@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-mode="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,14 +9,14 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
     <style>
       :root {
-        --bg-page: #0f1320;
-        --bg-surface: #1a2130;
-        --bg-accent: #232c40;
-        --line: #2b3344;
-        --text-strong: #ffffff;
-        --text-weak: #8b94a8;
-        --point-main: #4a9eff;
-        --point-sub: #5ccfd8;
+        --bg-page: #eef2f8;
+        --bg-surface: #fbfcfe;
+        --bg-accent: #dde7f4;
+        --line: #d3dce8;
+        --text-strong: #161f2b;
+        --text-weak: #586677;
+        --point-main: #2787d6;
+        --point-sub: #2bb0bd;
         --danger: #ef4444;
         --warning: #f5a623;
         --font: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
@@ -716,6 +716,10 @@
         height: 4px;
         cursor: pointer;
       }
+      .slider input[type='range']:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
       .ghostbtn {
         align-self: flex-start;
         background: transparent;
@@ -792,10 +796,6 @@
         border-radius: 5px;
         flex: none;
         letter-spacing: 0.2px;
-      }
-      /* 올해의 색(COTY) — 이름만 굵게 표시(선택 상태로 오해되지 않도록 강조 테두리는 빼둠) */
-      .trendchip.coty span:nth-child(2) {
-        font-weight: 700;
       }
       /* 현재 적용 중인 추천 테마만 강조색으로 '선택' 표시 */
       .trendchip.sel,
@@ -1051,13 +1051,23 @@
         border-color: var(--point-main);
         transform: translateX(2px);
       }
-      /* 컬러 모음 카드 하단: 이름 + 적용 모드(다크/라이트) 배지 */
-      .gallery .pcard .pcardfoot {
+      /* 컬러 모음 카드: 팔레트(원형) + 다크/라이트 배지를 같은 가로 줄에 */
+      .gallery .pcard {
+        gap: 7px;
+      }
+      .gallery .pcard .pcardtop {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 8px;
         width: 100%;
+      }
+      /* 이름은 한 줄로(넘치면 …) */
+      .gallery .pcard .pname {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .pmode {
         display: inline-flex;
@@ -1095,6 +1105,8 @@
         height: 26px;
         border-radius: 50%;
         border: 2px solid var(--bg-page);
+        /* 배경과 같은 색(맨 왼쪽 '배경' 색)도 보이도록 옅은 외곽선 추가 */
+        box-shadow: 0 0 0 1px var(--line);
         margin-left: -9px;
         flex: none;
       }
@@ -1104,6 +1116,7 @@
       .pname {
         font-size: 12.5px;
         color: var(--text-strong);
+        text-align: left;
       }
       .pgrid {
         display: grid;
@@ -1318,6 +1331,48 @@
       .kpi .sub b {
         color: var(--point-main);
         font-weight: 600;
+      }
+      /* 값 갱신 시 살짝 커졌다 돌아오는 효과 */
+      .kpi .val {
+        transform-origin: left center;
+      }
+      .kpi .val.bump {
+        animation: valBump 0.5s ease;
+      }
+      @keyframes valBump {
+        0% {
+          transform: scale(1);
+        }
+        30% {
+          transform: scale(1.045);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .kpi .val.bump {
+          animation: none;
+        }
+      }
+      /* KPI 실시간 추세 화살표 */
+      .kpi .kchg {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+        font-size: 12px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .kpi .kchg.up {
+        color: #22b07d;
+      }
+      .kpi .kchg.down {
+        color: var(--danger);
+      }
+      .kpi .kchg.flat {
+        color: var(--text-weak);
       }
 
       /* columns + panels */
@@ -1632,6 +1687,16 @@
         background: var(--bg-accent);
         color: var(--text-weak);
         margin-right: 7px;
+        font-weight: 600;
+      }
+      /* 기관 분류 뱃지 — 종류별로 색 구분 */
+      .tag.t-elec {
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+      }
+      .tag.t-bank {
+        color: var(--point-sub);
+        background: color-mix(in srgb, var(--point-sub) 18%, transparent);
       }
       .badge {
         display: inline-block;
@@ -1864,6 +1929,77 @@
         border-radius: 50%;
       }
 
+      /* ===== 실시간 관제 신호: 상태점 깜빡임 ===== */
+      /* 패널 제목 점 — 살아있는 모니터링 느낌의 은은한 맥박 */
+      .ph h3::before {
+        animation: liveDot 2.2s ease-in-out infinite;
+      }
+      /* 정상(online) 상태 점 — 초록 + 부드러운 심박 */
+      .hcell .ok {
+        background: #22b07d;
+        opacity: 0.6;
+        animation: okPulse 2.6s ease-in-out infinite;
+      }
+      /* 장애(critical) 알람 — 빨강 점멸 + 링 확산 */
+      .hcell .al {
+        animation: alarmBlink 1.1s ease-in-out infinite;
+      }
+      /* Critical 배지 — 배경이 은은히 깜빡여 경보 강조 */
+      .badge.b-crit {
+        animation: critPulse 1.5s ease-in-out infinite;
+      }
+      @keyframes liveDot {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.82);
+        }
+      }
+      @keyframes okPulse {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.25);
+        }
+      }
+      @keyframes alarmBlink {
+        0%,
+        100% {
+          opacity: 1;
+          box-shadow: 0 0 0 0 color-mix(in srgb, var(--danger) 55%, transparent);
+        }
+        50% {
+          opacity: 0.55;
+          box-shadow: 0 0 0 5px color-mix(in srgb, var(--danger) 0%, transparent);
+        }
+      }
+      @keyframes critPulse {
+        0%,
+        100% {
+          background: color-mix(in srgb, var(--danger) 16%, transparent);
+        }
+        50% {
+          background: color-mix(in srgb, var(--danger) 34%, transparent);
+        }
+      }
+      /* 움직임 최소화 설정 사용자는 깜빡임 끄기 */
+      @media (prefers-reduced-motion: reduce) {
+        .ph h3::before,
+        .hcell .ok,
+        .hcell .al,
+        .badge.b-crit {
+          animation: none;
+        }
+      }
+
       @keyframes rise {
         from {
           transform: scaleY(0);
@@ -1974,30 +2110,56 @@
           <button id="closer" title="메뉴 접기">‹</button>
         </div>
         <section class="colorset">
-          <div class="csttl">색상 설정 <span class="ko">Color</span></div>
+          <div class="csttl">
+            색상 설정
+            <span class="ko">Color</span>
+          </div>
 
           <details class="acc">
             <summary>
-              <span class="acttl">Mode <span class="ko">화면 밝기</span></span>
-              <span class="info" tabindex="0" role="button" aria-label="모드 도움말">?
-                <span class="tip"><b>화면 밝기 테마</b><br /><br /><span class="accent">Dark</span> — 어두운 배경의 차분한 화면. 관제·모니터링에 잘 맞아요.<br /><br /><span class="accent">Light</span> — 밝은 배경의 환한 화면. 사무실·보고서에 잘 맞아요.</span>
+              <span class="acttl">
+                Mode
+                <span class="ko">화면 밝기</span>
+              </span>
+              <span class="info" tabindex="0" role="button" aria-label="모드 도움말">
+                ?
+                <span class="tip">
+                  <b>화면 밝기 테마</b>
+                  <br />
+                  <br />
+                  <span class="accent">Dark</span>
+                  — 어두운 배경의 차분한 화면. 관제·모니터링에 잘 맞아요.
+                  <br />
+                  <br />
+                  <span class="accent">Light</span>
+                  — 밝은 배경의 환한 화면. 사무실·보고서에 잘 맞아요.
+                </span>
               </span>
               <span class="chev">▾</span>
             </summary>
             <div class="accbody">
               <div class="seg" id="mode">
-                <button data-m="dark" class="on">Dark</button>
-                <button data-m="light">Light</button>
+                <button data-m="dark">Dark</button>
+                <button data-m="light" class="on">Light</button>
               </div>
             </div>
           </details>
 
           <details class="acc" data-src="seed" open>
             <summary>
-              <span class="acttl">Seed Color <span class="ko">기준 색</span></span>
+              <span class="acttl">
+                Seed Color
+                <span class="ko">기준 색</span>
+              </span>
               <span class="srcbadge">사용 중</span>
-              <span class="info" tabindex="0" role="button" aria-label="기준 색 도움말">?
-                <span class="tip"><b>팔레트의 중심이 되는 색</b><br /><br />이 색 하나만 정하면 배경·글자·강조색까지 전체 팔레트가 이 색을 기준으로 자동 생성돼요. 왼쪽 색칸을 눌러 고르거나, 오른쪽 칸에 색상 코드(예: #4A9EFF)를 직접 입력하세요.</span>
+              <span class="info" tabindex="0" role="button" aria-label="기준 색 도움말">
+                ?
+                <span class="tip">
+                  <b>팔레트의 중심이 되는 색</b>
+                  <br />
+                  <br />
+                  이 색 하나만 정하면 배경·글자·강조색까지 전체 팔레트가 이 색을 기준으로 자동 생성돼요. 왼쪽 색칸을 눌러 고르거나, 오른쪽 칸에 색상 코드(예: #4A9EFF)를 직접 입력하세요.
+                </span>
               </span>
               <span class="chev">▾</span>
             </summary>
@@ -2008,8 +2170,29 @@
               </div>
               <label class="lblrow">
                 배색 방식
-                <span class="info" tabindex="0" role="button" aria-label="배색 방식 도움말">?
-                  <span class="tip"><b>강조색을 뽑는 규칙</b><br /><br />기준 색에서 <b>두 번째 강조색</b>을 어떤 관계로 고를지 정해요.<br /><br /><span class="accent">유사</span> — 비슷한 색끼리, 차분하고 안정적<br /><span class="accent">보색</span> — 반대 색, 강렬한 대비<br /><span class="accent">삼각</span> — 세 방향 색, 균형 잡힌 화려함<br /><span class="accent">분할보색</span> — 보색의 부드러운 버전</span>
+                <span class="info" tabindex="0" role="button" aria-label="배색 방식 도움말">
+                  ?
+                  <span class="tip">
+                    <b>강조색을 뽑는 규칙</b>
+                    <br />
+                    <br />
+                    기준 색에서
+                    <b>두 번째 강조색</b>
+                    을 어떤 관계로 고를지 정해요.
+                    <br />
+                    <br />
+                    <span class="accent">유사</span>
+                    — 비슷한 색끼리, 차분하고 안정적
+                    <br />
+                    <span class="accent">보색</span>
+                    — 반대 색, 강렬한 대비
+                    <br />
+                    <span class="accent">삼각</span>
+                    — 세 방향 색, 균형 잡힌 화려함
+                    <br />
+                    <span class="accent">분할보색</span>
+                    — 보색의 부드러운 버전
+                  </span>
                 </span>
               </label>
               <div class="pills" id="harmony">
@@ -2056,10 +2239,21 @@
 
           <details class="acc" data-src="image">
             <summary>
-              <span class="acttl">Theme from Image <span class="ko">사진에서 추출</span></span>
+              <span class="acttl">
+                Theme from Image
+                <span class="ko">사진에서 추출</span>
+              </span>
               <span class="srcbadge">사용 중</span>
-              <span class="info up" tabindex="0" role="button" aria-label="사진에서 추출 도움말">?
-                <span class="tip"><b>사진 한 장으로 테마 만들기</b><br /><br />좋아하는 사진(브랜드 이미지·로고·풍경 등)을 올리면 그 안의 색을 분석해 팔레트를 자동으로 만들어줘요. 아래 <b>색 추출 방식</b>으로 분위기를 고를 수 있어요.</span>
+              <span class="info up" tabindex="0" role="button" aria-label="사진에서 추출 도움말">
+                ?
+                <span class="tip">
+                  <b>사진 한 장으로 테마 만들기</b>
+                  <br />
+                  <br />
+                  좋아하는 사진(브랜드 이미지·로고·풍경 등)을 올리면 그 안의 색을 분석해 팔레트를 자동으로 만들어줘요. 아래
+                  <b>색 추출 방식</b>
+                  으로 분위기를 고를 수 있어요.
+                </span>
               </span>
               <span class="chev">▾</span>
             </summary>
@@ -2077,11 +2271,19 @@
               <div class="imgprev" id="imgprev"></div>
               <label class="lblrow">
                 색 추출 방식
-                <span class="info up" tabindex="0" role="button" aria-label="추출 방식 도움말">?
+                <span class="info up" tabindex="0" role="button" aria-label="추출 방식 도움말">
+                  ?
                   <span class="tip">
-                    <b>이미지로 테마를 만드는 방법</b><br /><br />
-                    <span class="accent">자동 조화</span> — 사진에서 대표색 하나를 뽑아 배경·글자·강조색을 보기 좋게 자동으로 맞춰줘요. 어떤 사진이든 깔끔하게 나옵니다. <b>잘 모르겠으면 이걸 추천!</b><br /><br />
-                    <span class="accent">원본 색 그대로</span> — 사진 속 여러 색을 그대로 가져와 어두운 색은 배경, 밝은 색은 글자, 선명한 색은 강조로 배치해요. 사진 분위기는 살지만, 사진에 따라 글자가 잘 안 보일 수도 있어요.
+                    <b>이미지로 테마를 만드는 방법</b>
+                    <br />
+                    <br />
+                    <span class="accent">자동 조화</span>
+                    — 사진에서 대표색 하나를 뽑아 배경·글자·강조색을 보기 좋게 자동으로 맞춰줘요. 어떤 사진이든 깔끔하게 나옵니다.
+                    <b>잘 모르겠으면 이걸 추천!</b>
+                    <br />
+                    <br />
+                    <span class="accent">원본 색 그대로</span>
+                    — 사진 속 여러 색을 그대로 가져와 어두운 색은 배경, 밝은 색은 글자, 선명한 색은 강조로 배치해요. 사진 분위기는 살지만, 사진에 따라 글자가 잘 안 보일 수도 있어요.
                   </span>
                 </span>
               </label>
@@ -2095,21 +2297,43 @@
 
           <details class="acc" data-src="preset">
             <summary>
-              <span class="acttl">추천 테마 <span class="ko">고르면 바로 적용</span></span>
+              <span class="acttl">
+                추천 테마
+                <span class="ko">고르면 바로 적용</span>
+              </span>
               <span class="srcbadge">사용 중</span>
-              <span class="info up" tabindex="0" role="button" aria-label="추천 테마 도움말">?
-                <span class="tip"><b>미리 만들어 둔 테마 모음</b><br /><br />색을 직접 고르기 어렵다면 여기서 마음에 드는 걸 누르기만 하면 화면 전체에 바로 적용돼요.<br /><br /><span class="accent">올해의 트렌드</span> — 연도별 팬톤 유행색<br /><span class="accent">컬러 모음</span> — 엄선한 배색 세트</span>
+              <span class="info up" tabindex="0" role="button" aria-label="추천 테마 도움말">
+                ?
+                <span class="tip">
+                  <b>미리 만들어 둔 테마 모음</b>
+                  <br />
+                  <br />
+                  색을 직접 고르기 어렵다면 여기서 마음에 드는 걸 누르기만 하면 화면 전체에 바로 적용돼요.
+                  <br />
+                  <br />
+                  <span class="accent">올해의 트렌드</span>
+                  — 연도별 팬톤 유행색
+                  <br />
+                  <span class="accent">컬러 모음</span>
+                  — 엄선한 배색 세트
+                </span>
               </span>
               <span class="chev">▾</span>
             </summary>
             <div class="accbody">
               <div class="sublbl">
-                <span>올해의 트렌드 <span class="ko">Pantone</span></span>
+                <span>
+                  올해의 트렌드
+                  <span class="ko">Pantone</span>
+                </span>
                 <select id="trendYear"></select>
               </div>
               <div class="trend" id="trend"></div>
               <div class="sublbl" style="margin-top: 10px">
-                <span>컬러 모음 <span class="ko">Curated</span></span>
+                <span>
+                  컬러 모음
+                  <span class="ko">Curated</span>
+                </span>
               </div>
               <div class="seg" id="galleryMode">
                 <button data-gm="dark" class="on">다크 추천</button>
@@ -2136,9 +2360,28 @@
         </section>
         <div class="grp">
           <label class="lblrow">
-            <span>대시보드 편집 <span class="ko">자유롭게 바꾸기</span></span>
-            <span class="info up" tabindex="0" role="button" aria-label="대시보드 편집 도움말">?
-              <span class="tip"><b>오른쪽 화면을 내 맘대로</b><br /><br /><span class="accent">배치 수정</span> — 패널을 끌어다 놓아 위치·순서를 바꿔요.<br /><br /><span class="accent">내용 수정</span> — 제목·숫자·표 등 글자를 클릭해 직접 고쳐요.<br /><br />바꾼 내용은 자동 저장되고, <b>기본값으로 되돌리기</b>로 처음 상태로 복원됩니다.</span>
+            <span>
+              대시보드 편집
+              <span class="ko">자유롭게 바꾸기</span>
+            </span>
+            <span class="info up" tabindex="0" role="button" aria-label="대시보드 편집 도움말">
+              ?
+              <span class="tip">
+                <b>오른쪽 화면을 내 맘대로</b>
+                <br />
+                <br />
+                <span class="accent">배치 수정</span>
+                — 패널을 끌어다 놓아 위치·순서를 바꿔요.
+                <br />
+                <br />
+                <span class="accent">내용 수정</span>
+                — 제목·숫자·표 등 글자를 클릭해 직접 고쳐요.
+                <br />
+                <br />
+                바꾼 내용은 자동 저장되고,
+                <b>기본값으로 되돌리기</b>
+                로 처음 상태로 복원됩니다.
+              </span>
             </span>
           </label>
           <button class="editbtn" id="editToggle" title="패널을 끌어서 옮길 수 있는 상태로 전환">
@@ -2412,7 +2655,7 @@
                     <tbody>
                       <tr class="rowline">
                         <td>
-                          <span class="tag">전자</span>
+                          <span class="tag t-elec">전자</span>
                           국민은행
                         </td>
                         <td class="num">1,009</td>
@@ -2422,7 +2665,7 @@
                       </tr>
                       <tr class="rowline">
                         <td>
-                          <span class="tag">은행</span>
+                          <span class="tag t-bank">은행</span>
                           카카오뱅크
                         </td>
                         <td class="num">834</td>
@@ -2432,7 +2675,7 @@
                       </tr>
                       <tr class="rowline">
                         <td>
-                          <span class="tag">전자</span>
+                          <span class="tag t-elec">전자</span>
                           지역농협
                         </td>
                         <td class="num">819</td>
@@ -2442,7 +2685,7 @@
                       </tr>
                       <tr class="rowline">
                         <td>
-                          <span class="tag">은행</span>
+                          <span class="tag t-bank">은행</span>
                           농협은행
                         </td>
                         <td class="num">677</td>
@@ -2452,7 +2695,7 @@
                       </tr>
                       <tr>
                         <td>
-                          <span class="tag">전자</span>
+                          <span class="tag t-elec">전자</span>
                           우리은행
                         </td>
                         <td class="num">623</td>
@@ -2850,7 +3093,7 @@
         danger: '--danger',
         warning: '--warning',
       };
-      let state = { seed: '#4a9eff', harmony: 'analog', mode: 'dark', subHex: null, mapMode: 'auto', imgCols: null, adjust: { h: 0, s: 0, l: 0 }, source: 'seed', overrides: {}, curpalOpen: false };
+      let state = { seed: '#4a9eff', harmony: 'analog', mode: 'light', subHex: null, mapMode: 'auto', imgCols: null, adjust: { h: 0, s: 0, l: 0 }, source: 'seed', overrides: {}, curpalOpen: false };
       function normHex(h) {
         const { r, g, b } = hexToRgb(h);
         const to = (x) => x.toString(16).padStart(2, '0');
@@ -2864,6 +3107,42 @@
         const { r, g, b } = hexToRgb(hex);
         return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? '#15151a' : '#fff';
       }
+      /* ===== WCAG 대비비(контраст) 계산 ===== */
+      function relLum(hex) {
+        const { r, g, b } = hexToRgb(hex);
+        const f = (c) => {
+          c /= 255;
+          return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        };
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+      }
+      function wcagRatio(a, b) {
+        const L1 = relLum(a),
+          L2 = relLum(b);
+        return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+      }
+      /* 글자색을 배경 대비 AAA(≥7:1) 통과하도록 자동 보정 — 통과한 색만 콘텐츠에 사용 */
+      const AAA_MIN = 7;
+      function enforceAAA(hexMap) {
+        const bgs = [hexMap['bg/page'], hexMap['bg/surface']];
+        const worst = (c) => Math.min(...bgs.map((b) => wcagRatio(c, b)));
+        const bgLight = relLum(hexMap['bg/page']) > 0.4; /* 배경이 밝으면 글자를 어둡게 */
+        ['text/strong', 'text/weak'].forEach((role) => {
+          if (state.overrides[role]) return; /* 직접 지정한 색은 그대로 둠 */
+          let cur = hexMap[role];
+          if (worst(cur) >= AAA_MIN) return;
+          const { h, s } = rgbToHsl(hexToRgb(cur));
+          let { l } = rgbToHsl(hexToRgb(cur));
+          const dir = bgLight ? -1 : 1;
+          let best = cur;
+          for (let i = 0; i < 110; i++) {
+            l = clamp(l + dir, 0, 100);
+            best = hslToHex(h, s, l);
+            if (worst(best) >= AAA_MIN || l === 0 || l === 100) break;
+          }
+          hexMap[role] = best.toUpperCase();
+        });
+      }
       function apply() {
         let P = state.mapMode === 'direct' && state.imgCols ? buildDirect(state.imgCols, state.mode) : genPalette(state.seed, state.harmony, state.mode, state.subHex);
         P = applyAdjust(P);
@@ -2872,6 +3151,7 @@
         /* 직접 지정한 색(overrides)이 있으면 자동 생성값을 덮어씀 */
         const hexMap = {};
         for (const k in P) hexMap[k] = (state.overrides[k] || cssHslToHex(P[k])).toUpperCase();
+        enforceAAA(hexMap); /* 본문·보조 글자색을 배경 대비 AAA 통과하도록 보정 */
         for (const k in P) root.style.setProperty(RV[k], hexMap[k]);
         document.getElementById('seed').value = normHex(state.seed);
         renderCurrentPalette(hexMap);
@@ -2910,12 +3190,26 @@
           hex.value = '';
           hex.placeholder = cur === 'preset' ? '추천 테마 사용 중' : '이미지 추출 사용 중';
         }
+        /* 미세 조정은 '기준 색'에서만 사용 가능 — 다른 소스면 컨트롤 비활성 */
+        ['adjH', 'adjS', 'adjL', 'adjReset'].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.disabled = cur !== 'seed';
+        });
+      }
+      /* 미세 조정 값과 슬라이더 UI를 0으로 초기화 */
+      function resetAdjust() {
+        state.adjust = { h: 0, s: 0, l: 0 };
+        ['adjH', 'adjS', 'adjL'].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = 0;
+        });
       }
       /* 소스 전환 — 새 소스를 활성화하고, 사용하지 않는 소스의 내용은 비움 */
       function setSource(src) {
         state.source = src;
         if (src !== 'image') clearImageUI(); /* 다른 방식으로 바꾸면 올렸던 이미지는 제거 */
         if (src !== 'preset') clearPresetSelection(); /* 추천 테마 외 방식이면 선택 표시 해제 */
+        if (src !== 'seed') resetAdjust(); /* 다른 그룹으로 가면 기존 미세 조정은 초기화 */
         refreshSourceUI();
       }
       /* 추천 테마 선택 표시 — 현재 적용 중인 항목 하나만 강조 */
@@ -2942,8 +3236,7 @@
       const curpalEl = document.getElementById('curpal');
       const COPY_SVG =
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-      const CHECK_SVG =
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
       function renderCurrentPalette(hex) {
         const circleKeys = ['bg/page', 'bg/surface', 'point/main', 'point/sub', 'text/strong'];
         const circles = circleKeys.map((k) => `<i data-c="${k}" style="background:${hex[k]}"></i>`).join('');
@@ -3208,7 +3501,7 @@
         el.title = p.n;
         const pm = paletteMode(p.c);
         el.dataset.pm = pm;
-        el.innerHTML = `<div class="circles">${p.c.map((c) => `<i style="background:${c}"></i>`).join('')}</div><div class="pcardfoot"><span class="pname">${p.n}</span><span class="pmode pmode-${pm}"><i></i>${pm === 'light' ? '라이트' : '다크'}</span></div>`;
+        el.innerHTML = `<div class="pcardtop"><div class="circles">${p.c.map((c) => `<i style="background:${c}"></i>`).join('')}</div><span class="pmode pmode-${pm}"><i></i>${pm === 'light' ? '라이트' : '다크'}</span></div><span class="pname">${p.n}</span>`;
         el.onclick = () => {
           applyPalette(p.c);
           markPreset(el);
@@ -3320,15 +3613,14 @@
       ['adjH', 'adjS', 'adjL'].forEach(
         (id) =>
           (document.getElementById(id).oninput = () => {
+            if (state.source !== 'seed') return; /* 기준 색에서만 미세 조정 가능 */
             state.adjust = { h: +document.getElementById('adjH').value, s: +document.getElementById('adjS').value, l: +document.getElementById('adjL').value };
             apply();
           })
       );
       document.getElementById('adjReset').onclick = () => {
-        state.adjust = { h: 0, s: 0, l: 0 };
-        document.getElementById('adjH').value = 0;
-        document.getElementById('adjS').value = 0;
-        document.getElementById('adjL').value = 0;
+        if (state.source !== 'seed') return;
+        resetAdjust();
         apply();
       };
       const appEl = document.getElementById('app');
@@ -3622,7 +3914,8 @@
           h += `<div class="hrow"><div class="rl">${r}</div>`;
           for (let i = 0; i < 6; i++) {
             const alert = Math.random() > 0.86;
-            h += `<div class="hcell" title="${r} · ${days[i]} · ${alert ? 'Critical' : '정상'}">${alert ? '<span class="al"><i></i></span>' : '<span class="ok"></span>'}</div>`;
+            const dly = `animation-delay:${(Math.random() * 2.2).toFixed(2)}s`;
+            h += `<div class="hcell" title="${r} · ${days[i]} · ${alert ? 'Critical' : '정상'}">${alert ? `<span class="al" style="${dly}"><i></i></span>` : `<span class="ok" style="${dly}"></span>`}</div>`;
           }
           h += '</div>';
         });
@@ -3683,12 +3976,7 @@
       };
       async function loadWeather(lat, lon) {
         try {
-          const url =
-            'https://api.open-meteo.com/v1/forecast?latitude=' +
-            lat +
-            '&longitude=' +
-            lon +
-            '&current=temperature_2m,weather_code&timezone=auto';
+          const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current=temperature_2m,weather_code&timezone=auto';
           const r = await fetch(url);
           if (!r.ok) throw new Error('weather http ' + r.status);
           const j = await r.json();
@@ -3925,6 +4213,83 @@
           })
         );
       });
+      /* ===== KPI 실시간 변동 + 추세 화살표 (값 카운트업보다 먼저 원본 목표값을 읽음) ===== */
+      (function liveKPI() {
+        const stage = document.querySelector('.stage');
+        const fmt = (n) => Math.round(n).toLocaleString('en-US');
+        const kpis = [...document.querySelectorAll('.kpis .kpi')].map((kpi) => {
+          const valEl = kpi.querySelector('.val');
+          const subB = kpi.querySelector('.sub b');
+          const val = parseInt((valEl ? valEl.textContent : '').replace(/,/g, '')) || 0;
+          let cur = 0,
+            peak = 0,
+            hasPeak = false;
+          if (subB) {
+            const parts = subB.textContent
+              .replace(/[^\d/]/g, '')
+              .split('/')
+              .filter(Boolean)
+              .map(Number);
+            cur = parts[0] || 0;
+            if (parts.length > 1) {
+              peak = parts[1] || 0;
+              hasPeak = true;
+            }
+          }
+          const chg = document.createElement('div');
+          chg.className = 'kchg flat';
+          chg.innerHTML = '—';
+          if (valEl) valEl.insertAdjacentElement('afterend', chg);
+          return { valEl, subB, val, cur, base: cur, peak, hasPeak, chg };
+        });
+        /* 값이 바뀔 때 옛 값 → 새 값으로 카운트업(이징) 애니메이션 */
+        function animateVal(k, from, to) {
+          if (k.raf) cancelAnimationFrame(k.raf);
+          const start = performance.now(),
+            dur = 700;
+          k.valEl.classList.add('bump');
+          setTimeout(() => k.valEl && k.valEl.classList.remove('bump'), 520);
+          (function step(t) {
+            const p = Math.min(1, (t - start) / dur);
+            const e = 1 - Math.pow(1 - p, 3); /* easeOutCubic */
+            k.valEl.textContent = fmt(from + (to - from) * e);
+            if (p < 1) k.raf = requestAnimationFrame(step);
+          })(start);
+        }
+        /* 3초마다 한 번씩: 누적 거래량 단계 증가 + TPS 변동 + 추세 + 임계치 */
+        const STEP_SEC = 3;
+        function tick() {
+          if (stage.classList.contains('content-editing')) return; /* 내용 수정 중엔 멈춤 */
+          kpis.forEach((k) => {
+            if (!k.cur) return;
+            const prev = k.cur;
+            /* 평소엔 기준값 근처로 회귀, 가끔(7%) 피크 근처로 급등 → 임계치 경고 시연 */
+            const surge = k.hasPeak && Math.random() < 0.07;
+            const aim = surge ? k.base + (k.peak - k.base) * (0.88 + Math.random() * 0.22) : k.base;
+            let next = prev + (aim - prev) * 0.3 + (Math.random() - 0.5) * Math.max(6, k.base * 0.03);
+            next = Math.max(1, Math.round(next));
+            if (k.hasPeak) next = Math.min(next, k.peak);
+            k.cur = next;
+            /* 누적 거래량은 3초간 처리량(≈ TPS×3)만큼 증가 → 3초마다 또박또박, 카운트업 애니메이션 */
+            const from = k.val;
+            k.val += next * STEP_SEC;
+            if (k.valEl) animateVal(k, from, k.val);
+            if (k.subB) {
+              k.subB.textContent = k.hasPeak ? `| ${next}/${k.peak}` : `| ${next}`;
+              if (k.hasPeak) {
+                const ratio = next / k.peak;
+                k.subB.style.color = ratio >= 0.95 ? 'var(--danger)' : ratio >= 0.85 ? 'var(--warning)' : '';
+              }
+            }
+            const d = prev ? ((next - prev) / prev) * 100 : 0;
+            const flat = next === prev;
+            k.chg.className = 'kchg ' + (flat ? 'flat' : next > prev ? 'up' : 'down');
+            k.chg.innerHTML = `${flat ? '—' : next > prev ? '▲' : '▼'} ${Math.abs(d).toFixed(1)}%`;
+          });
+        }
+        /* 초기 카운트업(1.3s)이 끝난 뒤 3초 주기로 갱신 시작 */
+        setTimeout(() => setInterval(tick, STEP_SEC * 1000), 1400);
+      })();
       document.querySelectorAll('.kpi .val').forEach((el) => {
         const raw = el.textContent.replace(/,/g, '').trim();
         if (!/^\d+$/.test(raw)) return; /* 사용자가 바꾼 숫자 아닌 값은 그대로 둠 */
