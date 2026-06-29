@@ -1,0 +1,3952 @@
+<!-- @format -->
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEMB Theme Studio</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
+    <style>
+      :root {
+        --bg-page: #0f1320;
+        --bg-surface: #1a2130;
+        --bg-accent: #232c40;
+        --line: #2b3344;
+        --text-strong: #ffffff;
+        --text-weak: #8b94a8;
+        --point-main: #4a9eff;
+        --point-sub: #5ccfd8;
+        --danger: #ef4444;
+        --warning: #f5a623;
+        --font: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
+        --sb: 308px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg-page);
+        color: var(--text-strong);
+        font-family: var(--font);
+        font-size: 14px;
+        line-height: 1.45;
+        transition:
+          background 0.35s ease,
+          color 0.35s ease;
+      }
+      .num {
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.2px;
+      }
+
+      .app {
+        display: flex;
+        align-items: flex-start;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .main {
+        flex: 1;
+        min-width: 0;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #opener {
+        position: fixed;
+        top: 14px;
+        left: 14px;
+        z-index: 60;
+        display: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        border: 1px solid var(--line);
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        font-size: 16px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+      }
+      #opener:hover {
+        border-color: var(--point-main);
+      }
+      .app.collapsed #opener {
+        display: flex;
+      }
+      .app.collapsed .sidebar {
+        width: 0;
+        min-width: 0;
+        padding-left: 0;
+        padding-right: 0;
+        border-right: 0;
+        overflow: hidden;
+      }
+      .app.collapsed .hdr {
+        padding-left: 46px;
+      }
+
+      /* sidebar */
+      .sidebar {
+        width: var(--sb);
+        flex: none;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        background: var(--bg-surface);
+        border-right: 1px solid var(--line);
+        padding: 24px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        transition:
+          width 0.25s ease,
+          padding 0.25s ease;
+      }
+      .sidebar::-webkit-scrollbar {
+        width: 7px;
+      }
+      .sidebar::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border-radius: 4px;
+      }
+      .brandhead {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brandhead .logo {
+        display: flex;
+        align-items: center;
+        flex: none;
+      }
+      .wlogo {
+        display: block;
+        width: auto;
+      }
+      .brandhead .wlogo {
+        height: 16px;
+      }
+      .brand .wlogo {
+        height: 16px;
+      }
+      /* 다크 테마: 로고 전체를 흰색으로 */
+      html[data-mode='dark'] .wlogo {
+        filter: brightness(0) invert(1);
+      }
+      .brandhead .bt {
+        flex: 1;
+        min-width: 0;
+      }
+      .brandhead h1 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        line-height: 1.15;
+        white-space: nowrap;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .brandhead small {
+        display: block;
+        color: var(--text-weak);
+        font-size: 12px;
+        margin-top: 2px;
+        letter-spacing: 0.3px;
+      }
+      #closer {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text-weak);
+        cursor: pointer;
+        font-size: 14px;
+        flex: none;
+      }
+      #closer:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .grp {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .grp > label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: var(--text-weak);
+        font-weight: 700;
+      }
+      /* 한글 보조 설명(영문 라벨 옆) — 비개발자도 바로 이해하도록 */
+      .grp > label .ko,
+      .acc > summary .acttl .ko,
+      .sublbl .ko {
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 500;
+        color: color-mix(in srgb, var(--text-weak) 85%, transparent);
+        font-size: 11px;
+        margin-left: 5px;
+      }
+      /* 한 그룹 안의 소제목(추천 테마 → 트렌드/컬러모음) */
+      .sublbl {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-strong);
+        margin: 2px 0;
+      }
+      /* ===== 색상 설정 아코디언 — 헤더만 보이고 클릭하면 펼쳐짐(드롭다운식) ===== */
+      .colorset {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .colorset .csttl {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: var(--text-weak);
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .colorset .csttl .ko {
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 500;
+        color: color-mix(in srgb, var(--text-weak) 85%, transparent);
+        font-size: 11px;
+        margin-left: 5px;
+      }
+      .acc {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--bg-page);
+        transition: border-color 0.15s;
+      }
+      .acc[open] {
+        border-color: color-mix(in srgb, var(--point-main) 40%, var(--line));
+      }
+      .acc > summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 14px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+        color: var(--text-weak);
+        user-select: none;
+        transition: color 0.15s;
+      }
+      .acc > summary::-webkit-details-marker {
+        display: none;
+      }
+      .acc > summary:hover {
+        color: var(--text-strong);
+      }
+      .acc[open] > summary {
+        color: var(--text-strong);
+        border-bottom: 1px solid var(--line);
+      }
+      .acc > summary .acttl {
+        flex: 1;
+        min-width: 0;
+      }
+      .acc > summary .info {
+        text-transform: none;
+        letter-spacing: 0;
+      }
+      .acc > summary .chev {
+        font-size: 10px;
+        color: var(--text-weak);
+        flex: none;
+        transition: transform 0.2s;
+      }
+      .acc[open] > summary .chev {
+        transform: rotate(180deg);
+      }
+      .acc .accbody {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 13px 14px 15px;
+      }
+      .colorset .csgen {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      /* 활성/비활성(대기) 소스 표시 — 지금 화면에 적용 중인 방식만 또렷하게 */
+      .acc .srcbadge {
+        display: none;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        text-transform: none;
+        color: #fff;
+        background: var(--point-main);
+        padding: 2px 8px;
+        border-radius: 20px;
+        flex: none;
+      }
+      .acc.src-active .srcbadge {
+        display: inline-block;
+      }
+      .acc.src-active {
+        border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+      }
+      .acc.src-active > summary {
+        color: var(--text-strong);
+      }
+      /* 비활성 소스 — 흐리게 + 흑백 처리해 '사용 안 함'을 분명히. 누르면 다시 활성화됨 */
+      .acc.src-idle {
+        opacity: 0.45;
+        filter: grayscale(0.5);
+        transition:
+          opacity 0.2s,
+          filter 0.2s;
+      }
+      .acc.src-idle:hover {
+        opacity: 0.85;
+        filter: grayscale(0);
+      }
+      /* 대기 상태의 '기준 색' 미리보기 — 색을 비워 빗금으로 표시 */
+      .swprev.empty {
+        background: repeating-linear-gradient(45deg, var(--bg-accent), var(--bg-accent) 5px, transparent 5px, transparent 10px) !important;
+      }
+      .seedrow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .swprev {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        position: relative;
+        overflow: hidden;
+        flex: none;
+        background: var(--point-main);
+        transition: border-color 0.15s;
+      }
+      .swprev:hover {
+        border-color: var(--point-main);
+      }
+      .swprev input[type='color'] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        border: 0;
+        padding: 0;
+      }
+      .hex {
+        flex: 1;
+        min-width: 0;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        color: var(--text-strong);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-family: Consolas, monospace;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+      }
+      .hex:focus {
+        outline: none;
+        border-color: var(--point-main);
+      }
+      .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .pills button {
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        color: var(--text-weak);
+        border-radius: 20px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .pills button:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .pills button.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+        font-weight: 600;
+      }
+      .seg {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+      }
+      .seg button {
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        color: var(--text-weak);
+        border-radius: 12px;
+        padding: 11px;
+        font-size: 13px;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .seg button:hover {
+        border-color: var(--point-main);
+      }
+      .seg button.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+        font-weight: 600;
+      }
+      /* 1순위 주요 동작(CTA) — 가장 강하게 */
+      .genbtn {
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        padding: 15px;
+        font-size: 14.5px;
+        font-weight: 700;
+        cursor: pointer;
+        color: #fff;
+        font-family: var(--font);
+        background: var(--point-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition:
+          background 0.15s,
+          transform 0.12s;
+      }
+      .genbtn:hover {
+        background: color-mix(in srgb, var(--point-main) 86%, #000);
+      }
+      .genbtn svg {
+        width: 17px;
+        height: 17px;
+        flex: none;
+      }
+      .imgbtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        border: 1px dashed var(--line);
+        border-radius: 12px;
+        padding: 13px;
+        font-size: 13px;
+        color: var(--text-weak);
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .imgbtn:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .imgprev {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .imgprev:empty {
+        display: none;
+      }
+      .imgprev img {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        object-fit: cover;
+        border: 1px solid var(--line);
+        flex: none;
+      }
+      .imgprev .sws {
+        display: flex;
+        gap: 4px;
+      }
+      .imgprev .sws i {
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .imgprev .ihint {
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .chk {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-weak);
+        cursor: pointer;
+        margin-top: 2px;
+      }
+      .chk input {
+        accent-color: var(--point-main);
+        width: 15px;
+        height: 15px;
+      }
+      /* hidden native file input — upload is triggered by the styled button above */
+      #imgfile {
+        display: none;
+      }
+      .imgbtn svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+      .imgname {
+        display: block;
+        font-family: Consolas, monospace;
+        font-size: 11px;
+        color: var(--text-weak);
+        word-break: break-all;
+      }
+      .imgname:empty {
+        display: none;
+      }
+      .imgname b {
+        color: var(--point-main);
+        font-weight: 600;
+      }
+      .chkhint {
+        font-size: 11.5px;
+        line-height: 1.55;
+        color: var(--text-weak);
+        margin: 2px 0 0;
+        transition: color 0.2s;
+      }
+      /* "?" 도움말 배지 + 호버/포커스 툴팁 */
+      .info {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        color: var(--text-weak);
+        font-size: 11px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: help;
+        position: relative;
+        flex: none;
+        transition: 0.15s;
+      }
+      .info:hover,
+      .info:focus-visible {
+        border-color: var(--point-main);
+        color: var(--point-main);
+        outline: none;
+      }
+      .info .tip {
+        position: absolute;
+        top: calc(100% + 9px);
+        right: -2px;
+        width: 248px;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        padding: 12px 14px;
+        font-size: 11.5px;
+        line-height: 1.6;
+        font-weight: 400;
+        color: var(--text-weak);
+        letter-spacing: 0;
+        text-transform: none;
+        text-align: left;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-4px);
+        transition: 0.16s;
+        z-index: 50;
+        pointer-events: none;
+      }
+      .info .tip::after {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        right: 5px;
+        border: 6px solid transparent;
+        border-bottom-color: var(--line);
+      }
+      /* 아래쪽 섹션은 위로 펼쳐 화면 밖으로 잘리지 않게 */
+      .info.up .tip {
+        top: auto;
+        bottom: calc(100% + 9px);
+        transform: translateY(4px);
+      }
+      .info.up:hover .tip,
+      .info.up:focus-visible .tip {
+        transform: translateY(0);
+      }
+      .info.up .tip::after {
+        top: 100%;
+        bottom: auto;
+        border-bottom-color: transparent;
+        border-top-color: var(--line);
+      }
+      .info:hover .tip,
+      .info:focus-visible .tip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .info .tip b {
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+      .info .tip .accent {
+        color: var(--point-main);
+        font-weight: 700;
+      }
+      /* 접이식 "미세 조정" — 또렷한 버튼 형태라 눈에 잘 띈다 */
+      .more {
+        margin-top: 4px;
+      }
+      .more > summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--bg-page);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-weak);
+        user-select: none;
+        transition: 0.15s;
+      }
+      .more > summary::-webkit-details-marker {
+        display: none;
+      }
+      .more > summary svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+      }
+      .more > summary:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+        background: color-mix(in srgb, var(--point-main) 8%, var(--bg-page));
+      }
+      .more[open] > summary {
+        color: var(--text-strong);
+        border-color: color-mix(in srgb, var(--point-main) 40%, var(--line));
+        background: color-mix(in srgb, var(--point-main) 10%, var(--bg-page));
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .more > summary .chev {
+        font-size: 10px;
+        margin-left: 2px;
+        transition: transform 0.2s;
+      }
+      .more[open] > summary .chev {
+        transform: rotate(180deg);
+      }
+      .more .morebody {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+        padding: 15px 13px 14px;
+        border: 1px solid color-mix(in srgb, var(--point-main) 40%, var(--line));
+        border-top: 0;
+        border-radius: 0 0 10px 10px;
+        background: color-mix(in srgb, var(--point-main) 4%, var(--bg-page));
+      }
+      .slider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .slider span {
+        width: 30px;
+        flex: none;
+      }
+      .slider input[type='range'] {
+        flex: 1;
+        accent-color: var(--point-main);
+        height: 4px;
+        cursor: pointer;
+      }
+      .ghostbtn {
+        align-self: flex-start;
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--text-weak);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .ghostbtn:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .ghostbtn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .ghostbtn:disabled:hover {
+        border-color: var(--line);
+        color: var(--text-weak);
+      }
+      .trend {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .trendchip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 11px;
+        font-size: 13px;
+        color: var(--text-strong);
+        cursor: pointer;
+        font-family: var(--font);
+        text-align: left;
+        transition: 0.15s;
+      }
+      .trendchip:hover {
+        border-color: var(--point-main);
+        transform: translateX(2px);
+      }
+      .trendchip i {
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        flex: none;
+      }
+      .trendchip span {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .trendchip .yr {
+        font-size: 10px;
+        color: var(--text-weak);
+        flex: none;
+      }
+      .trendchip .pcode {
+        font-size: 10px;
+        font-family: Consolas, monospace;
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+        padding: 2px 6px;
+        border-radius: 5px;
+        flex: none;
+        letter-spacing: 0.2px;
+      }
+      /* 올해의 색(COTY) — 이름만 굵게 표시(선택 상태로 오해되지 않도록 강조 테두리는 빼둠) */
+      .trendchip.coty span:nth-child(2) {
+        font-weight: 700;
+      }
+      /* 현재 적용 중인 추천 테마만 강조색으로 '선택' 표시 */
+      .trendchip.sel,
+      .gallery .pcard.sel {
+        border-color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 14%, var(--bg-page));
+        box-shadow: inset 0 0 0 1px var(--point-main);
+      }
+      .lblrow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      #trendYear {
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        color: var(--text-strong);
+        border-radius: 7px;
+        padding: 3px 7px;
+        font-size: 12px;
+        font-family: var(--font);
+        cursor: pointer;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+      #trendYear:hover {
+        border-color: var(--point-main);
+      }
+      .gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      /* 현재 팔레트 미리보기 — 방금 만든 색을 '컬러 모음' 카드처럼 보여줌 */
+      .curpal {
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .curpal.show {
+        display: flex;
+      }
+      .curpal .pcard {
+        cursor: default;
+        gap: 11px;
+      }
+      .curpal .pcard:hover {
+        transform: none;
+        border-color: var(--line);
+      }
+      .curpal .phead {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        width: 100%;
+      }
+      .curpal .pname {
+        font-weight: 600;
+      }
+      .curpal .pname .ko {
+        font-weight: 400;
+        font-size: 10px;
+        color: var(--text-weak);
+        margin-left: 4px;
+      }
+      .curpal .phead .cpreset {
+        align-self: center;
+        flex: none;
+        padding: 4px 9px;
+        font-size: 11px;
+      }
+      .curpal .pseed {
+        font-family: Consolas, monospace;
+        font-size: 11px;
+        color: var(--point-main);
+      }
+      .swhexes {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        width: 100%;
+      }
+      .swhexes[hidden] {
+        display: none;
+      }
+      /* 개별 색상 펼치기/접기 토글 */
+      .curpal .cptoggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        width: 100%;
+        padding: 9px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--bg-surface);
+        color: var(--text-weak);
+        font-size: 12px;
+        font-weight: 600;
+        font-family: var(--font);
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .curpal .cptoggle:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .curpal .cptoggle .cnt {
+        color: var(--text-weak);
+        font-weight: 400;
+        font-size: 11px;
+      }
+      .curpal .cptoggle .chev {
+        font-size: 10px;
+        transition: transform 0.2s;
+      }
+      .curpal .cptoggle.open .chev {
+        transform: rotate(180deg);
+      }
+      .swhex {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 5px 8px;
+        font-family: var(--font);
+        min-width: 0;
+        transition: border-color 0.15s;
+      }
+      .swhex:hover {
+        border-color: color-mix(in srgb, var(--point-main) 35%, var(--line));
+      }
+      /* 색칸 = 색상 선택기 트리거(클릭 시 피커) */
+      .swhex .swc {
+        position: relative;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        flex: none;
+        overflow: hidden;
+        border: 1px solid rgba(127, 127, 127, 0.3);
+        cursor: pointer;
+      }
+      .swhex .swc i {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .swhex .swc input[type='color'] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        border: 0;
+        padding: 0;
+      }
+      .swhex .wrap {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        flex: 1;
+        line-height: 1.3;
+      }
+      .swhex .rl {
+        font-size: 10.5px;
+        color: var(--text-weak);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* '직접 지정한 색' 표시 점 — 평소엔 숨김, override일 때만 표시 */
+      .swhex .rl .ovd {
+        display: none;
+        margin-left: 4px;
+        color: var(--point-main);
+        font-size: 8px;
+        vertical-align: middle;
+      }
+      .swhex.ov .rl .ovd {
+        display: inline;
+      }
+      /* 글자 = 색상 코드 직접 입력 */
+      .swhex input.hx {
+        width: 100%;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        padding: 1px 4px;
+        margin-left: -4px;
+        font-family: Consolas, monospace;
+        font-size: 11px;
+        color: var(--text-strong);
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+      }
+      .swhex input.hx:hover {
+        border-color: var(--line);
+      }
+      .swhex input.hx:focus {
+        outline: none;
+        border-color: var(--point-main);
+        background: var(--bg-page);
+      }
+      /* 복사 아이콘 버튼 (수정과 분리) */
+      .swhex .cpy {
+        flex: none;
+        width: 26px;
+        height: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: transparent;
+        color: var(--text-weak);
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .swhex .cpy:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .swhex .cpy.done {
+        color: var(--point-main);
+        border-color: var(--point-main);
+      }
+      .swhex .cpy svg {
+        width: 13px;
+        height: 13px;
+      }
+      .pcard {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        cursor: pointer;
+        font-family: var(--font);
+        width: 100%;
+        transition: 0.15s;
+      }
+      .pcard:hover {
+        border-color: var(--point-main);
+        transform: translateX(2px);
+      }
+      /* 컬러 모음 카드 하단: 이름 + 적용 모드(다크/라이트) 배지 */
+      .gallery .pcard .pcardfoot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        width: 100%;
+      }
+      .pmode {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        flex: none;
+        border: 1px solid var(--line);
+        color: var(--text-weak);
+      }
+      .pmode i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        flex: none;
+      }
+      .pmode-dark i {
+        background: #1a2130;
+        border: 1px solid #5a657a;
+      }
+      .pmode-light i {
+        background: #f5f4ef;
+        border: 1px solid #cfcdc4;
+      }
+      .circles {
+        display: flex;
+        align-items: center;
+      }
+      .circles i {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid var(--bg-page);
+        margin-left: -9px;
+        flex: none;
+      }
+      .circles i:first-child {
+        margin-left: 0;
+      }
+      .pname {
+        font-size: 12.5px;
+        color: var(--text-strong);
+      }
+      .pgrid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 7px;
+      }
+      .pgrid .sw {
+        aspect-ratio: 1;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.14s;
+      }
+      .pgrid .sw:hover {
+        transform: scale(1.15);
+      }
+      .plist2 {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .prole {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 42px;
+        border-radius: 10px;
+        padding: 0 14px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition:
+          transform 0.12s,
+          filter 0.15s;
+      }
+      .prole:hover {
+        transform: translateX(3px);
+        filter: brightness(1.08);
+      }
+      .prole .rn {
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .prole .rh {
+        font-size: 12px;
+        font-family: Consolas, monospace;
+        opacity: 0.85;
+      }
+      .sbfoot {
+        margin-top: auto;
+        font-size: 12px;
+        color: var(--text-weak);
+        text-align: center;
+        padding-top: 6px;
+      }
+
+      /* 대시보드 배치 편집 토글 */
+      .editbtn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--text-strong);
+        background: var(--bg-page);
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .editbtn:hover {
+        border-color: var(--point-main);
+      }
+      .editbtn svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+      .editbtn.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+      }
+
+      /* dashboard shell */
+      .stage {
+        width: 100%;
+        padding: 16px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        flex: none;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+      }
+      .brand .logo {
+        display: flex;
+        align-items: center;
+      }
+      .brand .sf {
+        font-size: 15px;
+        letter-spacing: 2px;
+        font-weight: 600;
+      }
+      .brand .bar {
+        color: var(--line);
+      }
+      .brand .sub {
+        font-size: 13px;
+        color: var(--text-weak);
+      }
+      .nav {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .nav a {
+        position: relative;
+        font-size: 14px;
+        color: var(--text-weak);
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 9px;
+        cursor: pointer;
+        background: transparent;
+        transition:
+          color 0.18s ease,
+          background 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+      /* hover — 은은한 배경 틴트로 영역을 살짝 띄움 (선택 전 예고) */
+      .nav a:hover {
+        color: var(--text-strong);
+        background: color-mix(in srgb, var(--point-main) 9%, transparent);
+      }
+      /* active — 더 진한 틴트 + 포인트색 + 굵게 + 가벼운 링으로 확실히 구분 */
+      .nav a.active {
+        color: var(--point-main);
+        font-weight: 600;
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+      }
+      .nav a.active:hover {
+        background: color-mix(in srgb, var(--point-main) 20%, transparent);
+      }
+      .hstat {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 13px;
+        color: var(--text-weak);
+      }
+      .hstat b {
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+
+      /* KPI summary — NO card background, vertical accent dividers */
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        flex: none;
+      }
+      .kpi {
+        padding: 4px 26px;
+        position: relative;
+      }
+      .kpi:first-child {
+        padding-left: 2px;
+      }
+      .kpi + .kpi::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 70%;
+        background: var(--point-main);
+        border-radius: 2px;
+      }
+      .kpi .lab {
+        font-size: 13px;
+        color: var(--text-weak);
+      }
+      .kpi .val {
+        font-size: 32px;
+        font-weight: 800;
+        margin-top: 8px;
+        line-height: 1;
+      }
+      .kpi .sub {
+        font-size: 12px;
+        color: var(--text-weak);
+        margin-top: 9px;
+      }
+      .kpi .sub b {
+        color: var(--point-main);
+        font-weight: 600;
+      }
+
+      /* columns + panels */
+      .cols {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        align-items: stretch;
+        flex: 1;
+        min-height: 0;
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+        min-height: 0;
+      }
+      .col .panel {
+        flex: 1 1 0;
+        min-height: 0;
+      }
+      .cols > .col:nth-child(2) .panel:nth-child(1) {
+        flex-grow: 1.5;
+      }
+      .cols > .col:nth-child(2) .panel:nth-child(3) {
+        flex-grow: 0.85;
+      }
+      .cols > .col:nth-child(3) .panel:nth-child(1) {
+        flex-grow: 1.2;
+      }
+      .cols > .col:nth-child(3) .panel:nth-child(2) {
+        flex-grow: 1.7;
+      }
+      .panel {
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition:
+          background 0.35s,
+          border-color 0.2s;
+      }
+      .panel:hover {
+        border-color: color-mix(in srgb, var(--point-main) 30%, var(--line));
+      }
+      /* 배치 편집 모드 — 패널을 끌어 옮길 수 있는 상태 */
+      .cols.editing .panel {
+        cursor: grab;
+        border-style: dashed;
+        border-color: color-mix(in srgb, var(--point-main) 50%, var(--line));
+      }
+      .cols.editing .panel:hover {
+        border-color: var(--point-main);
+      }
+      .cols.editing .panel.dragging {
+        opacity: 0.4;
+        cursor: grabbing;
+      }
+      /* 편집 모드 안내 배너 */
+      .editbanner {
+        display: none;
+        align-items: center;
+        gap: 9px;
+        flex: none;
+        padding: 9px 14px;
+        border: 1px dashed color-mix(in srgb, var(--point-main) 55%, var(--line));
+        background: color-mix(in srgb, var(--point-main) 10%, var(--bg-surface));
+        color: var(--text-strong);
+        border-radius: 9px;
+        font-size: 13px;
+      }
+      .editbanner.show {
+        display: flex;
+      }
+      .editbanner svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+        color: var(--point-main);
+      }
+      /* 내용 수정 모드 — 글자에 마우스를 올리거나 클릭할 때만 표시(평소엔 깔끔) */
+      .stage.content-editing [contenteditable] {
+        cursor: text;
+      }
+      /* 편집 중인 칸만 옅은 회색 외곽선으로 표시(색상 강조 없음) */
+      .stage.content-editing [contenteditable]:focus {
+        outline: 1px solid var(--line);
+        outline-offset: 2px;
+        border-radius: 3px;
+      }
+      /* title row — fixed at top, separated from scrollable body (no overlap) */
+      .ph {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 12px 16px 10px;
+        flex: none;
+        flex-wrap: nowrap;
+      }
+      .ph h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+        flex-shrink: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ph h3::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--point-main);
+        flex: none;
+      }
+      .ph .tabs {
+        margin-left: auto;
+        display: flex;
+        gap: 5px;
+        flex-wrap: nowrap;
+        flex-shrink: 0;
+      }
+      .ph .tabs b {
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--text-weak);
+        padding: 3px 8px;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: 0.15s;
+        white-space: nowrap;
+      }
+      .ph .tabs b.on {
+        color: #fff;
+        background: var(--point-main);
+      }
+      .ph .tabs b:hover:not(.on) {
+        color: var(--text-strong);
+      }
+      .ph .hint {
+        margin-left: auto;
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .ph .hint b {
+        color: var(--point-main);
+        font-weight: 600;
+      }
+      .pbody {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 4px 12px 16px;
+        display: flex;
+        flex-direction: column;
+      }
+      .pbody::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .pbody::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border-radius: 3px;
+      }
+
+      /* chart with axes */
+      .clegend {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        font-size: 12px;
+        color: var(--text-weak);
+        margin-bottom: 4px;
+      }
+      .clegend span {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .clegend span::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .clegend .s-sub::before {
+        background: var(--point-sub);
+      }
+      .clegend .s-main::before {
+        background: var(--point-main);
+      }
+      .chart {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        grid-template-rows: 1fr 16px;
+        column-gap: 12px;
+        row-gap: 4px;
+      }
+      .yax {
+        grid-column: 1;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .plot {
+        grid-column: 2;
+        grid-row: 1;
+        position: relative;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .plot svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        overflow: hidden;
+      }
+      .xax {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .pulse-dot {
+        animation: pdot 1.7s ease-in-out infinite;
+      }
+      .plot rect {
+        transform-box: fill-box;
+        transform-origin: bottom;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th {
+        text-align: right;
+        color: var(--text-weak);
+        font-weight: 500;
+        padding: 6px 7px;
+        font-size: 12px;
+      }
+      th:first-child,
+      td:first-child {
+        text-align: left;
+      }
+      td {
+        padding: 7px 7px;
+        color: var(--text-strong);
+        transition: background 0.12s;
+      }
+      /* 표 hover — 행 전체가 하나의 같은 색으로 강조(셀별 차이 없음) */
+      tbody tr:not(.bandh):not(.bandgap):hover td {
+        background: color-mix(in srgb, var(--point-main) 10%, transparent);
+      }
+      /* 묶음(밴드) 사이 여백 — 위 그룹과 아래 그룹을 시각적으로 분리 */
+      .bandgap td {
+        height: 16px;
+        padding: 0;
+        border: 0;
+        background: none;
+      }
+      .bandh td:first-child {
+        background: none;
+      }
+      .bandh td {
+        background: var(--bg-accent);
+        background-clip: padding-box;
+        border-left: 2px solid transparent;
+        border-right: 2px solid transparent;
+        border-radius: 7px;
+        color: var(--text-weak);
+        text-align: center;
+        font-size: 12px;
+        padding: 4px;
+      }
+      .pair .v2 {
+        color: var(--point-main);
+        font-weight: 600;
+      }
+      .pair.teal .v2 {
+        color: var(--point-sub);
+      }
+      .pair .sl {
+        color: var(--text-weak);
+        margin: 0 4px;
+      }
+      .rowline td {
+        border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+      }
+      .tag {
+        font-size: 12px;
+        padding: 1px 7px;
+        border-radius: 5px;
+        background: var(--bg-accent);
+        color: var(--text-weak);
+        margin-right: 7px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 3px 9px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .b-ok {
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+      }
+      .b-warn {
+        color: var(--warning);
+        background: color-mix(in srgb, var(--warning) 16%, transparent);
+      }
+      .b-crit {
+        color: var(--danger);
+        background: color-mix(in srgb, var(--danger) 16%, transparent);
+      }
+
+      /* donut (segmented) */
+      .donut-wrap {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex: 1;
+        min-height: 0;
+      }
+      .donut-svg {
+        width: 128px;
+        height: 128px;
+        flex: none;
+      }
+      .dleg {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+        min-width: 0;
+      }
+      .dleg .row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 4px;
+        background: color-mix(in srgb, var(--bg-accent) 50%, transparent);
+        font-size: 13px;
+        color: var(--text-weak);
+      }
+      .dleg .row i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex: none;
+      }
+      .dleg .row b {
+        margin-left: auto;
+        color: var(--text-strong);
+        font-weight: 700;
+      }
+
+      /* progress lists */
+      .plist {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .sec-lab {
+        font-size: 12px;
+        color: var(--point-main);
+        font-weight: 700;
+        margin: 2px 0 8px;
+      }
+      .prow {
+        display: grid;
+        grid-template-columns: 1fr 84px 34px;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+      }
+      .prow .nm {
+        color: var(--text-weak);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .track {
+        height: 8px;
+        border-radius: 6px;
+        background: var(--bg-accent);
+        overflow: hidden;
+      }
+      .fill {
+        height: 100%;
+        border-radius: 6px;
+        background: linear-gradient(90deg, var(--point-sub), var(--point-main));
+        transition: width 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .prow .pv {
+        text-align: right;
+        font-weight: 700;
+        color: var(--text-strong);
+        font-size: 13px;
+      }
+
+      /* mini donuts */
+      .mini-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+        flex: 1;
+        align-items: center;
+      }
+      .mini {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .mini .d {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        position: relative;
+        transition: --v 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        background: conic-gradient(var(--point-main) 0 var(--v), var(--bg-accent) var(--v) 100%);
+      }
+      .mini .d::after {
+        content: '';
+        position: absolute;
+        inset: 7px;
+        border-radius: 50%;
+        background: var(--bg-surface);
+        transition: background 0.35s;
+      }
+      .mini .d b {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: var(--text-strong);
+      }
+
+      /* log */
+      .loglist {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 13px;
+      }
+      .logrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 11px;
+        background: color-mix(in srgb, var(--bg-accent) 50%, transparent);
+        border-radius: 9px;
+        transition: transform 0.12s;
+      }
+      .logrow:hover {
+        transform: translateX(2px);
+      }
+      .logrow span:nth-child(2) {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .logrow .t {
+        color: var(--text-weak);
+        margin-left: auto;
+        font-size: 12px;
+        flex: none;
+      }
+
+      /* heatmap (status dots) */
+      .heat {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+        justify-content: space-between;
+      }
+      .hrow {
+        display: grid;
+        grid-template-columns: 74px repeat(6, 1fr);
+        align-items: center;
+      }
+      .hrow .hh {
+        font-size: 12px;
+        color: var(--text-weak);
+        text-align: center;
+      }
+      .hrow .rl {
+        font-size: 13px;
+        color: var(--text-weak);
+      }
+      .hcell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hcell .ok {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--text-weak);
+        opacity: 0.45;
+      }
+      .hcell .al {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        background: var(--danger);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hcell .al i {
+        width: 11px;
+        height: 11px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+      }
+
+      @keyframes rise {
+        from {
+          transform: scaleY(0);
+        }
+      }
+      @keyframes pdot {
+        0%,
+        100% {
+          r: 3;
+          opacity: 1;
+        }
+        50% {
+          r: 6;
+          opacity: 0.3;
+        }
+      }
+      @keyframes panelIn {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @property --v {
+        syntax: '<percentage>';
+        inherits: false;
+        initial-value: 0%;
+      }
+      .kpi,
+      .col .panel {
+        animation: panelIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+      }
+
+      /* interaction states */
+      .kpi {
+        transition: transform 0.12s;
+      }
+      tbody tr {
+        transition: background 0.12s;
+      }
+      /* 클릭 가능한 모든 요소 → 손가락(클릭) 커서로 통일 */
+      .nav a,
+      .ph .tabs b,
+      .pills button,
+      .seg button,
+      .genbtn,
+      .editbtn,
+      .ghostbtn,
+      .imgbtn,
+      .trendchip,
+      .pcard,
+      .pgrid .sw,
+      .prole,
+      .swprev,
+      #trendYear,
+      .more > summary {
+        cursor: pointer;
+      }
+      .nav a:active,
+      .ph .tabs b:active,
+      .genbtn:active,
+      .seg button:active,
+      .pills button:active {
+        transform: translateY(1px);
+      }
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible,
+      .prole:focus-visible {
+        outline: 2px solid var(--point-main);
+        outline-offset: 2px;
+      }
+
+      @media (max-width: 1500px) {
+        .cols {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .kpis {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 820px) {
+        .cols {
+          grid-template-columns: 1fr;
+        }
+        .kpis {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <button id="opener" title="메뉴 펼치기">☰</button>
+
+      <aside class="sidebar">
+        <div class="brandhead">
+          <div class="bt">
+            <h1>
+              <span class="logo"><img class="wlogo" src="logo.svg" alt="WEMB" /></span>
+              Studio
+            </h1>
+            <small>Color Theme Generator</small>
+          </div>
+          <button id="closer" title="메뉴 접기">‹</button>
+        </div>
+        <section class="colorset">
+          <div class="csttl">색상 설정 <span class="ko">Color</span></div>
+
+          <details class="acc">
+            <summary>
+              <span class="acttl">Mode <span class="ko">화면 밝기</span></span>
+              <span class="info" tabindex="0" role="button" aria-label="모드 도움말">?
+                <span class="tip"><b>화면 밝기 테마</b><br /><br /><span class="accent">Dark</span> — 어두운 배경의 차분한 화면. 관제·모니터링에 잘 맞아요.<br /><br /><span class="accent">Light</span> — 밝은 배경의 환한 화면. 사무실·보고서에 잘 맞아요.</span>
+              </span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="accbody">
+              <div class="seg" id="mode">
+                <button data-m="dark" class="on">Dark</button>
+                <button data-m="light">Light</button>
+              </div>
+            </div>
+          </details>
+
+          <details class="acc" data-src="seed" open>
+            <summary>
+              <span class="acttl">Seed Color <span class="ko">기준 색</span></span>
+              <span class="srcbadge">사용 중</span>
+              <span class="info" tabindex="0" role="button" aria-label="기준 색 도움말">?
+                <span class="tip"><b>팔레트의 중심이 되는 색</b><br /><br />이 색 하나만 정하면 배경·글자·강조색까지 전체 팔레트가 이 색을 기준으로 자동 생성돼요. 왼쪽 색칸을 눌러 고르거나, 오른쪽 칸에 색상 코드(예: #4A9EFF)를 직접 입력하세요.</span>
+              </span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="accbody">
+              <div class="seedrow">
+                <span class="swprev" id="swprev"><input type="color" id="seed" value="#4a9eff" /></span>
+                <input type="text" class="hex" id="hex" value="#4A9EFF" />
+              </div>
+              <label class="lblrow">
+                배색 방식
+                <span class="info" tabindex="0" role="button" aria-label="배색 방식 도움말">?
+                  <span class="tip"><b>강조색을 뽑는 규칙</b><br /><br />기준 색에서 <b>두 번째 강조색</b>을 어떤 관계로 고를지 정해요.<br /><br /><span class="accent">유사</span> — 비슷한 색끼리, 차분하고 안정적<br /><span class="accent">보색</span> — 반대 색, 강렬한 대비<br /><span class="accent">삼각</span> — 세 방향 색, 균형 잡힌 화려함<br /><span class="accent">분할보색</span> — 보색의 부드러운 버전</span>
+                </span>
+              </label>
+              <div class="pills" id="harmony">
+                <button data-h="complement">보색</button>
+                <button data-h="analog" class="on">유사</button>
+                <button data-h="triad">삼각</button>
+                <button data-h="split">분할보색</button>
+              </div>
+              <details class="more">
+                <summary>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="21" x2="4" y2="14" />
+                    <line x1="4" y1="10" x2="4" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12" y2="3" />
+                    <line x1="20" y1="21" x2="20" y2="16" />
+                    <line x1="20" y1="12" x2="20" y2="3" />
+                    <line x1="1" y1="14" x2="7" y2="14" />
+                    <line x1="9" y1="8" x2="15" y2="8" />
+                    <line x1="17" y1="16" x2="23" y2="16" />
+                  </svg>
+                  미세 조정 (색 직접 다듬기)
+                  <span class="chev">▾</span>
+                </summary>
+                <div class="morebody">
+                  <p class="chkhint" style="margin: 0 0 2px">생성된 팔레트 전체의 느낌을 한 번에 미세하게 바꿔요. 잘 모르면 건드리지 않아도 됩니다.</p>
+                  <div class="slider" title="모든 색의 색상(빨강↔파랑 등)을 함께 회전시켜요">
+                    <span>색조</span>
+                    <input type="range" id="adjH" min="-30" max="30" value="0" />
+                  </div>
+                  <div class="slider" title="색의 선명함(탁하게↔쨍하게)을 조절해요">
+                    <span>채도</span>
+                    <input type="range" id="adjS" min="-40" max="40" value="0" />
+                  </div>
+                  <div class="slider" title="전체 밝기(어둡게↔밝게)를 조절해요">
+                    <span>명도</span>
+                    <input type="range" id="adjL" min="-20" max="20" value="0" />
+                  </div>
+                  <button class="ghostbtn" id="adjReset" title="세 슬라이더를 모두 0으로 되돌려요">조정 초기화</button>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="acc" data-src="image">
+            <summary>
+              <span class="acttl">Theme from Image <span class="ko">사진에서 추출</span></span>
+              <span class="srcbadge">사용 중</span>
+              <span class="info up" tabindex="0" role="button" aria-label="사진에서 추출 도움말">?
+                <span class="tip"><b>사진 한 장으로 테마 만들기</b><br /><br />좋아하는 사진(브랜드 이미지·로고·풍경 등)을 올리면 그 안의 색을 분석해 팔레트를 자동으로 만들어줘요. 아래 <b>색 추출 방식</b>으로 분위기를 고를 수 있어요.</span>
+              </span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="accbody">
+              <label class="imgbtn" for="imgfile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                이미지 첨부 → 테마 추출
+              </label>
+              <input type="file" id="imgfile" accept="image/*" />
+              <small class="imgname" id="imgname"></small>
+              <div class="imgprev" id="imgprev"></div>
+              <label class="lblrow">
+                색 추출 방식
+                <span class="info up" tabindex="0" role="button" aria-label="추출 방식 도움말">?
+                  <span class="tip">
+                    <b>이미지로 테마를 만드는 방법</b><br /><br />
+                    <span class="accent">자동 조화</span> — 사진에서 대표색 하나를 뽑아 배경·글자·강조색을 보기 좋게 자동으로 맞춰줘요. 어떤 사진이든 깔끔하게 나옵니다. <b>잘 모르겠으면 이걸 추천!</b><br /><br />
+                    <span class="accent">원본 색 그대로</span> — 사진 속 여러 색을 그대로 가져와 어두운 색은 배경, 밝은 색은 글자, 선명한 색은 강조로 배치해요. 사진 분위기는 살지만, 사진에 따라 글자가 잘 안 보일 수도 있어요.
+                  </span>
+                </span>
+              </label>
+              <div class="seg" id="extractMode">
+                <button data-x="auto" class="on">자동 조화</button>
+                <button data-x="direct">원본 색 그대로</button>
+              </div>
+              <p class="chkhint" id="extractHint">사진에서 대표색 하나를 골라, 서로 잘 어울리는 팔레트를 자동으로 만들어요.</p>
+            </div>
+          </details>
+
+          <details class="acc" data-src="preset">
+            <summary>
+              <span class="acttl">추천 테마 <span class="ko">고르면 바로 적용</span></span>
+              <span class="srcbadge">사용 중</span>
+              <span class="info up" tabindex="0" role="button" aria-label="추천 테마 도움말">?
+                <span class="tip"><b>미리 만들어 둔 테마 모음</b><br /><br />색을 직접 고르기 어렵다면 여기서 마음에 드는 걸 누르기만 하면 화면 전체에 바로 적용돼요.<br /><br /><span class="accent">올해의 트렌드</span> — 연도별 팬톤 유행색<br /><span class="accent">컬러 모음</span> — 엄선한 배색 세트</span>
+              </span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="accbody">
+              <div class="sublbl">
+                <span>올해의 트렌드 <span class="ko">Pantone</span></span>
+                <select id="trendYear"></select>
+              </div>
+              <div class="trend" id="trend"></div>
+              <div class="sublbl" style="margin-top: 10px">
+                <span>컬러 모음 <span class="ko">Curated</span></span>
+              </div>
+              <div class="seg" id="galleryMode">
+                <button data-gm="dark" class="on">다크 추천</button>
+                <button data-gm="light">라이트 추천</button>
+              </div>
+              <div class="gallery" id="gallery"></div>
+            </div>
+          </details>
+
+          <div class="csgen">
+            <button class="genbtn" id="rand" title="누를 때마다 새로운 색 조합을 무작위로 제안해요">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 3 21 3 21 8" />
+                <line x1="4" y1="20" x2="21" y2="3" />
+                <polyline points="21 16 21 21 16 21" />
+                <line x1="15" y1="15" x2="21" y2="21" />
+                <line x1="4" y1="4" x2="9" y2="9" />
+              </svg>
+              랜덤 팔레트 생성
+            </button>
+            <p class="chkhint" style="margin: 0; text-align: center">버튼을 누를 때마다 새로운 색 조합을 제안해요</p>
+            <div class="curpal" id="curpal" aria-live="polite"></div>
+          </div>
+        </section>
+        <div class="grp">
+          <label class="lblrow">
+            <span>대시보드 편집 <span class="ko">자유롭게 바꾸기</span></span>
+            <span class="info up" tabindex="0" role="button" aria-label="대시보드 편집 도움말">?
+              <span class="tip"><b>오른쪽 화면을 내 맘대로</b><br /><br /><span class="accent">배치 수정</span> — 패널을 끌어다 놓아 위치·순서를 바꿔요.<br /><br /><span class="accent">내용 수정</span> — 제목·숫자·표 등 글자를 클릭해 직접 고쳐요.<br /><br />바꾼 내용은 자동 저장되고, <b>기본값으로 되돌리기</b>로 처음 상태로 복원됩니다.</span>
+            </span>
+          </label>
+          <button class="editbtn" id="editToggle" title="패널을 끌어서 옮길 수 있는 상태로 전환">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="5 9 2 12 5 15" />
+              <polyline points="9 5 12 2 15 5" />
+              <polyline points="15 19 12 22 9 19" />
+              <polyline points="19 9 22 12 19 15" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <line x1="12" y1="2" x2="12" y2="22" />
+            </svg>
+            <span class="lbl">배치 수정하기</span>
+          </button>
+          <button class="editbtn" id="contentToggle" title="글자를 클릭해 직접 수정하는 상태로 전환">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+            </svg>
+            <span class="lbl">내용 수정하기</span>
+          </button>
+          <button class="ghostbtn" id="layoutReset" title="배치와 내용을 처음 상태로 되돌립니다">기본값으로 되돌리기</button>
+        </div>
+        <div class="sbfoot">테마를 클릭하면 화면 전체에 즉시 적용됩니다 · WEMB 2026</div>
+      </aside>
+
+      <main class="main">
+        <div class="stage">
+          <div class="editbanner" id="editBanner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="5 9 2 12 5 15" />
+              <polyline points="9 5 12 2 15 5" />
+              <polyline points="15 19 12 22 9 19" />
+              <polyline points="19 9 22 12 19 15" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <line x1="12" y1="2" x2="12" y2="22" />
+            </svg>
+            <span id="editBannerText">패널을 끌어다 놓아 위치를 바꿔보세요. 변경 내용은 자동 저장됩니다.</span>
+          </div>
+          <div class="hdr">
+            <div class="brand">
+              <span class="logo"><img class="wlogo" src="logo.svg" alt="WEMB" /></span>
+              <span class="bar">|</span>
+              <span class="sub">종합현황</span>
+            </div>
+            <nav class="nav">
+              <a class="active">Overview</a>
+              <a>Production</a>
+              <a>Quality</a>
+              <a>Equipment</a>
+            </nav>
+            <div class="hstat">
+              <span id="weather" title="실시간 날씨">
+                <span id="wicon">☁</span>
+                <span id="wdesc">불러오는 중…</span>
+                <b id="wtemp">--℃</b>
+              </span>
+              <span class="num" id="clock">불러오는 중…</span>
+            </div>
+          </div>
+
+          <div class="kpis">
+            <div class="kpi">
+              <div class="lab">거래건수</div>
+              <div class="val num">55,045,697</div>
+              <div class="sub">
+                TPS
+                <b>| 2284</b>
+              </div>
+            </div>
+            <div class="kpi">
+              <div class="lab">청구</div>
+              <div class="val num">2,603,089</div>
+              <div class="sub">
+                TPS / TPS Peak
+                <b>| 234/427</b>
+              </div>
+            </div>
+            <div class="kpi">
+              <div class="lab">청구</div>
+              <div class="val num">3,129,594</div>
+              <div class="sub">
+                TPS / TPS Peak
+                <b>| 227/354</b>
+              </div>
+            </div>
+            <div class="kpi">
+              <div class="lab">대외계</div>
+              <div class="val num">1,127,002</div>
+              <div class="sub">
+                TPS / TPS Peak
+                <b>| 254/384</b>
+              </div>
+            </div>
+            <div class="kpi">
+              <div class="lab">C/C</div>
+              <div class="val num">1,671,349</div>
+              <div class="sub">
+                TPS / TPS Peak
+                <b>| 201/339</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="cols">
+            <!-- Column 1 -->
+            <div class="col">
+              <div class="panel">
+                <div class="ph">
+                  <h3>Throughput</h3>
+                  <div class="tabs">
+                    <b class="on">tab01</b>
+                    <b>tab02</b>
+                    <b>tab03</b>
+                    <b>tab04</b>
+                  </div>
+                </div>
+                <div class="pbody">
+                  <div class="clegend">
+                    <span class="s-sub">PEAK 데이</span>
+                    <span class="s-main">금일</span>
+                  </div>
+                  <div class="chart" id="ch-tp"></div>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="ph">
+                  <h3>Connected</h3>
+                  <div class="tabs">
+                    <b class="on">tab01</b>
+                    <b>tab02</b>
+                    <b>tab03</b>
+                    <b>tab04</b>
+                  </div>
+                </div>
+                <div class="pbody"><div class="chart" id="ch-cn"></div></div>
+              </div>
+              <div class="panel">
+                <div class="ph">
+                  <h3>회선 사용량 정보</h3>
+                  <div class="tabs">
+                    <b class="on">tab01</b>
+                    <b>tab02</b>
+                    <b>tab03</b>
+                    <b>tab04</b>
+                  </div>
+                </div>
+                <div class="pbody"><div class="chart" id="ch-ci"></div></div>
+              </div>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="col">
+              <div class="panel">
+                <div class="ph">
+                  <h3>주요 업무 현황</h3>
+                  <div class="hint">
+                    TPS /
+                    <b>TPS Peak</b>
+                  </div>
+                </div>
+                <div class="pbody">
+                  <table>
+                    <tr class="bandh">
+                      <td></td>
+                      <td>1Q</td>
+                      <td>상품처리</td>
+                    </tr>
+                    <tr class="rowline">
+                      <td class="muted" style="color: var(--text-weak)">동시 사용자 수</td>
+                      <td class="pair num">
+                        10,906
+                        <span class="sl">/</span>
+                        <span class="v2">18,328</span>
+                      </td>
+                      <td class="pair num">
+                        2,425
+                        <span class="sl">/</span>
+                        <span class="v2">3,992</span>
+                      </td>
+                    </tr>
+                    <tr class="rowline">
+                      <td style="color: var(--text-weak)">초당처리량</td>
+                      <td class="pair num">
+                        1,868
+                        <span class="sl">/</span>
+                        <span class="v2">4,063</span>
+                      </td>
+                      <td class="pair num">
+                        665
+                        <span class="sl">/</span>
+                        <span class="v2">1,775</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="color: var(--text-weak)">평균수행시간</td>
+                      <td class="pair num">
+                        0.30
+                        <span class="sl">/</span>
+                        <span class="v2">0.20</span>
+                      </td>
+                      <td class="pair num">
+                        0.05
+                        <span class="sl">/</span>
+                        <span class="v2">0.06</span>
+                      </td>
+                    </tr>
+                    <tr class="bandgap" aria-hidden="true">
+                      <td colspan="3"></td>
+                    </tr>
+                    <tr class="bandh">
+                      <td></td>
+                      <td>개인뱅킹</td>
+                      <td>기업뱅킹</td>
+                    </tr>
+                    <tr class="rowline">
+                      <td style="color: var(--text-weak)">동시 사용자 수</td>
+                      <td class="pair teal num">
+                        10,906
+                        <span class="sl">/</span>
+                        <span class="v2">18,328</span>
+                      </td>
+                      <td class="pair teal num">
+                        2,425
+                        <span class="sl">/</span>
+                        <span class="v2">3,992</span>
+                      </td>
+                    </tr>
+                    <tr class="rowline">
+                      <td style="color: var(--text-weak)">초당처리량</td>
+                      <td class="pair teal num">
+                        1,868
+                        <span class="sl">/</span>
+                        <span class="v2">4,063</span>
+                      </td>
+                      <td class="pair teal num">
+                        665
+                        <span class="sl">/</span>
+                        <span class="v2">1,775</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="color: var(--text-weak)">평균수행시간</td>
+                      <td class="pair teal num">
+                        0.30
+                        <span class="sl">/</span>
+                        <span class="v2">0.20</span>
+                      </td>
+                      <td class="pair teal num">
+                        0.05
+                        <span class="sl">/</span>
+                        <span class="v2">0.06</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="ph"><h3>타 기관 지연 TOP5</h3></div>
+                <div class="pbody">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>기관명</th>
+                        <th>time_out</th>
+                        <th>지연</th>
+                        <th>조회</th>
+                        <th>입지</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="rowline">
+                        <td>
+                          <span class="tag">전자</span>
+                          국민은행
+                        </td>
+                        <td class="num">1,009</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr class="rowline">
+                        <td>
+                          <span class="tag">은행</span>
+                          카카오뱅크
+                        </td>
+                        <td class="num">834</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr class="rowline">
+                        <td>
+                          <span class="tag">전자</span>
+                          지역농협
+                        </td>
+                        <td class="num">819</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr class="rowline">
+                        <td>
+                          <span class="tag">은행</span>
+                          농협은행
+                        </td>
+                        <td class="num">677</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span class="tag">전자</span>
+                          우리은행
+                        </td>
+                        <td class="num">623</td>
+                        <td class="num" style="color: var(--warning)">1</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="ph"><h3>주요 업무 그룹 CPU 현황</h3></div>
+                <div class="pbody">
+                  <div class="mini-row">
+                    <div class="mini">
+                      <div class="d" style="--v: 24%"><b>24%</b></div>
+                      상품
+                    </div>
+                    <div class="mini">
+                      <div class="d" style="--v: 20%"><b>20%</b></div>
+                      디지털
+                    </div>
+                    <div class="mini">
+                      <div class="d" style="--v: 18%"><b>18%</b></div>
+                      EBK
+                    </div>
+                    <div class="mini">
+                      <div class="d" style="--v: 2%"><b>2%</b></div>
+                      채널EIC
+                    </div>
+                    <div class="mini">
+                      <div class="d" style="--v: 5%"><b>5%</b></div>
+                      대내EIC
+                    </div>
+                    <div class="mini">
+                      <div class="d" style="--v: 8%"><b>8%</b></div>
+                      대외EIC
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="col">
+              <div class="panel">
+                <div class="ph"><h3>Host &amp; Service Status Monitoring</h3></div>
+                <div class="pbody">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th rowspan="2">구분</th>
+                        <th colspan="2" style="text-align: center">Host</th>
+                        <th colspan="4" style="text-align: center">Service</th>
+                      </tr>
+                      <tr>
+                        <th>Up</th>
+                        <th>Down</th>
+                        <th>OK</th>
+                        <th>Warn</th>
+                        <th>Crit</th>
+                        <th>Unk</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="rowline">
+                        <td>Client</td>
+                        <td class="num">838</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr class="rowline">
+                        <td>Network</td>
+                        <td class="num">529</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr class="rowline">
+                        <td>System</td>
+                        <td class="num">16</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr class="rowline">
+                        <td>e-Banking</td>
+                        <td class="num">72</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                      <tr>
+                        <td><b>Total</b></td>
+                        <td class="num"><b>1,455</b></td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                        <td class="num">0</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="ph"><h3>보안시스템 자원 사용 현황</h3></div>
+                <div class="pbody">
+                  <div class="sec-lab">CPU Top 5</div>
+                  <div class="plist">
+                    <div class="prow">
+                      <span class="nm">하나쉴드 내부망 AP#13</span>
+                      <div class="track"><div class="fill" style="width: 81%"></div></div>
+                      <span class="pv num">81</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">Any 통합보안로그관리 #1-1</span>
+                      <div class="track"><div class="fill" style="width: 70%"></div></div>
+                      <span class="pv num">70</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">디지털캠퍼스 자외연계 #1</span>
+                      <div class="track"><div class="fill" style="width: 60%"></div></div>
+                      <span class="pv num">60</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">디지털캠퍼스 자외연계 #2</span>
+                      <div class="track"><div class="fill" style="width: 53%"></div></div>
+                      <span class="pv num">53</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">SO VDIDCOM25</span>
+                      <div class="track"><div class="fill" style="width: 36%"></div></div>
+                      <span class="pv num">36</span>
+                    </div>
+                  </div>
+                  <div class="sec-lab" style="margin-top: 20px">Memory Top 5</div>
+                  <div class="plist">
+                    <div class="prow">
+                      <span class="nm">UTS H자료연계 DB #1</span>
+                      <div class="track"><div class="fill" style="width: 79%"></div></div>
+                      <span class="pv num">79</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">SO SOMDDC102</span>
+                      <div class="track"><div class="fill" style="width: 79%"></div></div>
+                      <span class="pv num">79</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">SO SOMDB101</span>
+                      <div class="track"><div class="fill" style="width: 77%"></div></div>
+                      <span class="pv num">77</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">VDIIDB101</span>
+                      <div class="track"><div class="fill" style="width: 76%"></div></div>
+                      <span class="pv num">76</span>
+                    </div>
+                    <div class="prow">
+                      <span class="nm">디지털캠퍼스 자료연계 내부망</span>
+                      <div class="track"><div class="fill" style="width: 70%"></div></div>
+                      <span class="pv num">70</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 4 -->
+            <div class="col">
+              <div class="panel">
+                <div class="ph"><h3>CPU(Core)</h3></div>
+                <div class="pbody">
+                  <div class="donut-wrap">
+                    <svg class="donut-svg" id="donut" viewBox="0 0 128 128"></svg>
+                    <div class="dleg" id="dleg"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="ph">
+                  <h3>보안시스템 가동 현황</h3>
+                  <div class="tabs"><b class="on">Down Log</b></div>
+                </div>
+                <div class="pbody">
+                  <div class="loglist">
+                    <div class="logrow">
+                      <span class="badge b-crit">Host Down</span>
+                      <span>국민은행 연계 게이트웨이</span>
+                      <span class="t">20:01</span>
+                    </div>
+                    <div class="logrow">
+                      <span class="badge b-warn">Warning</span>
+                      <span>[hihtpiclp02] Disk_Root</span>
+                      <span class="t">19:58</span>
+                    </div>
+                    <div class="logrow">
+                      <span class="badge b-crit">Critical</span>
+                      <span>SO SOMDB101 응답 지연</span>
+                      <span class="t">19:44</span>
+                    </div>
+                    <div class="logrow">
+                      <span class="badge" style="color: var(--text-weak); background: var(--bg-accent)">Unknown</span>
+                      <span>VDIIDB101 상태 미확인</span>
+                      <span class="t">19:30</span>
+                    </div>
+                    <div class="logrow">
+                      <span class="badge b-crit">Critical</span>
+                      <span>디지털캠퍼스 내부망 #2</span>
+                      <span class="t">19:12</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="ph">
+                  <h3>보안시스템 가동 현황</h3>
+                  <div class="tabs"><b class="on">주간현황</b></div>
+                </div>
+                <div class="pbody"><div class="heat" id="heat"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* ===== color utils ===== */
+      const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+      function hexToRgb(h) {
+        h = h.replace('#', '');
+        if (h.length === 3)
+          h = h
+            .split('')
+            .map((c) => c + c)
+            .join('');
+        return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16) };
+      }
+      function rgbToHsl({ r, g, b }) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        const mx = Math.max(r, g, b),
+          mn = Math.min(r, g, b);
+        let h,
+          s,
+          l = (mx + mn) / 2;
+        if (mx === mn) {
+          h = s = 0;
+        } else {
+          const d = mx - mn;
+          s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+          switch (mx) {
+            case r:
+              h = (g - b) / d + (g < b ? 6 : 0);
+              break;
+            case g:
+              h = (b - r) / d + 2;
+              break;
+            default:
+              h = (r - g) / d + 4;
+          }
+          h /= 6;
+        }
+        return { h: h * 360, s: s * 100, l: l * 100 };
+      }
+      function hslToCss(h, s, l) {
+        return `hsl(${((h % 360) + 360) % 360} ${clamp(s, 0, 100).toFixed(1)}% ${clamp(l, 0, 100).toFixed(1)}%)`;
+      }
+      function hslToHex(h, s, l) {
+        s /= 100;
+        l /= 100;
+        const k = (n) => (n + h / 30) % 12;
+        const a = s * Math.min(l, 1 - l);
+        const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+        const to = (x) =>
+          Math.round(x * 255)
+            .toString(16)
+            .padStart(2, '0');
+        return `#${to(f(0))}${to(f(8))}${to(f(4))}`;
+      }
+      const SUB_OFFSET = { complement: 180, analog: 35, triad: 120, split: 150 };
+      function genPalette(seed, harmony, mode, subHex) {
+        const { h, s } = rgbToHsl(hexToRgb(seed));
+        const subH = subHex ? rgbToHsl(hexToRgb(subHex)).h : h + (SUB_OFFSET[harmony] || 35);
+        const bS = clamp(s, 35, 95);
+        const P = {};
+        if (mode === 'dark') {
+          P['bg/page'] = hslToCss(h, clamp(bS * 0.35, 10, 34), 7);
+          P['bg/surface'] = hslToCss(h, clamp(bS * 0.32, 10, 30), 12.5);
+          P['bg/accent'] = hslToCss(h, clamp(bS * 0.38, 12, 40), 19);
+          P['line'] = hslToCss(h, clamp(bS * 0.3, 10, 34), 26);
+          P['text/strong'] = hslToCss(h, 16, 96);
+          P['text/weak'] = hslToCss(h, 14, 66);
+          P['point/main'] = hslToCss(h, clamp(bS, 45, 95), 62);
+          P['point/sub'] = hslToCss(subH, clamp(bS * 0.85, 40, 85), 64);
+          P['danger'] = hslToCss(2, 78, 62);
+          P['warning'] = hslToCss(38, 90, 58);
+        } else {
+          P['bg/page'] = hslToCss(h, clamp(bS * 0.5, 18, 45), 96);
+          P['bg/surface'] = hslToCss(h, 40, 99.5);
+          P['bg/accent'] = hslToCss(h, clamp(bS * 0.6, 30, 70), 92);
+          P['line'] = hslToCss(h, clamp(bS * 0.35, 14, 40), 87);
+          P['text/strong'] = hslToCss(h, 32, 13);
+          P['text/weak'] = hslToCss(h, 16, 42);
+          P['point/main'] = hslToCss(h, clamp(bS, 45, 90), 48);
+          P['point/sub'] = hslToCss(subH, clamp(bS * 0.8, 40, 80), 46);
+          P['danger'] = hslToCss(2, 72, 50);
+          P['warning'] = hslToCss(35, 86, 46);
+        }
+        return P;
+      }
+      /* direct role-mapping from extracted image colors */
+      function buildDirect(cols, mode) {
+        if (!cols || !cols.length) return genPalette('#4a9eff', 'analog', mode);
+        const byL = [...cols].sort((a, b) => a.l - b.l);
+        const vib = [...cols].filter((c) => c.s > 18).sort((a, b) => b.score - a.score);
+        const main = vib[0] || cols[0];
+        let sub = null;
+        for (const o of vib) {
+          const dh = Math.abs(((o.h - main.h + 540) % 360) - 180);
+          if (dh > 35) {
+            sub = o;
+            break;
+          }
+        }
+        sub = sub || vib[1] || main;
+        const dk = byL[0],
+          lt = byL[byL.length - 1];
+        const P = {};
+        if (mode === 'dark') {
+          P['bg/page'] = hslToCss(dk.h, clamp(dk.s, 8, 34), 8);
+          P['bg/surface'] = hslToCss(dk.h, clamp(dk.s, 8, 32), 13);
+          P['bg/accent'] = hslToCss(dk.h, clamp(dk.s, 10, 38), 19);
+          P['line'] = hslToCss(dk.h, clamp(dk.s, 8, 32), 26);
+          P['text/strong'] = hslToCss(lt.h, 14, 96);
+          P['text/weak'] = hslToCss(lt.h, 12, 66);
+          P['point/main'] = hslToCss(main.h, clamp(main.s, 45, 95), clamp(main.l, 55, 68));
+          P['point/sub'] = hslToCss(sub.h, clamp(sub.s, 40, 90), clamp(sub.l, 55, 68));
+          P['danger'] = hslToCss(2, 78, 62);
+          P['warning'] = hslToCss(38, 90, 58);
+        } else {
+          P['bg/page'] = hslToCss(lt.h, clamp(lt.s, 10, 40), 96);
+          P['bg/surface'] = hslToCss(lt.h, 30, 99.5);
+          P['bg/accent'] = hslToCss(lt.h, clamp(lt.s, 20, 60), 92);
+          P['line'] = hslToCss(lt.h, clamp(lt.s, 12, 40), 87);
+          P['text/strong'] = hslToCss(dk.h, 30, 14);
+          P['text/weak'] = hslToCss(dk.h, 16, 42);
+          P['point/main'] = hslToCss(main.h, clamp(main.s, 45, 90), clamp(main.l, 42, 55));
+          P['point/sub'] = hslToCss(sub.h, clamp(sub.s, 40, 85), clamp(sub.l, 42, 55));
+          P['danger'] = hslToCss(2, 72, 50);
+          P['warning'] = hslToCss(35, 86, 46);
+        }
+        return P;
+      }
+      /* fine-tune: shift hue, scale saturation, shift lightness across the whole palette */
+      function applyAdjust(P) {
+        const a = state.adjust;
+        if (!a || (!a.h && !a.s && !a.l)) return P;
+        const out = {};
+        for (const k in P) {
+          const m = P[k].match(/hsl\(([\d.]+) ([\d.]+)% ([\d.]+)%\)/);
+          if (!m) {
+            out[k] = P[k];
+            continue;
+          }
+          out[k] = hslToCss(+m[1] + a.h, clamp(+m[2] * (1 + a.s / 100), 0, 100), clamp(+m[3] + a.l, 0, 100));
+        }
+        return out;
+      }
+      const RV = {
+        'bg/page': '--bg-page',
+        'bg/surface': '--bg-surface',
+        'bg/accent': '--bg-accent',
+        line: '--line',
+        'text/strong': '--text-strong',
+        'text/weak': '--text-weak',
+        'point/main': '--point-main',
+        'point/sub': '--point-sub',
+        danger: '--danger',
+        warning: '--warning',
+      };
+      let state = { seed: '#4a9eff', harmony: 'analog', mode: 'dark', subHex: null, mapMode: 'auto', imgCols: null, adjust: { h: 0, s: 0, l: 0 }, source: 'seed', overrides: {}, curpalOpen: false };
+      function normHex(h) {
+        const { r, g, b } = hexToRgb(h);
+        const to = (x) => x.toString(16).padStart(2, '0');
+        return `#${to(r)}${to(g)}${to(b)}`;
+      }
+      function cssHslToHex(str) {
+        const m = str.match(/hsl\(([\d.]+) ([\d.]+)% ([\d.]+)%\)/);
+        return m ? hslToHex(+m[1], +m[2], +m[3]) : '#000';
+      }
+      function contrast(hex) {
+        const { r, g, b } = hexToRgb(hex);
+        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? '#15151a' : '#fff';
+      }
+      function apply() {
+        let P = state.mapMode === 'direct' && state.imgCols ? buildDirect(state.imgCols, state.mode) : genPalette(state.seed, state.harmony, state.mode, state.subHex);
+        P = applyAdjust(P);
+        const root = document.documentElement;
+        root.setAttribute('data-mode', state.mode);
+        /* 직접 지정한 색(overrides)이 있으면 자동 생성값을 덮어씀 */
+        const hexMap = {};
+        for (const k in P) hexMap[k] = (state.overrides[k] || cssHslToHex(P[k])).toUpperCase();
+        for (const k in P) root.style.setProperty(RV[k], hexMap[k]);
+        document.getElementById('seed').value = normHex(state.seed);
+        renderCurrentPalette(hexMap);
+        refreshSourceUI();
+      }
+      /* ===== 활성 색상 소스 관리 — 한 번에 하나만 활성, 나머지는 대기(비활성) ===== */
+      const srcAccs = {
+        seed: document.querySelector('.acc[data-src="seed"]'),
+        image: document.querySelector('.acc[data-src="image"]'),
+        preset: document.querySelector('.acc[data-src="preset"]'),
+      };
+      function clearImageUI() {
+        document.getElementById('imgprev').innerHTML = '';
+        document.getElementById('imgname').innerHTML = '';
+        const f = document.getElementById('imgfile');
+        if (f) f.value = '';
+      }
+      function refreshSourceUI() {
+        const cur = state.source || 'seed';
+        for (const key in srcAccs) {
+          const el = srcAccs[key];
+          if (!el) continue;
+          el.classList.toggle('src-active', cur === key);
+          el.classList.toggle('src-idle', cur !== key);
+        }
+        const swprev = document.getElementById('swprev');
+        const hex = document.getElementById('hex');
+        if (cur === 'seed') {
+          swprev.classList.remove('empty');
+          swprev.style.background = normHex(state.seed);
+          hex.value = normHex(state.seed).toUpperCase();
+          hex.placeholder = '';
+        } else {
+          swprev.classList.add('empty');
+          swprev.style.removeProperty('background');
+          hex.value = '';
+          hex.placeholder = cur === 'preset' ? '추천 테마 사용 중' : '이미지 추출 사용 중';
+        }
+      }
+      /* 소스 전환 — 새 소스를 활성화하고, 사용하지 않는 소스의 내용은 비움 */
+      function setSource(src) {
+        state.source = src;
+        if (src !== 'image') clearImageUI(); /* 다른 방식으로 바꾸면 올렸던 이미지는 제거 */
+        if (src !== 'preset') clearPresetSelection(); /* 추천 테마 외 방식이면 선택 표시 해제 */
+        refreshSourceUI();
+      }
+      /* 추천 테마 선택 표시 — 현재 적용 중인 항목 하나만 강조 */
+      function clearPresetSelection() {
+        document.querySelectorAll('#trend .trendchip.sel, #gallery .pcard.sel').forEach((e) => e.classList.remove('sel'));
+      }
+      function markPreset(el) {
+        clearPresetSelection();
+        if (el) el.classList.add('sel');
+      }
+      /* 현재 적용된 팔레트의 색들을 '컬러 모음' 카드처럼 표시 (클릭하면 색상코드 복사) */
+      const CURPAL_ROLES = [
+        ['bg/page', '배경'],
+        ['bg/surface', '표면'],
+        ['bg/accent', '강조 배경'],
+        ['line', '구분선'],
+        ['point/main', '강조 1'],
+        ['point/sub', '강조 2'],
+        ['text/strong', '본문'],
+        ['text/weak', '보조 글자'],
+        ['danger', '경고'],
+        ['warning', '주의'],
+      ];
+      const curpalEl = document.getElementById('curpal');
+      const COPY_SVG =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      const CHECK_SVG =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      function renderCurrentPalette(hex) {
+        const circleKeys = ['bg/page', 'bg/surface', 'point/main', 'point/sub', 'text/strong'];
+        const circles = circleKeys.map((k) => `<i data-c="${k}" style="background:${hex[k]}"></i>`).join('');
+        const hasOv = Object.keys(state.overrides).length > 0;
+        const chips = CURPAL_ROLES.map(([k, label]) => {
+          const ov = !!state.overrides[k];
+          return (
+            `<div class="swhex${ov ? ' ov' : ''}" data-k="${k}">` +
+            `<span class="swc" title="${label} 색 바꾸기 — 눌러서 색상 선택기를 여세요"><i style="background:${hex[k]}"></i><input type="color" value="${hex[k].toLowerCase()}" aria-label="${label} 색 선택"></span>` +
+            `<span class="wrap"><span class="rl">${label}<b class="ovd" title="직접 지정한 색">●</b></span>` +
+            `<input class="hx" type="text" value="${hex[k]}" spellcheck="false" maxlength="7" title="${label} 색상 코드 직접 입력 (예: ${hex[k]}) — Enter로 적용"></span>` +
+            `<button class="cpy" type="button" title="색상 코드 복사">${COPY_SVG}</button>` +
+            `</div>`
+          );
+        }).join('');
+        const open = !!state.curpalOpen;
+        curpalEl.innerHTML =
+          `<div class="pcard"><div class="phead"><span class="pname">현재 팔레트 <span class="ko">색칸=선택기 · 글자=직접입력</span></span>` +
+          `<button class="ghostbtn cpreset" type="button" title="직접 바꾼 색을 모두 지우고 자동 생성값으로 되돌려요"${hasOv ? '' : ' disabled'}>색 초기화</button></div>` +
+          `<div class="circles">${circles}</div>` +
+          `<button class="cptoggle${open ? ' open' : ''}" type="button" aria-expanded="${open}" title="개별 색상(색칸·코드·복사)을 펼치거나 접어요"><span class="lbl">개별 색상 ${open ? '접기' : '펼치기'}</span> <span class="cnt">(${CURPAL_ROLES.length})</span> <span class="chev">▾</span></button>` +
+          `<div class="swhexes"${open ? '' : ' hidden'}>${chips}</div></div>`;
+        curpalEl.classList.add('show');
+        curpalEl.querySelectorAll('.swhex').forEach((row) => {
+          const k = row.dataset.k;
+          const colorInput = row.querySelector('input[type=color]');
+          const hxInput = row.querySelector('.hx');
+          const swatch = row.querySelector('.swc i');
+          const setOverride = (val) => {
+            val = val.toUpperCase();
+            state.overrides[k] = val;
+            document.documentElement.style.setProperty(RV[k], val);
+            swatch.style.background = val;
+            colorInput.value = val.toLowerCase();
+            hxInput.value = val;
+            row.classList.add('ov');
+            const c = curpalEl.querySelector(`.circles i[data-c="${k}"]`);
+            if (c) c.style.background = val;
+            const rb = curpalEl.querySelector('.cpreset');
+            if (rb) rb.disabled = false;
+          };
+          colorInput.oninput = () => setOverride(colorInput.value);
+          hxInput.onchange = () => {
+            const v = hxInput.value.trim();
+            if (/^#?[0-9a-fA-F]{6}$/.test(v)) setOverride(v[0] === '#' ? v : '#' + v);
+            else hxInput.value = state.overrides[k] || hex[k]; /* 잘못된 값이면 되돌림 */
+          };
+          row.querySelector('.cpy').onclick = (e) => {
+            e.stopPropagation();
+            if (navigator.clipboard) navigator.clipboard.writeText(hxInput.value).catch(() => {});
+            const btn = e.currentTarget;
+            btn.classList.add('done');
+            btn.innerHTML = CHECK_SVG;
+            setTimeout(() => {
+              btn.classList.remove('done');
+              btn.innerHTML = COPY_SVG;
+            }, 900);
+          };
+        });
+        const resetBtn = curpalEl.querySelector('.cpreset');
+        if (resetBtn)
+          resetBtn.onclick = () => {
+            state.overrides = {};
+            apply();
+          };
+        /* 개별 색상 펼치기/접기 — 기본은 접힘, 상태는 재렌더에도 유지 */
+        const tg = curpalEl.querySelector('.cptoggle');
+        const sw = curpalEl.querySelector('.swhexes');
+        if (tg && sw)
+          tg.onclick = () => {
+            state.curpalOpen = !state.curpalOpen;
+            const o = state.curpalOpen;
+            tg.classList.toggle('open', o);
+            tg.setAttribute('aria-expanded', o);
+            tg.querySelector('.lbl').textContent = '개별 색상 ' + (o ? '접기' : '펼치기');
+            if (o) sw.removeAttribute('hidden');
+            else sw.setAttribute('hidden', '');
+          };
+      }
+      document.getElementById('seed').oninput = (e) => {
+        state.seed = e.target.value;
+        state.subHex = null;
+        state.mapMode = 'auto';
+        setSource('seed');
+        apply();
+      };
+      document.getElementById('hex').onchange = (e) => {
+        let v = e.target.value.trim();
+        if (/^#?[0-9a-fA-F]{6}$/.test(v)) {
+          state.seed = v[0] === '#' ? v : '#' + v;
+          state.subHex = null;
+          state.mapMode = 'auto';
+          setSource('seed');
+          apply();
+        }
+      };
+      document.querySelectorAll('#harmony button').forEach(
+        (b) =>
+          (b.onclick = () => {
+            document.querySelectorAll('#harmony button').forEach((x) => x.classList.remove('on'));
+            b.classList.add('on');
+            state.harmony = b.dataset.h;
+            state.subHex = null;
+            state.mapMode = 'auto';
+            setSource('seed');
+            apply();
+          })
+      );
+      document.querySelectorAll('#mode button').forEach(
+        (b) =>
+          (b.onclick = () => {
+            document.querySelectorAll('#mode button').forEach((x) => x.classList.remove('on'));
+            b.classList.add('on');
+            state.mode = b.dataset.m;
+            apply();
+          })
+      );
+      document.getElementById('rand').onclick = () => {
+        const h = Math.floor(Math.random() * 360),
+          s = 55 + Math.random() * 35,
+          l = 45 + Math.random() * 15;
+        state.seed = hslToHex(h, s, l);
+        state.subHex = null;
+        state.mapMode = 'auto';
+        setSource('seed');
+        apply();
+      };
+
+      /* 추출 방식(자동 조화 / 원본 색 그대로) UI 동기화 */
+      function syncExtractUI(mode) {
+        document.querySelectorAll('#extractMode button').forEach((x) => x.classList.toggle('on', x.dataset.x === mode));
+        document.getElementById('extractHint').textContent =
+          mode === 'direct'
+            ? '사진 속 색을 그대로 가져와 배경·글자·강조에 배치해요. 분위기는 살지만 대비가 약할 수 있어요.'
+            : '사진에서 대표색 하나를 골라, 서로 잘 어울리는 팔레트를 자동으로 만들어요.';
+      }
+
+      function applySeed(seed, mode) {
+        state.seed = seed;
+        state.mode = mode;
+        state.subHex = null;
+        state.mapMode = 'auto';
+        syncExtractUI('auto');
+        document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === mode));
+        setSource('preset');
+        apply();
+      }
+
+      /* ===== Pantone Color of the Year by year (+ companion trend tones) ===== */
+      const PANTONE = {
+        2026: {
+          coty: { n: 'Cloud Dancer', code: 'PANTONE 11-4201', c: '#F0EEE9', seed: '#C2B4A0', mode: 'light' },
+          comp: [
+            { n: 'Butter Yellow', c: '#F3D58D', seed: '#E9B84A', mode: 'light' },
+            { n: 'Terracotta', c: '#C56A4A', seed: '#C56A4A', mode: 'light' },
+            { n: 'Sage Green', c: '#A3B18A', seed: '#8FA876', mode: 'dark' },
+            { n: 'Dusty Blue', c: '#7E9CB5', seed: '#6E93B5', mode: 'dark' },
+          ],
+        },
+        2025: {
+          coty: { n: 'Mocha Mousse', code: 'PANTONE 17-1230', c: '#A47864', seed: '#A47864', mode: 'dark' },
+          comp: [
+            { n: 'Warm Taupe', c: '#B9A48E', seed: '#B9A48E', mode: 'light' },
+            { n: 'Olive', c: '#7A7A52', seed: '#7A7A52', mode: 'dark' },
+            { n: 'Brick', c: '#9E4A3A', seed: '#9E4A3A', mode: 'dark' },
+          ],
+        },
+        2024: {
+          coty: { n: 'Peach Fuzz', code: 'PANTONE 13-1023', c: '#FFBE98', seed: '#F0A57E', mode: 'light' },
+          comp: [
+            { n: 'Soft Coral', c: '#F08A6B', seed: '#F08A6B', mode: 'light' },
+            { n: 'Sky', c: '#8FB6D6', seed: '#7FA9CE', mode: 'dark' },
+            { n: 'Cream', c: '#F3E2CE', seed: '#D9B68F', mode: 'light' },
+          ],
+        },
+        2023: {
+          coty: { n: 'Viva Magenta', code: 'PANTONE 18-1750', c: '#BB2649', seed: '#BB2649', mode: 'dark' },
+          comp: [
+            { n: 'Magenta Pink', c: '#D84A6B', seed: '#D84A6B', mode: 'dark' },
+            { n: 'Plum', c: '#7A2E4A', seed: '#7A2E4A', mode: 'dark' },
+            { n: 'Blush', c: '#E8B0B8', seed: '#D98594', mode: 'light' },
+          ],
+        },
+        2022: {
+          coty: { n: 'Very Peri', code: 'PANTONE 17-3938', c: '#6667AB', seed: '#6667AB', mode: 'dark' },
+          comp: [
+            { n: 'Periwinkle', c: '#8E8FD0', seed: '#8E8FD0', mode: 'dark' },
+            { n: 'Lavender', c: '#B7B0E0', seed: '#9A93D6', mode: 'light' },
+            { n: 'Indigo', c: '#3E3F73', seed: '#4A4B85', mode: 'dark' },
+          ],
+        },
+      };
+      const trendEl = document.getElementById('trend'),
+        yearSel = document.getElementById('trendYear');
+      Object.keys(PANTONE)
+        .sort((a, b) => b - a)
+        .forEach((y) => {
+          const o = document.createElement('option');
+          o.value = y;
+          o.textContent = y;
+          yearSel.appendChild(o);
+        });
+      function renderTrend(year) {
+        const y = PANTONE[year];
+        trendEl.innerHTML = '';
+        [{ ...y.coty, coty: true }, ...y.comp].forEach((t) => {
+          const el = document.createElement('button');
+          el.className = 'trendchip' + (t.coty ? ' coty' : '');
+          el.title = t.n + (t.code ? ' · ' + t.code : '');
+          el.innerHTML = `<i style="background:${t.c}"></i><span>${t.n}</span>${t.code ? `<span class="pcode">${t.code.replace('PANTONE ', '')}</span>` : `<span class="yr">trend</span>`}`;
+          el.onclick = () => {
+            applySeed(t.seed, t.mode);
+            markPreset(el);
+          };
+          trendEl.appendChild(el);
+        });
+      }
+      yearSel.onchange = (e) => renderTrend(e.target.value);
+      renderTrend('2026');
+
+      /* ===== curated color themes (named, shown as overlapping circles) ===== */
+      const PALETTES = [
+        { n: 'Halloween warm whimsical', c: ['#F3E7CE', '#E6B98A', '#E07B39', '#8A5A3B', '#352620'] },
+        { n: 'Red + Grey + Dark Grey + Lite Grey', c: ['#C21D03', '#33363B', '#6E7479', '#B7BDC2', '#E4E7EA'] },
+        { n: 'Dark Sapphire Blue', c: ['#0F243F', '#173B6B', '#2E5E9E', '#6E9BD0', '#C6DBF1'] },
+        { n: 'Dark blue, green and red blush', c: ['#16233F', '#2F7D6E', '#1F3A5C', '#D9483B', '#F0D9C9'] },
+        { n: 'Dark blue and red blush', c: ['#1B2740', '#10182B', '#33405C', '#D9483B', '#F3E4D6'] },
+        { n: 'Neon', c: ['#1A1430', '#7B3FF2', '#A06BFF', '#C9A8FF', '#2A1D52'] },
+        { n: 'Dark Sage Green', c: ['#2B332B', '#4F6B4A', '#6F8F6A', '#A9C0A0', '#D6E2C8'] },
+        { n: 'DE283B', c: ['#DE283B', '#1E3A42', '#2F7D8A', '#5FB0BD', '#9FD4DC'] },
+        { n: 'Cream & Sage', c: ['#FBF7EF', '#E7E0CE', '#BFC9A8', '#8A9A6B', '#4A5238'] },
+        { n: 'Pastel Sky', c: ['#F4F8FB', '#DCE9F2', '#A9CCE3', '#5B8DB8', '#28425C'] },
+        { n: 'Warm Sand', c: ['#FBF3E8', '#F0DEC4', '#E3C19A', '#C18F5A', '#6B4A2A'] },
+        { n: 'Blush Rose', c: ['#FCF2F3', '#F6DEE2', '#E9AEB8', '#C76E81', '#6E3A47'] },
+        { n: 'Mint Breeze', c: ['#F1FAF6', '#D6F0E4', '#A6DCC6', '#5BB394', '#2A5C49'] },
+        { n: 'Lavender Mist', c: ['#F7F4FB', '#E7DEF2', '#C9B6E3', '#8E6FB8', '#473159'] },
+      ];
+      /* 컬러 모음이 다크/라이트 중 어느 모드로 적용될지 — 평균 밝기로 판정(applyPalette와 동일 기준) */
+      function paletteMode(hexes) {
+        const avgL = hexes.reduce((a, h) => a + rgbToHsl(hexToRgb(h)).l, 0) / hexes.length;
+        return avgL > 55 ? 'light' : 'dark';
+      }
+      function applyPalette(hexes) {
+        const cols = hexes.map((h) => {
+          const c = hexToRgb(h);
+          const hsl = rgbToHsl(c);
+          return { r: c.r, g: c.g, b: c.b, h: hsl.h, s: hsl.s, l: hsl.l, n: 1, score: (hsl.s / 100) * (1 - Math.abs(hsl.l - 55) / 100) };
+        });
+        state.imgCols = cols;
+        state.mapMode = 'direct';
+        state.mode = paletteMode(hexes);
+        state.subHex = null;
+        syncExtractUI('direct');
+        document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === state.mode));
+        setSource('preset');
+        apply();
+      }
+      const galleryEl = document.getElementById('gallery');
+      PALETTES.forEach((p) => {
+        const el = document.createElement('button');
+        el.className = 'pcard';
+        el.title = p.n;
+        const pm = paletteMode(p.c);
+        el.dataset.pm = pm;
+        el.innerHTML = `<div class="circles">${p.c.map((c) => `<i style="background:${c}"></i>`).join('')}</div><div class="pcardfoot"><span class="pname">${p.n}</span><span class="pmode pmode-${pm}"><i></i>${pm === 'light' ? '라이트' : '다크'}</span></div>`;
+        el.onclick = () => {
+          applyPalette(p.c);
+          markPreset(el);
+        };
+        galleryEl.appendChild(el);
+      });
+      /* 컬러 모음 탭(다크/라이트) — 선택한 모드의 추천만 보여줌 */
+      let galleryFilter = 'dark';
+      function filterGallery(mode) {
+        galleryFilter = mode;
+        galleryEl.querySelectorAll('.pcard').forEach((el) => {
+          el.style.display = el.dataset.pm === mode ? '' : 'none';
+        });
+      }
+      document.querySelectorAll('#galleryMode button').forEach(
+        (b) =>
+          (b.onclick = () => {
+            document.querySelectorAll('#galleryMode button').forEach((x) => x.classList.toggle('on', x === b));
+            filterGallery(b.dataset.gm);
+          })
+      );
+      filterGallery('dark');
+
+      /* ===== theme from image ===== */
+      function extractTheme(img) {
+        const c = document.createElement('canvas');
+        c.width = c.height = 50;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0, 50, 50);
+        const d = ctx.getImageData(0, 0, 50, 50).data;
+        const map = {};
+        let lumSum = 0,
+          cnt = 0;
+        for (let i = 0; i < d.length; i += 4) {
+          if (d[i + 3] < 128) continue;
+          const r = d[i],
+            g = d[i + 1],
+            b = d[i + 2];
+          lumSum += 0.299 * r + 0.587 * g + 0.114 * b;
+          cnt++;
+          const key = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+          if (!map[key]) map[key] = { r: 0, g: 0, b: 0, n: 0 };
+          const o = map[key];
+          o.r += r;
+          o.g += g;
+          o.b += b;
+          o.n++;
+        }
+        const toHex = (o) => {
+          const t = (x) => Math.round(x).toString(16).padStart(2, '0');
+          return `#${t(o.r)}${t(o.g)}${t(o.b)}`;
+        };
+        const cols = Object.values(map).map((o) => {
+          const c = { r: o.r / o.n, g: o.g / o.n, b: o.b / o.n, n: o.n };
+          const hsl = rgbToHsl(c);
+          c.h = hsl.h;
+          c.s = hsl.s;
+          c.l = hsl.l;
+          c.score = (hsl.s / 100) * Math.sqrt(o.n) * (1 - Math.abs(hsl.l - 55) / 100);
+          return c;
+        });
+        if (!cols.length) return { seed: '#4a9eff', sub: null, mode: 'dark' };
+        cols.sort((a, b) => b.score - a.score);
+        const seed = cols[0];
+        const seedH = seed.h;
+        let sub = null;
+        for (const o of cols.slice(0, 10)) {
+          const dh = Math.abs(((o.h - seedH + 540) % 360) - 180);
+          if (o.s > 22 && dh > 40) {
+            sub = o;
+            break;
+          }
+        }
+        return { seed: toHex(seed), sub: sub ? toHex(sub) : null, mode: lumSum / cnt / 255 > 0.55 ? 'light' : 'dark', cols };
+      }
+      document.getElementById('imgfile').onchange = (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        const dot = f.name.lastIndexOf('.');
+        const ext = dot > -1 ? f.name.slice(dot + 1).toUpperCase() : '';
+        document.getElementById('imgname').innerHTML = `${f.name}${ext ? ` · <b>${ext}</b>` : ''}`;
+        const url = URL.createObjectURL(f);
+        const img = new Image();
+        img.onload = () => {
+          const t = extractTheme(img);
+          state.seed = t.seed;
+          state.mode = t.mode;
+          state.subHex = t.sub;
+          state.imgCols = t.cols;
+          document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === t.mode));
+          setSource('image');
+          apply();
+          document.getElementById('imgprev').innerHTML =
+            `<img src="${url}" alt=""><div class="sws"><i style="background:${t.seed}" title="${t.seed}"></i>${t.sub ? `<i style="background:${t.sub}" title="${t.sub}"></i>` : ''}</div><span class="ihint">${t.mode === 'light' ? '라이트' : '다크'} 추출됨</span>`;
+        };
+        img.src = url;
+      };
+      /* 추출 방식 선택 + fine-tune sliders */
+      document.querySelectorAll('#extractMode button').forEach(
+        (b) =>
+          (b.onclick = () => {
+            const hasImg = document.getElementById('imgprev').children.length > 0;
+            state.mapMode = b.dataset.x;
+            syncExtractUI(b.dataset.x);
+            if (hasImg) setSource('image');
+            apply();
+          })
+      );
+      ['adjH', 'adjS', 'adjL'].forEach(
+        (id) =>
+          (document.getElementById(id).oninput = () => {
+            state.adjust = { h: +document.getElementById('adjH').value, s: +document.getElementById('adjS').value, l: +document.getElementById('adjL').value };
+            apply();
+          })
+      );
+      document.getElementById('adjReset').onclick = () => {
+        state.adjust = { h: 0, s: 0, l: 0 };
+        document.getElementById('adjH').value = 0;
+        document.getElementById('adjS').value = 0;
+        document.getElementById('adjL').value = 0;
+        apply();
+      };
+      const appEl = document.getElementById('app');
+      document.getElementById('closer').onclick = () => appEl.classList.add('collapsed');
+      document.getElementById('opener').onclick = () => appEl.classList.remove('collapsed');
+
+      /* 색상 설정 아코디언 — 한 번에 하나만 펼치고(드롭다운식), 헤더의 '?'는 토글 제외 */
+      const accList = [...document.querySelectorAll('.colorset .acc')];
+      accList.forEach((d) => {
+        d.addEventListener('toggle', () => {
+          if (d.open) accList.forEach((o) => o !== d && (o.open = false));
+        });
+        const info = d.querySelector(':scope > summary .info');
+        if (info)
+          info.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          });
+      });
+      /* 처음엔 '기준 색' 하나만 펼쳐 두고 나머지는 접어 둠(로드 시점 깜빡임 방지) */
+      const accDefault = accList.find((d) => d.hasAttribute('open')) || accList[0];
+      accList.forEach((d) => (d.open = d === accDefault));
+
+      /* ===== charts ===== */
+      const NS = 'http://www.w3.org/2000/svg';
+      function svgEl(t, a) {
+        const e = document.createElementNS(NS, t);
+        for (const k in a || {}) e.setAttribute(k, a[k]);
+        return e;
+      }
+      function axes(host, yticks, xlabels, gridN) {
+        host.innerHTML = '';
+        const yax = document.createElement('div');
+        yax.className = 'yax';
+        yticks.forEach((t) => {
+          const s = document.createElement('span');
+          s.textContent = t;
+          yax.appendChild(s);
+        });
+        const plot = document.createElement('div');
+        plot.className = 'plot';
+        const svg = svgEl('svg', { viewBox: '0 0 400 200', preserveAspectRatio: 'none' });
+        const grid = svgEl('g');
+        const G = gridN || yticks.length;
+        for (let i = 0; i < G; i++) {
+          const y = (i / (G - 1)) * 200;
+          grid.appendChild(svgEl('line', { x1: 0, y1: y, x2: 400, y2: y, stroke: 'var(--line)', 'stroke-dasharray': '2 4', 'stroke-width': 1, opacity: 0.5 }));
+        }
+        svg.appendChild(grid);
+        const defs = svgEl('defs');
+        svg.appendChild(defs);
+        const series = svgEl('g');
+        svg.appendChild(series);
+        plot.appendChild(svg);
+        const xax = document.createElement('div');
+        xax.className = 'xax';
+        xlabels.forEach((l) => {
+          const s = document.createElement('span');
+          s.textContent = l;
+          xax.appendChild(s);
+        });
+        host.append(yax, plot, xax);
+        return { defs, series };
+      }
+      function spline(d, step, ys) {
+        let p = `M 0 ${ys(d[0])}`;
+        for (let i = 1; i < d.length; i++) {
+          const cx = ((i - 1 + i) / 2) * step;
+          p += ` C ${cx} ${ys(d[i - 1])} ${cx} ${ys(d[i])} ${i * step} ${ys(d[i])}`;
+        }
+        return p;
+      }
+
+      // Throughput: two lines (PEAK 데이 = sub, 금일 = main), live scroll left
+      function makeThroughput() {
+        const { series } = axes(document.getElementById('ch-tp'), [400, 200, 0], ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'], 9);
+        const N = 28,
+          step = 400 / (N - 1),
+          max = 440,
+          ys = (v) => 200 - (v / max) * 200;
+        let A = Array.from({ length: N }, (_, i) => 160 - i * 4.2 + Math.random() * 28);
+        let B = Array.from({ length: N }, (_, i) => 40 + i * 4.0 + Math.random() * 28);
+        const g = svgEl('g');
+        series.appendChild(g);
+        const pa = svgEl('path', { fill: 'none', stroke: 'var(--point-sub)', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+        const pb = svgEl('path', { fill: 'none', stroke: 'var(--point-main)', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+        const da = svgEl('circle', { class: 'pulse-dot', r: 3, fill: 'var(--point-sub)' });
+        const db = svgEl('circle', { class: 'pulse-dot', r: 3, fill: 'var(--point-main)' });
+        g.append(pa, pb, da, db);
+        function draw(a, b) {
+          pa.setAttribute('d', spline(a, step, ys));
+          pb.setAttribute('d', spline(b, step, ys));
+          da.setAttribute('cx', Math.min((a.length - 1) * step, 398));
+          da.setAttribute('cy', ys(a[a.length - 1]));
+          db.setAttribute('cx', Math.min((b.length - 1) * step, 398));
+          db.setAttribute('cy', ys(b[b.length - 1]));
+        }
+        function intro() {
+          draw(A, B);
+          [pa, pb].forEach((p) => {
+            const L = p.getTotalLength();
+            p.style.transition = 'none';
+            p.style.strokeDasharray = L;
+            p.style.strokeDashoffset = L;
+          });
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() =>
+              [pa, pb].forEach((p) => {
+                p.style.transition = 'stroke-dashoffset 1.3s ease';
+                p.style.strokeDashoffset = '0';
+              })
+            )
+          );
+        }
+        intro();
+        return {
+          tick() {
+            const na = [...A, clamp(A[N - 1] + (Math.random() * 40 - 20), 10, 430)],
+              nb = [...B, clamp(B[N - 1] + (Math.random() * 40 - 20), 10, 430)];
+            draw(na, nb);
+            g.style.transition = 'none';
+            g.style.transform = 'translateX(0)';
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => {
+                g.style.transition = 'transform .9s ease';
+                g.style.transform = `translateX(${-step}px)`;
+              })
+            );
+            setTimeout(() => {
+              A = na.slice(1);
+              B = nb.slice(1);
+              g.style.transition = 'none';
+              g.style.transform = 'translateX(0)';
+              draw(A, B);
+            }, 920);
+          },
+          redraw() {
+            A = Array.from({ length: N }, (_, i) => 160 - i * 4.2 + Math.random() * 28);
+            B = Array.from({ length: N }, (_, i) => 40 + i * 4.0 + Math.random() * 28);
+            intro();
+          },
+        };
+      }
+      // Connected: 14 bars, blue(top)->cyan(bottom) gradient, value-shift left each tick
+      function makeConnected() {
+        const { defs, series } = axes(document.getElementById('ch-cn'), [100, 75, 50, 25, 0], ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'], 5);
+        const lg = svgEl('linearGradient', { id: 'barGrad', x1: 0, y1: 0, x2: 0, y2: 1 });
+        lg.append(svgEl('stop', { offset: '0%', 'stop-color': 'var(--point-main)' }), svgEl('stop', { offset: '100%', 'stop-color': 'var(--point-sub)' }));
+        defs.appendChild(lg);
+        const N = 14,
+          step = 400 / (N - 1),
+          bw = step * 0.5,
+          max = 100,
+          ys = (v) => 200 - (v / max) * 200;
+        let data = Array.from({ length: N }, () => 20 + Math.random() * 72);
+        function draw(d, anim) {
+          series.innerHTML = '';
+          d.forEach((v, i) => {
+            const y = ys(v);
+            const r = svgEl('rect', { x: (i * step - bw / 2).toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: (200 - y).toFixed(1), rx: 2, fill: 'url(#barGrad)' });
+            if (anim) {
+              r.style.animation = 'rise .7s cubic-bezier(.2,.8,.2,1) backwards';
+              r.style.animationDelay = i * 0.03 + 's';
+            }
+            series.appendChild(r);
+          });
+        }
+        draw(data, true);
+        return {
+          tick() {
+            data = [...data.slice(1), 20 + Math.random() * 72];
+            draw(data, false);
+            const last = series.lastChild;
+            if (last) {
+              last.style.animation = 'rise .6s cubic-bezier(.2,.8,.2,1)';
+            }
+          },
+          redraw() {
+            data = Array.from({ length: N }, () => 20 + Math.random() * 72);
+            draw(data, true);
+          },
+        };
+      }
+      // 회선 사용량: area chart, live scroll left
+      function makeCircuit() {
+        const { defs, series } = axes(document.getElementById('ch-ci'), [100, 75, 50, 25, 0], ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'], 5);
+        const lg = svgEl('linearGradient', { id: 'ciGrad', x1: 0, y1: 0, x2: 0, y2: 1 });
+        lg.append(svgEl('stop', { offset: '0%', 'stop-color': 'var(--point-main)', 'stop-opacity': 0.35 }), svgEl('stop', { offset: '100%', 'stop-color': 'var(--point-main)', 'stop-opacity': 0 }));
+        defs.appendChild(lg);
+        const N = 14,
+          step = 400 / (N - 1),
+          max = 100,
+          ys = (v) => 200 - (v / max) * 200;
+        let data = Array.from({ length: N }, (_, i) => 62 + Math.sin(i / 2) * 14 + Math.random() * 7);
+        const g = svgEl('g');
+        series.appendChild(g);
+        const ar = svgEl('path', { fill: 'url(#ciGrad)' });
+        const ln = svgEl('path', { fill: 'none', stroke: 'var(--point-main)', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+        const dot = svgEl('circle', { class: 'pulse-dot', r: 3, fill: 'var(--point-main)' });
+        g.append(ar, ln, dot);
+        function draw(d) {
+          const p = spline(d, step, ys);
+          ln.setAttribute('d', p);
+          ar.setAttribute('d', p + ` L ${(d.length - 1) * step} 200 L 0 200 Z`);
+          dot.setAttribute('cx', Math.min((d.length - 1) * step, 398));
+          dot.setAttribute('cy', ys(d[d.length - 1]));
+        }
+        function intro() {
+          draw(data);
+          const L = ln.getTotalLength();
+          ln.style.transition = 'none';
+          ln.style.strokeDasharray = L;
+          ln.style.strokeDashoffset = L;
+          ar.style.transition = 'none';
+          ar.style.opacity = '0';
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              ln.style.transition = 'stroke-dashoffset 1.3s ease';
+              ln.style.strokeDashoffset = '0';
+              ar.style.transition = 'opacity 1.3s ease';
+              ar.style.opacity = '1';
+            })
+          );
+        }
+        intro();
+        return {
+          tick() {
+            const nd = [...data, clamp(data[N - 1] + (Math.random() * 24 - 12), 35, 98)];
+            draw(nd);
+            g.style.transition = 'none';
+            g.style.transform = 'translateX(0)';
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => {
+                g.style.transition = 'transform .9s ease';
+                g.style.transform = `translateX(${-step}px)`;
+              })
+            );
+            setTimeout(() => {
+              data = nd.slice(1);
+              g.style.transition = 'none';
+              g.style.transform = 'translateX(0)';
+              draw(data);
+            }, 920);
+          },
+        };
+      }
+      // CPU(Core) segmented donut + legend
+      function makeDonut() {
+        const svg = document.getElementById('donut');
+        const leg = document.getElementById('dleg');
+        const items = [
+          ['마케팅 정보 분석', 38, 'var(--point-main)'],
+          ['클라우드관리플랫폼', 22, 'var(--point-sub)'],
+          ['어플리케이션 보안', 18, 'color-mix(in srgb,var(--point-main) 50%,var(--line))'],
+          ['지속적 통합배포', 14, 'color-mix(in srgb,var(--text-weak) 55%,var(--line))'],
+          ['스마트창구', 8, 'var(--line)'],
+        ];
+        const cx = 64,
+          cy = 64,
+          r = 46,
+          C = 2 * Math.PI * r,
+          gap = 8;
+        svg.innerHTML = '';
+        let off = 0;
+        items.forEach(([, val, col]) => {
+          const seg = (C * val) / 100;
+          const c = svgEl('circle', {
+            cx,
+            cy,
+            r,
+            fill: 'none',
+            stroke: col,
+            'stroke-width': 16,
+            'stroke-dasharray': `${Math.max(0, seg - gap)} ${C - Math.max(0, seg - gap)}`,
+            'stroke-dashoffset': -off,
+            transform: `rotate(-90 ${cx} ${cy})`,
+          });
+          c.style.transition = 'stroke-dasharray .9s ease';
+          svg.appendChild(c);
+          off += seg;
+        });
+        leg.innerHTML = items.map(([n, v, c]) => `<div class="row"><i style="background:${c}"></i>${n}<b>${v}%</b></div>`).join('');
+      }
+      // heatmap status dots
+      function makeHeat() {
+        const heat = document.getElementById('heat');
+        const days = ['07/22', '07/23', '07/24', '07/25', '07/26', '07/27'];
+        const rows = ['Client', 'Network', 'System', 'e-Banking'];
+        let h = `<div class="hrow"><div class="rl">주간현황</div>${days.map((d) => `<div class="hh">${d}</div>`).join('')}</div>`;
+        rows.forEach((r) => {
+          h += `<div class="hrow"><div class="rl">${r}</div>`;
+          for (let i = 0; i < 6; i++) {
+            const alert = Math.random() > 0.86;
+            h += `<div class="hcell" title="${r} · ${days[i]} · ${alert ? 'Critical' : '정상'}">${alert ? '<span class="al"><i></i></span>' : '<span class="ok"></span>'}</div>`;
+          }
+          h += '</div>';
+        });
+        heat.innerHTML = h;
+      }
+      const tp = makeThroughput(),
+        cn = makeConnected(),
+        ci = makeCircuit();
+      makeDonut();
+      makeHeat();
+
+      /* clock — 날짜·시간 모두 실시간 */
+      function fmtClock() {
+        const d = new Date();
+        const p = (n) => String(n).padStart(2, '0');
+        const date = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+        const time = p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+        return date + ' · ' + time;
+      }
+      document.getElementById('clock').textContent = fmtClock();
+      setInterval(() => {
+        document.getElementById('clock').textContent = fmtClock();
+      }, 1000);
+
+      /* weather — 실시간 날씨
+         네이버 날씨는 공개 API가 없고, 브라우저에서 페이지를 직접 읽으면 CORS로 차단돼요.
+         그래서 키 없이 바로 쓰는 무료 실시간 기상 서비스(Open-Meteo, 기상청 데이터 기반)를 사용합니다.
+         위치 권한을 허용하면 현재 위치, 아니면 서울 기준으로 표시돼요. */
+      const WMO = {
+        0: ['☀', '맑음'],
+        1: ['🌤', '대체로 맑음'],
+        2: ['⛅', '구름 조금'],
+        3: ['☁', '흐림'],
+        45: ['🌫', '안개'],
+        48: ['🌫', '짙은 안개'],
+        51: ['🌦', '이슬비'],
+        53: ['🌦', '이슬비'],
+        55: ['🌦', '강한 이슬비'],
+        56: ['🌧', '어는 이슬비'],
+        57: ['🌧', '어는 이슬비'],
+        61: ['🌧', '약한 비'],
+        63: ['🌧', '비'],
+        65: ['🌧', '강한 비'],
+        66: ['🌧', '어는 비'],
+        67: ['🌧', '어는 비'],
+        71: ['🌨', '약한 눈'],
+        73: ['🌨', '눈'],
+        75: ['🌨', '강한 눈'],
+        77: ['🌨', '싸락눈'],
+        80: ['🌦', '소나기'],
+        81: ['🌦', '소나기'],
+        82: ['⛈', '강한 소나기'],
+        85: ['🌨', '소낙눈'],
+        86: ['🌨', '강한 소낙눈'],
+        95: ['⛈', '뇌우'],
+        96: ['⛈', '우박 동반 뇌우'],
+        99: ['⛈', '우박 동반 뇌우'],
+      };
+      async function loadWeather(lat, lon) {
+        try {
+          const url =
+            'https://api.open-meteo.com/v1/forecast?latitude=' +
+            lat +
+            '&longitude=' +
+            lon +
+            '&current=temperature_2m,weather_code&timezone=auto';
+          const r = await fetch(url);
+          if (!r.ok) throw new Error('weather http ' + r.status);
+          const j = await r.json();
+          const c = j.current;
+          const [icon, desc] = WMO[c.weather_code] || ['☁', '—'];
+          document.getElementById('wicon').textContent = icon;
+          document.getElementById('wdesc').textContent = desc;
+          document.getElementById('wtemp').textContent = Math.round(c.temperature_2m) + '℃';
+        } catch (e) {
+          document.getElementById('wicon').textContent = '⚠';
+          document.getElementById('wdesc').textContent = '날씨 정보 없음';
+          document.getElementById('wtemp').textContent = '';
+        }
+      }
+      function initWeather() {
+        const SEOUL = [37.5665, 126.978];
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => loadWeather(pos.coords.latitude, pos.coords.longitude),
+            () => loadWeather(SEOUL[0], SEOUL[1]),
+            { timeout: 5000 }
+          );
+        } else {
+          loadWeather(SEOUL[0], SEOUL[1]);
+        }
+      }
+      initWeather();
+      setInterval(initWeather, 10 * 60 * 1000); // 10분마다 갱신
+
+      /* interactions */
+      document.querySelectorAll('.nav a').forEach((a) =>
+        a.addEventListener('click', () => {
+          document.querySelectorAll('.nav a').forEach((x) => x.classList.remove('active'));
+          a.classList.add('active');
+        })
+      );
+      document.querySelectorAll('.ph .tabs').forEach((g) =>
+        g.querySelectorAll('b').forEach((b) =>
+          b.addEventListener('click', () => {
+            g.querySelectorAll('b').forEach((x) => x.classList.remove('on'));
+            b.classList.add('on');
+          })
+        )
+      );
+      document
+        .querySelector('#ch-tp')
+        .closest('.panel')
+        .querySelectorAll('.tabs b')
+        .forEach((b) => b.addEventListener('click', () => tp.redraw()));
+      document
+        .querySelector('#ch-cn')
+        .closest('.panel')
+        .querySelectorAll('.tabs b')
+        .forEach((b) => b.addEventListener('click', () => cn.redraw()));
+      document.querySelectorAll('.prow').forEach((r) => (r.title = r.querySelector('.nm').textContent + ' · ' + r.querySelector('.pv').textContent + '%'));
+
+      /* ===== 대시보드 편집: 패널 배치(드래그) + 내용(텍스트) 수정 — 자동 저장 ===== */
+      (function () {
+        const cols = document.querySelector('.cols');
+        const stage = document.querySelector('.stage');
+        if (!cols || !stage) return;
+
+        /* ---------- 1) 패널 배치 ---------- */
+        const LK = 'wemb-dash-layout';
+        cols.querySelectorAll('.panel').forEach((p, i) => (p.dataset.pid = 'p' + i));
+        const captureLayout = () => [...cols.querySelectorAll('.col')].map((c) => [...c.querySelectorAll('.panel')].map((p) => p.dataset.pid));
+        function applyLayout(layout) {
+          const colEls = [...cols.querySelectorAll('.col')];
+          const byId = {};
+          cols.querySelectorAll('.panel').forEach((p) => (byId[p.dataset.pid] = p));
+          layout.forEach((ids, ci) => {
+            const c = colEls[ci];
+            if (c) ids.forEach((id) => byId[id] && c.appendChild(byId[id]));
+          });
+        }
+        const DEFAULT_LAYOUT = captureLayout();
+        const saveLayout = () => {
+          try {
+            localStorage.setItem(LK, JSON.stringify(captureLayout()));
+          } catch (e) {}
+        };
+        const loadLayout = () => {
+          try {
+            const r = localStorage.getItem(LK);
+            if (r) applyLayout(JSON.parse(r));
+          } catch (e) {}
+        };
+
+        /* ---------- 2) 내용(텍스트) ---------- */
+        const CK = 'wemb-dash-content';
+        const CSEL = '.kpi .lab, .kpi .val, .kpi .sub, .ph h3, .nav a, .brand .sub, .panel th, .panel td, .logrow span, .dleg .row, .prow .nm, .prow .pv, .sec-lab';
+        const textEls = [...stage.querySelectorAll(CSEL)];
+        textEls.forEach((el, i) => (el.dataset.eid = 'e' + i));
+        const DEFAULT_CONTENT = {};
+        textEls.forEach((el) => (DEFAULT_CONTENT[el.dataset.eid] = el.innerHTML));
+        const saveContent = () => {
+          const m = {};
+          textEls.forEach((el) => {
+            if (el.innerHTML !== DEFAULT_CONTENT[el.dataset.eid]) m[el.dataset.eid] = el.innerHTML;
+          });
+          try {
+            localStorage.setItem(CK, JSON.stringify(m));
+          } catch (e) {}
+        };
+        const loadContent = () => {
+          try {
+            const r = localStorage.getItem(CK);
+            if (!r) return;
+            const m = JSON.parse(r);
+            textEls.forEach((el) => {
+              if (m[el.dataset.eid] != null) el.innerHTML = m[el.dataset.eid];
+            });
+          } catch (e) {}
+        };
+
+        /* ---------- 3) 모드 토글 (배치/내용 상호 배타) ---------- */
+        const layoutBtn = document.getElementById('editToggle');
+        const layoutLbl = layoutBtn.querySelector('.lbl');
+        const contentBtn = document.getElementById('contentToggle');
+        const contentLbl = contentBtn.querySelector('.lbl');
+        const banner = document.getElementById('editBanner');
+        const bannerText = document.getElementById('editBannerText');
+        let layoutMode = false,
+          contentMode = false,
+          dragEl = null;
+
+        function refreshBanner() {
+          if (layoutMode) bannerText.textContent = '패널을 끌어다 놓아 위치를 바꿔보세요. 변경 내용은 자동 저장됩니다.';
+          else if (contentMode) bannerText.textContent = '바꾸고 싶은 글자를 클릭해 직접 수정하세요. 변경 내용은 자동 저장됩니다.';
+          banner.classList.toggle('show', layoutMode || contentMode);
+        }
+        function setLayout(on) {
+          layoutMode = on;
+          if (on && contentMode) setContent(false);
+          cols.classList.toggle('editing', on);
+          layoutBtn.classList.toggle('on', on);
+          layoutLbl.textContent = on ? '수정 끝내기' : '배치 수정하기';
+          cols.querySelectorAll('.panel').forEach((p) => (p.draggable = on));
+          refreshBanner();
+        }
+        function setContent(on) {
+          contentMode = on;
+          if (on && layoutMode) setLayout(false);
+          stage.classList.toggle('content-editing', on);
+          contentBtn.classList.toggle('on', on);
+          contentLbl.textContent = on ? '수정 끝내기' : '내용 수정하기';
+          textEls.forEach((el) => (on ? el.setAttribute('contenteditable', 'true') : el.removeAttribute('contenteditable')));
+          refreshBanner();
+        }
+        layoutBtn.onclick = () => setLayout(!layoutMode);
+        contentBtn.onclick = () => setContent(!contentMode);
+        document.getElementById('layoutReset').onclick = () => {
+          applyLayout(DEFAULT_LAYOUT);
+          textEls.forEach((el) => (el.innerHTML = DEFAULT_CONTENT[el.dataset.eid]));
+          try {
+            localStorage.removeItem(LK);
+            localStorage.removeItem(CK);
+          } catch (e) {}
+        };
+
+        /* 내용 편집 → 입력 시 자동 저장(디바운스) */
+        let st;
+        stage.addEventListener('input', (e) => {
+          if (!contentMode || !e.target.closest('[data-eid]')) return;
+          clearTimeout(st);
+          st = setTimeout(saveContent, 350);
+        });
+
+        /* ---------- 4) 드래그 앤 드롭 ---------- */
+        function getAfter(col, y) {
+          const els = [...col.querySelectorAll('.panel:not(.dragging)')];
+          let closest = { offset: -Infinity, el: null };
+          els.forEach((child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) closest = { offset, el: child };
+          });
+          return closest.el;
+        }
+        cols.addEventListener('dragstart', (e) => {
+          if (!layoutMode) return;
+          const panel = e.target.closest('.panel');
+          if (!panel) return;
+          dragEl = panel;
+          panel.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          try {
+            e.dataTransfer.setData('text/plain', panel.dataset.pid);
+          } catch (e) {}
+        });
+        cols.addEventListener('dragover', (e) => {
+          if (!layoutMode || !dragEl) return;
+          e.preventDefault();
+          const col = e.target.closest('.col');
+          if (!col) return;
+          const after = getAfter(col, e.clientY);
+          if (after == null) col.appendChild(dragEl);
+          else col.insertBefore(dragEl, after);
+        });
+        cols.addEventListener('drop', (e) => {
+          if (layoutMode) e.preventDefault();
+        });
+        cols.addEventListener('dragend', () => {
+          if (dragEl) dragEl.classList.remove('dragging');
+          dragEl = null;
+          if (layoutMode) saveLayout();
+        });
+
+        /* 페이지 로드 시 저장된 배치·내용 복원 */
+        loadLayout();
+        loadContent();
+      })();
+
+      /* entrance */
+      document.querySelectorAll('.kpi').forEach((el, i) => (el.style.animationDelay = i * 0.06 + 's'));
+      document.querySelectorAll('.col .panel').forEach((el, i) => (el.style.animationDelay = 0.3 + i * 0.06 + 's'));
+      document.querySelectorAll('.fill').forEach((f, i) => {
+        const w = f.style.width;
+        f.style.width = '0';
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            f.style.transitionDelay = i * 0.05 + 's';
+            f.style.width = w;
+          })
+        );
+      });
+      document.querySelectorAll('.mini .d').forEach((d, i) => {
+        const v = d.style.getPropertyValue('--v');
+        d.style.setProperty('--v', '0%');
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            d.style.transitionDelay = i * 0.07 + 's';
+            d.style.setProperty('--v', v);
+          })
+        );
+      });
+      document.querySelectorAll('.kpi .val').forEach((el) => {
+        const raw = el.textContent.replace(/,/g, '').trim();
+        if (!/^\d+$/.test(raw)) return; /* 사용자가 바꾼 숫자 아닌 값은 그대로 둠 */
+        const target = parseInt(raw) || 0;
+        const dur = 1300,
+          start = performance.now();
+        (function step(t) {
+          const p = Math.min(1, (t - start) / dur);
+          const e = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * e).toLocaleString('en-US');
+          if (p < 1) requestAnimationFrame(step);
+        })(start);
+      });
+
+      /* live: every 5s — lines scroll left, bars stack from right */
+      setInterval(() => {
+        tp.tick();
+        setTimeout(() => ci.tick(), 300);
+        cn.tick();
+      }, 5000);
+
+      apply();
+    </script>
+  </body>
+</html>
