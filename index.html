@@ -1844,6 +1844,625 @@
       .exhint.err {
         color: #ffb4a8;
       }
+      .excard.wide {
+        width: min(1080px, 100%);
+      }
+      .exsel {
+        background: #0a0d16;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 9px;
+        padding: 8px 11px;
+        font-family: var(--font);
+        font-size: 12.5px;
+        cursor: pointer;
+        max-width: 220px;
+      }
+
+      /* ===== 대비비 검증표 ===== */
+      .cttablewrap {
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+      }
+      .cttable {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+        color: #cdd6e6;
+      }
+      .cttable th {
+        text-align: left;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 600;
+        font-size: 11px;
+        padding: 9px 11px;
+        background: rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+      }
+      .cttable td {
+        padding: 9px 11px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        white-space: nowrap;
+      }
+      .cttable tr:last-child td {
+        border-bottom: 0;
+      }
+      .ctpair {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .ctsw {
+        width: 34px;
+        height: 22px;
+        border-radius: 5px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+      }
+      .ctlabel {
+        color: #e7ecf5;
+      }
+      .ctlabel small {
+        display: block;
+        color: rgba(255, 255, 255, 0.42);
+        font-size: 10.5px;
+        font-family: Consolas, monospace;
+      }
+      .ctratio {
+        font-family: Consolas, monospace;
+        font-weight: 700;
+        color: #fff;
+        font-size: 13px;
+      }
+      .ctbadge {
+        display: inline-block;
+        padding: 2px 9px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .ctpass {
+        background: rgba(34, 176, 125, 0.2);
+        color: #45d99e;
+      }
+      .ctfail {
+        background: rgba(239, 68, 68, 0.18);
+        color: #ff8f8f;
+      }
+      /* 미달 수정 바 */
+      .ctfixbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 13px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.03);
+      }
+      .ctfixbar.has-fail {
+        border-color: rgba(239, 68, 68, 0.5);
+        background: rgba(239, 68, 68, 0.1);
+      }
+      .ctfixbar.all-ok {
+        border-color: rgba(34, 176, 125, 0.45);
+        background: rgba(34, 176, 125, 0.1);
+      }
+      .ctfixmsg {
+        flex: 1;
+        min-width: 0;
+        font-size: 12.5px;
+        color: #e7ecf5;
+      }
+      .ctfixmsg b {
+        color: #ff8f8f;
+        font-weight: 700;
+      }
+      .ctfixbar.all-ok .ctfixmsg {
+        color: #8fe6c4;
+      }
+      .ctfixbtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        flex: none;
+        border: 0;
+        border-radius: 9px;
+        padding: 9px 15px;
+        background: var(--point-main);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .ctfixbtn:hover {
+        background: color-mix(in srgb, var(--point-main) 86%, #000);
+      }
+      .ctfixbtn svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+      }
+      .ctfixbar.all-ok .ctfixbtn {
+        display: none;
+      }
+      /* ===== 대비비 검증표: 비차단 플로팅 팝업 ===== */
+      .ctpopup {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 180;
+        width: 440px;
+        max-width: calc(100vw - 36px);
+        max-height: calc(100vh - 36px);
+        display: none;
+        flex-direction: column;
+        background: #0f1320;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+      }
+      .ctpopup.show {
+        display: flex;
+        animation: panelIn 0.2s ease;
+      }
+      .ctpopup .exhead {
+        cursor: grab;
+        padding: 12px 14px;
+      }
+      .ctpopup .exhead:active {
+        cursor: grabbing;
+      }
+      .ctpopup .exhead h2 {
+        font-size: 15px;
+      }
+      .ctpopup .ctdrag {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 15px;
+        letter-spacing: -2px;
+        cursor: grab;
+        flex: none;
+      }
+      .ctpopup .exsel {
+        max-width: 150px;
+        font-size: 12px;
+        padding: 6px 8px;
+      }
+      .ctpopup .exbody {
+        padding: 13px 14px 15px;
+        gap: 11px;
+      }
+      .ctpopup .cttable th,
+      .ctpopup .cttable td {
+        padding: 7px 8px;
+        white-space: normal;
+      }
+      .ctpopup .ctsw {
+        width: 30px;
+        height: 20px;
+      }
+      /* 수정으로 바뀐 행을 잠깐 반짝이게 */
+      @keyframes ctFlash {
+        0% {
+          background: rgba(34, 176, 125, 0.45);
+        }
+        100% {
+          background: transparent;
+        }
+      }
+      .cttable tr.ctflash td {
+        animation: ctFlash 1.6s ease;
+      }
+      /* 수정 내역 카드 */
+      .ctchanges {
+        display: none;
+        flex-direction: column;
+        gap: 7px;
+        padding: 11px 12px;
+        border: 1px solid rgba(34, 176, 125, 0.4);
+        background: rgba(34, 176, 125, 0.08);
+        border-radius: 10px;
+      }
+      .ctchanges.show {
+        display: flex;
+      }
+      .ctchanges .cchead {
+        font-size: 12px;
+        font-weight: 700;
+        color: #8fe6c4;
+      }
+      .ctchanges .cchead span {
+        display: block;
+        font-weight: 400;
+        font-size: 10.5px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 2px;
+      }
+      .ctchange {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 11.5px;
+        color: #e7ecf5;
+        flex-wrap: wrap;
+      }
+      .ctchange .ccrole {
+        font-weight: 700;
+        min-width: 58px;
+        flex: none;
+      }
+      .ctchange .ccsw {
+        width: 15px;
+        height: 15px;
+        border-radius: 4px;
+        flex: none;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+      }
+      .ctchange code {
+        font-family: Consolas, monospace;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .ctchange .ccarrow {
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .ctchange .ccratio {
+        margin-left: auto;
+        font-family: Consolas, monospace;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .ctchange .ccratio b {
+        color: #ff8f8f;
+        font-weight: 700;
+      }
+      .ctchange .ccratio b.ok {
+        color: #45d99e;
+      }
+
+      /* ===== 컴포넌트 시트(상태 갤러리) — 선택 테마 색을 컨테이너에 스코프 ===== */
+      .cssheet {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 13px;
+        background: var(--bg-page);
+        color: var(--text-strong);
+        padding: 16px;
+        border-radius: 12px;
+        font-family: var(--font);
+      }
+      .cscard {
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-panel);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 0;
+      }
+      .cscard.span2 {
+        grid-column: 1 / -1;
+      }
+      .cscard > .cslbl {
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-weak);
+        font-weight: 700;
+      }
+      .csrow {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .csmeta {
+        font-size: 10.5px;
+        color: var(--text-weak);
+      }
+      /* 버튼 */
+      .csbtn {
+        border: 0;
+        border-radius: 9px;
+        padding: 9px 15px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .csbtn.primary {
+        background: var(--point-main);
+        color: #fff;
+      }
+      .csbtn.primary:hover {
+        background: color-mix(in srgb, var(--point-main) 86%, #000);
+      }
+      .csbtn.sub {
+        background: var(--point-sub);
+        color: #06141a;
+      }
+      .csbtn.ghost {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--text-weak);
+      }
+      .csbtn.ghost:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .csbtn.danger {
+        background: var(--danger);
+        color: #fff;
+      }
+      .csbtn:disabled {
+        opacity: 0.42;
+        cursor: not-allowed;
+      }
+      /* 배지 */
+      .csbadge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .csbadge.ok {
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+      }
+      .csbadge.info {
+        color: var(--point-sub);
+        background: color-mix(in srgb, var(--point-sub) 18%, transparent);
+      }
+      .csbadge.warn {
+        color: var(--warning);
+        background: color-mix(in srgb, var(--warning) 16%, transparent);
+      }
+      .csbadge.crit {
+        color: var(--danger);
+        background: color-mix(in srgb, var(--danger) 16%, transparent);
+      }
+      /* 입력 */
+      .csinput {
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        color: var(--text-strong);
+        border-radius: 9px;
+        padding: 9px 12px;
+        font-family: var(--font);
+        font-size: 13px;
+        width: 100%;
+      }
+      .csinput:focus {
+        outline: none;
+        border-color: var(--point-main);
+      }
+      .csinput::placeholder {
+        color: var(--text-weak);
+      }
+      /* 스위치 */
+      .csswitch {
+        width: 44px;
+        height: 25px;
+        border-radius: 20px;
+        background: var(--bg-accent);
+        border: 1px solid var(--line);
+        position: relative;
+        cursor: pointer;
+        transition: 0.2s;
+        flex: none;
+      }
+      .csswitch::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: var(--text-weak);
+        transition: 0.2s;
+      }
+      .csswitch.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+      }
+      .csswitch.on::after {
+        left: 21px;
+        background: #fff;
+      }
+      /* 체크 / 라디오 */
+      .cscheck {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        border: 1.5px solid var(--line);
+        background: var(--bg-page);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+      .cscheck.round {
+        border-radius: 50%;
+      }
+      .cscheck.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+      }
+      .cscheck svg {
+        width: 13px;
+        height: 13px;
+        color: #fff;
+        opacity: 0;
+      }
+      .cscheck.on svg {
+        opacity: 1;
+      }
+      .cscheck.round.on::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .cscheck.round.on svg {
+        display: none;
+      }
+      .cschkrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--text-strong);
+        cursor: pointer;
+      }
+      /* 진행률 */
+      .cstrack {
+        height: 8px;
+        border-radius: 6px;
+        background: var(--bg-accent);
+        overflow: hidden;
+        width: 100%;
+      }
+      .csfill {
+        height: 100%;
+        border-radius: 6px;
+        background: linear-gradient(90deg, var(--point-sub), var(--point-main));
+      }
+      /* 탭 */
+      .cstabs {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+      .cstab {
+        font-size: 12px;
+        color: var(--text-weak);
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        background: transparent;
+        border: 1px solid transparent;
+      }
+      .cstab.on {
+        color: #fff;
+        background: var(--point-main);
+      }
+      .cstab:hover:not(.on) {
+        color: var(--text-strong);
+        background: color-mix(in srgb, var(--point-main) 12%, transparent);
+      }
+      /* 칩 */
+      .cschip {
+        font-size: 12px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-weak);
+        cursor: pointer;
+      }
+      .cschip.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+        font-weight: 600;
+      }
+      /* 알림 배너 */
+      .csalert {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 12px;
+        border-radius: 9px;
+        font-size: 12.5px;
+      }
+      .csalert i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex: none;
+      }
+      .csalert.info {
+        background: color-mix(in srgb, var(--point-main) 12%, transparent);
+        color: var(--text-strong);
+      }
+      .csalert.info i {
+        background: var(--point-main);
+      }
+      .csalert.warn {
+        background: color-mix(in srgb, var(--warning) 13%, transparent);
+        color: var(--text-strong);
+      }
+      .csalert.warn i {
+        background: var(--warning);
+      }
+      .csalert.crit {
+        background: color-mix(in srgb, var(--danger) 13%, transparent);
+        color: var(--text-strong);
+      }
+      .csalert.crit i {
+        background: var(--danger);
+      }
+      /* 표 */
+      .cstable {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+      }
+      .cstable th {
+        text-align: left;
+        color: var(--text-weak);
+        font-weight: 500;
+        font-size: 11.5px;
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      .cstable td {
+        padding: 7px 8px;
+        color: var(--text-strong);
+        border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+      }
+      .cstable .v2 {
+        color: var(--point-main);
+        font-weight: 600;
+      }
+      /* KPI 미니 */
+      .cskpi .lab {
+        font-size: 11px;
+        color: var(--text-weak);
+      }
+      .cskpi .val {
+        font-size: 26px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-top: 3px;
+      }
+      .cskpi .val b {
+        color: var(--point-main);
+      }
+      @media (max-width: 720px) {
+        .cssheet {
+          grid-template-columns: 1fr;
+        }
+      }
 
       /* dashboard shell */
       .stage {
@@ -3121,6 +3740,45 @@
         <div class="grp">
           <label class="lblrow">
             <span>
+              검증 · 시트
+              <span class="ko">대비비 · 컴포넌트</span>
+            </span>
+            <span class="info up" tabindex="0" role="button" aria-label="검증·시트 도움말">
+              ?
+              <span class="tip">
+                <b>접근성 검증과 컴포넌트 미리보기</b>
+                <br />
+                <br />
+                <span class="accent">대비비 검증표</span>
+                — 배경↔텍스트, 배경↔포인트 대비비와 AA/AAA 통과 여부를 표로 보고 Markdown·CSV로 내보내요(설계서 근거 첨부).
+                <br />
+                <br />
+                <span class="accent">컴포넌트 시트</span>
+                — 버튼·배지·입력·토글·표 등 여러 UI에 지금 테마가 어떻게 적용되는지 한눈에 봐요.
+              </span>
+            </span>
+          </label>
+          <button class="editbtn" id="contrastOpen" title="역할쌍 대비비·AA/AAA 검증표를 엽니다">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none" />
+            </svg>
+            <span class="lbl">대비비 검증표</span>
+          </button>
+          <button class="editbtn" id="sheetOpen" title="테마가 적용된 컴포넌트 상태 갤러리를 엽니다">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" />
+            </svg>
+            <span class="lbl">컴포넌트 시트</span>
+          </button>
+        </div>
+
+        <div class="grp">
+          <label class="lblrow">
+            <span>
               테마 저장·비교
               <span class="ko">스냅샷 · A/B · 히스토리</span>
             </span>
@@ -3795,6 +4453,56 @@
           </div>
         </div>
       </div>
+
+      <!-- 대비비 검증표 — 비차단 플로팅 팝업(대시보드를 보면서 실시간 수정 확인) -->
+      <div class="ctpopup" id="ctModal" role="dialog" aria-label="대비비 검증표">
+        <div class="exhead" id="ctHead">
+          <span class="ctdrag" title="드래그해서 이동">⠿</span>
+          <h2>대비비 검증표</h2>
+          <span class="sp"></span>
+          <select class="exsel" id="ctSel"></select>
+          <button class="abclose" id="ctClose" title="닫기 (Esc)">✕</button>
+        </div>
+        <div class="exbody">
+          <div class="cttablewrap"><table class="cttable" id="ctTable"></table></div>
+          <div class="ctfixbar" id="ctFixBar">
+            <span class="ctfixmsg" id="ctFixMsg"></span>
+            <button class="ctfixbtn" id="ctFix" title="미달난 색만 같은 색상에서 명도를 조정해 기준을 통과하도록 고칩니다">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2 2.1-2.1z" /></svg>
+              미달 수정하기
+            </button>
+          </div>
+          <div class="ctchanges" id="ctChanges"></div>
+          <div class="exsec"><span class="exseclbl">설계서 첨부용 내보내기</span></div>
+          <div class="exactions">
+            <button id="ctMd" title="Markdown 표로 복사 (문서·Notion·Confluence)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M7 15V9l3 3 3-3v6" /><path d="M17 9v6" /><path d="m20 12-3 3-3-3" /></svg>
+              Markdown 복사
+            </button>
+            <button id="ctCsv" title="CSV 파일로 저장 (스프레드시트)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+              CSV 저장
+            </button>
+          </div>
+          <p class="exhint" id="ctHint">팝업을 옮겨 가며 대시보드 색이 바뀌는 걸 실시간으로 확인하세요.</p>
+        </div>
+      </div>
+
+      <!-- 컴포넌트 시트(상태 갤러리) 모달 -->
+      <div class="exmodal" id="csModal" role="dialog" aria-modal="true" aria-label="컴포넌트 시트">
+        <div class="excard wide">
+          <div class="exhead">
+            <h2>컴포넌트 시트 / Components</h2>
+            <span class="exnote">같은 테마가 여러 UI·상태에 적용된 모습 (호버·포커스는 직접 올려보세요)</span>
+            <span class="sp"></span>
+            <select class="exsel" id="csSel"></select>
+            <button class="abclose" id="csClose" title="닫기 (Esc)">✕</button>
+          </div>
+          <div class="exbody">
+            <div id="csSheet"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -4016,13 +4724,60 @@
           hexMap[role] = best.toUpperCase();
         });
       }
+      /* 색상(명도만 이동)을 조정해 배경 대비 ≥bgMin, (whiteMin>0이면) 흰 글자 대비 ≥whiteMin 을 만족시키는 가장 가까운 값 */
+      const UI_MIN = 3;
+      function fixContrastLightness(hex, bgs, bgMin, whiteMin) {
+        bgMin = bgMin || UI_MIN;
+        whiteMin = whiteMin || 0;
+        const { h, s } = rgbToHsl(hexToRgb(hex));
+        const l0 = rgbToHsl(hexToRgb(hex)).l;
+        const ok = (L) => {
+          const c = hslToHex(h, s, L);
+          let good = bgs.every((b) => wcagRatio(c, b) >= bgMin);
+          if (whiteMin) good = good && wcagRatio('#FFFFFF', c) >= whiteMin;
+          return good;
+        };
+        if (ok(l0)) return hex;
+        for (let d = 1; d <= 100; d++) {
+          if (l0 + d <= 100 && ok(l0 + d)) return hslToHex(h, s, l0 + d);
+          if (l0 - d >= 0 && ok(l0 - d)) return hslToHex(h, s, l0 - d);
+        }
+        /* 완벽한 값이 없으면 각 기준 대비 여유(ratio/min)가 가장 큰 명도 선택 */
+        let best = l0,
+          bestScore = -Infinity;
+        for (let L = 0; L <= 100; L++) {
+          const c = hslToHex(h, s, L);
+          let m = Math.min(...bgs.map((b) => wcagRatio(c, b) / bgMin));
+          if (whiteMin) m = Math.min(m, wcagRatio('#FFFFFF', c) / whiteMin);
+          if (m > bestScore) {
+            bestScore = m;
+            best = L;
+          }
+        }
+        return hslToHex(h, s, best);
+      }
+      /* 강조·상태색을 '작은 글씨 기준' 배경 대비 ≥4.5:1(흰 버튼글자는 큰글씨 ≥3:1)로 자동 보정 — 직접 지정한 색은 건드리지 않음 */
+      function enforceContrast(hexMap, overrides) {
+        overrides = overrides || {};
+        const bgP = hexMap['bg/page'],
+          bgS = hexMap['bg/surface'];
+        const fix = (role, bgs, bgMin, whiteMin) => {
+          if (overrides[role]) return; /* 사용자가 직접 지정한 색은 그대로 둠 */
+          hexMap[role] = fixContrastLightness(hexMap[role], bgs, bgMin, whiteMin).toUpperCase();
+        };
+        fix('point/main', [bgP, bgS], 4.5, 3); /* 강조1: 배경 대비 AA 4.5 + 흰 버튼글자 3 */
+        fix('point/sub', [bgS], 4.5, 0); /* 강조2: 표면 대비 AA 4.5 */
+        fix('danger', [bgS], 4.5, 3); /* 경고: 표면 대비 AA 4.5 + 흰 버튼글자 3 */
+        fix('warning', [bgS], 4.5, 0); /* 주의: 표면 대비 AA 4.5 */
+      }
       /* 임의 테마(s)의 최종 색상표를 계산 — 미리보기·A/B 비교에서도 동일 결과를 재사용 */
       function computeHexMap(s) {
         let P = s.mapMode === 'direct' && s.imgCols ? buildDirect(s.imgCols, s.mode) : genPalette(s.seed, s.harmony, s.mode, s.subHex);
         P = applyAdjust(P, s.adjust);
         const hexMap = {};
         for (const k in P) hexMap[k] = ((s.overrides && s.overrides[k]) || cssHslToHex(P[k])).toUpperCase();
-        enforceAAA(hexMap, s.overrides || {});
+        enforceAAA(hexMap, s.overrides || {}); /* 본문·보조 글자: 배경 대비 AAA */
+        enforceContrast(hexMap, s.overrides || {}); /* 강조·상태색: 배경/버튼 대비 ≥3:1 */
         return hexMap;
       }
       function apply() {
@@ -5757,6 +6512,332 @@
         document.getElementById('exShare').onclick = copyShare;
       }
 
+      /* 검증·시트 모달의 테마 선택 목록(현재 테마 + 저장 스냅샷) 채우기 */
+      function refreshAuditSelects() {
+        ['ctSel', 'csSel'].forEach((id) => {
+          const sel = document.getElementById(id);
+          if (!sel) return;
+          const prev = sel.value;
+          const opts = abThemeList();
+          sel.innerHTML = opts.map((o) => `<option value="${o.id}">${o.name}</option>`).join('');
+          if (opts.some((o) => o.id === prev)) sel.value = prev;
+        });
+      }
+
+      /* ============================================================
+       *  대비비 검증표 (Contrast Audit) — 역할쌍 대비비 + AA/AAA 통과
+       * ============================================================ */
+      /* [전경, 배경, 라벨, 필요등급 라벨, 필요 대비비] — 용도에 맞는 WCAG 기준으로 단일 판정 */
+      const CONTRAST_PAIRS = [
+        ['text/strong', 'bg/page', '본문 텍스트 ↔ 페이지 배경', 'AAA 본문', 7],
+        ['text/strong', 'bg/surface', '본문 텍스트 ↔ 표면', 'AAA 본문', 7],
+        ['text/weak', 'bg/page', '보조 텍스트 ↔ 페이지 배경', 'AA 본문', 4.5],
+        ['text/weak', 'bg/surface', '보조 텍스트 ↔ 표면', 'AA 본문', 4.5],
+        ['point/main', 'bg/page', '강조1(작은 글씨) ↔ 페이지 배경', 'AA 본문', 4.5],
+        ['point/main', 'bg/surface', '강조1(작은 글씨) ↔ 표면', 'AA 본문', 4.5],
+        ['point/sub', 'bg/surface', '강조2(작은 글씨) ↔ 표면', 'AA 본문', 4.5],
+        ['danger', 'bg/surface', '경고색(작은 글씨) ↔ 표면', 'AA 본문', 4.5],
+        ['warning', 'bg/surface', '주의색(작은 글씨) ↔ 표면', 'AA 본문', 4.5],
+        ['#FFFFFF', 'point/main', '버튼 글자(흰색·굵게) ↔ 강조1', 'AA 큰글씨', 3],
+        ['#FFFFFF', 'danger', '버튼 글자(흰색·굵게) ↔ 경고', 'AA 큰글씨', 3],
+      ];
+      function resolveColor(v, hex) {
+        return v.charAt(0) === '#' ? v.toUpperCase() : hex[v];
+      }
+      function contrastRows(theme) {
+        const hex = computeHexMap(theme);
+        return CONTRAST_PAIRS.map(([fgK, bgK, label, level, min]) => {
+          const fg = resolveColor(fgK, hex),
+            bg = resolveColor(bgK, hex);
+          const ratio = wcagRatio(fg, bg);
+          /* 보정 대상 역할: 전경이 색역할이면 전경, 흰색 리터럴이면 배경(=강조/경고색) */
+          const adjRole = fgK.charAt(0) === '#' ? bgK : fgK;
+          return { label, level, min, fg, bg, ratio, pass: ratio >= min, adjRole };
+        });
+      }
+      function renderContrast(highlightRoles) {
+        const rows = contrastRows(abResolve(document.getElementById('ctSel').value));
+        const verdict = (r) => (r.pass ? '<span class="ctbadge ctpass">통과</span>' : '<span class="ctbadge ctfail">미달</span>');
+        const body = rows
+          .map((r) => {
+            const flash = highlightRoles && highlightRoles.has(r.adjRole) ? ' class="ctflash"' : '';
+            return `<tr${flash}><td><div class="ctpair"><span class="ctsw" style="background:${r.bg};color:${r.fg}">Aa</span><span class="ctlabel">${r.label}<small>${r.fg} / ${r.bg}</small></span></div></td><td><span class="ctratio">${r.ratio.toFixed(2)}:1</span></td><td>${r.level}<small style="display:block;color:rgba(255,255,255,.4);font-size:10.5px">필요 ${r.min}:1</small></td><td>${verdict(r)}</td></tr>`;
+          })
+          .join('');
+        document.getElementById('ctTable').innerHTML = `<thead><tr><th>역할쌍 (전경 / 배경)</th><th>대비비</th><th>필요 기준</th><th>판정</th></tr></thead><tbody>${body}</tbody>`;
+        /* 미달 수정 바 갱신 */
+        const fails = rows.filter((r) => !r.pass).length;
+        const bar = document.getElementById('ctFixBar');
+        const msg = document.getElementById('ctFixMsg');
+        if (fails > 0) {
+          bar.className = 'ctfixbar has-fail';
+          msg.innerHTML = `대비 기준에 <b>${fails}개</b> 항목이 미달입니다. 직접 지정한 색을 같은 색상(명도만)으로 조정해 통과시킬 수 있어요.`;
+        } else {
+          bar.className = 'ctfixbar all-ok';
+          msg.textContent = '모든 역할쌍이 기준을 통과했어요 ✓';
+        }
+      }
+      /* 미달난 역할쌍의 색만 명도 조정해 통과시키는 보정값(override) 계산 */
+      /* [역할, 배경역할들, 배경 최소대비, 흰글자 최소대비(0이면 미적용)] — 검증표의 필요 기준과 일치 */
+      const FIX_ROLES = [
+        ['text/strong', ['bg/page', 'bg/surface'], 7, 0],
+        ['text/weak', ['bg/page', 'bg/surface'], 4.5, 0],
+        ['point/main', ['bg/page', 'bg/surface'], 4.5, 3],
+        ['point/sub', ['bg/surface'], 4.5, 0],
+        ['danger', ['bg/surface'], 4.5, 3],
+        ['warning', ['bg/surface'], 4.5, 0],
+      ];
+      const ROLE_LABEL = {};
+      AB_ROLES.forEach(([k, l]) => (ROLE_LABEL[k] = l));
+      function fixThemeContrast(theme) {
+        const hex = computeHexMap(theme);
+        const ov = Object.assign({}, theme.overrides || {});
+        const changes = [];
+        FIX_ROLES.forEach(([role, bgRoles, bgMin, whiteMin]) => {
+          const bgs = bgRoles.map((b) => hex[b]);
+          const cur = hex[role];
+          const worst = (c) => {
+            const arr = bgs.map((b) => wcagRatio(c, b));
+            if (whiteMin) arr.push(wcagRatio('#FFFFFF', c));
+            return Math.min(...arr);
+          };
+          const okNow = bgs.every((b) => wcagRatio(cur, b) >= bgMin) && (!whiteMin || wcagRatio('#FFFFFF', cur) >= whiteMin);
+          if (okNow) return;
+          const fixed = fixContrastLightness(cur, bgs, bgMin, whiteMin).toUpperCase();
+          ov[role] = fixed;
+          changes.push({ role, from: cur.toUpperCase(), to: fixed, ratioBefore: worst(cur), ratioAfter: worst(fixed), min: bgMin });
+        });
+        return { overrides: ov, changes };
+      }
+      /* 수정 내역(무엇이·어떻게 바뀌었는지)을 카드로 표시 */
+      function renderChanges(changes) {
+        const box = document.getElementById('ctChanges');
+        if (!changes || !changes.length) {
+          box.className = 'ctchanges';
+          box.innerHTML = '';
+          return;
+        }
+        const rows = changes
+          .map((c) => {
+            const lbl = ROLE_LABEL[c.role] || c.role;
+            return `<div class="ctchange"><span class="ccrole">${lbl}</span><span class="ccsw" style="background:${c.from}"></span><code>${c.from}</code><span class="ccarrow">→</span><span class="ccsw" style="background:${c.to}"></span><code>${c.to}</code><span class="ccratio"><b>${c.ratioBefore.toFixed(2)}</b> → <b class="ok">${c.ratioAfter.toFixed(2)}</b> (필요 ${c.min})</span></div>`;
+          })
+          .join('');
+        box.className = 'ctchanges show';
+        box.innerHTML = `<div class="cchead">수정 내역 — ${changes.length}개 색 보정<span>색상·채도는 유지하고 명도(밝기)만 조정해 기준을 통과시켰어요. 대시보드에 즉시 반영됩니다.</span></div>${rows}`;
+      }
+      function applyContrastFix() {
+        const id = document.getElementById('ctSel').value;
+        if (id === '__current__') {
+          const r = fixThemeContrast(captureTheme());
+          if (!r.changes.length) {
+            ctHintMsg('이미 모든 항목이 통과예요.', 'ok');
+            return;
+          }
+          state.overrides = r.overrides;
+          apply();
+          commitHistory();
+          renderContrast(new Set(r.changes.map((c) => c.role)));
+          renderChanges(r.changes);
+          ctHintMsg(`${r.changes.length}개 색을 보정했어요 — 대시보드에 바로 반영됐어요(되돌리기로 취소 가능).`, 'ok');
+        } else {
+          const snap = snapshots.find((s) => s.id === id);
+          if (!snap) return;
+          const r = fixThemeContrast(snap.theme);
+          if (!r.changes.length) {
+            ctHintMsg('이미 모든 항목이 통과예요.', 'ok');
+            return;
+          }
+          snap.theme.overrides = r.overrides;
+          saveSnapshots();
+          renderSnapshots();
+          refreshABOptions();
+          renderContrast(new Set(r.changes.map((c) => c.role)));
+          renderChanges(r.changes);
+          ctHintMsg(`${r.changes.length}개 색을 보정해 스냅샷 “${snap.name}”에 저장했어요.`, 'ok');
+        }
+      }
+      function contrastMarkdown() {
+        const rows = contrastRows(abResolve(document.getElementById('ctSel').value));
+        let md = '| 역할쌍 | 전경 | 배경 | 대비비 | 필요 기준 | 판정 |\n|---|---|---|---|---|:---:|\n';
+        rows.forEach((r) => (md += `| ${r.label} | \`${r.fg}\` | \`${r.bg}\` | ${r.ratio.toFixed(2)}:1 | ${r.level} (${r.min}:1) | ${r.pass ? '✅ 통과' : '❌ 미달'} |\n`));
+        return md;
+      }
+      function contrastCSV() {
+        const rows = contrastRows(abResolve(document.getElementById('ctSel').value));
+        let csv = '역할쌍,전경,배경,대비비,필요기준,필요대비비,판정\n';
+        rows.forEach((r) => (csv += `"${r.label}",${r.fg},${r.bg},${r.ratio.toFixed(2)}:1,"${r.level}",${r.min}:1,${r.pass ? 'PASS' : 'FAIL'}\n`));
+        return csv;
+      }
+      function ctHintMsg(msg, cls) {
+        const h = document.getElementById('ctHint');
+        h.textContent = msg;
+        h.className = 'exhint' + (cls ? ' ' + cls : '');
+      }
+      function openContrast() {
+        refreshAuditSelects();
+        document.getElementById('ctSel').value = '__current__';
+        const p = document.getElementById('ctModal'); /* 위치 초기화(우상단 기본 위치) */
+        p.style.left = '';
+        p.style.top = '';
+        p.style.right = '';
+        renderContrast();
+        renderChanges(null);
+        ctHintMsg('팝업을 옮겨 가며 대시보드 색이 바뀌는 걸 실시간으로 확인하세요.');
+        p.classList.add('show');
+      }
+      function closeContrast() {
+        document.getElementById('ctModal').classList.remove('show');
+      }
+      /* 헤더를 잡고 끌어 팝업 위치 이동 */
+      function makeDraggable(panel, handle) {
+        let dragging = false,
+          sx,
+          sy,
+          ox,
+          oy;
+        handle.addEventListener('mousedown', (e) => {
+          if (e.target.closest('button, select')) return;
+          const r = panel.getBoundingClientRect();
+          ox = r.left;
+          oy = r.top;
+          sx = e.clientX;
+          sy = e.clientY;
+          dragging = true;
+          panel.style.right = 'auto';
+          panel.style.left = ox + 'px';
+          panel.style.top = oy + 'px';
+          document.body.style.userSelect = 'none';
+          e.preventDefault();
+        });
+        window.addEventListener('mousemove', (e) => {
+          if (!dragging) return;
+          const nx = Math.max(0, Math.min(window.innerWidth - 90, ox + (e.clientX - sx)));
+          const ny = Math.max(0, Math.min(window.innerHeight - 40, oy + (e.clientY - sy)));
+          panel.style.left = nx + 'px';
+          panel.style.top = ny + 'px';
+        });
+        window.addEventListener('mouseup', () => {
+          dragging = false;
+          document.body.style.userSelect = '';
+        });
+      }
+      function initContrast() {
+        document.getElementById('contrastOpen').onclick = openContrast;
+        document.getElementById('ctClose').onclick = closeContrast;
+        document.getElementById('ctSel').onchange = () => {
+          renderContrast();
+          renderChanges(null);
+        };
+        makeDraggable(document.getElementById('ctModal'), document.getElementById('ctHead'));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.getElementById('ctModal').classList.contains('show')) closeContrast();
+        });
+        document.getElementById('ctMd').onclick = async () => {
+          try {
+            await navigator.clipboard.writeText(contrastMarkdown());
+            ctHintMsg('Markdown 표를 복사했어요. 설계서·Notion·Confluence에 그대로 붙여넣으세요.', 'ok');
+          } catch (e) {
+            ctHintMsg('복사 권한이 없어요.', 'err');
+          }
+        };
+        document.getElementById('ctCsv').onclick = () => {
+          downloadBlob(new Blob(['﻿' + contrastCSV()], { type: 'text/csv;charset=utf-8' }), 'wemb-contrast.csv');
+          ctHintMsg('CSV 파일을 저장했어요(스프레드시트에서 열 수 있어요).', 'ok');
+        };
+        document.getElementById('ctFix').onclick = applyContrastFix;
+      }
+
+      /* ============================================================
+       *  컴포넌트 시트(상태 갤러리) — 선택 테마를 여러 UI에 적용해 보기
+       * ============================================================ */
+      const CS_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+      function componentSheetHTML() {
+        return `
+          <div class="cscard"><span class="cslbl">버튼 · 상태 Buttons</span>
+            <div class="csrow"><button class="csbtn primary">기본 동작</button><button class="csbtn sub">보조</button><button class="csbtn ghost">고스트</button><button class="csbtn danger">위험</button><button class="csbtn primary" disabled>비활성</button></div>
+            <span class="csmeta">마우스를 올리면 실제 hover 상태가 보여요 · 맨 오른쪽은 disabled</span>
+          </div>
+          <div class="cscard"><span class="cslbl">배지 Badges</span>
+            <div class="csrow"><span class="csbadge ok">정상</span><span class="csbadge info">정보</span><span class="csbadge warn">주의</span><span class="csbadge crit">경고</span></div>
+          </div>
+          <div class="cscard"><span class="cslbl">입력 Inputs</span>
+            <input class="csinput" placeholder="텍스트 입력 (클릭해 포커스)" /><input class="csinput" value="입력된 값 12,345" /><input class="csinput" value="비활성 필드" disabled />
+          </div>
+          <div class="cscard"><span class="cslbl">토글 · 선택 Controls (클릭 가능)</span>
+            <div class="csrow"><span class="csswitch on cstoggle" role="switch" aria-checked="true"></span><span class="csswitch cstoggle" role="switch" aria-checked="false"></span><span class="csmeta">스위치 On / Off</span></div>
+            <div class="csrow"><label class="cschkrow"><span class="cscheck on cstoggle">${CS_CHECK}</span>체크 On</label><label class="cschkrow"><span class="cscheck cstoggle">${CS_CHECK}</span>체크 Off</label></div>
+            <div class="csrow"><label class="cschkrow"><span class="cscheck round on cstoggle"></span>라디오 On</label><label class="cschkrow"><span class="cscheck round cstoggle"></span>라디오 Off</label></div>
+          </div>
+          <div class="cscard"><span class="cslbl">진행률 Progress</span>
+            <div class="cstrack"><div class="csfill" style="width:72%"></div></div>
+            <div class="cstrack"><div class="csfill" style="width:38%"></div></div>
+          </div>
+          <div class="cscard"><span class="cslbl">탭 · 칩 Tabs · Chips</span>
+            <div class="cstabs"><span class="cstab on">Overview</span><span class="cstab">Production</span><span class="cstab">Quality</span></div>
+            <div class="csrow"><span class="cschip on">선택됨</span><span class="cschip">옵션 A</span><span class="cschip">옵션 B</span></div>
+          </div>
+          <div class="cscard span2"><span class="cslbl">알림 Alerts</span>
+            <div class="csalert info"><i></i>정보: 모든 시스템이 정상 작동 중입니다.</div>
+            <div class="csalert warn"><i></i>주의: 디스크 사용량이 85%를 초과했습니다.</div>
+            <div class="csalert crit"><i></i>경고: SOMDB101 응답 지연이 감지되었습니다.</div>
+          </div>
+          <div class="cscard"><span class="cslbl">KPI</span>
+            <div class="cskpi"><div class="lab">거래건수</div><div class="val">55,045,697</div></div>
+            <div class="cskpi"><div class="lab">청구 TPS / Peak</div><div class="val"><b>2,603</b> / 3,992</div></div>
+          </div>
+          <div class="cscard"><span class="cslbl">표 Table</span>
+            <table class="cstable"><thead><tr><th>항목</th><th>TPS</th><th>Peak</th></tr></thead><tbody><tr><td>동시 사용자</td><td>10,906</td><td class="v2">18,328</td></tr><tr><td>초당 처리량</td><td>1,868</td><td class="v2">4,063</td></tr><tr><td>평균 수행시간</td><td>0.30</td><td class="v2">0.20</td></tr></tbody></table>
+          </div>`;
+      }
+      function renderSheet() {
+        const theme = abResolve(document.getElementById('csSel').value);
+        const hex = computeHexMap(theme);
+        const sheet = document.getElementById('csSheet');
+        sheet.className = 'cssheet';
+        sheet.setAttribute('data-mode', theme.mode);
+        for (const k in RV) sheet.style.setProperty(RV[k], hex[k]);
+        sheet.style.setProperty('--radius-panel', (theme.radius != null ? theme.radius : 8) + 'px');
+        sheet.innerHTML = componentSheetHTML();
+      }
+      function openSheet() {
+        refreshAuditSelects();
+        document.getElementById('csSel').value = '__current__';
+        renderSheet();
+        document.getElementById('csModal').classList.add('show');
+      }
+      function closeSheet() {
+        document.getElementById('csModal').classList.remove('show');
+      }
+      function initSheet() {
+        document.getElementById('sheetOpen').onclick = openSheet;
+        document.getElementById('csClose').onclick = closeSheet;
+        document.getElementById('csSel').onchange = renderSheet;
+        document.getElementById('csModal').addEventListener('click', (e) => {
+          if (e.target.id === 'csModal') closeSheet();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.getElementById('csModal').classList.contains('show')) closeSheet();
+        });
+        /* 토글·체크·라디오는 클릭해 상태를 바꿔볼 수 있게 (상태 갤러리) */
+        document.getElementById('csSheet').addEventListener('click', (e) => {
+          const t = e.target.closest('.cstoggle');
+          if (!t) return;
+          if (t.classList.contains('csswitch')) {
+            t.classList.toggle('on');
+            t.setAttribute('aria-checked', t.classList.contains('on'));
+          } else if (t.classList.contains('cscheck')) {
+            if (t.classList.contains('round')) {
+              const row = t.closest('.csrow');
+              if (row) row.querySelectorAll('.cscheck.round').forEach((x) => x.classList.remove('on'));
+              t.classList.add('on');
+            } else {
+              t.classList.toggle('on');
+            }
+          }
+        });
+      }
+
       /* ---------- 초기화 ---------- */
       apply();
       loadSnapshots();
@@ -5764,6 +6845,8 @@
       refreshABOptions();
       initAB();
       initExport();
+      initContrast();
+      initSheet();
       applyShareFromURL(); /* 공유 링크로 열렸으면 그 시안을 복원 */
       commitHistory();
       renderHistory();
