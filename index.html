@@ -21,6 +21,8 @@
         --warning: #f5a623;
         --font: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
         --sb: 308px;
+        /* 오른쪽 대시보드 패널의 모서리 둥글기 (왼쪽 설정창에서 조절) */
+        --radius-panel: 8px;
       }
       * {
         box-sizing: border-box;
@@ -58,6 +60,9 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        /* 생성된 팔레트는 이 영역(오른쪽 콘텐츠)에만 적용됨 — 왼쪽 사이드바는 고정 */
+        background: var(--bg-page);
+        transition: background 0.35s ease;
       }
 
       #opener {
@@ -140,8 +145,12 @@
       .brand .wlogo {
         height: 16px;
       }
-      /* 다크 테마: 로고 전체를 흰색으로 */
-      html[data-mode='dark'] .wlogo {
+      /* 사이드바 로고 — 항상 어두운 배경이므로 흰색으로 고정 */
+      .sidebar .wlogo {
+        filter: brightness(0) invert(1);
+      }
+      /* 오른쪽 콘텐츠(헤더) 로고 — 다크 모드일 때만 흰색으로 */
+      .main[data-mode='dark'] .wlogo {
         filter: brightness(0) invert(1);
       }
       .brandhead .bt {
@@ -710,6 +719,13 @@
         width: 30px;
         flex: none;
       }
+      /* 슬라이더 우측 현재값 표시 (예: 8px) */
+      .slider .rval {
+        width: 38px;
+        text-align: right;
+        color: var(--text-strong);
+        font-weight: 600;
+      }
       .slider input[type='range'] {
         flex: 1;
         accent-color: var(--point-main);
@@ -1203,6 +1219,631 @@
         border-color: var(--point-main);
         color: #fff;
       }
+      /* 디자인 편집 버튼 — 펼침 화살표(누르면 회전) */
+      .editbtn .chev {
+        font-size: 10px;
+        margin-left: auto;
+        flex: none;
+        transition: transform 0.2s;
+      }
+      .editbtn.on .chev {
+        transform: rotate(180deg);
+      }
+      /* 디자인 편집 하위 메뉴 — 버튼을 누르면 토글로 펼쳐짐 */
+      .designpanel {
+        display: none;
+        flex-direction: column;
+        gap: 13px;
+        padding: 14px 13px;
+        margin-top: -3px;
+        border: 1px solid color-mix(in srgb, var(--point-main) 40%, var(--line));
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--point-main) 5%, var(--bg-page));
+      }
+      .designpanel.show {
+        display: flex;
+        animation: panelIn 0.25s ease;
+      }
+
+      /* ===== 테마 저장·비교 ===== */
+      .snapsave {
+        display: flex;
+        gap: 7px;
+      }
+      .snapsave .hex {
+        flex: 1;
+        min-width: 0;
+        padding: 11px 12px;
+        font-family: var(--font);
+        font-size: 13px;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+      .snapsave .savebtn {
+        flex: none;
+        border: 0;
+        border-radius: 12px;
+        padding: 0 18px;
+        background: var(--point-main);
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: background 0.15s;
+      }
+      .snapsave .savebtn:hover {
+        background: color-mix(in srgb, var(--point-main) 86%, #000);
+      }
+      .snaplist {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .snaplist:empty {
+        display: none;
+      }
+      .snaprow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 10px;
+        transition: border-color 0.15s;
+      }
+      .snaprow:hover {
+        border-color: color-mix(in srgb, var(--point-main) 35%, var(--line));
+      }
+      .snaprow .sws {
+        display: flex;
+        flex: none;
+      }
+      .snaprow .sws i {
+        width: 15px;
+        height: 15px;
+        border-radius: 4px;
+        box-shadow: 0 0 0 1px var(--line);
+        margin-left: -3px;
+      }
+      .snaprow .sws i:first-child {
+        margin-left: 0;
+      }
+      .snaprow .nm {
+        flex: 1;
+        min-width: 0;
+        font-size: 12.5px;
+        color: var(--text-strong);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .snaprow .acts {
+        display: flex;
+        gap: 4px;
+        flex: none;
+      }
+      .snaprow .acts button {
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text-weak);
+        border-radius: 7px;
+        padding: 4px 9px;
+        font-size: 11px;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .snaprow .acts button:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .snaprow .acts .del:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+      }
+      .histbtns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+      }
+      .histlist {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        max-height: 184px;
+        overflow: auto;
+      }
+      .histlist:empty {
+        display: none;
+      }
+      .histlist::-webkit-scrollbar {
+        width: 6px;
+      }
+      .histlist::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border-radius: 3px;
+      }
+      .histrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: var(--bg-page);
+        font-size: 12px;
+        color: var(--text-weak);
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .histrow:hover {
+        border-color: color-mix(in srgb, var(--point-main) 40%, var(--line));
+        color: var(--text-strong);
+      }
+      .histrow.cur {
+        border-color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 14%, var(--bg-page));
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+      .histrow .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--point-main);
+        flex: none;
+        opacity: 0.45;
+      }
+      .histrow.cur .dot {
+        opacity: 1;
+      }
+      .histrow .hl {
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .histrow .ht {
+        margin-left: auto;
+        font-size: 10px;
+        opacity: 0.7;
+        flex: none;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ===== A/B 비교 오버레이 ===== */
+      .abmodal {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: none;
+        flex-direction: column;
+        padding: 26px 28px;
+        background: rgba(5, 8, 15, 0.66);
+        backdrop-filter: blur(4px);
+      }
+      .abmodal.show {
+        display: flex;
+        animation: panelIn 0.22s ease;
+      }
+      .abhead {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 16px;
+        color: #fff;
+        flex: none;
+      }
+      .abhead h2 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .abhead .abnote {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .abhead .sp {
+        flex: 1;
+      }
+      .abclose {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: transparent;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        flex: none;
+        transition: 0.15s;
+      }
+      .abclose:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .abgrid {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: minmax(0, 1fr);
+        gap: 16px;
+      }
+      .abcol {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 0;
+        min-width: 0;
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 14px;
+        padding: 12px;
+      }
+      .abpick {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        flex: none;
+      }
+      .abtag {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+        color: #fff;
+        flex: none;
+      }
+      .abtag-a {
+        background: #4a9eff;
+      }
+      .abtag-b {
+        background: #5ccfd8;
+      }
+      .abpick select {
+        flex: 1;
+        min-width: 0;
+        background: #0f1320;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 9px;
+        padding: 9px 11px;
+        font-family: var(--font);
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .abprev {
+        flex: 1;
+        min-height: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* A/B 미리보기: 실제 대시보드를 그대로 복제해 칸에 맞춰 축소 */
+      .abscaler {
+        position: relative;
+        flex: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+      }
+      .abstage {
+        width: 1440px;
+        height: 900px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transform-origin: top left;
+      }
+      .abstage .stage {
+        flex: 1;
+        min-height: 0;
+      }
+      /* 복제본 헤더 로고 — 다크 테마면 흰색으로 */
+      .abstage[data-mode='dark'] .wlogo {
+        filter: brightness(0) invert(1);
+      }
+      /* 하단: 썸네일 + 테마 색상 목록 */
+      .abmeta {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.13);
+      }
+      .abthumb {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: #fff;
+      }
+      .abthumb .circles {
+        display: flex;
+        align-items: center;
+        flex: none;
+      }
+      .abthumb .circles i {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid rgba(20, 24, 34, 0.9);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+        margin-left: -8px;
+      }
+      .abthumb .circles i:first-child {
+        margin-left: 0;
+      }
+      .abname {
+        flex: 1;
+        min-width: 0;
+        font-size: 13.5px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .abradius {
+        flex: none;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.62);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 20px;
+        padding: 3px 10px;
+      }
+      .abcolors {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        max-height: 86px;
+        overflow: auto;
+      }
+      .abcolors::-webkit-scrollbar {
+        width: 6px;
+      }
+      .abcolors::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+      }
+      .abchip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 7px;
+        padding: 4px 8px;
+      }
+      .abchip i {
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        flex: none;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+      }
+      .abchip b {
+        font-size: 11px;
+        font-weight: 600;
+        color: #fff;
+      }
+      .abchip code {
+        font-size: 10.5px;
+        font-family: Consolas, monospace;
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 0.2px;
+      }
+      @media (max-width: 760px) {
+        .abgrid {
+          grid-template-columns: 1fr;
+          grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+        }
+      }
+
+      /* ===== 내보내기(Export) 모달 ===== */
+      .exmodal {
+        position: fixed;
+        inset: 0;
+        z-index: 210;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(5, 8, 15, 0.66);
+        backdrop-filter: blur(4px);
+      }
+      .exmodal.show {
+        display: flex;
+        animation: panelIn 0.2s ease;
+      }
+      .excard {
+        width: min(760px, 100%);
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        background: #0f1320;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+      }
+      .exhead {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        color: #fff;
+        flex: none;
+      }
+      .exhead h2 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+      }
+      .exhead .exnote {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .exhead .sp {
+        flex: 1;
+      }
+      .exbody {
+        padding: 16px 18px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+        overflow: auto;
+      }
+      .extabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .extabs button {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: rgba(255, 255, 255, 0.72);
+        border-radius: 9px;
+        padding: 8px 13px;
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .extabs button:hover {
+        border-color: #4a9eff;
+        color: #fff;
+      }
+      .extabs button.on {
+        background: #4a9eff;
+        border-color: #4a9eff;
+        color: #fff;
+      }
+      .excode {
+        position: relative;
+      }
+      .excode pre {
+        margin: 0;
+        background: #0a0d16;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 14px;
+        max-height: 300px;
+        overflow: auto;
+      }
+      .excode pre::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      .excode pre::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 4px;
+      }
+      .excode code {
+        font-family: Consolas, monospace;
+        font-size: 12px;
+        line-height: 1.65;
+        color: #cdd6e6;
+        white-space: pre;
+        display: block;
+      }
+      .excopy {
+        position: absolute;
+        top: 9px;
+        right: 9px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .excopy:hover {
+        background: rgba(74, 158, 255, 0.85);
+        border-color: #4a9eff;
+      }
+      .excopy.done {
+        background: #22b07d;
+        border-color: #22b07d;
+      }
+      .exsec {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 2px;
+      }
+      .exseclbl {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .exsec::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .exactions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .exactions button {
+        flex: 1;
+        min-width: 130px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        color: #fff;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .exactions button:hover {
+        border-color: #4a9eff;
+        background: rgba(74, 158, 255, 0.16);
+      }
+      .exactions button svg {
+        width: 16px;
+        height: 16px;
+        flex: none;
+      }
+      .exhint {
+        margin: 0;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        min-height: 16px;
+        transition: color 0.15s;
+      }
+      .exhint.ok {
+        color: #5ccfd8;
+      }
+      .exhint.err {
+        color: #ffb4a8;
+      }
 
       /* dashboard shell */
       .stage {
@@ -1410,7 +2051,7 @@
       .panel {
         background: var(--bg-surface);
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: var(--radius-panel);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -2266,7 +2907,7 @@
                 </svg>
                 이미지 첨부 → 테마 추출
               </label>
-              <input type="file" id="imgfile" accept="image/*" />
+              <input type="file" id="imgfile" accept="image" />
               <small class="imgname" id="imgname"></small>
               <div class="imgprev" id="imgprev"></div>
               <label class="lblrow">
@@ -2402,8 +3043,141 @@
             </svg>
             <span class="lbl">내용 수정하기</span>
           </button>
+          <button class="editbtn" id="designToggle" title="모서리 둥글기 등 디자인을 조정하는 메뉴를 펼칩니다" aria-expanded="false" aria-controls="designPanel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="6" />
+              <path d="M9 3a6 6 0 0 0-6 6" />
+            </svg>
+            <span class="lbl">디자인 편집하기</span>
+            <span class="chev">▾</span>
+          </button>
+          <div class="designpanel" id="designPanel">
+            <div class="sublbl">
+              <span>
+                모서리 둥글기
+                <span class="ko">패널 라운드</span>
+              </span>
+              <span class="info up" tabindex="0" role="button" aria-label="모서리 둥글기 도움말">
+                ?
+                <span class="tip">
+                  <b>패널 모서리의 둥근 정도</b>
+                  <br />
+                  <br />
+                  오른쪽 화면의 카드(패널) 네 모서리가 얼마나 둥글지 정해요.
+                  <br />
+                  <br />
+                  <span class="accent">0px</span>
+                  — 각진 직사각형
+                  <br />
+                  <span class="accent">숫자가 클수록</span>
+                  — 더 둥글고 부드러운 느낌
+                </span>
+              </span>
+            </div>
+            <div class="slider" title="패널 모서리의 둥근 정도를 조절해요">
+              <input type="range" id="radius" min="0" max="24" value="8" />
+              <span class="rval num" id="radiusVal">8px</span>
+            </div>
+            <button class="ghostbtn" id="radiusReset" title="모서리 둥글기를 기본값(8px)으로 되돌려요">기본값(8px)</button>
+          </div>
           <button class="ghostbtn" id="layoutReset" title="배치와 내용을 처음 상태로 되돌립니다">기본값으로 되돌리기</button>
         </div>
+
+        <div class="grp">
+          <label class="lblrow">
+            <span>
+              내보내기
+              <span class="ko">Export · 토큰·이미지·링크</span>
+            </span>
+            <span class="info up" tabindex="0" role="button" aria-label="내보내기 도움말">
+              ?
+              <span class="tip">
+                <b>지금 테마를 산출물로 내보내기</b>
+                <br />
+                <br />
+                <span class="accent">토큰</span>
+                — CSS 변수 · JSON · Figma 변수 · Tailwind 형태로 코드 복사
+                <br />
+                <br />
+                <span class="accent">이미지</span>
+                — 대시보드 PNG, 팔레트 SVG 저장
+                <br />
+                <br />
+                <span class="accent">공유 링크</span>
+                — 지금 시안을 그대로 여는 URL을 복사
+              </span>
+            </span>
+          </label>
+          <button class="genbtn" id="exportOpen" title="토큰·이미지·공유 링크 내보내기 창을 엽니다">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            토큰·이미지·링크 내보내기
+          </button>
+        </div>
+
+        <div class="grp">
+          <label class="lblrow">
+            <span>
+              테마 저장·비교
+              <span class="ko">스냅샷 · A/B · 히스토리</span>
+            </span>
+            <span class="info up" tabindex="0" role="button" aria-label="테마 저장·비교 도움말">
+              ?
+              <span class="tip">
+                <b>만든 테마를 저장하고 비교</b>
+                <br />
+                <br />
+                <span class="accent">스냅샷</span>
+                — 지금 테마에 이름을 붙여 저장해 두고 언제든 다시 적용해요.
+                <br />
+                <br />
+                <span class="accent">A/B 비교</span>
+                — 두 테마를 나란히 놓고 색·모서리를 한눈에 견줘요.
+                <br />
+                <br />
+                <span class="accent">변경 히스토리</span>
+                — 색을 바꾼 기록을 따라 이전 상태로 되돌릴 수 있어요.
+              </span>
+            </span>
+          </label>
+
+          <div class="sublbl">
+            <span>
+              테마 스냅샷
+              <span class="ko">이름 붙여 저장</span>
+            </span>
+          </div>
+          <div class="snapsave">
+            <input type="text" class="hex" id="snapName" placeholder="테마 이름 (예: 야간 관제용)" maxlength="40" />
+            <button class="savebtn" id="snapSave" title="지금 테마를 이 이름으로 저장">저장</button>
+          </div>
+          <div class="snaplist" id="snapList"></div>
+          <p class="chkhint" id="snapEmpty" style="margin: 0">저장된 테마가 없어요. 마음에 드는 테마를 만들고 이름을 붙여 저장해 보세요.</p>
+
+          <button class="editbtn" id="abOpen" title="두 테마를 나란히 비교하는 화면을 엽니다">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="8" height="16" rx="2" />
+              <rect x="13" y="4" width="8" height="16" rx="2" />
+            </svg>
+            <span class="lbl">A/B 비교 열기</span>
+          </button>
+
+          <div class="sublbl" style="margin-top: 4px">
+            <span>
+              변경 히스토리
+              <span class="ko">되돌리기</span>
+            </span>
+          </div>
+          <div class="histbtns">
+            <button class="ghostbtn" id="histUndo" title="한 단계 이전 상태로 되돌리기">↶ 되돌리기</button>
+            <button class="ghostbtn" id="histRedo" title="되돌리기 취소(다시 실행)">↷ 다시 실행</button>
+          </div>
+          <div class="histlist" id="histList"></div>
+        </div>
+
         <div class="sbfoot">테마를 클릭하면 화면 전체에 즉시 적용됩니다 · WEMB 2026</div>
       </aside>
 
@@ -2935,6 +3709,92 @@
           </div>
         </div>
       </main>
+
+      <!-- A/B 테마 비교 오버레이 -->
+      <div class="abmodal" id="abModal" role="dialog" aria-modal="true" aria-label="A/B 테마 비교">
+        <div class="abhead">
+          <h2>A/B 테마 비교</h2>
+          <span class="abnote">두 테마를 나란히 놓고 색·모서리 둥글기를 비교하세요</span>
+          <span class="sp"></span>
+          <button class="abclose" id="abClose" title="닫기 (Esc)">✕</button>
+        </div>
+        <div class="abgrid">
+          <div class="abcol">
+            <div class="abpick">
+              <span class="abtag abtag-a">A</span>
+              <select id="abSelA"></select>
+            </div>
+            <div class="abprev" id="abPrevA"></div>
+            <div class="abmeta" id="abMetaA"></div>
+          </div>
+          <div class="abcol">
+            <div class="abpick">
+              <span class="abtag abtag-b">B</span>
+              <select id="abSelB"></select>
+            </div>
+            <div class="abprev" id="abPrevB"></div>
+            <div class="abmeta" id="abMetaB"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 내보내기(Export) 모달 -->
+      <div class="exmodal" id="exModal" role="dialog" aria-modal="true" aria-label="내보내기">
+        <div class="excard">
+          <div class="exhead">
+            <h2>내보내기 / Export</h2>
+            <span class="exnote">현재 테마를 코드·이미지·링크로 내보내요</span>
+            <span class="sp"></span>
+            <button class="abclose" id="exClose" title="닫기 (Esc)">✕</button>
+          </div>
+          <div class="exbody">
+            <div class="extabs" id="exTabs">
+              <button data-fmt="css" class="on">CSS 변수</button>
+              <button data-fmt="json">JSON 토큰</button>
+              <button data-fmt="figma">Figma 변수</button>
+              <button data-fmt="tw">Tailwind</button>
+            </div>
+            <div class="excode">
+              <button class="excopy" id="exCopy" title="코드 전체 복사">복사</button>
+              <pre><code id="exCode"></code></pre>
+            </div>
+            <div class="exsec">
+              <span class="exseclbl">이미지 · 공유</span>
+            </div>
+            <div class="exactions">
+              <button id="exPng" title="대시보드를 PNG 이미지로 저장">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+                대시보드 PNG
+              </button>
+              <button id="exSvg" title="팔레트(색상표)를 SVG 벡터로 저장">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="13.5" cy="6.5" r="2.5" />
+                  <circle cx="17.5" cy="10.5" r="2.5" />
+                  <circle cx="8.5" cy="7.5" r="2.5" />
+                  <circle cx="6.5" cy="12.5" r="2.5" />
+                  <path d="M12 2a10 10 0 1 0 0 20 1.5 1.5 0 0 0 0-3 .5.5 0 0 1 0-1 3 3 0 0 0 0-6" />
+                </svg>
+                팔레트 SVG
+              </button>
+              <button id="exShare" title="지금 시안을 그대로 여는 링크 복사">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
+                  <line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
+                </svg>
+                공유 링크 복사
+              </button>
+            </div>
+            <p class="exhint" id="exHint">탭을 눌러 형식을 고르고 “복사”로 코드를 가져가세요.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -3067,8 +3927,8 @@
         return P;
       }
       /* fine-tune: shift hue, scale saturation, shift lightness across the whole palette */
-      function applyAdjust(P) {
-        const a = state.adjust;
+      function applyAdjust(P, a) {
+        a = a || state.adjust;
         if (!a || (!a.h && !a.s && !a.l)) return P;
         const out = {};
         for (const k in P) {
@@ -3093,7 +3953,19 @@
         danger: '--danger',
         warning: '--warning',
       };
-      let state = { seed: '#4a9eff', harmony: 'analog', mode: 'dark', subHex: null, mapMode: 'auto', imgCols: null, adjust: { h: 0, s: 0, l: 0 }, source: 'seed', overrides: {}, curpalOpen: false };
+      let state = {
+        seed: '#4a9eff',
+        harmony: 'analog',
+        mode: 'dark',
+        subHex: null,
+        mapMode: 'auto',
+        imgCols: null,
+        adjust: { h: 0, s: 0, l: 0 },
+        source: 'seed',
+        overrides: {},
+        curpalOpen: false,
+        radius: 8,
+      };
       function normHex(h) {
         const { r, g, b } = hexToRgb(h);
         const to = (x) => x.toString(16).padStart(2, '0');
@@ -3123,12 +3995,13 @@
       }
       /* 글자색을 배경 대비 AAA(≥7:1) 통과하도록 자동 보정 — 통과한 색만 콘텐츠에 사용 */
       const AAA_MIN = 7;
-      function enforceAAA(hexMap) {
+      function enforceAAA(hexMap, overrides) {
+        overrides = overrides || state.overrides;
         const bgs = [hexMap['bg/page'], hexMap['bg/surface']];
         const worst = (c) => Math.min(...bgs.map((b) => wcagRatio(c, b)));
         const bgLight = relLum(hexMap['bg/page']) > 0.4; /* 배경이 밝으면 글자를 어둡게 */
         ['text/strong', 'text/weak'].forEach((role) => {
-          if (state.overrides[role]) return; /* 직접 지정한 색은 그대로 둠 */
+          if (overrides[role]) return; /* 직접 지정한 색은 그대로 둠 */
           let cur = hexMap[role];
           if (worst(cur) >= AAA_MIN) return;
           const { h, s } = rgbToHsl(hexToRgb(cur));
@@ -3143,19 +4016,25 @@
           hexMap[role] = best.toUpperCase();
         });
       }
-      function apply() {
-        let P = state.mapMode === 'direct' && state.imgCols ? buildDirect(state.imgCols, state.mode) : genPalette(state.seed, state.harmony, state.mode, state.subHex);
-        P = applyAdjust(P);
-        const root = document.documentElement;
-        root.setAttribute('data-mode', state.mode);
-        /* 직접 지정한 색(overrides)이 있으면 자동 생성값을 덮어씀 */
+      /* 임의 테마(s)의 최종 색상표를 계산 — 미리보기·A/B 비교에서도 동일 결과를 재사용 */
+      function computeHexMap(s) {
+        let P = s.mapMode === 'direct' && s.imgCols ? buildDirect(s.imgCols, s.mode) : genPalette(s.seed, s.harmony, s.mode, s.subHex);
+        P = applyAdjust(P, s.adjust);
         const hexMap = {};
-        for (const k in P) hexMap[k] = (state.overrides[k] || cssHslToHex(P[k])).toUpperCase();
-        enforceAAA(hexMap); /* 본문·보조 글자색을 배경 대비 AAA 통과하도록 보정 */
-        for (const k in P) root.style.setProperty(RV[k], hexMap[k]);
+        for (const k in P) hexMap[k] = ((s.overrides && s.overrides[k]) || cssHslToHex(P[k])).toUpperCase();
+        enforceAAA(hexMap, s.overrides || {});
+        return hexMap;
+      }
+      function apply() {
+        /* 생성된 팔레트는 오른쪽 콘텐츠(.main)에만 적용 — 왼쪽 사이드바는 고정된 기본 테마 유지 */
+        const target = document.querySelector('.main');
+        target.setAttribute('data-mode', state.mode);
+        const hexMap = computeHexMap(state);
+        for (const k in RV) target.style.setProperty(RV[k], hexMap[k]);
         document.getElementById('seed').value = normHex(state.seed);
         renderCurrentPalette(hexMap);
         refreshSourceUI();
+        scheduleHistory(); /* 변경 히스토리에 디바운스로 기록 */
       }
       /* ===== 활성 색상 소스 관리 — 한 번에 하나만 활성, 나머지는 대기(비활성) ===== */
       const srcAccs = {
@@ -3268,7 +4147,7 @@
           const setOverride = (val) => {
             val = val.toUpperCase();
             state.overrides[k] = val;
-            document.documentElement.style.setProperty(RV[k], val);
+            document.querySelector('.main').style.setProperty(RV[k], val);
             swatch.style.background = val;
             colorInput.value = val.toLowerCase();
             hxInput.value = val;
@@ -3277,6 +4156,7 @@
             if (c) c.style.background = val;
             const rb = curpalEl.querySelector('.cpreset');
             if (rb) rb.disabled = false;
+            scheduleHistory(); /* 색 직접 지정도 히스토리에 기록 */
           };
           colorInput.oninput = () => setOverride(colorInput.value);
           hxInput.onchange = () => {
@@ -3333,6 +4213,48 @@
           apply();
         }
       };
+      /* ===== 모서리 둥글기(패널 라운드) — 슬라이더로 조절, localStorage에 저장 ===== */
+      const RK = 'wemb-dash-radius';
+      const radiusInput = document.getElementById('radius');
+      const radiusVal = document.getElementById('radiusVal');
+      function applyRadius(px, save) {
+        px = Math.max(0, Math.min(24, px | 0));
+        state.radius = px;
+        document.documentElement.style.setProperty('--radius-panel', px + 'px');
+        if (radiusInput) radiusInput.value = px;
+        if (radiusVal) radiusVal.textContent = px + 'px';
+        if (save) {
+          try {
+            localStorage.setItem(RK, String(px));
+          } catch (e) {}
+          if (!restoring) scheduleHistory(); /* 모서리 둥글기 변경도 히스토리에 기록 */
+        }
+      }
+      if (radiusInput) radiusInput.oninput = () => applyRadius(+radiusInput.value, true);
+      document.getElementById('radiusReset').onclick = () => applyRadius(8, true);
+      /* 저장된 값 복원 */
+      (function () {
+        let saved = null;
+        try {
+          saved = localStorage.getItem(RK);
+        } catch (e) {}
+        applyRadius(saved != null ? +saved : 8, false);
+      })();
+      /* 디자인 편집 버튼 — 누르면 하위 메뉴(모서리 둥글기)를 토글로 펼침/접음 */
+      (function () {
+        const btn = document.getElementById('designToggle');
+        const panel = document.getElementById('designPanel');
+        const lbl = btn.querySelector('.lbl');
+        if (!btn || !panel) return;
+        btn.onclick = () => {
+          const open = !panel.classList.contains('show');
+          panel.classList.toggle('show', open);
+          btn.classList.toggle('on', open);
+          btn.setAttribute('aria-expanded', open);
+          lbl.textContent = open ? '디자인 편집 닫기' : '디자인 편집하기';
+        };
+      })();
+
       document.querySelectorAll('#harmony button').forEach(
         (b) =>
           (b.onclick = () => {
@@ -4311,7 +5233,540 @@
         cn.tick();
       }, 5000);
 
+      /* ============================================================
+       *  테마 저장 · A/B 비교 · 변경 히스토리
+       * ============================================================ */
+
+      /* 현재 테마 전체를 복제해 저장 가능한 객체로 */
+      function captureTheme() {
+        return {
+          seed: state.seed,
+          harmony: state.harmony,
+          mode: state.mode,
+          subHex: state.subHex,
+          mapMode: state.mapMode,
+          imgCols: state.imgCols ? JSON.parse(JSON.stringify(state.imgCols)) : null,
+          adjust: { h: state.adjust.h || 0, s: state.adjust.s || 0, l: state.adjust.l || 0 },
+          source: state.source,
+          overrides: Object.assign({}, state.overrides),
+          radius: state.radius,
+        };
+      }
+      /* 사이드바 컨트롤을 현재 state에 맞춰 다시 표시 */
+      function syncControlsFromState() {
+        document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === state.mode));
+        document.querySelectorAll('#harmony button').forEach((x) => x.classList.toggle('on', x.dataset.h === state.harmony));
+        const setVal = (id, v) => {
+          const el = document.getElementById(id);
+          if (el) el.value = v;
+        };
+        setVal('adjH', state.adjust.h || 0);
+        setVal('adjS', state.adjust.s || 0);
+        setVal('adjL', state.adjust.l || 0);
+        syncExtractUI(state.mapMode === 'direct' ? 'direct' : 'auto');
+        clearPresetSelection();
+      }
+      /* 저장된 테마를 화면에 복원 (히스토리 기록 여부는 호출부에서 결정) */
+      function restoreTheme(t) {
+        restoring = true;
+        state.seed = t.seed;
+        state.harmony = t.harmony;
+        state.mode = t.mode;
+        state.subHex = t.subHex;
+        state.mapMode = t.mapMode;
+        state.imgCols = t.imgCols ? JSON.parse(JSON.stringify(t.imgCols)) : null;
+        state.adjust = { h: (t.adjust && t.adjust.h) || 0, s: (t.adjust && t.adjust.s) || 0, l: (t.adjust && t.adjust.l) || 0 };
+        state.source = t.source || 'seed';
+        state.overrides = Object.assign({}, t.overrides || {});
+        syncControlsFromState();
+        apply();
+        applyRadius(t.radius != null ? t.radius : 8, true);
+        restoring = false;
+      }
+
+      /* ---------- 변경 히스토리 ---------- */
+      let themeHistory = [];
+      let hIndex = -1;
+      let restoring = false;
+      let hTimer = null;
+      function themeSig(t) {
+        return JSON.stringify([t.seed, t.harmony, t.mode, t.subHex, t.mapMode, t.adjust, t.overrides, t.radius, t.imgCols ? t.imgCols.length : 0, t.source]);
+      }
+      function historyLabel(t) {
+        const m = t.mode === 'dark' ? '다크' : '라이트';
+        let src;
+        if (t.source === 'image') src = '이미지 추출';
+        else if (t.source === 'preset') src = '추천 테마';
+        else src = '기준색 ' + (t.seed || '').toUpperCase();
+        return m + ' · ' + src;
+      }
+      function scheduleHistory() {
+        if (restoring) return;
+        clearTimeout(hTimer);
+        hTimer = setTimeout(commitHistory, 450);
+      }
+      function commitHistory() {
+        clearTimeout(hTimer);
+        const t = captureTheme();
+        if (hIndex >= 0 && themeSig(themeHistory[hIndex].theme) === themeSig(t)) return;
+        themeHistory = themeHistory.slice(0, hIndex + 1);
+        themeHistory.push({ theme: t, label: historyLabel(t), time: Date.now() });
+        if (themeHistory.length > 30) themeHistory.shift();
+        hIndex = themeHistory.length - 1;
+        renderHistory();
+      }
+      function fmtTime(ms) {
+        const d = new Date(ms);
+        const p = (n) => String(n).padStart(2, '0');
+        return p(d.getHours()) + ':' + p(d.getMinutes());
+      }
+      function renderHistory() {
+        const list = document.getElementById('histList');
+        list.innerHTML = '';
+        for (let i = themeHistory.length - 1; i >= 0; i--) {
+          const h = themeHistory[i];
+          const row = document.createElement('div');
+          row.className = 'histrow' + (i === hIndex ? ' cur' : '');
+          row.innerHTML = `<span class="dot"></span><span class="hl">${h.label}</span><span class="ht">${fmtTime(h.time)}</span>`;
+          row.onclick = () => jumpHistory(i);
+          list.appendChild(row);
+        }
+        document.getElementById('histUndo').disabled = hIndex <= 0;
+        document.getElementById('histRedo').disabled = hIndex >= themeHistory.length - 1;
+      }
+      function jumpHistory(i) {
+        if (i < 0 || i >= themeHistory.length || i === hIndex) return;
+        clearTimeout(hTimer);
+        hIndex = i;
+        restoreTheme(themeHistory[i].theme);
+        renderHistory();
+      }
+      document.getElementById('histUndo').onclick = () => {
+        if (hIndex > 0) jumpHistory(hIndex - 1);
+      };
+      document.getElementById('histRedo').onclick = () => {
+        if (hIndex < themeHistory.length - 1) jumpHistory(hIndex + 1);
+      };
+
+      /* ---------- 명명 스냅샷 저장 ---------- */
+      const SNAP_KEY = 'wemb-theme-snapshots';
+      let snapshots = [];
+      function loadSnapshots() {
+        try {
+          snapshots = JSON.parse(localStorage.getItem(SNAP_KEY)) || [];
+        } catch (e) {
+          snapshots = [];
+        }
+      }
+      function saveSnapshots() {
+        try {
+          localStorage.setItem(SNAP_KEY, JSON.stringify(snapshots));
+        } catch (e) {}
+      }
+      function defaultSnapName() {
+        const d = new Date();
+        const p = (n) => String(n).padStart(2, '0');
+        return `테마 ${p(d.getMonth() + 1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+      }
+      function addSnapshot(name) {
+        name = (name || '').trim() || defaultSnapName();
+        snapshots.unshift({ id: 's' + Date.now(), name: name, theme: captureTheme() });
+        if (snapshots.length > 40) snapshots.length = 40;
+        saveSnapshots();
+        renderSnapshots();
+        refreshABOptions();
+      }
+      function deleteSnapshot(id) {
+        snapshots = snapshots.filter((s) => s.id !== id);
+        saveSnapshots();
+        renderSnapshots();
+        refreshABOptions();
+      }
+      function renderSnapshots() {
+        const list = document.getElementById('snapList');
+        const empty = document.getElementById('snapEmpty');
+        list.innerHTML = '';
+        empty.style.display = snapshots.length ? 'none' : '';
+        snapshots.forEach((s) => {
+          const hex = computeHexMap(s.theme);
+          const sw = ['bg/page', 'bg/surface', 'point/main', 'point/sub', 'text/strong'].map((k) => `<i style="background:${hex[k]}"></i>`).join('');
+          const row = document.createElement('div');
+          row.className = 'snaprow';
+          row.innerHTML = `<span class="sws">${sw}</span><span class="nm" title="${s.name}">${s.name}</span><span class="acts"><button class="ap" title="이 테마를 화면에 적용">적용</button><button class="del" title="이 스냅샷 삭제">삭제</button></span>`;
+          row.querySelector('.ap').onclick = () => {
+            restoreTheme(s.theme);
+            commitHistory();
+          };
+          row.querySelector('.del').onclick = () => deleteSnapshot(s.id);
+          list.appendChild(row);
+        });
+      }
+      document.getElementById('snapSave').onclick = () => {
+        const inp = document.getElementById('snapName');
+        addSnapshot(inp.value);
+        inp.value = '';
+      };
+      document.getElementById('snapName').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') document.getElementById('snapSave').click();
+      });
+
+      /* ---------- A/B 비교 ---------- */
+      function abThemeList() {
+        return [{ id: '__current__', name: '● 현재 테마' }].concat(snapshots.map((s) => ({ id: s.id, name: s.name })));
+      }
+      function refreshABOptions() {
+        ['abSelA', 'abSelB'].forEach((id) => {
+          const sel = document.getElementById(id);
+          if (!sel) return;
+          const prev = sel.value;
+          const opts = abThemeList();
+          sel.innerHTML = opts.map((o) => `<option value="${o.id}">${o.name}</option>`).join('');
+          if (opts.some((o) => o.id === prev)) sel.value = prev;
+        });
+      }
+      function abResolve(id) {
+        if (id === '__current__' || !id) return captureTheme();
+        const s = snapshots.find((x) => x.id === id);
+        return s ? s.theme : captureTheme();
+      }
+      /* 차트 그라디언트 등 id 충돌 방지: 복제본 내부 id와 url(#)/href 참조를 고유 접두사로 네임스페이스 */
+      function namespaceIds(root, prefix) {
+        root.querySelectorAll('[id]').forEach((el) => (el.id = prefix + el.id));
+        const urlAttrs = ['fill', 'stroke', 'filter', 'clip-path', 'mask'];
+        root.querySelectorAll('*').forEach((el) => {
+          urlAttrs.forEach((a) => {
+            const v = el.getAttribute(a);
+            if (v && v.indexOf('url(#') > -1)
+              el.setAttribute(
+                a,
+                v.replace(/url\(#([^)]+)\)/g, (m, id) => `url(#${prefix}${id})`)
+              );
+          });
+          const st = el.getAttribute('style');
+          if (st && st.indexOf('url(#') > -1)
+            el.setAttribute(
+              'style',
+              st.replace(/url\(#([^)]+)\)/g, (m, id) => `url(#${prefix}${id})`)
+            );
+          ['href', 'xlink:href'].forEach((a) => {
+            const v = el.getAttribute(a);
+            if (v && v.charAt(0) === '#') el.setAttribute(a, '#' + prefix + v.slice(1));
+          });
+        });
+      }
+      function fitScale(slot, scaler, virt) {
+        const VW = +virt.dataset.vw || 1440,
+          VH = +virt.dataset.vh || 900;
+        const w = slot.clientWidth || 1,
+          h = slot.clientHeight || 1;
+        const f = Math.min(w / VW, h / VH);
+        virt.style.transform = 'scale(' + f + ')';
+        scaler.style.width = VW * f + 'px';
+        scaler.style.height = VH * f + 'px';
+      }
+      /* 실제 대시보드(.stage)를 통째로 복제해 해당 테마 색으로 칠한 뒤, 칸에 맞춰 축소 표시.
+         가상 캔버스 크기를 실제 .main과 똑같이 잡아 동일 레이아웃으로 잘리지 않게 함 */
+      function renderThemeInto(slotEl, theme, side) {
+        const hex = computeHexMap(theme);
+        const radius = theme.radius != null ? theme.radius : 8;
+        const main = document.querySelector('.main');
+        const VW = main.clientWidth || 1440,
+          VH = main.clientHeight || 900;
+        slotEl.innerHTML = '';
+        const scaler = document.createElement('div');
+        scaler.className = 'abscaler';
+        const virt = document.createElement('div');
+        virt.className = 'abstage';
+        virt.dataset.vw = VW;
+        virt.dataset.vh = VH;
+        virt.style.width = VW + 'px';
+        virt.style.height = VH + 'px';
+        virt.setAttribute('data-mode', theme.mode);
+        for (const k in RV) virt.style.setProperty(RV[k], hex[k]);
+        virt.style.setProperty('--radius-panel', radius + 'px');
+        virt.style.background = hex['bg/page'];
+        virt.style.color = hex['text/strong'];
+        const clone = document.querySelector('.stage').cloneNode(true); /* 이미 그려진 차트 SVG까지 그대로 복제 */
+        clone.classList.remove('content-editing');
+        const banner = clone.querySelector('.editbanner');
+        if (banner) banner.remove();
+        clone.querySelectorAll('[contenteditable]').forEach((e) => e.removeAttribute('contenteditable'));
+        namespaceIds(clone, 'ab' + side + '_'); /* 차트 그라디언트 id 충돌 방지 → 각 복제본이 자기 테마색으로 칠해짐 */
+        virt.appendChild(clone);
+        scaler.appendChild(virt);
+        slotEl.appendChild(scaler);
+        fitScale(slotEl, scaler, virt);
+      }
+      /* 하단 메타: 색상 썸네일(겹친 원) + 이름 + 모서리 + 전체 색상표 */
+      const AB_ROLES = [
+        ['bg/page', '배경'],
+        ['bg/surface', '표면'],
+        ['bg/accent', '강조배경'],
+        ['line', '구분선'],
+        ['point/main', '강조1'],
+        ['point/sub', '강조2'],
+        ['text/strong', '본문'],
+        ['text/weak', '보조'],
+        ['danger', '경고'],
+        ['warning', '주의'],
+      ];
+      function fillMeta(metaEl, theme, name) {
+        const hex = computeHexMap(theme);
+        const r = theme.radius != null ? theme.radius : 8;
+        const circles = ['bg/page', 'bg/surface', 'point/main', 'point/sub', 'text/strong'].map((k) => `<i style="background:${hex[k]}"></i>`).join('');
+        const chips = AB_ROLES.map(([k, l]) => `<span class="abchip"><i style="background:${hex[k]}"></i><b>${l}</b><code>${hex[k]}</code></span>`).join('');
+        metaEl.innerHTML = `<div class="abthumb"><span class="circles">${circles}</span><span class="abname" title="${name}">${name}</span><span class="abradius">모서리 ${r}px</span></div><div class="abcolors">${chips}</div>`;
+      }
+      function renderAB() {
+        const selA = document.getElementById('abSelA'),
+          selB = document.getElementById('abSelB');
+        const tA = abResolve(selA.value),
+          tB = abResolve(selB.value);
+        const nA = selA.selectedOptions[0] ? selA.selectedOptions[0].text.replace(/^●\s*/, '') : 'A';
+        const nB = selB.selectedOptions[0] ? selB.selectedOptions[0].text.replace(/^●\s*/, '') : 'B';
+        renderThemeInto(document.getElementById('abPrevA'), tA, 'A');
+        renderThemeInto(document.getElementById('abPrevB'), tB, 'B');
+        fillMeta(document.getElementById('abMetaA'), tA, nA);
+        fillMeta(document.getElementById('abMetaB'), tB, nB);
+      }
+      function refitAB() {
+        ['abPrevA', 'abPrevB'].forEach((id) => {
+          const slot = document.getElementById(id);
+          if (!slot) return;
+          const scaler = slot.querySelector('.abscaler');
+          const virt = slot.querySelector('.abstage');
+          if (scaler && virt) fitScale(slot, scaler, virt);
+        });
+      }
+      function openAB() {
+        refreshABOptions();
+        document.getElementById('abSelA').value = '__current__';
+        document.getElementById('abSelB').value = snapshots.length ? snapshots[0].id : '__current__';
+        document.getElementById('abModal').classList.add('show');
+        renderAB(); /* 모달이 보인 뒤 렌더해야 칸 크기를 기준으로 정확히 축소됨 */
+      }
+      function closeAB() {
+        document.getElementById('abModal').classList.remove('show');
+      }
+      function initAB() {
+        document.getElementById('abOpen').onclick = openAB;
+        document.getElementById('abClose').onclick = closeAB;
+        document.getElementById('abSelA').onchange = renderAB;
+        document.getElementById('abSelB').onchange = renderAB;
+        document.getElementById('abModal').addEventListener('click', (e) => {
+          if (e.target.id === 'abModal') closeAB();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.getElementById('abModal').classList.contains('show')) closeAB();
+        });
+        window.addEventListener('resize', () => {
+          if (document.getElementById('abModal').classList.contains('show')) refitAB();
+        });
+      }
+
+      /* ============================================================
+       *  내보내기(Export): 토큰(CSS/JSON/Figma/Tailwind) · PNG/SVG · 공유 URL
+       * ============================================================ */
+      const exRadius = () => (state.radius != null ? state.radius : 8);
+      const kebab = (role) => role.replace('/', '-');
+      function genCSS(hex) {
+        const lines = Object.keys(RV).map((k) => `  ${RV[k]}: ${hex[k]};`);
+        lines.push(`  --radius-panel: ${exRadius()}px;`);
+        return `:root {\n${lines.join('\n')}\n}`;
+      }
+      function genJSON(hex) {
+        const obj = {};
+        Object.keys(RV).forEach((k) => {
+          const parts = k.split('/');
+          let cur = obj;
+          parts.forEach((p, i) => {
+            if (i === parts.length - 1) cur[p] = { $type: 'color', $value: hex[k] };
+            else cur = cur[p] = cur[p] || {};
+          });
+        });
+        obj.radius = { panel: { $type: 'dimension', $value: exRadius() + 'px' } };
+        return JSON.stringify(obj, null, 2);
+      }
+      function genFigma(hex) {
+        const variables = Object.keys(RV).map((k) => ({ name: k, type: 'COLOR', valuesByMode: { 'Mode 1': hex[k] } }));
+        variables.push({ name: 'radius/panel', type: 'FLOAT', valuesByMode: { 'Mode 1': exRadius() } });
+        return JSON.stringify({ name: 'WEMB Theme', modes: ['Mode 1'], variables }, null, 2);
+      }
+      function genTailwind(hex) {
+        const colorLines = Object.keys(RV)
+          .map((k) => `        '${kebab(k)}': '${hex[k]}',`)
+          .join('\n');
+        return `/** @type {import('tailwindcss').Config} */\nmodule.exports = {\n  theme: {\n    extend: {\n      colors: {\n${colorLines}\n      },\n      borderRadius: {\n        panel: '${exRadius()}px',\n      },\n    },\n  },\n};`;
+      }
+      let exFmt = 'css';
+      function exContent() {
+        const hex = computeHexMap(state);
+        if (exFmt === 'json') return genJSON(hex);
+        if (exFmt === 'figma') return genFigma(hex);
+        if (exFmt === 'tw') return genTailwind(hex);
+        return genCSS(hex);
+      }
+      function renderExport() {
+        document.getElementById('exCode').textContent = exContent();
+      }
+      function exHintMsg(msg, cls) {
+        const h = document.getElementById('exHint');
+        h.textContent = msg;
+        h.className = 'exhint' + (cls ? ' ' + cls : '');
+      }
+      /* 파일 다운로드 헬퍼 */
+      function downloadBlob(blob, name) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+      }
+      function loadScript(src) {
+        return new Promise((res, rej) => {
+          const s = document.createElement('script');
+          s.src = src;
+          s.onload = res;
+          s.onerror = () => rej(new Error('load fail'));
+          document.head.appendChild(s);
+        });
+      }
+      /* 대시보드 PNG — html2canvas-pro(최신 color-mix/색함수 지원)를 필요할 때 CDN에서 불러와 캡처 */
+      async function exportPNG() {
+        exHintMsg('이미지를 만드는 중… (처음엔 라이브러리 다운로드로 잠시 걸려요)');
+        try {
+          const h2c = () => window.html2canvas || window.html2canvasPro;
+          if (!h2c()) await loadScript('https://cdn.jsdelivr.net/npm/html2canvas-pro@1.5.8/dist/html2canvas-pro.min.js');
+          const render = h2c();
+          if (!render) throw new Error('no lib');
+          const el = document.querySelector('.main');
+          const canvas = await render(el, { backgroundColor: computeHexMap(state)['bg/page'], scale: 2, logging: false, useCORS: true });
+          await new Promise((res) =>
+            canvas.toBlob((b) => {
+              downloadBlob(b, 'wemb-dashboard.png');
+              res();
+            }, 'image/png')
+          );
+          exHintMsg('대시보드 PNG를 저장했어요.', 'ok');
+        } catch (e) {
+          exHintMsg('PNG 생성에 실패했어요(오프라인이면 인터넷 연결이 필요). 대신 팔레트 SVG를 이용하세요.', 'err');
+        }
+      }
+      /* 팔레트 SVG — 색상표(스와치+코드)를 벡터로 직접 생성 */
+      function genPaletteSVG() {
+        const hex = computeHexMap(state);
+        const pad = 22,
+          rh = 48,
+          cw = 320,
+          headH = 70;
+        const W = pad * 2 + cw,
+          H = headH + AB_ROLES.length * rh + pad;
+        const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+        let y = headH;
+        const rows = AB_ROLES.map(([k, l]) => {
+          const sw = `<rect x="${pad}" y="${y}" width="34" height="34" rx="7" fill="${hex[k]}" stroke="rgba(0,0,0,0.12)"/>`;
+          const lab = `<text x="${pad + 46}" y="${y + 15}" font-family="Pretendard, sans-serif" font-size="13.5" font-weight="600" fill="#15151a">${esc(l)}</text>`;
+          const code = `<text x="${pad + 46}" y="${y + 31}" font-family="Consolas, monospace" font-size="12" fill="#6b7280">${hex[k]} · ${esc(k)}</text>`;
+          y += rh;
+          return sw + lab + code;
+        }).join('');
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" fill="#ffffff"/><text x="${pad}" y="34" font-family="Pretendard, sans-serif" font-weight="700" font-size="18" fill="#15151a">WEMB Theme Palette</text><text x="${pad}" y="54" font-family="Pretendard, sans-serif" font-size="12.5" fill="#9aa0ac">${state.mode === 'dark' ? '다크' : '라이트'} · 모서리 ${exRadius()}px · 10 토큰</text>${rows}</svg>`;
+      }
+      function exportSVG() {
+        downloadBlob(new Blob([genPaletteSVG()], { type: 'image/svg+xml' }), 'wemb-palette.svg');
+        exHintMsg('팔레트 SVG를 저장했어요.', 'ok');
+      }
+      /* 공유 URL — 현재 테마를 직렬화해 링크 해시에 담음 */
+      function encodeState(t) {
+        const slim = Object.assign({}, t);
+        if (slim.imgCols) slim.imgCols = slim.imgCols.slice(0, 16).map((c) => ({ h: +(+c.h).toFixed(1), s: +(+c.s).toFixed(1), l: +(+c.l).toFixed(1), score: +(+(c.score || 0)).toFixed(4) }));
+        return btoa(unescape(encodeURIComponent(JSON.stringify(slim))));
+      }
+      function decodeState(str) {
+        return JSON.parse(decodeURIComponent(escape(atob(str))));
+      }
+      function shareURL() {
+        return location.href.split('#')[0] + '#t=' + encodeState(captureTheme());
+      }
+      async function copyShare() {
+        const url = shareURL();
+        try {
+          history.replaceState(null, '', '#t=' + encodeState(captureTheme()));
+        } catch (e) {}
+        try {
+          await navigator.clipboard.writeText(url);
+          exHintMsg('공유 링크를 복사했어요. 이 링크를 열면 같은 시안이 그대로 적용돼요.', 'ok');
+        } catch (e) {
+          exHintMsg('복사 권한이 없어요. 주소창의 링크를 직접 복사하세요.', 'err');
+        }
+      }
+      function applyShareFromURL() {
+        const m = location.hash.match(/[#&]t=([^&]+)/);
+        if (!m) return false;
+        try {
+          restoreTheme(decodeState(m[1]));
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+      function openExport() {
+        renderExport();
+        exHintMsg('탭을 눌러 형식을 고르고 “복사”로 코드를 가져가세요.');
+        document.getElementById('exModal').classList.add('show');
+      }
+      function closeExport() {
+        document.getElementById('exModal').classList.remove('show');
+      }
+      function initExport() {
+        document.getElementById('exportOpen').onclick = openExport;
+        document.getElementById('exClose').onclick = closeExport;
+        document.getElementById('exModal').addEventListener('click', (e) => {
+          if (e.target.id === 'exModal') closeExport();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.getElementById('exModal').classList.contains('show')) closeExport();
+        });
+        document.querySelectorAll('#exTabs button').forEach((b) => {
+          b.onclick = () => {
+            document.querySelectorAll('#exTabs button').forEach((x) => x.classList.toggle('on', x === b));
+            exFmt = b.dataset.fmt;
+            renderExport();
+          };
+        });
+        document.getElementById('exCopy').onclick = async (e) => {
+          const btn = e.currentTarget;
+          try {
+            await navigator.clipboard.writeText(exContent());
+            btn.classList.add('done');
+            btn.textContent = '복사됨';
+            exHintMsg('클립보드에 복사했어요.', 'ok');
+            setTimeout(() => {
+              btn.classList.remove('done');
+              btn.textContent = '복사';
+            }, 1200);
+          } catch (err) {
+            exHintMsg('복사 권한이 없어요. 코드를 직접 선택해 복사하세요.', 'err');
+          }
+        };
+        document.getElementById('exPng').onclick = exportPNG;
+        document.getElementById('exSvg').onclick = exportSVG;
+        document.getElementById('exShare').onclick = copyShare;
+      }
+
+      /* ---------- 초기화 ---------- */
       apply();
+      loadSnapshots();
+      renderSnapshots();
+      refreshABOptions();
+      initAB();
+      initExport();
+      applyShareFromURL(); /* 공유 링크로 열렸으면 그 시안을 복원 */
+      commitHistory();
+      renderHistory();
     </script>
   </body>
 </html>
