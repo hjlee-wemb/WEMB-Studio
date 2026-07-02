@@ -113,6 +113,8 @@
         height: 100vh;
         overflow-y: auto;
         background: var(--bg-surface);
+        /* 사이드바 글자색을 모드에 맞춰 — 없으면 body의 흰색을 상속해 라이트에서 제목이 묻힘 */
+        color: var(--text-strong);
         border-right: 1px solid var(--line);
         padding: 24px 22px;
         display: flex;
@@ -3702,6 +3704,230 @@
           grid-template-columns: repeat(2, 1fr);
         }
       }
+
+      /* ============================================================
+       *  Enterprise 버전 (≤50색) — Figma 'system' Enterprise 기준 시각 강화
+       *  표면 4단계·텍스트 계층·강조 알파·그라데이션을 대시보드(.main)에 적용
+       * ============================================================ */
+      .main[data-version='enterprise'] .panel {
+        background: var(--surface-1);
+        border-color: var(--ov-divider);
+      }
+      .main[data-version='enterprise'] .panel:hover {
+        border-color: var(--accent-40);
+      }
+      /* 제목·텍스트 계층 */
+      .main[data-version='enterprise'] .ph h3 {
+        color: var(--text-heading-alt);
+      }
+      .main[data-version='enterprise'] .kpi .lab,
+      .main[data-version='enterprise'] .kpi .sub,
+      .main[data-version='enterprise'] .hint,
+      .main[data-version='enterprise'] .clegend {
+        color: var(--text-tertiary);
+      }
+      .main[data-version='enterprise'] .kpi .val {
+        color: var(--text-primary);
+      }
+      .main[data-version='enterprise'] .brand .sub {
+        color: var(--text-label);
+      }
+      .main[data-version='enterprise'] .nav a {
+        color: var(--text-label);
+      }
+      .main[data-version='enterprise'] .nav a.active {
+        color: var(--text-primary);
+      }
+      /* 차트 축 라벨 */
+      .main[data-version='enterprise'] .xax span,
+      .main[data-version='enterprise'] .yax span {
+        color: var(--text-axis);
+      }
+      /* 표: 헤더/밴드 = surface-2, 구분선 = divider, hover = surface-2 */
+      .main[data-version='enterprise'] th,
+      .main[data-version='enterprise'] .bandh td {
+        background: var(--surface-2);
+        color: var(--text-label-bright);
+      }
+      .main[data-version='enterprise'] td,
+      .main[data-version='enterprise'] th {
+        border-color: var(--ov-divider);
+      }
+      .main[data-version='enterprise'] .rowline {
+        border-bottom-color: var(--ov-divider);
+      }
+      .main[data-version='enterprise'] tbody tr:hover {
+        background: var(--surface-1-70);
+      }
+      /* 탭: 활성 강조색, 비활성 hover는 강조 알파 */
+      .main[data-version='enterprise'] .ph .tabs b {
+        color: var(--text-label);
+      }
+      .main[data-version='enterprise'] .ph .tabs b.on {
+        background: var(--accent);
+        color: #fff;
+      }
+      .main[data-version='enterprise'] .ph .tabs b:hover:not(.on) {
+        background: var(--accent-15);
+        color: var(--text-primary);
+      }
+      /* KPI 구분선 */
+      .main[data-version='enterprise'] .kpi + .kpi::before {
+        background: var(--ov-divider);
+      }
+      /* 진행률 막대 — 세그먼트(눈금) 그라데이션, 값이 높으면 레드 그라데이션 */
+      .main[data-version='enterprise'] .track {
+        background: var(--surface-2);
+      }
+      .main[data-version='enterprise'] .fill {
+        background: linear-gradient(90deg, var(--grad-chart-start), var(--grad-chart-end));
+        -webkit-mask: repeating-linear-gradient(90deg, #000 0 3px, transparent 3px 5px);
+        mask: repeating-linear-gradient(90deg, #000 0 3px, transparent 3px 5px);
+      }
+      .main[data-version='enterprise'] .fill.hot {
+        background: linear-gradient(90deg, var(--grad-prog-start), var(--grad-prog-end));
+      }
+      /* 도넛 범례 */
+      .main[data-version='enterprise'] .dleg .row {
+        background: var(--surface-2);
+        color: var(--text-tertiary);
+      }
+      .main[data-version='enterprise'] .dleg .row b {
+        color: var(--text-primary);
+      }
+      /* 미니 게이지 라벨 */
+      .main[data-version='enterprise'] .mini {
+        color: var(--text-tertiary);
+      }
+      /* 스크롤바 */
+      .main[data-version='enterprise'] .pbody::-webkit-scrollbar-thumb {
+        background: var(--ov-divider);
+      }
+
+      /* ---- Enterprise 확연한 차이: 입체감(그림자)·그라데이션·글로우 (Flat엔 없음) ---- */
+      /* 페이지 배경: 강조색 은은한 글로우 (Flat은 단색) */
+      .main[data-version='enterprise'] {
+        background:
+          radial-gradient(1100px 560px at 12% -12%, var(--accent-15), transparent 60%),
+          radial-gradient(900px 480px at 102% -6%, var(--teal-20), transparent 55%),
+          var(--surface-base) !important;
+        position: relative;
+      }
+      /* 배경 그라데이션 애니메이션 — 강조/보조색 블롭이 천천히 흐르며 고급스러운 깊이감 */
+      .main[data-version='enterprise']::before {
+        content: '';
+        position: absolute;
+        inset: -20%;
+        z-index: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(50% 50% at 26% 26%, var(--accent-20), transparent 72%),
+          radial-gradient(52% 52% at 78% 32%, var(--teal-20), transparent 74%);
+        filter: blur(72px);
+        opacity: 0.55;
+        will-change: transform;
+        animation: entBgDrift 40s ease-in-out infinite alternate;
+      }
+      /* 아주 느리고 은은한 흐름 — 회전 없이 미세한 이동·확대만 */
+      @keyframes entBgDrift {
+        from {
+          transform: translate3d(-2%, -1%, 0) scale(1.02);
+        }
+        to {
+          transform: translate3d(2%, 2%, 0) scale(1.08);
+        }
+      }
+      /* 대시보드 콘텐츠는 배경 애니메이션 위에 */
+      .main[data-version='enterprise'] > .stage {
+        position: relative;
+        z-index: 1;
+      }
+      /* 라이트 모드에선 더 은은하게 */
+      .main[data-version='enterprise'][data-mode='light']::before {
+        opacity: 0.35;
+        filter: blur(80px);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .main[data-version='enterprise']::before {
+          animation: none;
+        }
+      }
+      /* 패널: 표면 그라데이션 + 그림자 입체 + 상단 하이라이트 + 강조 상단 라인 */
+      .main[data-version='enterprise'] .panel {
+        background: linear-gradient(180deg, var(--surface-2), var(--surface-1) 46%) !important;
+        border: 1px solid var(--ov-divider);
+        box-shadow: 0 10px 26px -6px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--ov-glow-15);
+        position: relative;
+        isolation: isolate;
+      }
+      .main[data-version='enterprise'] .panel::after {
+        content: '';
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+        opacity: 0.85;
+        pointer-events: none;
+      }
+      .main[data-version='enterprise'] .panel:hover {
+        border-color: var(--accent-40);
+        box-shadow: 0 14px 32px -6px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--ov-glow-15);
+      }
+      /* 제목 강조 점 — 글로우 */
+      .main[data-version='enterprise'] .ph h3::before {
+        box-shadow: 0 0 8px 1px var(--accent);
+      }
+      /* KPI 숫자 — 강조→teal 그라데이션 텍스트 (아주 눈에 띄는 차이) */
+      .main[data-version='enterprise'] .kpi .val {
+        background: linear-gradient(92deg, var(--text-primary), var(--accent) 55%, var(--teal));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+      /* 콘텐츠(차트·도넛·게이지·막대)에는 그림자/글로우 없음 — 데이터 가독성 우선 */
+      .main[data-version='enterprise'] .chart svg path,
+      .main[data-version='enterprise'] .chart svg .pulse-dot,
+      .main[data-version='enterprise'] .donut-svg circle,
+      .main[data-version='enterprise'] .fill,
+      .main[data-version='enterprise'] .fill.hot,
+      .main[data-version='enterprise'] .mini .d {
+        filter: none;
+      }
+      /* 진행률 트랙 얇은 안쪽 테두리(그림자 아님) */
+      .main[data-version='enterprise'] .track {
+        box-shadow: inset 0 0 0 1px var(--ov-subtle);
+      }
+
+      /* ---- 라이트 모드: 그림자·그라데이션·글로우가 과하므로 대폭 완화 ---- */
+      .main[data-version='enterprise'][data-mode='light'] {
+        background: radial-gradient(900px 460px at 12% -16%, var(--accent-15), transparent 62%), var(--surface-base) !important;
+      }
+      .main[data-version='enterprise'][data-mode='light'] .panel {
+        background: var(--surface-1) !important; /* 표면 그라데이션 제거 → 평평 */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        border-color: var(--line);
+      }
+      .main[data-version='enterprise'][data-mode='light'] .panel:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      .main[data-version='enterprise'][data-mode='light'] .panel::after {
+        opacity: 0.55;
+      }
+      /* 글로우(drop-shadow) 제거 */
+      .main[data-version='enterprise'][data-mode='light'] .chart svg path,
+      .main[data-version='enterprise'][data-mode='light'] .chart svg .pulse-dot,
+      .main[data-version='enterprise'][data-mode='light'] .fill,
+      .main[data-version='enterprise'][data-mode='light'] .fill.hot,
+      .main[data-version='enterprise'][data-mode='light'] .mini .d {
+        filter: none;
+      }
+      .main[data-version='enterprise'][data-mode='light'] .ph .tabs b.on,
+      .main[data-version='enterprise'][data-mode='light'] .ph h3::before,
+      .main[data-version='enterprise'][data-mode='light'] .badge.b-crit,
+      .main[data-version='enterprise'][data-mode='light'] .tag {
+        box-shadow: none;
+      }
     </style>
   </head>
   <body>
@@ -3724,6 +3950,36 @@
             색상 설정
             <span class="ko">Color</span>
           </div>
+
+          <details class="acc" open>
+            <summary>
+              <span class="acttl">
+                Version
+                <span class="ko">버전</span>
+              </span>
+              <span class="info" tabindex="0" role="button" aria-label="버전 도움말">
+                ?
+                <span class="tip">
+                  <b>색상 사용 범위</b>
+                  <br />
+                  <br />
+                  <span class="accent">Flat</span>
+                  — 10색 이하의 단순 팔레트. 가볍고 정적인 화면에 적합.
+                  <br />
+                  <br />
+                  <span class="accent">Enterprise</span>
+                  — 50색 이하의 풍부한 토큰(표면 단계·텍스트 계층·그라데이션). 밀도 높은 관제 화면에 적합.
+                </span>
+              </span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="accbody">
+              <div class="seg" id="version">
+                <button data-v="flat" class="on">Flat</button>
+                <button data-v="enterprise">Enterprise</button>
+              </div>
+            </div>
+          </details>
 
           <details class="acc">
             <summary>
@@ -5021,6 +5277,7 @@
         seed: '#4a9eff',
         harmony: 'analog',
         mode: 'dark',
+        version: 'flat', /* 'flat'(≤10색) | 'enterprise'(≤50색) */
         subHex: null,
         mapMode: 'auto',
         imgCols: null,
@@ -5030,6 +5287,10 @@
         curpalOpen: false,
         radius: 8,
       };
+      try {
+        const sv = localStorage.getItem('wemb-version');
+        if (sv === 'flat' || sv === 'enterprise') state.version = sv;
+      } catch (e) {}
       function normHex(h) {
         const { r, g, b } = hexToRgb(h);
         const to = (x) => x.toString(16).padStart(2, '0');
@@ -5136,19 +5397,272 @@
         enforceContrast(hexMap, s.overrides || {}); /* 강조·상태색: 배경/버튼 대비 ≥3:1 */
         return hexMap;
       }
+      /* ===== Enterprise(≤50색) 토큰 — Figma 'system' Enterprise 페이지 기준 =====
+         하나의 시드색에서 표면 4단계·텍스트 계층·강조 알파 단계·상태색·그라데이션까지 파생 */
+      const EV = {
+        base: '--surface-base',
+        s1: '--surface-1',
+        s2: '--surface-2',
+        s3: '--surface-3',
+        s1_50: '--surface-1-50',
+        s1_70: '--surface-1-70',
+        s3_80: '--surface-3-80',
+        accent: '--accent',
+        accent15: '--accent-15',
+        accent20: '--accent-20',
+        accent40: '--accent-40',
+        accent50: '--accent-50',
+        teal: '--teal',
+        teal20: '--teal-20',
+        tPrimary: '--text-primary',
+        tSecondary: '--text-secondary',
+        tTertiary: '--text-tertiary',
+        tLabel: '--text-label',
+        tLabelBright: '--text-label-bright',
+        tHeading: '--text-heading-alt',
+        tAxis: '--text-axis',
+        tDim: '--text-dim',
+        ovDivider: '--ov-divider',
+        ovSubtle: '--ov-subtle',
+        ovDotRing: '--ov-dot-ring',
+        ovHigh: '--ov-high-90',
+        ovDim45: '--ov-dim-45',
+        ovGlow: '--ov-glow-15',
+        iconGray: '--ui-icon-gray',
+        trackLight: '--track-light',
+        trackDark: '--track-dark',
+        lighterBlue: '--ui-lighter-blue',
+        deepBlue: '--ui-deep-blue',
+        dot1: '--dot-1',
+        dot2: '--dot-2',
+        dot3: '--dot-3',
+        dataCyan: '--data-cyan',
+        crit: '--crit',
+        critBright: '--crit-bright',
+        crit15: '--crit-15',
+        crit60: '--crit-60',
+        warn: '--warn',
+        gChartS: '--grad-chart-start',
+        gChartE: '--grad-chart-end',
+        gFadeS: '--grad-fade-start',
+        gFadeE: '--grad-fade-end',
+        gProgS: '--grad-prog-start',
+        gProgE: '--grad-prog-end',
+      };
+      /* 색(알파 포함) 하나에 미세조정(색상 이동·채도·명도)을 적용 — flat의 applyAdjust와 동일 규칙 */
+      function adjustHex(hex, a) {
+        if (!a || (!a.h && !a.s && !a.l)) return hex;
+        const m = /^#([0-9a-fA-F]{6})([0-9a-fA-F]{2})?$/.exec(hex);
+        if (!m) return hex;
+        const { h, s, l } = rgbToHsl(hexToRgb('#' + m[1]));
+        return hslToHex(((h + a.h) % 360 + 360) % 360, clamp(s * (1 + a.s / 100), 0, 100), clamp(l + a.l, 0, 100)) + (m[2] || '');
+      }
+      function genEnterprise(s) {
+        const mode = s.mode;
+        /* 구동 색: 시드 / 이미지·컬러모음(direct) / 보조색 지정을 모두 반영
+           - accent*: 강조1, teal*: 강조2(보조), surf*: 표면·텍스트 톤 */
+        let accentH, accentS, tealH, tealS, surfH, surfS;
+        if (s.mapMode === 'direct' && s.imgCols && s.imgCols.length) {
+          const cols = s.imgCols;
+          const byL = [...cols].sort((a, b) => a.l - b.l);
+          const vib = [...cols].filter((c) => c.s > 18).sort((a, b) => b.score - a.score);
+          const main = vib[0] || cols[0];
+          let sub = null;
+          for (const o of vib) {
+            const dh = Math.abs(((o.h - main.h + 540) % 360) - 180);
+            if (dh > 35) {
+              sub = o;
+              break;
+            }
+          }
+          sub = sub || vib[1] || main;
+          const dk = byL[0];
+          accentH = main.h;
+          accentS = main.s;
+          tealH = sub.h;
+          tealS = sub.s;
+          surfH = dk.h;
+          surfS = dk.s;
+        } else {
+          const c = rgbToHsl(hexToRgb(s.seed));
+          accentH = c.h;
+          accentS = c.s;
+          surfH = c.h;
+          surfS = c.s;
+          if (s.subHex) {
+            const sc = rgbToHsl(hexToRgb(s.subHex));
+            tealH = sc.h;
+            tealS = sc.s;
+          } else {
+            /* 배색 방식(harmony)을 반영 — flat과 동일하게 보조색 색상환 회전 */
+            tealH = c.h + (SUB_OFFSET[s.harmony] || 35);
+            tealS = c.s;
+          }
+        }
+        const bS = clamp(accentS, 35, 95);
+        const tS = clamp(tealS, 40, 90);
+        const surfSat = clamp(surfS * 0.3, 8, 26);
+        const hx = (hh, ss, ll) => hslToHex(((hh % 360) + 360) % 360, clamp(ss, 0, 100), clamp(ll, 0, 100));
+        const al = (hex, f) =>
+          hex +
+          Math.round(clamp(f, 0, 1) * 255)
+            .toString(16)
+            .padStart(2, '0');
+        const T = {};
+        if (mode === 'dark') {
+          T.accent = hx(accentH, clamp(bS, 55, 100), 64);
+          T.teal = hx(tealH, clamp(tS, 45, 80), 67);
+          T.base = hx(surfH, surfSat, 5.5);
+          T.s1 = hx(surfH, surfSat, 12);
+          T.s2 = hx(surfH, surfSat, 19);
+          T.s3 = hx(surfH, surfSat * 0.95, 28);
+          T.lineSolid = hx(surfH, surfSat, 24);
+          T.tPrimary = '#ffffff';
+          T.tSecondary = al('#ffffff', 0.7);
+          T.tTertiary = al('#ffffff', 0.6);
+          T.tLabel = hx(surfH, 24, 68);
+          T.tLabelBright = hx(surfH, 26, 76);
+          T.tHeading = hx(surfH, 6, 92);
+          T.tAxis = al('#ffffff', 0.55);
+          T.tDim = al(hx(surfH, 18, 52), 0.6);
+          T.ovDivider = al('#ffffff', 0.1);
+          T.ovSubtle = al('#ffffff', 0.05);
+          T.ovDotRing = al('#ffffff', 0.5);
+          T.ovHigh = al('#ffffff', 0.9);
+          T.ovDim45 = al('#ffffff', 0.45);
+          T.ovGlow = al('#ffffff', 0.15);
+          T.iconGray = '#c4c4c4';
+          T.trackLight = '#7b7b7b';
+          T.trackDark = '#605f5f';
+          T.lighterBlue = hx(accentH, clamp(bS, 60, 100), 76);
+          T.deepBlue = hx(accentH, clamp(bS * 0.85, 55, 90), 53);
+          T.dot1 = hx(surfH, 14, 66);
+          T.dot2 = hx(surfH, 16, 40);
+          T.dot3 = hx(surfH, 20, 28);
+          T.dataCyan = hx(tealH, 95, 50);
+        } else {
+          T.accent = hx(accentH, clamp(bS, 55, 95), 50);
+          T.teal = hx(tealH, clamp(tS, 45, 80), 46);
+          T.base = hx(surfH, clamp(surfSat * 1.4, 12, 34), 93);
+          T.s1 = hx(surfH, 30, 99.5);
+          T.s2 = hx(surfH, clamp(surfSat * 1.6, 16, 40), 90);
+          T.s3 = hx(surfH, clamp(surfSat * 1.4, 14, 36), 83);
+          T.lineSolid = hx(surfH, clamp(surfSat * 1.3, 12, 34), 84);
+          T.tPrimary = hx(surfH, 30, 13);
+          T.tSecondary = al(hx(surfH, 28, 18), 0.85);
+          T.tTertiary = al(hx(surfH, 22, 26), 0.72);
+          T.tLabel = hx(surfH, 20, 40);
+          T.tLabelBright = hx(surfH, 22, 32);
+          T.tHeading = hx(surfH, 26, 16);
+          T.tAxis = al(hx(surfH, 18, 30), 0.72);
+          T.tDim = al(hx(surfH, 16, 42), 0.62);
+          T.ovDivider = al(hx(surfH, 20, 22), 0.16);
+          T.ovSubtle = al(hx(surfH, 20, 22), 0.05);
+          T.ovDotRing = al(hx(surfH, 20, 30), 0.45);
+          T.ovHigh = al(hx(surfH, 26, 16), 0.9);
+          T.ovDim45 = al(hx(surfH, 20, 30), 0.45);
+          T.ovGlow = al(hx(surfH, 30, 55), 0.14);
+          T.iconGray = '#8a8a8a';
+          T.trackLight = hx(surfH, 16, 82);
+          T.trackDark = hx(surfH, 14, 74);
+          T.lighterBlue = hx(accentH, clamp(bS, 55, 95), 62);
+          T.deepBlue = hx(accentH, clamp(bS * 0.9, 55, 90), 42);
+          T.dot1 = hx(surfH, 16, 54);
+          T.dot2 = hx(surfH, 16, 68);
+          T.dot3 = hx(surfH, 18, 78);
+          T.dataCyan = hx(tealH, 80, 42);
+        }
+        /* 강조·표면 알파 단계 */
+        T.accent15 = al(T.accent, 0.15);
+        T.accent20 = al(T.accent, 0.2);
+        T.accent40 = al(T.accent, 0.4);
+        T.accent50 = al(T.accent, 0.5);
+        T.teal20 = al(T.teal, 0.2);
+        T.s1_50 = al(T.s1, 0.5);
+        T.s1_70 = al(T.s1, 0.7);
+        T.s3_80 = al(T.s3, 0.8);
+        /* 상태색 + 그라데이션(정상: 강조→teal, 위험: 레드 그라데이션) */
+        T.crit = hx(2, 72, mode === 'dark' ? 58 : 50);
+        T.critBright = hx(3, 100, mode === 'dark' ? 60 : 55);
+        T.crit15 = al(T.crit, 0.15);
+        T.crit60 = al(T.crit, 0.6);
+        T.warn = hx(38, 90, mode === 'dark' ? 55 : 48);
+        T.gChartS = T.accent;
+        T.gChartE = T.teal;
+        T.gFadeS = al(T.accent, 0.25);
+        T.gFadeE = al(T.accent, 0);
+        T.gProgS = hx(6, 100, 63);
+        T.gProgE = hx(8, 55, 50);
+        /* 미세조정(색상 이동·채도·명도) 반영 — 시드 슬라이더가 Enterprise에도 먹히도록 */
+        const a = s.adjust;
+        if (a && (a.h || a.s || a.l)) for (const k in T) T[k] = adjustHex(T[k], a);
+        return T;
+      }
+      /* Enterprise 토큰에서 대시보드 기본 10색(코어 변수)·팔레트 UI용 맵을 뽑아냄 */
+      function entCoreMap(T) {
+        return {
+          'bg/page': T.base,
+          'bg/surface': T.s1,
+          'bg/accent': T.s2,
+          line: T.lineSolid,
+          'text/strong': T.tPrimary,
+          'text/weak': T.tLabel,
+          'point/main': T.accent,
+          'point/sub': T.teal,
+          danger: T.crit,
+          warning: T.warn,
+        };
+      }
+      /* Enterprise 전용: 진행률 막대 색을 값에 따라 정상(강조)/위험(레드)로 구분 */
+      function enhanceEnterpriseBars(root) {
+        root = root || document.querySelector('.main');
+        if (!root) return;
+        const on = root.getAttribute('data-version') === 'enterprise';
+        root.querySelectorAll('.fill').forEach((f) => {
+          if (!on) {
+            f.classList.remove('hot');
+            return;
+          }
+          const pv = f.closest('.prow') ? f.closest('.prow').querySelector('.pv') : null;
+          const v = pv ? parseFloat(pv.textContent) : NaN;
+          f.classList.toggle('hot', v >= 80);
+        });
+      }
       function apply() {
         /* 생성된 팔레트를 오른쪽 콘텐츠(.main)와 왼쪽 사이드바(.sidebar) 모두에 적용 —
            왼쪽 옵션창에서 고른 라이트/다크 모드를 왼쪽 메뉴창(사이드바)도 함께 따라감 */
-        const hexMap = computeHexMap(state);
-        [document.querySelector('.main'), document.querySelector('.sidebar')].forEach((target) => {
-          if (!target) return;
-          target.setAttribute('data-mode', state.mode);
-          for (const k in RV) target.style.setProperty(RV[k], hexMap[k]);
-        });
+        const version = state.version || 'flat';
+        const main = document.querySelector('.main'),
+          sidebar = document.querySelector('.sidebar');
+        let coreMap;
+        let entMap = null;
+        if (version === 'enterprise') {
+          const T = genEnterprise(state);
+          entMap = T;
+          coreMap = entCoreMap(T);
+          /* 사용자가 직접 지정한 색(overrides)을 코어 색에도 반영 */
+          for (const k in state.overrides) if (coreMap[k] != null) coreMap[k] = state.overrides[k];
+          [main, sidebar].forEach((target) => {
+            if (!target) return;
+            target.setAttribute('data-mode', state.mode);
+            target.setAttribute('data-version', 'enterprise');
+            for (const k in EV) target.style.setProperty(EV[k], T[k]);
+            for (const k in RV) target.style.setProperty(RV[k], coreMap[k]);
+          });
+        } else {
+          coreMap = computeHexMap(state);
+          [main, sidebar].forEach((target) => {
+            if (!target) return;
+            target.setAttribute('data-mode', state.mode);
+            target.setAttribute('data-version', 'flat');
+            for (const k in RV) target.style.setProperty(RV[k], coreMap[k]);
+          });
+        }
         document.getElementById('seed').value = normHex(state.seed);
-        renderCurrentPalette(hexMap);
+        renderCurrentPalette(coreMap, entMap);
         refreshSourceUI();
         scheduleHistory(); /* 변경 히스토리에 디바운스로 기록 */
+        enhanceEnterpriseBars(main);
       }
       /* ===== 활성 색상 소스 관리 — 한 번에 하나만 활성, 나머지는 대기(비활성) ===== */
       const srcAccs = {
@@ -5390,6 +5904,22 @@
             apply();
           })
       );
+      /* 버전 토글(Flat / Enterprise) — 색상 사용 범위를 전환 */
+      function syncVersionUI() {
+        document.querySelectorAll('#version button').forEach((x) => x.classList.toggle('on', x.dataset.v === (state.version || 'flat')));
+      }
+      document.querySelectorAll('#version button').forEach(
+        (b) =>
+          (b.onclick = () => {
+            state.version = b.dataset.v;
+            syncVersionUI();
+            try {
+              localStorage.setItem('wemb-version', state.version);
+            } catch (e) {}
+            apply();
+          })
+      );
+      syncVersionUI(); /* 저장된 버전으로 토글 상태 반영 */
       document.getElementById('rand').onclick = () => {
         const h = Math.floor(Math.random() * 360),
           s = 55 + Math.random() * 35,
@@ -6336,6 +6866,7 @@
           }
           def.cur = type;
           updateBtn(def);
+          if (typeof enhanceEnterpriseBars === 'function') enhanceEnterpriseBars(document.querySelector('.main')); /* Enterprise: 새로 그린 진행률 막대 색 보정 */
         }
 
         /* 제목(타이틀)의 키워드로 어울리는 종류를 추천 */
