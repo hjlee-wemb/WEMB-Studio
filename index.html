@@ -62,7 +62,11 @@
         flex-direction: column;
         /* 생성된 팔레트는 이 영역(오른쪽 콘텐츠)에만 적용됨 — 왼쪽 사이드바는 고정 */
         background: var(--bg-page);
-        transition: background 0.35s ease;
+        /* 스코프된 글자색을 실제로 적용 — 없으면 body의 흰색을 상속해 라이트 모드에서 글씨가 흰색이 됨 */
+        color: var(--text-strong);
+        transition:
+          background 0.35s ease,
+          color 0.35s ease;
       }
 
       #opener {
@@ -145,11 +149,8 @@
       .brand .wlogo {
         height: 16px;
       }
-      /* 사이드바 로고 — 항상 어두운 배경이므로 흰색으로 고정 */
-      .sidebar .wlogo {
-        filter: brightness(0) invert(1);
-      }
-      /* 오른쪽 콘텐츠(헤더) 로고 — 다크 모드일 때만 흰색으로 */
+      /* 로고 — 다크 모드일 때만 흰색으로 (사이드바·헤더 모두 선택한 모드를 따라감) */
+      .sidebar[data-mode='dark'] .wlogo,
       .main[data-mode='dark'] .wlogo {
         filter: brightness(0) invert(1);
       }
@@ -1999,13 +2000,24 @@
       /* ===== 대비비 검증표: 비차단 플로팅 팝업 ===== */
       .ctpopup {
         position: fixed;
-        top: 18px;
-        right: 18px;
+        inset: 0;
         z-index: 180;
-        width: 440px;
-        max-width: calc(100vw - 36px);
-        max-height: calc(100vh - 36px);
         display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(5, 8, 15, 0.66);
+        backdrop-filter: blur(4px);
+      }
+      .ctpopup.show {
+        display: flex;
+        animation: panelIn 0.2s ease;
+      }
+      .ctcard {
+        width: 440px;
+        max-width: 100%;
+        max-height: calc(100vh - 48px);
+        display: flex;
         flex-direction: column;
         background: #0f1320;
         border: 1px solid rgba(255, 255, 255, 0.16);
@@ -2013,16 +2025,8 @@
         overflow: hidden;
         box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
       }
-      .ctpopup.show {
-        display: flex;
-        animation: panelIn 0.2s ease;
-      }
       .ctpopup .exhead {
-        cursor: grab;
         padding: 12px 14px;
-      }
-      .ctpopup .exhead:active {
-        cursor: grabbing;
       }
       .ctpopup .exhead h2 {
         font-size: 15px;
@@ -2031,7 +2035,6 @@
         color: rgba(255, 255, 255, 0.4);
         font-size: 15px;
         letter-spacing: -2px;
-        cursor: grab;
         flex: none;
       }
       .ctpopup .exsel {
@@ -2421,6 +2424,175 @@
       .csalert.crit i {
         background: var(--danger);
       }
+      /* 이름 충돌 차단: 알림/배지의 info 변형이 도움말 배지용 전역 .info(width:17px;height:17px;…)에
+         걸려 박스가 찌그러지고 글자가 넘치는 문제를 스코프 특정성으로 무력화 */
+      .cscard .csalert.info,
+      .cscard .csbadge.info {
+        width: auto;
+        height: auto;
+        justify-content: flex-start;
+        cursor: default;
+      }
+      /* ===== 상태 전용 컴포넌트(C) — 라이브 대시보드가 안 보여주는 상태들 ===== */
+      /* 빈 상태 */
+      .csempty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 5px;
+        padding: 12px 8px 6px;
+      }
+      .csempty .eic {
+        font-size: 26px;
+        line-height: 1;
+        color: var(--text-weak);
+        opacity: 0.75;
+      }
+      .csempty .et {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-strong);
+      }
+      .csempty .es {
+        font-size: 11.5px;
+        color: var(--text-weak);
+        margin-bottom: 8px;
+      }
+      /* 로딩 스켈레톤 */
+      .csskel {
+        height: 14px;
+        border-radius: 6px;
+        background: linear-gradient(90deg, var(--bg-accent) 25%, var(--line) 50%, var(--bg-accent) 75%);
+        background-size: 200% 100%;
+        animation: csShimmer 1.3s linear infinite;
+      }
+      @keyframes csShimmer {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+      /* 키보드 포커스 링(대시보드에선 안 보이는 상태) */
+      .csfocus {
+        outline: none;
+        box-shadow:
+          0 0 0 2px var(--bg-surface),
+          0 0 0 4px var(--point-main);
+      }
+      /* 내보내기(B) 버튼 — 헤더 */
+      .csexport {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex: none;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        border-radius: 9px;
+        padding: 7px 12px;
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+      }
+      .csexport:hover {
+        border-color: #4a9eff;
+        background: rgba(74, 158, 255, 0.16);
+      }
+      .csexport svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+      }
+      /* ===== 갤러리 확장 컴포넌트 ===== */
+      .cssheet .cssection {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 8px 2px 0;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--point-main);
+      }
+      .cssheet .cssection::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+      .cssheet .cssection small {
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--text-weak);
+      }
+      .csgauge {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        flex: none;
+        background: conic-gradient(var(--point-main) var(--v, 60%), var(--bg-accent) 0);
+      }
+      .csgauge > i {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--bg-surface);
+        display: grid;
+        place-items: center;
+        font-style: normal;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-strong);
+      }
+      .csspin {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 3px solid var(--line);
+        border-top-color: var(--point-main);
+        animation: csSpin 0.8s linear infinite;
+        flex: none;
+      }
+      @keyframes csSpin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes csIndeterminate {
+        0% {
+          margin-left: -45%;
+        }
+        100% {
+          margin-left: 100%;
+        }
+      }
+      .csdot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex: none;
+        vertical-align: middle;
+      }
+      .cstag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3px 9px;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 600;
+      }
       /* 표 */
       .cstable {
         width: 100%;
@@ -2725,6 +2897,184 @@
         outline: 1px solid var(--line);
         outline-offset: 2px;
         border-radius: 3px;
+      }
+      /* ===== 차트 종류 선택기 — 내용 수정 모드에서만 노출 ===== */
+      .charttype {
+        display: none;
+        margin-left: auto;
+        flex: none;
+      }
+      .stage.content-editing .panel .charttype {
+        display: inline-flex;
+      }
+      /* 편집 중엔 자리 확보를 위해 탭/힌트는 숨김(차트 패널 한정) */
+      .stage.content-editing .panel:has(.charttype) .tabs,
+      .stage.content-editing .panel:has(.charttype) .hint {
+        display: none;
+      }
+      .ct-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-strong);
+        background: var(--bg-accent);
+        border: 1px solid var(--line);
+        padding: 4px 9px;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: 0.15s;
+      }
+      .ct-btn:hover {
+        border-color: var(--point-main);
+      }
+      .ct-ico {
+        font-size: 13px;
+        line-height: 1;
+      }
+      .ct-cv {
+        color: var(--text-weak);
+        font-size: 10px;
+      }
+      /* 드롭다운 — .main 안에 fixed로 띄워(패널 overflow:hidden 회피) 미리보기 테마를 그대로 사용 */
+      .ct-menu {
+        display: none;
+        position: fixed;
+        z-index: 80;
+        width: 250px;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+        padding: 7px;
+      }
+      .ct-menu.open {
+        display: block;
+      }
+      .ct-hd {
+        font-size: 11px;
+        color: var(--text-weak);
+        font-weight: 600;
+        padding: 5px 8px 7px;
+      }
+      /* 카테고리 행(1단계 메뉴) — 마우스를 올리면 오른쪽에 하위 메뉴가 펼쳐짐 */
+      .ct-cat-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        background: transparent;
+        border: 0;
+        border-radius: 9px;
+        padding: 9px 8px;
+        cursor: pointer;
+        color: var(--text-strong);
+      }
+      .ct-cat-row:hover,
+      .ct-cat-row.active {
+        background: var(--bg-accent);
+      }
+      /* 현재 선택된 종류가 들어있는 카테고리 표시(왼쪽 강조 바) */
+      .ct-cat-row.has-cur {
+        box-shadow: inset 2px 0 0 var(--point-main);
+      }
+      .ct-cat-ico {
+        font-size: 16px;
+        width: 22px;
+        text-align: center;
+        flex: none;
+      }
+      .ct-cat-nm {
+        flex: 1;
+        font-size: 12.5px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .ct-cat-arrow {
+        flex: none;
+        color: var(--text-weak);
+        font-size: 11px;
+      }
+      .ct-cat-rec {
+        font-size: 9.5px;
+        font-weight: 700;
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+        padding: 1px 6px;
+        border-radius: 999px;
+      }
+      /* 하위 메뉴(2단계 flyout) — .main 안에 fixed로 띄움 */
+      .ct-sub {
+        display: none;
+        position: fixed;
+        z-index: 81;
+        width: 238px;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+        padding: 7px;
+      }
+      .ct-sub.open {
+        display: block;
+      }
+      .ct-opt {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        background: transparent;
+        border: 0;
+        border-radius: 9px;
+        padding: 8px;
+        cursor: pointer;
+        color: var(--text-strong);
+      }
+      .ct-opt:hover {
+        background: var(--bg-accent);
+      }
+      .ct-opt.on {
+        background: color-mix(in srgb, var(--point-main) 14%, var(--bg-surface));
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--point-main) 45%, var(--line));
+      }
+      .ct-opt .ct-ico {
+        font-size: 17px;
+        width: 22px;
+        text-align: center;
+        flex: none;
+      }
+      .ct-tx {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        flex: 1;
+      }
+      .ct-tx b {
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+      .ct-tx small {
+        font-size: 11px;
+        color: var(--text-weak);
+        line-height: 1.3;
+        white-space: normal;
+      }
+      .ct-badge {
+        flex: none;
+        font-size: 10px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--point-main);
+        padding: 2px 6px;
+        border-radius: 999px;
+        align-self: flex-start;
       }
       /* title row — fixed at top, separated from scrollable body (no overlap) */
       .ph {
@@ -3358,7 +3708,7 @@
     <div class="app" id="app">
       <button id="opener" title="메뉴 펼치기">☰</button>
 
-      <aside class="sidebar">
+      <aside class="sidebar" data-mode="dark">
         <div class="brandhead">
           <div class="bt">
             <h1>
@@ -4454,37 +4804,39 @@
         </div>
       </div>
 
-      <!-- 대비비 검증표 — 비차단 플로팅 팝업(대시보드를 보면서 실시간 수정 확인) -->
-      <div class="ctpopup" id="ctModal" role="dialog" aria-label="대비비 검증표">
-        <div class="exhead" id="ctHead">
-          <span class="ctdrag" title="드래그해서 이동">⠿</span>
-          <h2>대비비 검증표</h2>
-          <span class="sp"></span>
-          <select class="exsel" id="ctSel"></select>
-          <button class="abclose" id="ctClose" title="닫기 (Esc)">✕</button>
-        </div>
-        <div class="exbody">
-          <div class="cttablewrap"><table class="cttable" id="ctTable"></table></div>
-          <div class="ctfixbar" id="ctFixBar">
-            <span class="ctfixmsg" id="ctFixMsg"></span>
-            <button class="ctfixbtn" id="ctFix" title="미달난 색만 같은 색상에서 명도를 조정해 기준을 통과하도록 고칩니다">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2 2.1-2.1z" /></svg>
-              미달 수정하기
-            </button>
+      <!-- 대비비 검증표 — 모달(딤 배경 위 가운데 정렬) -->
+      <div class="ctpopup" id="ctModal" role="dialog" aria-modal="true" aria-label="대비비 검증표">
+        <div class="ctcard">
+          <div class="exhead" id="ctHead">
+            <span class="ctdrag" aria-hidden="true">⠿</span>
+            <h2>대비비 검증표</h2>
+            <span class="sp"></span>
+            <select class="exsel" id="ctSel"></select>
+            <button class="abclose" id="ctClose" title="닫기 (Esc)">✕</button>
           </div>
-          <div class="ctchanges" id="ctChanges"></div>
-          <div class="exsec"><span class="exseclbl">설계서 첨부용 내보내기</span></div>
-          <div class="exactions">
-            <button id="ctMd" title="Markdown 표로 복사 (문서·Notion·Confluence)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M7 15V9l3 3 3-3v6" /><path d="M17 9v6" /><path d="m20 12-3 3-3-3" /></svg>
-              Markdown 복사
-            </button>
-            <button id="ctCsv" title="CSV 파일로 저장 (스프레드시트)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
-              CSV 저장
-            </button>
+          <div class="exbody">
+            <div class="cttablewrap"><table class="cttable" id="ctTable"></table></div>
+            <div class="ctfixbar" id="ctFixBar">
+              <span class="ctfixmsg" id="ctFixMsg"></span>
+              <button class="ctfixbtn" id="ctFix" title="미달난 색만 같은 색상에서 명도를 조정해 기준을 통과하도록 고칩니다">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2 2.1-2.1z" /></svg>
+                미달 수정하기
+              </button>
+            </div>
+            <div class="ctchanges" id="ctChanges"></div>
+            <div class="exsec"><span class="exseclbl">설계서 첨부용 내보내기</span></div>
+            <div class="exactions">
+              <button id="ctMd" title="Markdown 표로 복사 (문서·Notion·Confluence)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M7 15V9l3 3 3-3v6" /><path d="M17 9v6" /><path d="m20 12-3 3-3-3" /></svg>
+                Markdown 복사
+              </button>
+              <button id="ctCsv" title="CSV 파일로 저장 (스프레드시트)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+                CSV 저장
+              </button>
+            </div>
+            <p class="exhint" id="ctHint">미달 항목은 ‘미달 수정’으로 한 번에 고칠 수 있어요.</p>
           </div>
-          <p class="exhint" id="ctHint">팝업을 옮겨 가며 대시보드 색이 바뀌는 걸 실시간으로 확인하세요.</p>
         </div>
       </div>
 
@@ -4493,8 +4845,12 @@
         <div class="excard wide">
           <div class="exhead">
             <h2>컴포넌트 시트 / Components</h2>
-            <span class="exnote">같은 테마가 여러 UI·상태에 적용된 모습 (호버·포커스는 직접 올려보세요)</span>
+            <span class="exnote">이 테마가 적용된 전체 컴포넌트 카탈로그 — 화면에 있는 것 + 화면에 없는 상태값까지 (호버·포커스는 직접 올려보세요)</span>
             <span class="sp"></span>
+            <button class="csexport" id="csExport" title="이 검증 보드를 자립형 HTML 파일로 저장 (테마·컴포넌트·진단 포함)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+              HTML 내보내기
+            </button>
             <select class="exsel" id="csSel"></select>
             <button class="abclose" id="csClose" title="닫기 (Esc)">✕</button>
           </div>
@@ -4781,11 +5137,14 @@
         return hexMap;
       }
       function apply() {
-        /* 생성된 팔레트는 오른쪽 콘텐츠(.main)에만 적용 — 왼쪽 사이드바는 고정된 기본 테마 유지 */
-        const target = document.querySelector('.main');
-        target.setAttribute('data-mode', state.mode);
+        /* 생성된 팔레트를 오른쪽 콘텐츠(.main)와 왼쪽 사이드바(.sidebar) 모두에 적용 —
+           왼쪽 옵션창에서 고른 라이트/다크 모드를 왼쪽 메뉴창(사이드바)도 함께 따라감 */
         const hexMap = computeHexMap(state);
-        for (const k in RV) target.style.setProperty(RV[k], hexMap[k]);
+        [document.querySelector('.main'), document.querySelector('.sidebar')].forEach((target) => {
+          if (!target) return;
+          target.setAttribute('data-mode', state.mode);
+          for (const k in RV) target.style.setProperty(RV[k], hexMap[k]);
+        });
         document.getElementById('seed').value = normHex(state.seed);
         renderCurrentPalette(hexMap);
         refreshSourceUI();
@@ -5598,11 +5957,594 @@
         });
         heat.innerHTML = h;
       }
-      const tp = makeThroughput(),
-        cn = makeConnected(),
-        ci = makeCircuit();
-      makeDonut();
       makeHeat();
+
+      /* ============================================================
+       *  차트 종류 전환 — '내용 수정하기' 모드에서 차트/그래프 종류를
+       *  바꾸고, 내용에 맞는 종류를 추천해 줌. 선택은 자동 저장.
+       * ============================================================ */
+      const DashCharts = (function () {
+        const C_MAIN = 'var(--point-main)',
+          C_SUB = 'var(--point-sub)';
+        const PAL = [
+          C_MAIN,
+          C_SUB,
+          'color-mix(in srgb, var(--point-main) 55%, var(--line))',
+          'color-mix(in srgb, var(--point-sub) 55%, var(--line))',
+          'color-mix(in srgb, var(--text-weak) 60%, var(--line))',
+          'var(--warning)',
+          'var(--danger)',
+          'var(--line)',
+        ];
+        /* 선택 가능한 모든 종류 — 카테고리(cat)로 묶어 드롭다운에서 구분해 보여줌 */
+        const CATS = [
+          { key: 'data', name: '데이터', ico: '🗂️' },
+          { key: 'trend', name: '차트 · 그래프', ico: '📈' },
+          { key: 'ratio', name: '비율 차트', ico: '🍩' },
+          { key: 'level', name: '지표 · 분포', ico: '📊' },
+        ];
+        const TYPES = [
+          { k: 'table', cat: 'data', name: '테이블', ico: '▦', desc: '여러 항목·수치를 표로 나열' },
+          { k: 'line', cat: 'trend', name: '꺾은선 그래프', ico: '📈', desc: '시간 흐름에 따른 추세' },
+          { k: 'area', cat: 'trend', name: '영역 그래프', ico: '🏔️', desc: '연속적인 누적·사용량 강조' },
+          { k: 'bar', cat: 'trend', name: '막대 그래프', ico: '📊', desc: '구간·항목별 값 비교' },
+          { k: 'donut', cat: 'ratio', name: '도넛 차트', ico: '🍩', desc: '전체 대비 구성 비율' },
+          { k: 'pie', cat: 'ratio', name: '파이 차트', ico: '🥧', desc: '전체 대비 구성 비율' },
+          { k: 'gauge', cat: 'level', name: '게이지', ico: '⏱️', desc: '목표 대비 현재 수준' },
+          { k: 'progress', cat: 'level', name: '진행률 막대', ico: '📶', desc: '항목별 비율 순위' },
+          { k: 'heatmap', cat: 'level', name: '히트맵', ico: '🟩', desc: '값의 분포·밀도' },
+        ];
+        /* 전환 대상 차트 정의(대표 데이터 포함 — 애니메이션 기본형은 build로 다시 그림) */
+        const DEFS = [
+          {
+            id: 'ch-tp',
+            title: 'Throughput',
+            def: 'line',
+            build: makeThroughput,
+            data: {
+              labels: ['08', '09', '10', '11', '12', '13', '14', '15', '16'],
+              series: [
+                { name: 'PEAK 데이', color: C_SUB, values: [160, 150, 138, 150, 120, 132, 118, 126, 110] },
+                { name: '금일', color: C_MAIN, values: [40, 80, 120, 150, 190, 210, 250, 300, 340] },
+              ],
+            },
+          },
+          {
+            id: 'ch-cn',
+            title: 'Connected',
+            def: 'bar',
+            build: makeConnected,
+            data: {
+              labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'],
+              series: [{ name: 'Connected', color: C_MAIN, values: [46, 58, 39, 72, 64, 50, 81, 55, 68, 42, 77, 60, 53, 70] }],
+            },
+          },
+          {
+            id: 'ch-ci',
+            title: '회선 사용량 정보',
+            def: 'area',
+            build: makeCircuit,
+            data: {
+              labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'],
+              series: [{ name: '회선 사용량', color: C_MAIN, values: [62, 66, 70, 68, 64, 72, 75, 70, 66, 69, 74, 71, 67, 73] }],
+            },
+          },
+          {
+            id: 'donut',
+            title: 'CPU(Core)',
+            def: 'donut',
+            build: null,
+            hostSel: '.donut-wrap',
+            data: {
+              labels: ['마케팅 정보 분석', '클라우드관리플랫폼', '어플리케이션 보안', '지속적 통합배포', '스마트창구'],
+              series: [{ name: 'CPU', color: C_MAIN, values: [38, 22, 18, 14, 8] }],
+            },
+          },
+          /* --- 표·게이지·진행률 등 나머지 데이터 패널: 기본형은 원본 HTML 유지, 다른 종류는 추출 데이터로 렌더 --- */
+          {
+            id: 'p-biz',
+            title: '주요 업무 현황',
+            def: 'table',
+            body: true,
+            find: () => panelBodyByTitle('주요 업무 현황'),
+            data: {
+              labels: ['1Q', '상품처리', '개인뱅킹', '기업뱅킹'],
+              series: [{ name: '초당처리량', color: C_MAIN, values: [1868, 665, 1420, 980] }],
+            },
+          },
+          {
+            id: 'p-delay',
+            title: '타 기관 지연 TOP5',
+            def: 'table',
+            body: true,
+            find: () => panelBodyByTitle('타 기관 지연 TOP5'),
+            data: {
+              labels: ['국민은행', '카카오뱅크', '지역농협', '농협은행', '우리은행'],
+              series: [{ name: 'time_out', color: C_MAIN, values: [1009, 834, 819, 677, 623] }],
+            },
+          },
+          {
+            id: 'p-grpcpu',
+            title: '주요 업무 그룹 CPU 현황',
+            def: 'gauge',
+            body: true,
+            find: () => panelBodyByTitle('주요 업무 그룹 CPU 현황'),
+            data: {
+              labels: ['상품', '디지털', 'EBK', '채널EIC', '대내EIC', '대외EIC'],
+              series: [{ name: 'CPU', color: C_MAIN, values: [24, 20, 18, 2, 5, 8] }],
+            },
+          },
+          {
+            id: 'p-host',
+            title: 'Host & Service Status Monitoring',
+            def: 'table',
+            body: true,
+            find: () => panelBodyByTitle('Host & Service Status Monitoring'),
+            data: {
+              labels: ['Client', 'Network', 'System', 'e-Banking'],
+              series: [{ name: 'Host Up', color: C_MAIN, values: [838, 529, 16, 72] }],
+            },
+          },
+          {
+            id: 'p-secres',
+            title: '보안시스템 자원 사용 현황',
+            def: 'progress',
+            body: true,
+            find: () => panelBodyByTitle('보안시스템 자원 사용 현황'),
+            data: {
+              labels: ['하나쉴드 AP#13', 'Any 로그관리', '디지털캠퍼스 #1', '디지털캠퍼스 #2', 'SO VDIDCOM25'],
+              series: [{ name: 'CPU %', color: C_MAIN, values: [81, 70, 60, 53, 36] }],
+            },
+          },
+          {
+            id: 'p-week',
+            title: '보안시스템 가동 현황',
+            def: 'heatmap',
+            body: true,
+            find: () => {
+              const h = document.getElementById('heat');
+              return h ? h.closest('.pbody') : null;
+            },
+            data: {
+              labels: ['07/22', '07/23', '07/24', '07/25', '07/26', '07/27'],
+              series: [
+                { name: 'Client', color: C_MAIN, values: [1, 1, 2, 1, 1, 1] },
+                { name: 'Network', color: C_MAIN, values: [1, 2, 1, 1, 3, 1] },
+                { name: 'System', color: C_MAIN, values: [1, 1, 1, 2, 1, 1] },
+                { name: 'e-Banking', color: C_MAIN, values: [2, 1, 1, 1, 1, 2] },
+              ],
+            },
+          },
+        ];
+
+        let gid = 0;
+        const maxOf = (d) => Math.max(1, ...d.series.reduce((a, s) => a.concat(s.values), []));
+        const colorOf = (s, i) => s.color || PAL[i % PAL.length];
+        function niceMax(m) {
+          const p = Math.pow(10, Math.floor(Math.log10(m)));
+          const n = m / p;
+          const s = n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10;
+          return s * p;
+        }
+        /* 축이 필요한 종류(line/area/bar)를 그릴 대상 — .chart 그리드를 재사용 */
+        function axisTarget(host) {
+          if (host.classList.contains('chart')) {
+            host.style.display = '';
+            host.innerHTML = '';
+            return host;
+          }
+          host.innerHTML = '';
+          host.style.display = 'block';
+          const c = document.createElement('div');
+          c.className = 'chart';
+          c.style.height = '100%';
+          host.appendChild(c);
+          return c;
+        }
+        function renderAxis(host, data, type) {
+          const t = axisTarget(host);
+          const mx = niceMax(maxOf(data) * 1.05);
+          const yt = [mx, mx * 0.75, mx * 0.5, mx * 0.25, 0].map((v) => Math.round(v).toLocaleString());
+          const { defs, series } = axes(t, yt, data.labels, 5);
+          const n = data.labels.length,
+            step = 400 / (n - 1),
+            ys = (v) => 200 - (v / mx) * 200;
+          if (type === 'bar') {
+            const ns = data.series.length,
+              groupW = step * 0.7,
+              bw = groupW / ns;
+            data.series.forEach((s, si) => {
+              s.values.forEach((v, i) => {
+                const x = i * step - groupW / 2 + si * bw,
+                  y = ys(v);
+                const r = svgEl('rect', { x: x.toFixed(1), y: y.toFixed(1), width: (bw * 0.86).toFixed(1), height: (200 - y).toFixed(1), rx: 2, fill: colorOf(s, si) });
+                r.style.animation = 'rise .6s cubic-bezier(.2,.8,.2,1) backwards';
+                r.style.animationDelay = i * 0.03 + 's';
+                series.appendChild(r);
+              });
+            });
+          } else {
+            data.series.forEach((s, si) => {
+              const col = colorOf(s, si),
+                p = spline(s.values, step, ys);
+              if (type === 'area') {
+                const g = 'cg' + gid++;
+                const lg = svgEl('linearGradient', { id: g, x1: 0, y1: 0, x2: 0, y2: 1 });
+                lg.append(svgEl('stop', { offset: '0%', 'stop-color': col, 'stop-opacity': 0.34 }), svgEl('stop', { offset: '100%', 'stop-color': col, 'stop-opacity': 0.02 }));
+                defs.appendChild(lg);
+                series.appendChild(svgEl('path', { d: p + ` L ${(n - 1) * step} 200 L 0 200 Z`, fill: `url(#${g})` }));
+              }
+              const ln = svgEl('path', { d: p, fill: 'none', stroke: col, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+              series.appendChild(ln);
+              series.appendChild(svgEl('circle', { r: 3, fill: col, cx: Math.min((n - 1) * step, 398), cy: ys(s.values[n - 1]) }));
+              const L = ln.getTotalLength ? ln.getTotalLength() : 0;
+              if (L) {
+                ln.style.strokeDasharray = L;
+                ln.style.strokeDashoffset = L;
+                requestAnimationFrame(() =>
+                  requestAnimationFrame(() => {
+                    ln.style.transition = 'stroke-dashoffset 1s ease';
+                    ln.style.strokeDashoffset = '0';
+                  })
+                );
+              }
+            });
+          }
+        }
+        function segsOf(data) {
+          if (data.series.length > 1) return data.series.map((s, i) => ({ name: s.name, val: s.values.reduce((a, b) => a + b, 0), col: colorOf(s, i) }));
+          return data.labels.map((l, i) => ({ name: l, val: data.series[0].values[i], col: PAL[i % PAL.length] }));
+        }
+        function arcPath(cx, cy, r, a0, a1) {
+          const rad = (d) => (d * Math.PI) / 180;
+          const x0 = cx + r * Math.cos(rad(a0)),
+            y0 = cy + r * Math.sin(rad(a0)),
+            x1 = cx + r * Math.cos(rad(a1)),
+            y1 = cy + r * Math.sin(rad(a1)),
+            large = a1 - a0 > 180 ? 1 : 0;
+          return `M ${cx} ${cy} L ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z`;
+        }
+        function renderDonut(host, data, isPie) {
+          host.innerHTML = '';
+          host.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;height:100%';
+          const segs = segsOf(data),
+            total = segs.reduce((a, s) => a + s.val, 0) || 1;
+          const svg = svgEl('svg', { viewBox: '0 0 128 128' });
+          svg.style.cssText = 'width:128px;height:128px;flex:none';
+          const cx = 64,
+            cy = 64;
+          if (isPie) {
+            const r = 58;
+            let ang = -90;
+            segs.forEach((s) => {
+              const a1 = ang + (s.val / total) * 360;
+              svg.appendChild(svgEl('path', { d: arcPath(cx, cy, r, ang, a1), fill: s.col, stroke: 'var(--bg-surface)', 'stroke-width': 1 }));
+              ang = a1;
+            });
+          } else {
+            const r = 46,
+              C = 2 * Math.PI * r,
+              gap = 6;
+            let off = 0;
+            segs.forEach((s) => {
+              const seg = (C * s.val) / total;
+              const c = svgEl('circle', {
+                cx,
+                cy,
+                r,
+                fill: 'none',
+                stroke: s.col,
+                'stroke-width': 16,
+                'stroke-dasharray': `${Math.max(0, seg - gap)} ${C - Math.max(0, seg - gap)}`,
+                'stroke-dashoffset': -off,
+                transform: `rotate(-90 ${cx} ${cy})`,
+              });
+              c.style.transition = 'stroke-dasharray .8s ease';
+              svg.appendChild(c);
+              off += seg;
+            });
+          }
+          const leg = document.createElement('div');
+          leg.className = 'dleg';
+          leg.innerHTML = segs.map((s) => `<div class="row"><i style="background:${s.col}"></i>${s.name}<b>${Math.round((s.val / total) * 100)}%</b></div>`).join('');
+          host.append(svg, leg);
+        }
+        function renderGauge(host, data) {
+          host.innerHTML = '';
+          host.style.cssText = 'display:flex;align-items:center;justify-content:center;height:100%';
+          const mx = maxOf(data);
+          const items =
+            data.series.length > 1
+              ? data.series.map((s, i) => ({ name: s.name, pct: Math.round((s.values.reduce((a, b) => a + b, 0) / s.values.length / mx) * 100) }))
+              : data.labels.map((l, i) => ({ name: l, pct: Math.round((data.series[0].values[i] / mx) * 100) }));
+          const wrap = document.createElement('div');
+          wrap.className = 'mini-row';
+          wrap.style.width = '100%';
+          wrap.innerHTML = items
+            .slice(0, 8)
+            .map((it) => `<div class="mini"><div class="d" style="--v:${it.pct}%"><b>${it.pct}%</b></div>${it.name}</div>`)
+            .join('');
+          host.appendChild(wrap);
+        }
+        function renderHeat(host, data) {
+          host.innerHTML = '';
+          host.style.cssText = 'display:block;padding:6px 0;overflow:auto';
+          const mx = maxOf(data);
+          const cell = (v) => `<div title="${v}" style="flex:1;aspect-ratio:1;min-width:14px;border-radius:4px;background:color-mix(in srgb,var(--point-main) ${Math.round(12 + (v / mx) * 78)}%,transparent)"></div>`;
+          let h = '<div style="display:flex;flex-direction:column;gap:4px">';
+          data.series.forEach((s) => {
+            h += '<div style="display:flex;gap:4px">' + s.values.map(cell).join('') + '</div>';
+          });
+          h += '</div>';
+          h += '<div style="display:flex;gap:4px;margin-top:6px;color:var(--text-weak);font-size:11px">' + data.labels.map((l) => `<span style="flex:1;min-width:14px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l}</span>`).join('') + '</div>';
+          host.innerHTML = h;
+        }
+        function renderProgress(host, data) {
+          host.innerHTML = '';
+          host.style.cssText = 'display:block;padding:6px 2px;overflow:auto';
+          const mx = maxOf(data),
+            s = data.series[0];
+          const rows = data.labels.map((l, i) => ({ n: l, v: s.values[i] })).sort((a, b) => b.v - a.v);
+          host.innerHTML =
+            '<div class="plist">' +
+            rows.map((r) => `<div class="prow"><span class="nm">${r.n}</span><div class="track"><div class="fill" style="width:${Math.round((r.v / mx) * 100)}%"></div></div><span class="pv num">${r.v}</span></div>`).join('') +
+            '</div>';
+        }
+
+        function renderTable(host, data) {
+          host.style.cssText = 'display:block;overflow:auto';
+          const h =
+            '<table><thead><tr><th>항목</th>' +
+            data.series.map((s) => `<th class="num" style="text-align:right">${s.name}</th>`).join('') +
+            '</tr></thead><tbody>' +
+            data.labels
+              .map((l, i) => '<tr class="rowline"><td>' + l + '</td>' + data.series.map((s) => `<td class="num">${Number(s.values[i]).toLocaleString()}</td>`).join('') + '</tr>')
+              .join('') +
+            '</tbody></table>';
+          host.innerHTML = h;
+        }
+        function genericRender(def, type) {
+          const host = def.hostEl,
+            data = def.data;
+          if (type === 'line' || type === 'area' || type === 'bar') renderAxis(host, data, type);
+          else if (type === 'donut') renderDonut(host, data, false);
+          else if (type === 'pie') renderDonut(host, data, true);
+          else if (type === 'gauge') renderGauge(host, data);
+          else if (type === 'heatmap') renderHeat(host, data);
+          else if (type === 'progress') renderProgress(host, data);
+          else if (type === 'table') renderTable(host, data);
+        }
+        function render(def, type) {
+          const host = def.hostEl;
+          host.removeAttribute('style');
+          def.ctrl = null;
+          if (type === def.def) {
+            /* 기본형 복원 — 실시간 차트는 다시 그리고, 원래 표/게이지/진행률/로그는 원본 HTML 복원 */
+            if (def.build) {
+              host.innerHTML = '';
+              def.ctrl = def.build();
+            } else if (def.id === 'donut') {
+              host.innerHTML = '<svg class="donut-svg" id="donut" viewBox="0 0 128 128"></svg><div class="dleg" id="dleg"></div>';
+              makeDonut();
+            } else if (def.html0 != null) {
+              host.innerHTML = def.html0;
+            } else {
+              genericRender(def, type);
+            }
+          } else {
+            genericRender(def, type);
+          }
+          def.cur = type;
+          updateBtn(def);
+        }
+
+        /* 제목(타이틀)의 키워드로 어울리는 종류를 추천 */
+        function recommend(def) {
+          const title = def.title || '',
+            multi = def.data.series.length > 1,
+            n = def.data.labels.length;
+          if (/구성|비율|점유|분포|share|ratio|\(core\)/i.test(title)) return { type: 'donut', reason: '전체에서 각 항목이 차지하는 비율을 한눈에 보여줘요.' };
+          if (/주간|가동|매트릭스|heat/i.test(title)) return { type: 'heatmap', reason: '요일·항목별 상태 분포를 색 농도로 보여줘요.' };
+          if (/top|순위|rank|지연/i.test(title)) return { type: 'bar', reason: '항목별 값을 크기 순으로 비교하기 좋아요.' };
+          if (/cpu|memory|메모리|사용률|점유율|가동률|자원|core/i.test(title)) return { type: 'gauge', reason: '목표(100%) 대비 현재 사용 수준을 보여줘요.' };
+          if (/사용량|usage|추이|trend/i.test(title)) return { type: 'area', reason: '연속적인 값 변화를 면적으로 강조해요.' };
+          if (/현황|status|monitoring|목록|log|로그|list/i.test(title)) return { type: 'table', reason: '여러 항목·수치를 표로 정확히 나열하기 좋아요.' };
+          if (multi) return { type: 'line', reason: '여러 계열의 시간 추이를 겹쳐 비교하기 좋아요.' };
+          if (n > 10) return { type: 'bar', reason: '구간이 많아 막대로 개별 값을 비교하기 좋아요.' };
+          return { type: 'line', reason: '값의 추세를 보기 좋아요.' };
+        }
+
+        const CTK = 'wemb-dash-charttype';
+        function saveTypes() {
+          const m = {};
+          DEFS.forEach((d) => {
+            if (d.cur !== d.def) m[d.id] = d.cur;
+          });
+          try {
+            localStorage.setItem(CTK, JSON.stringify(m));
+          } catch (e) {}
+        }
+        function loadTypes() {
+          try {
+            return JSON.parse(localStorage.getItem(CTK)) || {};
+          } catch (e) {
+            return {};
+          }
+        }
+
+        let hideTimer = null;
+        function hideSubs(def) {
+          (def.subs || []).forEach((s) => {
+            s.sub.classList.remove('open');
+            s.row.classList.remove('active');
+          });
+        }
+        function cancelHideSub() {
+          clearTimeout(hideTimer);
+        }
+        function scheduleHideSub(def) {
+          clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => hideSubs(def), 200);
+        }
+        function openSub(def, entry) {
+          cancelHideSub();
+          hideSubs(def); /* 형제 하위 메뉴는 닫음 */
+          const sub = entry.sub,
+            r = entry.row.getBoundingClientRect();
+          sub.classList.add('open');
+          entry.row.classList.add('active');
+          const w = sub.offsetWidth || 238,
+            h = sub.offsetHeight;
+          let left = r.right + 2;
+          if (left + w > window.innerWidth - 8) left = r.left - 2 - w; /* 오른쪽이 넘치면 왼쪽으로 */
+          if (left < 8) left = 8;
+          let top = r.top - 6;
+          if (top + h > window.innerHeight - 8) top = Math.max(8, window.innerHeight - 8 - h);
+          sub.style.left = left + 'px';
+          sub.style.top = top + 'px';
+        }
+        function closeAll() {
+          DEFS.forEach((d) => {
+            if (d.menu) d.menu.classList.remove('open');
+            hideSubs(d);
+          });
+          cancelHideSub();
+        }
+        function openMenu(def) {
+          closeAll();
+          const menu = def.menu,
+            r = def.btn.getBoundingClientRect(),
+            w = 250;
+          menu.classList.add('open');
+          let left = Math.max(8, r.right - w),
+            top = r.bottom + 6;
+          menu.style.left = left + 'px';
+          menu.style.top = top + 'px';
+          const mh = menu.getBoundingClientRect().height;
+          if (top + mh > window.innerHeight - 8) menu.style.top = Math.max(8, r.top - 6 - mh) + 'px';
+        }
+        function updateBtn(def) {
+          if (!def.btn) return;
+          const cur = TYPES.find((t) => t.k === def.cur) || TYPES[0];
+          def.btn.innerHTML = `<span class="ct-ico">${cur.ico}</span><span class="ct-cur">${cur.name}</span><span class="ct-cv">▾</span>`;
+          /* 현재 선택된 종류를 하위 메뉴에서 표시 + 그 카테고리 행에도 점 표시 */
+          (def.subs || []).forEach((s) => {
+            let has = false;
+            s.sub.querySelectorAll('.ct-opt').forEach((o) => {
+              const on = o.dataset.t === def.cur;
+              o.classList.toggle('on', on);
+              if (on) has = true;
+            });
+            s.row.classList.toggle('has-cur', has);
+          });
+        }
+        function buildPicker(def) {
+          const ph = def.panel.querySelector('.ph');
+          if (!ph) return;
+          const box = document.createElement('div');
+          box.className = 'charttype';
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'ct-btn';
+          btn.title = '차트 종류 바꾸기';
+          const menu = document.createElement('div');
+          menu.className = 'ct-menu';
+          menu.innerHTML = '<div class="ct-hd">종류 바꾸기 · 카테고리에 마우스를 올리세요</div>';
+          /* 1단계: 카테고리 행. 2단계: 마우스 올리면 오른쪽에 뜨는 하위 메뉴(flyout) */
+          def.subs = [];
+          CATS.forEach((cat) => {
+            const list = TYPES.filter((tp) => tp.cat === cat.key);
+            if (!list.length) return;
+            const recInCat = list.some((tp) => tp.k === def.rec.type);
+            const row = document.createElement('button');
+            row.type = 'button';
+            row.className = 'ct-cat-row';
+            row.dataset.cat = cat.key;
+            row.innerHTML = `<span class="ct-cat-ico">${cat.ico || ''}</span><span class="ct-cat-nm">${cat.name}</span>${recInCat ? '<span class="ct-cat-rec">추천</span>' : ''}<span class="ct-cat-arrow">▸</span>`;
+            menu.appendChild(row);
+
+            const sub = document.createElement('div');
+            sub.className = 'ct-sub';
+            list.forEach((tp) => {
+              const rec = def.rec.type === tp.k;
+              const o = document.createElement('button');
+              o.type = 'button';
+              o.className = 'ct-opt';
+              o.dataset.t = tp.k;
+              o.innerHTML = `<span class="ct-ico">${tp.ico}</span><span class="ct-tx"><b>${tp.name}</b><small>${rec ? def.rec.reason : tp.desc}</small></span>${rec ? '<span class="ct-badge">추천</span>' : ''}`;
+              o.addEventListener('click', () => {
+                render(def, tp.k);
+                saveTypes();
+                closeAll();
+              });
+              sub.appendChild(o);
+            });
+            mainEl.appendChild(sub);
+
+            const entry = { cat: cat.key, row, sub };
+            def.subs.push(entry);
+            row.addEventListener('mouseenter', () => openSub(def, entry));
+            row.addEventListener('mouseleave', () => scheduleHideSub(def));
+            row.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openSub(def, entry);
+            }); /* 클릭·터치로도 펼침 */
+            sub.addEventListener('mouseenter', cancelHideSub);
+            sub.addEventListener('mouseleave', () => scheduleHideSub(def));
+          });
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            def.menu.classList.contains('open') ? closeAll() : openMenu(def);
+          });
+          box.appendChild(btn);
+          ph.appendChild(box);
+          mainEl.appendChild(menu); /* .main 안에 두어 미리보기 테마를 그대로 사용 */
+          def.box = box;
+          def.btn = btn;
+          def.menu = menu;
+          /* 탭 클릭 시 기본형이면 데이터 갱신(기존 동작 유지) */
+          const tabs = def.panel.querySelector('.tabs');
+          if (tabs) tabs.querySelectorAll('b').forEach((b) => b.addEventListener('click', () => def.cur === def.def && def.ctrl && def.ctrl.redraw && def.ctrl.redraw()));
+        }
+
+        /* 제목으로 패널 본문(.pbody)을 찾음 — 표/게이지 등 본문 통째로 바꾸는 패널용 */
+        function panelBodyByTitle(t) {
+          const p = [...document.querySelectorAll('.cols .panel')].find((p) => {
+            const h = p.querySelector('.ph h3');
+            return h && h.textContent.trim() === t;
+          });
+          return p ? p.querySelector('.pbody') : null;
+        }
+
+        const mainEl = document.querySelector('.main');
+        const saved = loadTypes();
+        DEFS.forEach((def) => {
+          def.hostEl = def.find ? def.find() : document.querySelector(def.hostSel || '#' + def.id);
+          if (!def.hostEl) return;
+          def.panel = def.hostEl.closest('.panel');
+          if (def.body) def.html0 = def.hostEl.innerHTML; /* 원본 표/게이지 HTML 스냅샷 → 기본형 복원용 */
+          def.rec = recommend(def);
+          buildPicker(def);
+          render(def, saved[def.id] || def.def);
+        });
+        document.addEventListener('click', closeAll);
+        window.addEventListener('resize', closeAll);
+        document.addEventListener('scroll', closeAll, true); /* 대시보드 내부 스크롤 시 위치 어긋남 방지 */
+        document.addEventListener('dash-reset', () => {
+          try {
+            localStorage.removeItem(CTK);
+          } catch (e) {}
+          DEFS.forEach((def) => def.hostEl && render(def, def.def));
+        });
+
+        return {
+          tick() {
+            DEFS.forEach((def, i) => {
+              if (def.ctrl && def.ctrl.tick) setTimeout(() => def.ctrl.tick(), i * 120);
+            });
+          },
+        };
+      })();
 
       /* clock — 날짜·시간 모두 실시간 */
       function fmtClock() {
@@ -5668,20 +6610,27 @@
           document.getElementById('wtemp').textContent = '';
         }
       }
+      /* 위치 권한은 '처음 한 번만' 요청하고, 이후 갱신은 저장된 좌표로 날씨만 다시 불러옴
+         (예전엔 10분마다 getCurrentPosition을 다시 호출해 권한 팝업이 계속 떴음) */
+      const SEOUL = [37.5665, 126.978];
+      let weatherCoords = SEOUL; // 기본값: 서울. 위치 허용 시 실제 좌표로 교체
       function initWeather() {
-        const SEOUL = [37.5665, 126.978];
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
-            (pos) => loadWeather(pos.coords.latitude, pos.coords.longitude),
-            () => loadWeather(SEOUL[0], SEOUL[1]),
-            { timeout: 5000 }
+            (pos) => {
+              weatherCoords = [pos.coords.latitude, pos.coords.longitude];
+              loadWeather(weatherCoords[0], weatherCoords[1]);
+            },
+            () => loadWeather(weatherCoords[0], weatherCoords[1]), // 거부/실패 → 서울, 다시 묻지 않음
+            { timeout: 5000, maximumAge: 60 * 60 * 1000 }
           );
         } else {
-          loadWeather(SEOUL[0], SEOUL[1]);
+          loadWeather(weatherCoords[0], weatherCoords[1]);
         }
       }
       initWeather();
-      setInterval(initWeather, 10 * 60 * 1000); // 10분마다 갱신
+      // 10분마다 갱신 — 위치는 다시 묻지 않고 저장된 좌표로 날씨만 새로고침
+      setInterval(() => loadWeather(weatherCoords[0], weatherCoords[1]), 10 * 60 * 1000);
 
       /* interactions */
       document.querySelectorAll('.nav a').forEach((a) =>
@@ -5698,16 +6647,7 @@
           })
         )
       );
-      document
-        .querySelector('#ch-tp')
-        .closest('.panel')
-        .querySelectorAll('.tabs b')
-        .forEach((b) => b.addEventListener('click', () => tp.redraw()));
-      document
-        .querySelector('#ch-cn')
-        .closest('.panel')
-        .querySelectorAll('.tabs b')
-        .forEach((b) => b.addEventListener('click', () => cn.redraw()));
+      /* 차트 탭 클릭 시 데이터 갱신은 DashCharts 모듈에서 처리(현재 종류가 기본형일 때만) */
       document.querySelectorAll('.prow').forEach((r) => (r.title = r.querySelector('.nm').textContent + ' · ' + r.querySelector('.pv').textContent + '%'));
 
       /* ===== 대시보드 편집: 패널 배치(드래그) + 내용(텍스트) 수정 — 자동 저장 ===== */
@@ -5782,7 +6722,7 @@
 
         function refreshBanner() {
           if (layoutMode) bannerText.textContent = '패널을 끌어다 놓아 위치를 바꿔보세요. 변경 내용은 자동 저장됩니다.';
-          else if (contentMode) bannerText.textContent = '바꾸고 싶은 글자를 클릭해 직접 수정하세요. 변경 내용은 자동 저장됩니다.';
+          else if (contentMode) bannerText.textContent = '글자를 클릭해 직접 수정하고, 차트 오른쪽 위의 종류 버튼으로 차트 모양을 바꿀 수 있어요(추천 표시 참고). 자동 저장됩니다.';
           banner.classList.toggle('show', layoutMode || contentMode);
         }
         function setLayout(on) {
@@ -5808,6 +6748,7 @@
         document.getElementById('layoutReset').onclick = () => {
           applyLayout(DEFAULT_LAYOUT);
           textEls.forEach((el) => (el.innerHTML = DEFAULT_CONTENT[el.dataset.eid]));
+          document.dispatchEvent(new CustomEvent('dash-reset')); /* 차트 종류도 기본값으로 */
           try {
             localStorage.removeItem(LK);
             localStorage.removeItem(CK);
@@ -5981,12 +6922,8 @@
         })(start);
       });
 
-      /* live: every 5s — lines scroll left, bars stack from right */
-      setInterval(() => {
-        tp.tick();
-        setTimeout(() => ci.tick(), 300);
-        cn.tick();
-      }, 5000);
+      /* live: every 5s — 기본형(실시간) 차트만 갱신. 다른 종류로 바꾼 차트는 정지 */
+      setInterval(() => DashCharts.tick(), 5000);
 
       /* ============================================================
        *  테마 저장 · A/B 비교 · 변경 히스토리
@@ -6677,50 +7614,14 @@
       function openContrast() {
         refreshAuditSelects();
         document.getElementById('ctSel').value = '__current__';
-        const p = document.getElementById('ctModal'); /* 위치 초기화(우상단 기본 위치) */
-        p.style.left = '';
-        p.style.top = '';
-        p.style.right = '';
+        const p = document.getElementById('ctModal');
         renderContrast();
         renderChanges(null);
-        ctHintMsg('팝업을 옮겨 가며 대시보드 색이 바뀌는 걸 실시간으로 확인하세요.');
+        ctHintMsg('미달 항목은 ‘미달 수정’으로 한 번에 고칠 수 있어요.');
         p.classList.add('show');
       }
       function closeContrast() {
         document.getElementById('ctModal').classList.remove('show');
-      }
-      /* 헤더를 잡고 끌어 팝업 위치 이동 */
-      function makeDraggable(panel, handle) {
-        let dragging = false,
-          sx,
-          sy,
-          ox,
-          oy;
-        handle.addEventListener('mousedown', (e) => {
-          if (e.target.closest('button, select')) return;
-          const r = panel.getBoundingClientRect();
-          ox = r.left;
-          oy = r.top;
-          sx = e.clientX;
-          sy = e.clientY;
-          dragging = true;
-          panel.style.right = 'auto';
-          panel.style.left = ox + 'px';
-          panel.style.top = oy + 'px';
-          document.body.style.userSelect = 'none';
-          e.preventDefault();
-        });
-        window.addEventListener('mousemove', (e) => {
-          if (!dragging) return;
-          const nx = Math.max(0, Math.min(window.innerWidth - 90, ox + (e.clientX - sx)));
-          const ny = Math.max(0, Math.min(window.innerHeight - 40, oy + (e.clientY - sy)));
-          panel.style.left = nx + 'px';
-          panel.style.top = ny + 'px';
-        });
-        window.addEventListener('mouseup', () => {
-          dragging = false;
-          document.body.style.userSelect = '';
-        });
       }
       function initContrast() {
         document.getElementById('contrastOpen').onclick = openContrast;
@@ -6729,7 +7630,9 @@
           renderContrast();
           renderChanges(null);
         };
-        makeDraggable(document.getElementById('ctModal'), document.getElementById('ctHead'));
+        document.getElementById('ctModal').addEventListener('click', (e) => {
+          if (e.target.id === 'ctModal') closeContrast();
+        });
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape' && document.getElementById('ctModal').classList.contains('show')) closeContrast();
         });
@@ -6753,41 +7656,163 @@
        * ============================================================ */
       const CS_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
       function componentSheetHTML() {
+        const heat = Array.from({ length: 45 }, (_, i) => {
+          const s = i === 13 || i === 31 ? 'var(--danger)' : i % 9 === 4 ? 'var(--warning)' : 'color-mix(in srgb, var(--point-sub) 55%, var(--bg-accent))';
+          return '<span style="aspect-ratio:1;border-radius:3px;background:' + s + '"></span>';
+        }).join('');
         return `
-          <div class="cscard"><span class="cslbl">버튼 · 상태 Buttons</span>
-            <div class="csrow"><button class="csbtn primary">기본 동작</button><button class="csbtn sub">보조</button><button class="csbtn ghost">고스트</button><button class="csbtn danger">위험</button><button class="csbtn primary" disabled>비활성</button></div>
-            <span class="csmeta">마우스를 올리면 실제 hover 상태가 보여요 · 맨 오른쪽은 disabled</span>
+          <div class="cssection">화면에 있는 컴포넌트 <small>대시보드에서 실제로 쓰는 것들</small></div>
+
+          <div class="cscard"><span class="cslbl">KPI 카드</span>
+            <div class="csrow" style="gap:16px">
+              <div class="cskpi"><div class="lab">거래건수</div><div class="val">55,045,697</div></div>
+              <div class="cskpi"><div class="lab">청구 TPS / Peak</div><div class="val"><b>2,603</b> / 3,992</div></div>
+            </div>
           </div>
-          <div class="cscard"><span class="cslbl">배지 Badges</span>
-            <div class="csrow"><span class="csbadge ok">정상</span><span class="csbadge info">정보</span><span class="csbadge warn">주의</span><span class="csbadge crit">경고</span></div>
+          <div class="cscard"><span class="cslbl">패널 헤더 · 탭</span>
+            <div class="cstabs"><span class="cstab on">tab01</span><span class="cstab">tab02</span><span class="cstab">tab03</span><span class="cstab">tab04</span></div>
+            <div class="cstabs" style="margin-top:4px"><span class="cstab on">Overview</span><span class="cstab">Production</span><span class="cstab">Quality</span></div>
           </div>
-          <div class="cscard"><span class="cslbl">입력 Inputs</span>
-            <input class="csinput" placeholder="텍스트 입력 (클릭해 포커스)" /><input class="csinput" value="입력된 값 12,345" /><input class="csinput" value="비활성 필드" disabled />
+          <div class="cscard span2"><span class="cslbl">라인 · 영역 차트</span>
+            <svg viewBox="0 0 240 70" preserveAspectRatio="none" style="width:100%;height:70px">
+              <polygon points="0,60 0,40 40,45 80,25 120,35 160,15 200,28 240,12 240,60" fill="var(--point-main)" opacity="0.16" />
+              <polyline points="0,40 40,45 80,25 120,35 160,15 200,28 240,12" fill="none" stroke="var(--point-main)" stroke-width="2" />
+              <polyline points="0,55 40,52 80,50 120,45 160,48 200,40 240,44" fill="none" stroke="var(--point-sub)" stroke-width="2" opacity="0.85" />
+            </svg>
+            <div style="display:flex;gap:16px;font-size:11px;color:var(--text-weak);margin-top:4px"><span><i class="csdot" style="width:8px;height:8px;border-radius:2px;background:var(--point-main)"></i> 금일</span><span><i class="csdot" style="width:8px;height:8px;border-radius:2px;background:var(--point-sub)"></i> PEAK 데이</span></div>
           </div>
-          <div class="cscard"><span class="cslbl">토글 · 선택 Controls (클릭 가능)</span>
+          <div class="cscard"><span class="cslbl">도넛 차트</span>
+            <div class="csrow" style="gap:16px;align-items:center">
+              <div class="csgauge" style="background:conic-gradient(var(--point-main) 0 42%, var(--point-sub) 42% 68%, var(--warning) 68% 84%, var(--bg-accent) 84%)"><i>68%</i></div>
+              <div style="font-size:11.5px;color:var(--text-weak);line-height:1.8">
+                <div><i class="csdot" style="background:var(--point-main)"></i> 정상 42%</div>
+                <div><i class="csdot" style="background:var(--point-sub)"></i> 처리 26%</div>
+                <div><i class="csdot" style="background:var(--warning)"></i> 대기 16%</div>
+              </div>
+            </div>
+          </div>
+          <div class="cscard"><span class="cslbl">CPU 미니 게이지</span>
+            <div class="csrow" style="gap:16px;text-align:center">
+              <div style="font-size:11px;color:var(--text-weak)"><div class="csgauge" style="--v:24%;width:50px;height:50px;margin:0 auto 5px"><i style="width:36px;height:36px;font-size:11px">24%</i></div>상품</div>
+              <div style="font-size:11px;color:var(--text-weak)"><div class="csgauge" style="--v:20%;width:50px;height:50px;margin:0 auto 5px"><i style="width:36px;height:36px;font-size:11px">20%</i></div>디지털</div>
+              <div style="font-size:11px;color:var(--text-weak)"><div class="csgauge" style="--v:8%;width:50px;height:50px;margin:0 auto 5px"><i style="width:36px;height:36px;font-size:11px">8%</i></div>대외</div>
+            </div>
+          </div>
+          <div class="cscard span2"><span class="cslbl">상태 히트맵</span>
+            <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:4px">${heat}</div>
+            <div style="display:flex;gap:14px;font-size:11px;color:var(--text-weak);margin-top:8px"><span><i class="csdot" style="width:9px;height:9px;background:color-mix(in srgb, var(--point-sub) 55%, var(--bg-accent))"></i> 정상</span><span><i class="csdot" style="width:9px;height:9px;background:var(--warning)"></i> 주의</span><span><i class="csdot" style="width:9px;height:9px;background:var(--danger)"></i> 경고</span></div>
+          </div>
+          <div class="cscard span2"><span class="cslbl">표 · 밴드형</span>
+            <table class="cstable"><thead><tr><th>항목</th><th>1Q</th><th>상품처리</th></tr></thead><tbody>
+              <tr><td>동시 사용자</td><td>10,906 <span class="v2">/ 18,328</span></td><td>2,425 <span class="v2">/ 3,992</span></td></tr>
+              <tr><td>초당 처리량</td><td class="teal">1,868 <span class="v2">/ 4,063</span></td><td class="teal">665 <span class="v2">/ 1,775</span></td></tr>
+              <tr><td>평균 수행시간</td><td>0.30 <span class="v2">/ 0.20</span></td><td>0.05 <span class="v2">/ 0.06</span></td></tr>
+            </tbody></table>
+          </div>
+          <div class="cscard"><span class="cslbl">상태 표 · 카운트</span>
+            <table class="cstable"><thead><tr><th>구분</th><th>Up</th><th>Down</th><th>Warn</th><th>Crit</th></tr></thead><tbody>
+              <tr><td>Client</td><td>838</td><td>0</td><td style="color:var(--warning)">2</td><td>0</td></tr>
+              <tr><td>Server</td><td>412</td><td style="color:var(--danger)">1</td><td style="color:var(--warning)">3</td><td style="color:var(--danger)">1</td></tr>
+            </tbody></table>
+          </div>
+          <div class="cscard"><span class="cslbl">태그</span>
+            <div class="csrow">
+              <span class="cstag" style="background:color-mix(in srgb,var(--point-main) 18%,transparent);color:var(--point-main)">전자</span>
+              <span class="cstag" style="background:color-mix(in srgb,var(--point-sub) 20%,transparent);color:var(--point-sub)">은행</span>
+              <span class="cstag" style="background:color-mix(in srgb,var(--warning) 18%,transparent);color:var(--warning)">지연</span>
+              <span class="cstag" style="background:var(--bg-accent);color:var(--text-weak)">기타</span>
+            </div>
+          </div>
+          <div class="cscard"><span class="cslbl">네비게이션</span>
+            <div style="display:flex;gap:18px;font-size:13px">
+              <a style="color:var(--point-main);font-weight:700;border-bottom:2px solid var(--point-main);padding-bottom:5px">Overview</a>
+              <a style="color:var(--text-weak);padding-bottom:5px">Production</a>
+              <a style="color:var(--text-weak);padding-bottom:5px">Quality</a>
+              <a style="color:var(--text-weak);padding-bottom:5px">Equipment</a>
+            </div>
+          </div>
+
+          <div class="cssection">화면에 없는 컴포넌트 · 상태 <small>추측 — 앞으로 필요할 수 있는 것들</small></div>
+
+          <div class="cscard"><span class="cslbl">버튼 · 상태</span>
+            <div class="csrow"><button class="csbtn primary">기본</button><button class="csbtn sub">보조</button><button class="csbtn ghost">고스트</button><button class="csbtn danger">위험</button></div>
+            <div class="csrow"><button class="csbtn primary csfocus">포커스</button><button class="csbtn primary" disabled>비활성</button><button class="csbtn primary" style="display:inline-flex;align-items:center;gap:7px"><span class="csspin" style="width:14px;height:14px;border-width:2px"></span>로딩</button></div>
+            <span class="csmeta">기본 · hover(직접 올려보기) · 포커스 · 비활성 · 로딩</span>
+          </div>
+          <div class="cscard"><span class="cslbl">배지 · 상태칩</span>
+            <div class="csrow"><span class="csbadge ok">정상</span><span class="csbadge info">정보</span><span class="csbadge warn">주의</span><span class="csbadge crit">경고</span><span class="csbadge" style="color:var(--text-weak);background:var(--bg-accent)">비활성</span></div>
+            <div class="csrow" style="margin-top:2px"><span class="cstag" style="background:color-mix(in srgb,var(--point-sub) 18%,transparent);color:var(--point-sub)"><i class="csdot" style="width:7px;height:7px;background:var(--point-sub);margin-right:5px"></i>온라인</span><span class="cstag" style="background:var(--bg-accent);color:var(--text-weak)"><i class="csdot" style="width:7px;height:7px;background:var(--text-weak);margin-right:5px"></i>오프라인</span></div>
+          </div>
+          <div class="cscard"><span class="cslbl">입력 · 상태</span>
+            <input class="csinput" placeholder="플레이스홀더" />
+            <input class="csinput" value="입력된 값 12,345" />
+            <input class="csinput csfocus" value="포커스됨" />
+            <input class="csinput" value="비활성 필드" disabled />
+            <input class="csinput" value="잘못된 값" style="border-color:var(--danger)" />
+            <span style="font-size:11px;color:var(--danger)">필수 항목이에요</span>
+          </div>
+          <div class="cscard"><span class="cslbl">토글 · 선택</span>
             <div class="csrow"><span class="csswitch on cstoggle" role="switch" aria-checked="true"></span><span class="csswitch cstoggle" role="switch" aria-checked="false"></span><span class="csmeta">스위치 On / Off</span></div>
-            <div class="csrow"><label class="cschkrow"><span class="cscheck on cstoggle">${CS_CHECK}</span>체크 On</label><label class="cschkrow"><span class="cscheck cstoggle">${CS_CHECK}</span>체크 Off</label></div>
+            <div class="csrow"><label class="cschkrow"><span class="cscheck on cstoggle">${CS_CHECK}</span>체크 On</label><label class="cschkrow"><span class="cscheck cstoggle">${CS_CHECK}</span>체크 Off</label><label class="cschkrow"><span class="cscheck on cstoggle" style="position:relative"><span style="position:absolute;left:4px;right:4px;top:50%;height:2px;background:#fff;transform:translateY(-50%)"></span></span>부분 선택</label></div>
             <div class="csrow"><label class="cschkrow"><span class="cscheck round on cstoggle"></span>라디오 On</label><label class="cschkrow"><span class="cscheck round cstoggle"></span>라디오 Off</label></div>
           </div>
-          <div class="cscard"><span class="cslbl">진행률 Progress</span>
+          <div class="cscard"><span class="cslbl">진행률</span>
             <div class="cstrack"><div class="csfill" style="width:72%"></div></div>
             <div class="cstrack"><div class="csfill" style="width:38%"></div></div>
+            <div class="cstrack" style="overflow:hidden"><div class="csfill" style="width:45%;animation:csIndeterminate 1.3s ease-in-out infinite"></div></div>
+            <span class="csmeta">확정 72% · 38% · 불확정(진행 중)</span>
           </div>
-          <div class="cscard"><span class="cslbl">탭 · 칩 Tabs · Chips</span>
-            <div class="cstabs"><span class="cstab on">Overview</span><span class="cstab">Production</span><span class="cstab">Quality</span></div>
-            <div class="csrow"><span class="cschip on">선택됨</span><span class="cschip">옵션 A</span><span class="cschip">옵션 B</span></div>
-          </div>
-          <div class="cscard span2"><span class="cslbl">알림 Alerts</span>
+          <div class="cscard span2"><span class="cslbl">알림 배너</span>
             <div class="csalert info"><i></i>정보: 모든 시스템이 정상 작동 중입니다.</div>
+            <div class="csalert" style="background:color-mix(in srgb,var(--point-sub) 13%,transparent);color:var(--text-strong)"><i style="background:var(--point-sub)"></i>완료: 배포가 성공적으로 끝났습니다.</div>
             <div class="csalert warn"><i></i>주의: 디스크 사용량이 85%를 초과했습니다.</div>
             <div class="csalert crit"><i></i>경고: SOMDB101 응답 지연이 감지되었습니다.</div>
           </div>
-          <div class="cscard"><span class="cslbl">KPI</span>
-            <div class="cskpi"><div class="lab">거래건수</div><div class="val">55,045,697</div></div>
-            <div class="cskpi"><div class="lab">청구 TPS / Peak</div><div class="val"><b>2,603</b> / 3,992</div></div>
+          <div class="cscard"><span class="cslbl">토스트 알림</span>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:9px;background:var(--bg-accent);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12.5px;color:var(--text-strong);box-shadow:0 6px 18px rgba(0,0,0,.28)"><i class="csdot" style="background:var(--point-sub)"></i>저장되었습니다<span style="margin-left:auto;color:var(--text-weak)">✕</span></div>
+              <div style="display:flex;align-items:center;gap:9px;background:var(--bg-accent);border:1px solid color-mix(in srgb,var(--danger) 45%,var(--line));border-radius:9px;padding:10px 12px;font-size:12.5px;color:var(--text-strong)"><i class="csdot" style="background:var(--danger)"></i>연결이 끊겼습니다<span style="margin-left:auto;color:var(--point-main);font-weight:600">다시 시도</span></div>
+            </div>
           </div>
-          <div class="cscard"><span class="cslbl">표 Table</span>
-            <table class="cstable"><thead><tr><th>항목</th><th>TPS</th><th>Peak</th></tr></thead><tbody><tr><td>동시 사용자</td><td>10,906</td><td class="v2">18,328</td></tr><tr><td>초당 처리량</td><td>1,868</td><td class="v2">4,063</td></tr><tr><td>평균 수행시간</td><td>0.30</td><td class="v2">0.20</td></tr></tbody></table>
+          <div class="cscard"><span class="cslbl">툴팁</span>
+            <div style="display:flex;justify-content:center;padding:16px 0 10px">
+              <div style="position:relative;background:var(--text-strong);color:var(--bg-page);font-size:12px;font-weight:500;padding:6px 11px;border-radius:7px">자세한 설명이 여기 표시돼요<span style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--text-strong)"></span></div>
+            </div>
+          </div>
+          <div class="cscard"><span class="cslbl">드롭다운 (열림)</span>
+            <div style="border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--bg-surface)">
+              <div style="padding:9px 12px;font-size:12.5px;color:var(--point-main);background:color-mix(in srgb,var(--point-main) 14%,transparent)">✓ 선택된 항목</div>
+              <div style="padding:9px 12px;font-size:12.5px;color:var(--text-strong);border-top:1px solid var(--line)">두 번째 항목</div>
+              <div style="padding:9px 12px;font-size:12.5px;color:var(--text-weak);border-top:1px solid var(--line)">비활성 항목</div>
+            </div>
+          </div>
+          <div class="cscard"><span class="cslbl">페이지네이션</span>
+            <div class="csrow" style="gap:5px">
+              <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-weak)">‹</span>
+              <span class="cstag" style="min-width:28px;background:var(--point-main);color:#fff">1</span>
+              <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-strong)">2</span>
+              <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-strong)">3</span>
+              <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-weak)">›</span>
+            </div>
+          </div>
+          <div class="cscard"><span class="cslbl">스피너 · 로딩</span>
+            <div class="csrow" style="align-items:center;gap:14px"><span class="csspin"></span><span class="csspin" style="width:18px;height:18px;border-width:2px"></span><span style="font-size:12px;color:var(--text-weak)">불러오는 중…</span></div>
+          </div>
+          <div class="cscard"><span class="cslbl">빈 상태</span>
+            <div class="csempty"><div class="eic">◎</div><div class="et">표시할 데이터가 없어요</div><div class="es">필터를 바꾸거나 기간을 넓혀보세요</div><button class="csbtn ghost">새로고침</button></div>
+          </div>
+          <div class="cscard"><span class="cslbl">에러 상태</span>
+            <div class="csempty"><div class="eic" style="color:var(--danger)">⚠</div><div class="et">불러오지 못했어요</div><div class="es">네트워크 오류 (503) · 잠시 후 다시 시도하세요</div><button class="csbtn ghost">다시 시도</button></div>
+          </div>
+          <div class="cscard"><span class="cslbl">로딩 스켈레톤</span>
+            <div class="csskel" style="width:70%"></div>
+            <div class="csskel" style="width:100%"></div>
+            <div class="csskel" style="width:45%"></div>
+            <span class="csmeta">데이터를 불러오는 중 표시되는 자리표시자</span>
+          </div>
+          <div class="cscard"><span class="cslbl">키보드 포커스</span>
+            <div class="csrow"><button class="csbtn primary csfocus">포커스된 버튼</button><input class="csinput csfocus" value="포커스된 입력" style="max-width:170px" /></div>
+            <span class="csmeta">키보드 이동 시 나타나는 포커스 링</span>
           </div>`;
       }
       function renderSheet() {
@@ -6799,6 +7824,42 @@
         for (const k in RV) sheet.style.setProperty(RV[k], hex[k]);
         sheet.style.setProperty('--radius-panel', (theme.radius != null ? theme.radius : 8) + 'px');
         sheet.innerHTML = componentSheetHTML();
+      }
+      /* ===== 내보내기(B) — 검증 보드를 자립형 HTML로 저장 ===== */
+      function componentSheetExportHTML() {
+        const css = [...document.querySelectorAll('style')].map((s) => s.textContent).join('\n');
+        const sheet = document.getElementById('csSheet');
+        const mode = sheet.getAttribute('data-mode') || 'dark';
+        const themeName = document.getElementById('csSel').selectedOptions[0].textContent.trim().replace(/^●\s*/, '');
+        const date = new Date().toLocaleString('ko-KR');
+        const body = sheet.outerHTML;
+        return `<!doctype html>
+<html lang="ko" data-mode="${mode}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEMB 컴포넌트 시트 — ${themeName}</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
+    <style>${css}</style>
+    <style>
+      html, body { height: auto; overflow: auto; background: #0f1320; color: #e7ecf5; margin: 0; padding: 26px; }
+      .exwrap { max-width: 1080px; margin: 0 auto; }
+      .exhd { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; color: #fff; flex-wrap: wrap; }
+      .exhd h1 { font-size: 18px; margin: 0; font-weight: 700; }
+      .exhd .sub { font-size: 12.5px; color: rgba(255, 255, 255, 0.55); }
+    </style>
+  </head>
+  <body>
+    <div class="exwrap">
+      <div class="exhd"><h1>WEMB 컴포넌트 갤러리</h1><span class="sub">테마: ${themeName} · 내보낸 시각 ${date}</span></div>
+      ${body}
+    </div>
+  </body>
+</html>`;
+      }
+      function exportSheet() {
+        const name = document.getElementById('csSel').selectedOptions[0].textContent.trim().replace(/^●\s*/, '').replace(/[^\w가-힣-]+/g, '_') || 'theme';
+        downloadBlob(new Blob([componentSheetExportHTML()], { type: 'text/html;charset=utf-8' }), `wemb-components-${name}.html`);
       }
       function openSheet() {
         refreshAuditSelects();
@@ -6812,6 +7873,7 @@
       function initSheet() {
         document.getElementById('sheetOpen').onclick = openSheet;
         document.getElementById('csClose').onclick = closeSheet;
+        document.getElementById('csExport').onclick = exportSheet;
         document.getElementById('csSel').onchange = renderSheet;
         document.getElementById('csModal').addEventListener('click', (e) => {
           if (e.target.id === 'csModal') closeSheet();
