@@ -2136,10 +2136,200 @@
         color: #45d99e;
       }
 
+      /* ============================================================
+         라이트 모드 팝업·모달 — html[data-mode='light']일 때 어두운
+         크롬(오버레이·카드·표·코드블록)을 밝은 디자인으로 전환.
+         (툴팁 .tip, 컴포넌트 시트 .cssheet, 차트종류 메뉴는 이미 테마
+          변수를 쓰므로 여기서 다루지 않음)
+         ============================================================ */
+      html[data-mode='light'] .abmodal,
+      html[data-mode='light'] .exmodal,
+      html[data-mode='light'] .ctpopup {
+        background: rgba(28, 36, 51, 0.32);
+      }
+      /* 카드/컨테이너 표면 */
+      html[data-mode='light'] .excard,
+      html[data-mode='light'] .ctcard {
+        background: #ffffff;
+        border-color: rgba(15, 23, 42, 0.1);
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
+      }
+      html[data-mode='light'] .abcol {
+        background: #fbfcfe;
+        border-color: rgba(15, 23, 42, 0.1);
+      }
+      /* 헤더/제목/보조 텍스트 */
+      html[data-mode='light'] .abhead,
+      html[data-mode='light'] .abthumb,
+      html[data-mode='light'] .exhead {
+        color: #1a1f2b;
+      }
+      html[data-mode='light'] .exhead {
+        border-bottom-color: rgba(15, 23, 42, 0.1);
+      }
+      html[data-mode='light'] .abhead .abnote {
+        color: rgba(26, 31, 43, 0.6);
+      }
+      html[data-mode='light'] .exhead .exnote,
+      html[data-mode='light'] .ctpopup .ctdrag {
+        color: rgba(26, 31, 43, 0.5);
+      }
+      /* 닫기 버튼 */
+      html[data-mode='light'] .abclose {
+        border-color: rgba(15, 23, 42, 0.18);
+        color: #1a1f2b;
+      }
+      html[data-mode='light'] .abclose:hover {
+        background: rgba(15, 23, 42, 0.06);
+      }
+      /* 셀렉트/입력 */
+      html[data-mode='light'] .abpick select,
+      html[data-mode='light'] .exsel {
+        background: #f4f6f9;
+        color: #1a1f2b;
+        border-color: rgba(15, 23, 42, 0.16);
+      }
+      /* 탭 버튼 */
+      html[data-mode='light'] .extabs button {
+        background: rgba(15, 23, 42, 0.04);
+        border-color: rgba(15, 23, 42, 0.12);
+        color: rgba(26, 31, 43, 0.72);
+      }
+      html[data-mode='light'] .extabs button:hover {
+        color: #1a1f2b;
+      }
+      html[data-mode='light'] .extabs button.on {
+        color: #fff;
+      }
+      /* 코드 블록 — 밝은 회색 배경 + 어두운 글자 */
+      html[data-mode='light'] .excode pre {
+        background: #f5f7fa;
+        border-color: rgba(15, 23, 42, 0.1);
+      }
+      html[data-mode='light'] .excode pre::-webkit-scrollbar-thumb {
+        background: rgba(15, 23, 42, 0.18);
+      }
+      html[data-mode='light'] .excode code {
+        color: #2a2f3a;
+      }
+      html[data-mode='light'] .excopy {
+        background: rgba(15, 23, 42, 0.06);
+        border-color: rgba(15, 23, 42, 0.16);
+        color: #1a1f2b;
+      }
+      /* 섹션 구분 라벨/선 */
+      html[data-mode='light'] .exseclbl {
+        color: rgba(26, 31, 43, 0.45);
+      }
+      html[data-mode='light'] .exsec::after {
+        background: rgba(15, 23, 42, 0.1);
+      }
+      /* 액션 버튼 */
+      html[data-mode='light'] .exactions button {
+        background: rgba(15, 23, 42, 0.04);
+        border-color: rgba(15, 23, 42, 0.14);
+        color: #1a1f2b;
+      }
+      html[data-mode='light'] .exactions button:hover {
+        background: rgba(74, 158, 255, 0.12);
+      }
+      html[data-mode='light'] .exhint {
+        color: rgba(26, 31, 43, 0.6);
+      }
+      /* 컴포넌트 시트 헤더의 'HTML 내보내기' 버튼 — 밝은 배경에서 흰 글자가 안 보이므로 전환 */
+      html[data-mode='light'] .csexport {
+        border-color: rgba(15, 23, 42, 0.16);
+        background: rgba(15, 23, 42, 0.04);
+        color: #1a1f2b;
+      }
+      html[data-mode='light'] .csexport:hover {
+        border-color: #4a9eff;
+        background: rgba(74, 158, 255, 0.12);
+      }
+      /* A/B 하단 메타 */
+      html[data-mode='light'] .abmeta {
+        border-top-color: rgba(15, 23, 42, 0.1);
+      }
+      html[data-mode='light'] .abradius {
+        color: rgba(26, 31, 43, 0.6);
+        border-color: rgba(15, 23, 42, 0.18);
+      }
+      html[data-mode='light'] .abchip {
+        background: rgba(15, 23, 42, 0.04);
+        border-color: rgba(15, 23, 42, 0.1);
+      }
+      html[data-mode='light'] .abchip b {
+        color: #1a1f2b;
+      }
+      html[data-mode='light'] .abchip code {
+        color: rgba(26, 31, 43, 0.6);
+      }
+      html[data-mode='light'] .abthumb .circles i {
+        border-color: #ffffff;
+        box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.15);
+      }
+      html[data-mode='light'] .abcolors::-webkit-scrollbar-thumb {
+        background: rgba(15, 23, 42, 0.2);
+      }
+      /* 대비비 검증표 */
+      html[data-mode='light'] .cttablewrap {
+        border-color: rgba(15, 23, 42, 0.1);
+      }
+      html[data-mode='light'] .cttable {
+        color: #2a2f3a;
+      }
+      html[data-mode='light'] .cttable th {
+        color: rgba(26, 31, 43, 0.6);
+        background: rgba(15, 23, 42, 0.03);
+        border-bottom-color: rgba(15, 23, 42, 0.12);
+      }
+      html[data-mode='light'] .cttable td {
+        border-bottom-color: rgba(15, 23, 42, 0.07);
+      }
+      html[data-mode='light'] .ctsw,
+      html[data-mode='light'] .ctchange .ccsw {
+        box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.16);
+      }
+      html[data-mode='light'] .ctlabel,
+      html[data-mode='light'] .ctratio,
+      html[data-mode='light'] .ctfixmsg,
+      html[data-mode='light'] .ctchange {
+        color: #1a1f2b;
+      }
+      html[data-mode='light'] .ctlabel small,
+      html[data-mode='light'] .ctchange .ccratio,
+      html[data-mode='light'] .ctchanges .cchead span {
+        color: rgba(26, 31, 43, 0.55);
+      }
+      html[data-mode='light'] .ctchange code {
+        color: rgba(26, 31, 43, 0.78);
+      }
+      html[data-mode='light'] .ctchange .ccarrow {
+        color: rgba(26, 31, 43, 0.45);
+      }
+      html[data-mode='light'] .ctfixbar {
+        border-color: rgba(15, 23, 42, 0.1);
+        background: rgba(15, 23, 42, 0.02);
+      }
+      /* 상태 텍스트는 흰 배경에서 대비 확보를 위해 진하게 */
+      html[data-mode='light'] .ctpass,
+      html[data-mode='light'] .ctchange .ccratio b.ok,
+      html[data-mode='light'] .ctfixbar.all-ok .ctfixmsg,
+      html[data-mode='light'] .ctchanges .cchead {
+        color: #1f9d6b;
+      }
+      html[data-mode='light'] .ctfail,
+      html[data-mode='light'] .ctfixmsg b,
+      html[data-mode='light'] .ctchange .ccratio b {
+        color: #d1453b;
+      }
+
       /* ===== 컴포넌트 시트(상태 갤러리) — 선택 테마 색을 컨테이너에 스코프 ===== */
       .cssheet {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        /* 3열 + dense — 작은 카드가 촘촘히 채워져 빈 공간 낭비를 줄임 */
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-flow: row dense;
         gap: 13px;
         background: var(--bg-page);
         color: var(--text-strong);
@@ -2158,6 +2348,9 @@
         min-width: 0;
       }
       .cscard.span2 {
+        grid-column: span 2;
+      }
+      .cscard.span3 {
         grid-column: 1 / -1;
       }
       .cscard > .cslbl {
@@ -2190,14 +2383,14 @@
       }
       .csbtn.primary {
         background: var(--point-main);
-        color: #fff;
+        color: var(--on-main);
       }
       .csbtn.primary:hover {
         background: color-mix(in srgb, var(--point-main) 86%, #000);
       }
       .csbtn.sub {
         background: var(--point-sub);
-        color: #06141a;
+        color: var(--on-sub);
       }
       .csbtn.ghost {
         background: transparent;
@@ -2210,7 +2403,7 @@
       }
       .csbtn.danger {
         background: var(--danger);
-        color: #fff;
+        color: var(--on-danger);
       }
       .csbtn:disabled {
         opacity: 0.42;
@@ -2289,7 +2482,7 @@
       }
       .csswitch.on::after {
         left: 21px;
-        background: #fff;
+        background: var(--on-main);
       }
       /* 체크 / 라디오 */
       .cscheck {
@@ -2314,7 +2507,7 @@
       .cscheck svg {
         width: 13px;
         height: 13px;
-        color: #fff;
+        color: var(--on-main);
         opacity: 0;
       }
       .cscheck.on svg {
@@ -2325,7 +2518,7 @@
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #fff;
+        background: var(--on-main);
       }
       .cscheck.round.on svg {
         display: none;
@@ -2367,7 +2560,7 @@
         border: 1px solid transparent;
       }
       .cstab.on {
-        color: #fff;
+        color: var(--on-main);
         background: var(--point-main);
       }
       .cstab:hover:not(.on) {
@@ -2387,7 +2580,7 @@
       .cschip.on {
         background: var(--point-main);
         border-color: var(--point-main);
-        color: #fff;
+        color: var(--on-main);
         font-weight: 600;
       }
       /* 알림 배너 */
@@ -2632,9 +2825,22 @@
       .cskpi .val b {
         color: var(--point-main);
       }
-      @media (max-width: 720px) {
+      @media (max-width: 860px) {
+        .cssheet {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .cscard.span2,
+        .cscard.span3 {
+          grid-column: 1 / -1;
+        }
+      }
+      @media (max-width: 560px) {
         .cssheet {
           grid-template-columns: 1fr;
+        }
+        .cscard.span2,
+        .cscard.span3 {
+          grid-column: auto;
         }
       }
 
@@ -5190,9 +5396,9 @@
           P['danger'] = hslToCss(2, 78, 62);
           P['warning'] = hslToCss(38, 90, 58);
         } else {
-          P['bg/page'] = hslToCss(h, clamp(bS * 0.5, 18, 45), 96);
-          P['bg/surface'] = hslToCss(h, 40, 99.5);
-          P['bg/accent'] = hslToCss(h, clamp(bS * 0.6, 30, 70), 92);
+          P['bg/page'] = hslToCss(h, clamp(bS * 0.3, 8, 26), 97.8);
+          P['bg/surface'] = hslToCss(h, 24, 100);
+          P['bg/accent'] = hslToCss(h, clamp(bS * 0.45, 20, 52), 94.5);
           P['line'] = hslToCss(h, clamp(bS * 0.35, 14, 40), 87);
           P['text/strong'] = hslToCss(h, 32, 13);
           P['text/weak'] = hslToCss(h, 16, 42);
@@ -5233,9 +5439,9 @@
           P['danger'] = hslToCss(2, 78, 62);
           P['warning'] = hslToCss(38, 90, 58);
         } else {
-          P['bg/page'] = hslToCss(lt.h, clamp(lt.s, 10, 40), 96);
-          P['bg/surface'] = hslToCss(lt.h, 30, 99.5);
-          P['bg/accent'] = hslToCss(lt.h, clamp(lt.s, 20, 60), 92);
+          P['bg/page'] = hslToCss(lt.h, clamp(lt.s, 8, 28), 97.8);
+          P['bg/surface'] = hslToCss(lt.h, 20, 100);
+          P['bg/accent'] = hslToCss(lt.h, clamp(lt.s, 16, 48), 94.5);
           P['line'] = hslToCss(lt.h, clamp(lt.s, 12, 40), 87);
           P['text/strong'] = hslToCss(dk.h, 30, 14);
           P['text/weak'] = hslToCss(dk.h, 16, 42);
@@ -5543,11 +5749,11 @@
         } else {
           T.accent = hx(accentH, clamp(bS, 55, 95), 50);
           T.teal = hx(tealH, clamp(tS, 45, 80), 46);
-          T.base = hx(surfH, clamp(surfSat * 1.4, 12, 34), 93);
-          T.s1 = hx(surfH, 30, 99.5);
-          T.s2 = hx(surfH, clamp(surfSat * 1.6, 16, 40), 90);
-          T.s3 = hx(surfH, clamp(surfSat * 1.4, 14, 36), 83);
-          T.lineSolid = hx(surfH, clamp(surfSat * 1.3, 12, 34), 84);
+          T.base = hx(surfH, clamp(surfSat * 0.8, 6, 16), 97.8);
+          T.s1 = hx(surfH, 20, 100);
+          T.s2 = hx(surfH, clamp(surfSat * 1.0, 10, 22), 95.5);
+          T.s3 = hx(surfH, clamp(surfSat * 0.9, 9, 20), 90.5);
+          T.lineSolid = hx(surfH, clamp(surfSat * 0.9, 9, 22), 88.5);
           T.tPrimary = hx(surfH, 30, 13);
           T.tSecondary = al(hx(surfH, 28, 18), 0.85);
           T.tTertiary = al(hx(surfH, 22, 26), 0.72);
@@ -5632,6 +5838,8 @@
         /* 생성된 팔레트를 오른쪽 콘텐츠(.main)와 왼쪽 사이드바(.sidebar) 모두에 적용 —
            왼쪽 옵션창에서 고른 라이트/다크 모드를 왼쪽 메뉴창(사이드바)도 함께 따라감 */
         const version = state.version || 'flat';
+        /* 전역 모드 신호 — 본문 밖(body 직속) 팝업·모달이 라이트/다크에 맞춰 스타일 전환 */
+        document.documentElement.setAttribute('data-mode', state.mode);
         const main = document.querySelector('.main'),
           sidebar = document.querySelector('.sidebar');
         let coreMap;
@@ -5642,21 +5850,39 @@
           coreMap = entCoreMap(T);
           /* 사용자가 직접 지정한 색(overrides)을 코어 색에도 반영 */
           for (const k in state.overrides) if (coreMap[k] != null) coreMap[k] = state.overrides[k];
-          [main, sidebar].forEach((target) => {
-            if (!target) return;
-            target.setAttribute('data-mode', state.mode);
-            target.setAttribute('data-version', 'enterprise');
-            for (const k in EV) target.style.setProperty(EV[k], T[k]);
-            for (const k in RV) target.style.setProperty(RV[k], coreMap[k]);
-          });
+          /* 오른쪽 콘텐츠(.main): 미세조정(색상 이동·채도·명도)까지 반영 */
+          if (main) {
+            main.setAttribute('data-mode', state.mode);
+            main.setAttribute('data-version', 'enterprise');
+            for (const k in EV) main.style.setProperty(EV[k], T[k]);
+            for (const k in RV) main.style.setProperty(RV[k], coreMap[k]);
+          }
+          /* 왼쪽 메뉴(.sidebar): 라이트/다크 모드는 따라가되 미세조정(adjust)은 제외한
+             기준 팔레트만 적용 — 미세조정은 오른쪽 콘텐츠에만 반영되도록 */
+          if (sidebar) {
+            const Ts = genEnterprise({ ...state, adjust: null });
+            const sMap = entCoreMap(Ts);
+            for (const k in state.overrides) if (sMap[k] != null) sMap[k] = state.overrides[k];
+            sidebar.setAttribute('data-mode', state.mode);
+            sidebar.setAttribute('data-version', 'enterprise');
+            for (const k in EV) sidebar.style.setProperty(EV[k], Ts[k]);
+            for (const k in RV) sidebar.style.setProperty(RV[k], sMap[k]);
+          }
         } else {
           coreMap = computeHexMap(state);
-          [main, sidebar].forEach((target) => {
-            if (!target) return;
-            target.setAttribute('data-mode', state.mode);
-            target.setAttribute('data-version', 'flat');
-            for (const k in RV) target.style.setProperty(RV[k], coreMap[k]);
-          });
+          /* 오른쪽 콘텐츠(.main): 미세조정까지 반영 */
+          if (main) {
+            main.setAttribute('data-mode', state.mode);
+            main.setAttribute('data-version', 'flat');
+            for (const k in RV) main.style.setProperty(RV[k], coreMap[k]);
+          }
+          /* 왼쪽 메뉴(.sidebar): 미세조정(adjust) 제외한 기준 팔레트만 적용 */
+          if (sidebar) {
+            const sMap = computeHexMap({ ...state, adjust: { h: 0, s: 0, l: 0 } });
+            sidebar.setAttribute('data-mode', state.mode);
+            sidebar.setAttribute('data-version', 'flat');
+            for (const k in RV) sidebar.style.setProperty(RV[k], sMap[k]);
+          }
         }
         document.getElementById('seed').value = normHex(state.seed);
         renderCurrentPalette(coreMap, entMap);
@@ -8187,14 +8413,21 @@
        * ============================================================ */
       const CS_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
       function componentSheetHTML() {
-        const heat = Array.from({ length: 45 }, (_, i) => {
-          const s = i === 13 || i === 31 ? 'var(--danger)' : i % 9 === 4 ? 'var(--warning)' : 'color-mix(in srgb, var(--point-sub) 55%, var(--bg-accent))';
-          return '<span style="aspect-ratio:1;border-radius:3px;background:' + s + '"></span>';
+        /* 대시보드의 실제 히트맵(renderHeat)과 동일한 방식 — point-main 농도로 값 표현.
+           칸 크기는 max-width로 제한해 넓은 span2 카드에서도 커지지 않게 함 */
+        const HEAT_COLS = 12;
+        const heat = Array.from({ length: 5 }, (_, r) => {
+          const cells = Array.from({ length: HEAT_COLS }, (_, c) => {
+            const v = ((Math.sin(r * 1.7 + c * 0.9) + 1) / 2) * 0.8 + (c / HEAT_COLS) * 0.2;
+            const pct = Math.round(12 + v * 78);
+            return `<span style="flex:1;aspect-ratio:1;min-width:14px;max-width:22px;border-radius:4px;background:color-mix(in srgb,var(--point-main) ${pct}%,transparent)"></span>`;
+          }).join('');
+          return `<div style="display:flex;gap:4px">${cells}</div>`;
         }).join('');
         return `
           <div class="cssection">화면에 있는 컴포넌트 <small>대시보드에서 실제로 쓰는 것들</small></div>
 
-          <div class="cscard"><span class="cslbl">KPI 카드</span>
+          <div class="cscard span2"><span class="cslbl">KPI 카드</span>
             <div class="csrow" style="gap:16px">
               <div class="cskpi"><div class="lab">거래건수</div><div class="val">55,045,697</div></div>
               <div class="cskpi"><div class="lab">청구 TPS / Peak</div><div class="val"><b>2,603</b> / 3,992</div></div>
@@ -8204,8 +8437,8 @@
             <div class="cstabs"><span class="cstab on">tab01</span><span class="cstab">tab02</span><span class="cstab">tab03</span><span class="cstab">tab04</span></div>
             <div class="cstabs" style="margin-top:4px"><span class="cstab on">Overview</span><span class="cstab">Production</span><span class="cstab">Quality</span></div>
           </div>
-          <div class="cscard span2"><span class="cslbl">라인 · 영역 차트</span>
-            <svg viewBox="0 0 240 70" preserveAspectRatio="none" style="width:100%;height:70px">
+          <div class="cscard"><span class="cslbl">라인 · 영역 차트</span>
+            <svg viewBox="0 0 240 70" preserveAspectRatio="none" style="width:100%;height:54px">
               <polygon points="0,60 0,40 40,45 80,25 120,35 160,15 200,28 240,12 240,60" fill="var(--point-main)" opacity="0.16" />
               <polyline points="0,40 40,45 80,25 120,35 160,15 200,28 240,12" fill="none" stroke="var(--point-main)" stroke-width="2" />
               <polyline points="0,55 40,52 80,50 120,45 160,48 200,40 240,44" fill="none" stroke="var(--point-sub)" stroke-width="2" opacity="0.85" />
@@ -8229,9 +8462,9 @@
               <div style="font-size:11px;color:var(--text-weak)"><div class="csgauge" style="--v:8%;width:50px;height:50px;margin:0 auto 5px"><i style="width:36px;height:36px;font-size:11px">8%</i></div>대외</div>
             </div>
           </div>
-          <div class="cscard span2"><span class="cslbl">상태 히트맵</span>
-            <div style="display:grid;grid-template-columns:repeat(15,1fr);gap:4px">${heat}</div>
-            <div style="display:flex;gap:14px;font-size:11px;color:var(--text-weak);margin-top:8px"><span><i class="csdot" style="width:9px;height:9px;background:color-mix(in srgb, var(--point-sub) 55%, var(--bg-accent))"></i> 정상</span><span><i class="csdot" style="width:9px;height:9px;background:var(--warning)"></i> 주의</span><span><i class="csdot" style="width:9px;height:9px;background:var(--danger)"></i> 경고</span></div>
+          <div class="cscard"><span class="cslbl">상태 히트맵</span>
+            <div style="display:flex;flex-direction:column;gap:4px">${heat}</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-weak);margin-top:8px"><span>낮음</span><span style="width:104px;height:9px;border-radius:5px;background:linear-gradient(90deg,color-mix(in srgb,var(--point-main) 12%,transparent),var(--point-main))"></span><span>높음</span></div>
           </div>
           <div class="cscard span2"><span class="cslbl">표 · 밴드형</span>
             <table class="cstable"><thead><tr><th>항목</th><th>1Q</th><th>상품처리</th></tr></thead><tbody>
@@ -8284,7 +8517,7 @@
           </div>
           <div class="cscard"><span class="cslbl">토글 · 선택</span>
             <div class="csrow"><span class="csswitch on cstoggle" role="switch" aria-checked="true"></span><span class="csswitch cstoggle" role="switch" aria-checked="false"></span><span class="csmeta">스위치 On / Off</span></div>
-            <div class="csrow"><label class="cschkrow"><span class="cscheck on cstoggle">${CS_CHECK}</span>체크 On</label><label class="cschkrow"><span class="cscheck cstoggle">${CS_CHECK}</span>체크 Off</label><label class="cschkrow"><span class="cscheck on cstoggle" style="position:relative"><span style="position:absolute;left:4px;right:4px;top:50%;height:2px;background:#fff;transform:translateY(-50%)"></span></span>부분 선택</label></div>
+            <div class="csrow"><label class="cschkrow"><span class="cscheck on cstoggle">${CS_CHECK}</span>체크 On</label><label class="cschkrow"><span class="cscheck cstoggle">${CS_CHECK}</span>체크 Off</label><label class="cschkrow"><span class="cscheck on cstoggle" style="position:relative"><span style="position:absolute;left:4px;right:4px;top:50%;height:2px;background:var(--on-main);transform:translateY(-50%)"></span></span>부분 선택</label></div>
             <div class="csrow"><label class="cschkrow"><span class="cscheck round on cstoggle"></span>라디오 On</label><label class="cschkrow"><span class="cscheck round cstoggle"></span>라디오 Off</label></div>
           </div>
           <div class="cscard"><span class="cslbl">진행률</span>
@@ -8320,7 +8553,7 @@
           <div class="cscard"><span class="cslbl">페이지네이션</span>
             <div class="csrow" style="gap:5px">
               <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-weak)">‹</span>
-              <span class="cstag" style="min-width:28px;background:var(--point-main);color:#fff">1</span>
+              <span class="cstag" style="min-width:28px;background:var(--point-main);color:var(--on-main)">1</span>
               <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-strong)">2</span>
               <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-strong)">3</span>
               <span class="cstag" style="min-width:28px;background:var(--bg-accent);color:var(--text-weak)">›</span>
@@ -8354,6 +8587,12 @@
         sheet.setAttribute('data-mode', theme.mode);
         for (const k in RV) sheet.style.setProperty(RV[k], hex[k]);
         sheet.style.setProperty('--radius-panel', (theme.radius != null ? theme.radius : 8) + 'px');
+        /* 색면 위 글자색을 실제 대비로 검증해 지정 — point-sub·warning은 팔레트가 흰 글자 대비를
+           보장하지 않으므로 하드코딩 대신 각 색의 명도에 맞는 읽기 쉬운 색을 계산 */
+        sheet.style.setProperty('--on-main', contrast(hex['point/main']));
+        sheet.style.setProperty('--on-sub', contrast(hex['point/sub']));
+        sheet.style.setProperty('--on-warn', contrast(hex['warning']));
+        sheet.style.setProperty('--on-danger', contrast(hex['danger']));
         sheet.innerHTML = componentSheetHTML();
       }
       /* ===== 내보내기(B) — 검증 보드를 자립형 HTML로 저장 ===== */
