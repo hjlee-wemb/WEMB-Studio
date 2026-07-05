@@ -194,6 +194,168 @@
         border-color: var(--point-main);
         color: var(--text-strong);
       }
+      /* ===== 사이드바 상단 탭 — 테마(컬러 워크플로우) / 대시보드 편집 분리 ===== */
+      .sbtabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+      }
+      .sbtab {
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        color: var(--text-weak);
+        border-radius: 12px;
+        padding: 10px 8px;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.25;
+        cursor: pointer;
+        font-family: var(--font);
+        transition: 0.15s;
+        text-align: center;
+      }
+      .sbtab .ko {
+        display: block;
+        font-size: 10.5px;
+        font-weight: 500;
+        margin-top: 3px;
+        color: color-mix(in srgb, var(--text-weak) 80%, transparent);
+      }
+      .sbtab:hover {
+        border-color: var(--point-main);
+      }
+      .sbtab.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+      }
+      .sbtab.on .ko {
+        color: rgba(255, 255, 255, 0.82);
+      }
+      /* 탭 본문 — data-pane과 data-tab으로 표시/순서를 제어 */
+      .tabbody {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .tabbody[data-tab='theme'] > [data-pane='dash'] {
+        display: none;
+      }
+      .tabbody[data-tab='dash'] > [data-pane='theme'] {
+        display: none;
+      }
+      /* ===== 단계(스텝) 헤더 — 번호·굵은 제목·한 줄 설명으로 섹션을 한눈에 구별 ===== */
+      .stephdr {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 2px 0 4px;
+      }
+      .stephdr .stepno {
+        flex: none;
+        width: 23px;
+        height: 23px;
+        border-radius: 7px;
+        background: color-mix(in srgb, var(--point-main) 15%, transparent);
+        color: var(--point-main);
+        font-size: 12.5px;
+        font-weight: 800;
+        display: grid;
+        place-items: center;
+      }
+      .stephdr .steptx {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+        min-width: 0;
+      }
+      .stephdr .steptx b {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-strong);
+        letter-spacing: -0.2px;
+      }
+      .stephdr .steptx small {
+        font-size: 11px;
+        color: var(--text-weak);
+        margin-top: 1px;
+      }
+      .stephdr .info {
+        margin-left: auto;
+        flex: none;
+      }
+      /* 한 스텝 안의 하위 구분 라벨(예: 화면 형식 / 색 고르기) */
+      .substep {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-weak);
+        margin: 4px 2px 0;
+      }
+      .substep span {
+        font-weight: 500;
+        font-size: 10.5px;
+        color: color-mix(in srgb, var(--text-weak) 80%, transparent);
+      }
+      /* 화면 형식(버전·밝기) — 아코디언 없이 항상 보이는 세그먼트 */
+      .fmtgrid {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+      }
+      .fmtrow {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .fmtlbl {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-strong);
+      }
+      .fmtlbl .ko {
+        font-weight: 500;
+        font-size: 11px;
+        color: color-mix(in srgb, var(--text-weak) 85%, transparent);
+      }
+      .fmtlbl .info {
+        margin-left: 2px;
+      }
+      /* 아코디언 접힘 상태에서 현재 값 요약(예: 기준 색 ● #4A9EFF) */
+      .acc > summary .accval {
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 600;
+        font-size: 11.5px;
+        color: var(--text-strong);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        flex: none;
+        max-width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .acc > summary .accval i {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        flex: none;
+        box-shadow: 0 0 0 1px var(--line);
+      }
+      .acc > summary .accval:empty {
+        display: none;
+      }
+      /* 펼쳐지면 본문에서 값이 보이므로 요약값은 숨김 */
+      .acc[open] > summary .accval {
+        display: none;
+      }
       .grp {
         display: flex;
         flex-direction: column;
@@ -287,6 +449,13 @@
       .acc > summary .acttl {
         flex: 1;
         min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* 접힘 상태에선 값 요약(accval)이 활성 소스를 알려주므로 '사용 중' 배지는 생략 */
+      .acc:not([open]) > summary .srcbadge {
+        display: none;
       }
       .acc > summary .info {
         text-transform: none;
@@ -3460,9 +3629,13 @@
         color: var(--text-strong);
         transition: background 0.12s;
       }
-      /* 표 hover — 행 전체가 하나의 같은 색으로 강조(셀별 차이 없음) */
+      /* 표 hover — 행 전체가 하나의 같은 색으로 강조 + 왼쪽 강조 바로 선택행 표시 */
       tbody tr:not(.bandh):not(.bandgap):hover td {
-        background: color-mix(in srgb, var(--point-main) 10%, transparent);
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+        color: var(--text-strong);
+      }
+      tbody tr:not(.bandh):not(.bandgap):hover td:first-child {
+        box-shadow: inset 3px 0 0 var(--point-main);
       }
       /* 묶음(밴드) 사이 여백 — 위 그룹과 아래 그룹을 시각적으로 분리 */
       .bandgap td {
@@ -3963,8 +4136,8 @@
       .main[data-version='enterprise'] .rowline {
         border-bottom-color: var(--ov-divider);
       }
-      .main[data-version='enterprise'] tbody tr:hover {
-        background: var(--surface-1-70);
+      .main[data-version='enterprise'] tbody tr:not(.bandh):not(.bandgap):hover td {
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
       }
       /* 탭: 활성 강조색, 비활성 hover는 강조 알파 */
       .main[data-version='enterprise'] .ph .tabs b {
@@ -4152,71 +4325,83 @@
           </div>
           <button id="closer" title="메뉴 접기">‹</button>
         </div>
-        <section class="colorset">
-          <div class="csttl">
-            색상 설정
-            <span class="ko">Color</span>
+
+        <!-- 상단 탭 — 컬러 워크플로우(테마)와 대시보드 편집을 분리 -->
+        <div class="sbtabs" role="tablist" aria-label="작업 영역">
+          <button class="sbtab on" data-tab="theme" role="tab" aria-selected="true">
+            테마 만들기
+            <span class="ko">색 · 검증 · 저장 · 내보내기</span>
+          </button>
+          <button class="sbtab" data-tab="dash" role="tab" aria-selected="false">
+            대시보드 편집
+            <span class="ko">배치 · 내용 · 디자인</span>
+          </button>
+        </div>
+
+        <div class="tabbody" data-tab="theme">
+        <section class="colorset" data-pane="theme" style="order: 1">
+          <div class="stephdr">
+            <span class="stepno">1</span>
+            <span class="steptx">
+              <b>색 정하기</b>
+              <small>브랜드 색·사진·추천으로 팔레트 만들기</small>
+            </span>
           </div>
 
-          <details class="acc" open>
-            <summary>
-              <span class="acttl">
-                Version
-                <span class="ko">버전</span>
-              </span>
-              <span class="info" tabindex="0" role="button" aria-label="버전 도움말">
-                ?
-                <span class="tip">
-                  <b>색상 사용 범위</b>
-                  <br />
-                  <br />
-                  <span class="accent">Flat</span>
-                  — 10색 이하의 단순 팔레트. 가볍고 정적인 화면에 적합.
-                  <br />
-                  <br />
-                  <span class="accent">Enterprise</span>
-                  — 50색 이하의 풍부한 토큰(표면 단계·텍스트 계층·그라데이션). 밀도 높은 관제 화면에 적합.
+          <div class="substep">화면 형식 <span>버전 · 밝기</span></div>
+
+          <div class="fmtgrid">
+            <div class="fmtrow">
+              <div class="fmtlbl">
+                버전
+                <span class="ko">Version</span>
+                <span class="info" tabindex="0" role="button" aria-label="버전 도움말">
+                  ?
+                  <span class="tip">
+                    <b>색상 사용 범위</b>
+                    <br />
+                    <br />
+                    <span class="accent">Flat</span>
+                    — 10색 이하의 단순 팔레트. 가볍고 정적인 화면에 적합.
+                    <br />
+                    <br />
+                    <span class="accent">Enterprise</span>
+                    — 50색 이하의 풍부한 토큰(표면 단계·텍스트 계층·그라데이션). 밀도 높은 관제 화면에 적합.
+                  </span>
                 </span>
-              </span>
-              <span class="chev">▾</span>
-            </summary>
-            <div class="accbody">
+              </div>
               <div class="seg" id="version">
                 <button data-v="flat" class="on">Flat</button>
                 <button data-v="enterprise">Enterprise</button>
               </div>
             </div>
-          </details>
-
-          <details class="acc">
-            <summary>
-              <span class="acttl">
-                Mode
-                <span class="ko">화면 밝기</span>
-              </span>
-              <span class="info" tabindex="0" role="button" aria-label="모드 도움말">
-                ?
-                <span class="tip">
-                  <b>화면 밝기 테마</b>
-                  <br />
-                  <br />
-                  <span class="accent">Dark</span>
-                  — 어두운 배경의 차분한 화면. 관제·모니터링에 잘 맞아요.
-                  <br />
-                  <br />
-                  <span class="accent">Light</span>
-                  — 밝은 배경의 환한 화면. 사무실·보고서에 잘 맞아요.
+            <div class="fmtrow">
+              <div class="fmtlbl">
+                화면 밝기
+                <span class="ko">Mode</span>
+                <span class="info" tabindex="0" role="button" aria-label="모드 도움말">
+                  ?
+                  <span class="tip">
+                    <b>화면 밝기 테마</b>
+                    <br />
+                    <br />
+                    <span class="accent">Dark</span>
+                    — 어두운 배경의 차분한 화면. 관제·모니터링에 잘 맞아요.
+                    <br />
+                    <br />
+                    <span class="accent">Light</span>
+                    — 밝은 배경의 환한 화면. 사무실·보고서에 잘 맞아요.
+                  </span>
                 </span>
-              </span>
-              <span class="chev">▾</span>
-            </summary>
-            <div class="accbody">
+              </div>
               <div class="seg" id="mode">
                 <button data-m="dark" class="on">Dark</button>
                 <button data-m="light">Light</button>
               </div>
             </div>
-          </details>
+          </div>
+
+          <div class="substep">색 고르기 <span>아래 3가지 중 하나만 선택</span></div>
 
           <details class="acc" data-src="seed" open>
             <summary>
@@ -4224,6 +4409,7 @@
                 Seed Color
                 <span class="ko">기준 색</span>
               </span>
+              <span class="accval" id="seedVal"></span>
               <span class="srcbadge">사용 중</span>
               <span class="info" tabindex="0" role="button" aria-label="기준 색 도움말">
                 ?
@@ -4316,6 +4502,7 @@
                 Theme from Image
                 <span class="ko">사진에서 추출</span>
               </span>
+              <span class="accval" id="imageVal"></span>
               <span class="srcbadge">사용 중</span>
               <span class="info up" tabindex="0" role="button" aria-label="사진에서 추출 도움말">
                 ?
@@ -4374,6 +4561,7 @@
                 추천 테마
                 <span class="ko">고르면 바로 적용</span>
               </span>
+              <span class="accval" id="presetVal"></span>
               <span class="srcbadge">사용 중</span>
               <span class="info up" tabindex="0" role="button" aria-label="추천 테마 도움말">
                 ?
@@ -4431,7 +4619,7 @@
             <div class="curpal" id="curpal" aria-live="polite"></div>
           </div>
         </section>
-        <div class="grp">
+        <div class="grp" data-pane="dash" style="order: 1">
           <label class="lblrow">
             <span>
               대시보드 편집
@@ -4515,11 +4703,12 @@
           <button class="ghostbtn" id="layoutReset" title="배치와 내용을 처음 상태로 되돌립니다">기본값으로 되돌리기</button>
         </div>
 
-        <div class="grp">
-          <label class="lblrow">
-            <span>
-              내보내기
-              <span class="ko">Export · 토큰·이미지·링크</span>
+        <div class="grp" data-pane="theme" style="order: 4">
+          <div class="stephdr">
+            <span class="stepno">4</span>
+            <span class="steptx">
+              <b>내보내기</b>
+              <small>토큰 · 이미지 · 공유 링크</small>
             </span>
             <span class="info up" tabindex="0" role="button" aria-label="내보내기 도움말">
               ?
@@ -4539,7 +4728,7 @@
                 — 지금 시안을 그대로 여는 URL을 복사
               </span>
             </span>
-          </label>
+          </div>
           <button class="genbtn" id="exportOpen" title="토큰·이미지·공유 링크 내보내기 창을 엽니다">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -4550,11 +4739,12 @@
           </button>
         </div>
 
-        <div class="grp">
-          <label class="lblrow">
-            <span>
-              검증 · 시트
-              <span class="ko">대비비 · 컴포넌트</span>
+        <div class="grp" data-pane="theme" style="order: 2">
+          <div class="stephdr">
+            <span class="stepno">2</span>
+            <span class="steptx">
+              <b>검증하기</b>
+              <small>대비비 · 컴포넌트 미리보기</small>
             </span>
             <span class="info up" tabindex="0" role="button" aria-label="검증·시트 도움말">
               ?
@@ -4570,7 +4760,7 @@
                 — 버튼·배지·입력·토글·표 등 여러 UI에 지금 테마가 어떻게 적용되는지 한눈에 봐요.
               </span>
             </span>
-          </label>
+          </div>
           <button class="editbtn" id="contrastOpen" title="역할쌍 대비비·AA/AAA 검증표를 엽니다">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="9" />
@@ -4589,11 +4779,12 @@
           </button>
         </div>
 
-        <div class="grp">
-          <label class="lblrow">
-            <span>
-              테마 저장·비교
-              <span class="ko">스냅샷 · A/B · 히스토리</span>
+        <div class="grp" data-pane="theme" style="order: 3">
+          <div class="stephdr">
+            <span class="stepno">3</span>
+            <span class="steptx">
+              <b>저장 · 비교</b>
+              <small>스냅샷 · A/B · 되돌리기</small>
             </span>
             <span class="info up" tabindex="0" role="button" aria-label="테마 저장·비교 도움말">
               ?
@@ -4613,7 +4804,7 @@
                 — 색을 바꾼 기록을 따라 이전 상태로 되돌릴 수 있어요.
               </span>
             </span>
-          </label>
+          </div>
 
           <div class="sublbl">
             <span>
@@ -4648,6 +4839,8 @@
           </div>
           <div class="histlist" id="histList"></div>
         </div>
+        </div>
+        <!-- /.tabbody -->
 
         <div class="sbfoot">테마를 클릭하면 화면 전체에 즉시 적용됩니다 · WEMB 2026</div>
       </aside>
@@ -5929,6 +6122,25 @@
           const el = document.getElementById(id);
           if (el) el.disabled = cur !== 'seed';
         });
+        updateAccSummaries();
+      }
+      /* 아코디언 접힘 상태 요약값 — 펼치지 않고도 현재 설정을 한눈에 (예: 기준 색 ● #4A9EFF) */
+      function updateAccSummaries() {
+        const seedVal = document.getElementById('seedVal');
+        if (seedVal) {
+          const h = normHex(state.seed).toUpperCase();
+          seedVal.innerHTML = `<i style="background:${h}"></i>${h}`;
+        }
+        const imageVal = document.getElementById('imageVal');
+        if (imageVal) {
+          const nm = (document.getElementById('imgname')?.textContent || '').split('·')[0].trim();
+          imageVal.textContent = nm || '';
+        }
+        const presetVal = document.getElementById('presetVal');
+        if (presetVal) {
+          const sel = document.querySelector('#trend .trendchip.sel, #gallery .pcard.sel');
+          presetVal.textContent = sel ? (sel.getAttribute('title') || sel.getAttribute('aria-label') || '적용됨').trim() : '';
+        }
       }
       /* 미세 조정 값과 슬라이더 UI를 0으로 초기화 */
       function resetAdjust() {
@@ -6419,6 +6631,23 @@
       const appEl = document.getElementById('app');
       document.getElementById('closer').onclick = () => appEl.classList.add('collapsed');
       document.getElementById('opener').onclick = () => appEl.classList.remove('collapsed');
+
+      /* 사이드바 상단 탭 — 테마(컬러 워크플로우)와 대시보드 편집을 분리해 전환 */
+      (function () {
+        const tabbody = document.querySelector('.tabbody');
+        const tabs = [...document.querySelectorAll('.sbtab')];
+        tabs.forEach((b) => {
+          b.addEventListener('click', () => {
+            const t = b.dataset.tab;
+            if (tabbody) tabbody.setAttribute('data-tab', t);
+            tabs.forEach((x) => {
+              const on = x === b;
+              x.classList.toggle('on', on);
+              x.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+          });
+        });
+      })();
 
       /* 색상 설정 아코디언 — 한 번에 하나만 펼치고(드롭다운식), 헤더의 '?'는 토글 제외 */
       const accList = [...document.querySelectorAll('.colorset .acc')];
