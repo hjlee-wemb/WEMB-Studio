@@ -10,14 +10,17 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
     <style>
       :root {
-        --bg-page: #0f1320;
-        --bg-surface: #1a2130;
-        --bg-accent: #232c40;
-        --line: #2b3344;
-        --text-strong: #ffffff;
-        --text-weak: #8b94a8;
-        --point-main: #4a9eff;
-        --point-sub: #5ccfd8;
+        /* ── 툴 크롬(사이드바·모달) 전용 중립 모노톤 팔레트 ──
+           생성된 테마와 시각적으로 분리하기 위해 고정값. 오른쪽 프리뷰(.main)만
+           생성 팔레트를 인라인으로 덮어써서 실제 테마 색을 보여준다. */
+        --bg-page: #101216;
+        --bg-surface: #191c22;
+        --bg-accent: #242832;
+        --line: #2f343d;
+        --text-strong: #f4f6f9;
+        --text-weak: #949bab;
+        --point-main: #5d6270;
+        --point-sub: #878fa2;
         --danger: #ef4444;
         --warning: #f5a623;
         --font: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
@@ -113,6 +116,10 @@
         top: 0;
         height: 100vh;
         overflow-y: auto;
+        /* 프리뷰(엔터프라이즈 .stage 등 z-index 요소)보다 위에 쌓이도록 —
+           그래야 사이드바 밖으로 떠오르는 도움말 툴팁(fixed)이 가려지지 않음.
+           본문 밖 모달(180~210)보다는 아래라 모달 흐름은 방해하지 않음. */
+        z-index: 100;
         background: var(--bg-surface);
         /* 사이드바 글자색을 모드에 맞춰 — 없으면 body의 흰색을 상속해 라이트에서 제목이 묻힘 */
         color: var(--text-strong);
@@ -193,6 +200,93 @@
       #closer:hover {
         border-color: var(--point-main);
         color: var(--text-strong);
+      }
+      /* ── 항상 보이는 되돌리기/다시실행 (브랜드 헤더) ── */
+      .quickhist {
+        display: flex;
+        gap: 4px;
+        flex: none;
+        margin-left: auto;
+      }
+      .qh {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-weak);
+        cursor: pointer;
+        font-size: 15px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.15s;
+      }
+      .qh:hover:not(:disabled) {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+        background: var(--bg-accent);
+      }
+      .qh:disabled {
+        opacity: 0.32;
+        cursor: default;
+      }
+      /* 전체 초기화 버튼 — 파괴적 동작이라 hover 시 위험색으로 구분 */
+      .qh-reset {
+        font-size: 16px;
+      }
+      .qh-reset:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+        background: color-mix(in srgb, var(--danger) 10%, var(--bg-page));
+      }
+      /* Color Hunt 연동 링크 · 더 추천하기 버튼 */
+      .chlink {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--point-main);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .chlink:hover {
+        text-decoration: underline;
+      }
+      /* 팔레트 페이지네이션 */
+      .galpager {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .galnav {
+        flex: none;
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-weak);
+        font-family: var(--font);
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .galnav:hover:not(:disabled) {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+        background: var(--bg-accent);
+      }
+      .galnav:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .galpos {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-weak);
+        font-variant-numeric: tabular-nums;
       }
       /* ===== 사이드바 상단 탭 — 테마(컬러 워크플로우) / 대시보드 편집 분리 ===== */
       .sbtabs {
@@ -675,7 +769,9 @@
         width: 46px;
         height: 46px;
         border-radius: 10px;
-        object-fit: cover;
+        /* 전체 사진을 담아 보여줌 — 가운데만 쓰는 게 아님을 시각적으로 전달 */
+        object-fit: contain;
+        background: var(--bg-page);
         border: 1px solid var(--line);
         flex: none;
       }
@@ -760,10 +856,13 @@
         color: var(--point-main);
         outline: none;
       }
-      .info .tip {
-        position: absolute;
-        top: calc(100% + 9px);
-        right: -2px;
+      /* 툴팁은 표시될 때 JS가 document.body 로 옮겨 position:fixed 로 띄운다 —
+         비활성 색상소스(.acc.src-idle {filter})나 스크롤/transform 조상에 갇혀 좌표가
+         어긋나거나 잘리는 것을 원천 차단. 좌표·표시는 JS가 관리(.tip-on). */
+      .tip {
+        position: fixed;
+        left: 0;
+        top: 0;
         width: 248px;
         background: var(--bg-page);
         border: 1px solid var(--line);
@@ -776,49 +875,47 @@
         letter-spacing: 0;
         text-transform: none;
         text-align: left;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
         opacity: 0;
         visibility: hidden;
         transform: translateY(-4px);
-        transition: 0.16s;
-        z-index: 50;
+        transition:
+          opacity 0.16s ease,
+          transform 0.16s ease,
+          visibility 0.16s;
+        z-index: 300;
         pointer-events: none;
       }
-      .info .tip::after {
+      /* 화살표 — 배지 중심에 맞춰 JS가 --arrow-x 를 지정(없으면 왼쪽 기본) */
+      .tip::after {
         content: '';
         position: absolute;
         bottom: 100%;
-        right: 5px;
+        left: var(--arrow-x, 14px);
         border: 6px solid transparent;
         border-bottom-color: var(--line);
       }
-      /* 아래쪽 섹션은 위로 펼쳐 화면 밖으로 잘리지 않게 */
-      .info.up .tip {
-        top: auto;
-        bottom: calc(100% + 9px);
+      /* 위로 펼침(.up) — 화살표를 아래 모서리로 */
+      .tip.up {
         transform: translateY(4px);
       }
-      .info.up:hover .tip,
-      .info.up:focus-visible .tip {
-        transform: translateY(0);
-      }
-      .info.up .tip::after {
+      .tip.up::after {
         top: 100%;
         bottom: auto;
         border-bottom-color: transparent;
         border-top-color: var(--line);
       }
-      .info:hover .tip,
-      .info:focus-visible .tip {
+      /* 표시 상태 — JS가 토글 (조상 :hover 에 의존하지 않음) */
+      .tip.tip-on {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
       }
-      .info .tip b {
+      .tip b {
         color: var(--text-strong);
         font-weight: 600;
       }
-      .info .tip .accent {
+      .tip .accent {
         color: var(--point-main);
         font-weight: 700;
       }
@@ -1354,15 +1451,44 @@
         opacity: 0.85;
       }
       .sbfoot {
-        margin-top: auto;
         font-size: 12px;
         color: var(--text-weak);
         text-align: center;
         padding-top: 6px;
       }
+      /* 전체 초기화 — 사이드바 하단 고정, 위험 동작이라 톤은 절제하되 눈에 띄게 */
+      .resetall {
+        margin-top: auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 14px;
+        border-radius: 9px;
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-weak);
+        font-family: var(--font);
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .resetall svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+      }
+      .resetall:hover {
+        border-color: var(--danger);
+        color: var(--danger);
+        background: color-mix(in srgb, var(--danger) 8%, var(--bg-page));
+      }
 
       /* 대시보드 배치 편집 토글 */
       .editbtn {
+        position: relative;
         width: 100%;
         display: flex;
         align-items: center;
@@ -1392,15 +1518,18 @@
         border-color: var(--point-main);
         color: #fff;
       }
-      /* 디자인 편집 버튼 — 펼침 화살표(누르면 회전) */
+      /* 디자인 편집 버튼 — 펼침 화살표(누르면 회전).
+         절대배치로 흐름에서 빼내, 아이콘+라벨은 다른 두 버튼과 완전히 동일하게 가운데 정렬 */
       .editbtn .chev {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
         font-size: 10px;
-        margin-left: auto;
-        flex: none;
         transition: transform 0.2s;
       }
       .editbtn.on .chev {
-        transform: rotate(180deg);
+        transform: translateY(-50%) rotate(180deg);
       }
       /* 디자인 편집 하위 메뉴 — 버튼을 누르면 토글로 펼쳐짐 */
       .designpanel {
@@ -1585,6 +1714,39 @@
         opacity: 0.7;
         flex: none;
         font-variant-numeric: tabular-nums;
+      }
+      /* 현재 위치 표시 (예: 3 / 12) */
+      .histpos {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-weak);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.3px;
+        flex: none;
+      }
+      /* 되돌리기/다시실행 버튼 안의 단축키 힌트 */
+      .histbtns .ghostbtn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding-top: 7px;
+        padding-bottom: 6px;
+        line-height: 1.2;
+      }
+      .histbtns kbd {
+        font-family: var(--font);
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        color: var(--text-weak);
+        background: var(--bg-accent);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 6px;
+      }
+      .histbtns .ghostbtn:disabled kbd {
+        opacity: 0.5;
       }
 
       /* ===== A/B 비교 오버레이 ===== */
@@ -3025,13 +3187,18 @@
         min-height: 0;
         overflow: hidden;
       }
+      /* 헤더: 브랜드 · 내비 · 상태를 space-between으로 한 줄에 배치.
+         좁아져도 줄바꿈하지 않고(nav가 줄어들며 내부 탭이 접힘) 한 줄 유지. */
       .hdr {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         flex: none;
+      }
+      .hdr .nav {
+        min-width: 0;
       }
       .brand {
         display: flex;
@@ -4126,12 +4293,21 @@
       /* 표: 헤더/밴드 = surface-2, 구분선 = divider, hover = surface-2 */
       .main[data-version='enterprise'] th,
       .main[data-version='enterprise'] .bandh td {
-        background: var(--surface-2);
+        /* background(단축)는 background-clip을 border-box로 되돌려 셀 배경이 붙어버림 —
+           background-color만 바꿔 기본값(padding-box)을 유지해 Flat처럼 칸 사이 간격 확보 */
+        background-color: var(--surface-2);
         color: var(--text-label-bright);
       }
+      /* 밴드 헤더 첫 칸은 Flat처럼 배경 없이 — 위 규칙이 first-child까지 덮어써서 색이 나왔음 */
+      .main[data-version='enterprise'] .bandh td:first-child {
+        background: none;
+      }
+      /* 행 구분선(아래쪽)만 색을 입힘 — 예전엔 border-color(모든 변)로 지정돼
+         .bandh td 의 좌우 투명 여백 보더까지 칠해져(1Q·상품처리 칸에 상자처럼 세로선)
+         Flat과 달라 보였음. bottom만 지정해 Flat과 동일한 알약형으로 통일. */
       .main[data-version='enterprise'] td,
       .main[data-version='enterprise'] th {
-        border-color: var(--ov-divider);
+        border-bottom-color: var(--ov-divider);
       }
       .main[data-version='enterprise'] .rowline {
         border-bottom-color: var(--ov-divider);
@@ -4188,9 +4364,7 @@
       /* 페이지 배경: 강조색 은은한 글로우 (Flat은 단색) */
       .main[data-version='enterprise'] {
         background:
-          radial-gradient(1100px 560px at 12% -12%, var(--accent-15), transparent 60%),
-          radial-gradient(900px 480px at 102% -6%, var(--teal-20), transparent 55%),
-          var(--surface-base) !important;
+          radial-gradient(1100px 560px at 12% -12%, var(--accent-15), transparent 60%), radial-gradient(900px 480px at 102% -6%, var(--teal-20), transparent 55%), var(--surface-base) !important;
         position: relative;
       }
       /* 배경 그라데이션 애니메이션 — 강조/보조색 블롭이 천천히 흐르며 고급스러운 깊이감 */
@@ -4200,9 +4374,7 @@
         inset: -20%;
         z-index: 0;
         pointer-events: none;
-        background:
-          radial-gradient(50% 50% at 26% 26%, var(--accent-20), transparent 72%),
-          radial-gradient(52% 52% at 78% 32%, var(--teal-20), transparent 74%);
+        background: radial-gradient(50% 50% at 26% 26%, var(--accent-20), transparent 72%), radial-gradient(52% 52% at 78% 32%, var(--teal-20), transparent 74%);
         filter: blur(72px);
         opacity: 0.55;
         will-change: transform;
@@ -4236,7 +4408,9 @@
       .main[data-version='enterprise'] .panel {
         background: linear-gradient(180deg, var(--surface-2), var(--surface-1) 46%) !important;
         border: 1px solid var(--ov-divider);
-        box-shadow: 0 10px 26px -6px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--ov-glow-15);
+        box-shadow:
+          0 10px 26px -6px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 var(--ov-glow-15);
         position: relative;
         isolation: isolate;
       }
@@ -4251,7 +4425,9 @@
       }
       .main[data-version='enterprise'] .panel:hover {
         border-color: var(--accent-40);
-        box-shadow: 0 14px 32px -6px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--ov-glow-15);
+        box-shadow:
+          0 14px 32px -6px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 var(--ov-glow-15);
       }
       /* 제목 강조 점 — 글로우 */
       .main[data-version='enterprise'] .ph h3::before {
@@ -4323,6 +4499,9 @@
             </h1>
             <small>Color Theme Generator</small>
           </div>
+          <div class="quickhist">
+            <button id="quickReset" class="qh qh-reset" title="전체 옵션 초기화 — 색·배색·미세조정·모서리·대시보드 배치/내용·되돌리기 기록을 처음 상태로 (저장한 스냅샷은 유지)" aria-label="전체 옵션 초기화">↻</button>
+          </div>
           <button id="closer" title="메뉴 접기">‹</button>
         </div>
 
@@ -4339,508 +4518,528 @@
         </div>
 
         <div class="tabbody" data-tab="theme">
-        <section class="colorset" data-pane="theme" style="order: 1">
-          <div class="stephdr">
-            <span class="stepno">1</span>
-            <span class="steptx">
-              <b>색 정하기</b>
-              <small>브랜드 색·사진·추천으로 팔레트 만들기</small>
-            </span>
-          </div>
-
-          <div class="substep">화면 형식 <span>버전 · 밝기</span></div>
-
-          <div class="fmtgrid">
-            <div class="fmtrow">
-              <div class="fmtlbl">
-                버전
-                <span class="ko">Version</span>
-                <span class="info" tabindex="0" role="button" aria-label="버전 도움말">
-                  ?
-                  <span class="tip">
-                    <b>색상 사용 범위</b>
-                    <br />
-                    <br />
-                    <span class="accent">Flat</span>
-                    — 10색 이하의 단순 팔레트. 가볍고 정적인 화면에 적합.
-                    <br />
-                    <br />
-                    <span class="accent">Enterprise</span>
-                    — 50색 이하의 풍부한 토큰(표면 단계·텍스트 계층·그라데이션). 밀도 높은 관제 화면에 적합.
-                  </span>
-                </span>
-              </div>
-              <div class="seg" id="version">
-                <button data-v="flat" class="on">Flat</button>
-                <button data-v="enterprise">Enterprise</button>
-              </div>
-            </div>
-            <div class="fmtrow">
-              <div class="fmtlbl">
-                화면 밝기
-                <span class="ko">Mode</span>
-                <span class="info" tabindex="0" role="button" aria-label="모드 도움말">
-                  ?
-                  <span class="tip">
-                    <b>화면 밝기 테마</b>
-                    <br />
-                    <br />
-                    <span class="accent">Dark</span>
-                    — 어두운 배경의 차분한 화면. 관제·모니터링에 잘 맞아요.
-                    <br />
-                    <br />
-                    <span class="accent">Light</span>
-                    — 밝은 배경의 환한 화면. 사무실·보고서에 잘 맞아요.
-                  </span>
-                </span>
-              </div>
-              <div class="seg" id="mode">
-                <button data-m="dark" class="on">Dark</button>
-                <button data-m="light">Light</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="substep">색 고르기 <span>아래 3가지 중 하나만 선택</span></div>
-
-          <details class="acc" data-src="seed" open>
-            <summary>
-              <span class="acttl">
-                Seed Color
-                <span class="ko">기준 색</span>
+          <section class="colorset" data-pane="theme" style="order: 1">
+            <div class="stephdr">
+              <span class="stepno">1</span>
+              <span class="steptx">
+                <b>색 정하기</b>
               </span>
-              <span class="accval" id="seedVal"></span>
-              <span class="srcbadge">사용 중</span>
-              <span class="info" tabindex="0" role="button" aria-label="기준 색 도움말">
-                ?
-                <span class="tip">
-                  <b>팔레트의 중심이 되는 색</b>
-                  <br />
-                  <br />
-                  이 색 하나만 정하면 배경·글자·강조색까지 전체 팔레트가 이 색을 기준으로 자동 생성돼요. 왼쪽 색칸을 눌러 고르거나, 오른쪽 칸에 색상 코드(예: #4A9EFF)를 직접 입력하세요.
-                </span>
-              </span>
-              <span class="chev">▾</span>
-            </summary>
-            <div class="accbody">
-              <div class="seedrow">
-                <span class="swprev" id="swprev"><input type="color" id="seed" value="#4a9eff" /></span>
-                <input type="text" class="hex" id="hex" value="#4A9EFF" />
-              </div>
-              <label class="lblrow">
-                배색 방식
-                <span class="info" tabindex="0" role="button" aria-label="배색 방식 도움말">
-                  ?
-                  <span class="tip">
-                    <b>강조색을 뽑는 규칙</b>
-                    <br />
-                    <br />
-                    기준 색에서
-                    <b>두 번째 강조색</b>
-                    을 어떤 관계로 고를지 정해요.
-                    <br />
-                    <br />
-                    <span class="accent">유사</span>
-                    — 비슷한 색끼리, 차분하고 안정적
-                    <br />
-                    <span class="accent">보색</span>
-                    — 반대 색, 강렬한 대비
-                    <br />
-                    <span class="accent">삼각</span>
-                    — 세 방향 색, 균형 잡힌 화려함
-                    <br />
-                    <span class="accent">분할보색</span>
-                    — 보색의 부드러운 버전
+            </div>
+
+            <div class="substep">화면 형식</div>
+
+            <div class="fmtgrid">
+              <div class="fmtrow">
+                <div class="fmtlbl">
+                  버전
+                  <span class="ko">Version</span>
+                  <span class="info" tabindex="0" role="button" aria-label="버전 도움말">
+                    ?
+                    <span class="tip">
+                      <b>색상 사용 범위</b>
+                      <br />
+                      <br />
+                      <span class="accent">Flat</span>
+                      — 10색 이하의 단순 팔레트. 가볍고 정적인 화면에 적합.
+                      <br />
+                      <br />
+                      <span class="accent">Enterprise</span>
+                      — 50색 이하의 풍부한 토큰(표면 단계·텍스트 계층·그라데이션). 밀도 높은 관제 화면에 적합.
+                    </span>
                   </span>
-                </span>
-              </label>
-              <div class="pills" id="harmony">
-                <button data-h="complement">보색</button>
-                <button data-h="analog" class="on">유사</button>
-                <button data-h="triad">삼각</button>
-                <button data-h="split">분할보색</button>
-              </div>
-              <details class="more">
-                <summary>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" y1="21" x2="4" y2="14" />
-                    <line x1="4" y1="10" x2="4" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12" y2="3" />
-                    <line x1="20" y1="21" x2="20" y2="16" />
-                    <line x1="20" y1="12" x2="20" y2="3" />
-                    <line x1="1" y1="14" x2="7" y2="14" />
-                    <line x1="9" y1="8" x2="15" y2="8" />
-                    <line x1="17" y1="16" x2="23" y2="16" />
-                  </svg>
-                  미세 조정 (색 직접 다듬기)
-                  <span class="chev">▾</span>
-                </summary>
-                <div class="morebody">
-                  <p class="chkhint" style="margin: 0 0 2px">생성된 팔레트 전체의 느낌을 한 번에 미세하게 바꿔요. 잘 모르면 건드리지 않아도 됩니다.</p>
-                  <div class="slider" title="모든 색의 색상(빨강↔파랑 등)을 함께 회전시켜요">
-                    <span>색조</span>
-                    <input type="range" id="adjH" min="-30" max="30" value="0" />
-                  </div>
-                  <div class="slider" title="색의 선명함(탁하게↔쨍하게)을 조절해요">
-                    <span>채도</span>
-                    <input type="range" id="adjS" min="-40" max="40" value="0" />
-                  </div>
-                  <div class="slider" title="전체 밝기(어둡게↔밝게)를 조절해요">
-                    <span>명도</span>
-                    <input type="range" id="adjL" min="-20" max="20" value="0" />
-                  </div>
-                  <button class="ghostbtn" id="adjReset" title="세 슬라이더를 모두 0으로 되돌려요">조정 초기화</button>
                 </div>
-              </details>
+                <div class="seg" id="version">
+                  <button data-v="flat" class="on">Flat</button>
+                  <button data-v="enterprise">Enterprise</button>
+                </div>
+              </div>
+              <div class="fmtrow">
+                <div class="fmtlbl">
+                  화면 밝기
+                  <span class="ko">Mode</span>
+                  <span class="info" tabindex="0" role="button" aria-label="모드 도움말">
+                    ?
+                    <span class="tip">
+                      <b>화면 밝기 테마</b>
+                      <br />
+                      <br />
+                      <span class="accent">Dark</span>
+                      — 어두운 배경의 차분한 화면. 관제·모니터링에 잘 맞아요.
+                      <br />
+                      <br />
+                      <span class="accent">Light</span>
+                      — 밝은 배경의 환한 화면. 사무실·보고서에 잘 맞아요.
+                    </span>
+                  </span>
+                </div>
+                <div class="seg" id="mode">
+                  <button data-m="dark" class="on">Dark</button>
+                  <button data-m="light">Light</button>
+                </div>
+              </div>
             </div>
-          </details>
 
-          <details class="acc" data-src="image">
-            <summary>
-              <span class="acttl">
-                Theme from Image
-                <span class="ko">사진에서 추출</span>
-              </span>
-              <span class="accval" id="imageVal"></span>
-              <span class="srcbadge">사용 중</span>
-              <span class="info up" tabindex="0" role="button" aria-label="사진에서 추출 도움말">
-                ?
-                <span class="tip">
-                  <b>사진 한 장으로 테마 만들기</b>
-                  <br />
-                  <br />
-                  좋아하는 사진(브랜드 이미지·로고·풍경 등)을 올리면 그 안의 색을 분석해 팔레트를 자동으로 만들어줘요. 아래
-                  <b>색 추출 방식</b>
-                  으로 분위기를 고를 수 있어요.
+            <div class="substep">색 고르기</div>
+
+            <details class="acc" data-src="seed">
+              <summary>
+                <span class="acttl">
+                  Seed Color
+                  <span class="ko">기준 색</span>
                 </span>
-              </span>
-              <span class="chev">▾</span>
-            </summary>
-            <div class="accbody">
-              <label class="imgbtn" for="imgfile">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
-                이미지 첨부 → 테마 추출
-              </label>
-              <input type="file" id="imgfile" accept="image" />
-              <small class="imgname" id="imgname"></small>
-              <div class="imgprev" id="imgprev"></div>
-              <label class="lblrow">
-                색 추출 방식
-                <span class="info up" tabindex="0" role="button" aria-label="추출 방식 도움말">
+                <span class="accval" id="seedVal"></span>
+                <span class="srcbadge">사용 중</span>
+                <span class="info" tabindex="0" role="button" aria-label="기준 색 도움말">
                   ?
                   <span class="tip">
-                    <b>이미지로 테마를 만드는 방법</b>
+                    <b>팔레트의 중심이 되는 색</b>
                     <br />
                     <br />
-                    <span class="accent">자동 조화</span>
-                    — 사진에서 대표색 하나를 뽑아 배경·글자·강조색을 보기 좋게 자동으로 맞춰줘요. 어떤 사진이든 깔끔하게 나옵니다.
-                    <b>잘 모르겠으면 이걸 추천!</b>
-                    <br />
-                    <br />
-                    <span class="accent">원본 색 그대로</span>
-                    — 사진 속 여러 색을 그대로 가져와 어두운 색은 배경, 밝은 색은 글자, 선명한 색은 강조로 배치해요. 사진 분위기는 살지만, 사진에 따라 글자가 잘 안 보일 수도 있어요.
+                    이 색 하나만 정하면 배경·글자·강조색까지 전체 팔레트가 이 색을 기준으로 자동 생성돼요. 왼쪽 색칸을 눌러 고르거나, 오른쪽 칸에 색상 코드(예: #4A9EFF)를 직접 입력하세요.
                   </span>
                 </span>
-              </label>
-              <div class="seg" id="extractMode">
-                <button data-x="auto" class="on">자동 조화</button>
-                <button data-x="direct">원본 색 그대로</button>
+                <span class="chev">▾</span>
+              </summary>
+              <div class="accbody">
+                <div class="seedrow">
+                  <span class="swprev" id="swprev"><input type="color" id="seed" value="#4a9eff" /></span>
+                  <input type="text" class="hex" id="hex" value="#4A9EFF" />
+                </div>
+                <label class="lblrow">
+                  배색 방식
+                  <span class="info" tabindex="0" role="button" aria-label="배색 방식 도움말">
+                    ?
+                    <span class="tip">
+                      <b>강조색을 뽑는 규칙</b>
+                      <br />
+                      <br />
+                      기준 색에서
+                      <b>두 번째 강조색</b>
+                      을 어떤 관계로 고를지 정해요.
+                      <br />
+                      <br />
+                      <span class="accent">유사</span>
+                      — 비슷한 색끼리, 차분하고 안정적
+                      <br />
+                      <span class="accent">보색</span>
+                      — 반대 색, 강렬한 대비
+                      <br />
+                      <span class="accent">삼각</span>
+                      — 세 방향 색, 균형 잡힌 화려함
+                      <br />
+                      <span class="accent">분할보색</span>
+                      — 보색의 부드러운 버전
+                    </span>
+                  </span>
+                </label>
+                <div class="pills" id="harmony">
+                  <button data-h="complement">보색</button>
+                  <button data-h="analog" class="on">유사</button>
+                  <button data-h="triad">삼각</button>
+                  <button data-h="split">분할보색</button>
+                </div>
+                <details class="more">
+                  <summary>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="4" y1="21" x2="4" y2="14" />
+                      <line x1="4" y1="10" x2="4" y2="3" />
+                      <line x1="12" y1="21" x2="12" y2="12" />
+                      <line x1="12" y1="8" x2="12" y2="3" />
+                      <line x1="20" y1="21" x2="20" y2="16" />
+                      <line x1="20" y1="12" x2="20" y2="3" />
+                      <line x1="1" y1="14" x2="7" y2="14" />
+                      <line x1="9" y1="8" x2="15" y2="8" />
+                      <line x1="17" y1="16" x2="23" y2="16" />
+                    </svg>
+                    미세 조정 (색 직접 다듬기)
+                    <span class="chev">▾</span>
+                  </summary>
+                  <div class="morebody">
+                    <div class="slider" title="모든 색의 색상(빨강↔파랑 등)을 함께 회전시켜요">
+                      <span>색조</span>
+                      <input type="range" id="adjH" min="-30" max="30" value="0" />
+                    </div>
+                    <div class="slider" title="색의 선명함(탁하게↔쨍하게)을 조절해요">
+                      <span>채도</span>
+                      <input type="range" id="adjS" min="-40" max="40" value="0" />
+                    </div>
+                    <div class="slider" title="전체 밝기(어둡게↔밝게)를 조절해요">
+                      <span>명도</span>
+                      <input type="range" id="adjL" min="-20" max="20" value="0" />
+                    </div>
+                    <button class="ghostbtn" id="adjReset" title="세 슬라이더를 모두 0으로 되돌려요">조정 초기화</button>
+                  </div>
+                </details>
               </div>
-              <p class="chkhint" id="extractHint">사진에서 대표색 하나를 골라, 서로 잘 어울리는 팔레트를 자동으로 만들어요.</p>
-            </div>
-          </details>
+            </details>
 
-          <details class="acc" data-src="preset">
-            <summary>
-              <span class="acttl">
-                추천 테마
-                <span class="ko">고르면 바로 적용</span>
+            <details class="acc" data-src="image">
+              <summary>
+                <span class="acttl">
+                  Theme from Image
+                  <span class="ko">사진에서 추출</span>
+                </span>
+                <span class="accval" id="imageVal"></span>
+                <span class="srcbadge">사용 중</span>
+                <span class="info up" tabindex="0" role="button" aria-label="사진에서 추출 도움말">
+                  ?
+                  <span class="tip">
+                    <b>사진 한 장으로 테마 만들기</b>
+                    <br />
+                    <br />
+                    좋아하는 사진(브랜드 이미지·로고·풍경 등)을 올리면 그 안의 색을 분석해 팔레트를 자동으로 만들어줘요. 아래
+                    <b>색 추출 방식</b>
+                    으로 분위기를 고를 수 있어요.
+                  </span>
+                </span>
+                <span class="chev">▾</span>
+              </summary>
+              <div class="accbody">
+                <label class="imgbtn" for="imgfile">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  이미지 첨부 → 테마 추출
+                </label>
+                <input type="file" id="imgfile" accept="image" />
+                <small class="imgname" id="imgname"></small>
+                <div class="imgprev" id="imgprev"></div>
+                <label class="lblrow">
+                  색 추출 방식
+                  <span class="info up" tabindex="0" role="button" aria-label="추출 방식 도움말">
+                    ?
+                    <span class="tip">
+                      <b>이미지로 테마를 만드는 방법</b>
+                      <br />
+                      <br />
+                      <span class="accent">자동 조화</span>
+                      — 사진에서 대표색 하나를 뽑아 배경·글자·강조색을 보기 좋게 자동으로 맞춰줘요. 어떤 사진이든 깔끔하게 나옵니다.
+                      <b>잘 모르겠으면 이걸 추천!</b>
+                      <br />
+                      <br />
+                      <span class="accent">원본 색 그대로</span>
+                      — 사진 속 여러 색을 그대로 가져와 어두운 색은 배경, 밝은 색은 글자, 선명한 색은 강조로 배치해요. 사진 분위기는 살지만, 사진에 따라 글자가 잘 안 보일 수도 있어요.
+                    </span>
+                  </span>
+                </label>
+                <div class="seg" id="extractMode">
+                  <button data-x="auto" class="on">자동 조화</button>
+                  <button data-x="direct">원본 색 그대로</button>
+                </div>
+                <p class="chkhint" id="extractHint">사진에서 대표색 하나를 골라, 서로 잘 어울리는 팔레트를 자동으로 만들어요.</p>
+              </div>
+            </details>
+
+            <details class="acc" data-src="preset">
+              <summary>
+                <span class="acttl">
+                  추천 테마
+                  <span class="ko">고르면 바로 적용</span>
+                </span>
+                <span class="accval" id="presetVal"></span>
+                <span class="srcbadge">사용 중</span>
+                <span class="info up" tabindex="0" role="button" aria-label="추천 테마 도움말">
+                  ?
+                  <span class="tip">
+                    <b>미리 만들어 둔 테마 모음</b>
+                    <br />
+                    <br />
+                    색을 직접 고르기 어렵다면 여기서 마음에 드는 걸 누르기만 하면 화면 전체에 바로 적용돼요.
+                    <br />
+                    <br />
+                    <span class="accent">올해의 트렌드</span>
+                    — 연도별 팬톤 유행색
+                    <br />
+                    <span class="accent">컬러 모음</span>
+                    — 엄선한 배색 세트
+                  </span>
+                </span>
+                <span class="chev">▾</span>
+              </summary>
+              <div class="accbody">
+                <div class="sublbl">
+                  <span>
+                    올해의 트렌드
+                    <span class="ko">Pantone</span>
+                  </span>
+                  <select id="trendYear"></select>
+                </div>
+                <div class="trend" id="trend"></div>
+                <div class="sublbl" style="margin-top: 12px">
+                  <span>
+                    Color Hunt 인기 팔레트
+                    <span class="ko">Popular</span>
+                  </span>
+                  <a class="chlink" href="https://colorhunt.co/palettes/popular" target="_blank" rel="noopener">colorhunt.co ↗</a>
+                </div>
+                <div class="seg" id="galleryMode">
+                  <button data-gm="dark" class="on">다크 추천</button>
+                  <button data-gm="light">라이트 추천</button>
+                </div>
+                <div class="gallery" id="gallery"></div>
+                <div class="galpager" id="galPager">
+                  <button class="galnav" id="galPrev" type="button" aria-label="이전 팔레트">‹ 이전</button>
+                  <span class="galpos" id="galPos">1 / 1</span>
+                  <button class="galnav" id="galNext" type="button" aria-label="다음 팔레트">다음 ›</button>
+                </div>
+              </div>
+            </details>
+
+            <div class="csgen">
+              <button class="genbtn" id="rand" title="누를 때마다 새로운 색 조합을 무작위로 제안해요">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 3 21 3 21 8" />
+                  <line x1="4" y1="20" x2="21" y2="3" />
+                  <polyline points="21 16 21 21 16 21" />
+                  <line x1="15" y1="15" x2="21" y2="21" />
+                  <line x1="4" y1="4" x2="9" y2="9" />
+                </svg>
+                랜덤 팔레트 생성
+              </button>
+              <div class="curpal" id="curpal" aria-live="polite"></div>
+            </div>
+          </section>
+          <div class="grp" data-pane="dash" style="order: 1">
+            <label class="lblrow">
+              <span>
+                대시보드 편집
+                <span class="ko">자유롭게 바꾸기</span>
               </span>
-              <span class="accval" id="presetVal"></span>
-              <span class="srcbadge">사용 중</span>
-              <span class="info up" tabindex="0" role="button" aria-label="추천 테마 도움말">
+              <span class="info up" tabindex="0" role="button" aria-label="대시보드 편집 도움말">
                 ?
                 <span class="tip">
-                  <b>미리 만들어 둔 테마 모음</b>
+                  <b>오른쪽 화면을 내 맘대로</b>
                   <br />
                   <br />
-                  색을 직접 고르기 어렵다면 여기서 마음에 드는 걸 누르기만 하면 화면 전체에 바로 적용돼요.
+                  <span class="accent">배치 수정</span>
+                  — 패널을 끌어다 놓아 위치·순서를 바꿔요.
                   <br />
                   <br />
-                  <span class="accent">올해의 트렌드</span>
-                  — 연도별 팬톤 유행색
+                  <span class="accent">내용 수정</span>
+                  — 제목·숫자·표 등 글자를 클릭해 직접 고쳐요.
                   <br />
-                  <span class="accent">컬러 모음</span>
-                  — 엄선한 배색 세트
+                  <br />
+                  바꾼 내용은 자동 저장되고,
+                  <b>기본값으로 되돌리기</b>
+                  로 처음 상태로 복원됩니다.
                 </span>
               </span>
+            </label>
+            <button class="editbtn" id="editToggle" title="패널을 끌어서 옮길 수 있는 상태로 전환">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="5 9 2 12 5 15" />
+                <polyline points="9 5 12 2 15 5" />
+                <polyline points="15 19 12 22 9 19" />
+                <polyline points="19 9 22 12 19 15" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="12" y1="2" x2="12" y2="22" />
+              </svg>
+              <span class="lbl">배치 수정하기</span>
+            </button>
+            <button class="editbtn" id="contentToggle" title="글자를 클릭해 직접 수정하는 상태로 전환">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+              </svg>
+              <span class="lbl">내용 수정하기</span>
+            </button>
+            <button class="editbtn" id="designToggle" title="모서리 둥글기 등 디자인을 조정하는 메뉴를 펼칩니다" aria-expanded="false" aria-controls="designPanel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="6" />
+                <path d="M9 3a6 6 0 0 0-6 6" />
+              </svg>
+              <span class="lbl">디자인 편집하기</span>
               <span class="chev">▾</span>
-            </summary>
-            <div class="accbody">
+            </button>
+            <div class="designpanel" id="designPanel">
               <div class="sublbl">
                 <span>
-                  올해의 트렌드
-                  <span class="ko">Pantone</span>
+                  모서리 둥글기
+                  <span class="ko">패널 라운드</span>
                 </span>
-                <select id="trendYear"></select>
-              </div>
-              <div class="trend" id="trend"></div>
-              <div class="sublbl" style="margin-top: 10px">
-                <span>
-                  컬러 모음
-                  <span class="ko">Curated</span>
+                <span class="info up" tabindex="0" role="button" aria-label="모서리 둥글기 도움말">
+                  ?
+                  <span class="tip">
+                    <b>패널 모서리의 둥근 정도</b>
+                    <br />
+                    <br />
+                    오른쪽 화면의 카드(패널) 네 모서리가 얼마나 둥글지 정해요.
+                    <br />
+                    <br />
+                    <span class="accent">0px</span>
+                    — 각진 직사각형
+                    <br />
+                    <span class="accent">숫자가 클수록</span>
+                    — 더 둥글고 부드러운 느낌
+                  </span>
                 </span>
               </div>
-              <div class="seg" id="galleryMode">
-                <button data-gm="dark" class="on">다크 추천</button>
-                <button data-gm="light">라이트 추천</button>
+              <div class="slider" title="패널 모서리의 둥근 정도를 조절해요">
+                <input type="range" id="radius" min="0" max="24" value="8" />
+                <span class="rval num" id="radiusVal">8px</span>
               </div>
-              <div class="gallery" id="gallery"></div>
+              <button class="ghostbtn" id="radiusReset" title="모서리 둥글기를 기본값(8px)으로 되돌려요">기본값(8px)</button>
             </div>
-          </details>
-
-          <div class="csgen">
-            <button class="genbtn" id="rand" title="누를 때마다 새로운 색 조합을 무작위로 제안해요">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="16 3 21 3 21 8" />
-                <line x1="4" y1="20" x2="21" y2="3" />
-                <polyline points="21 16 21 21 16 21" />
-                <line x1="15" y1="15" x2="21" y2="21" />
-                <line x1="4" y1="4" x2="9" y2="9" />
-              </svg>
-              랜덤 팔레트 생성
-            </button>
-            <p class="chkhint" style="margin: 0; text-align: center">버튼을 누를 때마다 새로운 색 조합을 제안해요</p>
-            <div class="curpal" id="curpal" aria-live="polite"></div>
+            <button class="ghostbtn" id="layoutReset" title="배치와 내용을 처음 상태로 되돌립니다">기본값으로 되돌리기</button>
           </div>
-        </section>
-        <div class="grp" data-pane="dash" style="order: 1">
-          <label class="lblrow">
-            <span>
-              대시보드 편집
-              <span class="ko">자유롭게 바꾸기</span>
-            </span>
-            <span class="info up" tabindex="0" role="button" aria-label="대시보드 편집 도움말">
-              ?
-              <span class="tip">
-                <b>오른쪽 화면을 내 맘대로</b>
-                <br />
-                <br />
-                <span class="accent">배치 수정</span>
-                — 패널을 끌어다 놓아 위치·순서를 바꿔요.
-                <br />
-                <br />
-                <span class="accent">내용 수정</span>
-                — 제목·숫자·표 등 글자를 클릭해 직접 고쳐요.
-                <br />
-                <br />
-                바꾼 내용은 자동 저장되고,
-                <b>기본값으로 되돌리기</b>
-                로 처음 상태로 복원됩니다.
+
+          <div class="grp" data-pane="theme" style="order: 4">
+            <div class="stephdr">
+              <span class="stepno">4</span>
+              <span class="steptx">
+                <b>내보내기</b>
               </span>
-            </span>
-          </label>
-          <button class="editbtn" id="editToggle" title="패널을 끌어서 옮길 수 있는 상태로 전환">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="5 9 2 12 5 15" />
-              <polyline points="9 5 12 2 15 5" />
-              <polyline points="15 19 12 22 9 19" />
-              <polyline points="19 9 22 12 19 15" />
-              <line x1="2" y1="12" x2="22" y2="12" />
-              <line x1="12" y1="2" x2="12" y2="22" />
-            </svg>
-            <span class="lbl">배치 수정하기</span>
-          </button>
-          <button class="editbtn" id="contentToggle" title="글자를 클릭해 직접 수정하는 상태로 전환">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-            </svg>
-            <span class="lbl">내용 수정하기</span>
-          </button>
-          <button class="editbtn" id="designToggle" title="모서리 둥글기 등 디자인을 조정하는 메뉴를 펼칩니다" aria-expanded="false" aria-controls="designPanel">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="6" />
-              <path d="M9 3a6 6 0 0 0-6 6" />
-            </svg>
-            <span class="lbl">디자인 편집하기</span>
-            <span class="chev">▾</span>
-          </button>
-          <div class="designpanel" id="designPanel">
-            <div class="sublbl">
-              <span>
-                모서리 둥글기
-                <span class="ko">패널 라운드</span>
-              </span>
-              <span class="info up" tabindex="0" role="button" aria-label="모서리 둥글기 도움말">
+              <span class="info up" tabindex="0" role="button" aria-label="내보내기 도움말">
                 ?
                 <span class="tip">
-                  <b>패널 모서리의 둥근 정도</b>
+                  <b>지금 테마를 산출물로 내보내기</b>
                   <br />
                   <br />
-                  오른쪽 화면의 카드(패널) 네 모서리가 얼마나 둥글지 정해요.
+                  <span class="accent">토큰</span>
+                  — CSS 변수 · JSON · Figma 변수 · Tailwind 형태로 코드 복사
                   <br />
                   <br />
-                  <span class="accent">0px</span>
-                  — 각진 직사각형
+                  <span class="accent">이미지</span>
+                  — 대시보드 PNG, 팔레트 SVG 저장
                   <br />
-                  <span class="accent">숫자가 클수록</span>
-                  — 더 둥글고 부드러운 느낌
+                  <br />
+                  <span class="accent">공유 링크</span>
+                  — 지금 시안을 그대로 여는 URL을 복사
                 </span>
               </span>
             </div>
-            <div class="slider" title="패널 모서리의 둥근 정도를 조절해요">
-              <input type="range" id="radius" min="0" max="24" value="8" />
-              <span class="rval num" id="radiusVal">8px</span>
+            <button class="genbtn" id="exportOpen" title="토큰·이미지·공유 링크 내보내기 창을 엽니다">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              토큰·이미지·링크 내보내기
+            </button>
+          </div>
+
+          <div class="grp" data-pane="theme" style="order: 2">
+            <div class="stephdr">
+              <span class="stepno">2</span>
+              <span class="steptx">
+                <b>검증하기</b>
+              </span>
+              <span class="info up" tabindex="0" role="button" aria-label="검증·시트 도움말">
+                ?
+                <span class="tip">
+                  <b>접근성 검증과 컴포넌트 미리보기</b>
+                  <br />
+                  <br />
+                  <span class="accent">대비비 검증표</span>
+                  — 배경↔텍스트, 배경↔포인트 대비비와 AA/AAA 통과 여부를 표로 보고 Markdown·CSV로 내보내요(설계서 근거 첨부).
+                  <br />
+                  <br />
+                  <span class="accent">컴포넌트 시트</span>
+                  — 버튼·배지·입력·토글·표 등 여러 UI에 지금 테마가 어떻게 적용되는지 한눈에 봐요.
+                </span>
+              </span>
             </div>
-            <button class="ghostbtn" id="radiusReset" title="모서리 둥글기를 기본값(8px)으로 되돌려요">기본값(8px)</button>
+            <button class="editbtn" id="contrastOpen" title="역할쌍 대비비·AA/AAA 검증표를 엽니다">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none" />
+              </svg>
+              <span class="lbl">대비비 검증표</span>
+            </button>
+            <button class="editbtn" id="sheetOpen" title="테마가 적용된 컴포넌트 상태 갤러리를 엽니다">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                <rect x="14" y="14" width="7" height="7" rx="1.5" />
+              </svg>
+              <span class="lbl">컴포넌트 시트</span>
+            </button>
           </div>
-          <button class="ghostbtn" id="layoutReset" title="배치와 내용을 처음 상태로 되돌립니다">기본값으로 되돌리기</button>
-        </div>
 
-        <div class="grp" data-pane="theme" style="order: 4">
-          <div class="stephdr">
-            <span class="stepno">4</span>
-            <span class="steptx">
-              <b>내보내기</b>
-              <small>토큰 · 이미지 · 공유 링크</small>
-            </span>
-            <span class="info up" tabindex="0" role="button" aria-label="내보내기 도움말">
-              ?
-              <span class="tip">
-                <b>지금 테마를 산출물로 내보내기</b>
-                <br />
-                <br />
-                <span class="accent">토큰</span>
-                — CSS 변수 · JSON · Figma 변수 · Tailwind 형태로 코드 복사
-                <br />
-                <br />
-                <span class="accent">이미지</span>
-                — 대시보드 PNG, 팔레트 SVG 저장
-                <br />
-                <br />
-                <span class="accent">공유 링크</span>
-                — 지금 시안을 그대로 여는 URL을 복사
+          <div class="grp" data-pane="theme" style="order: 3">
+            <div class="stephdr">
+              <span class="stepno">3</span>
+              <span class="steptx">
+                <b>저장 · 비교</b>
               </span>
-            </span>
-          </div>
-          <button class="genbtn" id="exportOpen" title="토큰·이미지·공유 링크 내보내기 창을 엽니다">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            토큰·이미지·링크 내보내기
-          </button>
-        </div>
-
-        <div class="grp" data-pane="theme" style="order: 2">
-          <div class="stephdr">
-            <span class="stepno">2</span>
-            <span class="steptx">
-              <b>검증하기</b>
-              <small>대비비 · 컴포넌트 미리보기</small>
-            </span>
-            <span class="info up" tabindex="0" role="button" aria-label="검증·시트 도움말">
-              ?
-              <span class="tip">
-                <b>접근성 검증과 컴포넌트 미리보기</b>
-                <br />
-                <br />
-                <span class="accent">대비비 검증표</span>
-                — 배경↔텍스트, 배경↔포인트 대비비와 AA/AAA 통과 여부를 표로 보고 Markdown·CSV로 내보내요(설계서 근거 첨부).
-                <br />
-                <br />
-                <span class="accent">컴포넌트 시트</span>
-                — 버튼·배지·입력·토글·표 등 여러 UI에 지금 테마가 어떻게 적용되는지 한눈에 봐요.
+              <span class="info up" tabindex="0" role="button" aria-label="테마 저장·비교 도움말">
+                ?
+                <span class="tip">
+                  <b>만든 테마를 저장하고 비교</b>
+                  <br />
+                  <br />
+                  <span class="accent">스냅샷</span>
+                  — 지금 테마에 이름을 붙여 저장해 두고 언제든 다시 적용해요.
+                  <br />
+                  <br />
+                  <span class="accent">A/B 비교</span>
+                  — 두 테마를 나란히 놓고 색·모서리를 한눈에 견줘요.
+                  <br />
+                  <br />
+                  <span class="accent">변경 히스토리</span>
+                  — 색을 바꾼 기록을 따라 이전 상태로 되돌릴 수 있어요.
+                </span>
               </span>
-            </span>
-          </div>
-          <button class="editbtn" id="contrastOpen" title="역할쌍 대비비·AA/AAA 검증표를 엽니다">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none" />
-            </svg>
-            <span class="lbl">대비비 검증표</span>
-          </button>
-          <button class="editbtn" id="sheetOpen" title="테마가 적용된 컴포넌트 상태 갤러리를 엽니다">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7" rx="1.5" />
-              <rect x="14" y="3" width="7" height="7" rx="1.5" />
-              <rect x="3" y="14" width="7" height="7" rx="1.5" />
-              <rect x="14" y="14" width="7" height="7" rx="1.5" />
-            </svg>
-            <span class="lbl">컴포넌트 시트</span>
-          </button>
-        </div>
+            </div>
 
-        <div class="grp" data-pane="theme" style="order: 3">
-          <div class="stephdr">
-            <span class="stepno">3</span>
-            <span class="steptx">
-              <b>저장 · 비교</b>
-              <small>스냅샷 · A/B · 되돌리기</small>
-            </span>
-            <span class="info up" tabindex="0" role="button" aria-label="테마 저장·비교 도움말">
-              ?
-              <span class="tip">
-                <b>만든 테마를 저장하고 비교</b>
-                <br />
-                <br />
-                <span class="accent">스냅샷</span>
-                — 지금 테마에 이름을 붙여 저장해 두고 언제든 다시 적용해요.
-                <br />
-                <br />
-                <span class="accent">A/B 비교</span>
-                — 두 테마를 나란히 놓고 색·모서리를 한눈에 견줘요.
-                <br />
-                <br />
-                <span class="accent">변경 히스토리</span>
-                — 색을 바꾼 기록을 따라 이전 상태로 되돌릴 수 있어요.
+            <div class="sublbl">
+              <span>
+                테마 스냅샷
+                <span class="ko">이름 붙여 저장</span>
               </span>
-            </span>
-          </div>
+            </div>
+            <div class="snapsave">
+              <input type="text" class="hex" id="snapName" placeholder="테마 이름 (예: 야간 관제용)" maxlength="40" />
+              <button class="savebtn" id="snapSave" title="지금 테마를 이 이름으로 저장">저장</button>
+            </div>
+            <div class="snaplist" id="snapList"></div>
+            <p class="chkhint" id="snapEmpty" style="margin: 0">저장된 테마가 없어요. 마음에 드는 테마를 만들고 이름을 붙여 저장해 보세요.</p>
 
-          <div class="sublbl">
-            <span>
-              테마 스냅샷
-              <span class="ko">이름 붙여 저장</span>
-            </span>
-          </div>
-          <div class="snapsave">
-            <input type="text" class="hex" id="snapName" placeholder="테마 이름 (예: 야간 관제용)" maxlength="40" />
-            <button class="savebtn" id="snapSave" title="지금 테마를 이 이름으로 저장">저장</button>
-          </div>
-          <div class="snaplist" id="snapList"></div>
-          <p class="chkhint" id="snapEmpty" style="margin: 0">저장된 테마가 없어요. 마음에 드는 테마를 만들고 이름을 붙여 저장해 보세요.</p>
+            <button class="editbtn" id="abOpen" title="두 테마를 나란히 비교하는 화면을 엽니다">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="8" height="16" rx="2" />
+                <rect x="13" y="4" width="8" height="16" rx="2" />
+              </svg>
+              <span class="lbl">A/B 비교 열기</span>
+            </button>
 
-          <button class="editbtn" id="abOpen" title="두 테마를 나란히 비교하는 화면을 엽니다">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="8" height="16" rx="2" />
-              <rect x="13" y="4" width="8" height="16" rx="2" />
-            </svg>
-            <span class="lbl">A/B 비교 열기</span>
-          </button>
-
-          <div class="sublbl" style="margin-top: 4px">
-            <span>
-              변경 히스토리
-              <span class="ko">되돌리기</span>
-            </span>
+            <div class="sublbl" style="margin-top: 4px">
+              <span>
+                변경 히스토리
+                <span class="ko">되돌리기 타임라인</span>
+              </span>
+              <span class="histpos" id="histPos">–</span>
+            </div>
+            <div class="histbtns">
+              <button class="ghostbtn" id="histUndo" title="한 단계 이전 상태로 되돌리기 (Ctrl+Z)">
+                ↶ 되돌리기
+                <kbd>Ctrl Z</kbd>
+              </button>
+              <button class="ghostbtn" id="histRedo" title="되돌리기 취소·다시 실행 (Ctrl+Shift+Z)">
+                ↷ 다시 실행
+                <kbd>Ctrl ⇧ Z</kbd>
+              </button>
+            </div>
+            <p class="chkhint" style="display: none; margin: 2px 0 0">
+              아래 타임라인의 어느 지점이든 눌러 그 순간으로 바로 이동할 수 있어요. 상단
+              <b>↶ ↷</b>
+              버튼과 단축키로도 언제든 되돌릴 수 있습니다.
+            </p>
+            <div class="histlist" id="histList"></div>
           </div>
-          <div class="histbtns">
-            <button class="ghostbtn" id="histUndo" title="한 단계 이전 상태로 되돌리기">↶ 되돌리기</button>
-            <button class="ghostbtn" id="histRedo" title="되돌리기 취소(다시 실행)">↷ 다시 실행</button>
-          </div>
-          <div class="histlist" id="histList"></div>
-        </div>
         </div>
         <!-- /.tabbody -->
+
+        <button class="resetall" id="resetAll" title="색·배색·미세조정·모서리·대시보드 배치·내용·되돌리기 기록을 모두 처음 상태로 되돌립니다 (저장한 테마 스냅샷은 유지)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10" />
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+          </svg>
+          <span>전체 기본값으로 되돌리기</span>
+        </button>
 
         <div class="sbfoot">테마를 클릭하면 화면 전체에 즉시 적용됩니다 · WEMB 2026</div>
       </aside>
@@ -5475,7 +5674,9 @@
             <div class="ctfixbar" id="ctFixBar">
               <span class="ctfixmsg" id="ctFixMsg"></span>
               <button class="ctfixbtn" id="ctFix" title="미달난 색만 같은 색상에서 명도를 조정해 기준을 통과하도록 고칩니다">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2 2.1-2.1z" /></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2 2.1-2.1z" />
+                </svg>
                 미달 수정하기
               </button>
             </div>
@@ -5483,11 +5684,19 @@
             <div class="exsec"><span class="exseclbl">설계서 첨부용 내보내기</span></div>
             <div class="exactions">
               <button id="ctMd" title="Markdown 표로 복사 (문서·Notion·Confluence)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M7 15V9l3 3 3-3v6" /><path d="M17 9v6" /><path d="m20 12-3 3-3-3" /></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="M7 15V9l3 3 3-3v6" />
+                  <path d="M17 9v6" />
+                  <path d="m20 12-3 3-3-3" />
+                </svg>
                 Markdown 복사
               </button>
               <button id="ctCsv" title="CSV 파일로 저장 (스프레드시트)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
                 CSV 저장
               </button>
             </div>
@@ -5504,7 +5713,11 @@
             <span class="exnote">이 테마가 적용된 전체 컴포넌트 카탈로그 — 화면에 있는 것 + 화면에 없는 상태값까지 (호버·포커스는 직접 올려보세요)</span>
             <span class="sp"></span>
             <button class="csexport" id="csExport" title="이 검증 보드를 자립형 HTML 파일로 저장 (테마·컴포넌트·진단 포함)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
               HTML 내보내기
             </button>
             <select class="exsel" id="csSel"></select>
@@ -5677,7 +5890,7 @@
         seed: '#4a9eff',
         harmony: 'analog',
         mode: 'dark',
-        version: 'flat', /* 'flat'(≤10색) | 'enterprise'(≤50색) */
+        version: 'flat' /* 'flat'(≤10색) | 'enterprise'(≤50색) */,
         subHex: null,
         mapMode: 'auto',
         imgCols: null,
@@ -5855,7 +6068,7 @@
         const m = /^#([0-9a-fA-F]{6})([0-9a-fA-F]{2})?$/.exec(hex);
         if (!m) return hex;
         const { h, s, l } = rgbToHsl(hexToRgb('#' + m[1]));
-        return hslToHex(((h + a.h) % 360 + 360) % 360, clamp(s * (1 + a.s / 100), 0, 100), clamp(l + a.l, 0, 100)) + (m[2] || '');
+        return hslToHex((((h + a.h) % 360) + 360) % 360, clamp(s * (1 + a.s / 100), 0, 100), clamp(l + a.l, 0, 100)) + (m[2] || '');
       }
       function genEnterprise(s) {
         const mode = s.mode;
@@ -6032,10 +6245,10 @@
         /* 생성된 팔레트를 오른쪽 콘텐츠(.main)와 왼쪽 사이드바(.sidebar) 모두에 적용 —
            왼쪽 옵션창에서 고른 라이트/다크 모드를 왼쪽 메뉴창(사이드바)도 함께 따라감 */
         const version = state.version || 'flat';
-        /* 전역 모드 신호 — 본문 밖(body 직속) 팝업·모달이 라이트/다크에 맞춰 스타일 전환 */
-        document.documentElement.setAttribute('data-mode', state.mode);
-        const main = document.querySelector('.main'),
-          sidebar = document.querySelector('.sidebar');
+        /* 툴 크롬(사이드바·모달)은 생성 테마와 분리해 항상 고정된 중립 모노톤 유지 —
+           html data-mode는 'dark'로 고정하여 본문 밖 모달 프레임이 프리뷰 밝기를 따라가지 않음 */
+        document.documentElement.setAttribute('data-mode', 'dark');
+        const main = document.querySelector('.main');
         let coreMap;
         let entMap = null;
         if (version === 'enterprise') {
@@ -6051,17 +6264,7 @@
             for (const k in EV) main.style.setProperty(EV[k], T[k]);
             for (const k in RV) main.style.setProperty(RV[k], coreMap[k]);
           }
-          /* 왼쪽 메뉴(.sidebar): 라이트/다크 모드는 따라가되 미세조정(adjust)은 제외한
-             기준 팔레트만 적용 — 미세조정은 오른쪽 콘텐츠에만 반영되도록 */
-          if (sidebar) {
-            const Ts = genEnterprise({ ...state, adjust: null });
-            const sMap = entCoreMap(Ts);
-            for (const k in state.overrides) if (sMap[k] != null) sMap[k] = state.overrides[k];
-            sidebar.setAttribute('data-mode', state.mode);
-            sidebar.setAttribute('data-version', 'enterprise');
-            for (const k in EV) sidebar.style.setProperty(EV[k], Ts[k]);
-            for (const k in RV) sidebar.style.setProperty(RV[k], sMap[k]);
-          }
+          /* 사이드바는 테마를 적용하지 않음 — :root의 고정 중립 모노톤 크롬 유지 */
         } else {
           coreMap = computeHexMap(state);
           /* 오른쪽 콘텐츠(.main): 미세조정까지 반영 */
@@ -6070,13 +6273,7 @@
             main.setAttribute('data-version', 'flat');
             for (const k in RV) main.style.setProperty(RV[k], coreMap[k]);
           }
-          /* 왼쪽 메뉴(.sidebar): 미세조정(adjust) 제외한 기준 팔레트만 적용 */
-          if (sidebar) {
-            const sMap = computeHexMap({ ...state, adjust: { h: 0, s: 0, l: 0 } });
-            sidebar.setAttribute('data-mode', state.mode);
-            sidebar.setAttribute('data-version', 'flat');
-            for (const k in RV) sidebar.style.setProperty(RV[k], sMap[k]);
-          }
+          /* 사이드바는 테마를 적용하지 않음 — :root의 고정 중립 모노톤 크롬 유지 */
         }
         document.getElementById('seed').value = normHex(state.seed);
         renderCurrentPalette(coreMap, entMap);
@@ -6359,6 +6556,10 @@
           })
       );
       syncVersionUI(); /* 저장된 버전으로 토글 상태 반영 */
+      /* 모든 색상 소스 아코디언·미세조정 토글을 접음 */
+      function closeAllToggles() {
+        document.querySelectorAll('.colorset .acc, .colorset details.more').forEach((d) => (d.open = false));
+      }
       document.getElementById('rand').onclick = () => {
         const h = Math.floor(Math.random() * 360),
           s = 55 + Math.random() * 35,
@@ -6368,6 +6569,7 @@
         state.mapMode = 'auto';
         setSource('seed');
         apply();
+        closeAllToggles(); /* 랜덤 생성 시 열려 있던 토글 모두 닫기 */
       };
 
       /* 추출 방식(자동 조화 / 원본 색 그대로) UI 동기화 */
@@ -6462,22 +6664,49 @@
       yearSel.onchange = (e) => renderTrend(e.target.value);
       renderTrend('2026');
 
-      /* ===== curated color themes (named, shown as overlapping circles) ===== */
+      /* ===== Color Hunt 인기 팔레트 (colorhunt.co/palettes/popular 엄선, 4색) =====
+         다크/라이트는 평균 밝기로 자동 분류되어 갤러리 탭(다크 추천/라이트 추천)에 나뉘어 표시됨. */
       const PALETTES = [
-        { n: 'Halloween warm whimsical', c: ['#F3E7CE', '#E6B98A', '#E07B39', '#8A5A3B', '#352620'] },
-        { n: 'Red + Grey + Dark Grey + Lite Grey', c: ['#C21D03', '#33363B', '#6E7479', '#B7BDC2', '#E4E7EA'] },
-        { n: 'Dark Sapphire Blue', c: ['#0F243F', '#173B6B', '#2E5E9E', '#6E9BD0', '#C6DBF1'] },
-        { n: 'Dark blue, green and red blush', c: ['#16233F', '#2F7D6E', '#1F3A5C', '#D9483B', '#F0D9C9'] },
-        { n: 'Dark blue and red blush', c: ['#1B2740', '#10182B', '#33405C', '#D9483B', '#F3E4D6'] },
-        { n: 'Neon', c: ['#1A1430', '#7B3FF2', '#A06BFF', '#C9A8FF', '#2A1D52'] },
-        { n: 'Dark Sage Green', c: ['#2B332B', '#4F6B4A', '#6F8F6A', '#A9C0A0', '#D6E2C8'] },
-        { n: 'DE283B', c: ['#DE283B', '#1E3A42', '#2F7D8A', '#5FB0BD', '#9FD4DC'] },
-        { n: 'Cream & Sage', c: ['#FBF7EF', '#E7E0CE', '#BFC9A8', '#8A9A6B', '#4A5238'] },
-        { n: 'Pastel Sky', c: ['#F4F8FB', '#DCE9F2', '#A9CCE3', '#5B8DB8', '#28425C'] },
-        { n: 'Warm Sand', c: ['#FBF3E8', '#F0DEC4', '#E3C19A', '#C18F5A', '#6B4A2A'] },
-        { n: 'Blush Rose', c: ['#FCF2F3', '#F6DEE2', '#E9AEB8', '#C76E81', '#6E3A47'] },
-        { n: 'Mint Breeze', c: ['#F1FAF6', '#D6F0E4', '#A6DCC6', '#5BB394', '#2A5C49'] },
-        { n: 'Lavender Mist', c: ['#F7F4FB', '#E7DEF2', '#C9B6E3', '#8E6FB8', '#473159'] },
+        { n: 'Charcoal Teal', c: ['#222831', '#393E46', '#00ADB5', '#EEEEEE'] },
+        { n: 'Ocean Ink', c: ['#F9F7F7', '#DBE2EF', '#3F72AF', '#112D4E'] },
+        { n: 'Coral Navy', c: ['#364F6B', '#3FC1C9', '#F5F5F5', '#FC5185'] },
+        { n: 'Forest Night', c: ['#0F0F0F', '#232D3F', '#005B41', '#008170'] },
+        { n: 'Sunset Ember', c: ['#0B192C', '#1E3E62', '#FF6500', '#F5F5F5'] },
+        { n: 'Deep Pine', c: ['#2C3333', '#2E4F4F', '#0E8388', '#CBE4DE'] },
+        { n: 'Neon Grape', c: ['#211951', '#836FFF', '#15F5BA', '#F0F3FF'] },
+        { n: 'Mocha Cream', c: ['#F8EDE3', '#DFD3C3', '#D0B8A8', '#8D7B68'] },
+        { n: 'Espresso', c: ['#1A120B', '#3C2A21', '#D5CEA3', '#E5E5CB'] },
+        { n: 'Slate Mist', c: ['#27374D', '#526D82', '#9DB2BF', '#DDE6ED'] },
+        { n: 'Cotton Candy', c: ['#FFB6B9', '#FAE3D9', '#BBDED6', '#8AC6D1'] },
+        { n: 'Warm Clay', c: ['#7F5539', '#B08968', '#DDB892', '#EDE0D4'] },
+        { n: 'Muted Plum', c: ['#22223B', '#4A4E69', '#9A8C98', '#C9ADA7'] },
+        { n: 'Electric Pop', c: ['#F72585', '#7209B7', '#3A0CA3', '#4361EE'] },
+        { n: 'Crimson Slate', c: ['#2B2D42', '#8D99AE', '#EDF2F4', '#EF233C'] },
+        { n: 'Olive Sand', c: ['#606C38', '#283618', '#FEFAE0', '#DDA15E'] },
+        { n: 'Fire Sunset', c: ['#003049', '#D62828', '#F77F00', '#FCBF49'] },
+        { n: 'Amber Deep', c: ['#04293A', '#064663', '#ECB365', '#FFFFFF'] },
+        { n: 'Citrus Teal', c: ['#F5F5F5', '#FF9F1C', '#2EC4B6', '#011627'] },
+        { n: 'Midnight Steel', c: ['#0D1B2A', '#1B263B', '#415A77', '#E0E1DD'] },
+        { n: 'Pastel Dream', c: ['#CDB4DB', '#FFC8DD', '#FFAFCC', '#BDE0FE'] },
+        { n: 'Forest Lime', c: ['#191A19', '#1E5128', '#4E9F3D', '#D8E9A8'] },
+        { n: 'Periwinkle', c: ['#F0F3FF', '#DFE3FA', '#B4B4FF', '#5D5FEF'] },
+        { n: 'Gold Noir', c: ['#FFFFFF', '#FFD369', '#393E46', '#222831'] },
+        { n: 'Mauve Rose', c: ['#331D2C', '#3F2E3E', '#A78295', '#EFE1D1'] },
+        { n: 'Mustard Deep', c: ['#EAE7B1', '#E6B325', '#7C7C3A', '#0B2027'] },
+        { n: 'Teal Stone', c: ['#12343B', '#2D5D62', '#CDC6AE', '#E8E4C9'] },
+        { n: 'Blush Pink', c: ['#F6F5F5', '#FBBECD', '#F1929C', '#FA5075'] },
+        { n: 'Rose Quartz', c: ['#FFF2F2', '#FFE2E2', '#FFC7C7', '#8785A2'] },
+        { n: 'Sage Grove', c: ['#DAD7CD', '#A3B18A', '#588157', '#344E41'] },
+        { n: 'Sky Serenity', c: ['#F1FAEE', '#A8DADC', '#457B9D', '#1D3557'] },
+        { n: 'Peach Fuzz', c: ['#FFCDB2', '#FFB4A2', '#E5989B', '#B5838D'] },
+        { n: 'Lavender Fields', c: ['#E0AAFF', '#C77DFF', '#9D4EDD', '#5A189A'] },
+        { n: 'Autumn Spice', c: ['#582F0E', '#7F4F24', '#936639', '#A68A64'] },
+        { n: 'Cyber Lime', c: ['#131313', '#00FF9C', '#B6FFA1', '#E4FF3F'] },
+        { n: 'Berry Wine', c: ['#4A1C40', '#7A3B69', '#C06C84', '#F8B195'] },
+        { n: 'Arctic Blue', c: ['#CAF0F8', '#90E0EF', '#00B4D8', '#0077B6'] },
+        { n: 'Graphite', c: ['#EAEAEA', '#CBCBCB', '#7D7D7D', '#212121'] },
+        { n: 'Terracotta', c: ['#264653', '#E76F51', '#F4A261', '#E9C46A'] },
+        { n: 'Cocoa Mint', c: ['#1B4332', '#2D6A4F', '#40916C', '#95D5B2'] },
       ];
       /* 컬러 모음이 다크/라이트 중 어느 모드로 적용될지 — 평균 밝기로 판정(applyPalette와 동일 기준) */
       function paletteMode(hexes) {
@@ -6513,13 +6742,31 @@
         };
         galleryEl.appendChild(el);
       });
-      /* 컬러 모음 탭(다크/라이트) — 선택한 모드의 추천만 보여줌 */
+      /* 컬러 모음 탭(다크/라이트) + 페이지네이션 — 한 페이지에 8개씩, 넘치면 다음으로 */
+      const GAL_PER = 8;
       let galleryFilter = 'dark';
+      let galleryPage = 0;
+      function renderGalleryPage() {
+        const all = [...galleryEl.querySelectorAll('.pcard')];
+        const matches = all.filter((el) => el.dataset.pm === galleryFilter);
+        const pages = Math.max(1, Math.ceil(matches.length / GAL_PER));
+        galleryPage = Math.min(Math.max(0, galleryPage), pages - 1);
+        const start = galleryPage * GAL_PER;
+        all.forEach((el) => (el.style.display = 'none'));
+        matches.slice(start, start + GAL_PER).forEach((el) => (el.style.display = ''));
+        const pos = document.getElementById('galPos');
+        if (pos) pos.textContent = galleryPage + 1 + ' / ' + pages;
+        const prev = document.getElementById('galPrev'),
+          next = document.getElementById('galNext'),
+          pager = document.getElementById('galPager');
+        if (prev) prev.disabled = galleryPage <= 0;
+        if (next) next.disabled = galleryPage >= pages - 1;
+        if (pager) pager.style.display = pages > 1 ? '' : 'none';
+      }
       function filterGallery(mode) {
         galleryFilter = mode;
-        galleryEl.querySelectorAll('.pcard').forEach((el) => {
-          el.style.display = el.dataset.pm === mode ? '' : 'none';
-        });
+        galleryPage = 0;
+        renderGalleryPage();
       }
       document.querySelectorAll('#galleryMode button').forEach(
         (b) =>
@@ -6528,15 +6775,37 @@
             filterGallery(b.dataset.gm);
           })
       );
+      {
+        const prev = document.getElementById('galPrev'),
+          next = document.getElementById('galNext');
+        if (prev)
+          prev.onclick = () => {
+            galleryPage--;
+            renderGalleryPage();
+          };
+        if (next)
+          next.onclick = () => {
+            galleryPage++;
+            renderGalleryPage();
+          };
+      }
       filterGallery('dark');
 
       /* ===== theme from image ===== */
       function extractTheme(img) {
+        /* 사진 전체를 종횡비 그대로 축소해 골고루 표본 추출(가운데만 보지 않음) */
+        const maxSide = 128;
+        const iw = img.naturalWidth || img.width || 1;
+        const ih = img.naturalHeight || img.height || 1;
+        const scale = Math.min(1, maxSide / Math.max(iw, ih));
+        const cw = Math.max(1, Math.round(iw * scale));
+        const ch = Math.max(1, Math.round(ih * scale));
         const c = document.createElement('canvas');
-        c.width = c.height = 50;
+        c.width = cw;
+        c.height = ch;
         const ctx = c.getContext('2d');
-        ctx.drawImage(img, 0, 0, 50, 50);
-        const d = ctx.getImageData(0, 0, 50, 50).data;
+        ctx.drawImage(img, 0, 0, cw, ch);
+        const d = ctx.getImageData(0, 0, cw, ch).data;
         const map = {};
         let lumSum = 0,
           cnt = 0;
@@ -6565,7 +6834,9 @@
           c.h = hsl.h;
           c.s = hsl.s;
           c.l = hsl.l;
-          c.score = (hsl.s / 100) * Math.sqrt(o.n) * (1 - Math.abs(hsl.l - 55) / 100);
+          /* 전체 이미지에서 '넓게 차지하는 색'이 대표색이 되도록 면적(n) 가중을 크게,
+             채도는 완만한 하한(0.25)만 두어 작은 원색 얼룩이 대표색을 가로채지 않게 함 */
+          c.score = Math.pow(o.n, 0.8) * (0.25 + 0.75 * (hsl.s / 100)) * (1 - Math.abs(hsl.l - 55) / 100);
           return c;
         });
         if (!cols.length) return { seed: '#4a9eff', sub: null, mode: 'dark' };
@@ -6662,9 +6933,8 @@
             e.stopPropagation();
           });
       });
-      /* 처음엔 '기준 색' 하나만 펼쳐 두고 나머지는 접어 둠(로드 시점 깜빡임 방지) */
-      const accDefault = accList.find((d) => d.hasAttribute('open')) || accList[0];
-      accList.forEach((d) => (d.open = d === accDefault));
+      /* 처음엔 모든 색상 소스 아코디언을 접어 둠 */
+      accList.forEach((d) => (d.open = false));
 
       /* ===== charts ===== */
       const NS = 'http://www.w3.org/2000/svg';
@@ -7256,13 +7526,17 @@
           host.innerHTML = '';
           host.style.cssText = 'display:block;padding:6px 0;overflow:auto';
           const mx = maxOf(data);
-          const cell = (v) => `<div title="${v}" style="flex:1;aspect-ratio:1;min-width:14px;border-radius:4px;background:color-mix(in srgb,var(--point-main) ${Math.round(12 + (v / mx) * 78)}%,transparent)"></div>`;
+          const cell = (v) =>
+            `<div title="${v}" style="flex:1;aspect-ratio:1;min-width:14px;border-radius:4px;background:color-mix(in srgb,var(--point-main) ${Math.round(12 + (v / mx) * 78)}%,transparent)"></div>`;
           let h = '<div style="display:flex;flex-direction:column;gap:4px">';
           data.series.forEach((s) => {
             h += '<div style="display:flex;gap:4px">' + s.values.map(cell).join('') + '</div>';
           });
           h += '</div>';
-          h += '<div style="display:flex;gap:4px;margin-top:6px;color:var(--text-weak);font-size:11px">' + data.labels.map((l) => `<span style="flex:1;min-width:14px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l}</span>`).join('') + '</div>';
+          h +=
+            '<div style="display:flex;gap:4px;margin-top:6px;color:var(--text-weak);font-size:11px">' +
+            data.labels.map((l) => `<span style="flex:1;min-width:14px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l}</span>`).join('') +
+            '</div>';
           host.innerHTML = h;
         }
         function renderProgress(host, data) {
@@ -7273,7 +7547,12 @@
           const rows = data.labels.map((l, i) => ({ n: l, v: s.values[i] })).sort((a, b) => b.v - a.v);
           host.innerHTML =
             '<div class="plist">' +
-            rows.map((r) => `<div class="prow"><span class="nm">${r.n}</span><div class="track"><div class="fill" style="width:${Math.round((r.v / mx) * 100)}%"></div></div><span class="pv num">${r.v}</span></div>`).join('') +
+            rows
+              .map(
+                (r) =>
+                  `<div class="prow"><span class="nm">${r.n}</span><div class="track"><div class="fill" style="width:${Math.round((r.v / mx) * 100)}%"></div></div><span class="pv num">${r.v}</span></div>`
+              )
+              .join('') +
             '</div>';
         }
 
@@ -7283,9 +7562,7 @@
             '<table><thead><tr><th>항목</th>' +
             data.series.map((s) => `<th class="num" style="text-align:right">${s.name}</th>`).join('') +
             '</tr></thead><tbody>' +
-            data.labels
-              .map((l, i) => '<tr class="rowline"><td>' + l + '</td>' + data.series.map((s) => `<td class="num">${Number(s.values[i]).toLocaleString()}</td>`).join('') + '</tr>')
-              .join('') +
+            data.labels.map((l, i) => '<tr class="rowline"><td>' + l + '</td>' + data.series.map((s) => `<td class="num">${Number(s.values[i]).toLocaleString()}</td>`).join('') + '</tr>').join('') +
             '</tbody></table>';
           host.innerHTML = h;
         }
@@ -8010,8 +8287,18 @@
           row.onclick = () => jumpHistory(i);
           list.appendChild(row);
         }
-        document.getElementById('histUndo').disabled = hIndex <= 0;
-        document.getElementById('histRedo').disabled = hIndex >= themeHistory.length - 1;
+        const canUndo = hIndex > 0,
+          canRedo = hIndex < themeHistory.length - 1;
+        document.getElementById('histUndo').disabled = !canUndo;
+        document.getElementById('histRedo').disabled = !canRedo;
+        /* 항상 보이는 상단 되돌리기/다시실행 버튼(브랜드 헤더)도 함께 동기화 */
+        const qu = document.getElementById('quickUndo'),
+          qr = document.getElementById('quickRedo');
+        if (qu) qu.disabled = !canUndo;
+        if (qr) qr.disabled = !canRedo;
+        /* 현재 단계 위치 표시 (예: 3 / 12) */
+        const pos = document.getElementById('histPos');
+        if (pos) pos.textContent = themeHistory.length ? hIndex + 1 + ' / ' + themeHistory.length : '–';
       }
       function jumpHistory(i) {
         if (i < 0 || i >= themeHistory.length || i === hIndex) return;
@@ -8020,12 +8307,130 @@
         restoreTheme(themeHistory[i].theme);
         renderHistory();
       }
-      document.getElementById('histUndo').onclick = () => {
+      function doUndo() {
+        commitHistory(); /* 미확정 변경을 먼저 기록해 한 단계도 놓치지 않음 */
         if (hIndex > 0) jumpHistory(hIndex - 1);
-      };
-      document.getElementById('histRedo').onclick = () => {
+      }
+      function doRedo() {
         if (hIndex < themeHistory.length - 1) jumpHistory(hIndex + 1);
-      };
+      }
+      document.getElementById('histUndo').onclick = doUndo;
+      document.getElementById('histRedo').onclick = doRedo;
+      {
+        const qu = document.getElementById('quickUndo'),
+          qr = document.getElementById('quickRedo');
+        if (qu) qu.onclick = doUndo;
+        if (qr) qr.onclick = doRedo;
+      }
+      /* ── 전역 단축키: 되돌리기(Ctrl/⌘+Z) · 다시 실행(Ctrl/⌘+Shift+Z 또는 Ctrl+Y) ── */
+      document.addEventListener('keydown', (e) => {
+        const mod = e.ctrlKey || e.metaKey;
+        if (!mod) return;
+        const key = e.key.toLowerCase();
+        if (key !== 'z' && key !== 'y') return;
+        /* 입력 중(텍스트/색상 필드·편집영역)에는 브라우저 기본 되돌리기를 방해하지 않음 */
+        const t = e.target;
+        const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+        if (typing) return;
+        /* 모달이 열려 있으면 해당 모달 흐름을 방해하지 않음 */
+        if (document.querySelector('.abmodal.show, .exmodal.show, .ctpopup.show, .csmodal.show')) return;
+        e.preventDefault();
+        if (key === 'y' || (key === 'z' && e.shiftKey)) doRedo();
+        else doUndo();
+      });
+
+      /* ---------- 전체 옵션 초기화 (로고 옆 ↻ 버튼 · 하단 버튼 공용) ---------- */
+      function doResetAll() {
+        const ok = window.confirm(
+          '모든 설정을 처음 상태로 되돌릴까요?\n\n' +
+            '· 색상 · 기준 색 · 배색 방식 · 미세 조정\n' +
+            '· 패널 모서리 둥글기\n' +
+            '· 대시보드 배치 · 내용 · 차트 종류\n' +
+            '· 되돌리기 기록\n' +
+            '이 모두 초기화됩니다.\n\n' +
+            '※ 이름 붙여 저장한 테마 스냅샷은 그대로 유지됩니다.'
+        );
+        if (!ok) return;
+        try {
+          ['wemb-version', 'wemb-dash-radius', 'wemb-dash-charttype', 'wemb-dash-layout', 'wemb-dash-content'].forEach((k) => localStorage.removeItem(k));
+        } catch (e) {}
+        /* 공유 URL(#t=...)이 남아 있으면 새로고침 시 다시 적용되므로 해시 제거 */
+        try {
+          history.replaceState(null, '', location.pathname + location.search);
+        } catch (e) {}
+        location.reload();
+      }
+      ['resetAll', 'quickReset'].forEach((id) => {
+        const btn = document.getElementById(id);
+        if (btn) btn.onclick = doResetAll;
+      });
+
+      /* ---------- 도움말(?) 툴팁 — 표시 시 body로 옮겨 어떤 조상(스크롤·filter·transform)에도
+         갇히지 않게 하고, 좌표는 뷰포트 안으로 보정. 표시/숨김은 JS가 .tip-on 으로 관리. ---------- */
+      (function () {
+        const GAP = 9;
+        let active = null;
+        function hide() {
+          if (active) {
+            active.classList.remove('tip-on');
+            active = null;
+          }
+        }
+        function show(info) {
+          /* 최초 표시 때 tip을 body로 이동(그 뒤로도 body에 유지) */
+          let tip = info._tip || info.querySelector(':scope > .tip');
+          if (!tip) return;
+          info._tip = tip;
+          if (tip.parentElement !== document.body) document.body.appendChild(tip);
+          const r = info.getBoundingClientRect();
+          const tw = tip.offsetWidth || 248;
+          const th = tip.offsetHeight || 120;
+          const vw = window.innerWidth,
+            vh = window.innerHeight;
+          /* 오른쪽(프리뷰 방향)으로 펼침 — 뷰포트를 벗어나면 왼쪽으로 당겨 잘림 방지 */
+          let left = r.left - 2;
+          if (left + tw > vw - 8) left = vw - 8 - tw;
+          if (left < 8) left = 8;
+          /* 아래로 펼치되, 아래 공간이 부족하면 위로 */
+          let up = false;
+          let top = r.bottom + GAP;
+          if (top + th > vh - 8) {
+            top = r.top - th - GAP;
+            up = true;
+          }
+          if (top < 8) {
+            top = r.bottom + GAP;
+            up = false;
+          }
+          tip.style.left = left + 'px';
+          tip.style.top = top + 'px';
+          tip.classList.toggle('up', up);
+          /* 화살표를 배지 중심에 맞춤 */
+          tip.style.setProperty('--arrow-x', Math.max(8, r.left + r.width / 2 - left - 6) + 'px');
+          if (active && active !== tip) active.classList.remove('tip-on');
+          tip.classList.add('tip-on');
+          active = tip;
+        }
+        document.addEventListener('mouseover', (e) => {
+          const info = e.target.closest && e.target.closest('.info');
+          if (info) show(info);
+        });
+        document.addEventListener('mouseout', (e) => {
+          const info = e.target.closest && e.target.closest('.info');
+          if (!info) return;
+          /* 배지 내부 자식으로 이동한 경우는 유지, 배지를 완전히 벗어나면 숨김 */
+          const to = e.relatedTarget;
+          if (!to || !to.closest || !to.closest('.info')) hide();
+        });
+        document.addEventListener('focusin', (e) => {
+          const info = e.target.closest && e.target.closest('.info');
+          if (info) show(info);
+          else hide();
+        });
+        /* 스크롤·리사이즈 중엔 좌표가 틀어지므로 즉시 숨김 */
+        window.addEventListener('scroll', hide, true);
+        window.addEventListener('resize', hide);
+      })();
 
       /* ---------- 명명 스냅샷 저장 ---------- */
       const SNAP_KEY = 'wemb-theme-snapshots';
@@ -8858,7 +9263,12 @@
 </html>`;
       }
       function exportSheet() {
-        const name = document.getElementById('csSel').selectedOptions[0].textContent.trim().replace(/^●\s*/, '').replace(/[^\w가-힣-]+/g, '_') || 'theme';
+        const name =
+          document
+            .getElementById('csSel')
+            .selectedOptions[0].textContent.trim()
+            .replace(/^●\s*/, '')
+            .replace(/[^\w가-힣-]+/g, '_') || 'theme';
         downloadBlob(new Blob([componentSheetExportHTML()], { type: 'text/html;charset=utf-8' }), `wemb-components-${name}.html`);
       }
       function openSheet() {
