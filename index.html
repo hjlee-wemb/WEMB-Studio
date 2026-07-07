@@ -4484,6 +4484,752 @@
       .main[data-version='enterprise'][data-mode='light'] .tag {
         box-shadow: none;
       }
+
+      /* ============================================================
+       *  index2 개선 — 비디자이너 PM 대상 UX 보강
+       *  (1)실시간 대비 경고 (2)색 소스 세그먼트 (3)첫 실행 온보딩
+       *  (4)백업/복원 (5)고급 접기 (6)미리보기 편집 힌트
+       * ============================================================ */
+
+      /* (2) 색 소스 세그먼트 — 지금 만드는 방식 한 곳에서 표시/전환 */
+      .srcseg {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin: 2px 0 4px;
+      }
+      .srcseg .srclbl {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-weak);
+        letter-spacing: 0.2px;
+      }
+      .srcseg .srcbtns {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 4px;
+      }
+      .srcseg .srcbtns button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 7px 4px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: var(--text-weak);
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .srcseg .srcbtns button .sc {
+        font-size: 10px;
+        font-weight: 500;
+        opacity: 0.75;
+      }
+      .srcseg .srcbtns button:hover {
+        color: var(--text-strong);
+        background: var(--bg-accent);
+      }
+      .srcseg .srcbtns button.on {
+        background: var(--point-main);
+        color: #fff;
+      }
+      .srcseg .srcbtns button.on .sc {
+        opacity: 0.9;
+      }
+
+      /* (1) 실시간 대비 경고 배너 — 검증 모달을 열지 않아도 위험을 상시 노출 */
+      .cwarn {
+        display: none;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 11px 12px;
+        border-radius: 10px;
+        border: 1px solid color-mix(in srgb, var(--warning) 55%, var(--line));
+        background: color-mix(in srgb, var(--warning) 14%, var(--bg-surface));
+        margin-top: 2px;
+      }
+      .cwarn.show {
+        display: flex;
+      }
+      .cwarn.danger {
+        border-color: color-mix(in srgb, var(--danger) 60%, var(--line));
+        background: color-mix(in srgb, var(--danger) 15%, var(--bg-surface));
+      }
+      .cwarn .cwico {
+        flex: none;
+        width: 20px;
+        height: 20px;
+        color: var(--warning);
+      }
+      .cwarn.danger .cwico {
+        color: var(--danger);
+      }
+      .cwarn .cwbody {
+        flex: 1;
+        min-width: 0;
+      }
+      .cwarn .cwttl {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-strong);
+        margin-bottom: 2px;
+      }
+      .cwarn .cwdesc {
+        font-size: 11px;
+        color: var(--text-weak);
+        line-height: 1.4;
+      }
+      .cwarn .cwacts {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+      .cwarn .cwacts button {
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 7px;
+        cursor: pointer;
+        border: 1px solid var(--line);
+        background: var(--bg-accent);
+        color: var(--text-strong);
+      }
+      .cwarn .cwacts button.primary {
+        background: var(--warning);
+        border-color: var(--warning);
+        color: #1a1206;
+      }
+      .cwarn.danger .cwacts button.primary {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: #fff;
+      }
+      .cwarn .cwacts button:hover {
+        filter: brightness(1.08);
+      }
+      /* 통과 상태 — 안심 배지(작게) */
+      .cok {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        color: color-mix(in srgb, var(--point-sub) 70%, var(--text-strong));
+        padding: 2px 2px;
+        margin-top: 2px;
+      }
+      .cok.show {
+        display: flex;
+      }
+      .cok svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* (3) 첫 실행 온보딩 오버레이 */
+      .onbd {
+        position: fixed;
+        inset: 0;
+        z-index: 300;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(5, 8, 15, 0.72);
+        backdrop-filter: blur(4px);
+      }
+      .onbd.show {
+        display: flex;
+        animation: panelIn 0.22s ease;
+      }
+      .onbd .obcard {
+        width: min(440px, 100%);
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 26px 26px 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+      .onbd .obkicker {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        color: var(--point-sub);
+        text-transform: uppercase;
+      }
+      .onbd h2 {
+        margin: 8px 0 4px;
+        font-size: 20px;
+        color: var(--text-strong);
+      }
+      .onbd .obsub {
+        font-size: 13px;
+        color: var(--text-weak);
+        line-height: 1.5;
+        margin: 0 0 18px;
+      }
+      .onbd .obsteps {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+      .onbd .obstep {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .onbd .obstep .n {
+        flex: none;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--point-main);
+      }
+      .onbd .obstep .t b {
+        display: block;
+        font-size: 13.5px;
+        color: var(--text-strong);
+        margin-bottom: 1px;
+      }
+      .onbd .obstep .t span {
+        font-size: 12px;
+        color: var(--text-weak);
+        line-height: 1.45;
+      }
+      .onbd .obfoot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .onbd .obfoot label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11.5px;
+        color: var(--text-weak);
+        cursor: pointer;
+      }
+      .onbd .obstart {
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px 20px;
+        border-radius: 9px;
+        border: 0;
+        cursor: pointer;
+        background: var(--point-main);
+        color: #fff;
+      }
+      .onbd .obstart:hover {
+        filter: brightness(1.1);
+      }
+
+      /* (3) 프리셋 '여기서 시작' 배지 */
+      .startbadge {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        color: #1a1206;
+        background: var(--warning);
+        padding: 2px 7px;
+        border-radius: 20px;
+        flex: none;
+      }
+
+      /* (4) 저장 소실 방지 안내 + 백업/복원 */
+      .dataloss {
+        display: flex;
+        gap: 7px;
+        align-items: flex-start;
+        font-size: 10.5px;
+        line-height: 1.4;
+        color: var(--text-weak);
+        background: var(--bg-page);
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin-top: 8px;
+      }
+      .dataloss svg {
+        flex: none;
+        width: 14px;
+        height: 14px;
+        margin-top: 1px;
+        color: var(--warning);
+      }
+      .snapio {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .snapio button {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-family: inherit;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 8px 6px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--bg-accent);
+        color: var(--text-strong);
+        cursor: pointer;
+      }
+      .snapio button:hover {
+        border-color: var(--point-main);
+      }
+      .snapio button svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* (6) 미리보기 편집 발견성 힌트 칩 */
+      .previewhint {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        z-index: 40;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px 8px 12px;
+        border-radius: 999px;
+        background: rgba(20, 24, 34, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        font-size: 12px;
+        color: #eef1f7;
+        animation: panelIn 0.3s ease;
+      }
+      .previewhint.hide {
+        display: none;
+      }
+      .previewhint svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+        color: #9fb4ff;
+      }
+      .previewhint b {
+        font-weight: 700;
+      }
+      .previewhint .phx {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 0;
+        background: rgba(255, 255, 255, 0.12);
+        color: #cfd6e4;
+        font-size: 13px;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .previewhint .phx:hover {
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      /* ============================================================
+       *  index2 2차 개선 — (2)토스트 (3)날씨 옵트인 (4)데스크톱 안내
+       *  (5)디자인 사양서 (6)온보딩 스포트라이트
+       * ============================================================ */
+
+      /* (2) 토스트 — 액션 결과 피드백 (여러 기능에서 재사용) */
+      .toastwrap {
+        position: fixed;
+        left: 50%;
+        bottom: 26px;
+        transform: translateX(-50%);
+        z-index: 400;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+        pointer-events: none;
+      }
+      .toast {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 92vw;
+        padding: 11px 14px;
+        border-radius: 11px;
+        background: #1b2130;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+        color: #eef1f7;
+        font-size: 13px;
+        pointer-events: auto;
+        animation: toastIn 0.22s ease;
+      }
+      .toast.out {
+        animation: toastOut 0.2s ease forwards;
+      }
+      .toast .tico {
+        flex: none;
+        width: 18px;
+        height: 18px;
+      }
+      .toast.ok .tico {
+        color: #4ade80;
+      }
+      .toast.warn .tico {
+        color: var(--warning);
+      }
+      .toast.err .tico {
+        color: var(--danger);
+      }
+      .toast .tmsg b {
+        font-weight: 700;
+      }
+      .toast .tkbd {
+        margin-left: 2px;
+        font-size: 11px;
+        color: #aab2c4;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 5px;
+        padding: 1px 6px;
+        white-space: nowrap;
+      }
+      .toast .tundo {
+        margin-left: 4px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        color: #9fb4ff;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+      }
+      .toast .tundo:hover {
+        text-decoration: underline;
+      }
+      @keyframes toastIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes toastOut {
+        to {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .toast,
+        .toast.out {
+          animation: none;
+        }
+      }
+
+      /* (6) 온보딩 스포트라이트(코치마크) */
+      .coach {
+        position: fixed;
+        inset: 0;
+        z-index: 310;
+        display: none;
+      }
+      .coach.show {
+        display: block;
+      }
+      /* 하이라이트 창(대상 위에 얹혀 주변을 어둡게) */
+      .coach .spot {
+        position: absolute;
+        border-radius: 12px;
+        box-shadow: 0 0 0 9999px rgba(5, 8, 15, 0.72);
+        outline: 2px solid var(--point-sub);
+        outline-offset: 3px;
+        transition:
+          top 0.25s ease,
+          left 0.25s ease,
+          width 0.25s ease,
+          height 0.25s ease;
+        pointer-events: none;
+      }
+      .coach .ctip {
+        position: absolute;
+        width: min(300px, 78vw);
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 15px 16px 13px;
+        box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+        transition:
+          top 0.25s ease,
+          left 0.25s ease;
+      }
+      .coach .ctstep {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        color: var(--point-sub);
+        text-transform: uppercase;
+      }
+      .coach .cttl {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-strong);
+        margin: 4px 0 3px;
+      }
+      .coach .ctdesc {
+        font-size: 12.5px;
+        color: var(--text-weak);
+        line-height: 1.5;
+      }
+      .coach .ctfoot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 13px;
+      }
+      .coach .ctskip {
+        font-family: inherit;
+        font-size: 12px;
+        color: var(--text-weak);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+      }
+      .coach .ctskip:hover {
+        color: var(--text-strong);
+      }
+      .coach .ctnav {
+        display: flex;
+        gap: 6px;
+      }
+      .coach .ctnav button {
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 700;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--bg-accent);
+        color: var(--text-strong);
+        cursor: pointer;
+      }
+      .coach .ctnav button.primary {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+      }
+      .coach .ctnav button:hover {
+        filter: brightness(1.1);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .coach .spot,
+        .coach .ctip {
+          transition: none;
+        }
+      }
+
+      /* (3) 날씨 위젯 — 옵트인 안내(클릭 가능 표시) */
+      #weather {
+        cursor: pointer;
+      }
+      #weather.wopt {
+        outline: 1px dashed rgba(255, 255, 255, 0.25);
+        outline-offset: 3px;
+        border-radius: 6px;
+      }
+
+      /* ============================================================
+       *  index2 3차 개선 — (1)작업 자동저장 (2)내보내기 대비가드
+       *  (3)둘러보기 재실행+단축키 (4)스포이드 (5)스냅샷 이름변경/갱신
+       *  (6)모달 포커스 트랩
+       * ============================================================ */
+
+      /* (4) 스포이드(EyeDropper) 버튼 — seed 행 */
+      .seedrow .seedpick {
+        flex: none;
+        width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: var(--bg-accent);
+        color: var(--text-strong);
+        cursor: pointer;
+      }
+      .seedrow .seedpick:hover {
+        border-color: var(--point-main);
+      }
+      .seedrow .seedpick svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      /* (2) 내보내기 대비 가드 알림바 */
+      .exguard {
+        display: none;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 11px 13px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        border: 1px solid color-mix(in srgb, var(--danger) 55%, rgba(255, 255, 255, 0.1));
+        background: color-mix(in srgb, var(--danger) 16%, #0f1320);
+      }
+      .exguard.show {
+        display: flex;
+      }
+      .exguard svg {
+        flex: none;
+        width: 18px;
+        height: 18px;
+        color: var(--danger);
+        margin-top: 1px;
+      }
+      .exguard .egb {
+        flex: 1;
+        min-width: 0;
+        font-size: 12px;
+        color: #eef1f7;
+        line-height: 1.45;
+      }
+      .exguard .egfix {
+        margin-top: 8px;
+        font-family: inherit;
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 6px 11px;
+        border-radius: 7px;
+        border: 0;
+        background: var(--danger);
+        color: #fff;
+        cursor: pointer;
+      }
+      .exguard .egfix:hover {
+        filter: brightness(1.08);
+      }
+
+      /* (3) 사이드바 도움말/둘러보기 버튼 */
+      .helpbtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0 auto;
+        padding: 6px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--bg-surface);
+        color: var(--text-weak);
+        font-family: var(--font);
+        font-size: 11.5px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .helpbtn:hover {
+        border-color: var(--point-main);
+        color: var(--text-strong);
+      }
+      .helpbtn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      /* (3) 온보딩 단축키 안내 줄 */
+      .onbd .obkbd {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 14px;
+        margin: 0 0 18px;
+        padding: 11px 13px;
+        border-radius: 10px;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        font-size: 11.5px;
+        color: var(--text-weak);
+      }
+      .onbd .obkbd span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .onbd .obkbd kbd {
+        font-family: var(--font);
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--text-strong);
+        background: var(--bg-accent);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 2px 6px;
+      }
+
+      /* (5) 스냅샷 이름 인라인 편집 입력 */
+      .snaprow .nmedit {
+        flex: 1;
+        min-width: 0;
+        font-family: var(--font);
+        font-size: 12.5px;
+        color: var(--text-strong);
+        background: var(--bg-accent);
+        border: 1px solid var(--point-main);
+        border-radius: 6px;
+        padding: 3px 6px;
+      }
+
+      /* ============================================================
+       *  색 소스 = 탭 방식 — 세그먼트(직접색·사진·추천)로 고른 방식의
+       *  메뉴만 표시하고 나머지 아코디언은 완전히 숨김
+       * ============================================================ */
+      .colorset .acc.src-idle {
+        display: none;
+      }
+      .colorset .acc.src-active {
+        display: block;
+        opacity: 1;
+        filter: none;
+        border-color: color-mix(in srgb, var(--point-main) 45%, var(--line));
+      }
+      /* 세그먼트가 열림을 제어하므로 헤더의 접기 화살표·'사용 중' 배지·접힘 요약값은 감춤 */
+      .colorset .acc.src-active > summary .chev,
+      .colorset .acc.src-active > summary .srcbadge,
+      .colorset .acc.src-active > summary .accval {
+        display: none;
+      }
+      /* summary는 이제 정적 섹션 헤더 — 클릭으로 접히지 않음(‘?’ 도움말만 예외) */
+      .colorset .acc > summary {
+        cursor: default;
+      }
+      .colorset .acc > summary .info {
+        cursor: help;
+      }
     </style>
   </head>
   <body>
@@ -4536,15 +5282,16 @@
                   <span class="info" tabindex="0" role="button" aria-label="버전 도움말">
                     ?
                     <span class="tip">
-                      <b>색상 사용 범위</b>
+                      <b>화면에 쓰는 색의 개수</b>
                       <br />
                       <br />
                       <span class="accent">Flat</span>
-                      — 10색 이하의 단순 팔레트. 가볍고 정적인 화면에 적합.
+                      — 색을 적게(약 10색) 쓰는 <b>깔끔·기본형</b>. 대부분의 화면에 무난해요.
+                      <b>잘 모르겠으면 Flat!</b>
                       <br />
                       <br />
                       <span class="accent">Enterprise</span>
-                      — 50색 이하의 풍부한 토큰(표면 단계·텍스트 계층·그라데이션). 밀도 높은 관제 화면에 적합.
+                      — 색을 더 촘촘히(약 50색) 나눠 쓰는 <b>고급·정밀형</b>. 정보가 아주 빽빽한 관제 화면에서 단계가 더 또렷해요.
                     </span>
                   </span>
                 </div>
@@ -4581,6 +5328,25 @@
 
             <div class="substep">색 고르기</div>
 
+            <!-- (2) 색 소스 세그먼트 — 지금 어떤 방식으로 만드는지 한 곳에서 표시·전환 -->
+            <div class="srcseg">
+              <span class="srclbl">지금 만드는 방식</span>
+              <div class="srcbtns" id="srcSeg">
+                <button type="button" data-srcseg="seed" class="on">
+                  직접색
+                  <span class="sc">색 고르기</span>
+                </button>
+                <button type="button" data-srcseg="image">
+                  사진
+                  <span class="sc">이미지 추출</span>
+                </button>
+                <button type="button" data-srcseg="preset">
+                  추천
+                  <span class="sc">골라 적용</span>
+                </button>
+              </div>
+            </div>
+
             <details class="acc" data-src="seed">
               <summary>
                 <span class="acttl">
@@ -4604,6 +5370,11 @@
                 <div class="seedrow">
                   <span class="swprev" id="swprev"><input type="color" id="seed" value="#4a9eff" /></span>
                   <input type="text" class="hex" id="hex" value="#4A9EFF" />
+                  <button type="button" class="seedpick" id="seedPick" title="스포이드 — 화면 어디든 클릭해 그 색을 기준 색으로 (로고·브랜드 색 맞출 때)" aria-label="스포이드로 색 추출" style="display: none">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m2 22 1-1h3l9-9" /><path d="M3 21v-3l9-9" /><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z" />
+                    </svg>
+                  </button>
                 </div>
                 <label class="lblrow">
                   배색 방식
@@ -4651,7 +5422,7 @@
                       <line x1="9" y1="8" x2="15" y2="8" />
                       <line x1="17" y1="16" x2="23" y2="16" />
                     </svg>
-                    미세 조정 (색 직접 다듬기)
+                    고급 · 미세 조정 (색 직접 다듬기)
                     <span class="chev">▾</span>
                   </summary>
                   <div class="morebody">
@@ -4738,6 +5509,7 @@
                   추천 테마
                   <span class="ko">고르면 바로 적용</span>
                 </span>
+                <span class="startbadge" title="색을 직접 고르기 어렵다면 여기서 하나만 눌러 시작하세요">여기서 시작</span>
                 <span class="accval" id="presetVal"></span>
                 <span class="srcbadge">사용 중</span>
                 <span class="info up" tabindex="0" role="button" aria-label="추천 테마 도움말">
@@ -4799,6 +5571,27 @@
                 랜덤 팔레트 생성
               </button>
               <div class="curpal" id="curpal" aria-live="polite"></div>
+
+              <!-- (1) 실시간 대비 경고 — 검증 모달을 열지 않아도 위험을 자동으로 알려줌 -->
+              <div class="cwarn" id="cWarn" role="status" aria-live="polite">
+                <svg class="cwico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                <div class="cwbody">
+                  <div class="cwttl" id="cWarnTtl">글자가 잘 안 보일 수 있어요</div>
+                  <div class="cwdesc" id="cWarnDesc"></div>
+                  <div class="cwacts">
+                    <button type="button" class="primary" id="cWarnFix">자동으로 고치기</button>
+                    <button type="button" id="cWarnDetail">어디가 문제인지 보기</button>
+                  </div>
+                </div>
+              </div>
+              <div class="cok" id="cOk">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                글자 대비 기준을 모두 통과했어요
+              </div>
             </div>
           </section>
           <div class="grp" data-pane="dash" style="order: 1">
@@ -4998,6 +5791,25 @@
             <div class="snaplist" id="snapList"></div>
             <p class="chkhint" id="snapEmpty" style="margin: 0">저장된 테마가 없어요. 마음에 드는 테마를 만들고 이름을 붙여 저장해 보세요.</p>
 
+            <!-- (4) 저장 소실 방지 안내 + 백업/복원 -->
+            <div class="dataloss">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 9v4" /><path d="M12 17h.01" /><circle cx="12" cy="12" r="10" />
+              </svg>
+              <span>저장한 테마는 <b>이 브라우저에만</b> 보관돼요. 브라우저 기록을 지우거나 다른 PC로 옮기면 사라지니, 아래 <b>백업</b>으로 파일을 내려받아 두세요.</span>
+            </div>
+            <div class="snapio">
+              <button type="button" id="snapExport" title="저장한 모든 테마를 파일(.json)로 내려받아 백업">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+                백업(파일로 저장)
+              </button>
+              <button type="button" id="snapImport" title="백업해 둔 .json 파일을 불러와 테마 목록에 복원">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+                복원(파일 불러오기)
+              </button>
+              <input type="file" id="snapImportFile" accept="application/json,.json" style="display: none" />
+            </div>
+
             <button class="editbtn" id="abOpen" title="두 테마를 나란히 비교하는 화면을 엽니다">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="4" width="8" height="16" rx="2" />
@@ -5041,6 +5853,12 @@
           <span>전체 기본값으로 되돌리기</span>
         </button>
 
+        <button type="button" class="helpbtn" id="helpBtn" title="사용법 안내와 화면 둘러보기를 다시 봅니다">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          둘러보기 · 도움말
+        </button>
         <div class="sbfoot">테마를 클릭하면 화면 전체에 즉시 적용됩니다 · WEMB 2026</div>
       </aside>
 
@@ -5056,6 +5874,14 @@
               <line x1="12" y1="2" x2="12" y2="22" />
             </svg>
             <span id="editBannerText">패널을 끌어다 놓아 위치를 바꿔보세요. 변경 내용은 자동 저장됩니다.</span>
+          </div>
+          <!-- (6) 미리보기 편집 발견성 힌트 칩 -->
+          <div class="previewhint" id="previewHint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+            </svg>
+            <span>이 화면은 바로 고칠 수 있어요 — 왼쪽 <b>‘대시보드 편집’</b> 탭에서 배치·글자 수정</span>
+            <button type="button" class="phx" id="previewHintX" title="닫기" aria-label="힌트 닫기">×</button>
           </div>
           <div class="hdr">
             <div class="brand">
@@ -5611,6 +6437,17 @@
             <button class="abclose" id="exClose" title="닫기 (Esc)">✕</button>
           </div>
           <div class="exbody">
+            <!-- (2) 내보내기 대비 가드 — 미달이 있으면 핸드오프 전에 경고 -->
+            <div class="exguard" id="exGuard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <div class="egb">
+                <b id="exGuardMsg"></b>
+                <br />이대로 내보내면 화면에서 글자·색이 잘 안 보일 수 있어요.
+                <br /><button type="button" class="egfix" id="exGuardFix">자동으로 고치기</button>
+              </div>
+            </div>
             <div class="extabs" id="exTabs">
               <button data-fmt="css" class="on">CSS 변수</button>
               <button data-fmt="json">JSON 토큰</button>
@@ -5652,6 +6489,14 @@
                   <line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
                 </svg>
                 공유 링크 복사
+              </button>
+              <button id="exSpec" title="팔레트 + 대비 검증표를 한 장으로 인쇄/PDF 저장 — 개발·디자인 핸드오프용">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9V2h12v7" />
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                  <rect x="6" y="14" width="12" height="8" />
+                </svg>
+                디자인 사양서(PDF)
               </button>
             </div>
             <p class="exhint" id="exHint">탭을 눌러 형식을 고르고 “복사”로 코드를 가져가세요.</p>
@@ -5729,6 +6574,58 @@
         </div>
       </div>
     </div>
+
+    <!-- (3) 첫 실행 온보딩 — 핵심 3단계만 안내 (한 번만 표시, localStorage로 기억) -->
+    <div class="onbd" id="onbd" role="dialog" aria-modal="true" aria-label="빠른 시작 안내">
+      <div class="obcard">
+        <div class="obkicker">WEMB Studio · 빠른 시작</div>
+        <h2>3단계면 테마가 완성돼요</h2>
+        <p class="obsub">디자인을 몰라도 괜찮아요. 아래 순서대로만 하면 바로 쓸 수 있는 색 테마가 만들어집니다.</p>
+        <div class="obsteps">
+          <div class="obstep">
+            <span class="n">1</span>
+            <span class="t"><b>색 고르기</b><span>왼쪽 ‘색 정하기’에서 기준 색을 고르거나, 잘 모르겠으면 <b>추천 테마</b>를 하나 눌러요.</span></span>
+          </div>
+          <div class="obstep">
+            <span class="n">2</span>
+            <span class="t"><b>오른쪽에서 확인</b><span>실제 관제 화면에 색이 바로 입혀져요. 글자가 안 보이면 왼쪽에 <b>경고</b>가 자동으로 떠요.</span></span>
+          </div>
+          <div class="obstep">
+            <span class="n">3</span>
+            <span class="t"><b>내보내기</b><span>마음에 들면 ‘내보내기’로 코드·이미지·공유 링크를 받아 개발자·디자이너에게 전달해요.</span></span>
+          </div>
+        </div>
+        <div class="obkbd">
+          <span><kbd>Ctrl</kbd>+<kbd>Z</kbd> 되돌리기</span>
+          <span><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> 다시 실행</span>
+          <span>작업은 자동 저장돼요</span>
+        </div>
+        <div class="obfoot">
+          <label><input type="checkbox" id="onbdDont" checked /> 다시 보지 않기</label>
+          <button type="button" class="obstart" id="onbdStart">시작하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- (6) 온보딩 스포트라이트(코치마크) -->
+    <div class="coach" id="coach" role="dialog" aria-modal="true" aria-label="화면 둘러보기">
+      <div class="spot" id="coachSpot"></div>
+      <div class="ctip" id="coachTip">
+        <div class="ctstep" id="coachStep"></div>
+        <div class="cttl" id="coachTtl"></div>
+        <div class="ctdesc" id="coachDesc"></div>
+        <div class="ctfoot">
+          <button type="button" class="ctskip" id="coachSkip">건너뛰기</button>
+          <div class="ctnav">
+            <button type="button" id="coachPrev">이전</button>
+            <button type="button" class="primary" id="coachNext">다음</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- (2) 토스트 컨테이너 -->
+    <div class="toastwrap" id="toastWrap" aria-live="polite" aria-atomic="false"></div>
 
     <script>
       /* ===== color utils ===== */
@@ -5896,6 +6793,7 @@
         imgCols: null,
         adjust: { h: 0, s: 0, l: 0 },
         source: 'seed',
+        sourceView: 'seed' /* 지금 보이는 색 소스 패널(탭) — 세그먼트가 제어 */,
         overrides: {},
         curpalOpen: false,
         radius: 8,
@@ -6278,6 +7176,7 @@
         document.getElementById('seed').value = normHex(state.seed);
         renderCurrentPalette(coreMap, entMap);
         refreshSourceUI();
+        updateContrastWarn(); /* (1) 실시간 대비 경고 갱신 */
         scheduleHistory(); /* 변경 히스토리에 디바운스로 기록 */
         enhanceEnterpriseBars(main);
       }
@@ -6295,11 +7194,14 @@
       }
       function refreshSourceUI() {
         const cur = state.source || 'seed';
+        /* 화면에 보일 패널(탭) — 세그먼트가 정한 view. 아직 없으면 실제 소스를 따름 */
+        const view = state.sourceView || cur;
         for (const key in srcAccs) {
           const el = srcAccs[key];
           if (!el) continue;
-          el.classList.toggle('src-active', cur === key);
-          el.classList.toggle('src-idle', cur !== key);
+          el.classList.toggle('src-active', view === key);
+          el.classList.toggle('src-idle', view !== key);
+          el.open = view === key; /* 활성 방식만 펼쳐 유지 (세그먼트가 제어) */
         }
         const swprev = document.getElementById('swprev');
         const hex = document.getElementById('hex');
@@ -6320,6 +7222,7 @@
           if (el) el.disabled = cur !== 'seed';
         });
         updateAccSummaries();
+        updateSourceSeg(); /* (2) 상단 소스 세그먼트 활성 표시 동기화 */
       }
       /* 아코디언 접힘 상태 요약값 — 펼치지 않고도 현재 설정을 한눈에 (예: 기준 색 ● #4A9EFF) */
       function updateAccSummaries() {
@@ -6350,6 +7253,7 @@
       /* 소스 전환 — 새 소스를 활성화하고, 사용하지 않는 소스의 내용은 비움 */
       function setSource(src) {
         state.source = src;
+        state.sourceView = src; /* 실제 소스가 바뀌면 그 방식의 패널을 보여줌 */
         if (src !== 'image') clearImageUI(); /* 다른 방식으로 바꾸면 올렸던 이미지는 제거 */
         if (src !== 'preset') clearPresetSelection(); /* 추천 테마 외 방식이면 선택 표시 해제 */
         if (src !== 'seed') resetAdjust(); /* 다른 그룹으로 가면 기존 미세 조정은 초기화 */
@@ -6421,6 +7325,7 @@
             const rb = curpalEl.querySelector('.cpreset');
             if (rb) rb.disabled = false;
             scheduleHistory(); /* 색 직접 지정도 히스토리에 기록 */
+            updateContrastWarn(); /* (1) 직접 지정 색도 즉시 대비 검사 */
           };
           colorInput.oninput = () => setOverride(colorInput.value);
           hxInput.onchange = () => {
@@ -6920,21 +7825,18 @@
         });
       })();
 
-      /* 색상 설정 아코디언 — 한 번에 하나만 펼치고(드롭다운식), 헤더의 '?'는 토글 제외 */
+      /* 색 소스 패널 — 상단 세그먼트(직접색·사진·추천)가 어떤 패널을 열지 제어.
+         summary는 정적 섹션 헤더가 되어 클릭으로 접히지 않음('?' 도움말 클릭도 접힘 방지) */
       const accList = [...document.querySelectorAll('.colorset .acc')];
       accList.forEach((d) => {
-        d.addEventListener('toggle', () => {
-          if (d.open) accList.forEach((o) => o !== d && (o.open = false));
-        });
-        const info = d.querySelector(':scope > summary .info');
-        if (info)
-          info.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
+        const summary = d.querySelector(':scope > summary');
+        if (summary)
+          summary.addEventListener('click', (e) => {
+            e.preventDefault(); /* 네이티브 <details> 접힘/펼침 방지 — 항상 펼친 상태 유지 */
+            if (e.target.closest('.info')) e.stopPropagation();
           });
       });
-      /* 처음엔 모든 색상 소스 아코디언을 접어 둠 */
-      accList.forEach((d) => (d.open = false));
+      /* 실제 열림 상태는 refreshSourceUI(활성 view)가 제어 */
 
       /* ===== charts ===== */
       const NS = 'http://www.w3.org/2000/svg';
@@ -7878,18 +8780,36 @@
          (예전엔 10분마다 getCurrentPosition을 다시 호출해 권한 팝업이 계속 떴음) */
       const SEOUL = [37.5665, 126.978];
       let weatherCoords = SEOUL; // 기본값: 서울. 위치 허용 시 실제 좌표로 교체
+      /* (3) 위치 권한은 사용자가 날씨 위젯을 직접 눌러 '켤 때만' 요청 (테마 도구가 무단으로 위치를 묻지 않도록) */
+      function requestLiveLocation() {
+        if (!navigator.geolocation) {
+          toast('이 브라우저는 위치 기능을 지원하지 않아요.', { type: 'warn' });
+          return;
+        }
+        toast('위치를 확인하는 중…', { type: 'info', dur: 1800 });
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            weatherCoords = [pos.coords.latitude, pos.coords.longitude];
+            loadWeather(weatherCoords[0], weatherCoords[1]);
+            const w = document.getElementById('weather');
+            if (w) {
+              w.classList.remove('wopt');
+              w.title = '실시간 날씨 · 내 위치';
+            }
+            toast('내 위치의 실시간 날씨로 바꿨어요.', { type: 'ok' });
+          },
+          () => toast('위치 권한이 거부됐어요. 기본(서울) 날씨를 계속 표시해요.', { type: 'warn' }),
+          { timeout: 8000, maximumAge: 60 * 60 * 1000 }
+        );
+      }
       function initWeather() {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (pos) => {
-              weatherCoords = [pos.coords.latitude, pos.coords.longitude];
-              loadWeather(weatherCoords[0], weatherCoords[1]);
-            },
-            () => loadWeather(weatherCoords[0], weatherCoords[1]), // 거부/실패 → 서울, 다시 묻지 않음
-            { timeout: 5000, maximumAge: 60 * 60 * 1000 }
-          );
-        } else {
-          loadWeather(weatherCoords[0], weatherCoords[1]);
+        /* 기본은 서울 날씨만 표시 — 권한 팝업 없음 */
+        loadWeather(weatherCoords[0], weatherCoords[1]);
+        const w = document.getElementById('weather');
+        if (w) {
+          w.classList.add('wopt');
+          w.title = '눌러서 내 위치의 실시간 날씨 보기 (기본: 서울)';
+          w.addEventListener('click', requestLiveLocation);
         }
       }
       initWeather();
@@ -8233,6 +9153,7 @@
         state.imgCols = t.imgCols ? JSON.parse(JSON.stringify(t.imgCols)) : null;
         state.adjust = { h: (t.adjust && t.adjust.h) || 0, s: (t.adjust && t.adjust.s) || 0, l: (t.adjust && t.adjust.l) || 0 };
         state.source = t.source || 'seed';
+        state.sourceView = state.source; /* 복원 시 실제 소스의 패널을 보여줌 */
         state.overrides = Object.assign({}, t.overrides || {});
         syncControlsFromState();
         apply();
@@ -8264,6 +9185,7 @@
       function commitHistory() {
         clearTimeout(hTimer);
         const t = captureTheme();
+        persistCurrentTheme(t); /* (1-b) 현재 작업 자동 저장 */
         if (hIndex >= 0 && themeSig(themeHistory[hIndex].theme) === themeSig(t)) return;
         themeHistory = themeHistory.slice(0, hIndex + 1);
         themeHistory.push({ theme: t, label: historyLabel(t), time: Date.now() });
@@ -8476,12 +9398,15 @@
           const sw = ['bg/page', 'bg/surface', 'point/main', 'point/sub', 'text/strong'].map((k) => `<i style="background:${hex[k]}"></i>`).join('');
           const row = document.createElement('div');
           row.className = 'snaprow';
-          row.innerHTML = `<span class="sws">${sw}</span><span class="nm" title="${s.name}">${s.name}</span><span class="acts"><button class="ap" title="이 테마를 화면에 적용">적용</button><button class="del" title="이 스냅샷 삭제">삭제</button></span>`;
+          row.innerHTML = `<span class="sws">${sw}</span><span class="nm" title="더블클릭해 이름 변경">${s.name}</span><span class="acts"><button class="ap" title="이 테마를 화면에 적용">적용</button><button class="ovw" title="현재 테마로 이 스냅샷 덮어쓰기(갱신)">갱신</button><button class="del" title="이 스냅샷 삭제">삭제</button></span>`;
           row.querySelector('.ap').onclick = () => {
             restoreTheme(s.theme);
             commitHistory();
           };
+          row.querySelector('.ovw').onclick = () => overwriteSnapshot(s.id);
           row.querySelector('.del').onclick = () => deleteSnapshot(s.id);
+          const nmEl = row.querySelector('.nm');
+          nmEl.ondblclick = () => startRename(nmEl, s);
           list.appendChild(row);
         });
       }
@@ -8800,6 +9725,7 @@
       function openExport() {
         renderExport();
         exHintMsg('탭을 눌러 형식을 고르고 “복사”로 코드를 가져가세요.');
+        updateExportGuard(); /* (2-b) 대비 미달이면 상단에 경고 */
         document.getElementById('exModal').classList.add('show');
       }
       function closeExport() {
@@ -9310,6 +10236,583 @@
         });
       }
 
+      /* ============================================================
+       *  index2 개선 동작 — 위 UI에 로직 연결
+       * ============================================================ */
+
+      /* (2) 토스트 — 액션 결과 피드백 (alert 대체, 여러 곳에서 재사용) */
+      const TOAST_ICONS = {
+        ok: '<polyline points="20 6 9 17 4 12"/>',
+        warn: '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+        err: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+        info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+      };
+      function toast(msg, opts) {
+        opts = opts || {};
+        const type = opts.type || 'info';
+        const wrap = document.getElementById('toastWrap');
+        if (!wrap) return;
+        const t = document.createElement('div');
+        t.className = 'toast ' + type;
+        const ico = `<svg class="tico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${TOAST_ICONS[type] || TOAST_ICONS.info}</svg>`;
+        t.innerHTML = ico + `<span class="tmsg">${msg}</span>` + (opts.kbd ? `<span class="tkbd">${opts.kbd}</span>` : '');
+        if (opts.undo) {
+          const u = document.createElement('button');
+          u.className = 'tundo';
+          u.textContent = '되돌리기';
+          u.onclick = () => {
+            opts.undo();
+            dismiss();
+          };
+          t.appendChild(u);
+        }
+        wrap.appendChild(t);
+        let done = false;
+        const dismiss = () => {
+          if (done) return;
+          done = true;
+          t.classList.add('out');
+          setTimeout(() => t.remove(), 220);
+        };
+        setTimeout(dismiss, opts.dur || 3600);
+      }
+
+      /* (6) 온보딩 스포트라이트(코치마크) — 실제 UI 영역을 순서대로 안내 */
+      const COACH_STEPS = [
+        { sel: '.colorset .srcseg', ttl: '① 색을 골라요', desc: '여기서 방식을 고르세요. 잘 모르겠으면 <b>추천</b>을 눌러 마음에 드는 걸 하나 고르면 끝이에요.', side: 'right' },
+        { sel: '.main .stage', ttl: '② 오른쪽에서 확인', desc: '고른 색이 실제 관제 화면에 바로 입혀져요. 글자가 안 보이면 왼쪽에 <b>경고</b>가 자동으로 떠요.', side: 'left' },
+        { sel: '#exportOpen', ttl: '③ 내보내기', desc: '마음에 들면 <b>코드·이미지·PDF 사양서·공유 링크</b>로 내보내 개발·디자인팀에 전달하세요.', side: 'right' },
+      ];
+      (function initCoach() {
+        const coach = document.getElementById('coach');
+        const spot = document.getElementById('coachSpot');
+        const tip = document.getElementById('coachTip');
+        if (!coach) return;
+        let idx = 0;
+        function place() {
+          const step = COACH_STEPS[idx];
+          const el = document.querySelector(step.sel);
+          if (!el) {
+            next();
+            return;
+          }
+          if (el.closest('.sidebar')) el.scrollIntoView({ block: 'center', behavior: 'auto' });
+          /* 텍스트·버튼을 먼저 채운 뒤(툴팁 크기 확정) 위치 계산 — rAF에 의존하지 않아 탭이 비활성이어도 동작 */
+          document.getElementById('coachStep').textContent = `둘러보기 ${idx + 1} / ${COACH_STEPS.length}`;
+          document.getElementById('coachTtl').textContent = step.ttl;
+          document.getElementById('coachDesc').innerHTML = step.desc;
+          document.getElementById('coachPrev').style.visibility = idx === 0 ? 'hidden' : 'visible';
+          document.getElementById('coachNext').textContent = idx === COACH_STEPS.length - 1 ? '완료' : '다음';
+          const r = el.getBoundingClientRect();
+          const pad = 6;
+          const top = Math.max(6, r.top - pad),
+            left = Math.max(6, r.left - pad);
+          const w = Math.min(r.width + pad * 2, window.innerWidth - left - 6);
+          const h = Math.min(r.height + pad * 2, window.innerHeight - top - 6);
+          spot.style.top = top + 'px';
+          spot.style.left = left + 'px';
+          spot.style.width = w + 'px';
+          spot.style.height = h + 'px';
+          const tr = tip.getBoundingClientRect();
+          let tLeft, tTop;
+          if (step.side === 'right' && left + w + 16 + tr.width < window.innerWidth) tLeft = left + w + 16;
+          else if (step.side === 'left' && left - tr.width - 16 > 0) tLeft = left - tr.width - 16;
+          else tLeft = Math.min(Math.max(left, 12), window.innerWidth - tr.width - 12);
+          tTop = Math.min(Math.max(top, 12), window.innerHeight - tr.height - 12);
+          tip.style.left = tLeft + 'px';
+          tip.style.top = tTop + 'px';
+        }
+        function open() {
+          idx = 0;
+          coach.classList.add('show');
+          place();
+        }
+        function done() {
+          coach.classList.remove('show');
+          try {
+            localStorage.setItem('wemb-onboarded', '1');
+          } catch (e) {}
+        }
+        function next() {
+          if (idx >= COACH_STEPS.length - 1) {
+            done();
+            return;
+          }
+          idx++;
+          place();
+        }
+        function prev() {
+          if (idx > 0) {
+            idx--;
+            place();
+          }
+        }
+        document.getElementById('coachNext').onclick = next;
+        document.getElementById('coachPrev').onclick = prev;
+        document.getElementById('coachSkip').onclick = done;
+        window.addEventListener('resize', () => {
+          if (coach.classList.contains('show')) place();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (!coach.classList.contains('show')) return;
+          if (e.key === 'Escape') done();
+          else if (e.key === 'ArrowRight' || e.key === 'Enter') next();
+          else if (e.key === 'ArrowLeft') prev();
+        });
+        window.__startCoach = open; /* 온보딩 '시작하기'에서 호출 */
+      })();
+
+      /* (5) 디자인 사양서 — 팔레트 + 대비 검증표를 한 장으로 인쇄/PDF */
+      function exportSpecSheet() {
+        const hex = computeHexMap(state);
+        const rows = contrastRows(captureTheme());
+        const d = new Date();
+        const p = (n) => String(n).padStart(2, '0');
+        const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+        const modeLabel = state.mode === 'dark' ? '다크(Dark)' : '라이트(Light)';
+        const verLabel = (state.version || 'flat') === 'enterprise' ? 'Enterprise' : 'Flat';
+        const fails = rows.filter((r) => !r.pass).length;
+        const pal = CURPAL_ROLES.map(
+          ([k, l]) => `<div class="sw"><span class="chip" style="background:${hex[k]}"></span><div class="swt"><b>${esc(l)}</b><code>${hex[k]}<span>${esc(k)}</span></code></div></div>`
+        ).join('');
+        const ct = rows
+          .map(
+            (r) =>
+              `<tr class="${r.pass ? 'pass' : 'fail'}"><td><span class="aa" style="background:${r.bg};color:${r.fg}">Aa</span><span>${esc(r.label)}</span></td><td class="mono">${r.fg} / ${r.bg}</td><td class="mono">${r.ratio.toFixed(2)}:1</td><td>${esc(r.level)} · 필요 ${r.min}:1</td><td class="verdict">${r.pass ? '✅ 통과' : '❌ 미달'}</td></tr>`
+          )
+          .join('');
+        const html =
+          `<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>WEMB 테마 디자인 사양서</title>` +
+          `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css">` +
+          `<style>` +
+          `*{box-sizing:border-box}body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;color:#15151a;margin:0;padding:32px 34px;background:#fff;font-size:13px;line-height:1.5}` +
+          `h1{font-size:22px;margin:0 0 2px}.meta{color:#6b7280;font-size:12.5px;margin-bottom:22px}` +
+          `h2{font-size:14px;margin:26px 0 12px;padding-bottom:6px;border-bottom:2px solid #eef0f3}` +
+          `.pal{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 22px}` +
+          `.sw{display:flex;align-items:center;gap:11px}.chip{width:34px;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.12);flex:none}` +
+          `.swt b{display:block;font-size:12.5px}.swt code{font-family:Consolas,monospace;font-size:11.5px;color:#6b7280}.swt code span{color:#aab0ba;margin-left:6px}` +
+          `table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid #eef0f3}th{color:#6b7280;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.3px}` +
+          `td:first-child{display:flex;align-items:center;gap:9px}.aa{display:inline-flex;align-items:center;justify-content:center;width:26px;height:22px;border-radius:5px;font-weight:700;font-size:12px;flex:none}` +
+          `.mono{font-family:Consolas,monospace;color:#4b5563}.verdict{font-weight:700}tr.fail .verdict{color:#dc2626}tr.pass .verdict{color:#16a34a}` +
+          `.summary{margin:10px 0 0;padding:11px 14px;border-radius:9px;font-size:12.5px;font-weight:600;${fails ? 'background:#fef2f2;color:#b91c1c;border:1px solid #fecaca' : 'background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0'}}` +
+          `.foot{margin-top:26px;color:#9aa0ac;font-size:11px;border-top:1px solid #eef0f3;padding-top:12px}` +
+          `@media print{body{padding:14mm}h2{page-break-after:avoid}tr{page-break-inside:avoid}}` +
+          `</style></head><body>` +
+          `<h1>WEMB 테마 디자인 사양서</h1>` +
+          `<div class="meta">${verLabel} · ${modeLabel} · 패널 모서리 ${exRadius()}px · 생성일 ${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}</div>` +
+          `<h2>1. 색상 팔레트 (10 토큰)</h2><div class="pal">${pal}</div>` +
+          `<h2>2. 명암 대비 검증 (WCAG)</h2>` +
+          `<div class="summary">${fails ? `⚠ 대비 기준 미달 ${fails}곳 — 배포 전 보정 권장` : '✅ 모든 역할쌍이 대비 기준을 통과했습니다'}</div>` +
+          `<table><thead><tr><th>역할쌍 (전경/배경)</th><th>색상값</th><th>대비비</th><th>기준</th><th>판정</th></tr></thead><tbody>${ct}</tbody></table>` +
+          `<div class="foot">WEMB Theme Studio 자동 생성 · 대비비는 WCAG 2.1 상대휘도 기준</div>` +
+          `</body></html>`;
+        const w = window.open('', '_blank');
+        if (!w) {
+          toast('팝업이 차단됐어요. 팝업을 허용한 뒤 다시 시도하세요.', { type: 'err' });
+          return;
+        }
+        w.document.write(html);
+        w.document.close();
+        w.focus();
+        setTimeout(() => {
+          try {
+            w.print();
+          } catch (e) {}
+        }, 400);
+        toast('사양서를 새 창에서 열었어요. 인쇄 창에서 “PDF로 저장”을 고르세요.', { type: 'ok', dur: 4600 });
+      }
+      document.getElementById('exSpec').onclick = exportSpecSheet;
+
+      /* (1-b) 작업 중 테마 자동 저장/복원 — 새로고침·재접속해도 색 작업이 유지되도록 */
+      const CUR_KEY = 'wemb-current-theme';
+      function persistCurrentTheme(t) {
+        try {
+          localStorage.setItem(CUR_KEY, JSON.stringify(t || captureTheme()));
+        } catch (e) {}
+      }
+      function restoreCurrentTheme() {
+        let raw = null;
+        try {
+          raw = localStorage.getItem(CUR_KEY);
+        } catch (e) {}
+        if (!raw) return false;
+        try {
+          restoreTheme(JSON.parse(raw));
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      /* (2-b) 내보내기 대비 가드 — 미달이 있으면 모달 상단에 경고 */
+      function updateExportGuard() {
+        const guard = document.getElementById('exGuard');
+        if (!guard) return;
+        let fails = 0;
+        try {
+          fails = contrastRows(captureTheme()).filter((r) => !r.pass).length;
+        } catch (e) {}
+        if (fails > 0) {
+          document.getElementById('exGuardMsg').textContent = `이 테마는 대비 기준 미달 ${fails}곳이 있어요.`;
+          guard.classList.add('show');
+        } else {
+          guard.classList.remove('show');
+        }
+      }
+      document.getElementById('exGuardFix').onclick = () => {
+        const before = Object.assign({}, state.overrides);
+        let r;
+        try {
+          r = fixThemeContrast(captureTheme());
+        } catch (e) {
+          return;
+        }
+        if (!r || !r.changes.length) {
+          updateExportGuard();
+          return;
+        }
+        state.overrides = r.overrides;
+        apply();
+        commitHistory();
+        renderExport();
+        updateExportGuard();
+        toast(`색 <b>${r.changes.length}개</b>를 보정하고 내보낼 준비를 마쳤어요.`, {
+          type: 'ok',
+          kbd: 'Ctrl Z',
+          undo: () => {
+            state.overrides = before;
+            apply();
+            commitHistory();
+            updateExportGuard();
+          },
+        });
+      };
+
+      /* (3-b) 사이드바 '둘러보기·도움말' — 온보딩 카드를 다시 열어(→시작하기로 투어 재실행) */
+      document.getElementById('helpBtn').onclick = () => {
+        if (typeof window.__showOnboarding === 'function') window.__showOnboarding();
+      };
+
+      /* (4-b) 스포이드(EyeDropper) — 지원 브라우저에서만 버튼 노출 */
+      (function initEyeDropper() {
+        const btn = document.getElementById('seedPick');
+        if (!btn || !window.EyeDropper) return;
+        btn.style.display = '';
+        btn.addEventListener('click', async () => {
+          try {
+            const res = await new EyeDropper().open();
+            const hex = (res.sRGBHex || '').toUpperCase();
+            if (!/^#[0-9A-F]{6}$/.test(hex)) return;
+            state.seed = hex;
+            state.subHex = null;
+            state.mapMode = 'auto';
+            setSource('seed');
+            apply();
+            commitHistory();
+            toast(`화면에서 <b>${hex}</b> 색을 가져왔어요.`, { type: 'ok' });
+          } catch (e) {
+            /* 사용자가 취소(Esc) — 무시 */
+          }
+        });
+      })();
+
+      /* (5-b) 스냅샷 이름 변경 / 현재 테마로 덮어쓰기(갱신) */
+      function overwriteSnapshot(id) {
+        const s = snapshots.find((x) => x.id === id);
+        if (!s) return;
+        s.theme = captureTheme();
+        saveSnapshots();
+        renderSnapshots();
+        refreshABOptions();
+        toast(`“${s.name}”을(를) 현재 테마로 갱신했어요.`, { type: 'ok' });
+      }
+      function renameSnapshot(id, name) {
+        const s = snapshots.find((x) => x.id === id);
+        if (!s) return;
+        name = (name || '').trim();
+        if (!name) {
+          renderSnapshots();
+          return;
+        }
+        s.name = name.slice(0, 40);
+        saveSnapshots();
+        renderSnapshots();
+        refreshABOptions();
+      }
+      function startRename(nmEl, s) {
+        const inp = document.createElement('input');
+        inp.className = 'nmedit';
+        inp.value = s.name;
+        inp.maxLength = 40;
+        nmEl.replaceWith(inp);
+        inp.focus();
+        inp.select();
+        let done = false;
+        const commit = (save) => {
+          if (done) return;
+          done = true;
+          if (save) renameSnapshot(s.id, inp.value);
+          else renderSnapshots();
+        };
+        inp.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') commit(true);
+          else if (e.key === 'Escape') commit(false);
+        });
+        inp.addEventListener('blur', () => commit(true));
+      }
+
+      /* (6-b) 모달 포커스 트랩 + 닫을 때 원래 포커스로 복귀 */
+      (function initFocusTrap() {
+        const MODALS = ['onbd', 'exModal', 'abModal', 'ctModal', 'csModal', 'coach'];
+        const SEL = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+        const els = MODALS.map((id) => document.getElementById(id)).filter(Boolean);
+        const topOpen = () => els.find((el) => el.classList.contains('show')) || null;
+        const focusables = (el) => [...el.querySelectorAll(SEL)].filter((e) => e.offsetParent !== null || e.getClientRects().length);
+        let lastOutside = null,
+          returnTo = null,
+          wasOpen = false;
+        /* 모달 밖에 있을 때 마지막으로 포커스/클릭한 요소 기억 (body·모달 내부 제외).
+           클릭으로 여는 경우 focus 이벤트가 누락돼도 pointerdown으로 여는 버튼을 확실히 잡음 */
+        document.addEventListener('focusin', (e) => {
+          if (topOpen() || e.target === document.body) return;
+          lastOutside = e.target;
+        });
+        document.addEventListener(
+          'pointerdown',
+          (e) => {
+            if (topOpen()) return;
+            const t = e.target.closest && e.target.closest('button,a[href],[tabindex]:not([tabindex="-1"])');
+            if (t) lastOutside = t;
+          },
+          true
+        );
+        document.addEventListener(
+          'keydown',
+          (e) => {
+            if (e.key !== 'Tab') return;
+            const m = topOpen();
+            if (!m) return;
+            const f = focusables(m);
+            if (!f.length) return;
+            const first = f[0],
+              last = f[f.length - 1];
+            if (!m.contains(document.activeElement)) {
+              e.preventDefault();
+              first.focus();
+            } else if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          },
+          true
+        );
+        const mo = new MutationObserver(() => {
+          const m = topOpen();
+          if (m && !wasOpen) {
+            /* 방금 열림 — 복귀 대상(연 버튼)을 고정하고 모달 안으로 포커스 이동 */
+            wasOpen = true;
+            returnTo = lastOutside;
+            if (!m.contains(document.activeElement)) {
+              const f = focusables(m);
+              if (f.length) setTimeout(() => f[0].focus(), 30);
+            }
+          } else if (!m && wasOpen) {
+            /* 방금 닫힘 — 원래 포커스로 복귀 */
+            wasOpen = false;
+            if (returnTo && document.body.contains(returnTo)) setTimeout(() => returnTo.focus(), 0);
+          }
+        });
+        els.forEach((el) => mo.observe(el, { attributes: true, attributeFilter: ['class'] }));
+      })();
+
+      /* (1) 실시간 대비 경고 — 검증표(contrastRows)와 동일한 기준으로 자동 판정 */
+      function updateContrastWarn() {
+        const warn = document.getElementById('cWarn');
+        const ok = document.getElementById('cOk');
+        if (!warn || !ok) return;
+        let rows;
+        try {
+          rows = contrastRows(captureTheme());
+        } catch (e) {
+          return;
+        }
+        const fails = rows.filter((r) => !r.pass);
+        if (fails.length) {
+          /* 본문/보조 글자가 미달이면 위험(danger), 강조·상태색만 미달이면 주의(warning) */
+          const severe = fails.some((r) => r.adjRole === 'text/strong' || r.adjRole === 'text/weak');
+          const uniq = [...new Set(fails.map((r) => r.label.split('↔')[0].trim()))];
+          const names = uniq.slice(0, 3).join(', ') + (uniq.length > 3 ? ' 등' : '');
+          warn.classList.toggle('danger', severe);
+          document.getElementById('cWarnTtl').textContent = severe ? '글자가 잘 안 보일 수 있어요' : '일부 색이 배경과 잘 구분되지 않아요';
+          document.getElementById('cWarnDesc').innerHTML = `대비 기준 미달 <b>${fails.length}곳</b> — ${names}. 그대로 쓰면 화면에서 잘 안 보일 수 있어요.`;
+          warn.classList.add('show');
+          ok.classList.remove('show');
+        } else {
+          warn.classList.remove('show');
+          ok.classList.add('show');
+        }
+      }
+      /* 현재 테마의 대비 미달 색을 검증 모달을 열지 않고 바로 자동 보정 */
+      document.getElementById('cWarnFix').addEventListener('click', () => {
+        const before = Object.assign({}, state.overrides);
+        let r;
+        try {
+          r = fixThemeContrast(captureTheme());
+        } catch (e) {
+          return;
+        }
+        if (!r || !r.changes.length) {
+          toast('이미 모든 항목이 대비 기준을 통과했어요.', { type: 'ok' });
+          return;
+        }
+        state.overrides = r.overrides;
+        apply();
+        commitHistory();
+        toast(`색 <b>${r.changes.length}개</b>를 보정해 글자가 잘 보이게 고쳤어요.`, {
+          type: 'ok',
+          kbd: 'Ctrl Z',
+          undo: () => {
+            state.overrides = before;
+            apply();
+            commitHistory();
+          },
+        });
+      });
+      document.getElementById('cWarnDetail').addEventListener('click', () => openContrast());
+
+      /* (2) 색 소스 세그먼트 — 활성 표시 + 클릭 시 해당 방식으로 전환/펼침 */
+      function updateSourceSeg() {
+        const view = state.sourceView || state.source || 'seed';
+        document.querySelectorAll('#srcSeg [data-srcseg]').forEach((b) => b.classList.toggle('on', b.dataset.srcseg === view));
+      }
+      document.querySelectorAll('#srcSeg [data-srcseg]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.srcseg;
+          state.sourceView = key; /* 이 방식의 메뉴만 보이게 */
+          if (key === 'seed') {
+            setSource('seed'); /* 직접색은 바로 활성화(적용) */
+            apply();
+          } else {
+            /* 사진·추천은 패널만 먼저 열어 안내 — 이미지 업로드/항목 선택 시 setSource가 실제 적용 */
+            refreshSourceUI();
+          }
+        });
+      });
+
+      /* (3) 첫 실행 온보딩 — 핵심 3단계, 한 번만 표시 */
+      (function initOnboarding() {
+        const KEY = 'wemb-onboarded';
+        const ov = document.getElementById('onbd');
+        if (!ov) return;
+        let seen = false;
+        try {
+          seen = localStorage.getItem(KEY) === '1';
+        } catch (e) {}
+        if (!seen) ov.classList.add('show');
+        const close = (startTour) => {
+          ov.classList.remove('show');
+          if (document.getElementById('onbdDont').checked) {
+            try {
+              localStorage.setItem(KEY, '1');
+            } catch (e) {}
+          }
+          /* '시작하기'로 닫으면 실제 UI를 짚어주는 스포트라이트 투어로 이어짐 */
+          if (startTour && typeof window.__startCoach === 'function') setTimeout(window.__startCoach, 60);
+        };
+        document.getElementById('onbdStart').addEventListener('click', () => close(true));
+        ov.addEventListener('click', (e) => {
+          if (e.target === ov) close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && ov.classList.contains('show')) close();
+        });
+        /* (3-b) 사이드바 도움말 버튼에서 다시 열 수 있도록 노출 */
+        window.__showOnboarding = () => ov.classList.add('show');
+      })();
+
+      /* (4) 스냅샷 백업(파일로 저장) / 복원(파일 불러오기) — localStorage 소실 대비 */
+      document.getElementById('snapExport').addEventListener('click', () => {
+        if (!snapshots.length) {
+          toast('백업할 저장된 테마가 없어요. 먼저 마음에 드는 테마를 저장해 주세요.', { type: 'warn' });
+          return;
+        }
+        const data = { app: 'wemb-theme-studio', kind: 'snapshots', version: 1, exportedAt: new Date().toISOString(), snapshots: snapshots };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const d = new Date();
+        const p = (n) => String(n).padStart(2, '0');
+        a.href = url;
+        a.download = `wemb-themes-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toast(`저장한 테마 <b>${snapshots.length}개</b>를 파일로 백업했어요.`, { type: 'ok' });
+      });
+      document.getElementById('snapImport').addEventListener('click', () => document.getElementById('snapImportFile').click());
+      document.getElementById('snapImportFile').addEventListener('change', (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          let parsed;
+          try {
+            parsed = JSON.parse(reader.result);
+          } catch (err) {
+            toast('불러오지 못했어요. 올바른 백업 파일(.json)이 아니에요.', { type: 'err' });
+            e.target.value = '';
+            return;
+          }
+          const incoming = Array.isArray(parsed) ? parsed : parsed && parsed.snapshots;
+          const valid = Array.isArray(incoming) ? incoming.filter((s) => s && s.theme && s.theme.seed) : [];
+          if (!valid.length) {
+            toast('백업 파일에서 복원할 테마를 찾지 못했어요.', { type: 'err' });
+            e.target.value = '';
+            return;
+          }
+          const existIds = new Set(snapshots.map((s) => s.id));
+          let added = 0;
+          valid.forEach((s) => {
+            let id = s.id || 's' + Date.now() + Math.random().toString(36).slice(2, 6);
+            while (existIds.has(id)) id = 's' + Date.now() + Math.random().toString(36).slice(2, 6);
+            existIds.add(id);
+            snapshots.push({ id: id, name: (s.name || '복원된 테마').slice(0, 40), theme: s.theme });
+            added++;
+          });
+          if (snapshots.length > 40) snapshots.length = 40;
+          saveSnapshots();
+          renderSnapshots();
+          refreshABOptions();
+          e.target.value = '';
+          toast(`백업에서 테마 <b>${added}개</b>를 복원했어요.`, { type: 'ok' });
+        };
+        reader.readAsText(f);
+      });
+
+      /* (6) 미리보기 편집 힌트 — 닫거나 '대시보드 편집' 탭에 들어가면 숨김(한 번 닫으면 기억) */
+      (function initPreviewHint() {
+        const hint = document.getElementById('previewHint');
+        if (!hint) return;
+        let dismissed = false;
+        try {
+          dismissed = localStorage.getItem('wemb-previewhint') === '1';
+        } catch (e) {}
+        if (dismissed) hint.classList.add('hide');
+        const hide = () => {
+          hint.classList.add('hide');
+          try {
+            localStorage.setItem('wemb-previewhint', '1');
+          } catch (e) {}
+        };
+        document.getElementById('previewHintX').addEventListener('click', hide);
+        const dashTab = document.querySelector('.sbtab[data-tab="dash"]');
+        if (dashTab) dashTab.addEventListener('click', hide);
+      })();
+
       /* ---------- 초기화 ---------- */
       apply();
       loadSnapshots();
@@ -9319,7 +10822,8 @@
       initExport();
       initContrast();
       initSheet();
-      applyShareFromURL(); /* 공유 링크로 열렸으면 그 시안을 복원 */
+      /* 공유 링크로 열렸으면 그 시안을, 아니면 마지막 작업 중이던 테마를 복원 (1-b) */
+      if (!applyShareFromURL()) restoreCurrentTheme();
       commitHistory();
       renderHistory();
     </script>
