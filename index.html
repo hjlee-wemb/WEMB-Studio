@@ -1,12 +1,12 @@
 <!-- @format -->
 
 <!doctype html>
-<html lang="ko" data-mode="dark" data-version="0.7.0">
+<html lang="ko" data-mode="dark" data-version="0.8.0">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="version" content="0.7.0 (2026-07-14)" />
-    <title>WEMB Theme Studio</title>
+    <meta name="version" content="0.8.0 (2026-07-15) · index3 — 화면 종류(대시보드 / Digital Twin / 포탈) 전환 추가. DT는 Figma DT_Sample(16:2407)이 표준" />
+    <title>WEMB Theme Studio — index2 UI</title>
     <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M50 0H14C6.26801 0 0 6.26801 0 14V50C0 57.732 6.26801 64 14 64H50C57.732 64 64 57.732 64 50V14C64 6.26801 57.732 0 50 0Z" fill="%230D1526"/><path d="M20.7788 39.5703C19.6409 42.3867 21.0016 45.5923 23.818 46.7302C26.6344 47.8681 29.8399 46.5074 30.9778 43.691L38.8446 24.2202C39.9824 21.4038 38.6218 18.1982 35.8054 17.0603C32.989 15.9224 29.7834 17.2831 28.6455 20.0995L20.7788 39.5703Z" fill="%233F64A8"/><path d="M37.1848 39.5703C36.0469 42.3867 37.4076 45.5923 40.224 46.7302C43.0404 47.8681 46.2459 46.5074 47.3838 43.691L55.2506 24.2202C56.3885 21.4038 55.0278 18.1982 52.2114 17.0603C49.395 15.9224 46.1894 17.2831 45.0515 20.0995L37.1848 39.5703Z" fill="%23F16043"/><path d="M20.2397 43.7958C21.3776 46.6122 24.5831 47.9729 27.3995 46.835C30.2159 45.6971 31.5766 42.4915 30.4387 39.6751L22.5719 20.2043C21.4341 17.3879 18.2285 16.0272 15.4121 17.1651C12.5957 18.303 11.235 21.5086 12.3729 24.325L20.2397 43.7958Z" fill="%236BC382"/><circle cx="25.3125" cy="42" r="3" fill="%230D1526"/><path d="M36.6457 43.7958C37.7836 46.6122 40.9891 47.9729 43.8055 46.835C46.6219 45.6971 47.9826 42.4915 46.8447 39.6751L38.978 20.2043C37.8401 17.3879 34.6345 16.0272 31.8181 17.1651C29.0017 18.303 27.641 21.5086 28.7789 24.325L36.6457 43.7958Z" fill="%23F4C559"/><circle cx="42" cy="42" r="3" fill="%230D1526"/></svg>' />
     <!-- 공유 미리보기(OG) — 서버에 배포하면 og:image를 절대 URL로 바꿔야 미리보기가 뜹니다 -->
     <meta property="og:title" content="WEMB Studio" />
@@ -710,6 +710,14 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 7px;
+      }
+      /* 3칸 세그먼트(화면 종류 — 대시보드·Digital Twin·포탈) */
+      .seg.seg3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .seg button[disabled] {
+        opacity: 0.42;
+        cursor: not-allowed;
       }
       .seg button {
         background: var(--bg-page);
@@ -1900,7 +1908,8 @@
         overflow: hidden;
         transform-origin: top left;
       }
-      .abstage .stage {
+      .abstage .stage,
+      .abstage .dtstage {
         flex: 1;
         min-height: 0;
       }
@@ -3207,6 +3216,1176 @@
         flex: 1;
         min-height: 0;
         overflow: hidden;
+      }
+      /* 화면 종류 전환 — display:flex가 hidden 속성을 이기므로 명시적으로 끔 */
+      .stage[hidden] {
+        display: none;
+      }
+
+      /* ============================================================
+         Digital Twin 화면 (Figma DT_Sample 16:2407 표준)
+         ── 색 규칙 ──
+         이 블록에는 리터럴 색이 없다. 전부 .main에 주입되는 팔레트 변수에서
+         파생한다. Figma의 고정 토큰 → 팔레트 변수 대응:
+           Contets/Bg      #101114cc → --dt-glass  (bg/surface + 투명도)
+           Contets/Stroke  #ffffff33 → --dt-stroke (text/strong 20%)
+           Secondary       #2a74f4   → --point-main
+           Text/Primary    #e5e7eb   → --text-strong
+           Text/Secondary  #99a1af   → --text-weak
+           Critical·Major·Minor·Warning·Normal → danger → warning → 혼합 → point/sub → point/main
+         라이트/다크는 색을 뒤집는 게 아니라 --text-strong·--bg-surface가 이미
+         모드에 맞게 생성되므로 color-mix가 자동으로 따라간다.
+         3D 현장 사진(dt-bg.jpg)만은 예외로 원본 그대로 두고 테마를 입히지 않는다.
+         ============================================================ */
+      .dtstage {
+        position: relative;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--bg-page);
+        /* 유리 패널 — 3D 배경 위에 얹히는 반투명 표면 */
+        --dt-glass: color-mix(in srgb, var(--bg-surface) 80%, transparent);
+        --dt-glass-solid: color-mix(in srgb, var(--bg-surface) 94%, var(--bg-page));
+        --dt-stroke: color-mix(in srgb, var(--text-strong) 20%, transparent);
+        --dt-hair: color-mix(in srgb, var(--text-strong) 9%, transparent);
+        --dt-hover: color-mix(in srgb, var(--text-strong) 7%, transparent);
+        /* ── 이벤트 5단계 · 강조색 전경 ──
+           원본(*-raw)과 실제 사용값(--dt-*)을 분리한다. 버전(Flat/Enterprise)은 **원본만**
+           갈아끼우고, 밝기 보정은 모드(라이트/다크)가 **사용값에만** 건다. 서로 다른 속성을
+           건드리므로 두 규칙의 특이도가 같아도(둘 다 0,3,0) 순서와 무관하게 안전하다.
+
+           Minor(lv3)는 두 역할색을 섞지 않는다: --point-sub는 배색 방식(유사/보색/…)에 따라
+           아무 색이나 될 수 있어 --warning과 섞으면 결과 색상이 예측 불가하고 탁해진다.
+           대신 lv2의 명도·채도를 두고 색상만 돌려 Figma의 Major(주황) → Minor(노랑) 관계를 만든다. */
+        --lv1-raw: var(--danger);
+        --lv2-raw: var(--warning);
+        --lv3-raw: var(--lv2-raw); /* 관계형 색 문법 미지원 브라우저용 대체값 */
+        --lv4-raw: var(--point-sub);
+        --lv5-raw: var(--point-main);
+        --dt-lv1: var(--lv1-raw);
+        --dt-lv2: var(--lv2-raw);
+        --dt-lv3: var(--lv3-raw);
+        --dt-lv4: var(--lv4-raw);
+        --dt-lv5: var(--lv5-raw);
+        /* 유리 위에 '글자·아이콘으로' 올라가는 강조색.
+           --point-main을 날것으로 쓰면 안 된다 — 팔레트가 만드는 강조색은 밝기가 제각각이라
+           밝은 유리 위에 밝은 강조색이 얹히면 그냥 사라진다(실측: Enterprise 라이트의
+           강조색 = 밝은 민트 → 1.0 : 1). 배경으로 쓸 땐 --on-point가 글자색을 자동으로
+           골라주지만, 강조색 자신이 전경일 땐 그런 보호막이 없다. */
+        --dt-accent-fg: var(--point-main);
+      }
+      /* 색상(hue)·채도(chroma)는 그대로 두고 **명도만** 읽히는 범위로 고정.
+         실측으로 정한 한계값(라이트 유리 200~211 기준, Flat·Enterprise 양쪽 통과):
+           강조색 전경 → 활성 탭 '글자'라 4.5:1 필요 → l ≤ 0.40 (Ent 4.81 · Flat 5.76)
+                          l=0.45면 Ent 3.91로 미달, l=0.42도 Ent 4.42로 아슬하게 미달
+           등급 점     → 그래픽이라 3:1 → l ≤ 0.50 (3.20~4.09). 색상은 안 건드리므로
+                          5단계가 서로 구분되는 성질은 그대로 유지됨
+         min()/max()라서 이미 조건을 만족하는 팔레트는 손대지 않고 통과한다. */
+      @supports (color: oklch(from red l c h)) {
+        .dtstage {
+          --lv3-raw: oklch(from var(--lv2-raw) l c calc(h + 28));
+        }
+        .main[data-mode='light'] .dtstage {
+          --dt-lv1: oklch(from var(--lv1-raw) min(l, 0.5) c h);
+          --dt-lv2: oklch(from var(--lv2-raw) min(l, 0.5) c h);
+          --dt-lv3: oklch(from var(--lv3-raw) min(l, 0.5) c h);
+          --dt-lv4: oklch(from var(--lv4-raw) min(l, 0.5) c h);
+          --dt-lv5: oklch(from var(--lv5-raw) min(l, 0.5) c h);
+          --dt-accent-fg: oklch(from var(--point-main) min(l, 0.4) c h);
+        }
+        .main[data-mode='dark'] .dtstage {
+          --dt-accent-fg: oklch(from var(--point-main) max(l, 0.72) c h);
+        }
+      }
+      .dtstage[hidden] {
+        display: none;
+      }
+
+      /* ── 헤더 ── 글라스모피즘: 사진이 헤더 뒤까지 깔려 있고(.dt-scene이 .dtstage 직속),
+         반투명 표면 + backdrop blur로 뒤 사진이 비쳐 보인다.
+         불투명도 80%는 임의값이 아니라 **라이트 모드 대비의 하한**이다. 헤더가 덮는 사진
+         상단이 매우 어두워(평균 RGB 20,34,29) 유리를 더 투명하게 하면 밝은 표면이 어두워지고
+         --text-weak(비활성 내비)가 묻힌다 — 실측 72%=4.05로 AA 미달, 80%=4.88로 통과.
+         다크 모드는 어느 값이든 7:1 이상이라 라이트가 제약 조건. */
+      .dt-hdr {
+        flex: none;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 0 18px;
+        background: color-mix(in srgb, var(--bg-surface) 80%, transparent);
+        backdrop-filter: blur(20px) saturate(160%);
+        -webkit-backdrop-filter: blur(20px) saturate(160%);
+        border-bottom: 1px solid var(--dt-stroke);
+        box-shadow: 0 1px 24px color-mix(in srgb, var(--bg-page) 45%, transparent);
+        position: relative;
+        z-index: 2;
+      }
+      .dt-brand {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        flex: none;
+      }
+      .dt-brand .logo {
+        display: flex;
+        align-items: center;
+      }
+      .dt-brand .wlogo {
+        height: 20px;
+      }
+      .dt-bname {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-strong);
+        white-space: nowrap;
+      }
+      .dt-nav {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        min-width: 0;
+      }
+      .dt-nav a {
+        position: relative;
+        padding: 16px 16px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--text-weak);
+        white-space: nowrap;
+        cursor: pointer;
+        transition: color 0.15s ease;
+      }
+      .dt-nav a:hover {
+        color: var(--text-strong);
+      }
+      .dt-nav a.on {
+        color: var(--text-strong);
+      }
+      .dt-nav a.on::after {
+        content: '';
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        bottom: 0;
+        height: 2px;
+        border-radius: 2px 2px 0 0;
+        background: var(--point-main);
+      }
+      .dt-hstat {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .dt-live {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 11px;
+        border-radius: 999px;
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-hover);
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-strong);
+        white-space: nowrap;
+      }
+      /* '정상' 점 — 등급 램프의 lv4를 그대로 써서 라이트 밝기 보정을 같이 받게 함
+         (--point-sub 날것을 쓰면 라이트 유리 위에서 1.74:1로 안 보임) */
+      .dt-live i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--dt-lv4);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--dt-lv4) 22%, transparent);
+      }
+      .dt-hicons {
+        display: flex;
+        gap: 6px;
+      }
+      .dt-ico {
+        width: 28px;
+        height: 28px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 1px solid var(--dt-stroke);
+        background: transparent;
+        color: var(--text-weak);
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .dt-ico svg {
+        width: 14px;
+        height: 14px;
+      }
+      .dt-ico:hover {
+        color: var(--text-strong);
+        border-color: var(--point-main);
+      }
+      .dt-clock {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        line-height: 1.25;
+        padding-left: 12px;
+        border-left: 1px solid var(--dt-hair);
+      }
+      .dt-clock b {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-strong);
+        white-space: nowrap;
+      }
+      .dt-clock small {
+        font-size: 10.5px;
+        color: var(--text-weak);
+      }
+
+      /* ── 본문: 3D 씬 + 그 위의 UI ── */
+      .dt-body {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      /* 씬은 헤더 뒤까지 포함해 화면 전체를 덮는다 (.dtstage 직속, 맨 아래 층) */
+      .dt-scene {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+      .dt-scene > div {
+        position: absolute;
+        inset: 0;
+      }
+      /* 3D 현장 사진은 원본 그대로 — 색조·명암 보정 없음.
+         테마는 그 위에 얹히는 유리 패널·강조색만 바꾼다. */
+      .dt-scene-img {
+        background: url('dt-bg.jpg') center / cover no-repeat;
+      }
+
+      .dt-ui {
+        position: absolute;
+        inset: 0;
+        padding: 14px 18px;
+        display: grid;
+        grid-template-columns: 230px minmax(0, 1fr) 246px;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: 10px 12px;
+        align-items: start;
+      }
+      .dt-navbtns {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .dt-symbols {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+      }
+      .dt-region {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .dt-assets {
+        grid-column: 3;
+        grid-row: 2;
+      }
+      .dt-log {
+        grid-column: 1 / -1;
+        grid-row: 3;
+      }
+
+      /* ── 유리 카드 공통 ── */
+      .dt-card {
+        background: var(--dt-glass);
+        border: 1px solid var(--dt-stroke);
+        border-radius: var(--radius-panel);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        max-height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .dt-cardhead {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 12px;
+      }
+      .dt-chico {
+        width: 28px;
+        height: 28px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-hover);
+        color: var(--text-strong);
+      }
+      .dt-chico svg {
+        width: 14px;
+        height: 14px;
+      }
+      .dt-cardhead h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-strong);
+      }
+      .dt-search {
+        flex: none;
+        margin: 0 10px 10px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0 10px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid var(--dt-stroke);
+        background: color-mix(in srgb, var(--bg-page) 45%, transparent);
+      }
+      .dt-search svg {
+        width: 13px;
+        height: 13px;
+        flex: none;
+        color: var(--text-weak);
+      }
+      .dt-search input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        color: var(--text-strong);
+        font-family: var(--font);
+        font-size: 12px;
+        outline: none;
+      }
+      .dt-search input::placeholder {
+        color: var(--text-weak);
+      }
+      .dt-search:focus-within {
+        border-color: var(--point-main);
+      }
+
+      /* ── 좌상단 뷰 전환 버튼 ── */
+      .dt-navbtns {
+        display: flex;
+        gap: 8px;
+      }
+      .dt-navbtn {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 12px 4px;
+        border-radius: var(--radius-panel);
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: var(--text-weak);
+        font-family: var(--font);
+        font-size: 11.5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .dt-navbtn svg {
+        width: 20px;
+        height: 20px;
+      }
+      .dt-navbtn:hover {
+        color: var(--text-strong);
+        border-color: var(--point-main);
+      }
+      .dt-navbtn.on {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: var(--on-point, #fff);
+        box-shadow: 0 4px 16px color-mix(in srgb, var(--point-main) 40%, transparent);
+      }
+
+      /* ── 우상단 레이어 심볼 ── */
+      .dt-symbols {
+        display: flex;
+        gap: 10px;
+      }
+      .dt-sym {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        color: var(--text-weak);
+        font-family: var(--font);
+        font-size: 10.5px;
+        font-weight: 600;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: color 0.15s ease;
+      }
+      .dt-symb {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-glass);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        transition: 0.15s;
+      }
+      .dt-symb svg {
+        width: 18px;
+        height: 18px;
+      }
+      .dt-sym:hover {
+        color: var(--text-strong);
+      }
+      .dt-sym:hover .dt-symb {
+        border-color: var(--point-main);
+      }
+      .dt-sym.on {
+        color: var(--text-strong);
+      }
+      .dt-sym.on .dt-symb {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: var(--on-point, #fff);
+        box-shadow: 0 4px 16px color-mix(in srgb, var(--point-main) 40%, transparent);
+      }
+
+      /* ── 지역 탭 ── */
+      .dt-tabs {
+        flex: none;
+        display: flex;
+        gap: 14px;
+        margin: 0 10px;
+        border-bottom: 1px solid var(--dt-hair);
+      }
+      .dt-tabs b {
+        position: relative;
+        padding: 8px 2px 9px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-weak);
+        cursor: pointer;
+      }
+      .dt-tabs b.on {
+        color: var(--dt-accent-fg);
+      }
+      /* 밑줄은 배경이라 강조색 원본 그대로 — 밝기가 눌리지 않아 색이 또렷하다 */
+      .dt-tabs b.on::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 2px;
+        background: var(--point-main);
+      }
+
+      /* ── 트리 / 드롭 리스트 ── */
+      .dt-tree,
+      .dt-drops {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 8px 10px 10px;
+      }
+      .dt-tgap {
+        height: 8px;
+      }
+      .dt-ti,
+      .dt-drop,
+      .dt-di {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.12s;
+      }
+      .dt-ti {
+        height: 32px;
+        padding-right: 6px;
+        font-size: 12.5px;
+        color: var(--text-strong);
+      }
+      .dt-l1 {
+        padding-left: 4px;
+      }
+      .dt-l2 {
+        padding-left: 20px;
+      }
+      .dt-l3 {
+        padding-left: 52px;
+        color: var(--text-weak);
+      }
+      /* 화살표 = 접기/펴기 손잡이. 아이콘은 chevron-right 하나만 쓰고 열리면 90° 회전 */
+      .dt-chev {
+        flex: none;
+        width: 18px;
+        height: 18px;
+        display: grid;
+        place-items: center;
+        border-radius: 4px;
+        color: var(--text-weak);
+        cursor: pointer;
+      }
+      .dt-chev svg {
+        width: 12px;
+        height: 12px;
+        transition: transform 0.18s ease;
+      }
+      .dt-chev:hover {
+        background: color-mix(in srgb, var(--text-strong) 12%, transparent);
+        color: var(--text-strong);
+      }
+      .dt-node.open > .dt-ti > .dt-chev svg,
+      .dt-node.open > .dt-drop > .dt-chev svg {
+        transform: rotate(90deg);
+      }
+      /* 높이 0↔auto 전환 — grid 1fr 트릭(interpolate-size 불필요, details 렌더 스킵 이슈도 없음) */
+      .dt-kids {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.2s ease-out;
+      }
+      .dt-node.open > .dt-kids {
+        grid-template-rows: 1fr;
+      }
+      .dt-kidsin {
+        overflow: hidden;
+        min-height: 0;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .dt-kids {
+          transition: none;
+        }
+        .dt-chev svg {
+          transition: none;
+        }
+      }
+      .dt-tico {
+        flex: none;
+        width: 15px;
+        height: 15px;
+        display: grid;
+        place-items: center;
+        color: var(--dt-accent-fg);
+      }
+      .dt-tico svg {
+        width: 14px;
+        height: 14px;
+      }
+      .dt-tnm {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .dt-ti:hover,
+      .dt-drop:hover,
+      .dt-di:hover {
+        background: var(--dt-hover);
+      }
+      /* 검색으로 걸러낼 때 — flex/block이 hidden 속성을 이기므로 명시적으로 끔 */
+      .dt-ti[hidden],
+      .dt-di[hidden],
+      .dt-drop[hidden],
+      .dt-node[hidden],
+      .dt-tgap[hidden] {
+        display: none;
+      }
+      .dt-ti.on {
+        background: color-mix(in srgb, var(--text-strong) 11%, transparent);
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+      .dt-drop {
+        height: 32px;
+        padding: 0 6px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-strong);
+      }
+      .dt-node.open > .dt-drop {
+        background: var(--dt-hover);
+      }
+      .dt-di {
+        height: 26px;
+        padding-left: 24px;
+        font-size: 11.5px;
+        color: var(--text-weak);
+      }
+      /* 선택된 자산 = 감시 중. 왼쪽 강조 막대로 여러 개 켠 게 한눈에 보이게 */
+      .dt-di.on {
+        color: var(--text-strong);
+        font-weight: 600;
+        background: color-mix(in srgb, var(--point-main) 16%, transparent);
+        box-shadow: inset 2px 0 0 var(--point-main);
+      }
+
+      /* ── 하단 이벤트 로그 ── */
+      .dt-log {
+        max-height: 236px;
+      }
+      .dt-loghead {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+      }
+      .dt-loghead h3 {
+        margin: 0;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--text-strong);
+      }
+      .dt-lsep {
+        width: 1px;
+        height: 14px;
+        background: var(--dt-hair);
+      }
+      .dt-lsound {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11.5px;
+        color: var(--text-weak);
+      }
+      .dt-lsound svg {
+        width: 13px;
+        height: 13px;
+      }
+      .dt-switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 3px 4px 3px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--dt-stroke);
+      }
+      .dt-switch b {
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--text-strong);
+        letter-spacing: 0.4px;
+      }
+      .dt-switch i {
+        position: relative;
+        width: 30px;
+        height: 17px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--text-strong) 18%, transparent);
+        transition: background 0.2s ease;
+      }
+      .dt-switch i::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: var(--text-strong);
+        transition: transform 0.2s ease;
+      }
+      .dt-switch i.on {
+        background: var(--point-main);
+      }
+      .dt-switch i.on::after {
+        transform: translateX(13px);
+        background: var(--on-point, #fff);
+      }
+      .dt-sp {
+        flex: 1;
+      }
+      .dt-chip {
+        padding: 5px 13px;
+        border-radius: 6px;
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-hover);
+        color: var(--text-strong);
+        font-family: var(--font);
+        font-size: 11.5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .dt-chip:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .dt-counts {
+        display: flex;
+        gap: 7px;
+      }
+      .dt-cnt {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 11px 4px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-hover);
+        font-family: var(--font);
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-strong);
+        font-variant-numeric: tabular-nums;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .dt-cnt:hover {
+        border-color: var(--point-main);
+      }
+      /* 등급 필터가 걸린 칩 — 테두리·링만 해당 등급색으로. 숫자 글자색은 --text-strong 유지
+         (등급색을 글자에 쓰면 노랑/주황이 카드 위에서 대비 미달) */
+      .dt-cnt.on {
+        background: color-mix(in srgb, var(--text-strong) 14%, transparent);
+      }
+      .dt-cnt[data-lv='1'].on {
+        border-color: var(--dt-lv1);
+        box-shadow: 0 0 0 1px var(--dt-lv1);
+      }
+      .dt-cnt[data-lv='2'].on {
+        border-color: var(--dt-lv2);
+        box-shadow: 0 0 0 1px var(--dt-lv2);
+      }
+      .dt-cnt[data-lv='3'].on {
+        border-color: var(--dt-lv3);
+        box-shadow: 0 0 0 1px var(--dt-lv3);
+      }
+      .dt-cnt[data-lv='4'].on {
+        border-color: var(--dt-lv4);
+        box-shadow: 0 0 0 1px var(--dt-lv4);
+      }
+      .dt-cnt[data-lv='5'].on {
+        border-color: var(--dt-lv5);
+        box-shadow: 0 0 0 1px var(--dt-lv5);
+      }
+      .dt-chip.on {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .dt-cnt i,
+      .dt-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex: none;
+        display: inline-block;
+      }
+      .lv1 {
+        background: var(--dt-lv1);
+      }
+      .lv2 {
+        background: var(--dt-lv2);
+      }
+      .lv3 {
+        background: var(--dt-lv3);
+      }
+      .lv4 {
+        background: var(--dt-lv4);
+      }
+      .lv5 {
+        background: var(--dt-lv5);
+      }
+
+      .dt-table {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        border-top: 1px solid var(--dt-hair);
+      }
+      .dt-tr {
+        display: grid;
+        grid-template-columns: 44px 110px 160px 92px minmax(0, 1fr) 132px;
+        align-items: center;
+        gap: 8px;
+        height: 30px;
+        padding: 0 14px;
+        font-size: 11.5px;
+        color: var(--text-strong);
+        border-bottom: 1px solid var(--dt-hair);
+        cursor: pointer;
+      }
+      .dt-th {
+        cursor: default;
+      }
+      .dt-tr > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .dt-th {
+        height: 28px;
+        color: var(--text-weak);
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        background: var(--dt-glass-solid);
+        z-index: 1;
+      }
+      .dt-tr:not(.dt-th):hover {
+        background: var(--dt-hover);
+      }
+      .dt-tr.on {
+        background: color-mix(in srgb, var(--point-main) 22%, transparent);
+        box-shadow: inset 2px 0 0 var(--point-main);
+        font-weight: 600;
+      }
+      .dt-tag {
+        display: inline-block;
+        padding: 2px 7px;
+        border-radius: 4px;
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-hover);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        color: var(--text-weak);
+      }
+      /* CRITICAL — 채운 배지. Figma는 '반투명 빨강 배경 + 빨강 글자' 아웃라인 스타일이지만,
+         그 조합은 유리 카드 위에서 어느 모드에서도 4.5:1을 못 넘긴다(실측 다크 4.46 · 라이트 3.27
+         — 사진을 원본으로 되돌리며 카드가 어두워져 더 나빠짐). 배지를 채우고 글자색은
+         --on-danger(흰/검 자동 선택, --on-point와 같은 방식)로 두면 어떤 팔레트에서도 읽힌다.
+         최고 심각도 배지는 눈에 띄는 게 목적이라 채움이 의도에도 더 맞음. */
+      .dt-tag.crit {
+        color: var(--on-danger, #fff);
+        border-color: transparent;
+        background: var(--danger);
+      }
+      /* 액션은 선택된 행·마우스 올린 행에서만 — 늘 떠 있으면 표가 시끄러워짐 */
+      .dt-acts {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 5px;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+      }
+      .dt-tr.on .dt-acts,
+      .dt-tr:hover .dt-acts,
+      .dt-acts:focus-within {
+        opacity: 1;
+      }
+      .dt-tr:not([data-new]) .dt-new {
+        display: none;
+      }
+      .dt-empty {
+        padding: 22px 14px;
+        text-align: center;
+        font-size: 11.5px;
+        color: var(--text-weak);
+      }
+      .dt-tr[hidden] {
+        display: none;
+      }
+      .dt-new {
+        padding: 2px 7px;
+        border-radius: 4px;
+        background: var(--point-main);
+        color: var(--on-point, #fff);
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .dt-abtn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 7px;
+        border-radius: 4px;
+        border: 1px solid var(--dt-stroke);
+        background: var(--dt-hover);
+        color: var(--text-strong);
+        font-family: var(--font);
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .dt-abtn svg {
+        width: 11px;
+        height: 11px;
+      }
+      .dt-abtn:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+
+      /* ============================================================
+         Digital Twin — Enterprise 버전
+         Flat이 코어 10색만 쓰는 데 반해, 여기서는 Enterprise 전용 토큰(약 50색)을 끌어와
+         대시보드의 Enterprise와 **같은 디자인 언어**로 차이를 만든다:
+           ① 표면을 단색 → 그라데이션(surface-2 → surface-1)
+           ② 입체감(그림자 + 상단 inset 하이라이트)
+           ③ 강조 상단 라인(accent → teal 그라데이션)
+           ④ 제목 앞 글로우 점
+           ⑤ 큰 숫자에 그라데이션 텍스트
+           ⑥ 색 단계 세분화(text-primary/secondary/label, ov-divider/subtle)
+           ⑦ 상태색을 crit/warn/data-cyan/teal로 — Flat엔 없는 청록 계열이 생김
+         대시보드의 시그니처인 '움직이는 배경 글로우'는 여기선 쓸 수 없다 — 배경이
+         손대지 않기로 한 3D 사진이라서. 대신 유리 패널 쪽 입체감을 더 세게 준다.
+         ============================================================ */
+      .main[data-version='enterprise'] .dtstage {
+        --dt-glass: color-mix(in srgb, var(--surface-1) 80%, transparent);
+        --dt-glass-solid: color-mix(in srgb, var(--surface-1) 94%, var(--surface-base));
+        --dt-stroke: var(--ov-divider);
+        --dt-hair: var(--ov-subtle);
+        --dt-hover: var(--ov-glow-15);
+        /* 상태색을 Enterprise 토큰으로 — lv4가 청록(data-cyan)이 되며 Flat과 확실히 갈림.
+           **원본(*-raw)만 바꾼다** — 밝기 보정은 위의 모드 규칙이 --dt-lv*에 알아서 건다.
+           (예전엔 여기서 --dt-lv*를 직접 덮어 라이트 보정이 통째로 무력화됐었음) */
+        --lv1-raw: var(--crit);
+        --lv2-raw: var(--warn);
+        --lv4-raw: var(--data-cyan);
+        --lv5-raw: var(--accent);
+      }
+      /* ① 유리 카드 — 표면 그라데이션 + ② 입체감 */
+      .main[data-version='enterprise'] .dt-card {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 80%, transparent), color-mix(in srgb, var(--surface-1) 80%, transparent) 46%);
+        border-color: var(--ov-divider);
+        box-shadow:
+          0 10px 26px -6px rgba(0, 0, 0, 0.42),
+          inset 0 1px 0 var(--ov-glow-15);
+        position: relative;
+        isolation: isolate;
+      }
+      /* ③ 강조 상단 라인 */
+      .main[data-version='enterprise'] .dt-card::after {
+        content: '';
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+        opacity: 0.85;
+        pointer-events: none;
+        z-index: 1;
+      }
+      /* ④ 카드 제목 앞 글로우 점 — 대시보드 .ph h3::before와 같은 장치 */
+      .main[data-version='enterprise'] .dt-cardhead h3::before,
+      .main[data-version='enterprise'] .dt-loghead h3::before {
+        content: '';
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        margin-right: 7px;
+        vertical-align: middle;
+        background: var(--accent);
+        box-shadow: 0 0 8px 1px var(--accent);
+      }
+      /* 아이콘도 --dt-accent-fg를 씀 — Enterprise의 --accent는 라이트에서 밝은 민트라
+         날것으로 쓰면 1.0:1로 사라진다(--point-main === --accent, entCoreMap 기준) */
+      .main[data-version='enterprise'] .dt-chico {
+        border-color: var(--ov-divider);
+        background: linear-gradient(180deg, var(--surface-3), var(--surface-2));
+        color: var(--dt-accent-fg);
+      }
+      /* 헤더도 같은 언어로 — 표면 그라데이션 + 바닥 강조 라인 */
+      .main[data-version='enterprise'] .dt-hdr {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 80%, transparent), color-mix(in srgb, var(--surface-1) 80%, transparent));
+        border-bottom-color: transparent;
+        box-shadow:
+          0 1px 24px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 var(--ov-glow-15);
+        position: relative;
+      }
+      .main[data-version='enterprise'] .dt-hdr::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 1px;
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+        opacity: 0.7;
+        pointer-events: none;
+      }
+      /* ⑤ 시계 — 이 화면에서 가장 큰 숫자에 그라데이션 텍스트(대시보드 KPI .val과 같은 장치).
+         **다크에서만.** 라이트에선 밝은 유리 위에 강조색·teal이 얹혀 글자가 사라진다
+         (실측 accent 1.02 : 1, teal 1.79 : 1). 읽히는 곳에서만 쓰고 라이트는 단색으로. */
+      .main[data-version='enterprise'][data-mode='dark'] .dt-clock b {
+        background: linear-gradient(92deg, var(--text-primary), var(--accent) 60%, var(--teal));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+      .main[data-version='enterprise'][data-mode='light'] .dt-clock b {
+        color: var(--text-primary);
+      }
+      /* ⑥ 글자 단계 세분화 */
+      .main[data-version='enterprise'] .dt-cardhead h3,
+      .main[data-version='enterprise'] .dt-loghead h3,
+      .main[data-version='enterprise'] .dt-bname {
+        color: var(--text-heading-alt);
+      }
+      .main[data-version='enterprise'] .dt-ti,
+      .main[data-version='enterprise'] .dt-drop {
+        color: var(--text-secondary);
+      }
+      /* dim 단계는 --text-label/--text-axis가 아니라 **--text-label-bright**.
+         유리(80%)가 어두운 사진 위에 얹히면 라이트 모드 표면이 241 → 200으로 깎여
+         대시보드 패널보다 대비가 ~1.4배 불리해진다. 실측(라이트, DT 카드 위):
+           label 3.02 · axis 2.85 · tertiary 3.14  ← 전부 미달
+           label-bright 4.14  ← 대시보드의 같은 등급(tertiary 3.91)보다 오히려 나음
+         유리 불투명도를 94%까지 올려도 3.96이라 이 문제는 불투명도로는 못 푼다.
+         → 표면이 불리하면 글자를 한 단계 올린다. */
+      .main[data-version='enterprise'] .dt-l3,
+      .main[data-version='enterprise'] .dt-di,
+      .main[data-version='enterprise'] .dt-sym,
+      .main[data-version='enterprise'] .dt-navbtn,
+      .main[data-version='enterprise'] .dt-lsound,
+      .main[data-version='enterprise'] .dt-clock small,
+      .main[data-version='enterprise'] .dt-th,
+      .main[data-version='enterprise'] .dt-nav a,
+      .main[data-version='enterprise'] .dt-search input::placeholder {
+        color: var(--text-label-bright);
+      }
+      .main[data-version='enterprise'] .dt-nav a.on {
+        color: var(--text-primary);
+      }
+      .main[data-version='enterprise'] .dt-nav a.on::after {
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+        box-shadow: 0 0 8px var(--accent-50);
+      }
+      /* 활성 버튼 — 단색 강조 → accent→teal 그라데이션 + 글로우 */
+      .main[data-version='enterprise'] .dt-navbtn.on,
+      .main[data-version='enterprise'] .dt-sym.on .dt-symb,
+      .main[data-version='enterprise'] .dt-new {
+        background: linear-gradient(135deg, var(--accent), var(--teal));
+        border-color: transparent;
+        box-shadow: 0 6px 20px var(--accent-40);
+      }
+      /* 비활성 버튼도 카드와 같은 입체 표면으로 */
+      .main[data-version='enterprise'] .dt-navbtn,
+      .main[data-version='enterprise'] .dt-symb {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 80%, transparent), color-mix(in srgb, var(--surface-1) 80%, transparent));
+        border-color: var(--ov-divider);
+        box-shadow:
+          0 8px 20px -8px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 var(--ov-glow-15);
+      }
+      /* 활성 뷰버튼의 글자·아이콘 — color를 반드시 되살릴 것.
+         위의 dim 목록에 있는 `... .dt-navbtn`(0,3,0)이 Flat의 `.dt-navbtn.on`(0,2,0)을
+         특이도로 이겨서, 밝은 강조색 배경 위에 dim 글자가 얹혀 1.12:1이 됐었다
+         (--on-danger 때 겪은 것과 같은 함정). */
+      .main[data-version='enterprise'] .dt-navbtn.on {
+        color: var(--on-point, #fff);
+        box-shadow: 0 6px 20px var(--accent-40);
+      }
+      .main[data-version='enterprise'] .dt-live {
+        border-color: var(--ov-divider);
+        background: var(--surface-3-80);
+        color: var(--text-secondary);
+      }
+      .main[data-version='enterprise'] .dt-live i {
+        box-shadow: 0 0 8px 1px var(--dt-lv4);
+      }
+      .main[data-version='enterprise'] .dt-tabs b.on {
+        color: var(--dt-accent-fg);
+      }
+      .main[data-version='enterprise'] .dt-tabs b.on::after {
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+      }
+      /* 트리 선택 — 강조 막대 + 은은한 글로우 */
+      .main[data-version='enterprise'] .dt-ti.on {
+        background: linear-gradient(90deg, var(--accent-20), transparent);
+        box-shadow: inset 2px 0 0 var(--accent);
+        color: var(--text-primary);
+      }
+      .main[data-version='enterprise'] .dt-di.on {
+        background: linear-gradient(90deg, var(--accent-20), transparent);
+        box-shadow: inset 2px 0 0 var(--accent);
+        color: var(--text-primary);
+      }
+      .main[data-version='enterprise'] .dt-tico {
+        color: var(--dt-accent-fg);
+      }
+      /* 로그 — 선택행 그라데이션, 태그·칩을 Enterprise 토큰으로 */
+      .main[data-version='enterprise'] .dt-tr.on {
+        background: linear-gradient(90deg, var(--accent-20), var(--accent-15) 60%, transparent);
+        box-shadow: inset 2px 0 0 var(--accent);
+      }
+      .main[data-version='enterprise'] .dt-tag {
+        border-color: var(--ov-divider);
+        background: var(--surface-3-80);
+        color: var(--text-label-bright);
+      }
+      /* Enterprise CRITICAL — 채운 배지 유지 + 글로우로 차이를 냄.
+         **color를 반드시 다시 지정할 것**: `.main[data-version='enterprise'] .dt-tag`(0,3,0)가
+         `.dt-tag.crit`(0,2,0)를 특이도로 이겨 --on-danger를 덮어버린다(실측 2.43:1로 추락).
+         배경도 그라데이션(crit→crit-bright)은 쓰지 않는다 — --on-danger는 --crit 한 색을
+         기준으로 계산된 자동 글자색이라 두 색 위에 얹으면 한쪽에서 보장이 깨진다.
+         (Enterprise에선 entCoreMap이 danger = crit이므로 --on-danger = contrast(crit)) */
+      .main[data-version='enterprise'] .dt-tag.crit {
+        background: var(--crit);
+        color: var(--on-danger, #fff);
+        border-color: transparent;
+        box-shadow: 0 0 10px var(--crit-60);
+      }
+      .main[data-version='enterprise'] .dt-chip,
+      .main[data-version='enterprise'] .dt-cnt,
+      .main[data-version='enterprise'] .dt-abtn {
+        border-color: var(--ov-divider);
+        background: var(--surface-3-80);
+      }
+      .main[data-version='enterprise'] .dt-switch {
+        border-color: var(--ov-divider);
+      }
+      .main[data-version='enterprise'] .dt-switch i.on {
+        background: linear-gradient(90deg, var(--accent), var(--teal));
+      }
+      .main[data-version='enterprise'] .dt-search {
+        border-color: var(--ov-divider);
+        background: var(--track-dark);
+      }
+      /* 아이콘 계열은 전부 --text-label-bright로 통일 — Enterprise인데 화살표·돋보기만
+         Flat의 --text-weak을 쓰고 있었고, 헤더 아이콘의 --ui-icon-gray는 라이트 유리 위에서
+         2.11:1로 미달(아이콘 기준 3:1). label-bright는 4.14로 통과. */
+      .main[data-version='enterprise'] .dt-ico,
+      .main[data-version='enterprise'] .dt-chev,
+      .main[data-version='enterprise'] .dt-search svg {
+        color: var(--text-label-bright);
+      }
+      .main[data-version='enterprise'] .dt-ico {
+        border-color: var(--ov-divider);
+      }
+
+      /* 좁은 화면 — 사이드 패널을 줄이고 로그 열을 접음 */
+      @media (max-width: 1180px) {
+        .dt-ui {
+          grid-template-columns: 200px minmax(0, 1fr) 210px;
+          padding: 12px;
+        }
+        .dt-nav a {
+          padding: 16px 9px;
+          font-size: 12.5px;
+        }
+        .dt-tr {
+          grid-template-columns: 36px 92px 132px 84px minmax(0, 1fr) 0px;
+        }
+        .dt-acts {
+          display: none;
+        }
       }
       /* 헤더: 브랜드 · 내비 · 상태를 space-between으로 한 줄에 배치.
          좁아져도 줄바꿈하지 않고(nav가 줄어들며 내부 탭이 접힘) 한 줄 유지. */
@@ -5435,6 +6614,472 @@
         color: #fff;
         margin-left: 2px;
       }
+
+      /* ============================================================
+         index3 — 사이드바 메뉴 UI를 index2 디자인 언어로 리스킨.
+         CSS만 덮어씀(마크업·JS·ID 무수정) → index.html의 모든 옵션·메뉴·
+         기능은 그대로 살아있고 '보이는 모양'만 index2를 따른다.
+
+         index2 언어 = ① 라운드 스케일(칩·버튼은 pill, 카드는 18px)
+                       ② 세그먼트는 '트랙 + 안에서 채워지는 활성칩'
+                       ③ 스와치·아이콘 버튼은 원형
+                       ④ 대문자/자간 트래킹 없는 평범한 라벨
+                       ⑤ 얕고 넓은 그림자
+         ============================================================ */
+      :root {
+        --r-sm: 12px;
+        --r-md: 18px;
+        --r-pill: 999px;
+        --i2-shadow: 0 6px 14px -7px rgba(0, 0, 0, 0.6);
+        /* 모션 토큰 —
+           ease-out은 '등장/퇴장'용. 슬라이딩 필은 이미 화면에 있는 물체가
+           '이동'하는 것이므로 가속·감속이 다 있는 ease-in-out이 맞다.
+           색 변화는 ease, 누름 피드백은 즉각 반응하도록 ease-out.
+
+           곡선은 완만한 ease-in-out(easeInOutQuad). 흔히 쓰는 강한
+           cubic-bezier(.77,0,.175,1)은 중반이 너무 빨라, 아래 두-모서리
+           방식에서 앞뒤 모서리가 과하게 벌어져 필이 64%나 부풀어 버린다
+           (트랙을 거의 다 덮음). 완만한 곡선이라야 변형이 적정선에 들어온다. */
+        --i2-ease-move: cubic-bezier(0.45, 0, 0.55, 1);
+        --i2-dur-color: 200ms;
+        --i2-dur-press: 140ms;
+        /* 스쿼시&스트레치 —
+           필의 두 모서리를 다른 속도로 보낸다. 진행 방향의 '앞 모서리'가
+           먼저 도착(lead)하고 '뒤 모서리'가 늦게 따라붙으면(trail), 그 시간차
+           만큼 필이 늘어났다가(길쭉해져 덜 둥글어짐) 다시 오므라든다
+           = 공이 튕길 때의 변형. 이동거리가 길수록 더 늘어나 물리적으로 맞다.
+           두 값의 **차이가 곧 변형의 크기**다. 40ms 차이(200/240)는 +18.5%로
+           240ms 안에 스쳐 지나가 눈에 안 잡혔음 → 100ms 차이로 벌려 +40%대로.
+           체감 도착은 lead(200ms)라 느려 보이지 않고, 뒤 모서리가 남아서
+           따라붙는 300ms가 '늘어났다 오므라드는' 탄성으로 읽힌다. */
+        --i2-dur-lead: 200ms;
+        --i2-dur-trail: 300ms;
+        --i2-dur-flat: 240ms; /* 변형 없이 평범하게 이동할 때 */
+      }
+
+      /* ── 사이드바 컨테이너 ── */
+      .sidebar {
+        padding: 20px 18px;
+        gap: 20px;
+      }
+      .sidebar::-webkit-scrollbar-thumb {
+        border-radius: var(--r-pill);
+      }
+
+      /* ── 브랜드 헤더 → index2 userchip(알약 카드) ── */
+      .brandhead {
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: var(--r-pill);
+        padding: 8px 10px 8px 14px;
+        gap: 10px;
+      }
+      /* 접기·초기화 → index2 원형 아이콘 버튼 */
+      #closer,
+      .qh {
+        border-radius: 50%;
+        background: var(--bg-accent);
+        border: 1px solid var(--line);
+      }
+      #closer:hover,
+      .qh:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+
+      /* ── 상단 탭 → index2 세그먼트 트랙(2칸, 동일한 슬라이딩) ── */
+      .sbtabs {
+        position: relative;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        padding: 4px;
+        gap: 4px;
+      }
+      .sbtabs::before {
+        content: '';
+        position: absolute;
+        z-index: 0;
+        top: 4px;
+        bottom: 4px;
+        left: 4px;
+        right: calc(50% + 2px);
+        border-radius: calc(var(--r-md) - 5px);
+        background: var(--point-main);
+        box-shadow: var(--i2-shadow);
+        opacity: 0;
+        transition-property: left, right, opacity;
+        transition-timing-function: var(--i2-ease-move), var(--i2-ease-move), ease;
+        transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+      }
+      .sbtabs:has(.sbtab.on)::before {
+        opacity: 1;
+      }
+      .sbtabs:has(.sbtab:nth-child(2).on)::before {
+        left: calc(50% + 2px);
+        right: 4px;
+        transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+      }
+      .sbtab {
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        border: 0;
+        border-radius: calc(var(--r-md) - 5px);
+        padding: 9px 8px;
+        transition:
+          color var(--i2-dur-color) ease,
+          background var(--i2-dur-color) ease,
+          transform var(--i2-dur-press) ease-out;
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .sbtab:hover:not(.on) {
+          background: var(--bg-accent);
+          color: var(--text-strong);
+        }
+      }
+      /* 사이드바 크롬은 :root 고정 팔레트라 활성칩 배경도 항상 고정 네이비 →
+         글자색은 프리뷰용 --on-point가 아니라 흰색 고정(대비 4.6:1 확보) */
+      .sbtab.on {
+        background: transparent;
+        color: #fff;
+        box-shadow: none;
+      }
+      .sbtab.on .ko {
+        color: rgba(255, 255, 255, 0.82);
+      }
+      /* 대시보드 편집은 대시보드 화면에서만 — 다른 화면에선 잠김 */
+      .sbtab.locked {
+        opacity: 0.38;
+        cursor: not-allowed;
+      }
+
+      /* ── 스텝 번호 → 원형 ── */
+      .stephdr .stepno {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+      }
+      /* index2는 라벨에 대문자·자간을 쓰지 않음 */
+      .substep {
+        letter-spacing: 0;
+      }
+
+      /* ── 아코디언 → index2 카드(18px) + 평범한 라벨 ── */
+      .acc {
+        border-radius: var(--r-md);
+      }
+      .acc > summary {
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 12px 14px;
+      }
+      .acc .accbody {
+        padding: 13px 14px 15px;
+      }
+      .acc .srcbadge {
+        color: #fff;
+      }
+      /* 셰브론 글리프 → index2식 얇은 선(회전 유지) */
+      .acc > summary .chev {
+        font-size: 11px;
+      }
+
+      /* ── 세그먼트(.seg · 색 소스 .srcbtns) → index2 트랙 + 활성칩 ──
+         활성칩은 버튼 배경이 아니라 트랙의 ::before 인디케이터가 그린다.
+         선택이 바뀌면 이 인디케이터가 다음 칸으로 **미끄러진다**(sliding pill).
+         JS는 .on 클래스만 토글하므로(버튼 재생성 없음) CSS만으로 성립. */
+      .seg,
+      .srcseg .srcbtns {
+        position: relative;
+        background: var(--bg-page);
+        border: 1px solid var(--line);
+        border-radius: var(--r-pill);
+        padding: 4px;
+        gap: 4px;
+      }
+      /* 필의 위치를 translateX가 아니라 **left/right 인셋**으로 잡는다.
+         두 모서리를 따로 움직일 수 있어야 늘어남(스트레치)이 생기기 때문.
+         (transform 하나로는 시작·끝 scaleX가 같아 중간 변형을 만들 수 없고,
+          translateX와 scaleX는 같은 속성이라 transition/animation으로 못 쪼갬)
+         기준 컨테이닝 블록 = 트랙의 패딩 박스, 패딩 4px, 칸 사이 간격 4px. */
+      .seg::before,
+      .srcseg .srcbtns::before {
+        content: '';
+        position: absolute;
+        z-index: 0;
+        top: 4px;
+        bottom: 4px;
+        border-radius: var(--r-pill);
+        background: var(--point-main);
+        box-shadow: var(--i2-shadow);
+        opacity: 0;
+        transition-property: left, right, opacity;
+        transition-timing-function: var(--i2-ease-move), var(--i2-ease-move), ease;
+      }
+      /* 선택된 게 있을 때만 인디케이터 표시 */
+      .seg:has(button.on)::before,
+      .srcseg .srcbtns:has(button.on)::before {
+        opacity: 1;
+      }
+
+      /* ── 2칸 트랙(.seg — 버전·밝기·추출·갤러리) ──
+         칸1 오른쪽 인셋 = 50% + 2px, 칸2 왼쪽 인셋 = 50% + 2px */
+      .seg::before {
+        left: 4px;
+        right: calc(50% + 2px);
+        /* 칸1로 이동 = 왼쪽으로 감 → left가 앞 모서리(먼저 도착), right가 뒤따라옴 */
+        transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+      }
+      .seg:has(button:nth-child(2).on)::before {
+        left: calc(50% + 2px);
+        right: 4px;
+        /* 칸2로 이동 = 오른쪽으로 감 → right가 앞 모서리 */
+        transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+      }
+
+      /* ── 3칸 트랙(.seg.seg3 — 화면 종류) — 2칸 규칙을 같은 방식으로 덮어씀 ── */
+      .seg.seg3::before {
+        left: 4px;
+        right: calc(66.6667% + 1.3333px);
+        transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+      }
+      .seg.seg3:has(button:nth-child(2).on)::before {
+        left: calc(33.3333% + 2.6667px);
+        right: calc(33.3333% + 2.6667px);
+        transition-duration: var(--i2-dur-flat), var(--i2-dur-flat), 160ms;
+      }
+      .seg.seg3:has(button:nth-child(3).on)::before {
+        left: calc(66.6667% + 1.3333px);
+        right: 4px;
+        transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+      }
+
+      /* ── 3칸 트랙(#srcSeg — 직접색·사진·추천) ──
+         칸폭 = (100% - 패딩8 - 간격8)/3 → 경계 인셋 = 33.3333%+2.6667px, 66.6667%+1.3333px */
+      .srcseg .srcbtns::before {
+        left: 4px;
+        right: calc(66.6667% + 1.3333px);
+        transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+      }
+      /* 가운데 칸은 왼쪽·오른쪽 양쪽에서 올 수 있어 '앞 모서리'를 정할 수 없음
+         → 한쪽으로 정하면 반대 방향에서 올 때 거꾸로 오므라듦(스쿼시)이 생기므로,
+           변형 없이 평범하게 이동시킨다(짧은 이동이라 티가 거의 안 남) */
+      .srcseg .srcbtns:has(button:nth-child(2).on)::before {
+        left: calc(33.3333% + 2.6667px);
+        right: calc(33.3333% + 2.6667px);
+        transition-duration: var(--i2-dur-flat), var(--i2-dur-flat), 160ms;
+      }
+      .srcseg .srcbtns:has(button:nth-child(3).on)::before {
+        left: calc(66.6667% + 1.3333px);
+        right: 4px;
+        transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+      }
+      /* 버튼은 인디케이터 위에 얹힌 '글자'만 담당.
+         색 전환은 이동보다 빨라야 라벨이 중간에 흐리멍덩해 보이지 않음. */
+      .seg button,
+      .srcseg .srcbtns button {
+        position: relative;
+        z-index: 1;
+        background: transparent;
+        border: 0;
+        border-radius: var(--r-pill);
+        color: var(--text-weak);
+        transition:
+          color var(--i2-dur-color) ease,
+          background var(--i2-dur-color) ease,
+          transform var(--i2-dur-press) ease-out;
+      }
+      .seg button {
+        padding: 9px 8px;
+      }
+      .srcseg .srcbtns button {
+        padding: 8px 4px;
+      }
+      /* hover 배경은 비활성 칸에만 — 활성 칸에 깔면 인디케이터를 덮어버림.
+         터치기기는 탭이 hover로 오인되므로 마우스 환경으로 한정 */
+      @media (hover: hover) and (pointer: fine) {
+        .seg button:hover:not(.on),
+        .srcseg .srcbtns button:hover:not(.on) {
+          background: var(--bg-accent);
+          color: var(--text-strong);
+          border-color: transparent;
+        }
+      }
+      .seg button.on,
+      .srcseg .srcbtns button.on {
+        background: transparent;
+        border-color: transparent;
+        color: #fff;
+        box-shadow: none;
+      }
+
+      /* ── 기준 색 스와치 → index2 원형 ── */
+      .swprev {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border-width: 2px;
+      }
+      .seedpick {
+        border-radius: 50%;
+      }
+      /* HEX 입력 → 알약 */
+      .hex {
+        border-radius: var(--r-pill);
+        padding: 10px 15px;
+      }
+
+      /* ── 배색 방식 칩 → index2 고스트 알약 ──
+         이건 트랙이 아니라 줄바꿈되는 칩 묶음이라 슬라이딩이 성립하지 않음
+         → 선택된 칩이 살짝 부풀었다 돌아오는 팝으로 대신 */
+      .pills button {
+        background: var(--bg-accent);
+        padding: 8px 15px;
+        transition:
+          background var(--i2-dur-color) ease,
+          color var(--i2-dur-color) ease,
+          border-color var(--i2-dur-color) ease,
+          transform var(--i2-dur-press) ease-out;
+      }
+      .pills button.on {
+        color: #fff;
+        box-shadow: var(--i2-shadow);
+        animation: chipPop 240ms var(--i2-ease-move);
+      }
+      @keyframes chipPop {
+        0% {
+          transform: scale(1);
+        }
+        40% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* ── 누름 피드백 ──
+         전역 규칙이 이 버튼들에 translateY(1px)를 주는데, 가로로 미끄러지는
+         컨트롤에 세로 눌림은 방향이 어긋남 → 즉각 반응하는 scale로 교체 */
+      .seg button:active,
+      .srcseg .srcbtns button:active,
+      .sbtab:active,
+      .pills button:active {
+        transform: scale(0.97);
+      }
+
+      /* ── 버튼류 → 알약 통일 ── */
+      .genbtn,
+      .savebtn {
+        border-radius: var(--r-pill);
+        box-shadow: var(--i2-shadow);
+      }
+      .ghostbtn,
+      .galnav,
+      .resetall,
+      .editbtn,
+      .imgbtn {
+        border-radius: var(--r-pill);
+      }
+      .editbtn {
+        background: var(--bg-accent);
+      }
+
+      /* ── 카드류 → index2 18px ── */
+      .stepcard,
+      .pcard,
+      .trendchip,
+      .promocard,
+      .designpanel,
+      .cwarn {
+        border-radius: var(--r-md);
+      }
+
+      /* ── 슬라이더 → index2 토글 노브 느낌(둥근 트랙 + 원형 손잡이) ── */
+      .slider input[type='range'] {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 6px;
+        border-radius: var(--r-pill);
+        background: var(--bg-accent);
+        border: 1px solid var(--line);
+      }
+      .slider input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--point-main);
+        border: 2px solid var(--bg-surface);
+        box-shadow: var(--i2-shadow);
+        cursor: pointer;
+      }
+      .slider input[type='range']::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--point-main);
+        border: 2px solid var(--bg-surface);
+        box-shadow: var(--i2-shadow);
+        cursor: pointer;
+        border-color: var(--bg-surface);
+      }
+
+      /* ── 이미지 미리보기 썸네일 → index2 라운드 타일 ── */
+      .imgprev img {
+        border-radius: var(--r-sm);
+      }
+
+      /* :has() 미지원 브라우저 안전망 — 슬라이딩 인디케이터가 성립하지 않으므로
+         인디케이터를 숨기고 활성칩을 예전처럼 '버튼 배경'으로 되돌린다.
+         (없으면 선택 표시가 통째로 사라짐) */
+      @supports not selector(:has(*)) {
+        .seg::before,
+        .srcseg .srcbtns::before,
+        .sbtabs::before {
+          display: none;
+        }
+        .seg button.on,
+        .srcseg .srcbtns button.on,
+        .sbtab.on {
+          background: var(--point-main);
+          box-shadow: var(--i2-shadow);
+        }
+      }
+
+      /* 움직임 최소화 설정 — '전부 끄기'가 아니라 **이동만** 제거.
+         색·투명도 전환은 어느 칸이 선택됐는지 이해를 돕므로 남긴다. */
+      @media (prefers-reduced-motion: reduce) {
+        .seg::before,
+        .srcseg .srcbtns::before,
+        .sbtabs::before {
+          /* 위치(left/right)는 즉시 반영 → 미끄러짐·늘어남 없음 */
+          transition-property: opacity;
+          transition-duration: 160ms;
+          transition-timing-function: ease;
+        }
+        .seg button,
+        .srcseg .srcbtns button,
+        .sbtab,
+        .pills button {
+          transition:
+            color var(--i2-dur-color) ease,
+            background var(--i2-dur-color) ease;
+        }
+        .pills button.on {
+          animation: none;
+        }
+        .seg button:active,
+        .srcseg .srcbtns button:active,
+        .sbtab:active,
+        .pills button:active {
+          transform: none;
+        }
+      }
     </style>
   </head>
   <body>
@@ -5486,6 +7131,38 @@
             <div class="substep">화면 형식</div>
 
             <div class="fmtgrid">
+              <div class="fmtrow">
+                <div class="fmtlbl">
+                  화면 종류
+                  <span class="ko">Screen</span>
+                  <span class="info" tabindex="0" role="button" aria-label="화면 종류 도움말">
+                    ?
+                    <span class="tip">
+                      <b>테마를 입혀볼 화면</b>
+                      <br />
+                      <br />
+                      같은 팔레트를 서로 다른 화면에 얹어 확인해요. 색·버전·밝기 설정은 화면을 바꿔도 그대로 유지됩니다.
+                      <br />
+                      <br />
+                      <span class="accent">대시보드</span>
+                      — 패널·차트가 빽빽한 관제 대시보드
+                      <br />
+                      <br />
+                      <span class="accent">Digital Twin</span>
+                      — 3D 현장 뷰 위에 반투명 패널이 얹히는 디지털 트윈 관제 화면
+                      <br />
+                      <br />
+                      <span class="accent">포탈</span>
+                      — 준비 중
+                    </span>
+                  </span>
+                </div>
+                <div class="seg seg3" id="screen">
+                  <button data-s="dash" class="on">대시보드</button>
+                  <button data-s="dt">Digital Twin</button>
+                  <button data-s="portal" disabled title="준비 중입니다">포탈</button>
+                </div>
+              </div>
               <div class="fmtrow">
                 <div class="fmtlbl">
                   버전
@@ -6635,6 +8312,373 @@
             </div>
           </div>
         </div>
+
+        <!-- ===== Digital Twin 화면 =====
+             Figma DT_Sample(node 16:2407)을 표준으로 옮긴 화면. 색은 단 한 곳도
+             하드코딩하지 않고 .main에 주입되는 팔레트 변수(--bg-*, --text-*, --point-*,
+             --danger, --warning)만 참조하므로 대시보드와 똑같이 테마가 갈아끼워진다.
+             3D 배경 사진(dt-bg.jpg)은 보정 없이 원본 그대로 깐다. -->
+        <div class="dtstage" id="dtStage" hidden>
+          <!-- 씬을 헤더보다 바깥에 둬야 사진이 헤더 뒤까지 깔리고, 헤더 유리에 비칠 게 생긴다 -->
+          <div class="dt-scene" aria-hidden="true">
+            <div class="dt-scene-img"></div>
+          </div>
+          <div class="dt-hdr">
+            <div class="dt-brand">
+              <span class="logo"><img class="wlogo" src="logo.svg" alt="WEMB" /></span>
+              <span class="dt-bname">한국서부발전(주)</span>
+            </div>
+            <nav class="dt-nav">
+              <a class="on">재난관제</a>
+              <a>설비현황</a>
+              <a>대응절차</a>
+              <a>모의훈련</a>
+              <a>이력관리</a>
+            </nav>
+            <div class="dt-hstat">
+              <span class="dt-live"><i></i>감시모드 작동중</span>
+              <span class="dt-hicons">
+                <button type="button" class="dt-ico" aria-label="즐겨찾기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg></button>
+                <button type="button" class="dt-ico" aria-label="사용자"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></button>
+                <button type="button" class="dt-ico" aria-label="로그아웃"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg></button>
+              </span>
+              <span class="dt-clock">
+                <b class="num" id="dtTime">--시 --분 --초</b>
+                <small class="num" id="dtDate">----. --. --.</small>
+              </span>
+            </div>
+          </div>
+
+          <div class="dt-body">
+            <div class="dt-ui">
+              <!-- 좌상단: 뷰 전환 버튼 3개 -->
+              <div class="dt-navbtns">
+                <button type="button" class="dt-navbtn on">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
+                  <span>종합현황</span>
+                </button>
+                <button type="button" class="dt-navbtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21 1 6" /><line x1="8" y1="3" x2="8" y2="18" /><line x1="16" y1="6" x2="16" y2="21" /></svg>
+                  <span>기본위치</span>
+                </button>
+                <button type="button" class="dt-navbtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>
+                  <span>순차감시</span>
+                </button>
+              </div>
+
+              <!-- 우상단: 레이어 심볼 버튼 7개 -->
+              <div class="dt-symbols">
+                <button type="button" class="dt-sym on">
+                  <span class="dt-symb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg></span>
+                  <span>전체보기</span>
+                </button>
+                <button type="button" class="dt-sym">
+                  <span class="dt-symb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 12 6 12 9 5 13 19 16 12 22 12" /></svg></span>
+                  <span>지진감지</span>
+                </button>
+                <button type="button" class="dt-sym">
+                  <span class="dt-symb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2" /><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.25a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14" /></svg></span>
+                  <span>PIS</span>
+                </button>
+                <button type="button" class="dt-sym">
+                  <span class="dt-symb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg></span>
+                  <span>방재물품</span>
+                </button>
+                <button type="button" class="dt-sym">
+                  <span class="dt-symb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s5 5.5 5 10a5 5 0 0 1-10 0c0-4.5 5-10 5-10z" /></svg></span>
+                  <span>소방</span>
+                </button>
+                <button type="button" class="dt-sym">
+                  <span class="dt-symb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg></span>
+                  <span>CCTV</span>
+                </button>
+                <button type="button" class="dt-sym">
+                  <span class="dt-symb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg></span>
+                  <span>재난대피로</span>
+                </button>
+              </div>
+
+              <!-- 좌측: 지역 트리 -->
+              <aside class="dt-card dt-region">
+                <div class="dt-cardhead">
+                  <span class="dt-chico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg></span>
+                  <h3>지역</h3>
+                </div>
+                <div class="dt-search">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                  <input type="text" placeholder="지역 검색…" />
+                </div>
+                <div class="dt-tabs"><b class="on">당진화력발전소</b></div>
+                <!-- 트리: .dt-node > .dt-ti(줄) + .dt-kids(자식). 화살표 클릭 = 접기/펴기,
+                     줄 클릭 = 선택. 자식 없는 잎(.dt-leaf)은 화살표 없음. -->
+                <div class="dt-tree">
+                  <div class="dt-node open">
+                    <div class="dt-ti dt-l1">
+                      <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                      <span class="dt-tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg></span>
+                      <span class="dt-tnm">1발전처</span>
+                    </div>
+                    <div class="dt-kids">
+                      <div class="dt-kidsin">
+                        <div class="dt-node open">
+                          <div class="dt-ti dt-l2">
+                            <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                            <span class="dt-tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg></span>
+                            <span class="dt-tnm">보일러 설비</span>
+                          </div>
+                          <div class="dt-kids">
+                            <div class="dt-kidsin">
+                              <div class="dt-ti dt-l3 dt-leaf on"><span class="dt-tnm">연소 장치</span></div>
+                              <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">열교환기</span></div>
+                              <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">급수 펌프</span></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="dt-node">
+                          <div class="dt-ti dt-l2">
+                            <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                            <span class="dt-tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg></span>
+                            <span class="dt-tnm">터빈 발전기</span>
+                          </div>
+                          <div class="dt-kids">
+                            <div class="dt-kidsin">
+                              <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">고압 터빈</span></div>
+                              <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">저압 터빈</span></div>
+                              <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">복수기</span></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="dt-node">
+                          <div class="dt-ti dt-l2">
+                            <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                            <span class="dt-tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg></span>
+                            <span class="dt-tnm">전기 설비</span>
+                          </div>
+                          <div class="dt-kids">
+                            <div class="dt-kidsin">
+                              <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">변압기 #302</span></div>
+                              <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">배전반 #1</span></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dt-tgap"></div>
+                  <div class="dt-node">
+                    <div class="dt-ti dt-l1">
+                      <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                      <span class="dt-tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg></span>
+                      <span class="dt-tnm">2발전처</span>
+                    </div>
+                    <div class="dt-kids">
+                      <div class="dt-kidsin">
+                        <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">보일러 설비</span></div>
+                        <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">터빈 발전기</span></div>
+                        <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">전기 설비</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dt-node">
+                    <div class="dt-ti dt-l1">
+                      <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                      <span class="dt-tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg></span>
+                      <span class="dt-tnm">3발전처</span>
+                    </div>
+                    <div class="dt-kids">
+                      <div class="dt-kidsin">
+                        <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">보일러 설비</span></div>
+                        <div class="dt-ti dt-l3 dt-leaf"><span class="dt-tnm">터빈 발전기</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </aside>
+
+              <!-- 우측: 자산 리스트 -->
+              <aside class="dt-card dt-assets">
+                <div class="dt-cardhead">
+                  <span class="dt-chico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg></span>
+                  <h3>자산 리스트</h3>
+                </div>
+                <div class="dt-search">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                  <input type="text" placeholder="자산 리스트 검색" />
+                </div>
+                <!-- 자산 그룹: 트리와 같은 .dt-node 구조. 항목은 여러 개 동시 선택(감시 대상 켜기) -->
+                <div class="dt-drops">
+                  <div class="dt-node open">
+                    <div class="dt-drop">
+                      <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                      <span class="dt-tnm">CCTV</span>
+                    </div>
+                    <div class="dt-kids">
+                      <div class="dt-kidsin">
+                        <div class="dt-di">지하 1층 기계실</div>
+                        <div class="dt-di on">지하 1층 기계실</div>
+                        <div class="dt-di">지하 1층 기계실</div>
+                        <div class="dt-di on">지하 1층 기계실</div>
+                        <div class="dt-di">지하 1층 기계실</div>
+                        <div class="dt-di">지하 1층 기계실</div>
+                        <div class="dt-di">지하 1층 기계실</div>
+                        <div class="dt-di">지하 1층 기계실</div>
+                        <div class="dt-di">지하 1층 기계실</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dt-tgap"></div>
+                  <div class="dt-node">
+                    <div class="dt-drop">
+                      <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                      <span class="dt-tnm">소방시설</span>
+                    </div>
+                    <div class="dt-kids">
+                      <div class="dt-kidsin">
+                        <div class="dt-di">옥내 소화전 #1</div>
+                        <div class="dt-di">옥내 소화전 #2</div>
+                        <div class="dt-di">스프링클러 A동</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dt-node">
+                    <div class="dt-drop">
+                      <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                      <span class="dt-tnm">소방시설</span>
+                    </div>
+                    <div class="dt-kids">
+                      <div class="dt-kidsin">
+                        <div class="dt-di">화재 감지기 B동</div>
+                        <div class="dt-di">제연 설비 #3</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dt-node">
+                    <div class="dt-drop">
+                      <span class="dt-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6" /></svg></span>
+                      <span class="dt-tnm">소방시설</span>
+                    </div>
+                    <div class="dt-kids">
+                      <div class="dt-kidsin">
+                        <div class="dt-di">소화 펌프실</div>
+                        <div class="dt-di">비상 발전기</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </aside>
+
+              <!-- 하단: 이벤트 로그 -->
+              <section class="dt-card dt-log">
+                <div class="dt-loghead">
+                  <h3>이벤트 현황</h3>
+                  <span class="dt-lsep"></span>
+                  <span class="dt-lsound">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
+                    소리 알림
+                  </span>
+                  <span class="dt-switch"><b>AUTO</b><i class="on"></i></span>
+                  <span class="dt-sp"></span>
+                  <!-- Ack = 신규 배지 지우기, All = 필터 해제. 카운트 칩 = 등급별 필터 -->
+                  <button type="button" class="dt-chip" data-act="ack">Ack</button>
+                  <button type="button" class="dt-chip on" data-act="all">All</button>
+                  <span class="dt-counts">
+                    <button type="button" class="dt-cnt" data-lv="1"><i class="lv1"></i>3</button>
+                    <button type="button" class="dt-cnt" data-lv="2"><i class="lv2"></i>11</button>
+                    <button type="button" class="dt-cnt" data-lv="3"><i class="lv3"></i>24</button>
+                    <button type="button" class="dt-cnt" data-lv="4"><i class="lv4"></i>927</button>
+                    <button type="button" class="dt-cnt" data-lv="5"><i class="lv5"></i>327</button>
+                  </span>
+                </div>
+                <!-- data-lv = 등급. 상단 카운트 칩이 이 값으로 행을 걸러낸다 -->
+                <div class="dt-table" id="dtTable">
+                  <div class="dt-tr dt-th">
+                    <span>등급</span>
+                    <span>장비명</span>
+                    <span>시간</span>
+                    <span>이벤트타입</span>
+                    <span>메시지</span>
+                    <span></span>
+                  </div>
+                  <div class="dt-tr" data-lv="3">
+                    <span><i class="dt-dot lv3"></i></span>
+                    <span>변압기 #302</span>
+                    <span class="num">2026-01-12 09:33:00</span>
+                    <span><b class="dt-tag">SYSTEM</b></span>
+                    <span>전압 불균형 감지됨 (Phase A: 210V, Phase B: 230V) - 즉시 점검 요망</span>
+                    <span class="dt-acts">
+                      <button type="button" class="dt-abtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg>영상</button>
+                    </span>
+                  </div>
+                  <div class="dt-tr" data-lv="3">
+                    <span><i class="dt-dot lv3"></i></span>
+                    <span>변압기 #302</span>
+                    <span class="num">2026-01-12 09:33:00</span>
+                    <span><b class="dt-tag">SYSTEM</b></span>
+                    <span>전압 불균형 감지됨 (Phase A: 210V, Phase B: 230V) - 즉시 점검 요망</span>
+                    <span class="dt-acts">
+                      <button type="button" class="dt-abtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg>영상</button>
+                    </span>
+                  </div>
+                  <div class="dt-tr on" data-lv="1" data-new="1">
+                    <span><i class="dt-dot lv1"></i></span>
+                    <span>변압기 #302</span>
+                    <span class="num">2026-01-12 09:33:00</span>
+                    <span><b class="dt-tag crit">CRITICAL</b></span>
+                    <span>전압 불균형 감지됨 (Phase A: 210V, Phase B: 230V) - 즉시 점검 요망</span>
+                    <span class="dt-acts">
+                      <b class="dt-new">신규</b>
+                      <button type="button" class="dt-abtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg>영상</button>
+                      <button type="button" class="dt-abtn">영상</button>
+                    </span>
+                  </div>
+                  <div class="dt-tr" data-lv="5">
+                    <span><i class="dt-dot lv5"></i></span>
+                    <span>변압기 #302</span>
+                    <span class="num">2026-01-12 09:33:00</span>
+                    <span><b class="dt-tag">SYSTEM</b></span>
+                    <span>전압 불균형 감지됨 (Phase A: 210V, Phase B: 230V) - 즉시 점검 요망</span>
+                    <span class="dt-acts">
+                      <button type="button" class="dt-abtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg>영상</button>
+                    </span>
+                  </div>
+                  <div class="dt-tr" data-lv="5">
+                    <span><i class="dt-dot lv5"></i></span>
+                    <span>변압기 #302</span>
+                    <span class="num">2026-01-12 09:33:00</span>
+                    <span><b class="dt-tag">SYSTEM</b></span>
+                    <span>전압 불균형 감지됨 (Phase A: 210V, Phase B: 230V) - 즉시 점검 요망</span>
+                    <span class="dt-acts">
+                      <button type="button" class="dt-abtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg>영상</button>
+                    </span>
+                  </div>
+                  <div class="dt-tr" data-lv="4">
+                    <span><i class="dt-dot lv4"></i></span>
+                    <span>변압기 #302</span>
+                    <span class="num">2026-01-12 09:33:00</span>
+                    <span><b class="dt-tag">SYSTEM</b></span>
+                    <span>전압 불균형 감지됨 (Phase A: 210V, Phase B: 230V) - 즉시 점검 요망</span>
+                    <span class="dt-acts">
+                      <button type="button" class="dt-abtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg>영상</button>
+                    </span>
+                  </div>
+                  <div class="dt-tr" data-lv="2" data-new="1">
+                    <span><i class="dt-dot lv2"></i></span>
+                    <span>변압기 #302</span>
+                    <span class="num">2026-01-12 09:33:00</span>
+                    <span><b class="dt-tag">SYSTEM</b></span>
+                    <span>전압 불균형 감지됨 (Phase A: 210V, Phase B: 230V) - 즉시 점검 요망</span>
+                    <span class="dt-acts">
+                      <b class="dt-new">신규</b>
+                      <button type="button" class="dt-abtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z" /><polygon points="14 11 21 7.5 21 15.5 14 12" /></svg>영상</button>
+                    </span>
+                  </div>
+                  <div class="dt-empty" id="dtEmpty" hidden>해당 등급의 이벤트가 없습니다</div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
       </main>
 
       <!-- A/B 테마 비교 오버레이 -->
@@ -7026,6 +9070,7 @@
         harmony: 'analog',
         mode: 'dark',
         version: 'flat' /* 'flat'(≤10색) | 'enterprise'(≤50색) */,
+        screen: 'dash' /* 'dash'(대시보드) | 'dt'(Digital Twin) | 'portal'(준비 중) */,
         subHex: null,
         mapMode: 'auto',
         imgCols: null,
@@ -7406,6 +9451,7 @@
             /* 강조색 위 칩 글자색 — 흰/검 중 대비 높은 쪽 자동 선택 */
             main.style.setProperty('--on-point', contrast(coreMap['point/main']));
             main.style.setProperty('--on-accent', contrast(T.accent));
+            main.style.setProperty('--on-danger', contrast(coreMap['danger']));
           }
           /* 사이드바는 테마를 적용하지 않음 — :root의 고정 중립 모노톤 크롬 유지 */
         } else {
@@ -7416,6 +9462,7 @@
             main.setAttribute('data-version', 'flat');
             for (const k in RV) main.style.setProperty(RV[k], coreMap[k]);
             main.style.setProperty('--on-point', contrast(coreMap['point/main']));
+            main.style.setProperty('--on-danger', contrast(coreMap['danger']));
           }
           /* 사이드바는 테마를 적용하지 않음 — :root의 고정 중립 모노톤 크롬 유지 */
         }
@@ -7710,6 +9757,187 @@
           })
       );
       syncVersionUI(); /* 저장된 버전으로 토글 상태 반영 */
+
+      /* ===== 화면 종류(대시보드 / Digital Twin / 포탈) =====
+         팔레트는 .main에 주입되므로 두 화면 모두 같은 변수를 물려받는다.
+         여기서는 어떤 화면을 보여줄지와, 그 화면에서 쓸 수 없는 사이드바 탭만 정리한다. */
+      const SCREENS = {
+        dash: document.querySelector('.stage'),
+        dt: document.getElementById('dtStage'),
+      };
+      function applyScreen() {
+        const s = state.screen || 'dash';
+        for (const k in SCREENS) if (SCREENS[k]) SCREENS[k].hidden = k !== s;
+        const main = document.querySelector('.main');
+        if (main) main.setAttribute('data-screen', s);
+        document.querySelectorAll('#screen button').forEach((x) => x.classList.toggle('on', x.dataset.s === s));
+        /* '대시보드 편집'(배치·내용)은 대시보드 화면 전용 — 다른 화면에선 잠그고 테마 탭으로 되돌림 */
+        const dashTab = document.querySelector('.sbtab[data-tab="dash"]');
+        if (dashTab) {
+          const lock = s !== 'dash';
+          dashTab.disabled = lock;
+          dashTab.classList.toggle('locked', lock);
+          dashTab.title = lock ? '대시보드 화면에서만 편집할 수 있어요' : '';
+          if (lock && dashTab.classList.contains('on')) selectSidebarTab('theme');
+        }
+        try {
+          localStorage.setItem('wemb-screen', s);
+        } catch (e) {}
+      }
+      try {
+        const ss = localStorage.getItem('wemb-screen');
+        if (ss === 'dash' || ss === 'dt') state.screen = ss;
+      } catch (e) {}
+      document.querySelectorAll('#screen button').forEach(
+        (b) =>
+          (b.onclick = () => {
+            if (b.disabled) return;
+            state.screen = b.dataset.s;
+            applyScreen();
+          })
+      );
+
+      /* ===== Digital Twin 화면 상호작용 =====
+         #dtStage에 위임 하나로 전부 처리. A/B 미리보기의 복제본에는 리스너가 안 붙는데,
+         복제본은 색을 비교하는 정지 화면이라 그게 맞다.
+         테마 미리보기용 데모라 어떤 상태도 localStorage에 저장하지 않는다. */
+      (function initDT() {
+        const dt = document.getElementById('dtStage');
+        if (!dt) return;
+        const table = document.getElementById('dtTable');
+        const empty = document.getElementById('dtEmpty');
+        let lvFilter = null;
+
+        /* 같은 묶음 안에서 하나만 선택 */
+        const pickOne = (el, sel, scope) => (scope || dt).querySelectorAll(sel).forEach((x) => x.classList.toggle('on', x === el));
+
+        function applyLogFilter() {
+          let shown = 0;
+          table.querySelectorAll('.dt-tr:not(.dt-th)').forEach((r) => {
+            const on = !lvFilter || r.dataset.lv === lvFilter;
+            r.hidden = !on;
+            if (on) shown++;
+          });
+          empty.hidden = shown > 0;
+          dt.querySelectorAll('.dt-cnt').forEach((c) => c.classList.toggle('on', c.dataset.lv === lvFilter));
+          dt.querySelector('.dt-chip[data-act="all"]').classList.toggle('on', !lvFilter);
+        }
+
+        /* 검색 — 이름이 걸리는 줄만 남기고, 자식이 걸리면 부모를 남긴 채 펼쳐서 보여줌.
+           검색어를 지우면 검색 전 펼침 상태로 되돌린다. */
+        function filterPanel(input) {
+          const card = input.closest('.dt-card');
+          const root = card.querySelector('.dt-tree, .dt-drops');
+          if (!root) return;
+          const q = input.value.trim().toLowerCase();
+          const nodes = [...root.querySelectorAll('.dt-node')];
+          if (q && !root.__snap) root.__snap = nodes.map((n) => n.classList.contains('open'));
+          const hit = (el) => el.textContent.toLowerCase().includes(q);
+          const walk = (node) => {
+            const row = node.querySelector(':scope > .dt-ti, :scope > .dt-drop');
+            const kids = node.querySelector(':scope > .dt-kids > .dt-kidsin');
+            let any = false;
+            if (kids)
+              [...kids.children].forEach((c) => {
+                if (c.classList.contains('dt-node')) any = walk(c) || any;
+                else {
+                  const m = !q || hit(c);
+                  c.hidden = !m;
+                  any = m || any;
+                }
+              });
+            const keep = !q || hit(row) || any;
+            node.hidden = !keep;
+            if (q && any) node.classList.add('open');
+            return keep;
+          };
+          [...root.children].forEach((c) => {
+            if (c.classList.contains('dt-node')) walk(c);
+            else if (c.classList.contains('dt-tgap')) c.hidden = !!q;
+            else c.hidden = !!q && !hit(c);
+          });
+          if (!q && root.__snap) {
+            nodes.forEach((n, i) => n.classList.toggle('open', root.__snap[i]));
+            root.__snap = null;
+          }
+        }
+
+        dt.addEventListener('click', (e) => {
+          /* 화살표 = 접기/펴기. 줄 선택보다 먼저 가로채야 함 */
+          const chev = e.target.closest('.dt-chev');
+          if (chev) {
+            const node = chev.closest('.dt-node');
+            if (node) node.classList.toggle('open');
+            e.stopPropagation();
+            return;
+          }
+          /* 액션 버튼은 행 선택으로 번지지 않게 */
+          if (e.target.closest('.dt-abtn')) {
+            e.stopPropagation();
+            return;
+          }
+
+          const t = e.target;
+          const ti = t.closest('.dt-ti');
+          if (ti && dt.contains(ti)) {
+            /* 자식 있는 줄은 클릭만으로도 펼쳐지는 게 자연스러움.
+               closest('.dt-node')를 쓰면 안 됨 — 잎(.dt-leaf)은 .dt-kidsin 안에 있어
+               조상 노드가 잡히고, 잎을 고를 때마다 부모가 접혀버린다. 자기 줄일 때만 토글. */
+            const node = ti.parentElement.classList.contains('dt-node') ? ti.parentElement : null;
+            if (node && node.querySelector(':scope > .dt-kids')) node.classList.toggle('open');
+            pickOne(ti, '.dt-tree .dt-ti');
+            return;
+          }
+          const drop = t.closest('.dt-drop');
+          if (drop) {
+            drop.closest('.dt-node').classList.toggle('open');
+            return;
+          }
+          /* 자산 항목은 감시 대상 켜기 — 여러 개 동시 선택 */
+          const di = t.closest('.dt-di');
+          if (di) {
+            di.classList.toggle('on');
+            return;
+          }
+          const cnt = t.closest('.dt-cnt');
+          if (cnt) {
+            lvFilter = lvFilter === cnt.dataset.lv ? null : cnt.dataset.lv;
+            applyLogFilter();
+            return;
+          }
+          const chip = t.closest('.dt-chip');
+          if (chip) {
+            if (chip.dataset.act === 'all') {
+              lvFilter = null;
+              applyLogFilter();
+            } else {
+              /* Ack — 확인 처리해 '신규' 배지를 지움 */
+              dt.querySelectorAll('.dt-tr[data-new]').forEach((r) => r.removeAttribute('data-new'));
+            }
+            return;
+          }
+          const tr = t.closest('.dt-tr:not(.dt-th)');
+          if (tr) {
+            pickOne(tr, '.dt-tr:not(.dt-th)', table);
+            return;
+          }
+          const sw = t.closest('.dt-switch');
+          if (sw) {
+            sw.querySelector('i').classList.toggle('on');
+            return;
+          }
+          const nav = t.closest('.dt-nav a');
+          if (nav) return pickOne(nav, '.dt-nav a');
+          const nb = t.closest('.dt-navbtn');
+          if (nb) return pickOne(nb, '.dt-navbtn');
+          const sym = t.closest('.dt-sym');
+          if (sym) return pickOne(sym, '.dt-sym');
+          const tab = t.closest('.dt-tabs b');
+          if (tab) return pickOne(tab, '.dt-tabs b');
+        });
+
+        dt.querySelectorAll('.dt-search input').forEach((inp) => inp.addEventListener('input', () => filterPanel(inp)));
+      })();
       /* 모든 색상 소스 아코디언·미세조정 토글을 접음 */
       function closeAllToggles() {
         document.querySelectorAll('.colorset .acc, .colorset details.more').forEach((d) => (d.open = false));
@@ -8069,18 +10297,23 @@
       document.getElementById('opener').onclick = () => appEl.classList.remove('collapsed');
 
       /* 사이드바 상단 탭 — 테마(컬러 워크플로우)와 대시보드 편집을 분리해 전환 */
+      let selectSidebarTab = () => {};
       (function () {
         const tabbody = document.querySelector('.tabbody');
         const tabs = [...document.querySelectorAll('.sbtab')];
+        /* 화면 종류를 바꿀 때(applyScreen) 탭을 강제로 되돌릴 수 있도록 밖으로 노출 */
+        selectSidebarTab = (t) => {
+          if (tabbody) tabbody.setAttribute('data-tab', t);
+          tabs.forEach((x) => {
+            const on = x.dataset.tab === t;
+            x.classList.toggle('on', on);
+            x.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+        };
         tabs.forEach((b) => {
           b.addEventListener('click', () => {
-            const t = b.dataset.tab;
-            if (tabbody) tabbody.setAttribute('data-tab', t);
-            tabs.forEach((x) => {
-              const on = x === b;
-              x.classList.toggle('on', on);
-              x.setAttribute('aria-selected', on ? 'true' : 'false');
-            });
+            if (b.disabled) return;
+            selectSidebarTab(b.dataset.tab);
           });
         });
       })();
@@ -8988,10 +11221,18 @@
         const time = p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
         return date + ' · ' + time;
       }
-      document.getElementById('clock').textContent = fmtClock();
-      setInterval(() => {
+      /* Digital Twin 헤더 시계 — Figma와 같은 '16시 28분 38초 / 2026. 01. 12.' 형식 */
+      function tickClocks() {
         document.getElementById('clock').textContent = fmtClock();
-      }, 1000);
+        const d = new Date();
+        const p = (n) => String(n).padStart(2, '0');
+        const t = document.getElementById('dtTime');
+        const dd = document.getElementById('dtDate');
+        if (t) t.textContent = `${p(d.getHours())}시 ${p(d.getMinutes())}분 ${p(d.getSeconds())}초`;
+        if (dd) dd.textContent = `${d.getFullYear()}. ${p(d.getMonth() + 1)}. ${p(d.getDate())}.`;
+      }
+      tickClocks();
+      setInterval(tickClocks, 1000);
 
       /* weather — 실시간 날씨
          네이버 날씨는 공개 API가 없고, 브라우저에서 페이지를 직접 읽으면 CORS로 차단돼요.
@@ -9565,7 +11806,7 @@
         const ok = window.confirm(
           '모든 설정을 처음 상태로 되돌릴까요?\n\n' +
             '· 색상 · 기준 색 · 배색 방식 · 미세 조정\n' +
-            '· 패널 모서리 둥글기\n' +
+            '· 화면 종류 · 패널 모서리 둥글기\n' +
             '· 대시보드 배치 · 내용 · 차트 종류\n' +
             '· 되돌리기 기록\n' +
             '이 모두 초기화됩니다.\n\n' +
@@ -9573,7 +11814,7 @@
         );
         if (!ok) return;
         try {
-          ['wemb-version', 'wemb-dash-radius', 'wemb-dash-charttype', 'wemb-dash-layout', 'wemb-dash-content'].forEach((k) => localStorage.removeItem(k));
+          ['wemb-version', 'wemb-screen', 'wemb-dash-radius', 'wemb-dash-charttype', 'wemb-dash-layout', 'wemb-dash-content'].forEach((k) => localStorage.removeItem(k));
         } catch (e) {}
         /* 공유 URL(#t=...)이 남아 있으면 새로고침 시 다시 적용되므로 해시 제거 */
         try {
@@ -9775,8 +12016,9 @@
         scaler.style.width = VW * f + 'px';
         scaler.style.height = VH * f + 'px';
       }
-      /* 실제 대시보드(.stage)를 통째로 복제해 해당 테마 색으로 칠한 뒤, 칸에 맞춰 축소 표시.
-         가상 캔버스 크기를 실제 .main과 똑같이 잡아 동일 레이아웃으로 잘리지 않게 함 */
+      /* 지금 보고 있는 화면(대시보드 또는 Digital Twin)을 통째로 복제해 해당 테마 색으로
+         칠한 뒤, 칸에 맞춰 축소 표시. 가상 캔버스 크기를 실제 .main과 똑같이 잡아
+         동일 레이아웃으로 잘리지 않게 함 */
       function renderThemeInto(slotEl, theme, side) {
         const hex = themeCoreMap(theme);
         const radius = theme.radius != null ? theme.radius : 8;
@@ -9795,10 +12037,15 @@
         virt.setAttribute('data-mode', theme.mode);
         for (const k in RV) virt.style.setProperty(RV[k], hex[k]);
         virt.style.setProperty('--on-point', contrast(hex['point/main']));
+        virt.style.setProperty('--on-danger', contrast(hex['danger']));
         virt.style.setProperty('--radius-panel', radius + 'px');
         virt.style.background = hex['bg/page'];
         virt.style.color = hex['text/strong'];
-        const clone = document.querySelector('.stage').cloneNode(true); /* 이미 그려진 차트 SVG까지 그대로 복제 */
+        /* 지금 화면을 복제 — 숨김 속성은 떼야 복제본이 보인다 */
+        const src = SCREENS[state.screen] || SCREENS.dash;
+        const clone = src.cloneNode(true); /* 이미 그려진 차트 SVG까지 그대로 복제 */
+        clone.hidden = false;
+        clone.removeAttribute('hidden');
         clone.classList.remove('content-editing');
         const banner = clone.querySelector('.editbanner');
         if (banner) banner.remove();
@@ -9993,15 +12240,16 @@
           if (!h2c()) await loadScript('https://cdn.jsdelivr.net/npm/html2canvas-pro@1.5.8/dist/html2canvas-pro.min.js');
           const render = h2c();
           if (!render) throw new Error('no lib');
-          const el = document.querySelector('.main');
+          const el = document.querySelector('.main'); /* 지금 보이는 화면만 잡힘 — 숨은 화면은 display:none */
           const canvas = await render(el, { backgroundColor: themeCoreMap(captureTheme())['bg/page'], scale: 2, logging: false, useCORS: true });
+          const isDT = state.screen === 'dt';
           await new Promise((res) =>
             canvas.toBlob((b) => {
-              downloadBlob(b, 'wemb-dashboard.png');
+              downloadBlob(b, isDT ? 'wemb-digital-twin.png' : 'wemb-dashboard.png');
               res();
             }, 'image/png')
           );
-          exHintMsg('대시보드 PNG를 저장했어요.', 'ok');
+          exHintMsg((isDT ? 'Digital Twin' : '대시보드') + ' PNG를 저장했어요.', 'ok');
         } catch (e) {
           exHintMsg('PNG 생성에 실패했어요(오프라인이면 인터넷 연결이 필요). 대신 팔레트 SVG를 이용하세요.', 'err');
         }
@@ -10624,7 +12872,8 @@
       /* (6) 온보딩 스포트라이트(코치마크) — 실제 UI 영역을 순서대로 안내 */
       const COACH_STEPS = [
         { sel: '.colorset .srcseg', ttl: '① 색을 골라요', desc: '여기서 방식을 고르세요. 잘 모르겠으면 <b>추천</b>을 눌러 마음에 드는 걸 하나 고르면 끝이에요.', side: 'right' },
-        { sel: '.main .stage', ttl: '② 오른쪽에서 확인', desc: '고른 색이 실제 관제 화면에 바로 입혀져요. 글자가 안 보이면 왼쪽에 <b>경고</b>가 자동으로 떠요.', side: 'left' },
+        /* 화면 종류에 따라 .stage가 숨겨질 수 있으므로 항상 보이는 .main을 가리킴 */
+        { sel: '.main', ttl: '② 오른쪽에서 확인', desc: '고른 색이 실제 관제 화면에 바로 입혀져요. 글자가 안 보이면 왼쪽에 <b>경고</b>가 자동으로 떠요.', side: 'left' },
         { sel: '#exportOpen', ttl: '③ 내보내기', desc: '마음에 들면 <b>코드·이미지·PDF 사양서·공유 링크</b>로 내보내 개발·디자인팀에 전달하세요.', side: 'right' },
       ];
       (function initCoach() {
@@ -11186,6 +13435,7 @@
       })();
 
       /* ---------- 초기화 ---------- */
+      applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
       apply();
       loadSnapshots();
       renderSnapshots();
