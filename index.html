@@ -336,7 +336,9 @@
       }
       .sbtab .ko {
         display: block;
-        font-size: 11px;
+        white-space: nowrap;
+        font-size: 10.5px;
+        letter-spacing: -0.3px;
         font-weight: 500;
         margin-top: 3px;
         color: color-mix(in srgb, var(--text-weak) 80%, transparent);
@@ -1590,6 +1592,22 @@
         border: 1px solid color-mix(in srgb, var(--point-main) 40%, var(--line));
         border-radius: 12px;
         background: color-mix(in srgb, var(--point-main) 5%, var(--bg-page));
+      }
+      /* 디자인 패널 안의 '이 부분만 초기화' 버튼 — 아래 주 리셋(배치·내용 되돌리기)과 구분되게 작고 subtle하게 */
+      .designpanel .subreset {
+        align-self: flex-end;
+        width: auto;
+        margin-top: -4px;
+        padding: 4px 9px;
+        font-size: 11px;
+        color: var(--text-weak);
+        background: transparent;
+        border-color: transparent;
+      }
+      .designpanel .subreset:hover {
+        color: var(--text-strong);
+        background: color-mix(in srgb, var(--text-strong) 8%, transparent);
+        border-color: transparent;
       }
       .designpanel.show {
         display: flex;
@@ -3229,7 +3247,7 @@
       /* dashboard shell */
       .stage {
         width: 100%;
-        padding: 16px 22px;
+        padding: calc(16px * var(--pad-scale, 1)) calc(22px * var(--pad-scale, 1));
         display: flex;
         flex-direction: column;
         gap: 14px;
@@ -3495,11 +3513,11 @@
       .dt-ui {
         position: absolute;
         inset: 0;
-        padding: 14px 18px;
+        padding: calc(14px * var(--pad-scale, 1)) calc(18px * var(--pad-scale, 1));
         display: grid;
         grid-template-columns: 230px minmax(0, 1fr) 246px;
         grid-template-rows: auto minmax(0, 1fr) auto;
-        gap: 10px 12px;
+        gap: var(--panel-gap, 10px);
         align-items: start;
       }
       .dt-navbtns {
@@ -3526,9 +3544,10 @@
 
       /* ── 유리 카드 공통 ── */
       .dt-card {
-        background: var(--dt-glass);
-        border: 1px solid var(--dt-stroke);
+        background: color-mix(in srgb, var(--panel-bg, var(--bg-surface)) 80%, transparent);
+        border: var(--panel-border-w, 1px) solid var(--dt-stroke);
         border-radius: var(--radius-panel);
+        box-shadow: var(--panel-shadow, none);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
         max-height: 100%;
@@ -3542,7 +3561,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 11px 12px;
+        padding: calc(11px * var(--pad-scale, 1)) calc(12px * var(--pad-scale, 1));
       }
       .dt-chico {
         width: 28px;
@@ -4576,7 +4595,7 @@
       .cols {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
+        gap: var(--panel-gap, 8px);
         align-items: stretch;
         flex: 1;
         min-height: 0;
@@ -4584,7 +4603,7 @@
       .col {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: var(--panel-gap, 8px);
         min-width: 0;
         min-height: 0;
       }
@@ -4605,9 +4624,10 @@
         flex-grow: 1.7;
       }
       .panel {
-        background: var(--bg-surface);
-        border: 1px solid var(--line);
+        background: var(--panel-bg, var(--bg-surface));
+        border: var(--panel-border-w, 1px) solid var(--line);
         border-radius: var(--radius-panel);
+        box-shadow: var(--panel-shadow, none);
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -4677,6 +4697,28 @@
       .stage.content-editing .panel:has(.charttype) .hint {
         display: none;
       }
+      /* ── Digital Twin 편집(배치/내용) 상태 ── */
+      .dtstage.dt-editing .dt-drag {
+        cursor: grab;
+        outline: 1px dashed color-mix(in srgb, var(--point-main) 60%, transparent);
+        outline-offset: 3px;
+      }
+      .dtstage.dt-editing .dt-drag:hover {
+        outline-color: var(--point-main);
+      }
+      .dtstage.dt-editing .dt-drag.dragging {
+        opacity: 0.7;
+        cursor: grabbing;
+      }
+      .dtstage.dt-content-editing [contenteditable] {
+        cursor: text;
+      }
+      .dtstage.dt-content-editing [contenteditable]:focus {
+        outline: 1px solid var(--point-main);
+        outline-offset: 2px;
+        border-radius: 3px;
+      }
+
       .ct-btn {
         display: inline-flex;
         align-items: center;
@@ -4846,7 +4888,7 @@
         display: flex;
         align-items: center;
         gap: 9px;
-        padding: 12px 16px 10px;
+        padding: calc(12px * var(--pad-scale, 1)) calc(16px * var(--pad-scale, 1)) calc(10px * var(--pad-scale, 1));
         flex: none;
         flex-wrap: nowrap;
       }
@@ -6750,7 +6792,7 @@
         background: transparent;
         border: 0;
         border-radius: calc(var(--r-md) - 5px);
-        padding: 9px 8px;
+        padding: 9px 5px;
         transition:
           color var(--i2-dur-color) ease,
           background var(--i2-dur-color) ease,
@@ -6918,6 +6960,12 @@
       }
       .seg button {
         padding: 9px 8px;
+      }
+      /* 3칸 세그먼트: 활성 시 볼드로 굵어제도 'Digital Twin'이 한 줄 유지 */
+      .seg.seg3 button {
+        white-space: nowrap;
+        padding-left: 6px;
+        padding-right: 6px;
       }
       .srcseg .srcbtns button {
         padding: 8px 4px;
@@ -7585,9 +7633,41 @@
                 <input type="range" id="radius" min="0" max="24" value="8" />
                 <span class="rval num" id="radiusVal">8px</span>
               </div>
-              <button class="ghostbtn" id="radiusReset" title="모서리 둥글기를 기본값(8px)으로 되돌려요">기본값(8px)</button>
+              <button class="ghostbtn subreset" id="radiusReset" title="모서리 둥글기를 기본값(8px)으로 되돌려요">기본값(8px)</button>
+              <div class="sublbl"><span>패널 간격<span class="ko">밀도</span></span></div>
+              <div class="slider" title="패널 사이 여백(그리드 간격)을 조절해요">
+                <input type="range" id="pgap" min="0" max="20" value="8" />
+                <span class="rval num" id="pgapVal">8px</span>
+              </div>
+              <div class="sublbl"><span>내부 여백<span class="ko">패딩</span></span></div>
+              <div class="slider" title="패널 내부·바깥 여백을 한 번에 조절해요">
+                <input type="range" id="ppad" min="60" max="140" value="100" />
+                <span class="rval num" id="ppadVal">100%</span>
+              </div>
+              <div class="sublbl"><span>그림자<span class="ko">입체감</span></span></div>
+              <div class="slider" title="패널이 화면 위로 떠 보이는 정도(그림자)를 조절해요">
+                <input type="range" id="pelev" min="0" max="4" value="0" />
+                <span class="rval num" id="pelevVal">없음</span>
+              </div>
+              <div class="sublbl"><span>테두리<span class="ko">두께</span></span></div>
+              <div class="slider" title="패널 테두리 두께(0=없음)를 조절해요">
+                <input type="range" id="pborder" min="0" max="3" value="1" />
+                <span class="rval num" id="pborderVal">1px</span>
+              </div>
+              <div class="sublbl"><span>표면 강도<span class="ko">배경 대비</span></span></div>
+              <div class="slider" title="패널 면이 배경에서 얼마나 도드라지는지 조절해요">
+                <input type="range" id="psurface" min="0" max="100" value="50" />
+                <span class="rval num" id="psurfaceVal">50%</span>
+              </div>
+              <div class="sublbl"><span>밀도 프리셋<span class="ko">한 번에</span></span></div>
+              <div class="seg seg3" id="density">
+                <button type="button" data-d="compact">콤팩트</button>
+                <button type="button" data-d="normal" class="on">보통</button>
+                <button type="button" data-d="roomy">넓게</button>
+              </div>
+              <button class="ghostbtn subreset" id="designReset" title="간격·여백·라운드·그림자·테두리·표면을 모두 기본값으로">↺ 디자인 초기화</button>
+
             </div>
-            <button class="ghostbtn" id="layoutReset" title="배치와 내용을 처음 상태로 되돌립니다">기본값으로 되돌리기</button>
           </div>
 
           <details class="stepcard" data-pane="theme" id="stepVerify">
@@ -9729,6 +9809,49 @@
         } catch (e) {}
         applyRadius(saved != null ? +saved : 8, false);
       })();
+
+      /* ===== 디자인 편집 확장: 간격·여백·그림자·테두리·표면 + 밀도 프리셋 =====
+         radius와 동일하게 CSS 변수 → localStorage 저장/복원. 대시보드 .panel/.cols/.stage 대상. */
+      (function () {
+        const root = document.documentElement.style;
+        const $ = (id) => document.getElementById(id);
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v | 0));
+        const setV = (id, t) => { const e = $(id); if (e) e.textContent = t; };
+        const setI = (id, v) => { const e = $(id); if (e) e.value = v; };
+        const store = (k, v) => { try { localStorage.setItem(k, String(v)); } catch (e) {} };
+        const GK = 'wemb-dash-gap', PK = 'wemb-dash-pad', EK = 'wemb-dash-elev', BK = 'wemb-dash-border', SK = 'wemb-dash-surface';
+        const shadowFor = (n) => (n <= 0 ? 'none' : '0 ' + (2 + n * 2) + 'px ' + (8 + n * 6) + 'px rgba(0,0,0,' + (0.1 + n * 0.06).toFixed(2) + ')');
+        function applyGap(px, save) { px = clamp(px, 0, 20); root.setProperty('--panel-gap', px + 'px'); setI('pgap', px); setV('pgapVal', px + 'px'); if (save) store(GK, px); }
+        function applyPad(pct, save) { pct = clamp(pct, 60, 140); root.setProperty('--pad-scale', (pct / 100).toFixed(2)); setI('ppad', pct); setV('ppadVal', pct + '%'); if (save) store(PK, pct); }
+        function applyElev(n, save) { n = clamp(n, 0, 4); root.setProperty('--panel-shadow', shadowFor(n)); setI('pelev', n); setV('pelevVal', n === 0 ? '없음' : String(n)); if (save) store(EK, n); }
+        function applyBorder(px, save) { px = clamp(px, 0, 3); root.setProperty('--panel-border-w', px + 'px'); setI('pborder', px); setV('pborderVal', px + 'px'); if (save) store(BK, px); }
+        function applySurface(pct, save) { pct = clamp(pct, 0, 100); const bg = pct >= 50 ? 'color-mix(in srgb, var(--bg-surface), #ffffff ' + (((pct - 50) / 50) * 14).toFixed(1) + '%)' : 'color-mix(in srgb, var(--bg-surface), var(--bg-page) ' + Math.round(((50 - pct) / 50) * 100) + '%)'; root.setProperty('--panel-bg', bg); setI('psurface', pct); setV('psurfaceVal', pct + '%'); if (save) store(SK, pct); }
+
+        const bind = (id, fn) => { const e = $(id); if (e) e.oninput = () => fn(+e.value, true); };
+        bind('pgap', applyGap); bind('ppad', applyPad); bind('pelev', applyElev); bind('pborder', applyBorder); bind('psurface', applySurface);
+
+        const PRESETS = { compact: { gap: 4, pad: 80, radius: 6, elev: 0 }, normal: { gap: 8, pad: 100, radius: 8, elev: 1 }, roomy: { gap: 14, pad: 120, radius: 12, elev: 2 } };
+        document.querySelectorAll('#density button').forEach((b) => {
+          b.onclick = () => {
+            document.querySelectorAll('#density button').forEach((x) => x.classList.remove('on'));
+            b.classList.add('on');
+            const p = PRESETS[b.dataset.d];
+            if (!p) return;
+            applyGap(p.gap, true); applyPad(p.pad, true); applyElev(p.elev, true);
+            if (typeof applyRadius === 'function') applyRadius(p.radius, true);
+          };
+        });
+        const dr = $('designReset');
+        if (dr) dr.onclick = () => {
+          applyGap(8, true); applyPad(100, true); applyElev(0, true); applyBorder(1, true); applySurface(50, true);
+          if (typeof applyRadius === 'function') applyRadius(8, true);
+          document.querySelectorAll('#density button').forEach((x) => x.classList.toggle('on', x.dataset.d === 'normal'));
+        };
+
+        const rd = (k, def) => { try { const v = localStorage.getItem(k); return v != null ? +v : def; } catch (e) { return def; } };
+        applyGap(rd(GK, 8), false); applyPad(rd(PK, 100), false); applyElev(rd(EK, 0), false); applyBorder(rd(BK, 1), false); applySurface(rd(SK, 50), false);
+      })();
+
       /* 디자인 편집 버튼 — 누르면 하위 메뉴(모서리 둥글기)를 토글로 펼침/접음 */
       (function () {
         const btn = document.getElementById('designToggle');
@@ -9791,6 +9914,8 @@
       };
       function applyScreen() {
         const s = state.screen || 'dash';
+        if (window.__dashEditExit) window.__dashEditExit();
+        if (window.__dtEditExit) window.__dtEditExit();
         for (const k in SCREENS) if (SCREENS[k]) SCREENS[k].hidden = k !== s;
         const main = document.querySelector('.main');
         if (main) main.setAttribute('data-screen', s);
@@ -9798,7 +9923,7 @@
         /* '대시보드 편집'(배치·내용)은 대시보드 화면 전용 — 다른 화면에선 잠그고 테마 탭으로 되돌림 */
         const dashTab = document.querySelector('.sbtab[data-tab="dash"]');
         if (dashTab) {
-          const lock = s !== 'dash';
+          const lock = s !== 'dash' && s !== 'dt';
           dashTab.disabled = lock;
           dashTab.classList.toggle('locked', lock);
           dashTab.title = lock ? '대시보드 화면에서만 편집할 수 있어요' : '';
@@ -11460,9 +11585,12 @@
           textEls.forEach((el) => (on ? el.setAttribute('contenteditable', 'true') : el.removeAttribute('contenteditable')));
           refreshBanner();
         }
-        layoutBtn.onclick = () => setLayout(!layoutMode);
-        contentBtn.onclick = () => setContent(!contentMode);
-        document.getElementById('layoutReset').onclick = () => {
+        layoutBtn.onclick = () => { if (state.screen !== 'dash') return; setLayout(!layoutMode); };
+        contentBtn.onclick = () => { if (state.screen !== 'dash') return; setContent(!contentMode); };
+        window.__dashEditExit = () => { setLayout(false); setContent(false); };
+        const _lrBtn = document.getElementById('layoutReset');
+        if (_lrBtn) _lrBtn.onclick = () => {
+          if (state.screen !== 'dash') return;
           applyLayout(DEFAULT_LAYOUT);
           textEls.forEach((el) => (el.innerHTML = DEFAULT_CONTENT[el.dataset.eid]));
           document.dispatchEvent(new CustomEvent('dash-reset')); /* 차트 종류도 기본값으로 */
@@ -11524,6 +11652,144 @@
         loadLayout();
         loadContent();
       })();
+
+      /* ===== Digital Twin 화면도 '대시보드 편집' 대상 =====
+         DT는 .dt-ui 그리드에 유리 패널이 놓인 고정 레이아웃 → 배치=패널 자유 이동(transform),
+         내용=글자 직접 수정. 버튼(editToggle/contentToggle/layoutReset)은 화면이 dt일 때만 이 모듈이 처리.
+         (대시보드 모듈은 위에서 screen!=='dash'면 무시하도록 가드됨) */
+      (function initDTEdit() {
+        const dt = document.getElementById('dtStage');
+        const ui = dt && dt.querySelector('.dt-ui');
+        if (!ui) return;
+        const layoutBtn = document.getElementById('editToggle');
+        const contentBtn = document.getElementById('contentToggle');
+        const resetBtn = document.getElementById('layoutReset');
+        if (!layoutBtn || !contentBtn) return;
+        const layoutLbl = layoutBtn.querySelector('.lbl');
+        const contentLbl = contentBtn.querySelector('.lbl');
+        const banner = document.getElementById('editBanner');
+        const bannerText = document.getElementById('editBannerText');
+        const body = dt.querySelector('.dt-body');
+
+        /* 배치 대상 = .dt-ui 직속 패널 5개 */
+        const panels = [...ui.children].filter((el) => el.matches('.dt-navbtns, .dt-symbols, .dt-card'));
+        panels.forEach((p, i) => { p.dataset.did = 'd' + i; p.classList.add('dt-drag'); });
+
+        /* ---------- 배치(자유 이동) ---------- */
+        const LK = 'wemb-dt-layout';
+        let pos = {};
+        const applyPos = () => panels.forEach((p) => {
+          const o = pos[p.dataset.did];
+          p.style.transform = o ? 'translate(' + o[0] + 'px, ' + o[1] + 'px)' : '';
+        });
+        const savePos = () => { try { localStorage.setItem(LK, JSON.stringify(pos)); } catch (e) {} };
+        try { const r = localStorage.getItem(LK); if (r) pos = JSON.parse(r) || {}; } catch (e) {}
+
+        /* ---------- 내용(글자) ---------- */
+        const CK = 'wemb-dt-content';
+        const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm';
+        const textEls = [...dt.querySelectorAll(DTSEL)];
+        textEls.forEach((el, i) => (el.dataset.deid = 'x' + i));
+        const DEF = {};
+        textEls.forEach((el) => (DEF[el.dataset.deid] = el.innerHTML));
+        const saveContent = () => {
+          const m = {};
+          textEls.forEach((el) => { if (el.innerHTML !== DEF[el.dataset.deid]) m[el.dataset.deid] = el.innerHTML; });
+          try { localStorage.setItem(CK, JSON.stringify(m)); } catch (e) {}
+        };
+        try {
+          const r = localStorage.getItem(CK);
+          if (r) { const m = JSON.parse(r); textEls.forEach((el) => { if (m[el.dataset.deid] != null) el.innerHTML = m[el.dataset.deid]; }); }
+        } catch (e) {}
+
+        /* ---------- 모드 토글 ---------- */
+        let layoutMode = false, contentMode = false;
+        function refreshBanner() {
+          if (layoutMode) bannerText.textContent = '패널을 끌어다 놓아 위치를 바꿔보세요. 변경 내용은 자동 저장됩니다.';
+          else if (contentMode) bannerText.textContent = '글자를 클릭해 직접 수정하세요. 변경 내용은 자동 저장됩니다.';
+          if (banner) banner.classList.toggle('show', layoutMode || contentMode);
+        }
+        function setLayout(on) {
+          layoutMode = on;
+          if (on && contentMode) setContent(false);
+          dt.classList.toggle('dt-editing', on);
+          layoutBtn.classList.toggle('on', on);
+          if (layoutLbl) layoutLbl.textContent = on ? '수정 끝내기' : '배치 수정하기';
+          refreshBanner();
+        }
+        function setContent(on) {
+          contentMode = on;
+          if (on && layoutMode) setLayout(false);
+          dt.classList.toggle('dt-content-editing', on);
+          contentBtn.classList.toggle('on', on);
+          if (contentLbl) contentLbl.textContent = on ? '수정 끝내기' : '내용 수정하기';
+          textEls.forEach((el) => (on ? el.setAttribute('contenteditable', 'true') : el.removeAttribute('contenteditable')));
+          refreshBanner();
+        }
+        window.__dtEditExit = () => { setLayout(false); setContent(false); };
+
+        layoutBtn.addEventListener('click', () => { if (state.screen === 'dt') setLayout(!layoutMode); });
+        contentBtn.addEventListener('click', () => { if (state.screen === 'dt') setContent(!contentMode); });
+        if (resetBtn) resetBtn.addEventListener('click', () => {
+          if (state.screen !== 'dt') return;
+          pos = {}; applyPos(); savePos();
+          textEls.forEach((el) => (el.innerHTML = DEF[el.dataset.deid]));
+          try { localStorage.removeItem(LK); localStorage.removeItem(CK); } catch (e) {}
+        });
+
+        /* 내용 입력 자동 저장(디바운스) */
+        let st;
+        dt.addEventListener('input', (e) => {
+          if (!contentMode || !e.target.closest('[data-deid]')) return;
+          clearTimeout(st); st = setTimeout(saveContent, 350);
+        });
+
+        /* 편집 중 클릭이 DT 기능(뷰전환·트리·필터)을 건드리지 않게 캡처 단계에서 차단 */
+        dt.addEventListener('click', (e) => {
+          if (layoutMode || (contentMode && e.target.closest('[data-deid]'))) e.stopPropagation();
+        }, true);
+
+        /* ---------- 자유 이동 드래그(포인터) ---------- */
+        let drag = null;
+        ui.addEventListener('pointerdown', (e) => {
+          if (!layoutMode || e.button !== 0) return;
+          const panel = e.target.closest('.dt-drag');
+          if (!panel || !ui.contains(panel)) return;
+          const o = pos[panel.dataset.did] || [0, 0];
+          const rect = panel.getBoundingClientRect();
+          drag = {
+            panel, pid: e.pointerId, sx: e.clientX, sy: e.clientY, ox: o[0], oy: o[1], cur: null,
+            baseL: rect.left - o[0], baseT: rect.top - o[1], w: rect.width, h: rect.height,
+            br: body.getBoundingClientRect()
+          };
+          panel.setPointerCapture(e.pointerId);
+          panel.classList.add('dragging');
+          e.preventDefault();
+        });
+        ui.addEventListener('pointermove', (e) => {
+          if (!drag) return;
+          let dx = drag.ox + (e.clientX - drag.sx);
+          let dy = drag.oy + (e.clientY - drag.sy);
+          const minDx = drag.br.left + 4 - drag.baseL, maxDx = drag.br.right - 4 - (drag.baseL + drag.w);
+          const minDy = drag.br.top + 4 - drag.baseT, maxDy = drag.br.bottom - 4 - (drag.baseT + drag.h);
+          if (minDx <= maxDx) dx = Math.max(minDx, Math.min(maxDx, dx));
+          if (minDy <= maxDy) dy = Math.max(minDy, Math.min(maxDy, dy));
+          drag.cur = [Math.round(dx), Math.round(dy)];
+          drag.panel.style.transform = 'translate(' + drag.cur[0] + 'px, ' + drag.cur[1] + 'px)';
+        });
+        const endDrag = (e) => {
+          if (!drag) return;
+          drag.panel.classList.remove('dragging');
+          if (drag.cur) { pos[drag.panel.dataset.did] = drag.cur; savePos(); }
+          try { drag.panel.releasePointerCapture(drag.pid); } catch (er) {}
+          drag = null;
+        };
+        ui.addEventListener('pointerup', endDrag);
+        ui.addEventListener('pointercancel', endDrag);
+
+        applyPos();
+      })();
+
 
       /* entrance */
       document.querySelectorAll('.kpi').forEach((el, i) => (el.style.animationDelay = i * 0.06 + 's'));
@@ -11838,7 +12104,7 @@
         );
         if (!ok) return;
         try {
-          ['wemb-version', 'wemb-screen', 'wemb-dash-radius', 'wemb-dash-charttype', 'wemb-dash-layout', 'wemb-dash-content'].forEach((k) => localStorage.removeItem(k));
+          ['wemb-version', 'wemb-screen', 'wemb-dash-radius', 'wemb-dash-charttype', 'wemb-dash-layout', 'wemb-dash-content', 'wemb-dash-gap', 'wemb-dash-pad', 'wemb-dash-elev', 'wemb-dash-border', 'wemb-dash-surface', 'wemb-dt-layout', 'wemb-dt-content'].forEach((k) => localStorage.removeItem(k));
         } catch (e) {}
         /* 공유 URL(#t=...)이 남아 있으면 새로고침 시 다시 적용되므로 해시 제거 */
         try {
