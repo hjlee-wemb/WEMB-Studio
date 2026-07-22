@@ -27,7 +27,7 @@
         --bg-accent: #243043;
         --line: #1b2438;
         --text-strong: #f2f5fc;
-        --text-weak: #8b93a8;
+        --text-weak: #a7b0c6;
         --point-main: #4f6ce0;
         --point-sub: #93a0d4;
         --danger: #ef4444;
@@ -396,7 +396,7 @@
         letter-spacing: -0.2px;
       }
       .stephdr .steptx small {
-        font-size: 11px;
+        font-size: 12px;
         color: var(--text-weak);
         margin-top: 1px;
       }
@@ -409,14 +409,14 @@
         display: flex;
         align-items: baseline;
         gap: 6px;
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 700;
         color: var(--text-weak);
         margin: 4px 2px 0;
       }
       .substep span {
         font-weight: 500;
-        font-size: 11px;
+        font-size: 12px;
         color: color-mix(in srgb, var(--text-weak) 80%, transparent);
       }
       /* 화면 형식(버전·밝기) — 아코디언 없이 항상 보이는 세그먼트 */
@@ -440,7 +440,7 @@
       }
       .fmtlbl .ko {
         font-weight: 500;
-        font-size: 11px;
+        font-size: 12px;
         color: color-mix(in srgb, var(--text-weak) 85%, transparent);
       }
       .fmtlbl .info {
@@ -721,8 +721,22 @@
         grid-template-columns: repeat(3, 1fr);
       }
       .seg button[disabled] {
-        opacity: 0.42;
         cursor: not-allowed;
+        color: color-mix(in srgb, var(--text-weak) 60%, transparent);
+      }
+      .seg.seg3 button[disabled] {
+        position: relative;
+      }
+      .seg.seg3 button[disabled]::after {
+        content: '준비중';
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        line-height: 1;
+        color: var(--warning);
       }
       .seg button {
         background: var(--bg-page);
@@ -1488,6 +1502,7 @@
         font-size: 12px;
         color: var(--text-weak);
         text-align: center;
+        margin-top: -12px;
         padding-top: 6px;
       }
       /* 전체 초기화 — 사이드바 하단 고정, 위험 동작이라 톤은 절제하되 눈에 띄게 */
@@ -6334,19 +6349,22 @@
 
       /* (3) 사이드바 도움말/둘러보기 버튼 */
       .helpbtn {
-        display: inline-flex;
+        display: flex;
+        width: 100%;
         align-items: center;
-        gap: 6px;
-        margin: 0 auto;
-        padding: 6px 12px;
+        justify-content: center;
+        gap: 7px;
+        margin-top: -12px;
+        padding: 10px 14px;
         border: 1px solid var(--line);
-        border-radius: 998px;
-        background: var(--bg-surface);
+        border-radius: var(--r-pill);
+        background: transparent;
         color: var(--text-weak);
         font-family: var(--font);
-        font-size: 11px;
+        font-size: 12.5px;
         font-weight: 600;
         cursor: pointer;
+        transition: 0.15s;
       }
       .helpbtn:hover {
         border-color: var(--point-main);
@@ -6511,6 +6529,10 @@
       }
       .stepcard[open] > summary .chev {
         transform: rotate(180deg);
+      }
+      /* 스텝 2·3·4 카드는 서로 붙여 하나의 그룹으로 (스텝1과는 간격 유지) */
+      .stepcard + .stepcard {
+        margin-top: -8px;
       }
       .stepcard .stepbody {
         display: flex;
@@ -6815,7 +6837,7 @@
         top: 4px;
         bottom: 4px;
         border-radius: var(--r-pill);
-        background: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 46%, var(--bg-page));
         box-shadow: var(--i2-shadow);
         opacity: 0;
         transition-property: left, right, opacity;
@@ -7162,7 +7184,7 @@
                 <div class="seg seg3" id="screen">
                   <button data-s="dash" class="on">대시보드</button>
                   <button data-s="dt">Digital Twin</button>
-                  <button data-s="portal" disabled title="준비 중입니다">포탈</button>
+                  <button data-s="portal" disabled aria-disabled="true" title="준비 중입니다">포탈</button>
                 </div>
               </div>
               <div class="fmtrow">
@@ -7240,8 +7262,8 @@
             <details class="acc" data-src="seed">
               <summary>
                 <span class="acttl">
-                  Seed Color
-                  <span class="ko">기준 색</span>
+                  기준 색
+                  <span class="ko">Seed Color</span>
                 </span>
                 <span class="accval" id="seedVal"></span>
                 <span class="srcbadge">사용 중</span>
@@ -7337,8 +7359,8 @@
             <details class="acc" data-src="image">
               <summary>
                 <span class="acttl">
-                  Theme from Image
-                  <span class="ko">사진에서 추출</span>
+                  사진에서 추출
+                  <span class="ko">Theme from Image</span>
                 </span>
                 <span class="accval" id="imageVal"></span>
                 <span class="srcbadge">사용 중</span>
