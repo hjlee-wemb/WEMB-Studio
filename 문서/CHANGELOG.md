@@ -11,6 +11,50 @@ WEMB Studio의 버전별 변경 사항을 기록합니다.
 
 ---
 
+#### [0.9.0] — 2026-07-22
+
+### 추가
+
+- 디지털 트윈 화면 인라인 편집 — 패널 드래그 배치 + 텍스트 직접 수정(자동 저장·복원), 편집 중 원 기능(뷰 전환·트리·필터) 간섭 차단
+- 디자인 편집 컨트롤 — 간격·내부 여백·그림자·테두리·표면 강도 슬라이더 + 밀도 프리셋(대시보드·디지털 트윈 공통 적용)
+
+### 개선
+
+- 사이드바 시각 위계 정비(강조색 남용 완화), 2차 텍스트 대비 상향, 이중언어 라벨 통일, 비활성 어포던스 명확화
+- 리셋 컨트롤 위계 재정비·중복 버튼 제거, 전체 초기화가 신규 편집·디자인 키까지 커버
+
+### 수정
+
+- 세그먼트('Digital Twin')·상단 탭 부제 줄바꿈(폰트 환경별 렌더링 폭 대응), 사이드바 접힘 시 헤더 로고 겹침
+
+#### [0.8.0] — 2026-07-15
+
+### 추가
+
+- 디지털 트윈(관제) 화면 추가 — 화면 종류 전환(대시보드 / Digital Twin / 포탈)
+- SVG 파비콘·OG/Twitter 카드 메타 적용(링크 공유 시 브랜드 프리뷰 카드 노출)
+
+### 개선
+
+- 좌측 내비게이션 IA 전면 리디자인 — 상단 탭 폐기, 아이콘 레일 + 드롭 아코디언 드로어(인플레이스 확장)
+- 네이비 크롬 테마 정식 채택 — 기준안·리디자인안·색감안 A/B/C 병행 검토 후 정본 단일화
+
+#### [0.7.0] — 2026-07-14
+
+### 추가
+
+- 실시간 대비 안전망(검증 모달 없이 위험 자동 경고), 첫 실행 온보딩·스포트라이트 투어
+- 작업 자동 저장(새로고침 유지) + 스냅샷 파일 백업
+
+### 개선
+
+- 색 선택 방식(직접색·사진·추천) 세그먼트 탭 통합
+- 접근성·대비 검증 모델·컴포넌트 일관성·정보 밀도 전면 정비
+
+### 수정
+
+- Enterprise 버전이 스냅샷·공유 링크·A/B·내보내기에서 유실되던 기능 격차 수정(화면–산출물 정합성)
+
 #### [0.6.0] — 2026-07-03
 
 ### 개선
@@ -66,7 +110,10 @@ WEMB Studio의 버전별 변경 사항을 기록합니다.
 
 ---
 
-[Unreleased]: https://github.com/hjlee-wemb/WEMB-Studio/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/hjlee-wemb/WEMB-Studio/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.9.0
+[0.8.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.8.0
+[0.7.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.7.0
 [0.6.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.6.0
 [0.5.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.5.0
 [0.4.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.4.0
