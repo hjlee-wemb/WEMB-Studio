@@ -457,9 +457,20 @@
         color: var(--text-weak);
         margin-top: 1px;
       }
-      .stephdr .info {
+      .stephdr > .info {
         margin-left: auto;
         flex: none;
+      }
+      /* 도움말(?) + 경고(!) 배지를 한 묶음으로 오른쪽에 가깝게 배치 */
+      .stephdr .stepbadges {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        flex: none;
+      }
+      .stephdr .stepbadges .info {
+        margin-left: 0;
       }
       /* 한 스텝 안의 하위 구분 라벨(예: 화면 형식 / 색 고르기) */
       .substep {
@@ -958,12 +969,14 @@
       /* 경고용 배지 — '이 브라우저에만 저장' 같은 주의 사항을 호버 툴팁으로 */
       .info.warn {
         border-color: #e0a13a;
-        color: #e0a13a;
+        background: #e0a13a;
+        color: #1a1206;
       }
       .info.warn:hover,
       .info.warn:focus-visible {
         border-color: #f0b74e;
-        color: #f0b74e;
+        background: #f0b74e;
+        color: #1a1206;
       }
       /* 툴팁은 표시될 때 JS가 document.body 로 옮겨 position:fixed 로 띄운다 —
          비활성 색상소스(.acc.src-idle {filter})나 스크롤/transform 조상에 갇혀 좌표가
@@ -6722,14 +6735,20 @@
         border-color: color-mix(in srgb, var(--danger) 60%, var(--line));
         background: color-mix(in srgb, var(--danger) 15%, var(--bg-surface));
       }
+      /* 경고 배지 — 배경을 경고색으로 가득 채운 채움 배지 (아이콘은 어두운 색) */
       .cwarn .cwico {
         flex: none;
-        width: 20px;
-        height: 20px;
-        color: var(--warning);
+        width: 26px;
+        height: 26px;
+        padding: 4px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background: var(--warning);
+        color: #1a1206;
       }
       .cwarn.danger .cwico {
-        color: var(--danger);
+        background: var(--danger);
+        color: #fff;
       }
       .cwarn .cwbody {
         flex: 1;
@@ -6752,16 +6771,20 @@
         margin-top: 8px;
         flex-wrap: wrap;
       }
+      /* 보조 버튼(어디가 문제인지 보기) — 경고창 배경과 확실히 구분되게 또렷한 칩으로 */
       .cwarn .cwacts button {
         font-family: inherit;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 700;
         padding: 5px 10px;
         border-radius: 8px;
         cursor: pointer;
-        border: 1px solid var(--line);
-        background: var(--bg-accent);
+        border: 1px solid color-mix(in srgb, var(--warning) 45%, var(--line));
+        background: var(--bg-page);
         color: var(--text-strong);
+      }
+      .cwarn.danger .cwacts button {
+        border-color: color-mix(in srgb, var(--danger) 45%, var(--line));
       }
       .cwarn .cwacts button.primary {
         background: var(--warning);
@@ -7521,20 +7544,41 @@
         gap: 12px;
         padding: 2px 14px 14px;
       }
-      /* 스텝 내부 자동 유도 — 이전 단계를 설정하기 전엔 숨겼다가, 완료하면 부드럽게 펼친다.
-         gateColor는 원래 stepbody flex의 직계 자식들이 갖던 12px 간격을 자체 flex로 되살린다. */
-      .cgate {
-        display: none;
-      }
-      #gateColor.on {
+      /* 스텝 내부 자동 유도 — 메뉴 이름·구성은 항상 보이고, 이전 단계 전에는 '옵션'만 잠근다(.locked).
+         무슨 메뉴가 있는지는 알 수 있게 하되, 값(옵션)은 순서대로 열린다.
+         gateColor는 stepbody flex 직계 자식이 갖던 12px 간격을 자체 flex로 되살린다. */
+      #gateColor {
         display: flex;
         flex-direction: column;
         gap: 12px;
       }
-      .fmtrow.cgate.on {
-        display: flex;
+      .cgate.locked {
+        opacity: 0.72;
       }
-      .cgate.on {
+      /* 밝기: 라벨(화면 밝기)은 두고 옵션(Dark/Light)만 숨김 */
+      .fmtrow.cgate.locked .seg {
+        display: none;
+      }
+      /* 색 고르기: 제목 + 소스 메뉴 이름은 보이되 잠그고, 실제 옵션(아코디언·팔레트)만 숨김 */
+      #gateColor.locked .srcseg {
+        pointer-events: none;
+        opacity: 0.55;
+      }
+      #gateColor.locked .acc,
+      #gateColor.locked .csgen {
+        display: none;
+      }
+      .cgate .lockhint {
+        display: none;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-weak);
+        margin: 2px 0 0;
+      }
+      .cgate.locked .lockhint {
+        display: block;
+      }
+      .cgate:not(.locked) {
         animation: cgateIn 0.3s ease;
       }
       @keyframes cgateIn {
@@ -7563,6 +7607,188 @@
       }
       #histToggle[aria-expanded='true'] .chev {
         transform: rotate(180deg);
+      }
+
+      /* ── 브랜드 입력 (로고·브랜드명·화면명) ── */
+      .brandgrid {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      .brandrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .brandlogo {
+        width: 46px;
+        height: 46px;
+        flex: none;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: var(--bg-surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .brandlogo img {
+        max-width: 80%;
+        max-height: 80%;
+        object-fit: contain;
+      }
+      .brandbtns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: 0;
+      }
+      .brandbtns .imgbtn {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--point-main, #3f64a8);
+        cursor: pointer;
+        border: 0;
+      }
+      .brandfield {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .brandfield label {
+        flex: none;
+        width: 52px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-strong);
+      }
+      .brandfield input {
+        flex: 1;
+        min-width: 0;
+      }
+      .main .brand .brandname {
+        font-weight: 800;
+        color: var(--text-strong);
+        letter-spacing: -0.01em;
+      }
+
+      /* ── 화면 구성 (열 수 · 패널 추가) ── */
+      .lcolrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .lcol-lbl,
+      .addpanel + p .lcol-lbl {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-strong);
+        flex: none;
+      }
+      .lcolrow .seg {
+        flex: 1;
+      }
+      .addpanel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+      .addpanel button {
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-strong);
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        cursor: pointer;
+        transition: 0.14s;
+      }
+      .addpanel button:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+
+      /* 패널 삭제 버튼 — 배치 수정 중에만 노출 */
+      .pdel {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        z-index: 7;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(200, 40, 40, 0.92);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+      .cols.editing .panel {
+        position: relative;
+      }
+      .cols.editing .panel > .pdel {
+        display: inline-flex;
+      }
+      .pdel:hover {
+        background: rgba(220, 50, 50, 1);
+      }
+
+      /* 추가된 패널 내부 — 테마 변수를 그대로 사용해 기존 패널과 톤 일치 */
+      .addedbody {
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .addedbody .kpinum {
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--text-strong);
+        line-height: 1;
+      }
+      .addedbody .kpisub {
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .addedbody .minibars {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 88px;
+      }
+      .addedbody .minibars i {
+        flex: 1;
+        background: var(--point-main, #3f64a8);
+        border-radius: 4px 4px 0 0;
+        opacity: 0.85;
+      }
+      .addedbody table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        color: var(--text-strong);
+      }
+      .addedbody th,
+      .addedbody td {
+        text-align: left;
+        padding: 6px 4px;
+        border-bottom: 1px solid var(--line);
+      }
+      .addedbody th {
+        color: var(--text-weak);
+        font-weight: 600;
       }
 
       /* 창 제어 아이콘 — 텍스트 글리프(↻☰‹✕⠿×)를 SVG 세트로 통일 */
@@ -8224,6 +8450,41 @@
                   </div>
                 </div>
               </div>
+
+              <!-- 브랜드 — 고객사 로고·이름을 시안에 반영 (남의 로고로 보이지 않게) -->
+              <div class="substep" style="margin-top: 6px">
+                브랜드
+                <span class="info" tabindex="0" role="button" aria-label="브랜드 도움말">
+                  ?
+                  <span class="tip">
+                    <b>시안을 '우리 회사 화면'으로</b>
+                    <br />
+                    <br />
+                    로고를 올리고 브랜드·화면 이름을 넣으면 오른쪽 화면 머리말에 그대로 반영돼요.
+                    <b>로고에서 기준색</b>
+                    을 누르면 로고 대표색이 팔레트의 기준 색이 됩니다.
+                  </span>
+                </span>
+              </div>
+              <div class="brandgrid">
+                <div class="brandrow">
+                  <span class="brandlogo" id="brandLogoPrev"><img src="logo.svg" alt="로고 미리보기" /></span>
+                  <div class="brandbtns">
+                    <label class="imgbtn" for="brandLogoFile">로고 업로드</label>
+                    <input type="file" id="brandLogoFile" accept="image/*" style="display: none" />
+                    <button type="button" class="ghostbtn" id="brandLogoSeed" title="업로드한 로고에서 대표색을 뽑아 기준 색으로 설정">로고에서 기준색</button>
+                    <button type="button" class="ghostbtn" id="brandLogoClear" title="기본 로고로 되돌리기">기본값</button>
+                  </div>
+                </div>
+                <div class="brandfield">
+                  <label for="brandName">브랜드명</label>
+                  <input type="text" class="hex" id="brandName" placeholder="예: WEMB" maxlength="30" />
+                </div>
+                <div class="brandfield">
+                  <label for="screenName">화면명</label>
+                  <input type="text" class="hex" id="screenName" placeholder="예: 종합현황" maxlength="30" />
+                </div>
+              </div>
             </div>
           </details>
 
@@ -8270,7 +8531,7 @@
                   <button data-v="enterprise">Enterprise</button>
                 </div>
               </div>
-              <div class="fmtrow cgate" id="gateMode">
+              <div class="fmtrow cgate locked" id="gateMode">
                 <div class="fmtlbl">
                   화면 밝기
                   <span class="info" tabindex="0" role="button" aria-label="모드 도움말">
@@ -8292,10 +8553,11 @@
                   <button data-m="dark" class="on">Dark</button>
                   <button data-m="light">Light</button>
                 </div>
+                <span class="lockhint">🔒 버전을 먼저 고르면 열려요</span>
               </div>
             </div>
 
-            <div class="cgate" id="gateColor">
+            <div class="cgate locked" id="gateColor">
             <!-- (2) 색 소스 세그먼트 — 지금 어떤 방식으로 만드는지 한 곳에서 표시·전환.
                  예전엔 위에 ‘색 고르기’(substep) + ‘지금 만드는 방식’(srclbl) 두 줄이
                  같은 것을 가리키고 있었다. 세그먼트 자체가 방식을 보여 주므로 한 줄로 합친다. -->
@@ -8358,6 +8620,7 @@
                 </button>
               </div>
             </div>
+            <span class="lockhint">🔒 화면 밝기까지 정하면 색 옵션이 열려요</span>
 
             <details class="acc" data-src="seed">
               <summary>
@@ -8596,6 +8859,26 @@
                 </span>
               </span>
             </label>
+
+            <!-- 화면 구성 — 패널 추가/삭제·열 수로 고객사 화면 구조에 맞춘다 -->
+            <div class="sublbl"><span>화면 구성<span class="ko">패널 · 열 수</span></span></div>
+            <div class="lcolrow">
+              <span class="lcol-lbl">열 수</span>
+              <div class="seg seg3" id="colCount">
+                <button type="button" data-c="2">2</button>
+                <button type="button" data-c="3" class="on">3</button>
+                <button type="button" data-c="4">4</button>
+              </div>
+            </div>
+            <div class="addpanel">
+              <button type="button" data-add="kpi">＋ KPI</button>
+              <button type="button" data-add="chart">＋ 차트</button>
+              <button type="button" data-add="table">＋ 표</button>
+              <button type="button" data-add="gauge">＋ 게이지</button>
+            </div>
+            <p class="chkhint" style="margin: 0 0 2px">
+              배치 수정 중 패널 오른쪽 위 <b>×</b>로 삭제해요. 추가·삭제·열 수는 <b>내보내기</b>(화면 전체 HTML·컴포넌트)에 그대로 반영됩니다.
+            </p>
             <button class="editbtn" id="editToggle" title="패널을 끌어서 옮길 수 있는 상태로 전환">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="5 9 2 12 5 15" />
@@ -8737,6 +9020,7 @@
               <span class="steptx">
                 <b>저장 · 비교</b>
               </span>
+              <span class="stepbadges">
               <span class="info up" tabindex="0" role="button" aria-label="테마 저장·비교 도움말">
                 ?
                 <span class="tip">
@@ -8763,6 +9047,7 @@
                   <br />
                   브라우저 기록을 지우거나 다른 PC로 옮기면 사라집니다. 아래 <b>백업</b>으로 .json 파일을 내려받아 두세요.
                 </span>
+              </span>
               </span>
             </div>
             <span class="chev">▾</span>
@@ -15628,7 +15913,7 @@ ${bodyHTML}
         try {
           const main = document.querySelector('.main');
           const clone = main.cloneNode(true);
-          clone.querySelectorAll('.editbanner, .previewhint, .compcopy').forEach((el) => el.remove());
+          clone.querySelectorAll('.editbanner, .previewhint, .compcopy, .pdel').forEach((el) => el.remove());
           clone.classList.remove('editing', 'content-editing');
           clone.querySelectorAll('.editing, .content-editing').forEach((el) => el.classList.remove('editing', 'content-editing'));
           await inlineLogo(clone);
@@ -15652,7 +15937,7 @@ ${bodyHTML}
       function componentParts(node) {
         const t = wembThemeInline();
         const clone = node.cloneNode(true);
-        clone.querySelectorAll('.compcopy').forEach((el) => el.remove()); /* 복사 모드 버튼은 제외 */
+        clone.querySelectorAll('.compcopy, .pdel').forEach((el) => el.remove()); /* 복사·삭제 버튼은 제외 */
         const isDt = node.classList.contains('dt-card');
         const inner = isDt
           ? `      <div class="dtstage">\n${clone.outerHTML}\n      </div>`
@@ -15810,12 +16095,12 @@ ${parts.html}
           if (!b || b.disabled) return;
           advance('s1', 'stepColor');
         });
-        /* 색 정하기 내부 유도: 버전 → 밝기 → 색 고르기 순으로 하나씩 펼친다.
-           이전 단계를 누르기 전에는 다음 토글이 숨겨져 있다(.cgate). */
+        /* 색 정하기 내부 유도: 버전 → 밝기 → 색 고르기 순으로 옵션을 잠금 해제한다.
+           메뉴 이름·구성은 처음부터 보이고(.cgate.locked), 순서대로 옵션만 열린다. */
         const reveal = (id) => {
           const el = document.getElementById(id);
-          if (el && !el.classList.contains('on')) {
-            el.classList.add('on');
+          if (el && el.classList.contains('locked')) {
+            el.classList.remove('locked');
             setTimeout(() => el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 60);
           }
         };
@@ -15855,6 +16140,200 @@ ${parts.html}
           });
         }
       }
+
+      /* ── 브랜드 — 로고 업로드 · 브랜드명 · 화면명 → 프리뷰 머리말에 반영, 로고에서 기준색 추출 ── */
+      function initBrand() {
+        const LS = { logo: 'wemb-brand-logo', name: 'wemb-brand-name', screen: 'wemb-brand-screen' };
+        const store = (k, v) => {
+          try {
+            v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v);
+          } catch (e) {}
+        };
+        const setLogo = (src) => {
+          const url = src || 'logo.svg';
+          document.querySelectorAll('.main .wlogo').forEach((im) => (im.src = url));
+          const p = document.querySelector('#brandLogoPrev img');
+          if (p) p.src = url;
+        };
+        const setBrandName = (v) => {
+          document.querySelectorAll('.main .brand').forEach((b) => {
+            let el = b.querySelector('.brandname');
+            if (v) {
+              if (!el) {
+                el = document.createElement('span');
+                el.className = 'brandname';
+                const logo = b.querySelector('.logo');
+                logo ? logo.after(el) : b.prepend(el);
+              }
+              el.textContent = v;
+            } else if (el) el.remove();
+          });
+        };
+        const setScreenName = (v) => {
+          document.querySelectorAll('.main .brand .sub').forEach((s) => (s.textContent = v || '종합현황'));
+        };
+        const fileEl = document.getElementById('brandLogoFile');
+        if (fileEl)
+          fileEl.onchange = (e) => {
+            const f = e.target.files && e.target.files[0];
+            if (!f) return;
+            const rd = new FileReader();
+            rd.onload = () => {
+              setLogo(rd.result);
+              store(LS.logo, rd.result);
+            };
+            rd.readAsDataURL(f);
+          };
+        document.getElementById('brandLogoClear')?.addEventListener('click', () => {
+          setLogo(null);
+          store(LS.logo, null);
+        });
+        document.getElementById('brandLogoSeed')?.addEventListener('click', () => {
+          const cur = document.querySelector('#brandLogoPrev img');
+          if (!cur || !cur.src) return;
+          const im = new Image();
+          im.onload = () => {
+            try {
+              const t = extractTheme(im);
+              if (!t || !t.seed) return;
+              state.seed = t.seed;
+              const s = document.getElementById('seed'),
+                h = document.getElementById('hex');
+              if (s) s.value = t.seed;
+              if (h) h.value = t.seed.toUpperCase();
+              if (typeof setSource === 'function') setSource('seed');
+              apply();
+              if (typeof toast === 'function') toast('로고 대표색을 기준 색으로 적용했어요.', { type: 'ok' });
+            } catch (err) {}
+          };
+          im.onerror = () => {
+            if (typeof toast === 'function') toast('로고 색을 읽지 못했어요.', { type: 'err' });
+          };
+          im.src = cur.src;
+        });
+        const bn = document.getElementById('brandName'),
+          sn = document.getElementById('screenName');
+        if (bn)
+          bn.oninput = () => {
+            setBrandName(bn.value.trim());
+            store(LS.name, bn.value);
+          };
+        if (sn)
+          sn.oninput = () => {
+            setScreenName(sn.value.trim());
+            store(LS.screen, sn.value);
+          };
+        try {
+          const l = localStorage.getItem(LS.logo);
+          if (l) setLogo(l);
+          const n = localStorage.getItem(LS.name);
+          if (n) {
+            if (bn) bn.value = n;
+            setBrandName(n);
+          }
+          const c = localStorage.getItem(LS.screen);
+          if (c) {
+            if (sn) sn.value = c;
+            setScreenName(c);
+          }
+        } catch (e) {}
+      }
+
+      /* ── 화면 구성 — 열 수 조절 · 패널 추가/삭제 (세션 내 실시간, 내보내기에 그대로 반영) ── */
+      function initLayoutEditor() {
+        const main = document.querySelector('.main');
+        if (!main) return;
+        const activeCols = () => {
+          const page = [...main.querySelectorAll('.dashpage')].find((p) => !p.hasAttribute('hidden'));
+          return (page && page.querySelector('.cols')) || main.querySelector('.dashpage .cols') || main.querySelector('.cols');
+        };
+        const ensureDelBtns = () => {
+          main.querySelectorAll('.cols .panel').forEach((p) => {
+            if (p.querySelector(':scope > .pdel')) return;
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'pdel';
+            b.title = '이 패널 삭제';
+            b.setAttribute('aria-label', '패널 삭제');
+            b.textContent = '×';
+            p.appendChild(b);
+          });
+        };
+        ensureDelBtns();
+        main.addEventListener('click', (e) => {
+          const del = e.target.closest('.pdel');
+          if (!del) return;
+          e.preventDefault();
+          e.stopPropagation();
+          del.closest('.panel')?.remove();
+        });
+        const setColumns = (n) => {
+          const cols = activeCols();
+          if (!cols) return;
+          const panels = [...cols.querySelectorAll(':scope > .col > .panel')];
+          cols.innerHTML = '';
+          const newCols = [];
+          for (let i = 0; i < n; i++) {
+            const c = document.createElement('div');
+            c.className = 'col';
+            cols.appendChild(c);
+            newCols.push(c);
+          }
+          panels.forEach((p, i) => newCols[i % n].appendChild(p));
+          ensureDelBtns();
+        };
+        document.getElementById('colCount')?.addEventListener('click', (e) => {
+          const b = e.target.closest('button[data-c]');
+          if (!b) return;
+          document.querySelectorAll('#colCount button').forEach((x) => x.classList.toggle('on', x === b));
+          setColumns(+b.dataset.c);
+        });
+        const build = {
+          kpi: () => `<div class="ph"><h3>새 지표</h3></div><div class="addedbody"><div class="kpinum num">1,234</div><div class="kpisub">단위 · 전일 대비 +3.2%</div></div>`,
+          chart: () => {
+            const bars = [42, 68, 55, 80, 63, 74, 90, 58].map((h) => `<i style="height:${h}%"></i>`).join('');
+            return `<div class="ph"><h3>새 차트</h3></div><div class="addedbody"><div class="minibars">${bars}</div></div>`;
+          },
+          table: () =>
+            `<div class="ph"><h3>새 표</h3></div><div class="addedbody"><table><thead><tr><th>항목</th><th>값</th><th>상태</th></tr></thead><tbody><tr><td>항목 A</td><td class="num">128</td><td>정상</td></tr><tr><td>항목 B</td><td class="num">64</td><td>주의</td></tr><tr><td>항목 C</td><td class="num">301</td><td>정상</td></tr></tbody></table></div>`,
+          gauge: () => {
+            const r = 40,
+              c = 2 * Math.PI * r,
+              v = 0.72;
+            return `<div class="ph"><h3>새 게이지</h3></div><div class="addedbody" style="align-items:center"><svg viewBox="0 0 100 100" width="110" height="110"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--point-main)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${(c * v).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 50 50)"/><text x="50" y="56" text-anchor="middle" font-size="22" font-weight="800" fill="var(--text-strong)">72%</text></svg></div>`;
+          },
+        };
+        const addPanel = (type) => {
+          const cols = activeCols();
+          if (!cols) {
+            if (typeof toast === 'function') toast('이 화면에서는 패널 추가를 지원하지 않아요.', { type: 'err' });
+            return;
+          }
+          let colEls = [...cols.querySelectorAll(':scope > .col')];
+          if (!colEls.length) {
+            const c = document.createElement('div');
+            c.className = 'col';
+            cols.appendChild(c);
+            colEls = [c];
+          }
+          const target = colEls.reduce((a, b) => (b.querySelectorAll(':scope > .panel').length < a.querySelectorAll(':scope > .panel').length ? b : a));
+          const panel = document.createElement('div');
+          panel.className = 'panel';
+          panel.innerHTML = (build[type] || build.kpi)();
+          target.appendChild(panel);
+          ensureDelBtns();
+          panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        };
+        document.querySelector('.addpanel')?.addEventListener('click', (e) => {
+          const b = e.target.closest('button[data-add]');
+          if (b) addPanel(b.dataset.add);
+        });
+        /* 현재 열 수에 맞춰 세그먼트 표시 */
+        const cur = activeCols();
+        const n = cur ? cur.querySelectorAll(':scope > .col').length : 3;
+        document.querySelectorAll('#colCount button').forEach((x) => x.classList.toggle('on', +x.dataset.c === n));
+      }
+
       function openSheet() {
         refreshAuditSelects();
         document.getElementById('csSel').value = '__current__';
@@ -15959,8 +16438,8 @@ ${parts.html}
           const card = el.closest('details.stepcard');
           if (card && !card.open) card.open = true;
           /* 자동 유도로 숨겨둔 게이트(.cgate) 안이 대상이면 함께 펼쳐 스포트라이트가 잡히게 한다 */
-          if (card) card.querySelectorAll('.cgate').forEach((g) => g.classList.add('on'));
-          el.closest('.cgate')?.classList.add('on');
+          if (card) card.querySelectorAll('.cgate').forEach((g) => g.classList.remove('locked'));
+          el.closest('.cgate')?.classList.remove('locked');
           if (el.closest('.sidebar')) el.scrollIntoView({ block: 'center', behavior: 'auto' });
           /* 텍스트·버튼을 먼저 채운 뒤(툴팁 크기 확정) 위치 계산 — rAF에 의존하지 않아 탭이 비활성이어도 동작 */
           document.getElementById('coachStep').textContent = `둘러보기 ${idx + 1} / ${COACH_STEPS.length}`;
@@ -16514,6 +16993,8 @@ ${parts.html}
       initSheet();
       initComponentCopyMode();
       initStepFlow();
+      initBrand();
+      initLayoutEditor();
       /* 공유 링크로 열렸으면 그 시안을, 아니면 마지막 작업 중이던 테마를 복원 (1-b) */
       if (!applyShareFromURL()) restoreCurrentTheme();
       commitHistory();
