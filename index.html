@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="version" content="0.8.0 (2026-07-15) · index3 — 화면 종류(대시보드 / Digital Twin / 포탈) 전환 추가. DT는 Figma DT_Sample(16:2407)이 표준" />
+    <meta name="version" content="0.9.0 (2026-08-05) · 가이드형 워크플로우(PRD→기능명세서→유저플로우→와이어프레임→스튜디오) 도입 및 유저플로우 편집기 추가. index2 → index 통합" />
     <title>WEMB Theme Studio</title>
     <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M50 0H14C6.26801 0 0 6.26801 0 14V50C0 57.732 6.26801 64 14 64H50C57.732 64 64 57.732 64 50V14C64 6.26801 57.732 0 50 0Z" fill="%230D1526"/><path d="M20.7788 39.5703C19.6409 42.3867 21.0016 45.5923 23.818 46.7302C26.6344 47.8681 29.8399 46.5074 30.9778 43.691L38.8446 24.2202C39.9824 21.4038 38.6218 18.1982 35.8054 17.0603C32.989 15.9224 29.7834 17.2831 28.6455 20.0995L20.7788 39.5703Z" fill="%233F64A8"/><path d="M37.1848 39.5703C36.0469 42.3867 37.4076 45.5923 40.224 46.7302C43.0404 47.8681 46.2459 46.5074 47.3838 43.691L55.2506 24.2202C56.3885 21.4038 55.0278 18.1982 52.2114 17.0603C49.395 15.9224 46.1894 17.2831 45.0515 20.0995L37.1848 39.5703Z" fill="%23F16043"/><path d="M20.2397 43.7958C21.3776 46.6122 24.5831 47.9729 27.3995 46.835C30.2159 45.6971 31.5766 42.4915 30.4387 39.6751L22.5719 20.2043C21.4341 17.3879 18.2285 16.0272 15.4121 17.1651C12.5957 18.303 11.235 21.5086 12.3729 24.325L20.2397 43.7958Z" fill="%236BC382"/><circle cx="25.3125" cy="42" r="3" fill="%230D1526"/><path d="M36.6457 43.7958C37.7836 46.6122 40.9891 47.9729 43.8055 46.835C46.6219 45.6971 47.9826 42.4915 46.8447 39.6751L38.978 20.2043C37.8401 17.3879 34.6345 16.0272 31.8181 17.1651C29.0017 18.303 27.641 21.5086 28.7789 24.325L36.6457 43.7958Z" fill="%23F4C559"/><circle cx="42" cy="42" r="3" fill="%230D1526"/></svg>' />
     <!-- 공유 미리보기(OG) — 크롤러는 절대 URL만 인식. 배포 주소가 바뀌면 아래 URL도 함께 수정 -->
@@ -13,7 +13,7 @@
     <meta property="og:description" content="색 하나로 만드는 관제 대시보드 컬러 테마 — 고르고, 검증하고, 내보내세요." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://hjlee-wemb.github.io/WEMB-Studio/" />
-    <meta property="og:image" content="https://hjlee-wemb.github.io/WEMB-Studio/og-image02.jpg" />
+    <meta property="og:image" content="https://hjlee-wemb.github.io/WEMB-Studio/src/og-image02.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
     <style>
@@ -477,6 +477,22 @@
         border-color: var(--line);
         background: var(--bg-page);
       }
+      /* 스텝 잠금 — 이전 단계를 마쳐야 열린다 */
+      .tb-tab.locked,
+      .tb-tab:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+        color: var(--text-weak);
+      }
+      .tb-tab.locked:hover {
+        color: var(--text-weak);
+      }
+      .tb-tab.locked::before {
+        content: '🔒';
+        font-size: 10px;
+        margin-right: 4px;
+        opacity: 0.8;
+      }
       .tb-dot {
         color: var(--text-weak);
         opacity: 0.45;
@@ -649,6 +665,66 @@
       .doc-chip:hover {
         border-color: var(--point-main);
       }
+      /* ── 기능명세서 필터 드롭다운 ── */
+      .doc-chipwrap {
+        position: relative;
+      }
+      .doc-chip.active {
+        border-color: var(--point-main);
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 10%, var(--bg-surface));
+      }
+      .doc-menu {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        z-index: 60;
+        min-width: 168px;
+        padding: 6px;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: 0 18px 44px -22px rgba(0, 0, 0, 0.7);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .doc-menu[hidden] {
+        display: none;
+      }
+      .doc-mi {
+        text-align: left;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        color: var(--text-strong);
+        font: 500 12.5px var(--font);
+        padding: 7px 10px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .doc-mi:hover {
+        background: var(--bg-accent);
+      }
+      .doc-mi.on {
+        color: var(--point-main);
+        font-weight: 700;
+      }
+      .doc-mi .chk {
+        opacity: 0;
+        font-size: 11px;
+      }
+      .doc-mi.on .chk {
+        opacity: 1;
+      }
+      .spec-empty td {
+        text-align: center;
+        color: var(--text-weak);
+        padding: 24px 14px;
+      }
       .doc-tools {
         margin-left: auto;
         display: flex;
@@ -726,33 +802,197 @@
       .pri.low {
         color: var(--text-weak);
       }
-      /* ── 유저플로우(노드+화살표) ── */
-      .flow-wrap {
-        flex: 1;
-        min-height: 0;
-        overflow: auto;
+      /* ── 유저플로우 — 스크롤 없이 화면에 맞춰 크게(fitFlow가 통째로 scale) ── */
+      .flow-head {
+        flex: none;
+        padding: 22px 40px 0;
+      }
+      .flow-head .gen-summary {
+        margin-bottom: 0;
+      }
+      /* ── 유저플로우 툴바(검색 · 즐겨찾기) ── */
+      .flow-tools {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 40px;
+        justify-content: center; /* 가운데 정렬 */
+        gap: 10px;
+        margin-top: 4px;
+      }
+      /* 검색 — 평소엔 아이콘만, 누르면 오른쪽으로 늘어나며 입력창이 열린다 */
+      .flow-search {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--bg-surface);
+        overflow: hidden;
+        transition: border-color 0.15s ease;
+      }
+      .flow-search.open {
+        border-color: var(--point-main);
+      }
+      .flow-search-ic {
+        width: 38px;
+        height: 38px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-weak);
+        flex: none;
+      }
+      .flow-search.open .flow-search-ic {
+        color: var(--point-main);
+      }
+      .flow-search-ic svg {
+        width: 17px;
+        height: 17px;
+      }
+      .flow-search input {
+        border: 0;
+        background: transparent;
+        outline: none;
+        width: 0;
+        padding: 0;
+        opacity: 0;
+        color: var(--text-strong);
+        font: 500 13px var(--font);
+        transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1), padding 0.32s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+      }
+      .flow-search.open input {
+        width: min(260px, 46vw);
+        padding: 0 14px 0 2px;
+        opacity: 1;
+      }
+      .flow-search input::placeholder {
+        color: var(--text-weak);
+      }
+      /* 전역 input:focus-visible 아웃라인이 글씨 주변에 생기는 걸 없앤다(테두리는 pill이 대신함) */
+      .flow-search input:focus,
+      .flow-search input:focus-visible {
+        outline: none;
+        box-shadow: none;
+      }
+      /* 즐겨찾기 — 아이콘만 */
+      .flow-fav-toggle {
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--line);
+        background: var(--bg-surface);
+        color: var(--text-weak);
+        border-radius: 999px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+      .flow-fav-toggle svg {
+        width: 17px;
+        height: 17px;
+      }
+      .flow-fav-toggle:hover {
+        border-color: #e8b23a;
+        color: #e8b23a;
+      }
+      .flow-fav-toggle.on {
+        background: color-mix(in srgb, #e8b23a 18%, var(--bg-surface));
+        border-color: #e8b23a;
+        color: #e8b23a;
+      }
+      .flow-fav-toggle.on svg {
+        fill: #e8b23a;
+      }
+      .flow-stage {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        place-items: center;
+        padding: 20px 44px 40px;
+        overflow: hidden;
+        position: relative;
+      }
+      /* 캔버스 확대·축소 컨트롤 — 툴바(즐겨찾기 옆) 가로 버전 */
+      .flow-zoom {
+        display: inline-flex;
+        align-items: center;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 2px;
+      }
+      .fz-btn {
+        width: 30px;
+        height: 30px;
+        border: 0;
+        background: transparent;
+        color: var(--text-strong);
+        font: 700 16px var(--font);
+        cursor: pointer;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .fz-btn:hover {
+        background: var(--bg-accent);
+        color: var(--point-main);
+      }
+      .flow-zoom .fz-level {
+        width: auto;
+        min-width: 42px;
+        padding: 0 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-weak);
+      }
+      .flow-zoom .fz-level:hover {
+        color: var(--point-main);
+        background: transparent;
+      }
+      /* 스페이스바 누른 채 / 빈 캔버스 드래그로 화면 이동(패닝) */
+      .flow-stage.flow-space,
+      .flow-stage.flow-space .mm-node,
+      .flow-stage.flow-space .mm-node * {
+        cursor: grab;
+      }
+      .flow-stage.flow-panning,
+      .flow-stage.flow-panning .mm-node,
+      .flow-stage.flow-panning .mm-node * {
+        cursor: grabbing !important;
+      }
+      .flow-wrap {
+        transform-origin: center center;
+        will-change: transform;
+      }
+      .flow-branch {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: max-content;
+      }
+      .fb-chain {
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
       .fnode {
         display: flex;
         flex-direction: column;
-        gap: 3px;
-        min-width: 130px;
-        padding: 16px 18px;
-        border-radius: 12px;
+        gap: 4px;
+        min-width: 172px;
+        padding: 18px 22px;
+        border-radius: 14px;
         background: var(--bg-surface);
-        border: 1px solid var(--line);
-        font-size: 13.5px;
+        border: 1.5px solid var(--line);
+        font-size: 15px;
         font-weight: 700;
-        box-shadow: 0 8px 22px -14px rgba(0, 0, 0, 0.7);
+        box-shadow: 0 10px 26px -16px rgba(0, 0, 0, 0.7);
       }
       .fnode .fsub {
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 500;
         color: var(--text-weak);
       }
@@ -760,22 +1000,330 @@
         border-color: var(--point-main);
         background: color-mix(in srgb, var(--point-main) 12%, var(--bg-surface));
       }
+      .fnode.hub {
+        border-color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 12%, var(--bg-surface));
+        box-shadow: 0 14px 34px -16px color-mix(in srgb, var(--point-main) 70%, transparent);
+      }
       .fnode.start {
         background: var(--point-main);
         color: #fff;
         border-color: var(--point-main);
         min-width: 0;
+        text-align: center;
       }
       .fnode.end {
         background: color-mix(in srgb, #22b07d 88%, #000);
         color: #fff;
         border-color: transparent;
         min-width: 0;
+        text-align: center;
       }
+      /* 화살표 — 선 + 화살촉 */
       .farrow {
-        color: var(--text-weak);
-        font-size: 18px;
+        position: relative;
+        width: 42px;
+        height: 2.5px;
         flex: none;
+        border-radius: 2px;
+        background: color-mix(in srgb, var(--point-main) 55%, var(--line));
+      }
+      .farrow::after {
+        content: '';
+        position: absolute;
+        right: -1px;
+        top: 50%;
+        width: 9px;
+        height: 9px;
+        transform: translateY(-50%) rotate(45deg);
+        border-top: 2.5px solid color-mix(in srgb, var(--point-main) 55%, var(--line));
+        border-right: 2.5px solid color-mix(in srgb, var(--point-main) 55%, var(--line));
+      }
+      /* 종합 현황 → 세부 페이지 갈래(포크) + 페이지 → 종단(수렴) 브래킷 */
+      .fb-pages {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 0 24px;
+      }
+      .fb-pages::before,
+      .fb-pages::after {
+        content: '';
+        position: absolute;
+        top: 30px;
+        bottom: 30px;
+        width: 2.5px;
+        border-radius: 2px;
+        background: color-mix(in srgb, var(--point-main) 50%, var(--line));
+      }
+      .fb-pages::before {
+        left: 0;
+      }
+      .fb-pages::after {
+        right: 0;
+      }
+      .fnode.page {
+        position: relative;
+        min-width: 208px;
+      }
+      .fnode.page::before,
+      .fnode.page::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 24px;
+        height: 2.5px;
+        transform: translateY(-50%);
+        background: color-mix(in srgb, var(--point-main) 50%, var(--line));
+      }
+      .fnode.page::before {
+        left: -24px;
+      }
+      .fnode.page::after {
+        right: -24px;
+      }
+      /* ── 유저플로우 마인드맵 (PRD → 하위 항목 트리) ── */
+      .mm-board {
+        position: relative;
+      }
+      .mm-links {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: visible;
+        pointer-events: none;
+      }
+      .mm-link {
+        fill: none;
+        stroke-width: 2;
+        stroke: var(--h, var(--line));
+        opacity: 0.85;
+      }
+      .c-green {
+        --h: #4ea372;
+      }
+      .c-teal {
+        --h: #3bb0a6;
+      }
+      .c-blue {
+        --h: #6486c8;
+      }
+      .c-purple {
+        --h: #8b76d8;
+      }
+      .mm-node {
+        position: absolute;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 14px;
+        border-radius: 9px;
+        /* 반응형(1rem=16px 기준) — 화면 비율에 맞춰 13~15px, 13px 밑으론 안 내려간다 */
+        font-size: clamp(0.8125rem, 0.62rem + 0.55vw, 0.9375rem);
+        font-weight: 700;
+        white-space: nowrap;
+        border: 1.5px solid var(--line);
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        cursor: grab;
+        user-select: none;
+        touch-action: none;
+      }
+      .mm-node.mm-dragging {
+        cursor: grabbing;
+        z-index: 5;
+        box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6);
+      }
+      /* 드래그한 노드를 놓으면 위치가 서로 바뀔 대상 — 교환 미리보기 강조 */
+      .mm-node.mm-swap-target {
+        outline: 2px dashed var(--point-main);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--point-main) 22%, transparent);
+      }
+      .mm-node .mm-num {
+        font-size: clamp(0.8125rem, 0.76rem + 0.15vw, 0.875rem);
+        font-weight: 600;
+        opacity: 0.55;
+      }
+      .mm-node .mm-star {
+        font-size: clamp(0.8125rem, 0.74rem + 0.2vw, 0.9375rem);
+        opacity: 0.5;
+        cursor: pointer;
+      }
+      .mm-node .mm-star:hover {
+        opacity: 0.9;
+        color: #e8b23a;
+      }
+      .mm-node.mm-fav .mm-star {
+        opacity: 1;
+        color: #e8b23a;
+      }
+      /* 검색 매칭 강조 */
+      .mm-node.mm-match {
+        outline: 2px solid var(--point-main);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 5px color-mix(in srgb, var(--point-main) 20%, transparent);
+        z-index: 4;
+      }
+      /* 검색 포커스 시 부드러운 확대 이동 */
+      .mm-board.mm-anim {
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      /* 노드 상호작용 — 텍스트 클릭=수정, + 클릭=기능 추가, 드래그=이동 */
+      .mm-node .mm-t {
+        cursor: text;
+      }
+      .mm-node .mm-add {
+        margin-left: 3px;
+        width: 17px;
+        height: 17px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 14px;
+        line-height: 1;
+        color: var(--text-weak);
+        opacity: 0.5;
+        cursor: pointer;
+        flex: none;
+      }
+      .mm-node:hover .mm-add {
+        opacity: 0.85;
+      }
+      .mm-node .mm-add:hover {
+        opacity: 1;
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 15%, transparent);
+      }
+      .mm-node.mm-editing {
+        outline: 2px solid var(--point-main);
+        outline-offset: 1px;
+        z-index: 6;
+      }
+      .mm-node .mm-t[contenteditable='true'] {
+        outline: none;
+        min-width: 18px;
+        cursor: text;
+      }
+      /* 후보 기능 팝오버 */
+      .mm-addpop {
+        position: fixed;
+        z-index: 400;
+        width: 344px;
+        max-width: calc(100vw - 24px);
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 26px 64px -26px rgba(0, 0, 0, 0.75);
+        overflow: hidden;
+        font-family: var(--font);
+      }
+      .mm-addpop-h {
+        padding: 12px 15px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-strong);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .mm-addpop-h span {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-weak);
+      }
+      .mm-addpop-scroll {
+        max-height: 340px;
+        overflow-y: auto;
+        padding: 10px 13px 13px;
+      }
+      .mm-addpop-sec {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-weak);
+        letter-spacing: 0.3px;
+        margin: 8px 2px 8px;
+      }
+      .mm-addpop-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .mm-addbtn {
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-strong);
+        font: 500 12px var(--font);
+        padding: 7px 11px;
+        border-radius: 999px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+      }
+      .mm-addbtn:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .mm-addbtn.reco {
+        border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+        background: color-mix(in srgb, var(--point-main) 10%, var(--bg-surface));
+      }
+      .mm-addbtn .rb {
+        font-size: 9.5px;
+        font-weight: 800;
+        color: #fff;
+        background: var(--point-main);
+        padding: 1px 6px;
+        border-radius: 999px;
+      }
+      .mm-addpop-empty {
+        padding: 22px 8px;
+        text-align: center;
+        color: var(--text-weak);
+        font-size: 12.5px;
+      }
+      .mm-root {
+        gap: 10px;
+        padding: 11px 16px;
+        /* 루트 노드는 살짝 크게 — 13~16px 반응형 */
+        font-size: clamp(0.8125rem, 0.64rem + 0.6vw, 1rem);
+        font-weight: 800;
+        background: color-mix(in srgb, var(--text-strong) 10%, var(--bg-surface));
+        border-color: color-mix(in srgb, var(--text-strong) 18%, var(--line));
+      }
+      .mm-root .mm-up {
+        opacity: 0.55;
+        font-weight: 700;
+      }
+      .mm-root .mm-badge {
+        font-size: clamp(0.8125rem, 0.76rem + 0.15vw, 0.875rem);
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--point-main) 26%, transparent);
+        color: color-mix(in srgb, var(--point-main) 55%, var(--text-strong));
+      }
+      .mm-l1 {
+        border-color: color-mix(in srgb, var(--h) 60%, var(--line));
+        background: color-mix(in srgb, var(--h) 24%, var(--bg-surface));
+      }
+      .mm-l2,
+      .mm-l3 {
+        border-color: color-mix(in srgb, var(--h) 45%, var(--line));
+        background: color-mix(in srgb, var(--h) 13%, var(--bg-surface));
+      }
+      .mm-ph {
+        border-style: dashed;
+        border-color: color-mix(in srgb, var(--text-weak) 40%, var(--line));
+        background: color-mix(in srgb, var(--text-weak) 7%, var(--bg-surface));
+        color: var(--text-weak);
+        font-weight: 600;
       }
       /* ── 와이어프레임(회색 목업) ── */
       .wf-wrap {
@@ -865,6 +1413,270 @@
       }
       .wf-card.wide {
         height: 54px;
+      }
+      /* ── PRD 질문 폼 ── */
+      .prd-form {
+        max-width: 760px;
+        margin: 0 auto;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 40px 44px 28px;
+        box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.6);
+      }
+      .prd-form h1 {
+        margin: 8px 0 8px;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+      }
+      .prd-lead {
+        margin: 0 0 8px;
+        font-size: 13.5px;
+        line-height: 1.7;
+        color: color-mix(in srgb, var(--text-strong) 80%, var(--text-weak));
+      }
+      .prd-lead b {
+        color: var(--text-strong);
+      }
+      .pq {
+        border-top: 1px solid var(--line);
+        padding-top: 20px;
+        margin-top: 22px;
+      }
+      .pq-q {
+        display: block;
+        font-size: 14.5px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .pq-n {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        margin-right: 6px;
+        border-radius: 6px;
+        background: color-mix(in srgb, var(--point-main) 18%, transparent);
+        color: var(--point-main);
+        font-size: 11.5px;
+        font-weight: 800;
+      }
+      .pq-hint {
+        font-size: 11.5px;
+        font-weight: 500;
+        color: var(--text-weak);
+      }
+      .pq-text {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-strong);
+        font: 500 14px var(--font);
+      }
+      .pq-text:focus {
+        outline: none;
+        border-color: var(--point-main);
+      }
+      .pq-opts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .pq-multi {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .pq-opt {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        text-align: left;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1.5px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-strong);
+        cursor: pointer;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+      .pq-opt b {
+        font-size: 13.5px;
+        font-weight: 700;
+      }
+      .pq-opt small {
+        font-size: 11px;
+        color: var(--text-weak);
+      }
+      .pq-opt:hover {
+        border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+      }
+      .pq-opt.on {
+        border-color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 12%, var(--bg-surface));
+      }
+      .pq-opt.on small {
+        color: color-mix(in srgb, var(--text-strong) 70%, var(--text-weak));
+      }
+      .prd-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 14px;
+        border-top: 1px solid var(--line);
+        margin-top: 26px;
+        padding-top: 20px;
+      }
+      .prd-note {
+        font-size: 12px;
+        color: var(--text-weak);
+        margin-right: auto;
+      }
+      .prd-gen {
+        border: 0;
+        border-radius: 10px;
+        padding: 11px 20px;
+        font: 700 13.5px var(--font);
+        cursor: pointer;
+        background: var(--point-main);
+        color: #fff;
+        transition: filter 0.15s ease, opacity 0.15s ease;
+      }
+      .prd-gen:hover:not(:disabled) {
+        filter: brightness(1.06);
+      }
+      .prd-gen:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      /* ── 생성 결과 안내 요약(명세서·플로우·와이어프레임 공통) ── */
+      .gen-summary {
+        max-width: 960px;
+        margin: 0 auto 20px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--point-main) 7%, var(--bg-surface));
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--text-strong);
+      }
+      .gen-summary b {
+        color: var(--point-main);
+      }
+      .gen-summary .gs-empty {
+        color: var(--text-weak);
+      }
+      /* ── 와이어프레임 추천 카드 ── */
+      .wreco-wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      .wcat-h {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .wcat-h b {
+        font-size: 15.5px;
+        font-weight: 800;
+        letter-spacing: -0.2px;
+      }
+      .wcat-h span {
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .wreco-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      .wreco {
+        position: relative;
+        text-align: left;
+        padding: 14px;
+        border-radius: 14px;
+        border: 1.5px solid var(--line);
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        cursor: pointer;
+        transition: border-color 0.15s ease, transform 0.12s ease;
+      }
+      .wreco:hover {
+        border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+        transform: translateY(-2px);
+      }
+      .wreco.on {
+        border-color: var(--point-main);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--point-main) 22%, transparent);
+      }
+      .wreco .wf {
+        margin-bottom: 12px;
+      }
+      .wreco-name {
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .wreco-desc {
+        margin-top: 3px;
+        font-size: 11.5px;
+        color: var(--text-weak);
+      }
+      .wreco-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 10.5px;
+        font-weight: 800;
+        background: var(--point-main);
+        color: #fff;
+      }
+      .wreco-screen {
+        display: inline-block;
+        margin-bottom: 8px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 10.5px;
+        font-weight: 700;
+        background: var(--bg-accent);
+        color: var(--text-weak);
+      }
+      .wreco-bar {
+        max-width: 980px;
+        margin: 24px auto 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 14px;
+      }
+      .wreco-pick {
+        font-size: 12.5px;
+        color: var(--text-weak);
+        margin-right: auto;
+      }
+      /* 단계 이동 바 — 기능명세서·유저플로우 하단의 '다음 단계로' 버튼 */
+      .step-foot {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 14px;
+        padding: 13px 40px;
+        border-top: 1px solid var(--line);
+        background: var(--bg-surface);
+      }
+      .step-foot .step-hint {
+        font-size: 12.5px;
+        color: var(--text-weak);
+        margin-right: auto;
       }
       /* 상단 바·레일이 탭/홈/초기화/접기를 담당하므로 패널 안 중복 요소는 감춘다 (심플·직설).
          숨겨진 요소도 레일/상단 바가 .click()으로 프록시 호출하므로 기능은 그대로다. */
@@ -4599,7 +5411,7 @@
       /* 3D 현장 사진은 원본 그대로 — 색조·명암 보정 없음.
          테마는 그 위에 얹히는 유리 패널·강조색만 바꾼다. */
       .dt-scene-img {
-        background: url('dt-bg.jpg') center / cover no-repeat;
+        background: url('src/dt-bg.jpg') center / cover no-repeat;
       }
 
       .dt-ui {
@@ -10550,20 +11362,20 @@
     <!-- 상단 바 — 참고 UI 구조(브랜드 · 중앙 탭 · 우측 액션). 런처가 열리면 그 오버레이가 덮는다. -->
     <header class="topbar" id="topbar">
       <div class="tb-left">
-        <span class="tb-mark"><img src="logo%20chip01.svg" alt="WEMB" /></span>
+        <span class="tb-mark"><img src="src/logo%20chip01.svg" alt="WEMB" /></span>
         <span class="tb-name">Studio</span>
         <span class="tb-proj" id="tbProj"></span>
       </div>
       <nav class="tb-tabs" id="tbTabs" role="tablist" aria-label="페이지">
-        <button class="tb-tab on" data-page="wire" type="button" role="tab" aria-selected="true">스튜디오</button>
-        <span class="tb-dot" aria-hidden="true">···</span>
-        <button class="tb-tab" data-page="prd" type="button" role="tab">PRD</button>
+        <button class="tb-tab on" data-page="prd" type="button" role="tab" aria-selected="true">PRD</button>
         <span class="tb-dot" aria-hidden="true">···</span>
         <button class="tb-tab" data-page="spec" type="button" role="tab">기능명세서</button>
         <span class="tb-dot" aria-hidden="true">···</span>
         <button class="tb-tab" data-page="flow" type="button" role="tab">유저플로우</button>
         <span class="tb-dot" aria-hidden="true">···</span>
         <button class="tb-tab" data-page="wireframe" type="button" role="tab">와이어프레임</button>
+        <span class="tb-dot" aria-hidden="true">···</span>
+        <button class="tb-tab" data-page="wire" type="button" role="tab">스튜디오</button>
       </nav>
       <div class="tb-actions">
         <button class="tb-ic" data-act="undo" type="button" title="되돌리기" aria-label="되돌리기"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4" /><path d="M20 20v-7a4 4 0 0 0-4-4H4" /></svg></button>
@@ -10577,52 +11389,94 @@
          페이지 뷰 — 상단 탭으로 전환(SPA). '와이어프레임'은 아래 스튜디오(.app),
          나머지는 이 오버레이 페이지들이 스튜디오 위를 덮는다.
          ============================================================ -->
-    <!-- PRD -->
+    <!-- PRD — 관제/디지털 트윈 요구사항을 묻는 질문 폼. 답변이 명세서·플로우·와이어프레임을 만든다. -->
     <section class="page" id="pagePrd" data-page="prd" hidden aria-label="PRD">
       <div class="page-scroll">
-        <article class="prd-doc">
-          <div class="prd-kicker">제품 요구사항 문서</div>
-          <h1>WEMB Studio — PRD</h1>
-          <p class="prd-meta">v0.5 · 관제 대시보드 색 테마 생성기 · 최종 수정 2026-07-30</p>
-          <section class="prd-sec">
-            <h2>1. 개요</h2>
-            <p>고객사 브랜드 색을 기준으로 관제 대시보드·디지털 트윈 화면에 어울리는 색 테마를 만들고, 접근성을 검증한 뒤 코드·이미지로 내보내는 도구입니다.</p>
-          </section>
-          <section class="prd-sec">
-            <h2>2. 목표</h2>
-            <ul>
-              <li>로고 한 장에서 기준 색을 뽑아 전체 팔레트를 자동 생성</li>
-              <li>WCAG 대비 기준을 실시간으로 검증·자동 보정</li>
-              <li>Flat/Enterprise 두 밀도와 다크/라이트 테마 지원</li>
-            </ul>
-          </section>
-          <section class="prd-sec">
-            <h2>3. 핵심 기능</h2>
-            <ul>
-              <li>색 정하기 — 기준 색 · 배색 방식 · 사진 추출 · 추천 테마</li>
-              <li>대시보드 편집 — 화면 구성 · 콘텐츠 패널 추가 · 배치/내용 · 디자인</li>
-              <li>검증 · 저장 · 내보내기(토큰/이미지/공유 링크)</li>
-            </ul>
-          </section>
-          <section class="prd-sec">
-            <h2>4. 성공 지표</h2>
-            <ul>
-              <li>테마 1개 완성까지 평균 3분 이내</li>
-              <li>기본 다크/라이트 테마 대비 기준 100% 통과</li>
-            </ul>
-          </section>
-        </article>
+        <form class="prd-form" id="prdForm" autocomplete="off">
+          <div class="prd-kicker">제품 요구사항 문서 (PRD)</div>
+          <h1>무엇을 만들지 알려주세요</h1>
+          <p class="prd-lead">관제 대시보드·디지털 트윈 화면을 구성하기 위한 질문이에요. 답하면 <b>기능명세서 · 유저플로우 · 추천 와이어프레임</b>이 자동으로 만들어지고, 고른 구성이 스튜디오에 그대로 반영됩니다.</p>
+
+          <div class="pq">
+            <label class="pq-q" for="pqSite"><span class="pq-n">1</span> 사이트·프로젝트 이름</label>
+            <input class="pq-text" id="pqSite" type="text" placeholder="예: 당진화력 통합관제" maxlength="40" />
+          </div>
+
+          <div class="pq">
+            <div class="pq-q"><span class="pq-n">2</span> 주로 어떤 화면을 만드나요?</div>
+            <div class="pq-opts" data-q="screen">
+              <button type="button" class="pq-opt on" data-v="dash"><b>관제 대시보드</b><small>패널·차트 중심의 상황판</small></button>
+              <button type="button" class="pq-opt" data-v="dt"><b>디지털 트윈</b><small>3D 씬 위 유리 패널</small></button>
+              <button type="button" class="pq-opt" data-v="both"><b>둘 다</b><small>대시보드 + 디지털 트윈</small></button>
+            </div>
+          </div>
+
+          <div class="pq">
+            <div class="pq-q"><span class="pq-n">3</span> 감시 대상 규모는 어느 정도인가요?</div>
+            <div class="pq-opts" data-q="scale">
+              <button type="button" class="pq-opt" data-v="single"><b>단일 설비</b><small>한 대상에 집중</small></button>
+              <button type="button" class="pq-opt on" data-v="multi"><b>다중 설비·구역</b><small>여러 설비를 한눈에</small></button>
+              <button type="button" class="pq-opt" data-v="enterprise"><b>전사·다중 사이트</b><small>대규모 통합 관제</small></button>
+            </div>
+          </div>
+
+          <div class="pq">
+            <div class="pq-q"><span class="pq-n">4</span> 무엇을 모니터링하나요? <span class="pq-hint">(여러 개 선택)</span></div>
+            <div class="pq-opts pq-multi" data-q="features" data-multi="1">
+              <button type="button" class="pq-opt on" data-v="realtime"><b>실시간 계측</b><small>센서·트렌드</small></button>
+              <button type="button" class="pq-opt on" data-v="alarm"><b>알람·이벤트</b><small>경보 로그</small></button>
+              <button type="button" class="pq-opt" data-v="cctv"><b>CCTV 영상</b><small>실시간 스트림</small></button>
+              <button type="button" class="pq-opt" data-v="asset"><b>설비·자산 상태</b><small>설비 트리·드릴다운</small></button>
+              <button type="button" class="pq-opt" data-v="energy"><b>에너지·발전량</b><small>전력·효율 지표</small></button>
+              <button type="button" class="pq-opt" data-v="env"><b>환경 감시</b><small>지진·기상·재난</small></button>
+            </div>
+          </div>
+
+          <div class="pq">
+            <div class="pq-q"><span class="pq-n">5</span> 어떤 환경에서 운영하나요?</div>
+            <div class="pq-opts" data-q="ops">
+              <button type="button" class="pq-opt on" data-v="central"><b>24/7 상황판</b><small>대형 화면 상시 관제</small></button>
+              <button type="button" class="pq-opt" data-v="normal"><b>일반 모니터링</b><small>PC 화면</small></button>
+              <button type="button" class="pq-opt" data-v="field"><b>현장·모바일</b><small>태블릿·소형 화면</small></button>
+            </div>
+          </div>
+
+          <div class="pq">
+            <div class="pq-q"><span class="pq-n">6</span> 접근성(WCAG 대비) 목표는?</div>
+            <div class="pq-opts" data-q="a11y">
+              <button type="button" class="pq-opt on" data-v="AA"><b>AA</b><small>일반 기준</small></button>
+              <button type="button" class="pq-opt" data-v="AAA"><b>AAA</b><small>강화 기준</small></button>
+            </div>
+          </div>
+
+          <div class="prd-actions">
+            <span class="prd-note" id="prdNote">답변은 자동 저장돼요.</span>
+            <button type="button" class="prd-gen" id="prdGen">기능명세서 자동 생성 →</button>
+          </div>
+        </form>
       </div>
     </section>
 
     <!-- 기능명세서 -->
     <section class="page" id="pageSpec" data-page="spec" hidden aria-label="기능명세서">
       <div class="doc-toolbar">
-        <div class="doc-filters">
-          <button class="doc-chip">요구사항 + 기능 <span class="cv">▾</span></button>
-          <button class="doc-chip">상태 <span class="cv">▾</span></button>
-          <button class="doc-chip">사용자 역할 <span class="cv">▾</span></button>
-          <button class="doc-chip">중요도 <span class="cv">▾</span></button>
+        <div class="doc-filters" id="specFilters">
+          <div class="doc-chipwrap" data-filter="type">
+            <button type="button" class="doc-chip"><span class="dc-lab">요구사항 + 기능</span> <span class="cv">▾</span></button>
+            <div class="doc-menu" hidden></div>
+          </div>
+          <div class="doc-chipwrap" data-filter="status">
+            <button type="button" class="doc-chip"><span class="dc-lab">상태</span> <span class="cv">▾</span></button>
+            <div class="doc-menu" hidden></div>
+          </div>
+          <div class="doc-chipwrap" data-filter="role">
+            <button type="button" class="doc-chip"><span class="dc-lab">사용자 역할</span> <span class="cv">▾</span></button>
+            <div class="doc-menu" hidden></div>
+          </div>
+          <div class="doc-chipwrap" data-filter="pri">
+            <button type="button" class="doc-chip"><span class="dc-lab">중요도</span> <span class="cv">▾</span></button>
+            <div class="doc-menu" hidden></div>
+          </div>
         </div>
         <div class="doc-tools">
           <button class="doc-ic" title="새로고침"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10" /><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" /></svg></button>
@@ -10631,53 +11485,55 @@
         </div>
       </div>
       <div class="page-scroll">
+        <div class="gen-summary" id="specSummary"></div>
         <table class="spec-table">
           <thead><tr><th>기능</th><th>상태</th><th>사용자 역할</th><th>중요도</th></tr></thead>
-          <tbody>
-            <tr><td>프로젝트 런처(전체·최근·즐겨찾기·휴지통)</td><td><span class="sbadge ok">완료</span></td><td>기획자</td><td><span class="pri hi">높음</span></td></tr>
-            <tr><td>로고에서 기준색 추출</td><td><span class="sbadge ok">완료</span></td><td>디자이너</td><td><span class="pri hi">높음</span></td></tr>
-            <tr><td>색 정하기 — 배색·사진·추천</td><td><span class="sbadge ok">완료</span></td><td>디자이너</td><td><span class="pri hi">높음</span></td></tr>
-            <tr><td>대시보드 편집 — 패널 추가/배치</td><td><span class="sbadge doing">진행</span></td><td>기획자</td><td><span class="pri mid">보통</span></td></tr>
-            <tr><td>접근성 대비 검증표</td><td><span class="sbadge ok">완료</span></td><td>역할 미지정</td><td><span class="pri hi">높음</span></td></tr>
-            <tr><td>토큰·이미지·링크 내보내기</td><td><span class="sbadge doing">진행</span></td><td>개발자</td><td><span class="pri mid">보통</span></td></tr>
-            <tr><td>템플릿 갤러리</td><td><span class="sbadge wait">예정</span></td><td>기획자</td><td><span class="pri low">낮음</span></td></tr>
-          </tbody>
+          <tbody id="specBody"></tbody>
         </table>
       </div>
-    </section>
-
-    <!-- 유저플로우 -->
-    <section class="page page-dots" id="pageFlow" data-page="flow" hidden aria-label="유저플로우">
-      <div class="flow-wrap">
-        <div class="fnode start">시작</div>
-        <div class="farrow">→</div>
-        <div class="fnode">프로젝트 런처</div>
-        <div class="farrow">→</div>
-        <div class="fnode">새 프로젝트<span class="fsub">화면 종류·레이아웃</span></div>
-        <div class="farrow">→</div>
-        <div class="fnode accent">색 정하기<span class="fsub">로고→기준색·배색</span></div>
-        <div class="farrow">→</div>
-        <div class="fnode">대시보드 편집</div>
-        <div class="farrow">→</div>
-        <div class="fnode">검증 · 저장</div>
-        <div class="farrow">→</div>
-        <div class="fnode end">내보내기</div>
+      <div class="step-foot">
+        <span class="step-hint">항목을 끝까지 확인하면 다음 단계로 넘어갈 수 있어요. ↓</span>
+        <button type="button" class="prd-gen" id="specNext" hidden>유저플로우로 넘어가기 →</button>
       </div>
     </section>
 
-    <!-- 와이어프레임 -->
-    <section class="page page-dots" id="pageWire" data-page="wireframe" hidden aria-label="와이어프레임">
-      <div class="wf-wrap">
-        <div class="wf-frame">
-          <div class="wf-top"><span class="wf-tdot"></span><span class="wf-tdot"></span><span class="wf-tdot"></span><span class="wf-tbar"></span></div>
-          <div class="wf-body">
-            <div class="wf-side"><span></span><span></span><span></span><span></span><span></span></div>
-            <div class="wf-main">
-              <div class="wf-row"><div class="wf-card"></div><div class="wf-card"></div><div class="wf-card"></div></div>
-              <div class="wf-row"><div class="wf-card tall"></div><div class="wf-card tall"></div></div>
-              <div class="wf-row"><div class="wf-card wide"></div></div>
-            </div>
+    <!-- 유저플로우 — PRD 답변에서 생성된 흐름 노드 -->
+    <section class="page page-dots" id="pageFlow" data-page="flow" hidden aria-label="유저플로우">
+      <div class="flow-head">
+        <div class="flow-tools">
+          <div class="flow-search" id="flowSearchBox">
+            <button type="button" class="flow-search-ic" id="flowSearchBtn" title="검색" aria-label="검색">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+            </button>
+            <input type="text" id="flowSearch" placeholder="노드 이름 검색 — 예: 알람, 로그인, KPI 요약" autocomplete="off" />
           </div>
+          <button type="button" class="flow-fav-toggle" id="flowFavOnly" title="즐겨찾기(★)한 항목만 보기" aria-label="즐겨찾기만 보기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+          </button>
+          <div class="flow-zoom" id="flowZoom">
+            <button type="button" class="fz-btn" data-z="out" title="축소 (Ctrl + 휠 아래로)">−</button>
+            <button type="button" class="fz-btn fz-level" id="fzLevel" title="화면에 맞추기">100%</button>
+            <button type="button" class="fz-btn" data-z="in" title="확대 (Ctrl + 휠 위로)">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="flow-stage">
+        <div class="flow-wrap" id="flowWrap"></div>
+      </div>
+      <div class="step-foot">
+        <span class="step-hint">이 흐름의 메뉴가 스튜디오 상단 내비게이션에 반영돼요.</span>
+        <button type="button" class="prd-gen" id="flowNext">와이어프레임으로 넘어가기 →</button>
+      </div>
+    </section>
+
+    <!-- 와이어프레임 — 규모·항목에 맞춰 추천된 레이아웃. 고르면 스튜디오에 반영된다. -->
+    <section class="page page-dots" id="pageWire" data-page="wireframe" hidden aria-label="와이어프레임">
+      <div class="page-scroll">
+        <div class="gen-summary" id="wireSummary"></div>
+        <div class="wreco-wrap" id="wireReco"></div>
+        <div class="wreco-bar">
+          <span class="wreco-pick" id="wirePick">추천 와이어프레임을 골라 주세요</span>
+          <button type="button" class="prd-gen" id="wireStart" disabled>이 구성으로 스튜디오 열기 →</button>
         </div>
       </div>
     </section>
@@ -10690,7 +11546,7 @@
       <div class="flow" id="flowHome">
         <div class="lc">
           <aside class="lc-side">
-            <div class="lc-brand"><img src="logo.svg" alt="WEMB" /><b>Studio</b></div>
+            <div class="lc-brand"><img src="src/logo.svg" alt="WEMB" /><b>Studio</b></div>
             <nav class="lc-nav">
               <button class="lc-navi on" data-view="all"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /></svg>전체</button>
               <button class="lc-navi" data-view="recent"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>최근 편집</button>
@@ -10775,7 +11631,7 @@
           <div class="bt">
             <h1>
               <!-- 로고 — 누르면 스튜디오 홈(프로젝트 런처)으로 이동 -->
-              <button type="button" class="logo" id="brandHome" title="스튜디오 홈으로" aria-label="스튜디오 홈으로"><img class="wlogo" src="logo.svg" alt="WEMB" /></button>
+              <button type="button" class="logo" id="brandHome" title="스튜디오 홈으로" aria-label="스튜디오 홈으로"><img class="wlogo" src="src/logo.svg" alt="WEMB" /></button>
               Studio
             </h1>
             <small>Color Theme Generator</small>
@@ -10998,7 +11854,7 @@
             </div>
             <div class="brandgrid">
               <div class="brandrow">
-                <span class="brandlogo" id="brandLogoPrev"><img src="logo.svg" alt="로고 미리보기" /></span>
+                <span class="brandlogo" id="brandLogoPrev"><img src="src/logo.svg" alt="로고 미리보기" /></span>
                 <div class="brandbtns">
                   <label class="imgbtn" for="brandLogoFile">로고 업로드</label>
                   <input type="file" id="brandLogoFile" accept="image/*" style="display: none" />
@@ -11678,7 +12534,7 @@
           </div>
           <div class="hdr">
             <div class="brand">
-              <span class="logo"><img class="wlogo" src="logo.svg" alt="WEMB" /></span>
+              <span class="logo"><img class="wlogo" src="src/logo.svg" alt="WEMB" /></span>
               <!-- 로고와 화면 이름 사이 구분 기호 — 테두리선과 같은 장식이라 --line 색을 쓴다.
                    글자로 그려졌을 뿐이므로 대비 기준 대상이 아니고, 스크린리더도 읽을 필요 없다. -->
               <span class="bar" aria-hidden="true">|</span>
@@ -12450,7 +13306,7 @@
           </div>
           <div class="dt-hdr">
             <div class="dt-brand">
-              <span class="logo"><img class="wlogo" src="logo.svg" alt="WEMB" /></span>
+              <span class="logo"><img class="wlogo" src="src/logo.svg" alt="WEMB" /></span>
               <span class="dt-bname">한국서부발전(주)</span>
             </div>
             <nav class="dt-nav">
@@ -15616,12 +16472,16 @@
         const links = [...stage.querySelectorAll('.nav a')];
         const brandSub = stage.querySelector('.brand .sub');
         const NAMES = { overview: '종합현황', production: '생산현황' };
+        /* 상단 내비 표시 라벨 — 유저플로우 메뉴로 교체될 수 있다. 없으면 NAMES를 쓴다. */
+        const LABELS = {};
         const PK = 'wemb-dash-page';
+        let current = 'overview';
         function show(key) {
           if (!NAMES[key]) return;
+          current = key;
           pages.forEach((p) => (p.hidden = p.dataset.page !== key));
           links.forEach((a) => a.classList.toggle('active', (a.dataset.page || '') === key));
-          if (brandSub) brandSub.textContent = NAMES[key];
+          if (brandSub) brandSub.textContent = LABELS[key] || NAMES[key];
           if (key === 'production') ProdCharts.reveal();
           try {
             localStorage.setItem(PK, key);
@@ -15637,6 +16497,19 @@
             if (a.dataset.page) show(a.dataset.page);
           });
         });
+        /* 유저플로우의 상위 메뉴를 상단 내비 라벨로 반영한다(기존 링크의 라벨만 교체 → 핸들러 유지).
+           1번째→종합현황(overview), 2번째→생산현황(production), 이후는 준비 중 화면. */
+        window.__setStudioNav = function (labels) {
+          if (!Array.isArray(labels) || !labels.length) return;
+          links.forEach((a, i) => {
+            if (i >= labels.length || !labels[i]) return;
+            a.textContent = labels[i];
+            if (i === 0) { a.dataset.page = 'overview'; LABELS.overview = labels[i]; a.removeAttribute('title'); }
+            else if (i === 1) { a.dataset.page = 'production'; LABELS.production = labels[i]; a.removeAttribute('title'); }
+            else { delete a.dataset.page; a.title = '준비 중입니다'; }
+          });
+          show(NAMES[current] ? current : 'overview');
+        };
         let saved = 'overview';
         try {
           saved = localStorage.getItem(PK) || 'overview';
@@ -17053,10 +17926,40 @@
           if (wfCanvas) { wfCanvas.hidden = true; wfCanvas.innerHTML = ''; wfCanvas.__board = null; }
           document.querySelectorAll('.stage .dashpage').forEach((p) => (p.style.display = ''));
         }
+        /* ── 새 프로젝트에서 고른 디지털 트윈 레이아웃을 3D 씬 위 유리 패널로 재현 ──
+           그리드 모델(cols/rows/cells)을 1920×1080 좌표의 패널 사각형으로 바꿔 renderInto로
+           그린다. 가운데 빈 셀은 패널을 만들지 않아 3D 씬이 그대로 비친다. */
+        let dtLayoutWf = null;
+        function gridToWf(lay) {
+          if (!lay || !lay.cells || !lay.cells.length) return null;
+          const CW = 1920, CH = 1080, gap = 26;
+          const cw = CW / lay.cols, ch = CH / lay.rows;
+          const p = lay.cells.map(([x, y, w, h]) => [
+            Math.round((x - 1) * cw + gap),
+            Math.round((y - 1) * ch + gap),
+            Math.round(w * cw - gap * 2),
+            Math.round(h * ch - gap * 2),
+          ]);
+          return { n: lay.id, p };
+        }
         function applyDt() {
+          /* 레이아웃이 지정되면 유리 패널로 재현하고 기본 .dt-ui는 감춘다 */
+          if (dtLayoutWf) {
+            if (dtUi) dtUi.style.display = 'none';
+            renderInto(wfCanvasDt, dtLayoutWf);
+            requestAnimationFrame(() => requestAnimationFrame(() => fitBoard(wfCanvasDt)));
+            return;
+          }
           if (wfCanvasDt) { wfCanvasDt.hidden = true; wfCanvasDt.innerHTML = ''; wfCanvasDt.__board = null; }
           if (dtUi) dtUi.style.display = '';
         }
+        /* 레이아웃 객체(cols/rows/cells) 또는 null을 받아 DT 화면에 반영. initFlow에서 호출. */
+        window.__applyDtLayout = function (lay) {
+          dtLayoutWf = gridToWf(lay);
+          applyDt();
+        };
+        /* 창 크기가 바뀌면 활성 DT 레이아웃 보드를 다시 맞춘다 */
+        window.addEventListener('resize', () => { if (dtLayoutWf) fitBoard(wfCanvasDt); });
         function applyLayout() {
           applyDash();
           applyDt();
@@ -18766,12 +19669,12 @@
           rootStyle: document.documentElement.getAttribute('style') || '',
         };
       }
-      /* 로고 <img src="logo.svg">는 상대경로라 내려받은 파일에선 깨진다 → 원본 SVG를 data URI로 심어 자립화 */
+      /* 로고 <img src="src/logo.svg">는 상대경로라 내려받은 파일에선 깨진다 → 원본 SVG를 data URI로 심어 자립화 */
       async function inlineLogo(rootEl) {
-        const imgs = rootEl.querySelectorAll('img.wlogo, img[src="logo.svg"]');
+        const imgs = rootEl.querySelectorAll('img.wlogo, img[src="src/logo.svg"]');
         if (!imgs.length) return;
         try {
-          const svg = await fetch('logo.svg').then((r) => (r.ok ? r.text() : ''));
+          const svg = await fetch('src/logo.svg').then((r) => (r.ok ? r.text() : ''));
           if (!svg) return;
           const uri = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
           imgs.forEach((im) => im.setAttribute('src', uri));
@@ -19049,7 +19952,7 @@ ${parts.html}
           } catch (e) {}
         };
         const setLogo = (src) => {
-          const url = src || 'logo.svg';
+          const url = src || 'src/logo.svg';
           document.querySelectorAll('.main .wlogo').forEach((im) => (im.src = url));
           const p = document.querySelector('#brandLogoPrev img');
           if (p) p.src = url;
@@ -19998,10 +20901,40 @@ ${parts.html}
           { key: 'g3', label: '3단', hint: '3열 — 정보를 촘촘하게' },
           { key: 'mod', label: '모듈', hint: '크기가 다른 타일의 모자이크 — Figma 모듈 프레임 그대로' },
         ];
+        /* ── 디지털 트윈 전용 레이아웃 — Figma Studio 'Digital Twin' 섹션(147:756) 그대로.
+           대시보드와 달리 가운데는 3D 씬이 비치도록 비우고 패널을 가장자리·코너에 배치한다.
+           level = 패널 열 수(2/3/4), R = 세로 분할 정도(2/3/4). */
+        const DT_LAYOUTS = {
+          dt2: [
+            { id: 'dt-2l-2r', name: '2레벨 · 2R', desc: '좌 1 · 우 2 패널', ...L(4, 3, [[1, 1, 1, 1], [4, 1, 1, 2], [4, 3, 1, 1]]) },
+            { id: 'dt-2l-3r', name: '2레벨 · 3R', desc: '좌 세로 1 · 우 3 패널', ...L(4, 3, [[1, 1, 1, 3], [4, 1, 1, 1], [4, 2, 1, 1], [4, 3, 1, 1]]) },
+            { id: 'dt-2l-4r', name: '2레벨 · 4R', desc: '좌 3 · 우 4 패널', ...L(4, 12, [[1, 1, 1, 4], [1, 5, 1, 4], [1, 9, 1, 4], [4, 1, 1, 3], [4, 4, 1, 3], [4, 7, 1, 3], [4, 10, 1, 3]]) },
+          ],
+          dt3: [
+            { id: 'dt-3l-2r', name: '3레벨 · 2R', desc: '상단 3분할 · 하단 와이드', ...L(3, 4, [[1, 1, 1, 1], [2, 1, 1, 1], [3, 1, 1, 1], [1, 4, 3, 1]]) },
+            { id: 'dt-3l-3r', name: '3레벨 · 3R', desc: '우측 2 · 하단 3분할', ...L(3, 3, [[3, 1, 1, 1], [3, 2, 1, 1], [1, 3, 1, 1], [2, 3, 1, 1], [3, 3, 1, 1]]) },
+            { id: 'dt-3l-4r', name: '3레벨 · 4R', desc: '좌 2 · 우 3 · 하단 와이드', ...L(4, 7, [[1, 1, 1, 3], [1, 4, 1, 3], [4, 1, 1, 2], [4, 3, 1, 2], [4, 5, 1, 2], [1, 7, 4, 1]]) },
+          ],
+          dt4: [
+            { id: 'dt-4l-2r', name: '4레벨 · 2R', desc: '좌상 2 · 우 세로 · 하단 2', ...L(4, 4, [[1, 1, 1, 1], [2, 1, 1, 1], [4, 1, 1, 3], [3, 4, 1, 1], [4, 4, 1, 1]]) },
+            { id: 'dt-4l-3r', name: '4레벨 · 3R', desc: '상단 4 · 양측 1 · 하단 와이드', ...L(4, 4, [[1, 1, 1, 1], [2, 1, 1, 1], [3, 1, 1, 1], [4, 1, 1, 1], [1, 2, 1, 1], [4, 2, 1, 1], [1, 4, 4, 1]]) },
+            { id: 'dt-4l-4r', name: '4레벨 · 4R', desc: '상·하단 4열 · 양측 3', ...L(4, 4, [[1, 1, 1, 1], [2, 1, 1, 1], [3, 1, 1, 1], [4, 1, 1, 1], [1, 2, 1, 1], [1, 3, 1, 1], [4, 2, 1, 1], [4, 3, 1, 1], [1, 4, 1, 1], [2, 4, 1, 1], [3, 4, 1, 1], [4, 4, 1, 1]]) },
+          ],
+        };
+        const DT_GROUPS = [
+          { key: 'dt2', label: '2레벨', hint: '좌·우 양쪽 패널 · 가운데 3D 씬' },
+          { key: 'dt3', label: '3레벨', hint: '삼분할·상하 배치 · 넓은 씬 확보' },
+          { key: 'dt4', label: '4레벨', hint: '가장자리를 촘촘히 · 정보 밀도 높게' },
+        ];
+        /* 화면 종류에 맞는 레이아웃/그룹 세트 (디지털 트윈이면 DT 전용) */
+        const layoutsFor = (screen) => (screen === 'dt' ? DT_LAYOUTS : LAYOUTS);
+        const groupsFor = (screen) => (screen === 'dt' ? DT_GROUPS : GROUPS);
         const findLayout = (id) => {
-          for (const k in LAYOUTS) {
-            const f = LAYOUTS[k].find((l) => l.id === id);
-            if (f) return f;
+          for (const set of [LAYOUTS, DT_LAYOUTS]) {
+            for (const k in set) {
+              const f = set[k].find((l) => l.id === id);
+              if (f) return f;
+            }
           }
           return null;
         };
@@ -20056,6 +20989,8 @@ ${parts.html}
           const cols = dashCols();
           if (!cols) return;
           const panels = ensurePanels(cols);
+          /* 디지털 트윈 전용 레이아웃은 대시보드 미리보기에 적용하지 않는다(3D 씬 유지) */
+          if (typeof layoutId === 'string' && layoutId.startsWith('dt-')) { restoreCols(cols, panels); return; }
           const lay = findLayout(layoutId);
           if (!lay) {
             restoreCols(cols, panels);
@@ -20209,7 +21144,8 @@ ${parts.html}
             add.className = 'lc-card lc-cardnew';
             add.innerHTML =
               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>새 프로젝트 만들기</span>';
-            add.onclick = openModal;
+            /* index2 — 새 프로젝트는 팝업(화면 종류 선택) 대신 PRD 화면으로 진입한다 */
+            add.onclick = startNewProject;
             g.appendChild(add);
           }
 
@@ -20432,7 +21368,10 @@ ${parts.html}
           setTimeout(() => nm && nm.select(), 30);
         }
         const closeModal = () => modal.classList.remove('show');
-        document.getElementById('lcNew').onclick = openModal;
+        /* index2 — 새 프로젝트 진입점: 팝업 대신 PRD 화면으로.
+           런처(.flow)는 z-index가 PRD 페이지(.page)보다 높으므로 반드시 닫아야 PRD가 보인다. */
+        const startNewProject = () => { home.classList.remove('show'); if (window.__wembPrdReset) window.__wembPrdReset(); if (window.__wembStep) window.__wembStep.reset(); if (window.__setPage) window.__setPage('prd'); };
+        document.getElementById('lcNew').onclick = startNewProject;
         document.getElementById('npX').onclick = closeModal;
         document.getElementById('npCancel').onclick = closeModal;
         modal.addEventListener('click', (e) => {
@@ -20459,7 +21398,9 @@ ${parts.html}
           document.getElementById('lpProjName').textContent = pending.name + ' · ' + (SCREEN_LABEL[pending.screen] || '대시보드');
           const body = document.getElementById('lpBody');
           body.innerHTML = '';
-          GROUPS.forEach((grp) => {
+          const groups = groupsFor(pending.screen);
+          const sets = layoutsFor(pending.screen);
+          groups.forEach((grp) => {
             const sec = document.createElement('div');
             sec.className = 'lp-group';
             const gh = document.createElement('div');
@@ -20470,7 +21411,7 @@ ${parts.html}
             sec.appendChild(gh);
             const cards = document.createElement('div');
             cards.className = 'lp-cards';
-            LAYOUTS[grp.key].forEach((lay) => {
+            sets[grp.key].forEach((lay) => {
               const c = document.createElement('button');
               c.className = 'lp-card';
               c.dataset.lid = lay.id;
@@ -20502,6 +21443,7 @@ ${parts.html}
         document.getElementById('lpBack').onclick = () => {
           layout.classList.remove('show');
           home.classList.add('show');
+          try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
           openModal();
         };
         /* 바깥(백드롭) 클릭 시 이전 단계로 — npModal과 동일한 모달 동작 */
@@ -20519,15 +21461,24 @@ ${parts.html}
           try {
             localStorage.setItem('wemb-layout', layoutId || '');
           } catch (e) {}
-          /* 대시보드 화면이면 선택 레이아웃대로 패널을 재배치 (DT는 3D 씬 유지) */
+          /* 대시보드는 선택 레이아웃대로 패널 재배치, 디지털 트윈은 씬 위 유리 패널로 재현 */
           if (screen === 'dash') applyDashLayout(layoutId);
           if (typeof syncSideLayout === 'function') syncSideLayout();
           home.classList.remove('show');
           layout.classList.remove('show');
           modal.classList.remove('show');
+          /* 오버레이를 걷어 스튜디오가 실제 크기를 갖게 된 뒤 DT 레이아웃을 반영해야
+             유리 패널 보드가 화면 크기에 맞게 축소된다(캔버스 0 크기면 fitBoard가 대기). */
+          if (typeof window.__applyDtLayout === 'function') window.__applyDtLayout(screen === 'dt' ? findLayout(layoutId) : null);
           if (screen === 'dt' && layoutId && typeof toast === 'function')
-            toast('디지털 트윈은 선택한 레이아웃을 기록하고 3D 화면은 그대로 유지해요.', { type: 'info' });
+            toast('선택한 레이아웃을 디지털 트윈 화면에 반영했어요.', { type: 'info' });
+          /* 스튜디오에 들어왔으면 모든 단계 잠금 해제 + 유저플로우 메뉴를 상단 내비에 반영 */
+          try { if (window.__wembStep) window.__wembStep.advance(4); } catch (e) {}
+          try { if (window.__setStudioNav && typeof window.__WEMBFlowMenu === 'function') window.__setStudioNav(window.__WEMBFlowMenu()); } catch (e) {}
         }
+        /* PRD→명세서→플로우→와이어프레임 가이드(initGuide)가 레이아웃 정의와 스튜디오 진입을
+           재사용할 수 있도록 노출한다. */
+        window.__WEMBLayouts = { LAYOUTS, DT_LAYOUTS, GROUPS, DT_GROUPS, findLayout, wfEl, enterStudio, setProjectName: (n) => { pending.name = n || pending.name; } };
         function startStudio() {
           const projs = loadProjects();
           const proj = { id: newId(), name: pending.name, screen: pending.screen, layout: pending.layout, ts: Date.now(), fav: false };
@@ -20562,12 +21513,14 @@ ${parts.html}
           sideNew.onclick = () => {
             setView('all');
             home.classList.add('show');
+            try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
           };
 
         /* 사이드바 홈 버튼 · 브랜드 로고 → 프로젝트 목록(런처) 다시 열기 */
         const goHome = () => {
           setView('all');
           home.classList.add('show');
+          try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
         };
         const quickHome = document.getElementById('quickHome');
         if (quickHome) quickHome.onclick = goHome;
@@ -20701,6 +21654,7 @@ ${parts.html}
         window.__openLauncher = () => {
           setView('all');
           home.classList.add('show');
+          try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
         };
 
         /* 새 프로젝트로 새로고침해 진입한 경우 — 깨끗한 기본 상태에서 이 프로젝트로 바로 들어간다 */
@@ -20720,6 +21674,9 @@ ${parts.html}
       }
 
       /* ---------- 초기화 ---------- */
+      /* 새로고침 복원용 — initChrome의 초기 setPage('wire')가 localStorage를 덮기 전에
+         '작성 중이던 화면'을 미리 읽어 둔다(끝에서 이 값으로 복원). */
+      var __bootView = (function () { try { return localStorage.getItem('wemb-view'); } catch (e) { return null; } })();
       applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
       apply();
       loadSnapshots();
@@ -20739,6 +21696,844 @@ ${parts.html}
       renderHistory();
       /* 마지막에 — 진입점 플로우(런처 → 새 프로젝트 → 레이아웃 선택)를 띄운다 */
       initFlow();
+
+      /* ============================================================
+         가이드 파이프라인 — PRD(질문) → 기능명세서 → 유저플로우 → 추천 와이어프레임 → 스튜디오.
+         PRD 답변(G)에서 이후 단계를 결정론적으로 파생하고, 각 탭을 열 때 최신 답변으로 다시 그린다.
+         고른 추천 와이어프레임은 enterStudio(화면, 레이아웃)로 스튜디오에 그대로 반영한다.
+         ============================================================ */
+      (function initGuide() {
+        const form = document.getElementById('prdForm');
+        if (!form) return;
+        const LS = 'wemb-prd';
+        const DEFAULT = { site: '', screen: 'dash', scale: 'multi', features: ['realtime', 'alarm'], ops: 'central', a11y: 'AA' };
+        const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        function load() {
+          try {
+            const r = JSON.parse(localStorage.getItem(LS));
+            if (r && typeof r === 'object') return Object.assign({}, DEFAULT, r, { features: Array.isArray(r.features) && r.features.length ? r.features : DEFAULT.features.slice() });
+          } catch (e) {}
+          return Object.assign({}, DEFAULT, { features: DEFAULT.features.slice() });
+        }
+        let G = load();
+        const save = () => { try { localStorage.setItem(LS, JSON.stringify(G)); } catch (e) {} };
+
+        const SCREEN_LBL = { dash: '관제 대시보드', dt: '디지털 트윈', both: '대시보드 + 디지털 트윈' };
+        const SCALE_LBL = { single: '단일 설비', multi: '다중 설비·구역', enterprise: '전사·다중 사이트' };
+        const OPS_LBL = { central: '24/7 상황판', normal: '일반 모니터링', field: '현장·모바일' };
+        const FEAT_LBL = { realtime: '실시간 계측', alarm: '알람·이벤트', cctv: 'CCTV 영상', asset: '설비·자산 상태', energy: '에너지·발전량', env: '환경 감시' };
+        const PRI_LBL = { hi: '높음', mid: '보통', low: '낮음' };
+        const siteName = () => G.site || '이 프로젝트';
+
+        /* ── 폼 ↔ 상태 동기화 ── */
+        const siteInput = document.getElementById('pqSite');
+        function paintForm() {
+          if (siteInput) siteInput.value = G.site || '';
+          form.querySelectorAll('.pq-opts').forEach((grp) => {
+            const q = grp.dataset.q, multi = grp.dataset.multi === '1';
+            grp.querySelectorAll('.pq-opt').forEach((b) => {
+              const on = multi ? G[q].includes(b.dataset.v) : G[q] === b.dataset.v;
+              b.classList.toggle('on', on);
+            });
+          });
+          if (typeof refreshSteps === 'function') refreshSteps();
+        }
+        if (siteInput) siteInput.addEventListener('input', () => { G.site = siteInput.value.trim(); save(); if (typeof refreshSteps === 'function') refreshSteps(); });
+        form.querySelectorAll('.pq-opts').forEach((grp) => {
+          const q = grp.dataset.q, multi = grp.dataset.multi === '1';
+          grp.addEventListener('click', (e) => {
+            const b = e.target.closest('.pq-opt'); if (!b) return;
+            const v = b.dataset.v;
+            if (multi) {
+              const i = G[q].indexOf(v);
+              if (i >= 0) { if (G[q].length > 1) G[q].splice(i, 1); } else G[q].push(v);
+            } else G[q] = v;
+            save(); paintForm();
+          });
+        });
+
+        function summaryHTML(tail) {
+          const feats = G.features.map((f) => FEAT_LBL[f]).join(' · ');
+          return '<b>' + esc(siteName()) + '</b> · ' + SCREEN_LBL[G.screen] + ' · ' + SCALE_LBL[G.scale] + ' · ' + OPS_LBL[G.ops] + ' · WCAG ' + G.a11y +
+            '<br>모니터링: ' + feats + '<br><span class="gs-empty">' + tail + '</span>';
+        }
+
+        /* ── 1) 기능명세서 파생 — PRD 6개 문항(화면·규모·모니터링·운영·접근성 + 이름)을 그대로 반영해 추출 ── */
+        function deriveSpec() {
+          const rows = [];
+          /* type: '기능' = 구체적 화면·기능, '요구사항' = 규모·운영·접근성 등 비기능/제약 요구사항 */
+          const add = (feat, role, pri, type) => rows.push({ feat, role, pri, type: type || '기능' });
+          const site = (G.site && G.site.trim()) || '이 프로젝트';
+
+          /* 2번 — 화면 유형 (기능) */
+          if (G.screen === 'dash' || G.screen === 'both') add(site + ' 관제 대시보드 종합 현황 화면', '기획자', 'hi', '기능');
+          if (G.screen === 'dt' || G.screen === 'both') { add('3D 디지털 트윈 씬 뷰어', '기획자', 'hi', '기능'); add('씬 위 유리 패널 오버레이 배치', '디자이너', 'mid', '기능'); }
+
+          /* 4번 — 모니터링 항목(복수 선택) (기능) */
+          const F = {
+            realtime: [['실시간 계측 트렌드 차트', 'hi'], ['실시간 KPI 카운트업', 'mid']],
+            alarm: [['알람·이벤트 로그 패널', 'hi'], ['심각도별 필터·확인', 'mid']],
+            cctv: [['CCTV 실시간 스트림 타일', 'hi']],
+            asset: [['설비 트리·자산 상태', 'hi'], ['설비 드릴다운 상세', 'mid']],
+            energy: [['발전량·에너지 지표 대시보드', 'hi']],
+            env: [['환경 감시 위젯(지진·기상·재난)', 'hi']],
+          };
+          G.features.forEach((f) => (F[f] || []).forEach(([n, p]) => add(n, '운영자', p, '기능')));
+
+          /* 3번 — 감시 대상 규모 (요구사항) */
+          if (G.scale === 'single') add('단일 설비 집중 모니터링 뷰', '운영자', 'mid', '요구사항');
+          else if (G.scale === 'multi') add('구역·설비 그룹 전환 네비게이션', '운영자', 'mid', '요구사항');
+          else if (G.scale === 'enterprise') add('다중 사이트 통합·전환 네비게이션', '운영자', 'hi', '요구사항');
+
+          /* 5번 — 운영 환경 (요구사항) */
+          if (G.ops === 'central') add('24/7 대형 화면 고밀도 상황판 레이아웃', '디자이너', 'mid', '요구사항');
+          else if (G.ops === 'normal') add('일반 PC 화면 표준 레이아웃', '디자이너', 'mid', '요구사항');
+          else if (G.ops === 'field') add('현장·모바일·태블릿 대응 간소 레이아웃', '디자이너', 'mid', '요구사항');
+
+          /* 6번 — 접근성 목표 (요구사항) */
+          add('WCAG ' + G.a11y + ' 대비 자동 검증·보정', '개발자', G.a11y === 'AAA' ? 'hi' : 'mid', '요구사항');
+          add('테마 색 토큰 생성·내보내기(CSS/JSON/Figma)', '개발자', 'mid', '요구사항');
+          return rows;
+        }
+        function renderSpec() {
+          const body = document.getElementById('specBody'); if (!body) return;
+          body.innerHTML = deriveSpec().map((r) => {
+            const st = r.pri === 'hi' ? ['doing', '권장'] : ['wait', '예정'];
+            const priLab = PRI_LBL[r.pri];
+            return '<tr data-type="' + esc(r.type) + '" data-status="' + st[1] + '" data-role="' + esc(r.role) + '" data-pri="' + priLab + '">'
+              + '<td>' + esc(r.feat) + '</td>'
+              + '<td><span class="sbadge ' + st[0] + '">' + st[1] + '</span></td>'
+              + '<td>' + esc(r.role) + '</td>'
+              + '<td><span class="pri ' + r.pri + '">' + priLab + '</span></td></tr>';
+          }).join('');
+          const s = document.getElementById('specSummary'); if (s) s.innerHTML = summaryHTML('아래는 PRD 답변에서 자동 추출한 기능 목록이에요. 위 필터로 요구사항·상태·역할·중요도별로 추려 볼 수 있어요.');
+          applySpecFilters();
+        }
+
+        /* ── 기능명세서 필터(상단 드롭다운) ──
+           4개 축(요구사항+기능 / 상태 / 사용자 역할 / 중요도)으로 표 행을 걸러 준다. */
+        const SPEC_FILTERS = { type: '', status: '', role: '', pri: '' };
+        const SPEC_DIMS = {
+          type: { def: '요구사항 + 기능', order: ['요구사항', '기능'] },
+          status: { def: '상태', order: ['권장', '예정'] },
+          role: { def: '사용자 역할', order: ['기획자', '디자이너', '운영자', '개발자'] },
+          pri: { def: '중요도', order: ['높음', '보통', '낮음'] },
+        };
+        function applySpecFilters() {
+          const body = document.getElementById('specBody'); if (!body) return;
+          let visible = 0;
+          body.querySelectorAll('tr:not(.spec-empty)').forEach((tr) => {
+            const ok =
+              (!SPEC_FILTERS.type || tr.dataset.type === SPEC_FILTERS.type) &&
+              (!SPEC_FILTERS.status || tr.dataset.status === SPEC_FILTERS.status) &&
+              (!SPEC_FILTERS.role || tr.dataset.role === SPEC_FILTERS.role) &&
+              (!SPEC_FILTERS.pri || tr.dataset.pri === SPEC_FILTERS.pri);
+            tr.hidden = !ok;
+            if (ok) visible++;
+          });
+          let empty = body.querySelector('tr.spec-empty');
+          if (!visible) {
+            if (!empty) { empty = document.createElement('tr'); empty.className = 'spec-empty'; empty.innerHTML = '<td colspan="4">선택한 조건에 맞는 항목이 없어요.</td>'; body.appendChild(empty); }
+            empty.hidden = false;
+          } else if (empty) empty.hidden = true;
+          /* 표 높이가 바뀌면(필터 등) '다음 단계' 버튼 노출 조건도 다시 판정 */
+          if (window.__specScrollGate) window.__specScrollGate();
+        }
+        (function initSpecFilters() {
+          const bar = document.getElementById('specFilters'); if (!bar) return;
+          const closeAll = () => bar.querySelectorAll('.doc-menu').forEach((m) => (m.hidden = true));
+          function refreshChips() {
+            bar.querySelectorAll('.doc-chipwrap').forEach((wrap) => {
+              const key = wrap.dataset.filter, v = SPEC_FILTERS[key];
+              wrap.querySelector('.dc-lab').textContent = v ? (key === 'type' ? v : SPEC_DIMS[key].def + ': ' + v) : SPEC_DIMS[key].def;
+              wrap.querySelector('.doc-chip').classList.toggle('active', !!v);
+            });
+          }
+          function buildMenu(wrap, key) {
+            const menu = wrap.querySelector('.doc-menu');
+            const present = new Set([...document.querySelectorAll('#specBody tr:not(.spec-empty)')].map((tr) => tr.dataset[key]).filter(Boolean));
+            const opts = [''].concat(SPEC_DIMS[key].order.filter((v) => present.has(v)));
+            menu.innerHTML = opts.map((v) => {
+              const on = (SPEC_FILTERS[key] || '') === v;
+              return '<button type="button" class="doc-mi' + (on ? ' on' : '') + '" data-v="' + esc(v) + '">' + (v ? esc(v) : '전체') + '<span class="chk">✓</span></button>';
+            }).join('');
+          }
+          bar.addEventListener('click', (e) => {
+            const mi = e.target.closest('.doc-mi');
+            if (mi) {
+              const wrap = mi.closest('.doc-chipwrap');
+              SPEC_FILTERS[wrap.dataset.filter] = mi.dataset.v || '';
+              closeAll(); refreshChips(); applySpecFilters();
+              return;
+            }
+            const chip = e.target.closest('.doc-chip');
+            if (chip) {
+              const wrap = chip.closest('.doc-chipwrap'), menu = wrap.querySelector('.doc-menu'), wasOpen = !menu.hidden;
+              closeAll();
+              if (!wasOpen) { buildMenu(wrap, wrap.dataset.filter); menu.hidden = false; }
+            }
+          });
+          document.addEventListener('click', (e) => { if (!e.target.closest('#specFilters')) closeAll(); });
+          /* 툴바 새로고침 아이콘 → 필터 초기화 + 다시 그리기 */
+          const tools = document.querySelector('#pageSpec .doc-tools .doc-ic[title="새로고침"]');
+          if (tools) tools.addEventListener('click', () => {
+            Object.keys(SPEC_FILTERS).forEach((k) => (SPEC_FILTERS[k] = ''));
+            refreshChips(); renderSpec();
+          });
+          refreshChips();
+        })();
+
+        /* ── 기능명세서 스크롤 게이트 ──
+           항목을 끝까지(맨 아래) 스크롤해 다 읽은 뒤에만 '유저플로우로 넘어가기' 버튼이 나타난다.
+           표가 짧아 스크롤이 필요 없으면 바로 노출한다. */
+        (function initSpecScrollGate() {
+          const page = document.getElementById('pageSpec'); if (!page) return;
+          const scroller = page.querySelector('.page-scroll');
+          const btn = document.getElementById('specNext');
+          const hint = page.querySelector('.step-foot .step-hint');
+          if (!scroller || !btn) return;
+          const MORE = '항목을 끝까지 확인하면 다음 단계로 넘어갈 수 있어요. ↓';
+          const DONE = '모두 확인했어요. 유저플로우로 넘어가세요.';
+          function update() {
+            if (page.hidden) return;
+            const noScroll = scroller.scrollHeight <= scroller.clientHeight + 4;
+            const atBottom = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 6;
+            const done = noScroll || atBottom;
+            btn.hidden = !done;
+            if (hint) hint.textContent = done ? DONE : MORE;
+          }
+          scroller.addEventListener('scroll', update, { passive: true });
+          window.addEventListener('resize', update);
+          window.__specScrollGate = () => requestAnimationFrame(update);
+          update();
+        })();
+
+        /* ── 2) 유저플로우 = PRD 마인드맵 트리 ──
+           루트(PRD) → 색상별 브랜치(L1) → 하위 화면(L2) → 세부/플레이스홀더(L3).
+           번호(1, 1.1, 1.2.1)·별 아이콘·곡선 커넥터로 마인드맵 UI를 구성한다. */
+        function deriveTree() {
+          const isDT = G.screen === 'dt';
+          const B = [];
+          B.push({ n: '진입 · 인증', color: 'green', kids: [{ n: '로그인' }, G.scale === 'enterprise' ? { n: '사이트 선택' } : { n: '권한 확인' }] });
+          B.push({ n: isDT ? '3D 씬 · 종합 현황' : '종합 현황', color: 'teal', kids: [{ n: '메인 대시보드' }, { n: 'KPI 요약' }] });
+          const PG = { realtime: '실시간 계측', alarm: '알람·이벤트', cctv: 'CCTV 영상', asset: '설비 상세', energy: '발전량·에너지', env: '환경 감시' };
+          B.push({ n: '세부 모니터링', color: 'blue', kids: G.features.map((f) => ({ n: PG[f] })) });
+          B.push({ n: '리포트 · 관리', color: 'purple', kids: [{ n: '이력·통계' }, { n: '내보내기' }] });
+          return B;
+        }
+        const mmPos = {}; /* 드래그로 옮긴 노드 오프셋(라벨 기준, 세션 유지) */
+        let mmScale = 1;  /* 현재 보드 스케일(드래그 이동량 보정용) */
+        let mmZoom = 1;   /* 사용자 확대·축소 배율(화면 맞춤 위에 곱해진다) */
+        let panX = 0, panY = 0;  /* 캔버스 이동(패닝) 오프셋(화면 픽셀) */
+        let spaceDown = false;   /* 스페이스바를 누르고 있는 중이면 드래그가 패닝이 된다 */
+        const mmFav = new Set(); /* 즐겨찾기한 노드 라벨(세션 유지) */
+        let flowFavOnly = false; /* 즐겨찾기만 보기 */
+        let flowQuery = '';      /* 현재 검색어 */
+        let flowApi = null;      /* 현재 렌더된 마인드맵 조작 API(툴바에서 사용) */
+        const mmExtra = {};      /* 각 노드에 추가한 자식 기능: 노드 path → [기능명…] */
+        const mmEdit = {};       /* 인라인으로 수정한 노드 라벨: 노드 path → 새 라벨 */
+        /* 브랜치(색)별 추가 후보 기능 풀 — reco(앞 2개)는 추천, more는 그 밖의 기능 */
+        const FEATURE_POOL = {
+          root: {
+            reco: ['관제 대시보드', '알림·이벤트 센터'],
+            more: ['설비 관리', '리포트', '사용자·권한', '시스템 설정', '지도·GIS 뷰', 'CCTV 통합', '에너지 관리', '점검·정비', '재고·자산', '통계 분석', '대시보드 편집', '알람 규칙', '데이터 관리', '외부 연동', '모바일 뷰', '공지·게시판', '도움말·가이드', '감사 로그', '백업·복원', 'API 콘솔', '즐겨찾기', '테마 설정'],
+          },
+          green: {
+            reco: ['2단계 인증(OTP)', '세션 자동 로그아웃'],
+            more: ['SSO 로그인', '생체 인증', '비밀번호 재설정', '계정 잠금 정책', '로그인 이력', '접속 IP 화이트리스트', '역할 기반 접근제어(RBAC)', '다중 사이트 선택', '부서·조직 선택', '동시 접속 제한', '로그인 실패 잠금', '캡차(자동입력 방지)', '원격 로그아웃', '접속 기기 관리', '보안 공지 배너', '이용약관 동의', '언어 선택', '접근 감사 로그', '최근 접속 알림', '권한 그룹 관리', '비밀번호 만료 정책', '2차 승인 요청'],
+          },
+          teal: {
+            reco: ['실시간 KPI 카드', '알람 요약 배지'],
+            more: ['종합 상태 요약', '설비 가동률', '트렌드 미니차트', '지도 기반 현황', '히트맵', '게이지 위젯', '도넛 비율 차트', '실시간 시계·근무조', '날씨·환경 위젯', '위젯 드래그 배치', '화면 자동 순환', '풀스크린 모드', '임계값 색상 표시', '최근 이벤트 타임라인', '목표 대비 달성률', '전일·전주 비교', '데이터 새로고침 주기', '위젯 크기 조절', '알림 티커', '요약 리포트 바로가기', '즐겨찾기 위젯', '상태 신호등'],
+          },
+          blue: {
+            reco: ['실시간 트렌드 차트', '임계값 알람 설정'],
+            more: ['다중 센서 비교', '태그 검색·필터', '데이터 테이블 뷰', '상세 드릴다운', '설비 계통도', 'CCTV 연동', '이상치 하이라이트', '스냅샷 캡처', 'CSV 내보내기', '실시간·과거 전환', '확대·축소(줌)', '커서 값 표시', '다축 그래프', '알람 확인·해제', '정비 이력 표시', '예측 추세선', '태그 그룹핑', '샘플링 주기 설정', '주석·메모', '북마크', '풀스크린 차트', '상태 배지'],
+          },
+          purple: {
+            reco: ['예약 리포트 발송', 'PDF 내보내기'],
+            more: ['일간 리포트', '주간·월간 리포트', 'Excel 내보내기', '이메일 구독', '대시보드 공유 링크', '사용자 관리', '권한 설정', '알람 규칙 관리', '임계값 프로파일', '감사 로그', '데이터 보존 정책', '백업·복원', 'API 키 관리', '연동(Webhook)', '태그 관리', '설비 등록·편집', '리포트 템플릿', '통계 요약', '기간 비교 분석', '다운로드 이력', '스케줄러', '시스템 설정'],
+          },
+        };
+        function closeAddMenu() { document.querySelectorAll('.mm-addpop').forEach((p) => p.remove()); }
+        /* '상세 기능 추가' 노드를 누르면 그 브랜치에 맞는 후보 기능들을 팝오버로 나열한다 */
+        function openAddMenu(phNode) {
+          closeAddMenu();
+          const parentKey = phNode.dataset.parentKey || '';
+          const color = phNode.dataset.color || 'blue';
+          const pool = FEATURE_POOL[color] || FEATURE_POOL.blue;
+          const added = new Set(mmExtra[parentKey] || []);
+          const reco = pool.reco.filter((x) => !added.has(x));
+          const more = pool.more.filter((x) => !added.has(x));
+          const pop = document.createElement('div');
+          pop.className = 'mm-addpop';
+          let html = '<div class="mm-addpop-h">추가할 기능 <span>' + (reco.length + more.length) + '개</span></div><div class="mm-addpop-scroll">';
+          if (reco.length) {
+            html += '<div class="mm-addpop-sec">추천</div><div class="mm-addpop-grid">';
+            reco.forEach((x) => { html += '<button type="button" class="mm-addbtn reco" data-f="' + esc(x) + '">' + esc(x) + '<span class="rb">추천</span></button>'; });
+            html += '</div>';
+          }
+          if (more.length) {
+            html += '<div class="mm-addpop-sec">그 밖의 기능</div><div class="mm-addpop-grid">';
+            more.forEach((x) => { html += '<button type="button" class="mm-addbtn" data-f="' + esc(x) + '">' + esc(x) + '</button>'; });
+            html += '</div>';
+          }
+          if (!reco.length && !more.length) html += '<div class="mm-addpop-empty">추가할 수 있는 기능을 모두 넣었어요.</div>';
+          html += '</div>';
+          pop.innerHTML = html;
+          document.body.appendChild(pop);
+          const r = phNode.getBoundingClientRect();
+          const pw = pop.offsetWidth, phh = pop.offsetHeight;
+          let x = r.left, y = r.bottom + 8;
+          if (x + pw > window.innerWidth - 12) x = window.innerWidth - pw - 12;
+          if (x < 12) x = 12;
+          if (y + phh > window.innerHeight - 12) y = Math.max(12, r.top - phh - 8);
+          pop.style.left = x + 'px'; pop.style.top = y + 'px';
+          pop.addEventListener('click', (e) => {
+            const bb = e.target.closest('.mm-addbtn'); if (!bb) return;
+            mmExtra[parentKey] = (mmExtra[parentKey] || []).concat(bb.dataset.f);
+            closeAddMenu();
+            renderFlow();
+          });
+        }
+        document.addEventListener('click', (e) => { if (!e.target.closest('.mm-addpop') && !e.target.closest('.mm-node')) closeAddMenu(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAddMenu(); });
+        function renderFlow() {
+          const wrap = document.getElementById('flowWrap'); if (!wrap) return;
+          const branches = deriveTree();
+          let uid = 0;
+          const nodes = [];
+          const mk = (o) => { o.id = uid++; o.children = []; nodes.push(o); return o; };
+          const labelFor = (path, def) => (mmEdit[path] != null ? mmEdit[path] : def);
+          const typeOf = (d) => (d === 1 ? 'l1' : (d === 2 ? 'l2' : 'l3'));
+          const root = mk({ label: labelFor('root', 'PRD'), depth: 0, type: 'root', color: 'root', path: 'root', parentKey: 'root' });
+          /* 파생 자식 + 사용자가 추가한 자식을 재귀적으로 붙인다(모든 노드가 자식을 가질 수 있음) */
+          const build = (parent, kids, color, parentPath, depth) => {
+            const base = (kids || []).slice();
+            const all = base.concat((mmExtra[parentPath] || []).map((n) => ({ n })));
+            all.forEach((k, idx) => {
+              const path = parentPath === 'root' ? String(idx + 1) : parentPath + '.' + (idx + 1);
+              const node = mk({ label: labelFor(path, k.n), depth, type: typeOf(depth), color, num: path, path, parentKey: path });
+              parent.children.push(node);
+              build(node, k.kids || [], color, path, depth + 1);
+            });
+          };
+          branches.forEach((b, i) => {
+            const path = String(i + 1);
+            const l1 = mk({ label: labelFor(path, b.n), depth: 1, type: 'l1', color: b.color, num: path, path, parentKey: path });
+            root.children.push(l1);
+            build(l1, b.kids || [], b.color, path, 2);
+          });
+          /* 루트(PRD)에 사용자가 추가한 최상위 메뉴(브랜치) */
+          const PALETTE = ['green', 'teal', 'blue', 'purple'];
+          (mmExtra['root'] || []).forEach((fx, m) => {
+            const idx = branches.length + m;
+            const path = String(idx + 1);
+            const color = PALETTE[idx % PALETTE.length];
+            const l1 = mk({ label: labelFor(path, fx), depth: 1, type: 'l1', color, num: path, path, parentKey: path });
+            root.children.push(l1);
+            build(l1, [], color, path, 2);
+          });
+          const ROW = 50, COLX = [0, 320, 660, 1000, 1340, 1680, 2020];
+          const colOf = (d) => (COLX[d] != null ? COLX[d] : d * 340);
+          const cy = {}; let leaf = 0;
+          (function assign(nd) {
+            if (!nd.children.length) { cy[nd.id] = (leaf++ + 0.5) * ROW; return; }
+            nd.children.forEach(assign);
+            cy[nd.id] = (cy[nd.children[0].id] + cy[nd.children[nd.children.length - 1].id]) / 2;
+          })(root);
+          const board = document.createElement('div'); board.className = 'mm-board';
+          const NS = 'http://www.w3.org/2000/svg';
+          const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'mm-links');
+          board.appendChild(svg);
+          const el = {};
+          nodes.forEach((nd) => {
+            const d = document.createElement('div');
+            d.className = 'mm-node mm-' + nd.type + (nd.color && nd.color !== 'root' ? ' c-' + nd.color : '');
+            const off = mmPos[nd.path] || { ox: 0, oy: 0 };
+            const bx = colOf(nd.depth), by = cy[nd.id];
+            d.style.left = (bx + off.ox) + 'px';
+            d.style.top = (by + off.oy) + 'px';
+            d.dataset.bx = bx; d.dataset.by = by; d.dataset.label = nd.label; d.dataset.path = nd.path;
+            d.dataset.color = nd.color || 'blue';
+            d.dataset.parentKey = nd.parentKey || nd.path;
+            if (nd.type === 'root') {
+              /* 뱃지는 프로젝트명. 제목(PRD)은 클릭해 수정 가능, +로 상위 메뉴 추가 */
+              const projName = (G.site && G.site.trim()) || '새 프로젝트';
+              d.innerHTML = '<span class="mm-t">' + esc(nd.label) + '</span><span class="mm-badge">✦ ' + esc(projName) + '</span><span class="mm-add" title="상위 메뉴 추가">+</span>';
+            } else {
+              const fav = mmFav.has(nd.path);
+              if (fav) d.classList.add('mm-fav');
+              d.innerHTML = '<span class="mm-t">' + esc(nd.label) + '</span>' + (nd.num ? '<span class="mm-num">' + nd.num + '</span>' : '') + '<span class="mm-star" title="즐겨찾기">' + (fav ? '★' : '☆') + '</span><span class="mm-add" title="세부 기능 추가">+</span>';
+            }
+            board.appendChild(d); el[nd.id] = d;
+          });
+          wrap.innerHTML = ''; wrap.appendChild(board);
+          const s = document.getElementById('flowSummary'); if (s) s.innerHTML = summaryHTML('PRD를 뿌리로, 화면·기능이 가지치기되는 구조예요. 노드를 드래그해 위치를 바꿀 수 있어요.');
+          /* top=중심값 + translateY(-50%)라 offsetTop이 곧 시각 중심 Y. 드래그 후에도 커넥터가 따라오게 매번 다시 그린다. */
+          const isVis = (e) => e && e.style.display !== 'none';
+          function drawLinks() {
+            let W = 0, H = 0;
+            nodes.forEach((nd) => { const e = el[nd.id]; if (!isVis(e)) return; W = Math.max(W, e.offsetLeft + e.offsetWidth); H = Math.max(H, e.offsetTop + e.offsetHeight / 2); });
+            W += 10; H += ROW;
+            board.style.width = W + 'px'; board.style.height = H + 'px';
+            svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+            let paths = '';
+            nodes.forEach((p) => p.children.forEach((c) => {
+              const pe = el[p.id], ce = el[c.id];
+              if (!isVis(pe) || !isVis(ce)) return; /* 즐겨찾기 필터로 숨은 노드로 가는 선은 그리지 않는다 */
+              const x0 = pe.offsetLeft + pe.offsetWidth, y0 = pe.offsetTop, x1 = ce.offsetLeft, y1 = ce.offsetTop;
+              const dx = Math.max(26, Math.abs(x1 - x0) * 0.5);
+              paths += '<path class="mm-link c-' + (c.color || 'none') + '" d="M' + x0 + ' ' + y0 + ' C' + (x0 + dx) + ' ' + y0 + ' ' + (x1 - dx) + ' ' + y1 + ' ' + x1 + ' ' + y1 + '"/>';
+            }));
+            svg.innerHTML = paths;
+          }
+          requestAnimationFrame(() => {
+            drawLinks(); fitFlow();
+            /* 렌더 직후, 유지 중인 즐겨찾기 필터·검색 상태를 다시 반영한다 */
+            if (flowFavOnly) applyVisibility();
+            if (flowQuery) doSearch(flowQuery);
+          });
+          /* ── 노드 드래그 — 다른 노드 위에 놓으면 그 노드와 위치를 서로 맞바꾼다(swap) ── */
+          let drag = null;
+          const setOffset = (elm) => {
+            mmPos[elm.dataset.path] = {
+              ox: (parseFloat(elm.style.left) || 0) - parseFloat(elm.dataset.bx),
+              oy: (parseFloat(elm.style.top) || 0) - parseFloat(elm.dataset.by),
+            };
+          };
+          /* 드래그 중인 노드의 중심이 박스 안에 들어오는 '다른' 노드(가장 가까운 것)를 찾는다 */
+          const overlapTarget = (nd) => {
+            const cx = nd.offsetLeft + nd.offsetWidth / 2;
+            const cy = nd.offsetTop + nd.offsetHeight / 2;
+            let best = null, bestD = Infinity;
+            nodes.forEach((o) => {
+              const e = el[o.id];
+              if (!e || e === nd) return;
+              const inside = cx >= e.offsetLeft && cx <= e.offsetLeft + e.offsetWidth && cy >= e.offsetTop && cy <= e.offsetTop + e.offsetHeight;
+              if (!inside) return;
+              const d = Math.hypot(cx - (e.offsetLeft + e.offsetWidth / 2), cy - (e.offsetTop + e.offsetHeight / 2));
+              if (d < bestD) { bestD = d; best = e; }
+            });
+            return best;
+          };
+          const clearSwapHint = (keep) => board.querySelectorAll('.mm-swap-target').forEach((x) => { if (x !== keep) x.classList.remove('mm-swap-target'); });
+          /* 별(☆/★) 클릭 → 즐겨찾기 토글 */
+          function toggleFav(node) {
+            const path = node.dataset.path;
+            const star = node.querySelector('.mm-star');
+            if (mmFav.has(path)) { mmFav.delete(path); node.classList.remove('mm-fav'); if (star) star.textContent = '☆'; }
+            else { mmFav.add(path); node.classList.add('mm-fav'); if (star) star.textContent = '★'; }
+            if (flowFavOnly) applyVisibility();
+          }
+          /* 텍스트 클릭 → 그 자리에서 라벨 수정 */
+          function startEdit(node) {
+            const t = node.querySelector('.mm-t'); if (!t) return;
+            node.classList.add('mm-editing');
+            t.setAttribute('contenteditable', 'true');
+            t.focus();
+            try { const rng = document.createRange(); rng.selectNodeContents(t); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(rng); } catch (err) {}
+            let done = false;
+            const finish = (commit) => {
+              if (done) return; done = true;
+              t.removeAttribute('contenteditable');
+              node.classList.remove('mm-editing');
+              t.removeEventListener('blur', onBlur);
+              t.removeEventListener('keydown', onKey);
+              if (commit) { const v = t.textContent.trim(); if (v) mmEdit[node.dataset.path] = v; }
+              renderFlow();
+            };
+            const onBlur = () => finish(true);
+            const onKey = (ev) => {
+              if (ev.key === 'Enter') { ev.preventDefault(); finish(true); }
+              else if (ev.key === 'Escape') { ev.preventDefault(); finish(false); }
+            };
+            t.addEventListener('blur', onBlur);
+            t.addEventListener('keydown', onKey);
+          }
+          board.addEventListener('pointerdown', (e) => {
+            if (spaceDown) return; /* 스페이스바 패닝 중엔 노드 조작하지 않음(스테이지가 이동 처리) */
+            /* 별 클릭 → 즐겨찾기 토글 */
+            const star = e.target.closest('.mm-star');
+            if (star) { e.preventDefault(); const node = star.closest('.mm-node'); if (node) toggleFav(node); return; }
+            /* + 클릭 → 그 노드에 맞는 후보 기능 팝오버 */
+            const add = e.target.closest('.mm-add');
+            if (add) { e.preventDefault(); const node = add.closest('.mm-node'); if (node) openAddMenu(node); return; }
+            const nd = e.target.closest('.mm-node'); if (!nd) return;
+            if (nd.classList.contains('mm-editing')) return; /* 수정 중엔 드래그하지 않음 */
+            e.preventDefault();
+            const onText = !!e.target.closest('.mm-t');
+            drag = { nd, sx: e.clientX, sy: e.clientY, l: parseFloat(nd.style.left) || 0, t: parseFloat(nd.style.top) || 0, onText, moved: false, pid: e.pointerId };
+          });
+          board.addEventListener('pointermove', (e) => {
+            if (!drag) return;
+            const dxp = e.clientX - drag.sx, dyp = e.clientY - drag.sy;
+            if (!drag.moved && Math.hypot(dxp, dyp) < 5) return; /* 임계값 넘어야 드래그 시작 */
+            if (!drag.moved) { drag.moved = true; drag.nd.classList.add('mm-dragging'); try { drag.nd.setPointerCapture(drag.pid); } catch (err) {} }
+            const k = mmScale || 1;
+            drag.nd.style.left = (drag.l + dxp / k) + 'px';
+            drag.nd.style.top = (drag.t + dyp / k) + 'px';
+            const t = overlapTarget(drag.nd);
+            clearSwapHint(t);
+            if (t) t.classList.add('mm-swap-target');
+            drawLinks();
+          });
+          const endDrag = () => {
+            if (!drag) return;
+            const nd = drag.nd, onText = drag.onText, moved = drag.moved;
+            if (!moved) {
+              /* 이동 없이 클릭 — 텍스트면 수정, 그 외 영역이면 추가 메뉴 */
+              drag = null;
+              if (onText) startEdit(nd); else openAddMenu(nd);
+              return;
+            }
+            nd.classList.remove('mm-dragging');
+            const target = overlapTarget(nd);
+            clearSwapHint(null);
+            if (target) {
+              /* 색 슬롯(색상·위치)은 그대로 두고 내용(라벨·번호)만 맞바꾼다 */
+              const tmp = nd.innerHTML;
+              nd.innerHTML = target.innerHTML;
+              target.innerHTML = tmp;
+              nd.style.left = drag.l + 'px';
+              nd.style.top = drag.t + 'px';
+            } else {
+              setOffset(nd);
+            }
+            drag = null;
+            drawLinks();
+          };
+          board.addEventListener('pointerup', endDrag);
+          board.addEventListener('pointercancel', endDrag);
+
+          /* ── 즐겨찾기 필터 · 검색 포커스 ── */
+          function applyVisibility() {
+            nodes.forEach((nd) => {
+              const e = el[nd.id]; if (!e) return;
+              e.style.display = (flowFavOnly && !mmFav.has(nd.path)) ? 'none' : '';
+            });
+            board.classList.remove('mm-anim');
+            drawLinks();
+            requestAnimationFrame(fitFlow);
+          }
+          /* 노드를 화면 중앙으로 확대(포커스) — 스테이지 중앙에 노드 중심이 오도록 이동+확대 */
+          function focusNode(e2) {
+            const stage = document.querySelector('#pageFlow .flow-stage');
+            if (!stage || !e2) return;
+            const cs = getComputedStyle(stage);
+            const aw = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+            const ah = stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+            const s = 1.5; /* 포커스 확대 배율(자연 크기 기준) */
+            const nx = e2.offsetLeft + e2.offsetWidth / 2;
+            const ny = e2.offsetTop + e2.offsetHeight / 2;
+            wrap.style.width = aw + 'px';
+            wrap.style.height = ah + 'px';
+            board.style.transformOrigin = '0 0';
+            board.classList.add('mm-anim');
+            board.style.transform = 'translate(' + (aw / 2 - nx * s) + 'px,' + (ah / 2 - ny * s) + 'px) scale(' + s.toFixed(4) + ')';
+            mmScale = s;
+          }
+          function doSearch(q) {
+            flowQuery = q || '';
+            const qq = flowQuery.trim().toLowerCase();
+            let first = null;
+            nodes.forEach((nd) => {
+              const e = el[nd.id]; if (!e) return;
+              const hit = !!qq && String(nd.label).toLowerCase().indexOf(qq) >= 0 && isVis(e);
+              e.classList.toggle('mm-match', hit);
+              if (hit && !first) first = e;
+            });
+            if (first) focusNode(first);
+            else if (!qq) { board.classList.remove('mm-anim'); fitFlow(); } /* 검색어 비면 전체 보기로 복귀 */
+            return !!first;
+          }
+          flowApi = { search: doSearch, applyVisibility: applyVisibility, hasFav: () => mmFav.size > 0 };
+        }
+        /* 마인드맵을 스테이지에 맞춰 스케일(스크롤 없이 화면 비율에 맞춤).
+           보드를 top-left 기준 scale하고 래퍼를 축소 크기로 지정해야 grid 가운데 정렬이 맞는다. */
+        function fitFlow() {
+          const stage = document.querySelector('#pageFlow .flow-stage');
+          const wrap = document.getElementById('flowWrap');
+          if (!stage || !wrap) return;
+          const branch = wrap.firstElementChild; if (!branch) return;
+          branch.classList.remove('mm-anim'); /* 포커스 확대 애니메이션 해제 — 맞춤은 즉시 반영 */
+          branch.style.transform = 'none';
+          wrap.style.width = ''; wrap.style.height = '';
+          const cs = getComputedStyle(stage);
+          const availW = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+          const availH = stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+          const bw = branch.offsetWidth, bh = branch.offsetHeight;
+          if (!bw || !bh || availW <= 0 || availH <= 0) return;
+          /* 화면 맞춤 배율(최대 1.0)에 사용자 확대·축소(mmZoom)를 곱한다.
+             mmZoom>1이면 보드가 스테이지보다 커져 가운데 정렬 기준으로 확대(넘치는 부분은 overflow:hidden으로 잘림). */
+          const fit = Math.min(availW / bw, availH / bh, 1.0);
+          mmScale = fit * mmZoom;
+          branch.style.transformOrigin = 'top left';
+          branch.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + mmScale.toFixed(4) + ')';
+          wrap.style.width = Math.round(bw * mmScale) + 'px';
+          wrap.style.height = Math.round(bh * mmScale) + 'px';
+        }
+        /* 스케일은 그대로 두고 이동(패닝)만 빠르게 반영 */
+        function applyPan() {
+          const wrap = document.getElementById('flowWrap');
+          const branch = wrap && wrap.firstElementChild;
+          if (branch) branch.style.transform = 'translate(' + panX + 'px,' + panY + 'px) scale(' + mmScale.toFixed(4) + ')';
+        }
+        window.addEventListener('resize', () => { const pf = document.getElementById('pageFlow'); if (pf && !pf.hidden) fitFlow(); });
+        /* ── 캔버스 확대·축소(버튼 + Ctrl+휠) ── */
+        function updateZoomLabel() { const lv = document.getElementById('fzLevel'); if (lv) lv.textContent = Math.round(mmZoom * 100) + '%'; }
+        function zoomBy(factor) { mmZoom = Math.min(4, Math.max(0.5, mmZoom * factor)); fitFlow(); updateZoomLabel(); }
+        function zoomReset() { mmZoom = 1; panX = 0; panY = 0; fitFlow(); updateZoomLabel(); }
+        /* ── 캔버스 이동(패닝) — 빈 곳 드래그 또는 스페이스바+드래그 ── */
+        (function initFlowPan() {
+          const stage = document.querySelector('#pageFlow .flow-stage');
+          if (!stage) return;
+          let panning = null;
+          stage.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('.flow-zoom')) return;
+            /* 노드 위에서 시작하면(스페이스바 아닐 때) 노드 조작이 우선 — 패닝은 빈 곳/스페이스바일 때만 */
+            if (e.target.closest('.mm-node') && !spaceDown) return;
+            e.preventDefault();
+            panning = { sx: e.clientX, sy: e.clientY, px: panX, py: panY };
+            stage.classList.add('flow-panning');
+            try { stage.setPointerCapture(e.pointerId); } catch (err) {}
+          });
+          stage.addEventListener('pointermove', (e) => {
+            if (!panning) return;
+            panX = panning.px + (e.clientX - panning.sx);
+            panY = panning.py + (e.clientY - panning.sy);
+            applyPan();
+          });
+          const endPan = () => { if (panning) { panning = null; stage.classList.remove('flow-panning'); } };
+          stage.addEventListener('pointerup', endPan);
+          stage.addEventListener('pointercancel', endPan);
+          /* 스페이스바 — 누르는 동안 패닝 모드(입력/수정 중이 아닐 때만) */
+          document.addEventListener('keydown', (e) => {
+            if (e.code !== 'Space') return;
+            const pf = document.getElementById('pageFlow'); if (!pf || pf.hidden) return;
+            const ae = document.activeElement;
+            if (ae && (ae.isContentEditable || ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.tagName === 'BUTTON')) return;
+            e.preventDefault();
+            spaceDown = true;
+            stage.classList.add('flow-space');
+          });
+          document.addEventListener('keyup', (e) => {
+            if (e.code !== 'Space') return;
+            spaceDown = false;
+            stage.classList.remove('flow-space');
+          });
+        })();
+        (function initFlowZoom() {
+          const zc = document.getElementById('flowZoom');
+          const stage = document.querySelector('#pageFlow .flow-stage');
+          if (zc) zc.addEventListener('click', (e) => {
+            const b = e.target.closest('.fz-btn'); if (!b) return;
+            if (b.id === 'fzLevel') { zoomReset(); return; }
+            zoomBy(b.dataset.z === 'in' ? 1.2 : 1 / 1.2);
+          });
+          /* Ctrl(또는 ⌘) + 마우스 휠 → 캔버스 확대·축소 */
+          if (stage) stage.addEventListener('wheel', (e) => {
+            if (!(e.ctrlKey || e.metaKey)) return;
+            e.preventDefault();
+            zoomBy(e.deltaY < 0 ? 1.12 : 1 / 1.12);
+          }, { passive: false });
+          updateZoomLabel();
+        })();
+
+        /* ── 유저플로우 툴바(검색 · 즐겨찾기만 보기) 배선 — 한 번만 연결하고 flowApi로 현재 렌더를 조작 ── */
+        (function initFlowTools() {
+          const box = document.getElementById('flowSearchBox');
+          const searchBtn = document.getElementById('flowSearchBtn');
+          const input = document.getElementById('flowSearch');
+          const favBtn = document.getElementById('flowFavOnly');
+          const run = () => { if (flowApi) flowApi.search(input ? input.value : ''); };
+          if (searchBtn && box && input) {
+            searchBtn.addEventListener('click', () => {
+              const open = box.classList.toggle('open');
+              if (open) setTimeout(() => input.focus(), 40);
+              else { input.value = ''; run(); } /* 접으면 검색 해제 */
+            });
+          }
+          if (input) {
+            input.addEventListener('input', run);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); run(); } });
+          }
+          /* 바깥을 클릭하면 입력이 비어 있을 때 접는다 */
+          document.addEventListener('click', (e) => {
+            if (box && box.classList.contains('open') && !e.target.closest('#flowSearchBox') && input && !input.value.trim()) box.classList.remove('open');
+          });
+          if (favBtn) favBtn.addEventListener('click', () => {
+            if (!flowFavOnly && (!flowApi || !flowApi.hasFav())) {
+              if (typeof toast === 'function') toast('노드의 별(☆)을 눌러 즐겨찾기한 뒤 사용하세요.', { type: 'warn' });
+              return;
+            }
+            flowFavOnly = !flowFavOnly;
+            favBtn.classList.toggle('on', flowFavOnly);
+            if (flowApi) flowApi.applyVisibility();
+          });
+        })();
+
+        /* ── 3) 추천 1순위 레이아웃 id 계산 — 규모→계열, 모니터링 항목 수→행(R) 강도 ──
+           와이어프레임 메뉴는 카테고리별 '모든' 레이아웃을 보여주고, 여기서 고른 것만 배지로 표시한다. */
+        function recoIds() {
+          const L = window.__WEMBLayouts; const out = {};
+          if (!L) return out;
+          const nf = G.features.length;
+          const rIdx = nf <= 2 ? 0 : (nf <= 4 ? 1 : 2);
+          const pick = (sets, fam) => { const a = sets[fam]; return a && a.length ? a[Math.min(rIdx, a.length - 1)].id : null; };
+          const dashFamily = G.scale === 'single' ? 'g2' : (G.scale === 'enterprise' ? 'mod' : 'g3');
+          const dtFamily = G.scale === 'single' ? 'dt2' : (G.scale === 'enterprise' ? 'dt4' : 'dt3');
+          if (G.screen === 'dash' || G.screen === 'both') out.dash = pick(L.LAYOUTS, dashFamily);
+          if (G.screen === 'dt' || G.screen === 'both') out.dt = pick(L.DT_LAYOUTS, dtFamily);
+          return out;
+        }
+        let selected = null;
+        function renderWire() {
+          const wrap = document.getElementById('wireReco'); const L = window.__WEMBLayouts;
+          const startBtn = document.getElementById('wireStart'), pickLbl = document.getElementById('wirePick');
+          if (!wrap || !L) return;
+          wrap.innerHTML = ''; selected = null;
+          if (startBtn) startBtn.disabled = true;
+          const recos = recoIds();
+          const both = G.screen === 'both';
+          /* 화면 종류에 맞는 카테고리 세트: 대시보드=2단/3단/모듈, 디지털 트윈=2·3·4레벨 */
+          const sections = [];
+          if (G.screen === 'dash' || both) sections.push({ screen: 'dash', groups: L.GROUPS, sets: L.LAYOUTS, recoId: recos.dash });
+          if (G.screen === 'dt' || both) sections.push({ screen: 'dt', groups: L.DT_GROUPS, sets: L.DT_LAYOUTS, recoId: recos.dt });
+
+          const pickCard = (card, screen, lay, announce) => {
+            wrap.querySelectorAll('.wreco').forEach((x) => x.classList.remove('on'));
+            card.classList.add('on');
+            selected = { screen, layoutId: lay.id, name: lay.name };
+            if (startBtn) startBtn.disabled = false;
+            if (pickLbl) pickLbl.textContent = SCREEN_LBL[screen] + ' · ' + lay.name + announce;
+          };
+
+          sections.forEach((sec) => {
+            sec.groups.forEach((grp) => {
+              const cat = document.createElement('div');
+              cat.className = 'wcat';
+              const h = document.createElement('div');
+              h.className = 'wcat-h';
+              const b = document.createElement('b');
+              b.textContent = (both ? SCREEN_LBL[sec.screen] + ' · ' : '') + grp.label;
+              const hint = document.createElement('span');
+              hint.textContent = grp.hint;
+              h.appendChild(b); h.appendChild(hint);
+              cat.appendChild(h);
+              const row = document.createElement('div');
+              row.className = 'wreco-grid';
+              (sec.sets[grp.key] || []).forEach((lay) => {
+                const isReco = lay.id === sec.recoId;
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = 'wreco';
+                card.appendChild(L.wfEl(lay));
+                if (both) { const scr = document.createElement('span'); scr.className = 'wreco-screen'; scr.textContent = SCREEN_LBL[sec.screen]; card.appendChild(scr); }
+                const nm = document.createElement('div'); nm.className = 'wreco-name'; nm.textContent = lay.name;
+                const dd = document.createElement('div'); dd.className = 'wreco-desc'; dd.textContent = lay.desc;
+                card.appendChild(nm); card.appendChild(dd);
+                if (isReco) { const bd = document.createElement('span'); bd.className = 'wreco-badge'; bd.textContent = '추천'; card.appendChild(bd); }
+                card.onclick = () => pickCard(card, sec.screen, lay, ' 선택됨');
+                row.appendChild(card);
+                /* 첫 번째 추천을 기본 선택 */
+                if (isReco && !selected) pickCard(card, sec.screen, lay, ' (추천)');
+              });
+              cat.appendChild(row);
+              wrap.appendChild(cat);
+            });
+          });
+          const s = document.getElementById('wireSummary'); if (s) s.innerHTML = summaryHTML('카테고리별 전체 레이아웃이에요. <b>추천</b> 배지가 규모·항목에 맞춘 1순위이고, 어떤 것이든 골라 스튜디오에 반영할 수 있어요.');
+        }
+
+        /* ── 단계별 진행(스텝) ──
+           PRD → 기능명세서 → 유저플로우 → 와이어프레임 → 스튜디오 순으로만 열린다.
+           각 단계의 '다음 단계로' 버튼을 눌러야 그 다음 탭이 잠금 해제된다.
+           (maxStep = 지금까지 도달한 가장 먼 단계. 새로고침해도 그 화면으로 복원되도록 localStorage에 유지) */
+        const STEP_PAGES = ['prd', 'spec', 'flow', 'wireframe', 'wire'];
+        const STEP_LS = 'wemb-step';
+        let maxStep = (() => { try { return Math.max(0, parseInt(localStorage.getItem(STEP_LS), 10) || 0); } catch (e) { return 0; } })();
+        const saveStep = () => { try { localStorage.setItem(STEP_LS, String(maxStep)); } catch (e) {} };
+        /* PRD '전체 완료' = 이름 + 모든 문항(화면·규모·모니터링 1개 이상·운영·접근성)을 다 골랐을 때 */
+        const prdComplete = () =>
+          !!(G.site && G.site.trim()) &&
+          !!G.screen && !!G.scale &&
+          Array.isArray(G.features) && G.features.length > 0 &&
+          !!G.ops && !!G.a11y;
+        /* 탭 잠금 해제는 오직 '다음 단계로' 버튼을 눌러 advanceStep 했을 때만.
+           PRD를 다 채워도(=prdComplete) 기능명세서 탭은 열리지 않고, '기능명세서 자동 생성' 버튼만 활성화된다. */
+        const unlocked = () => maxStep;
+        function refreshSteps() {
+          const lvl = unlocked();
+          document.querySelectorAll('.tb-tab').forEach((t) => {
+            const idx = STEP_PAGES.indexOf(t.dataset.page);
+            const locked = idx > lvl;
+            t.classList.toggle('locked', locked);
+            t.disabled = locked;
+            t.setAttribute('aria-disabled', locked ? 'true' : 'false');
+            if (locked) t.title = '이전 단계를 먼저 완료해 주세요'; else t.removeAttribute('title');
+          });
+          const gen = document.getElementById('prdGen');
+          if (gen) { gen.disabled = !prdComplete(); gen.title = prdComplete() ? '' : 'PRD를 모두 작성하면 열려요'; }
+          const note = document.getElementById('prdNote');
+          if (note) note.textContent = prdComplete() ? '모두 작성했어요. 다음 단계(기능명세서)로 넘어갈 수 있어요.' : '모든 문항에 답하면 기능명세서 단계가 열려요.';
+        }
+        function advanceStep(i) { if (i > maxStep) { maxStep = i; saveStep(); } refreshSteps(); }
+        /* 새 프로젝트 시작 시 PRD를 '아무것도 선택 안 된' 빈 상태로 초기화한다 */
+        const EMPTY_PRD = { site: '', screen: '', scale: '', features: [], ops: '', a11y: '' };
+        window.__wembPrdReset = () => { G = Object.assign({}, EMPTY_PRD, { features: [] }); save(); paintForm(); };
+        window.__wembStep = {
+          advance: advanceStep,
+          reset: () => { maxStep = 0; saveStep(); refreshSteps(); },
+          refresh: refreshSteps,
+          allowed: (page) => STEP_PAGES.indexOf(page) <= unlocked(),
+        };
+        /* 유저플로우의 상위 메뉴(브랜치) 이름 — 스튜디오 상단 내비게이션에 반영 */
+        window.__WEMBFlowMenu = () => deriveTree().map((b) => b.n);
+
+        /* ── 버튼 · 페이지 전환 배선 ── */
+        document.getElementById('prdGen')?.addEventListener('click', () => {
+          if (!prdComplete()) return;
+          advanceStep(1);
+          if (window.__setPage) window.__setPage('spec');
+        });
+        document.getElementById('specNext')?.addEventListener('click', () => {
+          advanceStep(2);
+          if (window.__setPage) window.__setPage('flow');
+        });
+        document.getElementById('flowNext')?.addEventListener('click', () => {
+          advanceStep(3);
+          if (window.__setPage) window.__setPage('wireframe');
+        });
+        document.getElementById('wireStart')?.addEventListener('click', () => {
+          const L = window.__WEMBLayouts; if (!selected || !L) return;
+          if (L.setProjectName) L.setProjectName(G.site || '새 프로젝트');
+          const tbProj = document.getElementById('tbProj'); if (tbProj) tbProj.textContent = G.site ? '· ' + G.site : '';
+          advanceStep(4);
+          L.enterStudio(selected.screen, selected.layoutId);
+          if (window.__setPage) window.__setPage('wire');
+          if (typeof toast === 'function') toast('추천 구성(' + SCREEN_LBL[selected.screen] + ' · ' + selected.name + ')을 스튜디오에 반영했어요.', { type: 'info' });
+        });
+
+        /* 각 탭을 열 때 최신 답변으로 다시 그린다 (setPage에서 호출) */
+        window.__guideOnPage = (page) => {
+          if (page === 'prd') paintForm();
+          else if (page === 'spec') renderSpec();
+          else if (page === 'flow') renderFlow();
+          else if (page === 'wireframe') renderWire();
+        };
+        paintForm();
+        /* 기존 프로젝트를 열어 이미 스튜디오로 바로 들어온 상태(새로고침 복원 포함)라면
+           initFlow의 enterStudio가 __wembStep·__WEMBFlowMenu보다 먼저 실행됐을 수 있으므로 여기서 보정한다. */
+        (function syncIfInStudio() {
+          const homeEl = document.getElementById('flowHome');
+          const anyPageOpen = [...document.querySelectorAll('.page')].some((p) => !p.hidden);
+          if ((!homeEl || !homeEl.classList.contains('show')) && !anyPageOpen) {
+            advanceStep(4);
+            if (window.__setStudioNav) window.__setStudioNav(window.__WEMBFlowMenu());
+          }
+        })();
+      })();
 
       /* ============================================================
        *  index5 — 왼쪽 아이콘 레일 · 상단 바 배선
@@ -20770,6 +22565,12 @@ ${parts.html}
             t.setAttribute('aria-selected', on ? 'true' : 'false');
           });
           document.querySelectorAll('.page').forEach((p) => { p.hidden = p.dataset.page !== page; });
+          /* 현재 '작성 중인 화면'을 기억 — 새로고침 시 이 화면으로 복원한다(런처로 튕기지 않게) */
+          try { localStorage.setItem('wemb-view', page); } catch (e) {}
+          /* 가이드 파이프라인 페이지는 최신 PRD 답변으로 다시 그린다 */
+          if (typeof window.__guideOnPage === 'function') window.__guideOnPage(page);
+          /* 탭 잠금 상태(스텝) 다시 반영 */
+          if (window.__wembStep) window.__wembStep.refresh();
           /* 페이지 위에 떠 있던 레일 플라이아웃은 닫는다 */
           if (typeof closeFly === 'function') closeFly();
         }
@@ -20778,9 +22579,13 @@ ${parts.html}
           const b = e.target.closest('.tb-tab');
           if (b) setPage(b.dataset.page);
         });
-        /* 상단 좌측 브랜드(로고·Studio) 클릭 → 스튜디오로 (프로젝트명은 제외) */
+        /* 상단 좌측 브랜드 클릭 → 로고는 스튜디오 홈(런처), 이름은 스튜디오 페이지 (프로젝트명은 제외) */
         document.querySelector('.tb-left')?.addEventListener('click', (e) => {
           if (e.target.closest('.tb-proj')) return;
+          if (e.target.closest('.tb-mark')) {
+            document.getElementById('quickHome')?.click();
+            return;
+          }
           setPage('wire');
         });
         /* 상단 우측 액션 → 기존 버튼 프록시 */
@@ -20941,6 +22746,33 @@ ${parts.html}
         /* 초기 페이지 = 스튜디오. flyEl 등 플라이아웃 상태가 초기화된 뒤(이 위치)에 호출해야
            setPage 안의 closeFly()가 TDZ 에러를 내지 않는다(레일 메뉴가 죽던 원인). */
         setPage('wire');
+      })();
+
+      /* ── 새로고침 복원 ──
+         새로고침 직전에 '작성 중이던 화면'(PRD·기능명세서·유저플로우·와이어프레임·스튜디오)이었다면
+         런처(스튜디오 홈)로 튕기지 않고 그 화면을 그대로 다시 연다.
+         스튜디오 홈(런처)에 있었거나 기록이 없으면 기존대로 런처를 유지한다. */
+      (function restoreBootView() {
+        var WORK = ['prd', 'spec', 'flow', 'wireframe', 'wire'];
+        var homeEl = document.getElementById('flowHome');
+        if (WORK.indexOf(__bootView) >= 0) {
+          if (__bootView === 'wire') {
+            /* 스튜디오 배경은 이미 초기화(테마·레이아웃·수정 내용)로 복원돼 런처 뒤에 준비돼 있다.
+               enterStudio를 다시 부르면 레이아웃 프리셋이 사용자의 수동 편집을 덮을 수 있으므로,
+               런처만 걷어 이미 준비된 스튜디오를 드러내고 단계 잠금 해제·내비 반영만 한다. */
+            if (homeEl) homeEl.classList.remove('show');
+            try { if (window.__wembStep) window.__wembStep.advance(4); } catch (e) {}
+            try { if (window.__setStudioNav && typeof window.__WEMBFlowMenu === 'function') window.__setStudioNav(window.__WEMBFlowMenu()); } catch (e) {}
+            if (window.__setPage) window.__setPage('wire');
+          } else {
+            if (homeEl) homeEl.classList.remove('show');
+            if (window.__setPage) window.__setPage(__bootView);
+          }
+        } else if (homeEl && homeEl.classList.contains('show')) {
+          /* 런처(스튜디오 홈)에 있던 상태 — 초기 setPage('wire')가 덮어쓴 기록을 'home'으로 되돌려
+             다음 새로고침에도 홈을 유지한다. */
+          try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
+        }
       })();
     </script>
   </body>
