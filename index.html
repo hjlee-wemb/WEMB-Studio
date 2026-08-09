@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="version" content="0.9.0 (2026-08-05) · 가이드형 워크플로우(PRD→기능명세서→유저플로우→와이어프레임→스튜디오) 도입 및 유저플로우 편집기 추가. index2 → index 통합" />
+    <meta name="version" content="0.10.0 (2026-08-05) · 가이드형 워크플로우(PRD→기능명세서→유저플로우→와이어프레임→스튜디오) 도입 및 유저플로우 편집기 추가. index2 → index 통합" />
     <title>WEMB Theme Studio</title>
     <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M50 0H14C6.26801 0 0 6.26801 0 14V50C0 57.732 6.26801 64 14 64H50C57.732 64 64 57.732 64 50V14C64 6.26801 57.732 0 50 0Z" fill="%230D1526"/><path d="M20.7788 39.5703C19.6409 42.3867 21.0016 45.5923 23.818 46.7302C26.6344 47.8681 29.8399 46.5074 30.9778 43.691L38.8446 24.2202C39.9824 21.4038 38.6218 18.1982 35.8054 17.0603C32.989 15.9224 29.7834 17.2831 28.6455 20.0995L20.7788 39.5703Z" fill="%233F64A8"/><path d="M37.1848 39.5703C36.0469 42.3867 37.4076 45.5923 40.224 46.7302C43.0404 47.8681 46.2459 46.5074 47.3838 43.691L55.2506 24.2202C56.3885 21.4038 55.0278 18.1982 52.2114 17.0603C49.395 15.9224 46.1894 17.2831 45.0515 20.0995L37.1848 39.5703Z" fill="%23F16043"/><path d="M20.2397 43.7958C21.3776 46.6122 24.5831 47.9729 27.3995 46.835C30.2159 45.6971 31.5766 42.4915 30.4387 39.6751L22.5719 20.2043C21.4341 17.3879 18.2285 16.0272 15.4121 17.1651C12.5957 18.303 11.235 21.5086 12.3729 24.325L20.2397 43.7958Z" fill="%236BC382"/><circle cx="25.3125" cy="42" r="3" fill="%230D1526"/><path d="M36.6457 43.7958C37.7836 46.6122 40.9891 47.9729 43.8055 46.835C46.6219 45.6971 47.9826 42.4915 46.8447 39.6751L38.978 20.2043C37.8401 17.3879 34.6345 16.0272 31.8181 17.1651C29.0017 18.303 27.641 21.5086 28.7789 24.325L36.6457 43.7958Z" fill="%23F4C559"/><circle cx="42" cy="42" r="3" fill="%230D1526"/></svg>' />
     <!-- 공유 미리보기(OG) — 크롤러는 절대 URL만 인식. 배포 주소가 바뀌면 아래 URL도 함께 수정 -->
@@ -357,7 +357,10 @@
       .sidepanel[data-section^='dash-'] .grp[data-pane='dash'] > .dsec {
         display: none;
       }
-      .sidepanel[data-section='dash-compose'] .grp[data-pane='dash'] > [data-dsec='compose'],
+      /* 화면 구성(열 수)은 '레이아웃'으로 대체 — 메뉴·기본 노출에서 숨긴다(열 수 버튼은 레이아웃 프리셋이 재사용) */
+      .grp[data-pane='dash'] > [data-dsec='compose'] {
+        display: none !important;
+      }
       .sidepanel[data-section='dash-panels'] .grp[data-pane='dash'] > [data-dsec='panels'],
       .sidepanel[data-section='dash-edit'] .grp[data-pane='dash'] > [data-dsec='edit'],
       .sidepanel[data-section='dash-design'] .grp[data-pane='dash'] > [data-dsec='design'] {
@@ -802,6 +805,280 @@
       .pri.low {
         color: var(--text-weak);
       }
+      /* ── 기능명세서 행 — 오버 시 이름 수정·삭제, 행 클릭 시 상세 팝업 ── */
+      .spec-table tbody tr {
+        cursor: pointer;
+      }
+      .spec-feat {
+        position: relative;
+      }
+      .spec-feat .sf-text {
+        outline: none;
+      }
+      .spec-feat .sf-text[contenteditable="true"] {
+        background: var(--bg-surface);
+        box-shadow: 0 0 0 2px var(--point-main);
+        border-radius: 6px;
+        padding: 2px 6px;
+        margin: -2px -6px;
+        cursor: text;
+      }
+      /* 메모 / 요구사항 저장 여부 표시 — 서로 다른 색 칩 */
+      .sf-note {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 1px 7px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 700;
+        vertical-align: middle;
+      }
+      .sf-note.memo {
+        background: color-mix(in srgb, var(--point-main) 18%, transparent);
+        color: var(--point-main);
+      }
+      .sf-note.req {
+        background: color-mix(in srgb, #e8a33d 24%, transparent);
+        color: #d98a1f;
+      }
+      /* 상태 · 중요도 배지를 눌러 변경 */
+      button.sbadge,
+      button.pri {
+        border: 0;
+        cursor: pointer;
+        font: inherit;
+        line-height: inherit;
+      }
+      button.pri {
+        background: transparent;
+        padding: 3px 8px;
+        border-radius: 8px;
+      }
+      button.sbadge:hover,
+      button.pri:hover {
+        box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--point-main) 45%, transparent);
+      }
+      /* 상태·중요도 드롭다운 */
+      .sf-pick {
+        position: fixed;
+        z-index: 9100;
+        min-width: 112px;
+        padding: 5px;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: 0 18px 44px -22px rgba(0, 0, 0, 0.7);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .sf-pick-i {
+        text-align: left;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        color: var(--text-strong);
+        font: 500 12.5px var(--font);
+        padding: 7px 10px;
+        border-radius: 7px;
+      }
+      .sf-pick-i:hover {
+        background: var(--bg-accent);
+      }
+      .sf-pick-i.on {
+        color: var(--point-main);
+        font-weight: 700;
+      }
+      /* 기능 추가 버튼 */
+      .spec-add {
+        border: 1px solid var(--line);
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        font: 600 12.5px var(--font);
+        padding: 6px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-right: 4px;
+      }
+      .spec-add:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .sf-actions {
+        display: inline-flex;
+        gap: 2px;
+        margin-left: 10px;
+        vertical-align: middle;
+        opacity: 0;
+        transition: opacity 0.12s ease;
+      }
+      .spec-table tbody tr:hover .sf-actions {
+        opacity: 1;
+      }
+      .sf-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--text-weak);
+        display: inline-grid;
+        place-items: center;
+        cursor: pointer;
+      }
+      .sf-btn svg {
+        width: 15px;
+        height: 15px;
+      }
+      .sf-btn:hover {
+        background: var(--bg-accent);
+        color: var(--text-strong);
+      }
+      .sf-del:hover {
+        color: #e5606b;
+        border-color: color-mix(in srgb, #e5606b 40%, transparent);
+      }
+      /* ── 기능 상세 팝업(메모 · 요구사항) ── */
+      .spec-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: color-mix(in srgb, #000 55%, transparent);
+        opacity: 0;
+        transition: opacity 0.16s ease;
+      }
+      .spec-modal[hidden] {
+        display: none;
+      }
+      .spec-modal.show {
+        opacity: 1;
+      }
+      .spec-modal-bd {
+        width: min(560px, 100%);
+        max-height: 86vh;
+        overflow: auto;
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.7);
+        padding: 22px 22px 18px;
+        transform: translateY(6px);
+        transition: transform 0.16s ease;
+      }
+      .spec-modal.show .spec-modal-bd {
+        transform: none;
+      }
+      .sm-head {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .sm-tt {
+        flex: 1;
+        min-width: 0;
+      }
+      .sm-kind {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--point-main);
+        letter-spacing: 0.3px;
+      }
+      .sm-tt h3 {
+        margin: 4px 0 0;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.35;
+        word-break: keep-all;
+      }
+      .sm-x {
+        flex: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text-weak);
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .sm-x:hover {
+        background: var(--bg-accent);
+        color: var(--text-strong);
+      }
+      .sm-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+      .sm-tag {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-weak);
+        background: var(--bg-accent);
+        border-radius: 999px;
+        padding: 4px 10px;
+      }
+      .sm-field {
+        display: block;
+        margin-bottom: 14px;
+      }
+      .sm-field > span {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-weak);
+        margin-bottom: 6px;
+      }
+      .sm-field textarea {
+        width: 100%;
+        box-sizing: border-box;
+        resize: vertical;
+        background: var(--bg-page);
+        color: var(--text-strong);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font: 400 13px/1.6 var(--font);
+      }
+      .sm-field textarea:focus {
+        outline: none;
+        border-color: var(--point-main);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--point-main) 22%, transparent);
+      }
+      .sm-foot {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .sm-btn {
+        border-radius: 9px;
+        padding: 9px 16px;
+        font: 600 13px var(--font);
+        cursor: pointer;
+        border: 1px solid var(--line);
+      }
+      .sm-btn.ghost {
+        background: transparent;
+        color: var(--text-strong);
+      }
+      .sm-btn.ghost:hover {
+        background: var(--bg-accent);
+      }
+      .sm-btn.primary {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+      }
+      .sm-btn.primary:hover {
+        filter: brightness(1.05);
+      }
       /* ── 유저플로우 — 스크롤 없이 화면에 맞춰 크게(fitFlow가 통째로 scale) ── */
       .flow-head {
         flex: none;
@@ -1198,6 +1475,30 @@
         color: var(--point-main);
         background: color-mix(in srgb, var(--point-main) 15%, transparent);
       }
+      .mm-node .mm-del {
+        margin-left: 1px;
+        width: 17px;
+        height: 17px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 15px;
+        line-height: 1;
+        color: var(--text-weak);
+        opacity: 0;
+        cursor: pointer;
+        flex: none;
+        transition: opacity 0.12s ease;
+      }
+      .mm-node:hover .mm-del {
+        opacity: 0.55;
+      }
+      .mm-node .mm-del:hover {
+        opacity: 1;
+        color: #e5606b;
+        background: color-mix(in srgb, #e5606b 16%, transparent);
+      }
       .mm-node.mm-editing {
         outline: 2px solid var(--point-main);
         outline-offset: 1px;
@@ -1236,10 +1537,65 @@
         font-weight: 600;
         color: var(--text-weak);
       }
+      .mm-addpop-h > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-strong);
+      }
+      .mm-addpop-h .mm-addpop-cnt {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-weak);
+      }
+      .mm-addpop-all {
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text-weak);
+        font: 600 11px var(--font);
+        padding: 4px 9px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .mm-addpop-all:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .mm-addpop-all.on {
+        border-color: var(--point-main);
+        color: var(--point-main);
+        background: color-mix(in srgb, var(--point-main) 10%, var(--bg-surface));
+      }
+      .mm-addpop-lib {
+        width: 380px;
+      }
+      .mm-addpop-search {
+        padding: 10px 13px;
+        border-bottom: 1px solid var(--line);
+      }
+      .mm-addpop-search input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px 12px;
+        border-radius: 9px;
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        color: var(--text-strong);
+        font: 500 12.5px var(--font);
+      }
+      .mm-addpop-search input:focus {
+        outline: none;
+        border-color: var(--point-main);
+      }
       .mm-addpop-scroll {
-        max-height: 340px;
+        max-height: 360px;
         overflow-y: auto;
         padding: 10px 13px 13px;
+      }
+      .mm-addpop-sec:first-child {
+        margin-top: 2px;
       }
       .mm-addpop-sec {
         font-size: 11px;
@@ -1568,6 +1924,196 @@
       }
       .gen-summary .gs-empty {
         color: var(--text-weak);
+      }
+      /* ── PRD 인트로 · 보조 버튼 ── */
+      .prd-intro {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 8px 0 0;
+      }
+      .prd-summary {
+        margin-top: 20px;
+      }
+      .prd-gen.ghost {
+        background: transparent;
+        color: var(--text-strong);
+        border: 1px solid var(--line);
+      }
+      .prd-gen.ghost:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+        filter: none;
+      }
+      /* ── PRD 스텝 위저드(모달 팝업) ── */
+      .prdwiz {
+        position: fixed;
+        inset: 0;
+        z-index: 260;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: color-mix(in srgb, #000 55%, transparent);
+        opacity: 0;
+        transition: opacity 0.16s ease;
+      }
+      .prdwiz[hidden] {
+        display: none;
+      }
+      .prdwiz.show {
+        opacity: 1;
+      }
+      .prdwiz-card {
+        width: min(640px, 100%);
+        max-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 44px 100px -34px rgba(0, 0, 0, 0.72);
+        transform: translateY(8px) scale(0.99);
+        transition: transform 0.18s ease;
+      }
+      .prdwiz.show .prdwiz-card {
+        transform: none;
+      }
+      .prdwiz-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 18px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      .prdwiz-kicker {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        color: var(--point-main);
+      }
+      .prdwiz-dots {
+        display: flex;
+        gap: 6px;
+        margin: 0 auto;
+      }
+      .prdwiz-dots i {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--line);
+        transition: background 0.15s ease, width 0.15s ease;
+      }
+      .prdwiz-dots i.done {
+        background: color-mix(in srgb, var(--point-main) 55%, var(--line));
+      }
+      .prdwiz-dots i.on {
+        width: 20px;
+        background: var(--point-main);
+      }
+      .prdwiz-x {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--text-weak);
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .prdwiz-x:hover {
+        background: var(--bg-accent);
+        color: var(--text-strong);
+      }
+      .prdwiz-body {
+        padding: 22px 22px 6px;
+        overflow: auto;
+      }
+      .prdwiz-stepno {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-weak);
+        margin-bottom: 6px;
+      }
+      .prdwiz-q {
+        margin: 0 0 30px;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.2px;
+        word-break: keep-all;
+      }
+      .prdwiz-hint {
+        margin: 0 0 16px;
+        font-size: 12.5px;
+        color: var(--text-weak);
+      }
+      .prdwiz-hint:empty {
+        display: none;
+      }
+      .prdwiz-field {
+        margin-bottom: 14px;
+      }
+      .prdwiz-field .pq-text {
+        font-size: 15px;
+        padding: 13px 16px;
+      }
+      .prdwiz-field .pq-opts {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .prdwiz-field .pq-opt.locked {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-style: dashed;
+      }
+      .prdwiz-field .pq-opt.locked:hover {
+        border-color: var(--line);
+      }
+      .prdwiz-field .pq-opt .pq-lock {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text-weak);
+        margin-top: 2px;
+      }
+      .prdwiz-foot {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px 16px;
+        border-top: 1px solid var(--line);
+      }
+      .pw-count {
+        margin: 0 auto;
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .pw-btn {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font: 700 13.5px var(--font);
+        cursor: pointer;
+        border: 1px solid var(--line);
+      }
+      .pw-btn.ghost {
+        background: transparent;
+        color: var(--text-strong);
+      }
+      .pw-btn.ghost:hover {
+        background: var(--bg-accent);
+      }
+      .pw-btn.ghost:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .pw-btn.primary {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+      }
+      .pw-btn.primary:hover:not(:disabled) {
+        filter: brightness(1.06);
+      }
+      .pw-btn.primary:disabled {
+        opacity: 0.45;
+        cursor: default;
       }
       /* ── 와이어프레임 추천 카드 ── */
       .wreco-wrap {
@@ -5414,6 +5960,317 @@
         background: url('src/dt-bg.jpg') center / cover no-repeat;
       }
 
+      /* ── 한진 SMART 통합관제 — Figma 그대로 재현: 기본 DT 크롬을 숨기고 재현 캔버스만 보인다 ── */
+      .dtstage[data-tpl='hanjin'] .dt-hdr,
+      .dtstage[data-tpl='hanjin'] .dt-ui,
+      .dtstage[data-tpl='hanjin'] .dt-scene {
+        display: none !important;
+      }
+      .hj-repro {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #05050a;
+        z-index: 3;
+      }
+      .hj-canvas {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 1920px;
+        height: 1080px;
+        transform-origin: center center;
+      }
+      .hj-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        object-fit: cover;
+      }
+      /* 화면 시안(185:124) — 전체 디자인이 잘리지 않게 contain으로 표시 */
+      .hj-studioimg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+      /* 재현 요소는 모두 캔버스 직속 절대배치(Figma 좌표 px) */
+      .hj-canvas > div {
+        position: absolute;
+        box-sizing: border-box;
+      }
+      .hrt {
+        white-space: nowrap;
+        font-family: var(--font);
+        line-height: 1;
+        color: #b3d3ea;
+        font-size: 13px;
+      }
+      .hr-panelbg {
+        background: rgba(7, 11, 24, 0.92);
+        border: 1px solid rgba(179, 211, 234, 0.16);
+        border-radius: 6px;
+        -webkit-backdrop-filter: blur(3px);
+        backdrop-filter: blur(3px);
+      }
+      .hr-headbar {
+        background: linear-gradient(90deg, rgba(111, 137, 255, 0.22), rgba(7, 11, 24, 0.5));
+        border: 1px solid rgba(179, 211, 234, 0.14);
+        border-radius: 6px 6px 0 0;
+      }
+      .hr-rowbar { background: rgba(179, 211, 234, 0.05); border-radius: 4px; }
+      .hr-cell { background: rgba(179, 211, 234, 0.05); border: 1px solid rgba(179, 211, 234, 0.12); border-radius: 6px; }
+      .hr-evcell { background: rgba(7, 11, 24, 0.55); border: 1px solid rgba(179, 211, 234, 0.16); border-radius: 4px; }
+      .hr-tabon { background: rgba(111, 137, 255, 0.18); border: 1px solid rgba(111, 137, 255, 0.45); border-radius: 6px; }
+      .hr-tab2 { background: rgba(7, 11, 24, 0.5); border: 1px solid rgba(179, 211, 234, 0.1); border-bottom: none; border-radius: 6px 6px 0 0; }
+      .hr-tabaccent { background: #6f89ff; }
+      .hr-clockbox { background: rgba(111, 137, 255, 0.14); border: 1px solid rgba(111, 137, 255, 0.4); border-radius: 6px; }
+      .hr-auto { background: rgba(7, 11, 24, 0.5); border: 1px solid rgba(179, 211, 234, 0.2); border-radius: 15px; }
+      .hr-pullon { background: rgba(111, 137, 255, 0.18); border-radius: 5px; }
+      .hr-flooron { background: rgba(111, 137, 255, 0.16); border-radius: 5px; }
+      .hr {
+        position: absolute;
+        box-sizing: border-box;
+        font-family: var(--font);
+        color: #b3d3ea;
+        font-size: 13px;
+      }
+      .hr-p {
+        background: rgba(7, 11, 24, 0.94);
+        border: 1px solid rgba(179, 211, 234, 0.16);
+        border-radius: 6px;
+        -webkit-backdrop-filter: blur(3px);
+        backdrop-filter: blur(3px);
+      }
+      .hr-top { display: flex; align-items: center; gap: 14px; padding: 0 18px; }
+      .hr-ci { font-weight: 800; font-size: 17px; letter-spacing: 1px; color: #f8f8f8; }
+      .hr-div { width: 1px; height: 20px; background: rgba(179, 211, 234, 0.25); }
+      .hr-sub2 { color: #8fa3bd; font-size: 13px; }
+      .hr-tabs { margin-left: 22px; display: flex; gap: 6px; }
+      .hr-tabs b { padding: 8px 18px; font-size: 14px; font-weight: 600; color: #9fb2cc; border-radius: 6px; }
+      .hr-tabs b.on { color: #f8f8f8; background: rgba(111, 137, 255, 0.18); border: 1px solid rgba(111, 137, 255, 0.5); }
+      .hr-clock { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 14px; }
+      .hr-clock b { color: #f8f8f8; font-weight: 700; }
+      .hr-clock i { font-style: normal; color: #8fa3bd; }
+      .hr-filter { display: flex; align-items: center; gap: 10px; }
+      .hr-fchip { padding: 5px 14px; border-radius: 14px; font-size: 12px; color: #9fb2cc; border: 1px solid rgba(179, 211, 234, 0.18); }
+      .hr-fchip.on { color: #f8f8f8; background: rgba(111, 137, 255, 0.2); border-color: rgba(111, 137, 255, 0.5); }
+      .hr-pull { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+      .hr-pullitem { padding: 9px 12px; font-size: 13px; color: #b3d3ea; border-radius: 5px; }
+      .hr-pullitem.on { color: #f8f8f8; background: rgba(111, 137, 255, 0.18); }
+      .hr-tablewrap { padding: 0; display: flex; flex-direction: column; overflow: hidden; }
+      .hr-phead { padding: 11px 16px; font-size: 14px; font-weight: 700; color: #f8f8f8; border-bottom: 1px solid rgba(179, 211, 234, 0.14); }
+      .hr-table { padding: 4px 8px; }
+      .hr-tr { display: grid; grid-template-columns: 52px 82px 88px 108px 108px 56px; gap: 6px; padding: 8px 8px; font-size: 12.5px; color: #cfe0ef; border-bottom: 1px solid rgba(179, 211, 234, 0.08); }
+      .hr-tr span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .hr-trh { color: #8fa3bd; font-size: 11.5px; font-weight: 600; border-bottom: 1px solid rgba(179, 211, 234, 0.2); }
+      .hr-bottom { padding: 0; }
+      .hr-btabs { display: flex; }
+      .hr-btabs b { padding: 9px 22px; font-size: 13px; font-weight: 700; color: #8fa3bd; }
+      .hr-btabs b.on { color: #f8f8f8; border-bottom: 2px solid #6f89ff; }
+      .hr-bwrap { display: flex; align-items: center; gap: 16px; padding: 12px 16px; }
+      .hr-summary { display: flex; flex-direction: column; gap: 2px; padding-right: 16px; border-right: 1px solid rgba(179, 211, 234, 0.14); }
+      .hr-summary span { font-size: 12px; color: #9fb2cc; }
+      .hr-summary b { font-size: 26px; font-weight: 800; color: #f8f8f8; }
+      .hr-stages { display: flex; gap: 10px; flex: 1; }
+      .hr-stage { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; border-radius: 6px; background: rgba(179, 211, 234, 0.05); }
+      .hr-stage span { font-size: 12px; color: #9fb2cc; white-space: nowrap; }
+      .hr-stage b { font-size: 22px; font-weight: 800; color: #f8f8f8; }
+      .hr-evbar { display: flex; align-items: center; gap: 16px; padding: 0 18px; }
+      .hr-evtitle { font-size: 13px; color: #b3d3ea; font-weight: 600; }
+      .hr-auto { font-size: 12px; color: #9fb2cc; padding: 4px 12px; border: 1px solid rgba(179, 211, 234, 0.2); border-radius: 14px; }
+      .hr-evs { margin-left: auto; display: flex; gap: 6px; }
+      .hr-ev { font-size: 12px; color: #b3d3ea; padding: 4px 12px; border: 1px solid rgba(179, 211, 234, 0.16); border-radius: 5px; }
+      .hr-ev b { color: #f8f8f8; }
+      .hr-ev-cr { color: #e4575a; }
+      .hr-ev-ma { color: #ed8151; }
+      .hr-ev-mi { color: #e9ba47; }
+      .hr-ev-wa { color: #6ef5ae; }
+      .hr-compass { padding: 10px 12px; display: flex; flex-direction: column; }
+      .hr-clabel { font-size: 11px; color: #9fb2cc; }
+      .hr-cbig { font-size: 34px; font-weight: 800; color: #f8f8f8; text-align: center; margin-top: 22px; }
+      .hr-cdir { display: flex; justify-content: space-between; font-size: 11px; color: #8fa3bd; margin-top: auto; }
+      .hr-minimap { display: flex; align-items: flex-start; padding: 10px 12px; }
+      .hr-mmlabel { font-size: 11px; color: #9fb2cc; }
+      .hr-floors { padding: 8px; display: flex; flex-direction: column; gap: 5px; }
+      .hr-floor { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 5px; }
+      .hr-floor b { font-size: 13px; color: #6f89ff; min-width: 22px; }
+      .hr-floor span { font-size: 11.5px; color: #9fb2cc; }
+      .hr-floor.on { background: rgba(111, 137, 255, 0.16); }
+      .hr-floor.on span { color: #e7ebff; }
+      /* (구) 테마 토큰형 한진 패널 — 현재는 미사용 */
+      .hj-tablewrap {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 0 10px 10px;
+      }
+      .hj-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11.5px;
+      }
+      .hj-table th {
+        position: sticky;
+        top: 0;
+        text-align: left;
+        font-weight: 600;
+        color: var(--text-weak);
+        padding: 6px 6px;
+        border-bottom: 1px solid var(--dt-stroke);
+        background: color-mix(in srgb, var(--bg-page) 55%, transparent);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        white-space: nowrap;
+      }
+      .hj-table td {
+        color: var(--text-strong);
+        padding: 7px 6px;
+        border-bottom: 1px solid color-mix(in srgb, var(--dt-stroke) 60%, transparent);
+        white-space: nowrap;
+      }
+      .hj-table tbody tr:hover {
+        background: var(--dt-hover);
+      }
+      .hj-floors {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 0 10px 10px;
+        overflow: auto;
+      }
+      .hj-floor {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--dt-stroke);
+        background: transparent;
+        color: var(--text-strong);
+        cursor: pointer;
+        font-family: var(--font);
+        text-align: left;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .hj-floor b {
+        font-size: 14px;
+        min-width: 24px;
+        color: var(--point-main);
+      }
+      .hj-floor span {
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .hj-floor.on,
+      .hj-floor:hover {
+        background: var(--dt-hover);
+        border-color: var(--point-main);
+      }
+      .hj-log {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+        width: 100%;
+      }
+      .hj-logtop {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      .hj-summary {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+      .hj-sumlabel {
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .hj-sumnum {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--point-main);
+        font-variant-numeric: tabular-nums;
+      }
+      .hj-stagetabs {
+        display: flex;
+        gap: 6px;
+      }
+      .hj-stagetabs b {
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--dt-stroke);
+        color: var(--text-weak);
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .hj-stagetabs b.on {
+        color: var(--text-strong);
+        border-color: var(--point-main);
+        background: var(--dt-hover);
+      }
+      .hj-events {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .hj-evtitle {
+        font-size: 12px;
+        color: var(--text-weak);
+      }
+      .hj-evbtns {
+        display: flex;
+        gap: 4px;
+      }
+      .hj-ev {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 5px;
+        border: 1px solid var(--dt-stroke);
+        color: var(--text-weak);
+        white-space: nowrap;
+      }
+      .hj-stages {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+      }
+      .hj-stage {
+        flex: 1;
+        min-width: 92px;
+        display: flex;
+        align-items: center;
+        padding: 9px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--dt-stroke);
+        background: color-mix(in srgb, var(--bg-page) 30%, transparent);
+      }
+      .hj-stage-t {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .hj-stage-t span {
+        font-size: 11px;
+        color: var(--text-weak);
+        white-space: nowrap;
+      }
+      .hj-stage-t b {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--text-strong);
+        font-variant-numeric: tabular-nums;
+      }
+
       .dt-ui {
         position: absolute;
         inset: 0;
@@ -8926,6 +9783,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        width: max-content;
         max-width: 92vw;
         padding: 11px 14px;
         border-radius: 12px;
@@ -9390,6 +10248,42 @@
         gap: 12px;
         padding: 2px 14px 14px;
       }
+      /* 테마 만들기 단계 이동(이전/다음) */
+      .stepnav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin: 4px 14px 14px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+      .snav-prev,
+      .snav-next {
+        border-radius: 9px;
+        padding: 8px 16px;
+        font: 700 12.5px var(--font);
+        cursor: pointer;
+        border: 1px solid var(--line);
+      }
+      .snav-prev {
+        background: transparent;
+        color: var(--text-strong);
+      }
+      .snav-prev:hover {
+        background: var(--bg-accent);
+      }
+      .snav-next {
+        background: var(--point-main);
+        border-color: var(--point-main);
+        color: #fff;
+      }
+      .snav-next:hover {
+        filter: brightness(1.06);
+      }
+      .snav-next.snav-hidden {
+        display: none;
+      }
       /* 스텝 내부 자동 유도 — 메뉴 이름·구성은 항상 보이고, 이전 단계 전에는 '옵션'만 잠근다(.locked).
          무슨 메뉴가 있는지는 알 수 있게 하되, 값(옵션)은 순서대로 열린다.
          gateColor는 stepbody flex 직계 자식이 갖던 12px 간격을 자체 flex로 되살린다. */
@@ -9630,9 +10524,8 @@
         min-width: 0;
       }
       .main .brand .brandname {
-        font-weight: 800;
-        color: var(--text-strong);
-        letter-spacing: -0.01em;
+        /* 스튜디오 시안에는 브랜드명 텍스트를 표시하지 않는다 */
+        display: none;
       }
 
       /* ── 화면 구성 (열 수 · 패널 추가) ── */
@@ -10927,6 +11820,390 @@
         background: color-mix(in srgb, var(--point-main) 16%, transparent);
         color: var(--point-main);
       }
+      /* ── 템플릿 갤러리 — Figma Studio(169:150) 재현. 라이트 서피스 위 3열 카드 ── */
+      .lc-grid.tplmode {
+        display: block; /* 갤러리는 자체 그리드를 쓰므로 런처 그리드를 끈다 */
+      }
+      .tplgal {
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 28px 30px 34px;
+        margin-top: 4px;
+      }
+      .tplcats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 13px 22px;
+        padding-bottom: 22px;
+        margin-bottom: 26px;
+        border-bottom: 1px solid var(--line);
+      }
+      .tplcat {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        font-family: inherit;
+        font-size: 13.5px;
+        color: var(--text-weak);
+        cursor: pointer;
+        transition: color 0.15s ease;
+      }
+      .tplcat::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: 0.4;
+        transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease;
+      }
+      .tplcat:hover {
+        color: var(--text-strong);
+      }
+      .tplcat.on {
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+      .tplcat.on::before {
+        opacity: 1;
+        background: var(--point-main);
+        transform: scale(1.3);
+      }
+      .tplgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 28px 20px;
+      }
+      .tplcard {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        background: var(--bg-accent);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 0 0 26px;
+        text-align: left;
+        cursor: pointer;
+        font-family: inherit;
+        overflow: hidden;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      }
+      .tplcard:hover {
+        transform: translateY(-3px);
+        border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+      }
+      .tplthumb {
+        aspect-ratio: 498 / 318;
+        border-radius: 22px;
+        background: #1a1a22;
+        overflow: hidden;
+      }
+      .tplthumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .tplbox {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* 위(배지·제목)·아래(날짜·더보기)를 카드 높이에 맞춰 벌린다 */
+        gap: 18px;
+        padding: 0 30px;
+        flex: 1; /* 카드 높이가 서로 달라도 하단(날짜·더보기)이 정렬되도록 남는 공간을 채움 */
+      }
+      .tplsec1 {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .tplbadges {
+        display: flex;
+        gap: 6px;
+      }
+      .tplbadge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 8px;
+        border-radius: 10px;
+        font-size: 12px;
+        letter-spacing: -0.24px;
+        white-space: nowrap;
+      }
+      .tplbadge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+      .tplbadge.sol {
+        background: rgba(111, 206, 233, 0.16);
+        color: #8fd3f0;
+      }
+      .tplbadge.sol::before {
+        background: #5bc0ea;
+      }
+      .tplbadge.con {
+        background: rgba(111, 233, 144, 0.16);
+        color: #7fd8a5;
+      }
+      .tplbadge.con::before {
+        background: #4bd88a;
+      }
+      .tpltitle {
+        font-size: 22px;
+        line-height: 1.26;
+        color: var(--text-strong);
+        font-weight: 600;
+        letter-spacing: -0.2px;
+      }
+      .tplsec2 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .tpldate {
+        font-size: 15px;
+        color: var(--text-weak);
+        letter-spacing: -0.3px;
+      }
+      .tplmore {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 15px;
+        color: var(--text-strong);
+      }
+      .tplmore svg {
+        width: 13px;
+        height: 13px;
+        transition: transform 0.15s ease;
+      }
+      .tplcard:hover .tplmore svg {
+        transform: translateX(3px);
+      }
+      .tplempty {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: var(--text-weak);
+        padding: 56px 20px;
+        font-size: 14px;
+      }
+      /* ── 템플릿 상세 페이지 — Figma Studio(170:593) 재현 ── */
+      .tpldetail {
+        max-width: 1180px;
+        margin: 4px auto 0;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .tpld-back {
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border: 1px solid var(--line);
+        background: var(--bg-surface);
+        color: var(--text-weak);
+        font-family: inherit;
+        font-size: 13.5px;
+        padding: 8px 15px 8px 12px;
+        border-radius: var(--r-pill);
+        cursor: pointer;
+        transition: color 0.15s ease, border-color 0.15s ease;
+      }
+      .tpld-back:hover {
+        color: var(--text-strong);
+        border-color: color-mix(in srgb, var(--point-main) 45%, var(--line));
+      }
+      .tpld-back svg {
+        width: 15px;
+        height: 15px;
+      }
+      .tpld-head {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .tpld-titlerow {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .tpld-title {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-strong);
+        letter-spacing: -0.3px;
+        line-height: 1.3;
+      }
+      .tpld-date {
+        flex: none;
+        font-size: 16px;
+        color: var(--text-weak);
+        letter-spacing: -0.32px;
+        white-space: nowrap;
+      }
+      .tpld-hero {
+        aspect-ratio: 1180 / 660;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #1a1a22;
+        border: 1px solid var(--line);
+      }
+      .tpld-hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      /* 프리뷰 슬라이더(한진 등 다장) — 이미지(hero)는 tpldetail 전체 폭 그대로(크기 변화 없음).
+         화살표는 절대 위치로 이미지(=tpldetail) 바깥 좌우 여백에 띄운다. */
+      .tpld-sliderwrap {
+        position: relative;
+      }
+      .tpld-slider {
+        position: relative;
+      }
+      .tpld-track {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .tpld-slide {
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .tpld-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 2;
+        transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .tpld-nav.prev {
+        left: -60px;
+      }
+      .tpld-nav.next {
+        right: -60px;
+      }
+      .tpld-nav:hover {
+        background: var(--bg-accent);
+        border-color: color-mix(in srgb, var(--point-main) 50%, var(--line));
+      }
+      .tpld-nav:active {
+        transform: translateY(-50%) scale(0.92);
+      }
+      .tpld-nav svg {
+        width: 20px;
+        height: 20px;
+      }
+      /* 좁은 창 — tpldetail 바깥 여백이 부족하면 화살표를 이미지 가장자리 안쪽으로(반투명 오버레이) */
+      @media (max-width: 1640px) {
+        .tpld-nav {
+          background: rgba(10, 10, 14, 0.55);
+          border-color: rgba(255, 255, 255, 0.22);
+          color: #fff;
+          -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+        }
+        .tpld-nav.prev {
+          left: 14px;
+        }
+        .tpld-nav.next {
+          right: 14px;
+        }
+        .tpld-nav:hover {
+          background: rgba(10, 10, 14, 0.82);
+        }
+      }
+      .tpld-caption {
+        position: absolute;
+        left: 14px;
+        bottom: 14px;
+        z-index: 2;
+        font-size: 12.5px;
+        color: #fff;
+        background: rgba(10, 10, 14, 0.58);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        padding: 5px 12px;
+        border-radius: var(--r-pill);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+      }
+      .tpld-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .tpld-dot {
+        width: 8px;
+        height: 8px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: var(--line);
+        cursor: pointer;
+        transition: background 0.15s ease, transform 0.15s ease;
+      }
+      .tpld-dot:hover {
+        background: var(--text-weak);
+      }
+      .tpld-dot.on {
+        background: var(--point-main);
+        transform: scale(1.3);
+      }
+      .tpld-cta {
+        display: flex;
+        justify-content: center;
+        padding-top: 4px;
+      }
+      .tpld-start {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 0;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14.5px;
+        font-weight: 600;
+        color: #fff;
+        background: var(--point-main);
+        padding: 12px 24px;
+        border-radius: var(--r-pill);
+        transition: filter 0.15s ease, transform 0.15s ease;
+      }
+      .tpld-start:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+      }
+      .tpld-start svg {
+        width: 16px;
+        height: 16px;
+      }
       /* 휴지통 전체삭제 — 파괴적이라 위험색 */
       .lc-emptytrash {
         background: var(--danger);
@@ -11389,73 +12666,44 @@
          페이지 뷰 — 상단 탭으로 전환(SPA). '와이어프레임'은 아래 스튜디오(.app),
          나머지는 이 오버레이 페이지들이 스튜디오 위를 덮는다.
          ============================================================ -->
-    <!-- PRD — 관제/디지털 트윈 요구사항을 묻는 질문 폼. 답변이 명세서·플로우·와이어프레임을 만든다. -->
+    <!-- PRD — 스텝별 팝업(위저드)으로 요구사항을 묻는다. 이 페이지는 인트로 + 답변 요약. -->
     <section class="page" id="pagePrd" data-page="prd" hidden aria-label="PRD">
       <div class="page-scroll">
-        <form class="prd-form" id="prdForm" autocomplete="off">
+        <div class="prd-intro">
           <div class="prd-kicker">제품 요구사항 문서 (PRD)</div>
           <h1>무엇을 만들지 알려주세요</h1>
-          <p class="prd-lead">관제 대시보드·디지털 트윈 화면을 구성하기 위한 질문이에요. 답하면 <b>기능명세서 · 유저플로우 · 추천 와이어프레임</b>이 자동으로 만들어지고, 고른 구성이 스튜디오에 그대로 반영됩니다.</p>
-
-          <div class="pq">
-            <label class="pq-q" for="pqSite"><span class="pq-n">1</span> 사이트·프로젝트 이름</label>
-            <input class="pq-text" id="pqSite" type="text" placeholder="예: 당진화력 통합관제" maxlength="40" />
-          </div>
-
-          <div class="pq">
-            <div class="pq-q"><span class="pq-n">2</span> 주로 어떤 화면을 만드나요?</div>
-            <div class="pq-opts" data-q="screen">
-              <button type="button" class="pq-opt on" data-v="dash"><b>관제 대시보드</b><small>패널·차트 중심의 상황판</small></button>
-              <button type="button" class="pq-opt" data-v="dt"><b>디지털 트윈</b><small>3D 씬 위 유리 패널</small></button>
-              <button type="button" class="pq-opt" data-v="both"><b>둘 다</b><small>대시보드 + 디지털 트윈</small></button>
-            </div>
-          </div>
-
-          <div class="pq">
-            <div class="pq-q"><span class="pq-n">3</span> 감시 대상 규모는 어느 정도인가요?</div>
-            <div class="pq-opts" data-q="scale">
-              <button type="button" class="pq-opt" data-v="single"><b>단일 설비</b><small>한 대상에 집중</small></button>
-              <button type="button" class="pq-opt on" data-v="multi"><b>다중 설비·구역</b><small>여러 설비를 한눈에</small></button>
-              <button type="button" class="pq-opt" data-v="enterprise"><b>전사·다중 사이트</b><small>대규모 통합 관제</small></button>
-            </div>
-          </div>
-
-          <div class="pq">
-            <div class="pq-q"><span class="pq-n">4</span> 무엇을 모니터링하나요? <span class="pq-hint">(여러 개 선택)</span></div>
-            <div class="pq-opts pq-multi" data-q="features" data-multi="1">
-              <button type="button" class="pq-opt on" data-v="realtime"><b>실시간 계측</b><small>센서·트렌드</small></button>
-              <button type="button" class="pq-opt on" data-v="alarm"><b>알람·이벤트</b><small>경보 로그</small></button>
-              <button type="button" class="pq-opt" data-v="cctv"><b>CCTV 영상</b><small>실시간 스트림</small></button>
-              <button type="button" class="pq-opt" data-v="asset"><b>설비·자산 상태</b><small>설비 트리·드릴다운</small></button>
-              <button type="button" class="pq-opt" data-v="energy"><b>에너지·발전량</b><small>전력·효율 지표</small></button>
-              <button type="button" class="pq-opt" data-v="env"><b>환경 감시</b><small>지진·기상·재난</small></button>
-            </div>
-          </div>
-
-          <div class="pq">
-            <div class="pq-q"><span class="pq-n">5</span> 어떤 환경에서 운영하나요?</div>
-            <div class="pq-opts" data-q="ops">
-              <button type="button" class="pq-opt on" data-v="central"><b>24/7 상황판</b><small>대형 화면 상시 관제</small></button>
-              <button type="button" class="pq-opt" data-v="normal"><b>일반 모니터링</b><small>PC 화면</small></button>
-              <button type="button" class="pq-opt" data-v="field"><b>현장·모바일</b><small>태블릿·소형 화면</small></button>
-            </div>
-          </div>
-
-          <div class="pq">
-            <div class="pq-q"><span class="pq-n">6</span> 접근성(WCAG 대비) 목표는?</div>
-            <div class="pq-opts" data-q="a11y">
-              <button type="button" class="pq-opt on" data-v="AA"><b>AA</b><small>일반 기준</small></button>
-              <button type="button" class="pq-opt" data-v="AAA"><b>AAA</b><small>강화 기준</small></button>
-            </div>
-          </div>
-
+          <p class="prd-lead">몇 가지 질문에 한 단계씩 답하면 <b>기능명세서 · 유저플로우 · 추천 와이어프레임</b>이 자동으로 만들어지고, 고른 구성이 스튜디오에 그대로 반영됩니다.</p>
+          <div class="prd-summary gen-summary" id="prdSummary"></div>
           <div class="prd-actions">
             <span class="prd-note" id="prdNote">답변은 자동 저장돼요.</span>
+            <button type="button" class="prd-gen ghost" id="prdEdit">질문 시작 / 수정</button>
             <button type="button" class="prd-gen" id="prdGen">기능명세서 자동 생성 →</button>
           </div>
-        </form>
+        </div>
       </div>
     </section>
+
+    <!-- PRD 스텝 위저드 — 페이지 위에 뜨는 모달. 질문 하나씩 진행한다. -->
+    <div class="prdwiz" id="prdWiz" hidden>
+      <div class="prdwiz-card" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+        <div class="prdwiz-top">
+          <span class="prdwiz-kicker">제품 요구사항 (PRD)</span>
+          <div class="prdwiz-dots" id="pwDots" aria-hidden="true"></div>
+          <button type="button" class="prdwiz-x" id="pwClose" aria-label="닫기">✕</button>
+        </div>
+        <div class="prdwiz-body">
+          <div class="prdwiz-stepno" id="pwStepNo"></div>
+          <h2 class="prdwiz-q" id="pwTitle"></h2>
+          <p class="prdwiz-hint" id="pwHint"></p>
+          <div class="prdwiz-field" id="pwField"></div>
+        </div>
+        <div class="prdwiz-foot">
+          <button type="button" class="pw-btn ghost" id="pwPrev">이전</button>
+          <span class="pw-count" id="pwCount"></span>
+          <button type="button" class="pw-btn primary" id="pwNext">다음</button>
+        </div>
+      </div>
+    </div>
 
     <!-- 기능명세서 -->
     <section class="page" id="pageSpec" data-page="spec" hidden aria-label="기능명세서">
@@ -11469,25 +12717,18 @@
             <button type="button" class="doc-chip"><span class="dc-lab">상태</span> <span class="cv">▾</span></button>
             <div class="doc-menu" hidden></div>
           </div>
-          <div class="doc-chipwrap" data-filter="role">
-            <button type="button" class="doc-chip"><span class="dc-lab">사용자 역할</span> <span class="cv">▾</span></button>
-            <div class="doc-menu" hidden></div>
-          </div>
           <div class="doc-chipwrap" data-filter="pri">
             <button type="button" class="doc-chip"><span class="dc-lab">중요도</span> <span class="cv">▾</span></button>
             <div class="doc-menu" hidden></div>
           </div>
         </div>
         <div class="doc-tools">
-          <button class="doc-ic" title="새로고침"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10" /><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" /></svg></button>
-          <button class="doc-ic" title="필터"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6" /><line x1="7" y1="12" x2="17" y2="12" /><line x1="10" y1="18" x2="14" y2="18" /></svg></button>
-          <button class="doc-ic" title="전체화면"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M3 16v3a2 2 0 0 0 2 2h3" /></svg></button>
+          <button class="spec-add" id="specAddRow" type="button" title="새 기능 행 추가 — 표에서 바로 이름을 입력하세요">＋ 기능 추가</button>
         </div>
       </div>
       <div class="page-scroll">
-        <div class="gen-summary" id="specSummary"></div>
         <table class="spec-table">
-          <thead><tr><th>기능</th><th>상태</th><th>사용자 역할</th><th>중요도</th></tr></thead>
+          <thead><tr><th>기능</th><th>상태</th><th>중요도</th></tr></thead>
           <tbody id="specBody"></tbody>
         </table>
       </div>
@@ -11496,6 +12737,32 @@
         <button type="button" class="prd-gen" id="specNext" hidden>유저플로우로 넘어가기 →</button>
       </div>
     </section>
+
+    <!-- 기능 상세 팝업 — 표의 행을 클릭하면 열린다(상세 메모 · 요구사항 정리) -->
+    <div class="spec-modal" id="specModal" hidden>
+      <div class="spec-modal-bd" role="dialog" aria-modal="true" aria-labelledby="smTitle">
+        <header class="sm-head">
+          <div class="sm-tt">
+            <span class="sm-kind" id="smKind"></span>
+            <h3 id="smTitle"></h3>
+          </div>
+          <button type="button" class="sm-x" id="smClose" aria-label="닫기">✕</button>
+        </header>
+        <div class="sm-meta" id="smMeta"></div>
+        <label class="sm-field">
+          <span>상세 메모</span>
+          <textarea id="smMemo" rows="4" placeholder="이 기능의 목적·배경·동작 방식 등 설명을 자유롭게 적어 주세요."></textarea>
+        </label>
+        <label class="sm-field">
+          <span>요구사항 정리</span>
+          <textarea id="smReqs" rows="6" placeholder="필요한 요구사항을 한 줄에 하나씩 정리해 주세요."></textarea>
+        </label>
+        <footer class="sm-foot">
+          <button type="button" class="sm-btn ghost" id="smCancel">닫기</button>
+          <button type="button" class="sm-btn primary" id="smSave">저장</button>
+        </footer>
+      </div>
+    </div>
 
     <!-- 유저플로우 — PRD 답변에서 생성된 흐름 노드 -->
     <section class="page page-dots" id="pageFlow" data-page="flow" hidden aria-label="유저플로우">
@@ -11529,7 +12796,6 @@
     <!-- 와이어프레임 — 규모·항목에 맞춰 추천된 레이아웃. 고르면 스튜디오에 반영된다. -->
     <section class="page page-dots" id="pageWire" data-page="wireframe" hidden aria-label="와이어프레임">
       <div class="page-scroll">
-        <div class="gen-summary" id="wireSummary"></div>
         <div class="wreco-wrap" id="wireReco"></div>
         <div class="wreco-bar">
           <span class="wreco-pick" id="wirePick">추천 와이어프레임을 골라 주세요</span>
@@ -11543,7 +12809,7 @@
            온보딩 플로우 오버레이 — 런처 → 새 프로젝트 → 레이아웃 선택.
            완료(시작)하면 .show를 떼고 그 아래 스튜디오가 드러난다.
            ============================================================ -->
-      <div class="flow" id="flowHome">
+      <div class="flow show" id="flowHome">
         <div class="lc">
           <aside class="lc-side">
             <div class="lc-brand"><img src="src/logo.svg" alt="WEMB" /><b>Studio</b></div>
@@ -11621,7 +12887,6 @@
           <button class="railbtn" type="button" data-rail="home" title="스튜디오 홈" aria-label="스튜디오 홈"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5" /><path d="M5 9.5V21h14V9.5" /></svg></button>
           <button class="railbtn on" type="button" data-rail="theme" title="테마 만들기" aria-label="테마 만들기"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.7 0 2-1.3 1.2-2.3-.8-1 .1-2.2 1.3-2.2H17a4 4 0 0 0 4-4c0-4.4-4-7.5-9-7.5z" /><circle cx="7.5" cy="12" r="1" /><circle cx="10" cy="8" r="1" /><circle cx="14.5" cy="8" r="1" /></svg></button>
           <button class="railbtn" type="button" data-rail="dash" title="대시보드 편집" aria-label="대시보드 편집"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5" /><rect x="14" y="3" width="7" height="5" rx="1.5" /><rect x="14" y="12" width="7" height="9" rx="1.5" /><rect x="3" y="16" width="7" height="5" rx="1.5" /></svg></button>
-          <button class="railbtn" type="button" data-rail="layout" title="레이아웃" aria-label="레이아웃"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="M9 21V9" /></svg></button>
           <button class="railbtn" type="button" data-rail="history" title="되돌리기 기록 · 초기화" aria-label="되돌리기 기록 · 초기화"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v6h6" /><path d="M3.5 9A9 9 0 1 1 3 12" /><path d="M12 7v5l3 2" /></svg></button>
           <span class="railsep"></span>
           <button class="railbtn" type="button" data-rail="collapse" title="패널 접기 / 펼치기" aria-label="패널 접기 / 펼치기"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M9 4v16" /></svg></button>
@@ -14914,6 +16179,29 @@
           localStorage.setItem('wemb-screen', s);
         } catch (e) {}
       }
+
+      /* ── 한진 SMART 통합관제 — Figma(1:3) 그대로 재현 ──
+         중앙 3D 건물은 Figma 원본도 래스터 이미지라 실제 렌더(hanjin-1.jpg)를 베이스로 깔고,
+         그 위에 표·패널·카운터·상단바 등 모든 UI를 Figma 좌표(1920×1080)·색 그대로 HTML로 얹는다.
+         캔버스는 stage 크기에 맞춰 uniform scale 되므로 어느 화면에서도 비율이 유지된다. */
+      function applyHanjinDT() {
+        const stage = document.getElementById('dtStage');
+        if (!stage) return;
+        stage.setAttribute('data-tpl', 'hanjin');
+        const bn = stage.querySelector('.dt-bname');
+        if (bn) bn.textContent = '한진 SMART 통합관제';
+
+        let repro = stage.querySelector('.hj-repro');
+        if (repro) repro.remove();
+        repro = document.createElement('div');
+        repro.className = 'hj-repro';
+
+        /* 화면 시안(Studio 185:124)을 그대로 표시 — Figma 원본 렌더를 스튜디오 시안으로 사용.
+           이 대시보드는 3D 건물 등 대부분이 래스터라, '그대로' 나오게 하려면 실제 시안 렌더가 정답. */
+        repro.innerHTML = '<img class="hj-studioimg" src="src/templates/hanjin-studio.jpg" alt="한진 SMART 통합관제">';
+        stage.appendChild(repro);
+      }
+
       try {
         const ss = localStorage.getItem('wemb-screen');
         if (ss === 'dash' || ss === 'dt') state.screen = ss;
@@ -21065,12 +22353,60 @@ ${parts.html}
           const c = btn.querySelector('.lc-selcount');
           if (c) c.textContent = n ? ' (' + n + ')' : '';
         }
+        /* ── 템플릿 갤러리 데이터 — Figma Studio(169:150)의 카드/카테고리 그대로 ──
+           썸네일은 src/templates/tpl-01..18.jpg. 화면 종류는 제목 접두어로 판별. */
+        const TPL_CATS = ['All categories', 'Dashboard', 'Digital Twin DT', 'Portal', 'Report', 'FinCo', 'MfgCo', 'PwrCo EnerCo', 'Railway', 'LogiCo', 'DCIM', 'DCMS', 'FMS', 'PSIM', 'FEMS', 'DMS', 'BMS', 'Air Conditioning', 'Concept', 'Security', 'SOP'];
+        const TEMPLATES = [
+          'Digital Twin: SKHynix Icheon 1level',
+          'Dashbord: Icheon main',
+          'Dashbord: NH-DCIM',
+          'Dashboard: KB',
+          'Dashbord: hyundaicapital P01 Service Map',
+          'Dashbord: Hana Card',
+          'Dashbord: SHOneView main',
+          'Dashbord: koen Dashboard01',
+          'Digital Twin: Digicentre DCIM',
+          'Dashbord: Global Status(1)',
+          'Dashbord: Global Status(2)',
+          'Dashbord: SWsecurrity',
+          'Dashbord: Korea status(1)',
+          'Dashbord: KORAIL Concept',
+          'Digital Twin: Facility Status',
+          'Digital Twin: LSE Demo floor',
+          'Dashbord: Hanjin main',
+          'Dashbord: wooribank Transaction',
+        ].map((title, i) => {
+          const n = i + 1;
+          const dt = title.startsWith('Digital Twin');
+          return {
+            img: 'src/templates/tpl-' + String(n).padStart(2, '0') + '.jpg',
+            title,
+            date: n === 1 ? 'February, 2024' : 'July 24, 2026',
+            screen: dt ? 'dt' : 'dash',
+            badges: [[dt ? 'Digital Twin DT' : 'Dashboard', 'sol'], [n === 1 ? 'FMS' : 'DCIM', 'con']],
+          };
+        });
+        /* Hanjin main — 상세 페이지에서 3장(메인·입출문현황·하차현황)을 슬라이드로 보여준다. 메인이 첫 장. */
+        (function () {
+          const hj = TEMPLATES.find((t) => t.title === 'Dashbord: Hanjin main');
+          if (hj) {
+            hj.tpl = 'hanjin'; /* 스튜디오 열기 시 한진 디지털 트윈 페이지로 재현 */
+            hj.slides = [
+              { img: 'src/templates/hanjin-1.jpg', label: '메인' },
+              { img: 'src/templates/hanjin-2.jpg', label: '입출문현황' },
+              { img: 'src/templates/hanjin-3.jpg', label: '하차현황' },
+            ];
+          }
+        })();
+        let tplFilter = 'All categories';
+        let tplSelected = null; /* 상세 페이지로 열어 둔 템플릿(null이면 갤러리) */
+
         const VIEW_META = {
           all: { title: '전체', count: (n) => '프로젝트 ' + n + '개' },
           recent: { title: '최근 편집', count: (n) => n + '개 · 최근 편집순' },
           fav: { title: '즐겨찾기', count: (n) => '즐겨찾기 ' + n + '개' },
           trash: { title: '휴지통', count: (n) => '휴지통 ' + n + '개' },
-          tpl: { title: '템플릿', count: () => '준비 중' },
+          tpl: { title: '템플릿', count: () => '템플릿 ' + TEMPLATES.length + '개' },
         };
         const searchTerm = () => (document.getElementById('lcSearch')?.value || '').trim().toLowerCase();
 
@@ -21097,10 +22433,147 @@ ${parts.html}
           return d;
         };
 
+        /* 템플릿 갤러리 렌더 — 상단 카테고리 링크(필터) + 3열 카드 그리드.
+           카드 클릭 → 해당 화면 종류(대시보드/디지털 트윈)로 새 프로젝트를 만들어 스튜디오 진입. */
+        function renderTemplates(g) {
+          const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+          const gal = document.createElement('div');
+          gal.className = 'tplgal';
+
+          /* 카테고리 링크 바 — 클릭하면 그 카테고리(배지)로 카드를 거른다 */
+          const cats = document.createElement('div');
+          cats.className = 'tplcats';
+          TPL_CATS.forEach((c) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'tplcat' + (c === tplFilter ? ' on' : '');
+            b.textContent = c;
+            b.onclick = () => { tplFilter = c; renderProjects(); };
+            cats.appendChild(b);
+          });
+          gal.appendChild(cats);
+
+          /* 카드 그리드 */
+          const grid = document.createElement('div');
+          grid.className = 'tplgrid';
+          const list = TEMPLATES.filter((t) => tplFilter === 'All categories' || t.badges.some((bd) => bd[0] === tplFilter));
+          if (!list.length) {
+            const e = document.createElement('div');
+            e.className = 'tplempty';
+            e.textContent = '‘' + tplFilter + '’ 카테고리에 해당하는 템플릿이 아직 없어요.';
+            grid.appendChild(e);
+          }
+          const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
+          list.forEach((t) => {
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'tplcard';
+            card.innerHTML =
+              '<div class="tplthumb"><img loading="lazy" src="' + t.img + '" alt="' + esc(t.title) + '"></div>' +
+              '<div class="tplbox">' +
+                '<div class="tplsec1">' +
+                  '<div class="tplbadges">' +
+                    t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
+                  '</div>' +
+                  '<div class="tpltitle">' + esc(t.title) + '</div>' +
+                '</div>' +
+                '<div class="tplsec2">' +
+                  '<span class="tpldate">' + esc(t.date) + '</span>' +
+                  '<span class="tplmore">Read More' + arrow + '</span>' +
+                '</div>' +
+              '</div>';
+            card.onclick = () => { tplSelected = t; renderProjects(); };
+            grid.appendChild(card);
+          });
+          gal.appendChild(grid);
+          g.appendChild(gal);
+
+          const cnt = document.getElementById('lcCount');
+          if (cnt) cnt.textContent = tplFilter === 'All categories' ? VIEW_META.tpl.count() : list.length + '개 · ' + tplFilter;
+        }
+
+        /* 템플릿 상세 페이지 — Figma Studio(170:593): 배지 · 제목/날짜 · 큰 프리뷰 이미지.
+           맨 위 '목록으로'로 갤러리에 복귀, 아래 CTA로 이 구성을 스튜디오에 반영한다. */
+        function renderTemplateDetail(g, t) {
+          const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+          const backIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+          const goIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
+          const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+          const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+
+          /* 프리뷰 영역 — 슬라이드가 여러 장이면 캐러셀, 아니면 단일 이미지 */
+          const heroHTML = t.slides
+            ? '<div class="tpld-sliderwrap">' +
+                '<div class="tpld-hero tpld-slider">' +
+                  '<div class="tpld-track">' +
+                    t.slides.map((s) => '<img class="tpld-slide" src="' + s.img + '" alt="' + esc(t.title + ' · ' + s.label) + '">').join('') +
+                  '</div>' +
+                  '<span class="tpld-caption"></span>' +
+                '</div>' +
+                '<button type="button" class="tpld-nav prev" aria-label="이전">' + chevL + '</button>' +
+                '<button type="button" class="tpld-nav next" aria-label="다음">' + chevR + '</button>' +
+              '</div>' +
+              '<div class="tpld-dots">' +
+                t.slides.map((s, i) => '<button type="button" class="tpld-dot" data-i="' + i + '" aria-label="' + esc(s.label) + '"></button>').join('') +
+              '</div>'
+            : '<div class="tpld-hero"><img src="' + t.img + '" alt="' + esc(t.title) + '"></div>';
+
+          const det = document.createElement('div');
+          det.className = 'tpldetail';
+          det.innerHTML =
+            '<button type="button" class="tpld-back">' + backIcon + '목록으로</button>' +
+            '<div class="tpld-head">' +
+              '<div class="tplbadges">' +
+                t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
+              '</div>' +
+              '<div class="tpld-titlerow">' +
+                '<div class="tpld-title">' + esc(t.title) + '</div>' +
+                '<div class="tpld-date">' + esc(t.date) + '</div>' +
+              '</div>' +
+            '</div>' +
+            heroHTML +
+            '<div class="tpld-cta"><button type="button" class="tpld-start">이 구성으로 스튜디오 열기' + goIcon + '</button></div>';
+          g.appendChild(det);
+          det.querySelector('.tpld-back').onclick = () => { tplSelected = null; renderProjects(); };
+          det.querySelector('.tpld-start').onclick = () => openTemplate(t);
+
+          /* 슬라이더 배선 — 화살표/점으로 이동, 메인(0번)이 첫 장 */
+          if (t.slides) {
+            const track = det.querySelector('.tpld-track');
+            const dots = [...det.querySelectorAll('.tpld-dot')];
+            const cap = det.querySelector('.tpld-caption');
+            const n = t.slides.length;
+            let idx = 0;
+            const go = (i) => {
+              idx = (i + n) % n;
+              track.style.transform = 'translateX(' + -idx * 100 + '%)';
+              dots.forEach((d, k) => d.classList.toggle('on', k === idx));
+              cap.textContent = (idx + 1) + ' / ' + n + '  ·  ' + t.slides[idx].label;
+            };
+            det.querySelector('.tpld-nav.prev').onclick = () => go(idx - 1);
+            det.querySelector('.tpld-nav.next').onclick = () => go(idx + 1);
+            dots.forEach((d) => (d.onclick = () => go(+d.dataset.i)));
+            go(0);
+          }
+
+          const cnt = document.getElementById('lcCount');
+          if (cnt) cnt.textContent = t.title;
+        }
+
+        /* 상세 페이지 CTA / 스튜디오 진입 → 그 화면 종류로 새 프로젝트를 만들고 스튜디오로 진입.
+           tpl이 붙은 템플릿(한진)은 디지털 트윈 페이지로 재현하므로 DT 화면으로 연다. */
+        function openTemplate(t) {
+          const isDT = t.tpl === 'hanjin' || t.screen === 'dt';
+          pending = { name: t.title, screen: isDT ? 'dt' : 'dash', layout: isDT ? 'dt-3l-2r' : 'g3-2r', tpl: t.tpl || null };
+          startStudio();
+        }
+
         function renderProjects() {
           const g = document.getElementById('lcGrid');
           if (!g) return;
           g.innerHTML = '';
+          g.classList.toggle('tplmode', view === 'tpl');
+          if (view !== 'tpl') tplSelected = null;
 
           /* 도구 줄 — 뷰별로 버튼을 켜고 끈다
              · 새 프로젝트: 전체·최근 편집에서만
@@ -21121,18 +22594,10 @@ ${parts.html}
           if (selDel) selDel.hidden = view !== 'trash';
           updateTrashSelUI();
 
-          /* 템플릿 — 별도 페이지 예정. 지금은 안내 플레이스홀더만 */
+          /* 템플릿 — 선택한 카드가 있으면 상세 페이지, 없으면 갤러리(169:150) */
           if (view === 'tpl') {
-            g.appendChild(
-              emptyState(
-                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>' +
-                  '<b>템플릿 갤러리</b>' +
-                  '<p>미리 구성된 대시보드 템플릿을 골라 바로 시작할 수 있는 공간이에요. 곧 별도 페이지로 제공됩니다.</p>' +
-                  '<span class="lc-tplbadge">준비 중</span>'
-              )
-            );
-            const cnt0 = document.getElementById('lcCount');
-            if (cnt0) cnt0.textContent = VIEW_META.tpl.count();
+            if (tplSelected) renderTemplateDetail(g, tplSelected);
+            else renderTemplates(g);
             return;
           }
 
@@ -21370,7 +22835,13 @@ ${parts.html}
         const closeModal = () => modal.classList.remove('show');
         /* index2 — 새 프로젝트 진입점: 팝업 대신 PRD 화면으로.
            런처(.flow)는 z-index가 PRD 페이지(.page)보다 높으므로 반드시 닫아야 PRD가 보인다. */
-        const startNewProject = () => { home.classList.remove('show'); if (window.__wembPrdReset) window.__wembPrdReset(); if (window.__wembStep) window.__wembStep.reset(); if (window.__setPage) window.__setPage('prd'); };
+        /* 새 프로젝트 = 지금 프로젝트를 저장한 뒤, 상태를 깨끗이 비우고 PRD 위저드로 새로 시작(새로고침) */
+        const startNewProject = () => {
+          persistCurrentProjectData();
+          clearProjectState();
+          try { localStorage.removeItem(CUR_PROJ); localStorage.setItem('wemb-view', 'prd'); } catch (e) {}
+          location.reload();
+        };
         document.getElementById('lcNew').onclick = startNewProject;
         document.getElementById('npX').onclick = closeModal;
         document.getElementById('npCancel').onclick = closeModal;
@@ -21478,20 +22949,66 @@ ${parts.html}
         }
         /* PRD→명세서→플로우→와이어프레임 가이드(initGuide)가 레이아웃 정의와 스튜디오 진입을
            재사용할 수 있도록 노출한다. */
-        window.__WEMBLayouts = { LAYOUTS, DT_LAYOUTS, GROUPS, DT_GROUPS, findLayout, wfEl, enterStudio, setProjectName: (n) => { pending.name = n || pending.name; } };
-        function startStudio() {
+        /* 가이드(PRD→…→스튜디오) 완료 시 프로젝트를 목록에 저장/갱신한다.
+           같은 프로젝트 세션에서 다시 진입하면 중복 생성하지 않고 갱신(wemb-current-proj로 추적). */
+        const CUR_PROJ = 'wemb-current-proj';
+        /* ── 프로젝트별 상태 저장(번들) ──
+           스튜디오의 모든 작업 상태는 wemb-* 로컬스토리지 키에 자동 저장된다. 그중 프로젝트 공용(목록·자산·UI)
+           키를 제외한 나머지를 한 프로젝트의 상태 묶음(project.data)으로 스냅샷한다.
+           프로젝트를 열 때 그 묶음을 전역 키에 되돌려 쓴 뒤 새로고침하면, 평소 새로고침처럼 그 프로젝트가 복원된다. */
+        const PROJ_GLOBAL = new Set([LS_PROJ, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-view']);
+        const projStateKeys = () => { try { return Object.keys(localStorage).filter((k) => k.startsWith('wemb-') && !PROJ_GLOBAL.has(k)); } catch (e) { return []; } };
+        function collectProjectState() { const d = {}; projStateKeys().forEach((k) => { const v = localStorage.getItem(k); if (v != null) d[k] = v; }); return d; }
+        function clearProjectState() { projStateKeys().forEach((k) => { try { localStorage.removeItem(k); } catch (e) {} }); }
+        function applyProjectData(p) {
+          clearProjectState();
+          if (p && p.data) { Object.keys(p.data).forEach((k) => { try { localStorage.setItem(k, p.data[k]); } catch (e) {} }); }
+        }
+        function persistCurrentProjectData() {
+          let id = null; try { id = localStorage.getItem(CUR_PROJ); } catch (e) {}
+          if (!id) return;
+          const arr = loadProjects(); const p = arr.find((x) => x.id === id);
+          if (!p) return;
+          p.data = collectProjectState();
+          p.ts = Date.now();
+          saveProjects(arr);
+        }
+        function saveGuideProject(data) {
           const projs = loadProjects();
-          const proj = { id: newId(), name: pending.name, screen: pending.screen, layout: pending.layout, ts: Date.now(), fav: false };
+          let id = null;
+          try { id = localStorage.getItem(CUR_PROJ); } catch (e) {}
+          let p = id ? projs.find((x) => x.id === id) : null;
+          if (p) {
+            p.name = data.name || p.name;
+            p.screen = data.screen || p.screen;
+            p.layout = data.layout || p.layout;
+            p.ts = Date.now();
+            if (p.deleted) { delete p.deleted; delete p.deletedTs; }
+          } else {
+            p = { id: newId(), name: data.name || '새 프로젝트', screen: data.screen || 'dash', layout: data.layout || '', tpl: null, ts: Date.now(), fav: false };
+            projs.unshift(p);
+            if (projs.length > 48) projs.length = 48;
+            try { localStorage.setItem(CUR_PROJ, p.id); } catch (e) {}
+          }
+          saveProjects(projs);
+          return p.id;
+        }
+        window.__WEMBLayouts = { LAYOUTS, DT_LAYOUTS, GROUPS, DT_GROUPS, findLayout, wfEl, enterStudio, saveGuideProject, setProjectName: (n) => { pending.name = n || pending.name; } };
+        function startStudio() {
+          persistCurrentProjectData(); /* 이전 프로젝트 상태 저장 후 새로 시작 */
+          const projs = loadProjects();
+          const proj = { id: newId(), name: pending.name, screen: pending.screen, layout: pending.layout, tpl: pending.tpl || null, ts: Date.now(), fav: false };
           projs.unshift(proj);
           if (projs.length > 48) projs.length = 48;
           saveProjects(projs);
+          try { localStorage.setItem(CUR_PROJ, proj.id); } catch (e) {}
           /* 새 프로젝트는 '처음 상태'에서 시작해야 한다(이전 프로젝트의 색·대시보드 편집이 남지 않게).
              색/대시보드 설정은 프로젝트별 저장이 아니라 하나의 전역 상태를 공유하므로,
              디자인 관련 wemb-* 키를 비우고 새로고침한 뒤 이 프로젝트로 바로 진입한다.
              (프로젝트 목록·저장 스냅샷·둘러보기 여부는 유지) */
           try {
-            sessionStorage.setItem('wemb-fresh-open', JSON.stringify({ screen: proj.screen, layout: proj.layout, name: proj.name }));
-            const KEEP = new Set([LS_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint']);
+            sessionStorage.setItem('wemb-fresh-open', JSON.stringify({ screen: proj.screen, layout: proj.layout, name: proj.name, tpl: proj.tpl }));
+            const KEEP = new Set([LS_PROJ, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint']);
             Object.keys(localStorage)
               .filter((k) => k.startsWith('wemb-') && !KEEP.has(k))
               .forEach((k) => localStorage.removeItem(k));
@@ -21500,25 +23017,40 @@ ${parts.html}
           location.reload();
         }
         function openProject(p) {
-          /* 열면 '최근 편집' 순서에 반영되도록 타임스탬프 갱신 */
+          /* (1) 지금 보고 있던 프로젝트의 상태를 먼저 저장 */
+          persistCurrentProjectData();
           const arr = loadProjects();
-          const t = arr.find((x) => x.id === p.id);
-          if (t) { t.ts = Date.now(); saveProjects(arr); }
-          enterStudio(p.screen || 'dash', p.layout);
+          const t = arr.find((x) => x.id === p.id) || p;
+          t.ts = Date.now();
+          if (t.deleted) { delete t.deleted; delete t.deletedTs; }
+          saveProjects(arr);
+          /* (2) 이 프로젝트를 '현재 프로젝트'로 지정하고 저장된 상태 묶음을 전역 키에 복원 */
+          try { localStorage.setItem(CUR_PROJ, p.id); } catch (e) {}
+          applyProjectData(t);
+          /* (3) 새로고침 시 런처가 아니라 이 프로젝트 스튜디오로 바로 열리도록 */
+          try { localStorage.setItem('wemb-view', 'wire'); } catch (e) {}
+          /* 저장된 상태가 없던(구버전) 프로젝트는 화면 종류·레이아웃만이라도 반영 */
+          if (!t.data) {
+            try { localStorage.setItem('wemb-layout', t.layout || ''); } catch (e) {}
+            try { if (t.screen === 'dash' || t.screen === 'dt') localStorage.setItem('wemb-screen', t.screen); } catch (e) {}
+            try {
+              if (t.tpl === 'hanjin') localStorage.setItem('wemb-tpl-dt', 'hanjin');
+              else localStorage.removeItem('wemb-tpl-dt');
+            } catch (e) {}
+          }
+          location.reload();
         }
 
-        /* 사이드바 '새 프로젝트' → 런처 다시 열기 */
+        /* 사이드바 '새 프로젝트' → 완전히 새 프로젝트로 시작(현재 프로젝트는 저장) */
         const sideNew = document.getElementById('newProject');
         if (sideNew)
-          sideNew.onclick = () => {
-            setView('all');
-            home.classList.add('show');
-            try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
-          };
+          sideNew.onclick = startNewProject;
 
-        /* 사이드바 홈 버튼 · 브랜드 로고 → 프로젝트 목록(런처) 다시 열기 */
+        /* 사이드바 홈 버튼 · 브랜드 로고 → 프로젝트 목록(런처) 다시 열기(현재 프로젝트 저장) */
         const goHome = () => {
+          persistCurrentProjectData();
           setView('all');
+          renderProjects();
           home.classList.add('show');
           try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
         };
@@ -21526,6 +23058,8 @@ ${parts.html}
         if (quickHome) quickHome.onclick = goHome;
         const brandHome = document.getElementById('brandHome');
         if (brandHome) brandHome.onclick = goHome;
+        /* 탭을 닫거나 새로고침해도 현재 프로젝트 상태가 남도록 마지막에 한 번 저장 */
+        window.addEventListener('beforeunload', () => { try { persistCurrentProjectData(); } catch (e) {} });
 
         /* Esc — 모달만 닫는다(런처/레이아웃은 진입 화면이라 유지) */
         document.addEventListener('keydown', (e) => {
@@ -21669,6 +23203,11 @@ ${parts.html}
               bn.dispatchEvent(new Event('input', { bubbles: true }));
             }
             enterStudio(f.screen || 'dash', f.layout);
+            /* 템플릿 재현 — 한진은 디지털 트윈 페이지로 채운다(새로고침 후에도 유지되게 플래그 저장) */
+            try {
+              if (f.tpl === 'hanjin') { localStorage.setItem('wemb-tpl-dt', 'hanjin'); if (typeof applyHanjinDT === 'function') applyHanjinDT(); }
+              else localStorage.removeItem('wemb-tpl-dt');
+            } catch (e2) {}
           }
         } catch (e) {}
       }
@@ -21678,6 +23217,8 @@ ${parts.html}
          '작성 중이던 화면'을 미리 읽어 둔다(끝에서 이 값으로 복원). */
       var __bootView = (function () { try { return localStorage.getItem('wemb-view'); } catch (e) { return null; } })();
       applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
+      /* 한진 템플릿(디지털 트윈)로 열려 있었으면 새로고침 후에도 그 페이지를 재현 */
+      try { if (localStorage.getItem('wemb-tpl-dt') === 'hanjin' && (state.screen === 'dt') && typeof applyHanjinDT === 'function') applyHanjinDT(); } catch (e) {}
       apply();
       loadSnapshots();
       renderSnapshots();
@@ -21703,120 +23244,170 @@ ${parts.html}
          고른 추천 와이어프레임은 enterStudio(화면, 레이아웃)로 스튜디오에 그대로 반영한다.
          ============================================================ */
       (function initGuide() {
-        const form = document.getElementById('prdForm');
-        if (!form) return;
+        const prdPage = document.getElementById('pagePrd');
+        if (!prdPage) return;
         const LS = 'wemb-prd';
-        const DEFAULT = { site: '', screen: 'dash', scale: 'multi', features: ['realtime', 'alarm'], ops: 'central', a11y: 'AA' };
+        const DEFAULT = { site: '', screen: 'dash', scale: 'multi', industries: [], targets: [], ops: 'central' };
         const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+        /* ── 모니터링 유형(산업군, 다중 선택) → 모니터링 대상(라이브러리 태그) 매핑 ──
+           UI 라이브러리_태그항목.xlsx의 산업군·솔루션·컴포넌트 분류를 기반으로 구성. 대상은 라벨(다중 선택). */
+        const INDUSTRIES = {
+          finance:       { label: '금융', targets: ['계정계 (Core Banking)', '정보계', '대외채널', '인터넷 뱅킹', '모바일 뱅킹', '거래량', '거래 추이', '초당 처리건수(TPS)', '트랜잭션', '큐잉', '콜센터', '뱅킹 인프라', '종합 상황', '시스템 현황'] },
+          manufacturing: { label: '제조', targets: ['공장에너지관리 (FEMS)', '설비·자산 상태', '생산라인 현황', '공조', '전력', '온습도계', '압력', '화재감지기', '가스탐지기', '동작감지센서', 'CCTV', '알람·이벤트', '작업자'] },
+          distribution:  { label: '유통', targets: ['매장 현황', '재고·물류', '출입통제', '출입 카운트', '주차관제(LPR)', 'CCTV', '에너지 사용', '알람·이벤트'] },
+          logistics:     { label: '물류', targets: ['물류관리 (DMS)', '입고', '출고', '도크·하역', '무인지게차', '로봇', '차량·배송', '컨테이너', '차량차단기', '바리케이드', 'CCTV'] },
+          power:         { label: '발전·에너지', targets: ['발전량·발전기', 'ESS 에너지저장', '태양광', '인버터', '배터리 모듈', '리튬이온 배터리', '전력변환장치(PCS)', '변압기반', '송전탑', '풍력계', '환경 감시'] },
+          electric:      { label: '전기·전력', targets: ['변압기반', '배전반·VCB', '차단기', '무정전 전원장치(UPS)', '전력 사용량', '고압반', '저압반', '초고압반', '한전패드', '발전기'] },
+          public:        { label: '공공 인프라', targets: ['철도·교통', '상·하수 처리', '환경 감시 (지진·기상)', '재난 경보', '수위감지기', '화재감지기', '기상관측탑', 'CCTV', '종합 상황'] },
+          datacenter:    { label: '데이터센터', targets: ['데이터센터관리 (DCIM)', '랙·서버', '스토리지', '네트워크 (NMS)', '공조 (HVAC)', '항온항습', '전력', '상면관리', 'UPS', '누수탐지기', '온습도계', 'CCTV'] },
+          building:      { label: '건물·시설', targets: ['건물관리 (BMS)', '시설물관리 (FMS)', '공조', '전력', '엘리베이터', '출입통제', '조명·환경', '주차관제(LPR)', '화재감지기', 'CCTV'] },
+          security:      { label: '보안·환경', targets: ['물리보안 (PSIM)', 'CCTV', 'AI CCTV', '열화상카메라', '출입통제', '지문인식기', '얼굴인식', '화재 감지', '환경 감시 (지진·기상·재난)', '누수·가스 탐지', 'X-ray 검색대'] },
+        };
+        const industryLabels = () => (G.industries || []).map((k) => INDUSTRIES[k] && INDUSTRIES[k].label).filter(Boolean);
+        /* 선택한 산업군들의 모니터링 대상(라벨) 합집합 — 중복 제거 */
+        function industryTargetOpts() {
+          const seen = new Set(), out = [];
+          (G.industries || []).forEach((k) => { const ind = INDUSTRIES[k]; if (ind) ind.targets.forEach((lbl) => { if (!seen.has(lbl)) { seen.add(lbl); out.push(lbl); } }); });
+          return out;
+        }
+        const targetLabels = () => (G.targets || []).slice();
+
         function load() {
           try {
             const r = JSON.parse(localStorage.getItem(LS));
-            if (r && typeof r === 'object') return Object.assign({}, DEFAULT, r, { features: Array.isArray(r.features) && r.features.length ? r.features : DEFAULT.features.slice() });
+            if (r && typeof r === 'object') return Object.assign({}, DEFAULT, r);
           } catch (e) {}
-          return Object.assign({}, DEFAULT, { features: DEFAULT.features.slice() });
+          return Object.assign({}, DEFAULT);
         }
         let G = load();
+        /* 구버전 저장값 정리 + 산업군 단일(string)→다중(array) 마이그레이션 */
+        if (G.screen !== 'dash' && G.screen !== 'dt') G.screen = 'dash';
+        if (G.ops !== 'central' && G.ops !== 'normal') G.ops = 'central';
+        if (!Array.isArray(G.industries)) G.industries = (typeof G.industry === 'string' && INDUSTRIES[G.industry]) ? [G.industry] : [];
+        G.industries = G.industries.filter((k) => INDUSTRIES[k]);
+        delete G.industry;
+        if (!Array.isArray(G.targets)) G.targets = [];
         const save = () => { try { localStorage.setItem(LS, JSON.stringify(G)); } catch (e) {} };
 
-        const SCREEN_LBL = { dash: '관제 대시보드', dt: '디지털 트윈', both: '대시보드 + 디지털 트윈' };
+        const SCREEN_LBL = { dash: '관제 대시보드', dt: '디지털 트윈', portal: '포탈' };
         const SCALE_LBL = { single: '단일 설비', multi: '다중 설비·구역', enterprise: '전사·다중 사이트' };
-        const OPS_LBL = { central: '24/7 상황판', normal: '일반 모니터링', field: '현장·모바일' };
-        const FEAT_LBL = { realtime: '실시간 계측', alarm: '알람·이벤트', cctv: 'CCTV 영상', asset: '설비·자산 상태', energy: '에너지·발전량', env: '환경 감시' };
+        const OPS_LBL = { central: '대형 화면 상시 관제', normal: 'PC 화면 모니터링' };
         const PRI_LBL = { hi: '높음', mid: '보통', low: '낮음' };
         const siteName = () => G.site || '이 프로젝트';
 
-        /* ── 폼 ↔ 상태 동기화 ── */
-        const siteInput = document.getElementById('pqSite');
+        /* ── PRD 요약(인트로 페이지) 갱신 — 스텝 위저드가 답을 채우면 여기 반영된다 ── */
+        function renderPrdSummary() {
+          const box = document.getElementById('prdSummary');
+          if (box) box.innerHTML = summaryHTML(prdComplete() ? '모두 작성했어요. 아래에서 기능명세서를 생성할 수 있어요.' : '아직 비어 있어요. “질문 시작”을 눌러 한 단계씩 채워 주세요.');
+        }
         function paintForm() {
-          if (siteInput) siteInput.value = G.site || '';
-          form.querySelectorAll('.pq-opts').forEach((grp) => {
-            const q = grp.dataset.q, multi = grp.dataset.multi === '1';
-            grp.querySelectorAll('.pq-opt').forEach((b) => {
-              const on = multi ? G[q].includes(b.dataset.v) : G[q] === b.dataset.v;
-              b.classList.toggle('on', on);
-            });
-          });
+          renderPrdSummary();
           if (typeof refreshSteps === 'function') refreshSteps();
         }
-        if (siteInput) siteInput.addEventListener('input', () => { G.site = siteInput.value.trim(); save(); if (typeof refreshSteps === 'function') refreshSteps(); });
-        form.querySelectorAll('.pq-opts').forEach((grp) => {
-          const q = grp.dataset.q, multi = grp.dataset.multi === '1';
-          grp.addEventListener('click', (e) => {
-            const b = e.target.closest('.pq-opt'); if (!b) return;
-            const v = b.dataset.v;
-            if (multi) {
-              const i = G[q].indexOf(v);
-              if (i >= 0) { if (G[q].length > 1) G[q].splice(i, 1); } else G[q].push(v);
-            } else G[q] = v;
-            save(); paintForm();
-          });
-        });
 
         function summaryHTML(tail) {
-          const feats = G.features.map((f) => FEAT_LBL[f]).join(' · ');
-          return '<b>' + esc(siteName()) + '</b> · ' + SCREEN_LBL[G.screen] + ' · ' + SCALE_LBL[G.scale] + ' · ' + OPS_LBL[G.ops] + ' · WCAG ' + G.a11y +
-            '<br>모니터링: ' + feats + '<br><span class="gs-empty">' + tail + '</span>';
+          const parts = [];
+          if (G.site) parts.push('<b>' + esc(G.site) + '</b>');
+          if (SCREEN_LBL[G.screen]) parts.push(SCREEN_LBL[G.screen]);
+          if (SCALE_LBL[G.scale]) parts.push(SCALE_LBL[G.scale]);
+          if (OPS_LBL[G.ops]) parts.push(OPS_LBL[G.ops]);
+          const inds = industryLabels();
+          if (inds.length) parts.push(inds.join(', '));
+          const tg = targetLabels().join(' · ');
+          return (parts.join(' · ') || '—') + '<br>모니터링 대상: ' + esc(tg || '—') + '<br><span class="gs-empty">' + tail + '</span>';
         }
 
-        /* ── 1) 기능명세서 파생 — PRD 6개 문항(화면·규모·모니터링·운영·접근성 + 이름)을 그대로 반영해 추출 ── */
+        /* ── 기능명세서 편집 저장소 ──
+           행별 이름 수정·삭제·상세 메모·요구사항을 로컬에 보관해, PRD 재파생(renderSpec) 후에도 유지한다.
+           키 = 원본 파생 기능명(deriveSpec가 항상 같은 이름을 만들어 내므로 안정적). */
+        const SPEC_LS = 'wemb-spec';
+        let SPEC_STORE = (function () { try { return JSON.parse(localStorage.getItem(SPEC_LS)) || {}; } catch (e) { return {}; } })();
+        const saveSpec = () => { try { localStorage.setItem(SPEC_LS, JSON.stringify(SPEC_STORE)); } catch (e) {} };
+        const specOv = (id) => (SPEC_STORE[id] || (SPEC_STORE[id] = {}));
+
+        /* ── 1) 기능명세서 파생 — PRD 5개 문항(화면·규모·산업군·모니터링 대상·운영 + 이름)을 반영해 추출 ── */
         function deriveSpec() {
           const rows = [];
-          /* type: '기능' = 구체적 화면·기능, '요구사항' = 규모·운영·접근성 등 비기능/제약 요구사항 */
-          const add = (feat, role, pri, type) => rows.push({ feat, role, pri, type: type || '기능' });
+          /* type: '기능' = 구체적 화면·기능, '요구사항' = 규모·운영 등 비기능/제약 요구사항 */
+          const add = (feat, pri, type) => rows.push({ feat, pri, type: type || '기능' });
           const site = (G.site && G.site.trim()) || '이 프로젝트';
 
-          /* 2번 — 화면 유형 (기능) */
-          if (G.screen === 'dash' || G.screen === 'both') add(site + ' 관제 대시보드 종합 현황 화면', '기획자', 'hi', '기능');
-          if (G.screen === 'dt' || G.screen === 'both') { add('3D 디지털 트윈 씬 뷰어', '기획자', 'hi', '기능'); add('씬 위 유리 패널 오버레이 배치', '디자이너', 'mid', '기능'); }
+          /* 1번 — 화면 유형 (기능) */
+          if (G.screen === 'dt') { add('3D 디지털 트윈 씬 뷰어', 'hi', '기능'); add('씬 위 유리 패널 오버레이 배치', 'mid', '기능'); }
+          else add(site + ' 관제 대시보드 종합 현황 화면', 'hi', '기능');
 
-          /* 4번 — 모니터링 항목(복수 선택) (기능) */
-          const F = {
-            realtime: [['실시간 계측 트렌드 차트', 'hi'], ['실시간 KPI 카운트업', 'mid']],
-            alarm: [['알람·이벤트 로그 패널', 'hi'], ['심각도별 필터·확인', 'mid']],
-            cctv: [['CCTV 실시간 스트림 타일', 'hi']],
-            asset: [['설비 트리·자산 상태', 'hi'], ['설비 드릴다운 상세', 'mid']],
-            energy: [['발전량·에너지 지표 대시보드', 'hi']],
-            env: [['환경 감시 위젯(지진·기상·재난)', 'hi']],
-          };
-          G.features.forEach((f) => (F[f] || []).forEach(([n, p]) => add(n, '운영자', p, '기능')));
+          /* 3번 — 모니터링 유형(산업군, 다중) (요구사항) */
+          industryLabels().forEach((lbl) => add(lbl + ' 도메인 관제 구성', 'hi', '요구사항'));
 
-          /* 3번 — 감시 대상 규모 (요구사항) */
-          if (G.scale === 'single') add('단일 설비 집중 모니터링 뷰', '운영자', 'mid', '요구사항');
-          else if (G.scale === 'multi') add('구역·설비 그룹 전환 네비게이션', '운영자', 'mid', '요구사항');
-          else if (G.scale === 'enterprise') add('다중 사이트 통합·전환 네비게이션', '운영자', 'hi', '요구사항');
+          /* 4번 — 모니터링 대상(라이브러리 태그, 복수 선택) (기능) */
+          targetLabels().forEach((lbl, i) => add(lbl + ' 모니터링', i === 0 ? 'hi' : 'mid', '기능'));
+
+          /* 2번 — 관제 대상 규모 (요구사항) */
+          if (G.scale === 'single') add('단일 설비 집중 모니터링 뷰', 'mid', '요구사항');
+          else if (G.scale === 'multi') add('구역·설비 그룹 전환 네비게이션', 'mid', '요구사항');
+          else if (G.scale === 'enterprise') add('다중 사이트 통합·전환 네비게이션', 'hi', '요구사항');
 
           /* 5번 — 운영 환경 (요구사항) */
-          if (G.ops === 'central') add('24/7 대형 화면 고밀도 상황판 레이아웃', '디자이너', 'mid', '요구사항');
-          else if (G.ops === 'normal') add('일반 PC 화면 표준 레이아웃', '디자이너', 'mid', '요구사항');
-          else if (G.ops === 'field') add('현장·모바일·태블릿 대응 간소 레이아웃', '디자이너', 'mid', '요구사항');
+          if (G.ops === 'central') add('24/7 대형 화면 고밀도 상황판 레이아웃', 'mid', '요구사항');
+          else if (G.ops === 'normal') add('일반 PC 화면 표준 레이아웃', 'mid', '요구사항');
 
-          /* 6번 — 접근성 목표 (요구사항) */
-          add('WCAG ' + G.a11y + ' 대비 자동 검증·보정', '개발자', G.a11y === 'AAA' ? 'hi' : 'mid', '요구사항');
-          add('테마 색 토큰 생성·내보내기(CSS/JSON/Figma)', '개발자', 'mid', '요구사항');
+          add('테마 색 토큰 생성·내보내기(CSS/JSON/Figma)', 'mid', '요구사항');
           return rows;
+        }
+        const SF_EDIT_IC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+        const SF_DEL_IC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+        /* 상태·중요도 선택지 */
+        const SPEC_STATUS = [['doing', '권장'], ['wait', '예정'], ['ok', '완료']];
+        const statusClass = (lbl) => (SPEC_STATUS.find((s) => s[1] === lbl) || ['wait'])[0];
+        const PRI_ORDER = ['hi', 'mid', 'low'];
+        /* 사용자가 표에 직접 추가한 행(라이브러리 파생과 별개로 보관) */
+        function addedRows() { if (!Array.isArray(SPEC_STORE.__added)) SPEC_STORE.__added = []; return SPEC_STORE.__added; }
+        function specRowHTML(o) {
+          const sc = statusClass(o.statusLbl);
+          const priLab = PRI_LBL[o.priKey] || o.priKey;
+          return '<tr data-id="' + esc(o.id) + '"' + (o.custom ? ' data-custom="1"' : '') + ' data-type="' + esc(o.type) + '" data-status="' + esc(o.statusLbl) + '" data-pri="' + esc(priLab) + '" data-prikey="' + esc(o.priKey) + '">'
+            + '<td class="spec-feat"><span class="sf-text">' + esc(o.feat) + '</span>'
+            + (o.hasMemo ? '<span class="sf-note memo" title="상세 메모가 있어요">메모</span>' : '')
+            + (o.hasReqs ? '<span class="sf-note req" title="요구사항 정리가 있어요">요구사항</span>' : '')
+            + '<span class="sf-actions">'
+            + '<button type="button" class="sf-btn sf-edit" title="이름 수정" aria-label="이름 수정">' + SF_EDIT_IC + '</button>'
+            + '<button type="button" class="sf-btn sf-del" title="삭제" aria-label="삭제">' + SF_DEL_IC + '</button>'
+            + '</span></td>'
+            + '<td><button type="button" class="sbadge ' + sc + ' sf-status" title="상태 변경">' + esc(o.statusLbl) + '</button></td>'
+            + '<td><button type="button" class="pri ' + o.priKey + ' sf-pri" title="중요도 변경">' + esc(priLab) + '</button></td></tr>';
         }
         function renderSpec() {
           const body = document.getElementById('specBody'); if (!body) return;
-          body.innerHTML = deriveSpec().map((r) => {
-            const st = r.pri === 'hi' ? ['doing', '권장'] : ['wait', '예정'];
-            const priLab = PRI_LBL[r.pri];
-            return '<tr data-type="' + esc(r.type) + '" data-status="' + st[1] + '" data-role="' + esc(r.role) + '" data-pri="' + priLab + '">'
-              + '<td>' + esc(r.feat) + '</td>'
-              + '<td><span class="sbadge ' + st[0] + '">' + st[1] + '</span></td>'
-              + '<td>' + esc(r.role) + '</td>'
-              + '<td><span class="pri ' + r.pri + '">' + priLab + '</span></td></tr>';
-          }).join('');
-          const s = document.getElementById('specSummary'); if (s) s.innerHTML = summaryHTML('아래는 PRD 답변에서 자동 추출한 기능 목록이에요. 위 필터로 요구사항·상태·역할·중요도별로 추려 볼 수 있어요.');
+          const rows = [];
+          deriveSpec().forEach((r) => {
+            const ov = SPEC_STORE[r.feat] || {};
+            if (ov.deleted) return;
+            const priKey = ov.pri || r.pri;
+            rows.push({
+              id: r.feat, custom: false, type: r.type,
+              feat: (ov.feat != null && ov.feat !== '') ? ov.feat : r.feat,
+              priKey, statusLbl: ov.status || (priKey === 'hi' ? '권장' : '예정'),
+              hasMemo: !!(ov.memo && ov.memo.trim()), hasReqs: !!(ov.reqs && ov.reqs.trim()),
+            });
+          });
+          addedRows().forEach((o) => {
+            rows.push({
+              id: o.id, custom: true, type: o.type || '기능',
+              feat: o.feat || '', priKey: o.pri || 'mid', statusLbl: o.status || '예정',
+              hasMemo: !!(o.memo && o.memo.trim()), hasReqs: !!(o.reqs && o.reqs.trim()),
+            });
+          });
+          body.innerHTML = rows.map(specRowHTML).join('');
           applySpecFilters();
         }
 
         /* ── 기능명세서 필터(상단 드롭다운) ──
            4개 축(요구사항+기능 / 상태 / 사용자 역할 / 중요도)으로 표 행을 걸러 준다. */
-        const SPEC_FILTERS = { type: '', status: '', role: '', pri: '' };
+        const SPEC_FILTERS = { type: '', status: '', pri: '' };
         const SPEC_DIMS = {
           type: { def: '요구사항 + 기능', order: ['요구사항', '기능'] },
-          status: { def: '상태', order: ['권장', '예정'] },
-          role: { def: '사용자 역할', order: ['기획자', '디자이너', '운영자', '개발자'] },
+          status: { def: '상태', order: ['권장', '예정', '완료'] },
           pri: { def: '중요도', order: ['높음', '보통', '낮음'] },
         };
         function applySpecFilters() {
@@ -21826,14 +23417,13 @@ ${parts.html}
             const ok =
               (!SPEC_FILTERS.type || tr.dataset.type === SPEC_FILTERS.type) &&
               (!SPEC_FILTERS.status || tr.dataset.status === SPEC_FILTERS.status) &&
-              (!SPEC_FILTERS.role || tr.dataset.role === SPEC_FILTERS.role) &&
               (!SPEC_FILTERS.pri || tr.dataset.pri === SPEC_FILTERS.pri);
             tr.hidden = !ok;
             if (ok) visible++;
           });
           let empty = body.querySelector('tr.spec-empty');
           if (!visible) {
-            if (!empty) { empty = document.createElement('tr'); empty.className = 'spec-empty'; empty.innerHTML = '<td colspan="4">선택한 조건에 맞는 항목이 없어요.</td>'; body.appendChild(empty); }
+            if (!empty) { empty = document.createElement('tr'); empty.className = 'spec-empty'; empty.innerHTML = '<td colspan="3">선택한 조건에 맞는 항목이 없어요.</td>'; body.appendChild(empty); }
             empty.hidden = false;
           } else if (empty) empty.hidden = true;
           /* 표 높이가 바뀌면(필터 등) '다음 단계' 버튼 노출 조건도 다시 판정 */
@@ -21883,6 +23473,149 @@ ${parts.html}
           refreshChips();
         })();
 
+        /* ── 기능명세서 행 편집 ──
+           · 마우스 오버 → 기능 셀에 '이름 수정 ✎ · 삭제 🗑' 버튼 노출
+           · 행 클릭     → 상세 팝업(상세 메모 · 요구사항 정리)
+           표는 specBody 하나가 계속 유지되므로 이벤트 위임으로 한 번만 연결한다. */
+        (function initSpecEdit() {
+          const body = document.getElementById('specBody'); if (!body) return;
+          const modal = document.getElementById('specModal');
+          const elTitle = document.getElementById('smTitle');
+          const elKind = document.getElementById('smKind');
+          const elMeta = document.getElementById('smMeta');
+          const elMemo = document.getElementById('smMemo');
+          const elReqs = document.getElementById('smReqs');
+          let curTr = null;
+
+          /* 행이 참조하는 저장 객체 반환 (사용자 추가 행 / 파생 행 공통) */
+          const rowObj = (tr) => tr.dataset.custom ? addedRows().find((x) => x.id === tr.dataset.id) : specOv(tr.dataset.id);
+
+          /* ── 이름 인라인 수정 ── */
+          function commitEdit(tr) {
+            const span = tr.querySelector('.sf-text'); if (!span) return;
+            tr.removeAttribute('data-editing');
+            span.removeAttribute('contenteditable');
+            const txt = span.textContent.trim();
+            if (tr.dataset.custom) {
+              const o = addedRows().find((x) => x.id === tr.dataset.id);
+              if (o) { if (!txt) { SPEC_STORE.__added = addedRows().filter((x) => x.id !== o.id); tr.remove(); } else o.feat = txt; }
+              saveSpec();
+              return;
+            }
+            const id = tr.dataset.id;
+            if (!txt || txt === id) {
+              if (SPEC_STORE[id]) { delete SPEC_STORE[id].feat; if (!Object.keys(SPEC_STORE[id]).length) delete SPEC_STORE[id]; }
+              span.textContent = txt || id;
+            } else specOv(id).feat = txt;
+            saveSpec();
+          }
+          function startEdit(tr) {
+            const span = tr.querySelector('.sf-text'); if (!span) return;
+            tr.setAttribute('data-editing', '1');
+            span.setAttribute('contenteditable', 'true');
+            span.focus();
+            try { const sel = window.getSelection(), rng = document.createRange(); rng.selectNodeContents(span); sel.removeAllRanges(); sel.addRange(rng); } catch (e) {}
+            const onKey = (e) => {
+              if (e.key === 'Enter') { e.preventDefault(); span.blur(); }
+              else if (e.key === 'Escape') {
+                e.preventDefault();
+                const o = rowObj(tr);
+                span.textContent = tr.dataset.custom ? ((o && o.feat) || '') : ((o && o.feat) || tr.dataset.id);
+                span.blur();
+              }
+            };
+            const done = () => { span.removeEventListener('blur', done); span.removeEventListener('keydown', onKey); commitEdit(tr); };
+            span.addEventListener('blur', done);
+            span.addEventListener('keydown', onKey);
+          }
+          function delRow(tr) {
+            if (tr.dataset.custom) SPEC_STORE.__added = addedRows().filter((x) => x.id !== tr.dataset.id);
+            else specOv(tr.dataset.id).deleted = true;
+            saveSpec();
+            tr.remove();
+            applySpecFilters();
+            if (typeof toast === 'function') toast('항목을 삭제했어요.', { type: 'info' });
+          }
+          /* ── 새 행 추가 → 즉시 이름 입력 상태로 ── */
+          function addRow() {
+            const o = { id: 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), feat: '', pri: 'mid', status: '예정', type: '기능' };
+            addedRows().push(o); saveSpec(); renderSpec();
+            const tr = body.querySelector('tr[data-id="' + (window.CSS && CSS.escape ? CSS.escape(o.id) : o.id) + '"]');
+            if (tr) { const sc = document.querySelector('#pageSpec .page-scroll'); if (sc) sc.scrollTop = sc.scrollHeight; startEdit(tr); }
+          }
+          document.getElementById('specAddRow')?.addEventListener('click', addRow);
+
+          /* ── 상태 · 중요도 드롭다운 ── */
+          let pickEl = null;
+          function closePick() { if (pickEl) { pickEl.remove(); pickEl = null; } }
+          function openPick(anchor, options, current, onPick) {
+            closePick();
+            const m = document.createElement('div'); m.className = 'sf-pick';
+            m.innerHTML = options.map((o) => '<button type="button" class="sf-pick-i' + (o.val === current ? ' on' : '') + '" data-v="' + esc(o.val) + '">' + esc(o.label) + '</button>').join('');
+            document.body.appendChild(m);
+            const r = anchor.getBoundingClientRect();
+            let top = r.bottom + 4, left = r.left;
+            if (left + m.offsetWidth > window.innerWidth - 8) left = window.innerWidth - 8 - m.offsetWidth;
+            if (top + m.offsetHeight > window.innerHeight - 8) top = r.top - m.offsetHeight - 4;
+            m.style.left = Math.max(8, left) + 'px'; m.style.top = Math.max(8, top) + 'px';
+            m.addEventListener('click', (e) => { const b = e.target.closest('.sf-pick-i'); if (!b) return; onPick(b.dataset.v); closePick(); });
+            pickEl = m;
+          }
+          function setStatus(tr, lbl) { const o = rowObj(tr); if (o) { o.status = lbl; saveSpec(); renderSpec(); } }
+          function setPri(tr, key) { const o = rowObj(tr); if (o) { o.pri = key; saveSpec(); renderSpec(); } }
+          document.addEventListener('click', (e) => { if (pickEl && !e.target.closest('.sf-pick') && !e.target.closest('.sf-status') && !e.target.closest('.sf-pri')) closePick(); });
+          document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePick(); });
+          window.addEventListener('resize', closePick);
+
+          /* ── 상세 팝업 ── */
+          function openModal(tr) {
+            curTr = tr;
+            const o = rowObj(tr) || {};
+            elTitle.textContent = (o.feat || tr.querySelector('.sf-text')?.textContent || '(이름 없음)');
+            elKind.textContent = tr.dataset.type || '';
+            elMeta.innerHTML = '<span class="sm-tag">상태 · ' + esc(tr.dataset.status || '') + '</span><span class="sm-tag">중요도 · ' + esc(tr.dataset.pri || '') + '</span>';
+            elMemo.value = o.memo || '';
+            elReqs.value = o.reqs || '';
+            modal.hidden = false;
+            requestAnimationFrame(() => modal.classList.add('show'));
+            setTimeout(() => { try { elMemo.focus(); } catch (e) {} }, 40);
+          }
+          function closeModal() { modal.classList.remove('show'); curTr = null; setTimeout(() => { modal.hidden = true; }, 160); }
+          function saveModal() {
+            if (!curTr) return closeModal();
+            const memo = elMemo.value.trim(), reqs = elReqs.value.trim();
+            if (curTr.dataset.custom) {
+              const o = addedRows().find((x) => x.id === curTr.dataset.id);
+              if (o) { if (memo) o.memo = memo; else delete o.memo; if (reqs) o.reqs = reqs; else delete o.reqs; }
+            } else {
+              const o = specOv(curTr.dataset.id);
+              if (memo) o.memo = memo; else delete o.memo;
+              if (reqs) o.reqs = reqs; else delete o.reqs;
+              if (!Object.keys(o).length) delete SPEC_STORE[curTr.dataset.id];
+            }
+            saveSpec();
+            renderSpec(); /* 메모·요구사항 표시 갱신 */
+            closeModal();
+          }
+
+          body.addEventListener('click', (e) => {
+            const tr = e.target.closest('tr[data-id]'); if (!tr) return;
+            if (e.target.closest('.sf-edit')) { e.stopPropagation(); startEdit(tr); return; }
+            if (e.target.closest('.sf-del')) { e.stopPropagation(); delRow(tr); return; }
+            const stbtn = e.target.closest('.sf-status');
+            if (stbtn) { e.stopPropagation(); openPick(stbtn, SPEC_STATUS.map((s) => ({ val: s[1], label: s[1] })), tr.dataset.status, (v) => setStatus(tr, v)); return; }
+            const prbtn = e.target.closest('.sf-pri');
+            if (prbtn) { e.stopPropagation(); openPick(prbtn, PRI_ORDER.map((k) => ({ val: k, label: PRI_LBL[k] })), tr.dataset.prikey, (v) => setPri(tr, v)); return; }
+            if (tr.hasAttribute('data-editing')) return;          /* 이름 편집 중엔 팝업 안 뜸 */
+            openModal(tr);
+          });
+          document.getElementById('smClose')?.addEventListener('click', closeModal);
+          document.getElementById('smCancel')?.addEventListener('click', closeModal);
+          document.getElementById('smSave')?.addEventListener('click', saveModal);
+          modal?.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+          document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal && !modal.hidden) closeModal(); });
+        })();
+
         /* ── 기능명세서 스크롤 게이트 ──
            항목을 끝까지(맨 아래) 스크롤해 다 읽은 뒤에만 '유저플로우로 넘어가기' 버튼이 나타난다.
            표가 짧아 스크롤이 필요 없으면 바로 노출한다. */
@@ -21916,8 +23649,8 @@ ${parts.html}
           const B = [];
           B.push({ n: '진입 · 인증', color: 'green', kids: [{ n: '로그인' }, G.scale === 'enterprise' ? { n: '사이트 선택' } : { n: '권한 확인' }] });
           B.push({ n: isDT ? '3D 씬 · 종합 현황' : '종합 현황', color: 'teal', kids: [{ n: '메인 대시보드' }, { n: 'KPI 요약' }] });
-          const PG = { realtime: '실시간 계측', alarm: '알람·이벤트', cctv: 'CCTV 영상', asset: '설비 상세', energy: '발전량·에너지', env: '환경 감시' };
-          B.push({ n: '세부 모니터링', color: 'blue', kids: G.features.map((f) => ({ n: PG[f] })) });
+          const tkids = targetLabels().map((n) => ({ n }));
+          B.push({ n: '세부 모니터링', color: 'blue', kids: tkids.length ? tkids : [{ n: '모니터링 대상' }] });
           B.push({ n: '리포트 · 관리', color: 'purple', kids: [{ n: '이력·통계' }, { n: '내보내기' }] });
           return B;
         }
@@ -21930,8 +23663,13 @@ ${parts.html}
         let flowFavOnly = false; /* 즐겨찾기만 보기 */
         let flowQuery = '';      /* 현재 검색어 */
         let flowApi = null;      /* 현재 렌더된 마인드맵 조작 API(툴바에서 사용) */
-        const mmExtra = {};      /* 각 노드에 추가한 자식 기능: 노드 path → [기능명…] */
+        const mmExtra = {};      /* 각 노드에 추가한 자식(메뉴/콘텐츠): 노드 path → [이름…] */
         const mmEdit = {};       /* 인라인으로 수정한 노드 라벨: 노드 path → 새 라벨 */
+        const mmDeleted = new Set(); /* 삭제한 파생 노드: '부모path::원본이름' (파생 노드만; 추가 노드는 mmExtra에서 제거) */
+        /* 노드 = 메뉴. 최상위(첫 노드)는 GNB 메뉴, 그 아래는 하위 메뉴를 추천한다.
+           소수점 두번째(depth 3)부터는 메뉴 안에 들어갈 '콘텐츠'(라이브러리 태그)를 추가한다. */
+        const GNB_MENUS = ['관제 대시보드', '실시간 모니터링', '알람·이벤트', '설비·자산 관리', '리포트·통계', 'CCTV 통합관제', '지도·GIS', '에너지 관리', '점검·정비', '사용자·권한', '시스템 설정', '로그·감사', '대외 연동', '공지사항', '도움말'];
+        const SUBMENU_ITEMS = ['현황 요약', '상세 보기', '목록·이력', '실시간 추이', '통계·분석', '알림 규칙', '검색·필터', '설정', '내보내기', '권한 관리'];
         /* 브랜치(색)별 추가 후보 기능 풀 — reco(앞 2개)는 추천, more는 그 밖의 기능 */
         const FEATURE_POOL = {
           root: {
@@ -21955,33 +23693,107 @@ ${parts.html}
             more: ['일간 리포트', '주간·월간 리포트', 'Excel 내보내기', '이메일 구독', '대시보드 공유 링크', '사용자 관리', '권한 설정', '알람 규칙 관리', '임계값 프로파일', '감사 로그', '데이터 보존 정책', '백업·복원', 'API 키 관리', '연동(Webhook)', '태그 관리', '설비 등록·편집', '리포트 템플릿', '통계 요약', '기간 비교 분석', '다운로드 이력', '스케줄러', '시스템 설정'],
           },
         };
+        /* ── UI 라이브러리 태그(UI 라이브러리_태그항목.xlsx) → 카테고리별 추가 후보 ──
+           노드 '+' 팝오버에서 카테고리별로 골라 추가한다. */
+        const LIBRARY_CATS = [
+          { label: '화면 · 컨셉', items: ['관제 대시보드', '디지털 트윈', '포털', '리포트', '종합 상황', '시스템 현황', '메인 개요', '활용 사례'] },
+          { label: '금융 컨텐츠', items: ['로그인', '계정계', '정보계', '대외채널', '인터넷 뱅킹', '모바일 뱅킹', '거래량', '거래 추이', '초당 처리건수(TPS)', '큐잉', '콜센터', '뱅킹 인프라', '트랜잭션'] },
+          { label: '차트 · 그래프', items: ['라인차트', '바차트', '파이차트', '도넛차트', '게이지차트', '영역차트', '산점도차트', '라이다차트', '방사형차트', '커스텀차트', '데이터그리드', '표', '랭킹 리스트', '리스트', '지도', '미니맵', '타임라인', '이벤트브라우저', '시스템 구성도', '서비스맵', '시점 분석'] },
+          { label: '메뉴 · 내비게이션', items: ['네비게이션 메뉴', 'GNB', '트리메뉴', '사이드바', '메뉴', '검색', '티커 알람', '날짜 시간', '패널', '타이틀바', '아이콘'] },
+          { label: '센서 · 계측', items: ['온도센서', '온습도계', '온습도 전송기', '공기센서', '공기질 모니터', '가스탐지기', '누수탐지기', '수위감지기', '수질감지기', '동작감지센서', '화재감지기', '냄새 감지기', '지진계', '풍력계', '풍속계', '풍량계', '와이파이 센서'] },
+          { label: '공조 · 냉난방', items: ['공조기', '천정 에어컨', '에어컨', '에어컨 실외기', '항온항습기', '냉각기', '냉각탑', '환풍기', '열교환기', '열펌프', '펌프', '공조시스템(HVAC)'] },
+          { label: '전력 · 에너지', items: ['발전기', '발전기 제어반', '인버터', '배터리 모듈', '리튬이온 배터리', 'ESS 에너지저장', '전력변환장치(PCS)', '태양판', '변압기반', '송전탑', '배전반', '무정전 전원장치(UPS)', '차단기', 'VCB반', '고압반', '저압반', '초고압반', '전력 사용량'] },
+          { label: '보안 · 출입통제', items: ['CCTV', 'CCTV Dome', 'CCTV PTZ', 'CCTV 적외선', 'AI CCTV', '열화상카메라', '출입통제시스템', '카드 리더기', '지문인식기', '홍채인식', '얼굴인식', '손인식', '주차관제(LPR)', '스피드게이트', '자동문', '방화벽', 'X-ray 검색대', '검색대', '도난방지기', '차량차단기', '바리케이드', '펜스'] },
+          { label: '소방 · 안전', items: ['소화전', '옥외 소화전', '실내 소화전', '소방호스', '소방 센서', '분말 소화기', 'CO₂ 소화기', '하론 소화기', '방화 셔터', '산소공급기', '심장제세동기(AED)', '비상 벨', '비상 버튼', '비상구', '비상샤워기', '재난 경보', '화재경보기', '경고판'] },
+          { label: '데이터센터 · IT', items: ['서버', '랙', '스토리지', '네트워크', '클라우드', 'CPU', '메모리', '디스크', '상면관리', '네트워크 수신기'] },
+          { label: '3D 오브젝트 · 환경', items: ['표준 부지', '표준 건물', '표준 데이터센터', '드론', '로봇', '무인지게차', '항만', '도크', '컨테이너', '엘리베이터', '에스컬레이터', '차량', '기차', '나무', '물탱크', '기상관측탑', '작업자', '지구', '불 · 화재', '연기', '안개', '파티클', '3D 화살표', '흐름선'] },
+        ];
+        /* ── 이전(부모) 노드에 어울리는 카테고리만 노출하기 위한 관련도 매핑 ──
+           브랜치(색=역할) + 프로젝트 산업군을 함께 보고 어울리는 라이브러리 카테고리를 고른다. */
+        const BRANCH_CATS = {
+          root:   ['화면 · 컨셉', '메뉴 · 내비게이션'],          /* PRD 최상위 메뉴 */
+          green:  ['보안 · 출입통제', '메뉴 · 내비게이션'],       /* 진입 · 인증 */
+          teal:   ['화면 · 컨셉', '차트 · 그래프', '메뉴 · 내비게이션'], /* 종합 현황 */
+          blue:   ['센서 · 계측', '차트 · 그래프', '3D 오브젝트 · 환경'], /* 세부 모니터링 (+산업군) */
+          purple: ['차트 · 그래프', '데이터센터 · IT', '메뉴 · 내비게이션'], /* 리포트 · 관리 */
+        };
+        const INDUSTRY_CATS = {
+          finance:       ['금융 컨텐츠', '차트 · 그래프', '메뉴 · 내비게이션'],
+          manufacturing: ['센서 · 계측', '공조 · 냉난방', '전력 · 에너지', '보안 · 출입통제', '차트 · 그래프'],
+          distribution:  ['보안 · 출입통제', '센서 · 계측', '차트 · 그래프', '메뉴 · 내비게이션'],
+          logistics:     ['3D 오브젝트 · 환경', '보안 · 출입통제', '센서 · 계측', '차트 · 그래프'],
+          power:         ['전력 · 에너지', '센서 · 계측', '3D 오브젝트 · 환경', '차트 · 그래프'],
+          electric:      ['전력 · 에너지', '센서 · 계측', '차트 · 그래프'],
+          public:        ['센서 · 계측', '보안 · 출입통제', '소방 · 안전', '3D 오브젝트 · 환경', '차트 · 그래프'],
+          datacenter:    ['데이터센터 · IT', '공조 · 냉난방', '전력 · 에너지', '센서 · 계측', '차트 · 그래프'],
+          building:      ['공조 · 냉난방', '전력 · 에너지', '보안 · 출입통제', '소방 · 안전', '센서 · 계측'],
+          security:      ['보안 · 출입통제', '소방 · 안전', '센서 · 계측', '3D 오브젝트 · 환경'],
+        };
+        function relevantCats(color) {
+          const set = new Set(BRANCH_CATS[color] || BRANCH_CATS.blue);
+          /* 현황·모니터링·최상위 노드는 프로젝트 산업군에 맞는 카테고리도 포함 */
+          if (color === 'blue' || color === 'teal' || color === 'root') {
+            (G.industries || []).forEach((k) => { (INDUSTRY_CATS[k] || []).forEach((c) => set.add(c)); });
+          }
+          return set;
+        }
         function closeAddMenu() { document.querySelectorAll('.mm-addpop').forEach((p) => p.remove()); }
-        /* '상세 기능 추가' 노드를 누르면 그 브랜치에 맞는 후보 기능들을 팝오버로 나열한다 */
+        /* '상세 기능 추가' 노드를 누르면 라이브러리 태그를 카테고리별로 팝오버에 나열한다.
+           검색으로 좁힐 수 있고, 여러 개를 이어서 추가할 수 있다(추가해도 팝오버 유지). */
         function openAddMenu(phNode) {
           closeAddMenu();
           const parentKey = phNode.dataset.parentKey || '';
           const color = phNode.dataset.color || 'blue';
-          const pool = FEATURE_POOL[color] || FEATURE_POOL.blue;
-          const added = new Set(mmExtra[parentKey] || []);
-          const reco = pool.reco.filter((x) => !added.has(x));
-          const more = pool.more.filter((x) => !added.has(x));
+          const depth = parseInt(phNode.dataset.depth || '0', 10);
+          /* depth 0(첫 노드)=GNB 메뉴, depth 1=하위 메뉴, depth 2+ = 콘텐츠(라이브러리) */
+          const menuMode = depth <= 1;
+          const menuList = depth === 0 ? GNB_MENUS : SUBMENU_ITEMS;
+          const headLabel = menuMode ? (depth === 0 ? '추가할 메뉴 (GNB)' : '추가할 하위 메뉴') : '추가할 콘텐츠';
+          const searchPh = menuMode ? '메뉴 검색' : '콘텐츠 검색 — 예: 차트, CCTV, 센서';
           const pop = document.createElement('div');
-          pop.className = 'mm-addpop';
-          let html = '<div class="mm-addpop-h">추가할 기능 <span>' + (reco.length + more.length) + '개</span></div><div class="mm-addpop-scroll">';
-          if (reco.length) {
-            html += '<div class="mm-addpop-sec">추천</div><div class="mm-addpop-grid">';
-            reco.forEach((x) => { html += '<button type="button" class="mm-addbtn reco" data-f="' + esc(x) + '">' + esc(x) + '<span class="rb">추천</span></button>'; });
-            html += '</div>';
-          }
-          if (more.length) {
-            html += '<div class="mm-addpop-sec">그 밖의 기능</div><div class="mm-addpop-grid">';
-            more.forEach((x) => { html += '<button type="button" class="mm-addbtn" data-f="' + esc(x) + '">' + esc(x) + '</button>'; });
-            html += '</div>';
-          }
-          if (!reco.length && !more.length) html += '<div class="mm-addpop-empty">추가할 수 있는 기능을 모두 넣었어요.</div>';
-          html += '</div>';
-          pop.innerHTML = html;
+          pop.className = 'mm-addpop mm-addpop-lib';
+          const rel = relevantCats(color);
+          let showAll = false;
+          pop.innerHTML =
+            '<div class="mm-addpop-h"><span>' + headLabel + ' <b class="mm-addpop-cnt"></b></span>'
+            + (menuMode ? '' : '<button type="button" class="mm-addpop-all">전체 보기</button>') + '</div>'
+            + '<div class="mm-addpop-search"><input type="text" placeholder="' + searchPh + '" autocomplete="off" /></div>'
+            + '<div class="mm-addpop-scroll"></div>';
           document.body.appendChild(pop);
+          const scroll = pop.querySelector('.mm-addpop-scroll');
+          const cntEl = pop.querySelector('.mm-addpop-cnt');
+          const allBtn = pop.querySelector('.mm-addpop-all');
+          const input = pop.querySelector('.mm-addpop-search input');
+          const sec = (label, items, reco) =>
+            '<div class="mm-addpop-sec">' + esc(label) + '</div><div class="mm-addpop-grid">'
+            + items.map((x) => '<button type="button" class="mm-addbtn' + (reco ? ' reco' : '') + '" data-f="' + esc(x) + '">' + esc(x) + (reco ? '<span class="rb">추천</span>' : '') + '</button>').join('')
+            + '</div>';
+          function draw() {
+            const q = (input.value || '').trim().toLowerCase();
+            const added = new Set(mmExtra[parentKey] || []);
+            const match = (x) => !added.has(x) && (!q || x.toLowerCase().includes(q));
+            let html = '', total = 0;
+            if (menuMode) {
+              /* 메뉴 추천만 (GNB / 하위 메뉴) */
+              const items = menuList.filter(match);
+              if (items.length) { html += sec(depth === 0 ? 'GNB 메뉴' : '하위 메뉴', items, true); total += items.length; }
+            } else {
+              /* 콘텐츠(라이브러리 태그) — 기본은 관련 카테고리, '전체 보기'면 전부 */
+              const cats = showAll ? LIBRARY_CATS : LIBRARY_CATS.filter((c) => rel.has(c.label));
+              const reco = (FEATURE_POOL[color] || FEATURE_POOL.blue).reco.filter(match);
+              if (reco.length) { html += sec('추천', reco, true); total += reco.length; }
+              cats.forEach((cat) => {
+                const items = cat.items.filter(match);
+                if (items.length) { html += sec(cat.label, items, false); total += items.length; }
+              });
+            }
+            if (!total) html = '<div class="mm-addpop-empty">' + (q ? '검색 결과가 없어요.' : '더 추가할 항목이 없어요.') + '</div>';
+            scroll.innerHTML = html;
+            cntEl.textContent = total ? total + '개' : '';
+            if (allBtn) { allBtn.textContent = showAll ? '관련만 보기' : '전체 보기'; allBtn.classList.toggle('on', showAll); }
+          }
+          if (allBtn) allBtn.addEventListener('click', (e) => { e.stopPropagation(); showAll = !showAll; draw(); });
+          draw();
           const r = phNode.getBoundingClientRect();
           const pw = pop.offsetWidth, phh = pop.offsetHeight;
           let x = r.left, y = r.bottom + 8;
@@ -21989,12 +23801,17 @@ ${parts.html}
           if (x < 12) x = 12;
           if (y + phh > window.innerHeight - 12) y = Math.max(12, r.top - phh - 8);
           pop.style.left = x + 'px'; pop.style.top = y + 'px';
-          pop.addEventListener('click', (e) => {
+          input.addEventListener('input', draw);
+          input.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); if (input.value) { input.value = ''; draw(); } else closeAddMenu(); } });
+          scroll.addEventListener('click', (e) => {
             const bb = e.target.closest('.mm-addbtn'); if (!bb) return;
+            /* draw()가 버튼을 교체하면 이 클릭이 바깥 클릭으로 오인돼 팝오버가 닫히므로 전파를 막는다 */
+            e.stopPropagation();
             mmExtra[parentKey] = (mmExtra[parentKey] || []).concat(bb.dataset.f);
-            closeAddMenu();
-            renderFlow();
+            renderFlow();       /* 트리에 반영 */
+            draw();             /* 팝오버는 열어 둔 채 목록만 갱신(연속 추가) */
           });
+          setTimeout(() => { try { input.focus(); } catch (e) {} }, 30);
         }
         document.addEventListener('click', (e) => { if (!e.target.closest('.mm-addpop') && !e.target.closest('.mm-node')) closeAddMenu(); });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAddMenu(); });
@@ -22007,32 +23824,27 @@ ${parts.html}
           const labelFor = (path, def) => (mmEdit[path] != null ? mmEdit[path] : def);
           const typeOf = (d) => (d === 1 ? 'l1' : (d === 2 ? 'l2' : 'l3'));
           const root = mk({ label: labelFor('root', 'PRD'), depth: 0, type: 'root', color: 'root', path: 'root', parentKey: 'root' });
-          /* 파생 자식 + 사용자가 추가한 자식을 재귀적으로 붙인다(모든 노드가 자식을 가질 수 있음) */
+          /* 파생 자식(삭제분 제외) + 사용자가 추가한 자식을 재귀적으로 붙인다 */
           const build = (parent, kids, color, parentPath, depth) => {
-            const base = (kids || []).slice();
-            const all = base.concat((mmExtra[parentPath] || []).map((n) => ({ n })));
-            all.forEach((k, idx) => {
-              const path = parentPath === 'root' ? String(idx + 1) : parentPath + '.' + (idx + 1);
-              const node = mk({ label: labelFor(path, k.n), depth, type: typeOf(depth), color, num: path, path, parentKey: path });
+            const derived = (kids || []).filter((k) => !mmDeleted.has(parentPath + '::' + k.n));
+            const added = (mmExtra[parentPath] || []).map((n) => ({ n, added: true }));
+            derived.concat(added).forEach((k, idx) => {
+              const path = parentPath + '.' + (idx + 1);
+              const node = mk({ label: labelFor(path, k.n), base: k.n, added: !!k.added, depth, type: typeOf(depth), color, num: path, path, parentKey: path });
               parent.children.push(node);
               build(node, k.kids || [], color, path, depth + 1);
             });
           };
-          branches.forEach((b, i) => {
-            const path = String(i + 1);
-            const l1 = mk({ label: labelFor(path, b.n), depth: 1, type: 'l1', color: b.color, num: path, path, parentKey: path });
-            root.children.push(l1);
-            build(l1, b.kids || [], b.color, path, 2);
-          });
-          /* 루트(PRD)에 사용자가 추가한 최상위 메뉴(브랜치) */
+          /* 최상위 메뉴(브랜치) = 파생(삭제분 제외) + 사용자가 루트에 추가한 메뉴 */
           const PALETTE = ['green', 'teal', 'blue', 'purple'];
-          (mmExtra['root'] || []).forEach((fx, m) => {
-            const idx = branches.length + m;
-            const path = String(idx + 1);
-            const color = PALETTE[idx % PALETTE.length];
-            const l1 = mk({ label: labelFor(path, fx), depth: 1, type: 'l1', color, num: path, path, parentKey: path });
+          const rootDerived = branches.filter((b) => !mmDeleted.has('root::' + b.n));
+          const rootAdded = (mmExtra['root'] || []).map((n) => ({ n, added: true, color: null }));
+          rootDerived.concat(rootAdded).forEach((b, i) => {
+            const path = String(i + 1);
+            const color = b.color || PALETTE[i % PALETTE.length];
+            const l1 = mk({ label: labelFor(path, b.n), base: b.n, added: !!b.added, depth: 1, type: 'l1', color, num: path, path, parentKey: path });
             root.children.push(l1);
-            build(l1, [], color, path, 2);
+            build(l1, b.kids || [], color, path, 2);
           });
           const ROW = 50, COLX = [0, 320, 660, 1000, 1340, 1680, 2020];
           const colOf = (d) => (COLX[d] != null ? COLX[d] : d * 340);
@@ -22057,14 +23869,18 @@ ${parts.html}
             d.dataset.bx = bx; d.dataset.by = by; d.dataset.label = nd.label; d.dataset.path = nd.path;
             d.dataset.color = nd.color || 'blue';
             d.dataset.parentKey = nd.parentKey || nd.path;
+            d.dataset.depth = nd.depth;
+            if (nd.base != null) d.dataset.base = nd.base;
+            if (nd.added) d.dataset.added = '1';
             if (nd.type === 'root') {
-              /* 뱃지는 프로젝트명. 제목(PRD)은 클릭해 수정 가능, +로 상위 메뉴 추가 */
+              /* 뱃지는 프로젝트명. 제목(PRD)은 클릭해 수정 가능, +로 GNB 상위 메뉴 추가 */
               const projName = (G.site && G.site.trim()) || '새 프로젝트';
-              d.innerHTML = '<span class="mm-t">' + esc(nd.label) + '</span><span class="mm-badge">✦ ' + esc(projName) + '</span><span class="mm-add" title="상위 메뉴 추가">+</span>';
+              d.innerHTML = '<span class="mm-t">' + esc(nd.label) + '</span><span class="mm-badge">✦ ' + esc(projName) + '</span><span class="mm-add" title="GNB 메뉴 추가">+</span>';
             } else {
               const fav = mmFav.has(nd.path);
               if (fav) d.classList.add('mm-fav');
-              d.innerHTML = '<span class="mm-t">' + esc(nd.label) + '</span>' + (nd.num ? '<span class="mm-num">' + nd.num + '</span>' : '') + '<span class="mm-star" title="즐겨찾기">' + (fav ? '★' : '☆') + '</span><span class="mm-add" title="세부 기능 추가">+</span>';
+              const addTitle = nd.depth <= 1 ? '하위 메뉴 추가' : '콘텐츠 추가';
+              d.innerHTML = '<span class="mm-t">' + esc(nd.label) + '</span>' + (nd.num ? '<span class="mm-num">' + nd.num + '</span>' : '') + '<span class="mm-star" title="즐겨찾기">' + (fav ? '★' : '☆') + '</span><span class="mm-add" title="' + addTitle + '">+</span><span class="mm-del" title="이 노드 삭제">×</span>';
             }
             board.appendChild(d); el[nd.id] = d;
           });
@@ -22126,6 +23942,18 @@ ${parts.html}
             else { mmFav.add(path); node.classList.add('mm-fav'); if (star) star.textContent = '★'; }
             if (flowFavOnly) applyVisibility();
           }
+          /* 노드 삭제 — 추가 노드는 mmExtra에서 제거, 파생 노드는 mmDeleted에 표시(자식도 함께 사라짐) */
+          function deleteNode(node) {
+            const P = node.dataset.path;
+            if (!P || P === 'root') return;
+            const base = node.dataset.base != null ? node.dataset.base : node.dataset.label;
+            const parts = P.split('.');
+            const PP = parts.length === 1 ? 'root' : parts.slice(0, -1).join('.');
+            if (node.dataset.added) mmExtra[PP] = (mmExtra[PP] || []).filter((x) => x !== base);
+            else mmDeleted.add(PP + '::' + base);
+            closeAddMenu();
+            renderFlow();
+          }
           /* 텍스트 클릭 → 그 자리에서 라벨 수정 */
           function startEdit(node) {
             const t = node.querySelector('.mm-t'); if (!t) return;
@@ -22156,7 +23984,10 @@ ${parts.html}
             /* 별 클릭 → 즐겨찾기 토글 */
             const star = e.target.closest('.mm-star');
             if (star) { e.preventDefault(); const node = star.closest('.mm-node'); if (node) toggleFav(node); return; }
-            /* + 클릭 → 그 노드에 맞는 후보 기능 팝오버 */
+            /* × 클릭 → 노드 삭제 */
+            const del = e.target.closest('.mm-del');
+            if (del) { e.preventDefault(); const node = del.closest('.mm-node'); if (node) deleteNode(node); return; }
+            /* + 클릭 → 그 노드에 맞는 후보(메뉴/콘텐츠) 팝오버 */
             const add = e.target.closest('.mm-add');
             if (add) { e.preventDefault(); const node = add.closest('.mm-node'); if (node) openAddMenu(node); return; }
             const nd = e.target.closest('.mm-node'); if (!nd) return;
@@ -22378,13 +24209,13 @@ ${parts.html}
         function recoIds() {
           const L = window.__WEMBLayouts; const out = {};
           if (!L) return out;
-          const nf = G.features.length;
+          const nf = (G.targets || []).length;
           const rIdx = nf <= 2 ? 0 : (nf <= 4 ? 1 : 2);
           const pick = (sets, fam) => { const a = sets[fam]; return a && a.length ? a[Math.min(rIdx, a.length - 1)].id : null; };
           const dashFamily = G.scale === 'single' ? 'g2' : (G.scale === 'enterprise' ? 'mod' : 'g3');
           const dtFamily = G.scale === 'single' ? 'dt2' : (G.scale === 'enterprise' ? 'dt4' : 'dt3');
-          if (G.screen === 'dash' || G.screen === 'both') out.dash = pick(L.LAYOUTS, dashFamily);
-          if (G.screen === 'dt' || G.screen === 'both') out.dt = pick(L.DT_LAYOUTS, dtFamily);
+          if (G.screen === 'dash') out.dash = pick(L.LAYOUTS, dashFamily);
+          if (G.screen === 'dt') out.dt = pick(L.DT_LAYOUTS, dtFamily);
           return out;
         }
         let selected = null;
@@ -22395,11 +24226,11 @@ ${parts.html}
           wrap.innerHTML = ''; selected = null;
           if (startBtn) startBtn.disabled = true;
           const recos = recoIds();
-          const both = G.screen === 'both';
+          const both = false; /* '둘 다' 옵션 제거 — 단일 화면 종류만 */
           /* 화면 종류에 맞는 카테고리 세트: 대시보드=2단/3단/모듈, 디지털 트윈=2·3·4레벨 */
           const sections = [];
-          if (G.screen === 'dash' || both) sections.push({ screen: 'dash', groups: L.GROUPS, sets: L.LAYOUTS, recoId: recos.dash });
-          if (G.screen === 'dt' || both) sections.push({ screen: 'dt', groups: L.DT_GROUPS, sets: L.DT_LAYOUTS, recoId: recos.dt });
+          if (G.screen === 'dash') sections.push({ screen: 'dash', groups: L.GROUPS, sets: L.LAYOUTS, recoId: recos.dash });
+          if (G.screen === 'dt') sections.push({ screen: 'dt', groups: L.DT_GROUPS, sets: L.DT_LAYOUTS, recoId: recos.dt });
 
           const pickCard = (card, screen, lay, announce) => {
             wrap.querySelectorAll('.wreco').forEach((x) => x.classList.remove('on'));
@@ -22443,7 +24274,6 @@ ${parts.html}
               wrap.appendChild(cat);
             });
           });
-          const s = document.getElementById('wireSummary'); if (s) s.innerHTML = summaryHTML('카테고리별 전체 레이아웃이에요. <b>추천</b> 배지가 규모·항목에 맞춘 1순위이고, 어떤 것이든 골라 스튜디오에 반영할 수 있어요.');
         }
 
         /* ── 단계별 진행(스텝) ──
@@ -22454,12 +24284,13 @@ ${parts.html}
         const STEP_LS = 'wemb-step';
         let maxStep = (() => { try { return Math.max(0, parseInt(localStorage.getItem(STEP_LS), 10) || 0); } catch (e) { return 0; } })();
         const saveStep = () => { try { localStorage.setItem(STEP_LS, String(maxStep)); } catch (e) {} };
-        /* PRD '전체 완료' = 이름 + 모든 문항(화면·규모·모니터링 1개 이상·운영·접근성)을 다 골랐을 때 */
+        /* PRD '전체 완료' = 이름 + 모든 문항(화면·규모·산업군·모니터링 대상 1개 이상·운영)을 다 골랐을 때 */
         const prdComplete = () =>
           !!(G.site && G.site.trim()) &&
           !!G.screen && !!G.scale &&
-          Array.isArray(G.features) && G.features.length > 0 &&
-          !!G.ops && !!G.a11y;
+          Array.isArray(G.industries) && G.industries.length > 0 &&
+          Array.isArray(G.targets) && G.targets.length > 0 &&
+          !!G.ops;
         /* 탭 잠금 해제는 오직 '다음 단계로' 버튼을 눌러 advanceStep 했을 때만.
            PRD를 다 채워도(=prdComplete) 기능명세서 탭은 열리지 않고, '기능명세서 자동 생성' 버튼만 활성화된다. */
         const unlocked = () => maxStep;
@@ -22480,8 +24311,8 @@ ${parts.html}
         }
         function advanceStep(i) { if (i > maxStep) { maxStep = i; saveStep(); } refreshSteps(); }
         /* 새 프로젝트 시작 시 PRD를 '아무것도 선택 안 된' 빈 상태로 초기화한다 */
-        const EMPTY_PRD = { site: '', screen: '', scale: '', features: [], ops: '', a11y: '' };
-        window.__wembPrdReset = () => { G = Object.assign({}, EMPTY_PRD, { features: [] }); save(); paintForm(); };
+        const EMPTY_PRD = { site: '', screen: '', scale: '', industries: [], targets: [], ops: '' };
+        window.__wembPrdReset = () => { G = Object.assign({}, EMPTY_PRD, { industries: [], targets: [] }); save(); try { localStorage.removeItem('wemb-current-proj'); } catch (e) {} paintForm(); };
         window.__wembStep = {
           advance: advanceStep,
           reset: () => { maxStep = 0; saveStep(); refreshSteps(); },
@@ -22490,6 +24321,132 @@ ${parts.html}
         };
         /* 유저플로우의 상위 메뉴(브랜치) 이름 — 스튜디오 상단 내비게이션에 반영 */
         window.__WEMBFlowMenu = () => deriveTree().map((b) => b.n);
+
+        /* ── PRD 스텝 위저드(모달 팝업) ──
+           프로젝트명 → 화면 → 관제 대상 → 모니터링 유형(산업군) → 모니터링 대상(연동) → 운영 환경.
+           한 스텝씩 진행하며 마지막에 기능명세서를 생성한다. */
+        const WIZ_STEPS = [
+          { key: 'site', kind: 'text', title: '프로젝트 이름을 알려주세요', hint: '기능명세서·화면 제목에 사용돼요.', placeholder: '예: 당진화력 통합관제' },
+          { key: 'screen', kind: 'single', title: '어떤 화면을 만드나요?', hint: '', opts: [
+            ['dash', '관제 대시보드', '패널·차트 중심의 상황판'],
+            ['dt', '디지털 트윈', '3D 씬 위 유리 패널'],
+            ['portal', '포탈', '현재 준비 중', true],
+          ] },
+          { key: 'scale', kind: 'single', title: '관제 대상 규모는 어느 정도인가요?', hint: '', opts: [
+            ['single', '단일 설비', '한 대상에 집중'],
+            ['multi', '다중 설비·구역', '여러 설비를 한눈에'],
+            ['enterprise', '전사·다중 사이트', '통합 관제'],
+          ] },
+          { key: 'industries', kind: 'multi', title: '어떤 산업군을 관제하나요?', hint: '모니터링 유형 (여러 개 선택 가능)', opts: Object.keys(INDUSTRIES).map((k) => [k, INDUSTRIES[k].label]) },
+          { key: 'targets', kind: 'multi', title: '무엇을 모니터링하나요?', hint: '여러 개 선택', dynamic: true },
+          { key: 'ops', kind: 'single', title: '어떤 환경에서 운영하나요?', hint: '', opts: [
+            ['central', '대형 화면 상시 관제'],
+            ['normal', 'PC 화면 모니터링'],
+          ] },
+        ];
+        (function initPrdWiz() {
+          const modal = document.getElementById('prdWiz'); if (!modal) return;
+          const elDots = document.getElementById('pwDots');
+          const elStepNo = document.getElementById('pwStepNo');
+          const elTitle = document.getElementById('pwTitle');
+          const elHint = document.getElementById('pwHint');
+          const elField = document.getElementById('pwField');
+          const elCount = document.getElementById('pwCount');
+          const btnPrev = document.getElementById('pwPrev');
+          const btnNext = document.getElementById('pwNext');
+          let idx = 0, open = false;
+
+          const stepOpts = (st) => st.dynamic ? industryTargetOpts().map((lbl) => [lbl, lbl]) : (st.opts || []);
+          function stepAnswered(i) {
+            const st = WIZ_STEPS[i];
+            if (st.kind === 'text') return !!(G.site && G.site.trim());
+            if (st.kind === 'multi') return Array.isArray(G[st.key]) && G[st.key].length > 0;
+            return !!G[st.key];
+          }
+          function renderDots() {
+            elDots.innerHTML = WIZ_STEPS.map((s, i) => '<i class="' + (i === idx ? 'on' : (stepAnswered(i) ? 'done' : '')) + '"></i>').join('');
+          }
+          function renderField() {
+            const st = WIZ_STEPS[idx];
+            elField.innerHTML = '';
+            if (st.kind === 'text') {
+              const inp = document.createElement('input');
+              inp.className = 'pq-text'; inp.type = 'text'; inp.maxLength = 40;
+              inp.placeholder = st.placeholder || ''; inp.value = G.site || '';
+              inp.addEventListener('input', () => { G.site = inp.value.trim(); save(); syncFoot(); renderDots(); });
+              inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (stepAnswered(idx)) goNext(); } });
+              elField.appendChild(inp);
+              setTimeout(() => { try { inp.focus(); } catch (e) {} }, 40);
+              return;
+            }
+            const opts = stepOpts(st);
+            const wrap = document.createElement('div');
+            wrap.className = 'pq-opts' + (st.kind === 'multi' ? ' pq-multi' : '');
+            if (!opts.length) { wrap.innerHTML = '<small style="color:var(--text-weak)">먼저 산업군을 골라 주세요.</small>'; }
+            opts.forEach(([v, label, desc, locked]) => {
+              const b = document.createElement('button');
+              b.type = 'button';
+              b.className = 'pq-opt';
+              const on = st.kind === 'multi' ? (G[st.key] || []).includes(v) : G[st.key] === v;
+              if (on) b.classList.add('on');
+              if (locked) b.classList.add('locked');
+              b.innerHTML = '<b>' + esc(label) + '</b>' + (desc ? '<small>' + esc(desc) + '</small>' : '') + (locked ? '<span class="pq-lock">🔒 잠금</span>' : '');
+              b.addEventListener('click', () => {
+                if (locked) { if (typeof toast === 'function') toast('포탈은 현재 준비 중이에요.', { type: 'info' }); return; }
+                if (st.kind === 'multi') {
+                  const arr = G[st.key] = Array.isArray(G[st.key]) ? G[st.key] : [];
+                  const p = arr.indexOf(v); if (p >= 0) arr.splice(p, 1); else arr.push(v);
+                  /* 산업군 선택이 바뀌면, 더 이상 유효하지 않은 모니터링 대상은 걸러낸다 */
+                  if (st.key === 'industries') { const valid = new Set(industryTargetOpts()); G.targets = (G.targets || []).filter((t) => valid.has(t)); }
+                } else {
+                  G[st.key] = v;
+                }
+                save(); renderField(); renderDots(); syncFoot(); paintForm();
+              });
+              wrap.appendChild(b);
+            });
+            elField.appendChild(wrap);
+          }
+          function syncFoot() {
+            const last = idx === WIZ_STEPS.length - 1;
+            btnPrev.disabled = idx === 0;
+            btnNext.textContent = last ? '기능명세서 생성 →' : '다음';
+            btnNext.disabled = !stepAnswered(idx);
+            elCount.textContent = (idx + 1) + ' / ' + WIZ_STEPS.length;
+          }
+          function paintStep() {
+            const st = WIZ_STEPS[idx];
+            elStepNo.textContent = 'STEP ' + (idx + 1);
+            elTitle.textContent = st.title;
+            elHint.textContent = st.hint || '';
+            renderField(); renderDots(); syncFoot();
+          }
+          function firstUnanswered() { for (let i = 0; i < WIZ_STEPS.length; i++) if (!stepAnswered(i)) return i; return 0; }
+          function openWiz(start) {
+            idx = typeof start === 'number' ? start : firstUnanswered();
+            open = true; modal.hidden = false;
+            requestAnimationFrame(() => modal.classList.add('show'));
+            paintStep();
+          }
+          function closeWiz() { open = false; modal.classList.remove('show'); setTimeout(() => { modal.hidden = true; }, 180); }
+          function goNext() {
+            if (!stepAnswered(idx)) return;
+            if (idx < WIZ_STEPS.length - 1) { idx++; paintStep(); return; }
+            /* 마지막 스텝 → 기능명세서 생성 */
+            closeWiz();
+            if (prdComplete()) { advanceStep(1); if (window.__setPage) window.__setPage('spec'); }
+          }
+          function goPrev() { if (idx > 0) { idx--; paintStep(); } }
+          btnNext.addEventListener('click', goNext);
+          btnPrev.addEventListener('click', goPrev);
+          document.getElementById('pwClose')?.addEventListener('click', closeWiz);
+          modal.addEventListener('click', (e) => { if (e.target === modal) closeWiz(); });
+          document.addEventListener('keydown', (e) => { if (open && e.key === 'Escape') closeWiz(); });
+          window.__prdWizOpen = openWiz;
+          window.__prdWizIsOpen = () => open;
+        })();
+        document.getElementById('prdEdit')?.addEventListener('click', () => { if (window.__prdWizOpen) window.__prdWizOpen(); });
+        document.getElementById('prdSummary')?.addEventListener('click', () => { if (window.__prdWizOpen) window.__prdWizOpen(); });
 
         /* ── 버튼 · 페이지 전환 배선 ── */
         document.getElementById('prdGen')?.addEventListener('click', () => {
@@ -22510,6 +24467,8 @@ ${parts.html}
           if (L.setProjectName) L.setProjectName(G.site || '새 프로젝트');
           const tbProj = document.getElementById('tbProj'); if (tbProj) tbProj.textContent = G.site ? '· ' + G.site : '';
           advanceStep(4);
+          /* 만든 프로젝트를 스튜디오 홈(런처) 목록에 쌓아 둔다(캐시를 지우지 않는 한 유지) */
+          try { if (L.saveGuideProject) L.saveGuideProject({ name: G.site || '새 프로젝트', screen: selected.screen, layout: selected.layoutId }); } catch (e) {}
           L.enterStudio(selected.screen, selected.layoutId);
           if (window.__setPage) window.__setPage('wire');
           if (typeof toast === 'function') toast('추천 구성(' + SCREEN_LBL[selected.screen] + ' · ' + selected.name + ')을 스튜디오에 반영했어요.', { type: 'info' });
@@ -22517,7 +24476,12 @@ ${parts.html}
 
         /* 각 탭을 열 때 최신 답변으로 다시 그린다 (setPage에서 호출) */
         window.__guideOnPage = (page) => {
-          if (page === 'prd') paintForm();
+          if (page === 'prd') {
+            paintForm();
+            /* PRD 진입 시 아직 미완성이고 런처가 덮여 있지 않으면 스텝 위저드를 자동으로 연다 */
+            const homeShown = !!document.getElementById('flowHome')?.classList.contains('show');
+            if (!prdComplete() && !homeShown && window.__prdWizOpen && !(window.__prdWizIsOpen && window.__prdWizIsOpen())) window.__prdWizOpen();
+          }
           else if (page === 'spec') renderSpec();
           else if (page === 'flow') renderFlow();
           else if (page === 'wireframe') renderWire();
@@ -22579,14 +24543,12 @@ ${parts.html}
           const b = e.target.closest('.tb-tab');
           if (b) setPage(b.dataset.page);
         });
-        /* 상단 좌측 브랜드 클릭 → 로고는 스튜디오 홈(런처), 이름은 스튜디오 페이지 (프로젝트명은 제외) */
+        /* 상단 좌측 브랜드 클릭 → 로고(tb-mark)만 스튜디오 홈(런처)으로.
+           'Studio' 이름 글씨·프로젝트명 클릭은 아무 동작도 하지 않는다(스튜디오로 튀지 않게). */
         document.querySelector('.tb-left')?.addEventListener('click', (e) => {
-          if (e.target.closest('.tb-proj')) return;
           if (e.target.closest('.tb-mark')) {
             document.getElementById('quickHome')?.click();
-            return;
           }
-          setPage('wire');
         });
         /* 상단 우측 액션 → 기존 버튼 프록시 */
         document.querySelector('.tb-actions')?.addEventListener('click', (e) => {
@@ -22627,6 +24589,29 @@ ${parts.html}
           const s = document.getElementById(id);
           if (s && s.tagName === 'DETAILS') s.open = true;
         }
+        /* ── 테마 만들기 단계 이동(이전/다음) ──
+           각 단계 카드 하단에 '이전 · 다음' 버튼을 넣는다. '다음'은 그 단계를 한 번이라도
+           조작(옵션 클릭)하면 나타난다. 마지막(내보내기)엔 다음 없음, 첫(화면 정하기)엔 이전 없음. */
+        const THEME_STEPS = [['screen', 'stepScreen'], ['color', 'stepColor'], ['verify', 'stepVerify'], ['save', 'stepSave'], ['export', 'stepExport']];
+        (function initThemeNav() {
+          THEME_STEPS.forEach(([sec, id], i) => {
+            const card = document.getElementById(id); if (!card) return;
+            if (card.querySelector(':scope > .stepnav')) return;
+            const nav = document.createElement('div');
+            nav.className = 'stepnav';
+            nav.innerHTML = '<button type="button" class="snav-prev">← 이전</button><button type="button" class="snav-next snav-hidden">다음 →</button>';
+            card.appendChild(nav);
+            const prev = nav.querySelector('.snav-prev'), next = nav.querySelector('.snav-next');
+            if (i === 0) prev.style.visibility = 'hidden';
+            if (i === THEME_STEPS.length - 1) next.style.display = 'none';
+            prev.addEventListener('click', (e) => { e.preventDefault(); const p = THEME_STEPS[i - 1]; if (p) showStep(p[0], p[1]); });
+            next.addEventListener('click', (e) => { e.preventDefault(); const n = THEME_STEPS[i + 1]; if (n) showStep(n[0], n[1]); });
+            /* 단계 안을 조작하면 '다음' 노출 (버튼 자신·이전/다음 클릭은 제외) */
+            const reveal = (e) => { if (e.isTrusted && !e.target.closest('.stepnav')) next.classList.remove('snav-hidden'); };
+            card.addEventListener('click', reveal, true);
+            card.addEventListener('change', reveal, true);
+          });
+        })();
         function openLayoutGroup(label) {
           showSection('layout');
           document.querySelectorAll('#layList .laygrp').forEach((h) => {
@@ -22640,10 +24625,7 @@ ${parts.html}
         }
         const clickId = (id) => document.getElementById(id)?.click();
         const RAIL_MENUS = {
-          home: [
-            { label: '스튜디오 홈', icon: IC.home, run: () => clickId('quickHome') },
-            { label: '새 프로젝트', icon: IC.plus, run: () => clickId('newProject') },
-          ],
+          /* 홈은 메뉴 없이 곧바로 런처로 이동하므로 여기 항목이 없다(레일 클릭 핸들러에서 직접 처리) */
           theme: [
             { label: '화면 정하기', icon: IC.screen, run: () => showStep('screen', 'stepScreen') },
             { label: '색 정하기', icon: IC.palette, run: () => showStep('color', 'stepColor') },
@@ -22652,7 +24634,7 @@ ${parts.html}
             { label: '내보내기', icon: IC.upload, run: () => showStep('export', 'stepExport') },
           ],
           dash: [
-            { label: '화면 구성', icon: IC.columns, run: () => showSection('dash-compose') },
+            { label: '레이아웃', icon: IC.layout, run: () => showSection('layout') },
             { label: '콘텐츠 패널 추가', icon: IC.addpanel, run: () => showSection('dash-panels') },
             { label: '배치 · 내용 수정', icon: IC.move, run: () => showSection('dash-edit') },
             { label: '디자인 편집', icon: IC.sliders, run: () => showSection('dash-design') },
@@ -22718,6 +24700,8 @@ ${parts.html}
           if (!b) return;
           const key = b.dataset.rail;
           if (key === 'collapse') { closeFly(); app.classList.toggle('collapsed'); return; }
+          /* 홈 버튼은 메뉴 없이 곧바로 스튜디오 홈(런처)으로 이동 */
+          if (key === 'home') { closeFly(); document.getElementById('quickHome')?.click(); return; }
           if (flyOpenFor === key) { closeFly(); return; }
           openFly(b, key);
         });
@@ -22740,8 +24724,8 @@ ${parts.html}
         bn?.addEventListener('input', syncProj);
         syncProj();
 
-        /* 초기 옵션창은 '색 정하기' 섹션만 노출 — 이후 rail 메뉴로 섹션을 바꾼다 */
-        showStep('color', 'stepColor');
+        /* 초기 옵션창은 '화면 정하기' 섹션부터 노출 — 이후 rail 메뉴로 섹션을 바꾼다 */
+        showStep('screen', 'stepScreen');
 
         /* 초기 페이지 = 스튜디오. flyEl 등 플라이아웃 상태가 초기화된 뒤(이 위치)에 호출해야
            setPage 안의 closeFly()가 TDZ 에러를 내지 않는다(레일 메뉴가 죽던 원인). */
