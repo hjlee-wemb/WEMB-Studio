@@ -7532,7 +7532,10 @@
         will-change: transform;
       }
       .wfpanel {
-        position: absolute;
+        /* 반드시 절대배치 유지 — 콘텐츠가 담긴 패널은 .panel 클래스가 붙는데,
+           .panel의 position:relative가 이를 덮으면 패널들이 좌표 대신 문서 흐름으로 쌓여
+           레이아웃(썸네일)과 다르게 나온다. !important로 좌표 배치를 보장한다. */
+        position: absolute !important;
         background: var(--panel-bg, var(--bg-surface));
         border: var(--panel-border-w, 1px) solid var(--line);
         border-radius: var(--radius-panel);
