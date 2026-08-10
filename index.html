@@ -19250,6 +19250,16 @@
         };
         /* 창 크기가 바뀌면 활성 DT 레이아웃 보드를 다시 맞춘다 */
         window.addEventListener('resize', () => { if (dtLayoutWf) fitBoard(wfCanvasDt); });
+        /* 캔버스 자체 크기가 바뀔 때(스튜디오 진입 전환·사이드바 접기·처음 표시 등)마다 보드를 다시 맞춘다.
+           — 렌더 시점에 캔버스가 아직 최종 크기가 아니면 축소 배율이 어긋나 레이아웃이 이상하게 나오던 문제 해결. */
+        if (typeof ResizeObserver === 'function') {
+          const ro = new ResizeObserver(() => {
+            if (wfCanvas && wfCanvas.__board && !wfCanvas.hidden) fitBoard(wfCanvas);
+            if (wfCanvasDt && wfCanvasDt.__board && !wfCanvasDt.hidden) fitBoard(wfCanvasDt);
+          });
+          if (wfCanvas) ro.observe(wfCanvas);
+          if (wfCanvasDt) ro.observe(wfCanvasDt);
+        }
         function applyLayout() {
           applyDash();
           applyDt();
