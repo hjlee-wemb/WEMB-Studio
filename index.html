@@ -19183,21 +19183,18 @@
             el.style.animationDelay = (i * 0.025).toFixed(3) + 's';
             const kind = kindFor(q[2], q[3], i);
             const fit = mk('div', 'wffit');
+            /* PRD 답변 기반 제목 — 실제(리치) 콘텐츠는 그대로 쓰고 제목만 모니터링 대상으로 바꾼다 */
             const title = (wf.titles && wf.titles.length) ? wf.titles[i % wf.titles.length] : null;
-            if (title != null) {
-              /* PRD 답변 기반 — 패널마다 모니터링 대상 제목 + 크기에 맞는 시각화(콘텐츠) 생성 */
-              fit.innerHTML = (kind === 'strip' ? '' : titledHead(title)) + '<div class="wfbody">' + content(kind, q[2], q[3]) + '</div>';
+            const real = realFor(kind, q[2]);
+            if (real && real.kpi) {
+              el.classList.add('kpibox');
+              fit.appendChild(real.el);
+            } else if (real) {
+              el.classList.add('panel'); /* 실제 .ph/.pbody 스타일이 그대로 먹도록 */
+              while (real.el.firstChild) fit.appendChild(real.el.firstChild);
+              if (title != null) { const h = fit.querySelector('.ph h3'); if (h) h.textContent = title; }
             } else {
-              const real = realFor(kind, q[2]);
-              if (real && real.kpi) {
-                el.classList.add('kpibox');
-                fit.appendChild(real.el);
-              } else if (real) {
-                el.classList.add('panel'); /* 실제 .ph/.pbody 스타일이 그대로 먹도록 */
-                while (real.el.firstChild) fit.appendChild(real.el.firstChild);
-              } else {
-                fit.innerHTML = (kind === 'strip' ? '' : head()) + '<div class="wfbody">' + content(kind, q[2], q[3]) + '</div>';
-              }
+              fit.innerHTML = (kind === 'strip' ? '' : (title != null ? titledHead(title) : head())) + '<div class="wfbody">' + content(kind, q[2], q[3]) + '</div>';
             }
             el.appendChild(fit);
             board.appendChild(el);
