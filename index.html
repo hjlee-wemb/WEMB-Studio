@@ -16175,6 +16175,8 @@
         }
         /* 화면 만들기 — 종류에 맞춰 그리드/와이어프레임 선택 UI를 갱신한다. */
         if (window.__refreshScreenBuilder) window.__refreshScreenBuilder();
+        /* 레이아웃 목록도 화면 종류(대시보드/디지털 트윈)에 맞게 다시 구성한다. */
+        if (window.__syncSideLayout) window.__syncSideLayout();
         try {
           localStorage.setItem('wemb-screen', s);
         } catch (e) {}
@@ -23087,11 +23089,15 @@ ${parts.html}
           });
           return svg;
         }
-        function buildSideLayouts() {
+        function buildSideLayouts(screen) {
           const list = document.getElementById('layList');
           if (!list) return;
+          const scr = screen || (typeof state !== 'undefined' && state.screen ? state.screen : 'dash');
+          const isDt = scr === 'dt';
+          const groups = groupsFor(scr);
+          const sets = layoutsFor(scr);
           list.innerHTML = '';
-          GROUPS.forEach((grp) => {
+          groups.forEach((grp) => {
             const sec = document.createElement('div');
             sec.className = 'laygrp-sec';
             /* 카테고리 헤더 — 접기/펴기 + 유일한 화살표 */
@@ -23107,7 +23113,7 @@ ${parts.html}
             lbl.textContent = grp.label;
             const cnt = document.createElement('span');
             cnt.className = 'laygrp-count';
-            cnt.textContent = LAYOUTS[grp.key].length + '종';
+            cnt.textContent = sets[grp.key].length + '종';
             header.appendChild(chev);
             header.appendChild(lbl);
             header.appendChild(cnt);
@@ -23115,7 +23121,7 @@ ${parts.html}
             const rows = document.createElement('div');
             rows.className = 'laygrp-rows';
             rows.hidden = true;
-            LAYOUTS[grp.key].forEach((lay) => {
+            sets[grp.key].forEach((lay) => {
               const row = document.createElement('button');
               row.type = 'button';
               row.className = 'fignav-row';
@@ -23136,7 +23142,9 @@ ${parts.html}
               row.appendChild(ic); /* 화살표 없음 — 아이콘 + 제목·설명만 */
               row.appendChild(txt);
               row.onclick = () => {
-                applyDashLayout(lay.id);
+                /* 디지털 트윈이면 3D 씬 위 유리 패널 배치로, 대시보드면 패널 그리드로 반영 */
+                if (isDt) { if (window.__applyDtLayout) window.__applyDtLayout(findLayout(lay.id)); }
+                else applyDashLayout(lay.id);
                 try {
                   localStorage.setItem('wemb-layout', lay.id);
                 } catch (e) {}
@@ -23170,9 +23178,9 @@ ${parts.html}
         function syncSideLayout() {
           const sec = document.getElementById('sideLayoutSec');
           if (!sec) return;
-          const isDash = typeof state === 'undefined' || state.screen === 'dash';
-          sec.hidden = !isDash;
-          if (isDash) markSideLayout();
+          sec.hidden = false; /* 대시보드·디지털 트윈 모두 레이아웃 사용 */
+          const scr = (typeof state !== 'undefined' && state.screen) ? state.screen : 'dash';
+          buildSideLayouts(scr); /* 화면 종류에 맞는 레이아웃 목록으로 다시 구성 */
         }
         buildSideLayouts();
         window.__syncSideLayout = syncSideLayout;
