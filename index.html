@@ -19239,8 +19239,11 @@
         let dtLayoutWf = null;
         function gridToWf(lay) {
           if (!lay || !lay.cells || !lay.cells.length) return null;
-          const CW = 1920, CH = 1080, gap = 26;
-          const cw = CW / lay.cols, ch = CH / lay.rows;
+          /* 셀 폭을 실제 대시보드 패널 폭(≈421+여백)에 고정 → 열 수가 달라도 콘텐츠-패널 폭 비율이
+             대시보드와 동일하게 유지된다(기존엔 1920/열이라 3열이면 셀이 너무 넓어 글자가 작아 보였음).
+             높이는 그리드 행수로 정규화(1080)해 촘촘한 그리드에서 보드가 지나치게 길어지지 않게 한다. */
+          const CH = 1080, gap = 26;
+          const cw = 448, ch = CH / lay.rows;
           const p = lay.cells.map(([x, y, w, h]) => [
             Math.round((x - 1) * cw + gap),
             Math.round((y - 1) * ch + gap),
