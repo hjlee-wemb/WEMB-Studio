@@ -7599,6 +7599,20 @@
         border-radius: 3px;
         background: color-mix(in srgb, var(--text-strong) 50%, transparent);
       }
+      /* PRD 제목 텍스트 — 실제 글자로 표시(플레이스홀더 바 대신) */
+      .wfhead .t.tx {
+        height: auto;
+        width: auto;
+        max-width: 100%;
+        background: none;
+        border-radius: 0;
+        color: var(--text-strong);
+        font: 700 15px var(--font);
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       .wfbody {
         flex: 1 1 auto;
         min-height: 0;
@@ -19070,6 +19084,9 @@
           return s + '</div>';
         }
         const head = () => '<div class="wfhead"><span class="dot"></span><span class="t"></span></div>';
+        /* PRD 제목이 들어간 헤더 — 실제 글자를 보여준다 */
+        const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const titledHead = (t) => '<div class="wfhead"><span class="dot"></span><span class="t tx">' + escHtml(t) + '</span></div>';
 
         /* ── 실제 대시보드 콘텐츠 풀 ──
            오버뷰 페이지의 진짜 패널(.ph+.pbody)·KPI를 종류별로 모아 와이어프레임 박스에
@@ -19165,16 +19182,22 @@
             el.style.height = q[3] + 'px';
             el.style.animationDelay = (i * 0.025).toFixed(3) + 's';
             const kind = kindFor(q[2], q[3], i);
-            const real = realFor(kind, q[2]);
             const fit = mk('div', 'wffit');
-            if (real && real.kpi) {
-              el.classList.add('kpibox');
-              fit.appendChild(real.el);
-            } else if (real) {
-              el.classList.add('panel'); /* 실제 .ph/.pbody 스타일이 그대로 먹도록 */
-              while (real.el.firstChild) fit.appendChild(real.el.firstChild);
+            const title = (wf.titles && wf.titles.length) ? wf.titles[i % wf.titles.length] : null;
+            if (title != null) {
+              /* PRD 답변 기반 — 패널마다 모니터링 대상 제목 + 크기에 맞는 시각화(콘텐츠) 생성 */
+              fit.innerHTML = (kind === 'strip' ? '' : titledHead(title)) + '<div class="wfbody">' + content(kind, q[2], q[3]) + '</div>';
             } else {
-              fit.innerHTML = (kind === 'strip' ? '' : head()) + '<div class="wfbody">' + content(kind, q[2], q[3]) + '</div>';
+              const real = realFor(kind, q[2]);
+              if (real && real.kpi) {
+                el.classList.add('kpibox');
+                fit.appendChild(real.el);
+              } else if (real) {
+                el.classList.add('panel'); /* 실제 .ph/.pbody 스타일이 그대로 먹도록 */
+                while (real.el.firstChild) fit.appendChild(real.el.firstChild);
+              } else {
+                fit.innerHTML = (kind === 'strip' ? '' : head()) + '<div class="wfbody">' + content(kind, q[2], q[3]) + '</div>';
+              }
             }
             el.appendChild(fit);
             board.appendChild(el);
@@ -19185,18 +19208,12 @@
           fitContents(board);
           fitBoard(cv);
         }
-        /* 각 패널 콘텐츠가 세로로 넘치면 그 패널만 통째로 축소해 담는다(잘림 방지). */
+        /* 패널별 콘텐츠 축소 없음 — 콘텐츠는 실제 화면과 같은 밀도(네이티브)로 두고,
+           보드 전체만 fitBoard가 화면 비율에 맞춰 균일 축소한다(패널마다 폰트가 제각각 작아지지 않게). */
         function fitContents(board) {
           board.querySelectorAll('.wfpanel > .wffit').forEach((fit) => {
             fit.style.transform = '';
             fit.style.width = '';
-            const panel = fit.parentElement;
-            const ph = panel.clientHeight, sh = fit.scrollHeight;
-            if (ph > 0 && sh > ph + 2) {
-              const s = ph / sh;
-              fit.style.width = (100 / s).toFixed(2) + '%';
-              fit.style.transform = 'scale(' + s.toFixed(4) + ')';
-            }
           });
         }
         /* 보드를 캔버스에 맞게 축소·가운데 정렬 (반응형 — 리사이즈 때 재계산) */
@@ -19233,7 +19250,9 @@
             Math.round(w * cw - gap * 2),
             Math.round(h * ch - gap * 2),
           ]);
-          return { n: lay.id, p };
+          /* 패널 제목을 PRD 답변(모니터링 대상 등)에서 가져와 콘텐츠를 생성한다 */
+          const titles = (typeof window.__prdContentItems === 'function') ? window.__prdContentItems() : [];
+          return { n: lay.id, p, titles };
         }
         function applyDt() {
           /* 레이아웃이 지정되면 유리 패널로 재현하고 기본 .dt-ui는 감춘다 */
@@ -24342,6 +24361,14 @@ ${parts.html}
         };
         /* 유저플로우의 상위 메뉴(브랜치) 이름 — 스튜디오 상단 내비게이션에 반영 */
         window.__WEMBFlowMenu = () => deriveTree().map((b) => b.n);
+        /* PRD 답변 기반 패널 콘텐츠 제목 목록 — 디지털 트윈/대시보드 레이아웃 패널을 이걸로 채운다.
+           (종합 현황 + 모니터링 대상들 + 알람·KPI·리포트) */
+        window.__prdContentItems = () => {
+          const items = ['종합 현황'];
+          targetLabels().forEach((t) => items.push(t));
+          items.push('알람 · 이벤트', '실시간 KPI', '리포트 · 통계');
+          return items;
+        };
 
         /* ── PRD 스텝 위저드(모달 팝업) ──
            프로젝트명 → 화면 → 관제 대상 → 모니터링 유형(산업군) → 모니터링 대상(연동) → 운영 환경.
