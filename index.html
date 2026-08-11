@@ -7560,12 +7560,35 @@
         gap: 0;
       }
       .wfpanel.kpibox {
-        padding: 8px 9px;
+        padding: 10px 16px;
       }
       .wfpanel.kpibox .kpis {
         flex: 1;
         min-height: 0;
         margin: 0;
+        align-items: center;
+      }
+      /* KPI 칸이 그리드 폭(1fr)을 넘겨 잘리지 않도록 min-width 해제(그리드 오버플로 방지) +
+         칸 폭에 맞춰 숫자를 자동 축소(container query) + 칸마다 안쪽 여백을 넉넉히 줘
+         숫자가 구분선·패널 가장자리에 붙지 않게 한다. (대시보드 원본 KPI에는 영향 없음) */
+      .wfpanel.kpibox .kpi {
+        min-width: 0;
+        container-type: inline-size;
+        padding: 4px 16px;
+      }
+      .wfpanel.kpibox .kpi:first-child {
+        padding-left: 16px;
+      }
+      .wfpanel.kpibox .kpi .val {
+        font-size: clamp(14px, 12cqi, 30px);
+        white-space: nowrap;
+        margin-top: 6px;
+      }
+      .wfpanel.kpibox .kpi .lab,
+      .wfpanel.kpibox .kpi .sub {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       /* 콘텐츠 래퍼 — 패널을 꽉 채우되, 콘텐츠 자연높이가 패널보다 크면
          fitContents가 transform:scale로 축소해 '잘려 안 보이는' 대신 통째로 줄여 담는다. */
@@ -7848,6 +7871,33 @@
         outline: 1px solid var(--point-main);
         outline-offset: 2px;
         border-radius: 3px;
+      }
+      /* PRD 플로우로 만든 유리 패널(wfCanvasDt)도 배치·내용 편집 대상 —
+         .dt-ui 고정 배치가 숨겨진 상태에서 와이어프레임 패널을 서로 자리 바꿔(배치) 글자를 고친다.
+         배치 수정은 '자유 이동'이 아니라 '같은 크기 패널끼리 자리 맞바꾸기'라 레이아웃(격자)은 그대로 유지된다. */
+      .dtstage.dt-editing .wfcanvas.dt .wfpanel {
+        cursor: grab;
+        outline: 1px dashed color-mix(in srgb, var(--point-main) 60%, transparent);
+        outline-offset: 2px;
+        transition: left 0.18s ease, top 0.18s ease, width 0.18s ease, height 0.18s ease;
+      }
+      .dtstage.dt-editing .wfcanvas.dt .wfpanel:hover {
+        outline-color: var(--point-main);
+      }
+      /* 끌고 있는 패널 — 다른 패널 위로 떠오르고, 자리 이동 트랜지션은 끈다(포인터에 딱 붙게) */
+      .dtstage.dt-editing .wfcanvas.dt .wfpanel.wf-dragging {
+        opacity: 0.9;
+        cursor: grabbing;
+        z-index: 50;
+        outline-color: var(--point-main);
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+        transition: none;
+      }
+      /* 맞바꿀 대상(같은 크기 패널) — 그 위에 놓으면 자리를 바꾼다 */
+      .dtstage.dt-editing .wfcanvas.dt .wfpanel.wf-swaptarget {
+        outline: 2px solid var(--point-main);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--point-main) 22%, transparent);
       }
 
       .ct-btn {
@@ -12580,6 +12630,12 @@
         max-height: 360px;
         overflow: auto;
       }
+      /* 레일에서 '레이아웃'만 볼 때(다른 옵션 숨김)는 목록을 자체 높이로 자르지 않고 전부 펼친다.
+         → 사이드패널 전체가 하나의 자연스러운 스크롤을 갖게 해, 중간에 짤리는 이중 스크롤을 없앤다. */
+      .sidepanel[data-section='layout'] #layList {
+        max-height: none;
+        overflow: visible;
+      }
       .laygrp-sec:not(:last-child) {
         border-bottom: 1px solid var(--line);
       }
@@ -13513,6 +13569,31 @@
               <span class="chev">▾</span>
             </button>
             <div class="designpanel" id="designPanel">
+              <!-- 패널 간격 — '밀도'와는 별개의 독립 옵션(레이아웃 간격). 대시보드 열 간격 + 디지털 트윈 유리 패널 간격을 함께 조절한다. -->
+              <div class="sublbl">
+                <span>패널 간격<span class="ko">패널 사이</span></span>
+                <span class="info up" tabindex="0" role="button" aria-label="패널 간격 도움말">
+                  ?
+                  <span class="tip">
+                    <b>패널과 패널 사이의 간격</b>
+                    <br />
+                    <br />
+                    카드(패널)들이 서로 얼마나 떨어질지 정해요. 디지털 트윈 화면에선 바깥 테두리 여백도 이 값에 맞춰집니다.
+                    <br />
+                    <br />
+                    아래
+                    <span class="accent">밀도 프리셋</span>
+                    과는
+                    <b>별개 옵션</b>
+                    이라, 밀도를 바꿔도 이 간격은 그대로 유지돼요.
+                  </span>
+                </span>
+              </div>
+              <div class="slider" title="패널 사이 간격을 조절해요 (밀도와 별개)">
+                <input type="range" id="pgap" min="0" max="20" value="8" />
+                <span class="rval num" id="pgapVal">8px</span>
+              </div>
+              <button class="ghostbtn subreset" id="pgapReset" title="패널 간격을 기본값(8px)으로 되돌려요">기본값(8px)</button>
               <div class="sublbl">
                 <span>
                   모서리 둥글기
@@ -13540,11 +13621,6 @@
                 <span class="rval num" id="radiusVal">8px</span>
               </div>
               <button class="ghostbtn subreset" id="radiusReset" title="모서리 둥글기를 기본값(8px)으로 되돌려요">기본값(8px)</button>
-              <div class="sublbl"><span>패널 간격<span class="ko">밀도</span></span></div>
-              <div class="slider" title="패널 사이 여백(그리드 간격)을 조절해요">
-                <input type="range" id="pgap" min="0" max="20" value="8" />
-                <span class="rval num" id="pgapVal">8px</span>
-              </div>
               <div class="sublbl"><span>내부 여백<span class="ko">패딩</span></span></div>
               <div class="slider" title="패널 내부·바깥 여백을 한 번에 조절해요">
                 <input type="range" id="ppad" min="60" max="140" value="100" />
@@ -16079,7 +16155,7 @@
         const store = (k, v) => { try { localStorage.setItem(k, String(v)); } catch (e) {} };
         const GK = 'wemb-dash-gap', PK = 'wemb-dash-pad', EK = 'wemb-dash-elev', BK = 'wemb-dash-border', SK = 'wemb-dash-surface';
         const shadowFor = (n) => (n <= 0 ? 'none' : '0 ' + (2 + n * 2) + 'px ' + (8 + n * 6) + 'px rgba(0,0,0,' + (0.1 + n * 0.06).toFixed(2) + ')');
-        function applyGap(px, save) { px = clamp(px, 0, 20); root.setProperty('--panel-gap', px + 'px'); setI('pgap', px); setV('pgapVal', px + 'px'); if (save) store(GK, px); }
+        function applyGap(px, save) { px = clamp(px, 0, 20); root.setProperty('--panel-gap', px + 'px'); setI('pgap', px); setV('pgapVal', px + 'px'); if (window.__setDtGap) window.__setDtGap(px); if (save) store(GK, px); }
         function applyPad(pct, save) { pct = clamp(pct, 60, 140); root.setProperty('--pad-scale', (pct / 100).toFixed(2)); setI('ppad', pct); setV('ppadVal', pct + '%'); if (save) store(PK, pct); }
         function applyElev(n, save) { n = clamp(n, 0, 4); root.setProperty('--panel-shadow', shadowFor(n)); setI('pelev', n); setV('pelevVal', n === 0 ? '없음' : String(n)); if (save) store(EK, n); }
         function applyBorder(px, save) { px = clamp(px, 0, 3); root.setProperty('--panel-border-w', px + 'px'); setI('pborder', px); setV('pborderVal', px + 'px'); if (save) store(BK, px); }
@@ -16091,17 +16167,20 @@
         const bind = (id, fn) => { const e = $(id); if (e) e.oninput = () => fn(+e.value, true); };
         bind('pgap', applyGap); bind('ppad', applyPad); bind('pelev', applyElev); bind('pborder', applyBorder); bind('psurface', applySurface);
 
-        const PRESETS = { compact: { gap: 4, pad: 80, radius: 6, elev: 0 }, normal: { gap: 8, pad: 100, radius: 8, elev: 1 }, roomy: { gap: 14, pad: 120, radius: 12, elev: 2 } };
+        /* 밀도 프리셋은 패널 '외형'(안쪽 여백·라운드·그림자)만 바꾼다 — 패널 간격은 별개 옵션이라 건드리지 않는다. */
+        const PRESETS = { compact: { pad: 80, radius: 6, elev: 0 }, normal: { pad: 100, radius: 8, elev: 1 }, roomy: { pad: 120, radius: 12, elev: 2 } };
         document.querySelectorAll('#density button').forEach((b) => {
           b.onclick = () => {
             document.querySelectorAll('#density button').forEach((x) => x.classList.remove('on'));
             b.classList.add('on');
             const p = PRESETS[b.dataset.d];
             if (!p) return;
-            applyGap(p.gap, true); applyPad(p.pad, true); applyElev(p.elev, true);
+            applyPad(p.pad, true); applyElev(p.elev, true);
             if (typeof applyRadius === 'function') applyRadius(p.radius, true);
           };
         });
+        const pgr = $('pgapReset');
+        if (pgr) pgr.onclick = () => applyGap(8, true);
         const dr = $('designReset');
         if (dr) dr.onclick = () => {
           applyGap(8, true); applyPad(100, true); applyElev(0, true); applyBorder(1, true); applySurface(50, true);
@@ -19182,21 +19261,9 @@
             el.style.height = q[3] + 'px';
             el.style.animationDelay = (i * 0.025).toFixed(3) + 's';
             const kind = kindFor(q[2], q[3], i);
-            const fit = mk('div', 'wffit');
             /* PRD 답변 기반 제목 — 실제(리치) 콘텐츠는 그대로 쓰고 제목만 모니터링 대상으로 바꾼다 */
             const title = (wf.titles && wf.titles.length) ? wf.titles[i % wf.titles.length] : null;
-            const real = realFor(kind, q[2]);
-            if (real && real.kpi) {
-              el.classList.add('kpibox');
-              fit.appendChild(real.el);
-            } else if (real) {
-              el.classList.add('panel'); /* 실제 .ph/.pbody 스타일이 그대로 먹도록 */
-              while (real.el.firstChild) fit.appendChild(real.el.firstChild);
-              if (title != null) { const h = fit.querySelector('.ph h3'); if (h) h.textContent = title; }
-            } else {
-              fit.innerHTML = (kind === 'strip' ? '' : (title != null ? titledHead(title) : head())) + '<div class="wfbody">' + content(kind, q[2], q[3]) + '</div>';
-            }
-            el.appendChild(fit);
+            el.appendChild(buildFit(el, kind, q[2], q[3], title));
             board.appendChild(el);
           });
           cv.appendChild(board);
@@ -19204,6 +19271,79 @@
           cv.__board = { el: board, bw, bh };
           fitContents(board);
           fitBoard(cv);
+        }
+        /* 패널 하나에 콘텐츠(실제 대시보드 복제본 또는 대표 콘텐츠)를 채워 .wffit 을 만든다.
+           renderInto(고정 보드)와 renderDtGrid(캔버스 채움)가 공유한다. */
+        function buildFit(el, kind, w, h, title) {
+          const fit = mk('div', 'wffit');
+          const real = realFor(kind, w);
+          if (real && real.kpi) {
+            el.classList.add('kpibox');
+            fit.appendChild(real.el);
+          } else if (real) {
+            el.classList.add('panel'); /* 실제 .ph/.pbody 스타일이 그대로 먹도록 */
+            while (real.el.firstChild) fit.appendChild(real.el.firstChild);
+            if (title != null) { const hh = fit.querySelector('.ph h3'); if (hh) hh.textContent = title; }
+          } else {
+            fit.innerHTML = (kind === 'strip' ? '' : (title != null ? titledHead(title) : head())) + '<div class="wfbody">' + content(kind, w, h) + '</div>';
+          }
+          return fit;
+        }
+        /* ── 디지털 트윈 전용: 캔버스를 꽉 채우는 격자 렌더 ──
+           예전엔 고정 비율 보드(열수×448 : 1080)를 통째로 축소(letterbox)해서, 레이아웃 비율이
+           화면과 다르면 좌우/상하 여백이 크게 벌어져 어색했다. 여기서는 그리드 셀을 '현재 캔버스'
+           크기에 맞춰 직접 배치하고, 바깥 테두리 여백(dtPad)과 패널 사이 간격(dtGap)을 일정하게 준다
+           (기본 8px, '패널 간격' 슬라이더로 조절). 축소가 없으므로(1:1) 어느 화면에서도 여백이 균일하다. 리사이즈 때 재배치. */
+        /* 바깥 테두리 여백(dtPad)·패널 사이 간격(dtGap) — '대시보드 편집 > 패널 간격' 슬라이더가 조절한다.
+           저장된 간격(wemb-dash-gap)이 있으면 처음 렌더부터 그 값을 쓴다. */
+        let dtPad = 8, dtGap = 8; /* dtPad(바깥 테두리 여백)은 고정 — 간격 슬라이더는 dtGap(패널 사이)만 바꾼다 */
+        try { const g = parseInt(localStorage.getItem('wemb-dash-gap')); if (g >= 0 && g <= 20) dtGap = g; } catch (e) {}
+        window.__setDtGap = function (px) {
+          px = Math.max(0, Math.min(20, px | 0));
+          if (px === dtGap) return;
+          /* 패널 사이 간격만 조절한다 — 바깥 여백(dtPad)은 고정이라 전체폭 패널의 크기는 그대로 유지된다.
+             (전체폭 패널 폭 = 캔버스폭 − dtPad*2 로 간격과 무관, 다열 패널만 여유폭을 나눠 갖는다.) */
+          dtGap = px;
+          if (dtLay) scheduleDtReflow();
+        };
+        window.__getDtGap = () => dtGap;
+        function renderDtGrid(lay, animate) {
+          const cv = wfCanvasDt;
+          if (!cv || !lay || !lay.cells || !lay.cells.length) return;
+          const cw = cv.clientWidth, ch = cv.clientHeight;
+          if (!cw || !ch) { cv.hidden = false; return; } /* 아직 크기 0 → ResizeObserver가 다시 부른다 */
+          POOL = buildPool();
+          Object.keys(cursor).forEach((k) => (cursor[k] = 0));
+          const cols = Math.max(1, lay.cols || 1), rows = Math.max(1, lay.rows || 1);
+          const colW = (cw - dtPad * 2 - dtGap * (cols - 1)) / cols;
+          const rowH = (ch - dtPad * 2 - dtGap * (rows - 1)) / rows;
+          const titles = (typeof window.__prdContentItems === 'function') ? window.__prdContentItems() : [];
+          cv.innerHTML = '';
+          const board = mk('div', 'wfboard');
+          board.style.width = cw + 'px';
+          board.style.height = ch + 'px';
+          board.style.transform = ''; /* 축소 없음 — 1:1 로 캔버스를 채운다 */
+          lay.cells.forEach(([x, y, w, h], i) => {
+            const left = dtPad + (x - 1) * (colW + dtGap);
+            const top = dtPad + (y - 1) * (rowH + dtGap);
+            const width = Math.max(1, w * colW + (w - 1) * dtGap);
+            const height = Math.max(1, h * rowH + (h - 1) * dtGap);
+            const el = mk('div', 'wfpanel');
+            el.style.left = left + 'px';
+            el.style.top = top + 'px';
+            el.style.width = width + 'px';
+            el.style.height = height + 'px';
+            if (animate === false) el.style.animation = 'none'; /* 리사이즈 재배치 땐 등장 애니 생략 */
+            else el.style.animationDelay = (i * 0.025).toFixed(3) + 's';
+            const kind = kindFor(width, height, i);
+            const title = (titles && titles.length) ? titles[i % titles.length] : null;
+            el.appendChild(buildFit(el, kind, width, height, title));
+            board.appendChild(el);
+          });
+          cv.appendChild(board);
+          cv.hidden = false;
+          cv.__board = { el: board, bw: cw, bh: ch, dtGrid: lay };
+          fitContents(board);
         }
         /* 패널별 콘텐츠 축소 없음 — 콘텐츠는 실제 화면과 같은 밀도(네이티브)로 두고,
            보드 전체만 fitBoard가 화면 비율에 맞춰 균일 축소한다(패널마다 폰트가 제각각 작아지지 않게). */
@@ -19236,30 +19376,27 @@
         /* ── 새 프로젝트에서 고른 디지털 트윈 레이아웃을 3D 씬 위 유리 패널로 재현 ──
            그리드 모델(cols/rows/cells)을 1920×1080 좌표의 패널 사각형으로 바꿔 renderInto로
            그린다. 가운데 빈 셀은 패널을 만들지 않아 3D 씬이 그대로 비친다. */
-        let dtLayoutWf = null;
-        function gridToWf(lay) {
-          if (!lay || !lay.cells || !lay.cells.length) return null;
-          /* 셀 폭을 실제 대시보드 패널 폭(≈421+여백)에 고정 → 열 수가 달라도 콘텐츠-패널 폭 비율이
-             대시보드와 동일하게 유지된다(기존엔 1920/열이라 3열이면 셀이 너무 넓어 글자가 작아 보였음).
-             높이는 그리드 행수로 정규화(1080)해 촘촘한 그리드에서 보드가 지나치게 길어지지 않게 한다. */
-          const CH = 1080, gap = 26;
-          const cw = 448, ch = CH / lay.rows;
-          const p = lay.cells.map(([x, y, w, h]) => [
-            Math.round((x - 1) * cw + gap),
-            Math.round((y - 1) * ch + gap),
-            Math.round(w * cw - gap * 2),
-            Math.round(h * ch - gap * 2),
-          ]);
-          /* 패널 제목을 PRD 답변(모니터링 대상 등)에서 가져와 콘텐츠를 생성한다 */
-          const titles = (typeof window.__prdContentItems === 'function') ? window.__prdContentItems() : [];
-          return { n: lay.id, p, titles };
+        let dtLay = null;
+        let dtReflowRaf = 0;
+        /* 리사이즈/사이드바 토글로 캔버스 크기가 바뀌면 다음 프레임에 한 번만 재배치(등장 애니 생략) */
+        function scheduleDtReflow() {
+          if (!dtLay || dtReflowRaf) return;
+          dtReflowRaf = requestAnimationFrame(() => {
+            dtReflowRaf = 0;
+            const firstPaint = !(wfCanvasDt && wfCanvasDt.__board);
+            renderDtGrid(dtLay, firstPaint);
+            if (window.__dtWfEditRefresh) window.__dtWfEditRefresh();
+          });
         }
         function applyDt() {
           /* 레이아웃이 지정되면 유리 패널로 재현하고 기본 .dt-ui는 감춘다 */
-          if (dtLayoutWf) {
+          if (dtLay) {
             if (dtUi) dtUi.style.display = 'none';
-            renderInto(wfCanvasDt, dtLayoutWf);
-            requestAnimationFrame(() => requestAnimationFrame(() => fitBoard(wfCanvasDt)));
+            renderDtGrid(dtLay, true);
+            /* 렌더 직후, PRD 플로우 유리 패널에 저장된 배치·내용 편집을 다시 입힌다 */
+            if (window.__dtWfEditRefresh) window.__dtWfEditRefresh();
+            /* 진입 직후엔 캔버스가 아직 최종 크기가 아닐 수 있어 다음 프레임에 한 번 더 맞춘다 */
+            scheduleDtReflow();
             return;
           }
           if (wfCanvasDt) { wfCanvasDt.hidden = true; wfCanvasDt.innerHTML = ''; wfCanvasDt.__board = null; }
@@ -19267,17 +19404,20 @@
         }
         /* 레이아웃 객체(cols/rows/cells) 또는 null을 받아 DT 화면에 반영. initFlow에서 호출. */
         window.__applyDtLayout = function (lay) {
-          dtLayoutWf = gridToWf(lay);
+          dtLay = (lay && lay.cells && lay.cells.length) ? lay : null;
           applyDt();
         };
-        /* 창 크기가 바뀌면 활성 DT 레이아웃 보드를 다시 맞춘다 */
-        window.addEventListener('resize', () => { if (dtLayoutWf) fitBoard(wfCanvasDt); });
+        /* PRD 플로우 편집 모듈이 참조 — 현재 유리 패널 레이아웃 id, 강제 재렌더 */
+        window.__dtWfLayoutId = () => (dtLay ? dtLay.id : null);
+        window.__dtWfRerender = () => { if (dtLay) applyDt(); };
+        /* 창 크기가 바뀌면 활성 DT 레이아웃을 캔버스에 맞춰 다시 배치한다 */
+        window.addEventListener('resize', scheduleDtReflow);
         /* 캔버스 자체 크기가 바뀔 때(스튜디오 진입 전환·사이드바 접기·처음 표시 등)마다 보드를 다시 맞춘다.
            — 렌더 시점에 캔버스가 아직 최종 크기가 아니면 축소 배율이 어긋나 레이아웃이 이상하게 나오던 문제 해결. */
         if (typeof ResizeObserver === 'function') {
           const ro = new ResizeObserver(() => {
             if (wfCanvas && wfCanvas.__board && !wfCanvas.hidden) fitBoard(wfCanvas);
-            if (wfCanvasDt && wfCanvasDt.__board && !wfCanvasDt.hidden) fitBoard(wfCanvasDt);
+            if (dtLay && wfCanvasDt && !wfCanvasDt.hidden) scheduleDtReflow();
           });
           if (wfCanvas) ro.observe(wfCanvas);
           if (wfCanvasDt) ro.observe(wfCanvasDt);
@@ -19403,6 +19543,7 @@
           dt.classList.toggle('dt-editing', on);
           layoutBtn.classList.toggle('on', on);
           if (layoutLbl) layoutLbl.textContent = on ? '수정 끝내기' : '배치 수정하기';
+          if (typeof wfSetLayout === 'function') wfSetLayout(on);
           refreshBanner();
         }
         function setContent(on) {
@@ -19412,6 +19553,7 @@
           contentBtn.classList.toggle('on', on);
           if (contentLbl) contentLbl.textContent = on ? '수정 끝내기' : '내용 수정하기';
           textEls.forEach((el) => (on ? el.setAttribute('contenteditable', 'true') : el.removeAttribute('contenteditable')));
+          if (typeof wfSetContent === 'function') wfSetContent(on);
           refreshBanner();
         }
         window.__dtEditExit = () => { setLayout(false); setContent(false); };
@@ -19423,6 +19565,10 @@
           pos = {}; applyPos(); savePos();
           textEls.forEach((el) => (el.innerHTML = DEF[el.dataset.deid]));
           try { localStorage.removeItem(LK); localStorage.removeItem(CK); } catch (e) {}
+          /* PRD 플로우 유리 패널 편집(배치·내용)도 함께 기본값으로 되돌리고 재렌더 */
+          const wfid = wfLid();
+          if (wfid) { delete wfOrd[wfid]; delete wfCont[wfid]; wfSaveOrd(); wfSaveCont(); }
+          if (wfActive() && window.__dtWfRerender) window.__dtWfRerender();
         });
 
         /* 내용 입력 자동 저장(디바운스) */
@@ -19476,6 +19622,152 @@
         ui.addEventListener('pointercancel', endDrag);
 
         applyPos();
+
+        /* ============================================================
+         *  PRD → 기능명세서 → 유저플로우 → 와이어프레임을 거쳐 만들어진
+         *  '화면 시안'(유리 패널, #wfCanvasDt의 .wfpanel)도 편집 대상.
+         *  .dt-ui 고정 배치가 숨겨진 이 모드에서 패널을 직접 끌어 배치하고,
+         *  패널 안 제목·표·리스트·KPI 글자를 직접 고친다. 저장은 레이아웃 id별로.
+         *  (renderInto가 패널을 매번 새로 그리므로, 렌더 직후 저장분을 다시 입힌다.)
+         * ============================================================ */
+        const wfCanvas = document.getElementById('wfCanvasDt');
+        /* 실제 글자가 담긴 요소들 — 유리 패널 제목(PRD 대상)과 복제된 대시보드 콘텐츠 텍스트 */
+        const WFSEL = '.wfhead .t.tx, .ph h3, .kpi .lab, .kpi .val, .kpi .sub, th, td, .logrow span, .prow .nm, .prow .pv, .dleg .row, .sec-lab';
+        const WFOK = 'wemb-dt-wf-order', WFCK = 'wemb-dt-wf-content';
+        const wfLoad = (k) => { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch (e) { return {}; } };
+        let wfOrd = wfLoad(WFOK), wfCont = wfLoad(WFCK);
+        const wfLid = () => (window.__dtWfLayoutId ? window.__dtWfLayoutId() : null);
+        const wfActive = () => !!(wfCanvas && !wfCanvas.hidden && wfCanvas.__board);
+        const wfPanels = () => (wfCanvas ? [...wfCanvas.querySelectorAll('.wfpanel')] : []);
+        function wfSaveOrd() { try { localStorage.setItem(WFOK, JSON.stringify(wfOrd)); } catch (e) {} }
+        function wfSaveCont() { try { localStorage.setItem(WFCK, JSON.stringify(wfCont)); } catch (e) {} }
+        /* 캔버스를 1:1로 채우므로 보통 배율은 1이지만, 혹시 축소 보드일 때를 대비해 계산해 둔다 */
+        function wfScale() {
+          const b = wfCanvas && wfCanvas.__board;
+          if (!b) return 1;
+          const s = Math.min(wfCanvas.clientWidth / b.bw, wfCanvas.clientHeight / b.bh);
+          return s > 0 ? s : 1;
+        }
+        /* 방금 그려진(격자 순서) 패널의 '기본 슬롯 좌표'를 dataset에 기억 — 자리바꿈은 이 좌표 집합을 재배열만 한다 */
+        function wfSlotRect(p) {
+          if (p.dataset.wfdl == null) {
+            p.dataset.wfdl = parseFloat(p.style.left) || 0;
+            p.dataset.wfdt = parseFloat(p.style.top) || 0;
+            p.dataset.wfdw = parseFloat(p.style.width) || 0;
+            p.dataset.wfdh = parseFloat(p.style.height) || 0;
+          }
+          return { l: +p.dataset.wfdl, t: +p.dataset.wfdt, w: +p.dataset.wfdw, h: +p.dataset.wfdh };
+        }
+        /* 저장된 순서(치환)를 좌표에 반영 — 패널 i 는 slot perm[i] 자리로 간다. 슬롯(격자) 집합은 그대로라 레이아웃 유지. */
+        function wfApplyOrder() {
+          const panels = wfPanels();
+          if (!panels.length) return;
+          const defs = panels.map(wfSlotRect);
+          const id = wfLid();
+          let perm = id && wfOrd[id];
+          if (!Array.isArray(perm) || perm.length !== panels.length) perm = panels.map((_, i) => i);
+          panels.forEach((p, i) => {
+            const d = defs[perm[i]] || defs[i];
+            p.style.left = d.l + 'px'; p.style.top = d.t + 'px';
+            p.style.width = d.w + 'px'; p.style.height = d.h + 'px';
+            p.style.transform = '';
+          });
+        }
+        function wfApplyCont() {
+          const id = wfLid(), m = (id && wfCont[id]) || {};
+          wfPanels().forEach((p, i) => {
+            const cm = m[i]; if (!cm) return;
+            [...p.querySelectorAll(WFSEL)].forEach((el, j) => { if (cm[j] != null) el.innerHTML = cm[j]; });
+          });
+        }
+        function wfSetLayout(on) { if (on && wfActive()) wfApplyOrder(); }
+        function wfSetContent(on) {
+          if (!wfActive()) return;
+          wfPanels().forEach((p) => {
+            [...p.querySelectorAll(WFSEL)].forEach((el) => (on ? el.setAttribute('contenteditable', 'true') : el.removeAttribute('contenteditable')));
+          });
+        }
+        /* renderDtGrid로 패널이 새로 그려진 직후 호출(applyDt/리사이즈) — 기본 슬롯 좌표를 새로 읽고 순서·내용을 다시 입힌다 */
+        function wfRefresh() {
+          if (!wfActive()) return;
+          wfPanels().forEach((p) => { delete p.dataset.wfdl; delete p.dataset.wfdt; delete p.dataset.wfdw; delete p.dataset.wfdh; });
+          wfApplyOrder();
+          wfApplyCont();
+          if (contentMode) wfSetContent(true);
+        }
+        window.__dtWfEditRefresh = wfRefresh;
+
+        /* 내용 입력 자동 저장(디바운스) — 레이아웃 id > 패널 index > 요소 index 로 저장 */
+        let wfCt;
+        if (wfCanvas) wfCanvas.addEventListener('input', (e) => {
+          if (!contentMode || !wfActive()) return;
+          const el = e.target.closest('[contenteditable]'); if (!el) return;
+          const panel = el.closest('.wfpanel'); if (!panel) return;
+          const id = wfLid(); if (!id) return;
+          const i = wfPanels().indexOf(panel);
+          const j = [...panel.querySelectorAll(WFSEL)].indexOf(el);
+          if (i < 0 || j < 0) return;
+          (wfCont[id] = wfCont[id] || {});
+          (wfCont[id][i] = wfCont[id][i] || {});
+          wfCont[id][i][j] = el.innerHTML;
+          clearTimeout(wfCt); wfCt = setTimeout(wfSaveCont, 350);
+        });
+
+        /* ── 배치 수정 = '자리 맞바꾸기' ──
+           끌고 있는 패널을 같은 크기의 다른 패널 위에 놓으면 둘의 자리를 바꾼다. 슬롯(격자)은 그대로라
+           레이아웃이 유지되고 배치(순서)만 바뀐다. 자유 이동이 아니므로 겹침·빈칸이 생기지 않는다. */
+        let wfDrag = null;
+        const wfSameSize = (a, b) => Math.abs(a.offsetWidth - b.offsetWidth) < 2 && Math.abs(a.offsetHeight - b.offsetHeight) < 2;
+        function wfTargetAt(x, y, drag) {
+          return wfPanels().find((p) => {
+            if (p === drag.panel || !wfSameSize(p, drag.panel)) return false;
+            const r = p.getBoundingClientRect();
+            return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+          }) || null;
+        }
+        if (wfCanvas) {
+          wfCanvas.addEventListener('pointerdown', (e) => {
+            if (!layoutMode || !wfActive() || e.button !== 0) return;
+            const panel = e.target.closest('.wfpanel'); if (!panel) return;
+            wfDrag = { panel, pid: e.pointerId, sx: e.clientX, sy: e.clientY, s: wfScale(), target: null };
+            panel.classList.add('wf-dragging');
+            try { panel.setPointerCapture(e.pointerId); } catch (er) {}
+            e.preventDefault();
+          });
+          wfCanvas.addEventListener('pointermove', (e) => {
+            if (!wfDrag) return;
+            const dx = (e.clientX - wfDrag.sx) / wfDrag.s, dy = (e.clientY - wfDrag.sy) / wfDrag.s;
+            wfDrag.panel.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+            const tgt = wfTargetAt(e.clientX, e.clientY, wfDrag);
+            if (tgt !== wfDrag.target) {
+              if (wfDrag.target) wfDrag.target.classList.remove('wf-swaptarget');
+              wfDrag.target = tgt;
+              if (tgt) tgt.classList.add('wf-swaptarget');
+            }
+          });
+          const wfEnd = () => {
+            if (!wfDrag) return;
+            const drag = wfDrag; wfDrag = null;
+            drag.panel.classList.remove('wf-dragging');
+            if (drag.target) drag.target.classList.remove('wf-swaptarget');
+            const panels = wfPanels();
+            const a = panels.indexOf(drag.panel);
+            const b = drag.target ? panels.indexOf(drag.target) : -1;
+            const id = wfLid();
+            if (id && a >= 0 && b >= 0 && a !== b) {
+              let perm = (Array.isArray(wfOrd[id]) && wfOrd[id].length === panels.length) ? wfOrd[id].slice() : panels.map((_, i) => i);
+              const t = perm[a]; perm[a] = perm[b]; perm[b] = t;
+              wfOrd[id] = perm; wfSaveOrd();
+            }
+            wfApplyOrder(); /* 자리 바꾸거나(스왑) 제자리로(스냅백) — 트랜지션이 부드럽게 이동시킨다 */
+            try { drag.panel.releasePointerCapture(drag.pid); } catch (er) {}
+          };
+          wfCanvas.addEventListener('pointerup', wfEnd);
+          wfCanvas.addEventListener('pointercancel', wfEnd);
+        }
+
+        /* 이미 유리 패널이 그려진 채 스크립트가 로드된 경우(플로우 복원 등) 저장분을 즉시 반영 */
+        wfRefresh();
       })();
 
 
