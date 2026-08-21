@@ -23513,11 +23513,49 @@ ${wembTipRuntime()}
             return panel;
           }
 
+          /* '패널' 카테고리 에셋은 그 자체가 완결된 패널이므로,
+             기존 패널에 삽입하지 않고 새 .panel 로 추가한다.
+             (드롭 대상 패널이 있으면 그 뒤에, 없으면 활성 화면에 append) */
+          function addPanelItem(it, targetPanel) {
+            const cols = activeCols();
+            if (!cols) {
+              if (typeof toast === 'function') toast('이 화면에서는 패널 추가를 지원하지 않아요.', { type: 'err' });
+              return;
+            }
+            const panel = document.createElement('div');
+            panel.className = 'panel';
+            panel.innerHTML = panelHtml(it);
+            const tp = targetPanel && cols.contains(targetPanel) ? targetPanel : null;
+            if (cols.classList.contains('gridmode')) {
+              if (!cols.style.gridAutoRows) cols.style.gridAutoRows = 'minmax(140px, auto)';
+              if (tp) tp.after(panel);
+              else cols.appendChild(panel);
+            } else if (tp && tp.parentElement && tp.parentElement.classList.contains('col')) {
+              tp.after(panel);
+            } else {
+              let colEls = [...cols.querySelectorAll(':scope > .col')];
+              if (!colEls.length) {
+                const c = document.createElement('div');
+                c.className = 'col';
+                cols.appendChild(c);
+                colEls = [c];
+              }
+              const target = colEls.reduce((a, b) => (b.querySelectorAll(':scope > .panel').length < a.querySelectorAll(':scope > .panel').length ? b : a));
+              target.appendChild(panel);
+            }
+            ensureDelBtns();
+            if (typeof sizingOn !== 'undefined' && sizingOn && typeof ensureSzHandles === 'function') ensureSzHandles();
+            panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            return panel;
+          }
+
           /* 에셋을 '패널 안'에 삽입한다 (에셋 자체가 새 패널로 쌓이지 않는다).
              - 드래그로 특정 패널 위에 놓으면 그 패널 안에,
              - 클릭/빈 곳에 놓으면 활성 화면의 마지막 패널 안에,
-             - 패널이 하나도 없을 때만 새 패널을 만들어 그 안에 넣는다. */
+             - 패널이 하나도 없을 때만 새 패널을 만들어 그 안에 넣는다.
+             단, '패널' 카테고리는 새 .panel 로 추가한다(addPanelItem). */
           function place(it, targetPanel) {
+            if (it && it.cat === 'panel') return addPanelItem(it, targetPanel);
             const cols = activeCols();
             if (!cols) {
               if (typeof toast === 'function') toast('이 화면에서는 에셋 삽입을 지원하지 않아요.', { type: 'err' });
