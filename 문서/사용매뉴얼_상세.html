@@ -118,7 +118,8 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding:26px 0 60px;colo
   .sec{break-before:page;border-top:0;padding:4mm 0 0}
   .cover{padding-top:0;padding-bottom:18px}
   .toc{break-after:page}
-  .menu,table.spec,.tip,figure.fig,figure.ex,.figpair,.wfwrap,.toc li,tr{break-inside:avoid}
+  /* keep only atomic units together; allow .menu to flow so content fills pages */
+  table.spec,.tip,figure.fig,figure.ex,.figpair,.wfwrap,.toc li,tr{break-inside:avoid}
   h1,h2,h3,.sec-no,.menu h3{break-after:avoid}
   /* keep screenshots small enough that image + caption + nearby text fit one page */
   figure.fig,figure.ex{margin-top:12px}
