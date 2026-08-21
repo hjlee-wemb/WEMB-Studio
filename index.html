@@ -13456,6 +13456,7 @@
         <button class="tb-tab" data-page="wire" type="button" role="tab">스튜디오</button>
       </nav>
       <div class="tb-actions">
+        <a class="tb-ic" href="https://hjlee-wemb.github.io/WEMB-Studio/%EB%AC%B8%EC%84%9C/%EC%82%AC%EC%9A%A9%EB%A7%A4%EB%89%B4%EC%96%BC.html" target="_blank" rel="noopener noreferrer" title="사용 매뉴얼" aria-label="사용 매뉴얼"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v16H6a2 2 0 0 0-2 2z" /><path d="M20 5a2 2 0 0 0-2-2h-6v16h6a2 2 0 0 1 2 2z" /></svg></a>
         <button class="tb-ic" data-act="undo" type="button" title="되돌리기" aria-label="되돌리기"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4" /><path d="M20 20v-7a4 4 0 0 0-4-4H4" /></svg></button>
         <button class="tb-ic" data-act="redo" type="button" title="다시 실행" aria-label="다시 실행"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4" /><path d="M4 20v-7a4 4 0 0 1 4-4h12" /></svg></button>
         <button class="tb-ic" data-act="export" type="button" title="내보내기" aria-label="내보내기"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /><polyline points="7 8 12 3 17 8" /><path d="M5 15v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" /></svg></button>
@@ -20173,6 +20174,9 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         }
         cols.addEventListener('dragstart', (e) => {
           if (!layoutMode) return;
+          /* 삭제 X 등 컨트롤에서 시작한 드래그는 취소한다 — 안 그러면 패널이 끌려가며
+             클릭이 삼켜져 '삭제 버튼을 눌러도 안 지워지는' 문제가 생긴다. */
+          if (e.target.closest(CTRL_SEL)) { e.preventDefault(); return; }
           /* 에셋 슬롯이 먼저 — 패널보다 안쪽이라 이걸 집으면 에셋만 이동한다 */
           const slot = e.target.closest('.assetslot');
           if (slot) {
@@ -20809,8 +20813,9 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         const dragBoundsOf = (panel) => (panel.closest('.skx-screen') || panel.closest('.dt-body') || dt).getBoundingClientRect();
         dt.addEventListener('pointerdown', (e) => {
           if (!(layoutMode || contentMode) || e.button !== 0) return;
-          /* 에셋 컨트롤(세로/가로 토글·크기 슬라이더)과 에셋 슬롯은 패널 이동으로 가로채지 않는다. */
-          if (e.target.closest('.assettools, .aszr, .assetslot')) return;
+          /* 에셋 컨트롤(세로/가로 토글·크기 슬라이더)·에셋 슬롯·삭제 X 등 컨트롤은 패널 이동으로 가로채지 않는다.
+             (특히 .pdel 삭제 버튼을 여기서 잡으면 pointerdown이 클릭을 삼켜 삭제가 안 됨) */
+          if (e.target.closest('.assettools, .aszr, .assetslot, .pdel, .psz, .compcopy, .charttype, .ct-btn')) return;
           const panel = e.target.closest('.dt-drag');
           if (!panel || !dt.contains(panel)) return;
           /* 클릭한 패널만 편집 — 선택 안 된 패널을 누르면 먼저 선택(이동은 안 함) */
