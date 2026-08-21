@@ -11407,6 +11407,26 @@
       .pdel:hover {
         background: rgba(220, 50, 50, 1);
       }
+      /* SK하이닉스 이벤트 리스트 — expand 버튼으로 패널을 올리고(확장) 화살표 360° 회전 */
+      .skx-svg [id="skx-button/event-expand"] {
+        cursor: pointer;
+      }
+      .skx-svg [id="skx-panel/event-list"] {
+        transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .skx-svg [id="skx-panel/event-list"].skx-evt-open {
+        clip-path: none !important;
+        transform: translateY(-223px);
+      }
+      /* 확장 시 패널 배경을 거의 불투명하게 → 뒤 내용이 비쳐 지저분해지지 않게 */
+      .skx-svg [id="skx-panel/event-list"].skx-evt-open [id="skx-bg_3"] {
+        fill-opacity: 0.97;
+      }
+      .skx-svg [id="skx-arrow"] {
+        transform-box: fill-box;
+        transform-origin: center;
+        transition: transform 0.6s ease;
+      }
       /* 패널편집 중: 선택 대상 패널은 클릭 가능 표시 */
       .cols.sizing .panel,
       .cols.editing .panel,
@@ -17226,6 +17246,28 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
       function initSkxInteractions(svg) {
         if (!svg) return;
         const SVGNS = 'http://www.w3.org/2000/svg';
+
+        /* 0) 이벤트 리스트 expand — expand 버튼을 누르면 패널이 올라오고(확장) 화살표가 360° 회전한다.
+           (평소엔 하단 헤더 바만 clip 되어 보이고, 열면 clip 해제 + 위로 올려 패널 전체가 올라온다) */
+        (function eventExpand() {
+          const btn = svg.querySelector('[id="skx-button/event-expand"]');
+          const panel = svg.querySelector('[id="skx-panel/event-list"]');
+          const arrow = svg.querySelector('[id="skx-arrow"]');
+          if (!btn || !panel) return;
+          btn.style.cursor = 'pointer';
+          let open = false,
+            spin = 0;
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            open = !open;
+            panel.classList.toggle('skx-evt-open', open);
+            if (arrow) {
+              spin += 360;
+              arrow.style.transform = 'rotate(' + spin + 'deg)';
+            }
+          });
+        })();
 
         /* 1) 헤더 타임스탬프(skx-Date_2 · skx-Time_3, 벡터 패스)를 라이브 <text>로 대체해 매초 갱신 */
         (function clock() {
