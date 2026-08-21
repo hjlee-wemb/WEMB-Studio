@@ -120,6 +120,13 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding:26px 0 60px;colo
   .toc{break-after:page}
   .menu,table.spec,.tip,figure.fig,figure.ex,.figpair,.wfwrap,.toc li,tr{break-inside:avoid}
   h1,h2,h3,.sec-no,.menu h3{break-after:avoid}
+  /* keep screenshots small enough that image + caption + nearby text fit one page */
+  figure.fig,figure.ex{margin-top:12px}
+  figure.fig img,figure.ex img{width:auto;height:auto;max-width:100%;aspect-ratio:auto;display:block;margin:0 auto}
+  figure.fig img{max-height:78mm}
+  figure.ex img{max-height:112mm}
+  figure.ex.ex-narrow img{max-height:120mm}
+  .figpair figure.ex img{max-height:62mm}
 }
 </style>
 
