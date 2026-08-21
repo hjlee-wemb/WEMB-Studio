@@ -23557,7 +23557,10 @@ ${wembTipRuntime()}
                  폭/높이를 바꾸면 SVG(width/height 100%)가 그 크기에 맞춰 함께 스케일된다. */
             const setAspect = (el) => {
               const svg = el.querySelector('svg');
-              const vb = svg && svg.viewBox && svg.viewBox.baseVal;
+              if (!svg) return;
+              /* 패널 박스(가로·세로)에 꽉 채워지도록 종횡비 고정 해제 → 세로로 키우면 에셋도 같이 커진다 */
+              svg.setAttribute('preserveAspectRatio', 'none');
+              const vb = svg.viewBox && svg.viewBox.baseVal;
               if (vb && vb.width && vb.height) el.style.aspectRatio = vb.width + ' / ' + vb.height;
             };
             /* 드롭 대상 패널이 있으면 → 그 패널의 디자인을 드래그한 패널로 교체 */
