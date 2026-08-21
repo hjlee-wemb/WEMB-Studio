@@ -6426,6 +6426,23 @@
         height: 100%;
         display: block;
       }
+      /* 카드 컨테이너: 프레임(SVG)은 배경으로 깔고(.cardframe, 절대배치),
+         그 위 .cardbody 에 드롭한 콘텐츠(차트·심볼·아이콘)를 담는다. */
+      .panel.assetpanel.cardhost {
+        position: relative;
+        min-height: 120px;
+      }
+      .panel.assetpanel.cardhost > .cardframe {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .panel.assetpanel.cardhost > .cardbody {
+        position: relative;
+        z-index: 1;
+        padding: 14px;
+      }
 
       /* ── 유리 카드 공통 ── */
       .dt-card {
@@ -23565,32 +23582,27 @@ ${wembTipRuntime()}
               return;
             }
             const tp = targetPanel && cols.contains(targetPanel) ? targetPanel : null;
-            const body = assetVisual(it); /* .ph 헤더 없이 에셋 원본(fighost-panel)만 */
-            /* 에셋 SVG의 viewBox 비율을 패널 aspect-ratio 로 잡아 준다.
-               → 기본 높이가 에셋 비율에 딱 맞고(빈 공간 없음), 리사이즈(패널 조정)로
-                 폭/높이를 바꾸면 SVG(width/height 100%)가 그 크기에 맞춰 함께 스케일된다. */
-            const setAspect = (el) => {
-              const svg = el.querySelector('svg');
-              if (!svg) return;
-              /* 패널 박스(가로·세로)에 꽉 채워지도록 종횡비 고정 해제 → 세로로 키우면 에셋도 같이 커진다 */
-              svg.setAttribute('preserveAspectRatio', 'none');
-              const vb = svg.viewBox && svg.viewBox.baseVal;
-              if (vb && vb.width && vb.height) el.style.aspectRatio = vb.width + ' / ' + vb.height;
-            };
-            /* 드롭 대상 패널이 있으면 → 그 패널의 디자인을 드래그한 패널로 교체 */
+            /* 카드 에셋 = 콘텐츠를 담는 컨테이너.
+               프레임(SVG)을 배경으로 깔고(.cardframe, 절대배치), 그 위 .cardbody 에 다른 에셋(차트·심볼·아이콘)을 드롭해 넣는다. */
+            const body =
+              '<div class="fighost fighost-panel fig-embed cardframe">' + (it.html || '') + '</div>' +
+              '<div class="addedbody cardbody emptybody"><span class="emptyhint">에셋을 끌어 넣어 채우세요</span></div>';
+            /* 카드 프레임 SVG는 패널 박스(가로·세로)에 꽉 차게(종횡비 고정 해제) → 리사이즈하면 프레임도 함께 커진다 */
+            const setFrame = (el) => { const svg = el.querySelector('.cardframe svg'); if (svg) svg.setAttribute('preserveAspectRatio', 'none'); };
+            /* 드롭 대상 패널이 있으면 → 그 패널의 디자인을 드래그한 카드로 교체 */
             if (tp) {
-              tp.classList.add('assetpanel');
+              tp.classList.add('assetpanel', 'cardhost');
               tp.innerHTML = body;
-              setAspect(tp);
+              setFrame(tp);
               ensureDelBtns(); /* 삭제 버튼(.pdel) 다시 부여 */
               tp.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
               return tp;
             }
-            /* 대상이 없으면 새 에셋 패널을 만든다(배경 없이 에셋 원본만) */
+            /* 대상이 없으면 새 카드 컨테이너 패널을 만든다 */
             const panel = document.createElement('div');
-            panel.className = 'panel assetpanel';
+            panel.className = 'panel assetpanel cardhost';
             panel.innerHTML = body;
-            setAspect(panel);
+            setFrame(panel);
             if (cols.classList.contains('gridmode')) {
               if (!cols.style.gridAutoRows) cols.style.gridAutoRows = 'minmax(140px, auto)';
               cols.appendChild(panel);
