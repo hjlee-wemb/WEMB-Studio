@@ -23393,7 +23393,20 @@ ${wembTipRuntime()}
              Figma 네이밍대로 각 탭에 편입: Symbol-menu→심볼, Icon→아이콘, Chart→차트.
              (window.__SKX_ASSETS = {symbols, icons, charts}, src/skhynix-assets.js) */
           const SKX = window.__SKX_ASSETS || { symbols: [], icons: [], charts: [], panels: [] };
-          const skxItems = (arr, cat) => (arr || []).map((a) => ({ cat: cat, id: a.id, name: a.name, fig: a.fig, html: a.html }));
+          /* 스튜디오 표기용 에셋 이름 — Figma 'group/name' 에서 앞 그룹(접두)은 빼고 뒤 이름만, 한글로 표기.
+             (SK하이닉스 화면 좌측 라벨과 동일한 한글) */
+          const SKX_NAME_KO = {
+            'ups-power': 'UPS 전력량', 'center-temp': '센터 온도', 'saturation': '상면 포화도',
+            'fire': '화재', 'leak': '누수', 'hvac': '항온항습기', 'th-sensor': '온습도센서',
+            'discharge-temp': '토출온도계', 'rack-temp': 'RACK온도', 'anemometer': '풍속계',
+            'ups': 'UPS', 'rack-power': 'RACK전력',
+            'card': '카드', 'board': '보드', 'bar': '바',
+          };
+          const skxDispName = (name) => {
+            const suffix = String(name == null ? '' : name).split('/').pop().trim(); /* 앞 그룹 제거, 뒤 글자만 */
+            return SKX_NAME_KO[suffix] || suffix;
+          };
+          const skxItems = (arr, cat) => (arr || []).map((a) => ({ cat: cat, id: a.id, name: skxDispName(a.name), fig: a.fig, html: a.html }));
 
           const CATS = {
             chart: [],
@@ -23469,7 +23482,7 @@ ${wembTipRuntime()}
               if (cap[k]) add(k, cap[k].name, cap[k].html);
             });
             /* SK하이닉스 Figma 차트(Chart-line·Chart Canvas) — 인라인 SVG로 편입 */
-            (SKX.charts || []).forEach((a) => add(a.id, a.name, a.html));
+            (SKX.charts || []).forEach((a) => add(a.id, skxDispName(a.name), a.html));
             return items;
           }
 
