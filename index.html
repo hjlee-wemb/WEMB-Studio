@@ -6438,10 +6438,67 @@
         z-index: 0;
         pointer-events: none;
       }
+      /* 콘텐츠 영역이 카드(패널) 전체를 채운다 → 에셋 크기 기준 = 패널 크기 */
       .panel.assetpanel.cardhost > .cardbody {
-        position: relative;
+        position: absolute;
+        inset: 0;
         z-index: 1;
         padding: 14px;
+        display: flex;
+        flex-direction: column;
+      }
+      .panel.assetpanel.cardhost .assetwrap {
+        padding: 26px 0 0; /* 상단 세로/가로 토글 자리 확보 */
+        flex: 1 1 auto;
+        min-height: 0;
+        min-width: 0;
+        overflow: visible;
+      }
+      .panel.assetpanel.cardhost .assetrow {
+        flex: 1 1 auto;
+        min-height: 0;
+        min-width: 0;
+        align-items: stretch;
+      }
+      .panel.assetpanel.cardhost .assetrow > .assetslot {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 0;
+        justify-content: center;
+      }
+      /* 에셋 그래픽은 개별 스케일 대신 슬롯(=패널 분할) 크기에 맞춰 채운다 */
+      .panel.assetpanel.cardhost .assetslot > .avis {
+        width: 100%;
+        height: 100%;
+        transform: none !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .panel.assetpanel.cardhost .assetslot > .avis > * {
+        max-width: 100%;
+        max-height: 100%;
+      }
+      .panel.assetpanel.cardhost .assetslot svg {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+      }
+      .panel.assetpanel.cardhost .assetslot img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .panel.assetpanel.cardhost .assetslot > .aszr {
+        display: none !important; /* 크기 기준이 패널이므로 개별 크기 슬라이더 숨김 */
+      }
+      /* 세로/가로 배치 토글 — 카드 상단에 항상 보이게 */
+      .panel.assetpanel.cardhost .assettools {
+        display: inline-flex;
+        top: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 8;
       }
 
       /* ── 유리 카드 공통 ── */
@@ -23587,8 +23644,15 @@ ${wembTipRuntime()}
             const body =
               '<div class="fighost fighost-panel fig-embed cardframe">' + (it.html || '') + '</div>' +
               '<div class="addedbody cardbody emptybody"><span class="emptyhint">에셋을 끌어 넣어 채우세요</span></div>';
-            /* 카드 프레임 SVG는 패널 박스(가로·세로)에 꽉 차게(종횡비 고정 해제) → 리사이즈하면 프레임도 함께 커진다 */
-            const setFrame = (el) => { const svg = el.querySelector('.cardframe svg'); if (svg) svg.setAttribute('preserveAspectRatio', 'none'); };
+            /* 카드 프레임 SVG는 패널 박스(가로·세로)에 꽉 차게(종횡비 고정 해제) → 리사이즈하면 프레임도 함께 커진다.
+               기본 크기는 카드 비율(viewBox)로 잡아 준다(리사이즈하면 그 크기가 기준이 된다). */
+            const setFrame = (el) => {
+              const svg = el.querySelector('.cardframe svg');
+              if (!svg) return;
+              svg.setAttribute('preserveAspectRatio', 'none');
+              const vb = svg.viewBox && svg.viewBox.baseVal;
+              if (vb && vb.width && vb.height) el.style.aspectRatio = vb.width + ' / ' + vb.height;
+            };
             /* 드롭 대상 패널이 있으면 → 그 패널의 디자인을 드래그한 카드로 교체 */
             if (tp) {
               tp.classList.add('assetpanel', 'cardhost');
