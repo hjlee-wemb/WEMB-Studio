@@ -23411,7 +23411,8 @@ ${wembTipRuntime()}
           const CATS = {
             chart: [],
             /* SK하이닉스 패널(콘텐츠를 감싸는 카드/섹션) — 인라인 SVG 에셋 */
-            panel: skxItems(SKX.panels, 'panel'),
+            /* 패널 탭은 '카드'만 노출 (보드·바 제외) */
+            panel: skxItems((SKX.panels || []).filter((a) => String(a.name).split('/').pop().trim() === 'card'), 'panel'),
             symbol: (window.__WEMB_SYMBOLS || [])
               .map((s, i) => ({ cat: 'symbol', id: s.i, name: '심볼 ' + String(i + 1).padStart(2, '0'), src: s.s }))
               .concat(skxItems(SKX.symbols, 'symbol')),
