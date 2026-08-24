@@ -418,6 +418,60 @@
         gap: 9px;
         min-width: 0;
       }
+      /* 전역 뒤로가기 — 상단바 왼쪽. 이전 화면(페이지·런처·템플릿 상세)으로 되돌아간다. */
+      .tb-back {
+        flex: none;
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--bg-page);
+        color: var(--text-strong);
+        cursor: pointer;
+        transition: border-color 0.14s ease, color 0.14s ease, opacity 0.14s ease;
+      }
+      .tb-back svg {
+        width: 18px;
+        height: 18px;
+      }
+      .tb-back:hover:not(:disabled) {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .tb-back:disabled {
+        opacity: 0.38;
+        cursor: default;
+      }
+      /* 런처(홈)용 뒤로 버튼 — 화면에는 감춘다(크롬 뒤로가기로 대체). 로직은 그대로 유지. */
+      .lc-back {
+        display: none;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 8px;
+        padding: 6px 11px 6px 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--bg-surface);
+        color: var(--text-strong);
+        font: 600 12.5px var(--font);
+        cursor: pointer;
+        transition: border-color 0.14s ease, color 0.14s ease, opacity 0.14s ease;
+      }
+      .lc-back svg {
+        width: 16px;
+        height: 16px;
+      }
+      .lc-back:hover:not(:disabled) {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .lc-back:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
       .tb-mark {
         width: 26px;
         height: 26px;
@@ -5991,6 +6045,35 @@
       .dtstage[data-tpl='hanjin'] .dt-scene {
         display: none !important;
       }
+
+      /* ── 미연결 템플릿 임시 이미지 재현 — 대시보드/DT 공통 ── */
+      .dtstage[data-tpl='image'] .dt-hdr,
+      .dtstage[data-tpl='image'] .dt-ui,
+      .dtstage[data-tpl='image'] .dt-scene {
+        display: none !important;
+      }
+      .stage[data-tpl='image'] {
+        position: relative;
+        padding: 0;
+      }
+      .stage[data-tpl='image'] > *:not(.tplimg-repro) {
+        display: none !important;
+      }
+      .tplimg-repro {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #05050a;
+        z-index: 4;
+      }
+      .tplimg-shot {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
       .hj-repro {
         position: absolute;
         inset: 0;
@@ -10828,6 +10911,175 @@
         color: #fff;
       }
 
+      /* ── 콘텐츠 추가 컨텍스트 창 — '＋ 패널' 누르면 열리고, 문장을 넣으면 그에 맞는 패널이 채워진다 ── */
+      .addpanel-ctx {
+        display: none;
+        margin-top: 8px;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--bg-surface);
+      }
+      .addpanel-ctx.open {
+        display: block;
+        animation: apcIn 0.16s ease;
+      }
+      @keyframes apcIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: none; }
+      }
+      .apc-row {
+        display: flex;
+        gap: 6px;
+      }
+      .apc-input {
+        flex: 1;
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-family: inherit;
+        font-size: 12.5px;
+        color: var(--text-strong);
+        background: var(--bg-page);
+        outline: none;
+      }
+      .apc-input:focus {
+        border-color: var(--point-main);
+      }
+      .apc-input::placeholder {
+        color: var(--text-weak);
+      }
+      .apc-go {
+        flex: none;
+        border: 0;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+        background: var(--point-main);
+        cursor: pointer;
+      }
+      .apc-go:hover {
+        filter: brightness(1.08);
+      }
+      .apc-foot {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* 빈 패널 버튼을 왼쪽으로 */
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .apc-hint {
+        font-size: 11.5px;
+        line-height: 1.45;
+        color: var(--text-weak);
+        margin-bottom: 8px; /* 입력창(apc-row)보다 위에 먼저 보이도록 */
+      }
+      .apc-hint b {
+        color: var(--point-main);
+      }
+      .apc-empty {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid var(--line);
+        background: var(--bg-page);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-strong);
+        cursor: pointer;
+        padding: 7px 12px;
+        white-space: nowrap;
+        transition: border-color 0.14s ease, color 0.14s ease;
+      }
+      .apc-empty::before {
+        content: "＋";
+        font-weight: 700;
+        color: var(--text-weak);
+      }
+      .apc-empty:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      .apc-empty:hover::before {
+        color: var(--point-main);
+      }
+      /* 라이브러리에서 가져온 심볼/아이콘 에셋 — 지정한 박스에 꽉 차게 맞춘다 */
+      .apc-lib {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+      }
+      .apc-lib svg,
+      .apc-lib img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain;
+        display: block;
+      }
+      /* ── 패널 편집 중 교체 가능한 에셋 표시 ── */
+      .swap-asset {
+        position: relative;
+      }
+      :is(.cols.editing, .cols.sizing, .stage.content-editing, .dtstage.dt-editing, .dtstage.dt-content-editing) :is(.swap-asset, .assetslot) {
+        cursor: pointer;
+        outline: 1px dashed transparent;
+        outline-offset: 2px;
+        border-radius: 6px;
+        transition: outline-color 0.12s ease;
+      }
+      :is(.cols.editing, .cols.sizing, .stage.content-editing, .dtstage.dt-editing, .dtstage.dt-content-editing) :is(.swap-asset, .assetslot):hover {
+        outline-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+      }
+      .swap-asset.swap-sel,
+      .assetslot.swap-sel {
+        outline: 2px solid var(--point-main) !important;
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
+      .swap-just {
+        animation: swapFlash 0.6s ease;
+      }
+      @keyframes swapFlash {
+        0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--point-main) 55%, transparent); }
+        100% { box-shadow: 0 0 0 10px transparent; }
+      }
+      /* 선택한 에셋의 삭제(×) 버튼 */
+      .has-swapdel {
+        position: relative;
+      }
+      .swap-del {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        z-index: 6;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        border: 1px solid color-mix(in srgb, #000 20%, var(--danger, #e5484d));
+        border-radius: 50%;
+        background: var(--danger, #e5484d);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.32);
+      }
+      .swap-del:hover {
+        filter: brightness(1.12);
+      }
+
       /* ── 에셋 라이브러리 (차트·심볼·아이콘 팔레트 + 드래그 삽입) ── */
       /* 에셋 검색창 — 라이브러리 맨 위. 입력하면 전체 카테고리에서 이름으로 필터 */
       .libsearch-wrap {
@@ -11221,6 +11473,17 @@
         width: 100%;
       }
 
+      /* UPS 전력량·센터 온도·상면 포화도 차트 에셋 — 카드 배경/테두리 rect 제거,
+         에셋 콘텐츠(그래프·라벨·미터)만 노출. paint0=배경 채움, paint1=테두리. */
+      .fig-svg rect[fill="url(#c_chart_ups_paint0_linear_0_1)"],
+      .fig-svg rect[stroke="url(#c_chart_ups_paint1_linear_0_1)"],
+      .fig-svg rect[fill="url(#c_chart_centertemp_paint0_linear_0_1)"],
+      .fig-svg rect[stroke="url(#c_chart_centertemp_paint1_linear_0_1)"],
+      .fig-svg rect[fill="url(#c_chart_saturation_paint0_linear_0_1)"],
+      .fig-svg rect[stroke="url(#c_chart_saturation_paint1_linear_0_1)"] {
+        display: none;
+      }
+
       /* 에셋을 '패널 안'에 넣을 때 — 패널/배경 형태 없이 그래픽(에셋)만 넣는다.
          바깥 여백(상하좌우 패딩)은 .assetwrap 이 담당하므로 슬롯 자체 패딩은 두지 않는다
          (슬롯끼리 간격은 .assetrow 의 gap 이 담당). */
@@ -11425,7 +11688,18 @@
       .skx-svg [id="skx-arrow"] {
         transform-box: fill-box;
         transform-origin: center;
-        transition: transform 0.6s ease;
+        transition: transform 0.45s ease;
+      }
+      /* Auto 라디오 버튼 — 클릭 시 라디오처럼 선택 상태(링 강조) 표시 */
+      .skx-svg [id="skx-button/auto"] {
+        cursor: pointer;
+      }
+      .skx-svg [id="skx-button/auto"] [id="skx-Ellipse 1"] {
+        transition: stroke 0.18s ease;
+      }
+      .skx-svg [id="skx-button/auto"].skx-radio-on [id="skx-Ellipse 1"] {
+        stroke: var(--fg-point, #6aa0ff);
+        stroke-width: 1.5;
       }
       /* 패널편집 중: 선택 대상 패널은 클릭 가능 표시 */
       .cols.sizing .panel,
@@ -12786,10 +13060,196 @@
         background: var(--point-main);
         transform: scale(1.3);
       }
+      /* ── 템플릿 정렬 드롭다운 (카테고리 바 아래 행) ── */
+      .tplsortbar {
+        display: flex;
+        justify-content: flex-end; /* 카테고리 바로 아래, 오른쪽 정렬 */
+        margin: -6px 0 22px;
+      }
+      .tplsort {
+        position: relative;
+      }
+      .tplsort-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        background: var(--bg-accent);
+        border-radius: 10px;
+        padding: 7px 12px;
+        font-family: inherit;
+        font-size: 13px;
+        color: var(--text-strong);
+        cursor: pointer;
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+      .tplsort-btn:hover {
+        border-color: color-mix(in srgb, var(--point-main) 45%, var(--line));
+      }
+      .tplsort-btn svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+      }
+      .tplsort-btn .chev {
+        opacity: 0.65;
+        transition: transform 0.18s ease;
+      }
+      .tplsort.open .tplsort-btn .chev {
+        transform: rotate(180deg);
+      }
+      .tplsort-menu {
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        min-width: 148px;
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 6px;
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+        z-index: 30;
+        display: none;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .tplsort.open .tplsort-menu {
+        display: flex;
+      }
+      .tplsort-opt {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border: 0;
+        background: transparent;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-family: inherit;
+        font-size: 13px;
+        color: var(--text-weak);
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.12s ease, color 0.12s ease;
+      }
+      .tplsort-opt:hover {
+        background: var(--bg-accent);
+        color: var(--text-strong);
+      }
+      .tplsort-opt.on {
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+      .tplsort-opt .ck {
+        width: 15px;
+        height: 15px;
+        flex: none;
+        opacity: 0;
+        color: var(--point-main);
+      }
+      .tplsort-opt.on .ck {
+        opacity: 1;
+      }
       .tplgrid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 28px 20px;
+      }
+
+      /* ── 자연어 시안 생성 오미박스(스튜디오 하단 중앙) ── */
+      .nlgen {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 60;
+        width: min(680px, calc(100vw - 40px));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        pointer-events: none; /* 자식만 클릭 받게 */
+      }
+      /* 런처(홈)·A/B 비교 중엔 숨긴다 */
+      body:has(#flowHome.show) .nlgen,
+      body:has(.abmodal.show) .nlgen {
+        display: none;
+      }
+      .nlgen-inner {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 8px 8px 8px 14px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+      }
+      .nlgen-ico {
+        display: inline-flex;
+        color: var(--point-main);
+        flex: none;
+      }
+      .nlgen-ico svg {
+        width: 18px;
+        height: 18px;
+      }
+      .nlgen-input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--text-strong);
+        outline: none;
+      }
+      .nlgen-input::placeholder {
+        color: var(--text-weak);
+      }
+      .nlgen-go {
+        flex: none;
+        border: 0;
+        border-radius: 10px;
+        padding: 9px 16px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        background: var(--point-main);
+        cursor: pointer;
+        transition: filter 0.15s ease;
+      }
+      .nlgen-go:hover {
+        filter: brightness(1.08);
+      }
+      .nlgen-hint {
+        pointer-events: auto;
+        max-width: 100%;
+        font-size: 12px;
+        line-height: 1.5;
+        color: var(--text-weak);
+        background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 6px 12px;
+        opacity: 0;
+        transform: translateY(4px);
+        transition: opacity 0.16s ease, transform 0.16s ease;
+      }
+      .nlgen-hint.show {
+        opacity: 1;
+        transform: none;
+      }
+      .nlgen-hint.ok b {
+        color: var(--point-main);
+      }
+      .nlgen-hint.warn {
+        color: var(--text-strong);
+        border-color: color-mix(in srgb, var(--warning, #d08700) 55%, var(--line));
       }
       .tplcard {
         display: flex;
@@ -13560,6 +14020,9 @@
     <!-- 상단 바 — 참고 UI 구조(브랜드 · 중앙 탭 · 우측 액션). 런처가 열리면 그 오버레이가 덮는다. -->
     <header class="topbar" id="topbar">
       <div class="tb-left">
+        <button class="tb-back" id="tbBack" type="button" title="뒤로 (이전 화면)" aria-label="뒤로" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+        </button>
         <span class="tb-mark"><img src="src/logo%20chip01.svg" alt="WEMB" /></span>
         <span class="tb-name">Studio</span>
         <span class="tb-proj" id="tbProj"></span>
@@ -13744,6 +14207,9 @@
             </nav>
           </aside>
           <div class="lc-main">
+            <button class="lc-back" id="lcBack" type="button" title="뒤로 (이전 화면)" aria-label="뒤로" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6" /></svg>뒤로
+            </button>
             <div class="lc-title" id="lcTitle">전체</div>
             <div class="lc-sub" id="lcCount">프로젝트 0개</div>
             <div class="lc-tools" id="lcTools">
@@ -17153,6 +17619,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         /* 레이아웃 목록도 화면 종류(대시보드/디지털 트윈)에 맞게 다시 구성한다. */
         if (window.__syncSideLayout) window.__syncSideLayout();
         syncSkxControls(); /* SK하이닉스 화면이면 버전 토글 비활성 */
+        if (s === 'dt' && window.__paintDtFromPrd) window.__paintDtFromPrd(); /* PRD 답변을 트윈 패널에 반영 */
         try {
           localStorage.setItem('wemb-screen', s);
         } catch (e) {}
@@ -17180,6 +17647,37 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         repro.innerHTML = '<img class="hj-studioimg" src="src/templates/hanjin-studio.jpg" alt="한진 SMART 통합관제">';
         stage.appendChild(repro);
       }
+
+      /* ── 아직 Figma로 구현하지 않은 템플릿 — 임시로 카탈로그 이미지를 스튜디오 화면에 통째로 얹는다 ──
+         대시보드(.stage)·디지털 트윈(#dtStage) 어느 쪽이든 data-tpl='image'로 기본 크롬을 덮고
+         이미지 오버레이만 보여준다. (한진과 같은 방식이되, 화면 종류에 무관하게 재사용) */
+      function applyImageTemplate(img, screen) {
+        const stage = screen === 'dt' ? document.getElementById('dtStage') : document.querySelector('.stage');
+        if (!stage || !img) return;
+        stage.setAttribute('data-tpl', 'image');
+        try { syncSkxControls(); } catch (e) {}
+        let repro = stage.querySelector('.tplimg-repro');
+        if (repro) repro.remove();
+        repro = document.createElement('div');
+        repro.className = 'tplimg-repro';
+        /* 고해상도 시안 우선 — 파일명에 '-hi'가 붙은 1920급 시안(예: tpl-03-hi.jpg)이 있으면 그걸,
+           없으면(404) 카탈로그 썸네일(tpl-03.jpg)로 자동 폴백한다. 새 고해상도 파일을 넣기만 하면 반영됨. */
+        const hi = img.replace(/(\.[a-z0-9]+)$/i, '-hi$1');
+        repro.innerHTML = '<img class="tplimg-shot" src="' + hi + '" alt="템플릿 미리보기">';
+        const el = repro.querySelector('.tplimg-shot');
+        el.addEventListener('error', function onErr() { el.removeEventListener('error', onErr); el.src = img; }, { once: true });
+        stage.appendChild(repro);
+      }
+      /* 이미지 오버레이 제거(다른 프로젝트로 전환·초기화 시) */
+      function clearImageTemplate() {
+        document.querySelectorAll(".stage[data-tpl='image'], #dtStage[data-tpl='image']").forEach((stage) => {
+          stage.removeAttribute('data-tpl');
+          const r = stage.querySelector('.tplimg-repro');
+          if (r) r.remove();
+        });
+      }
+      window.__applyImageTemplate = applyImageTemplate;
+      window.__clearImageTemplate = clearImageTemplate;
 
       /* ── SK하이닉스 이천 FMS — Figma(1:139)를 순수 HTML/CSS DOM으로 구현 ──
          한진식(이미지/SVG 오버레이 + data-tpl 크롬 숨김)과 다르게, 자체 컨테이너(.skx-screen)에
@@ -17255,17 +17753,43 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           const arrow = svg.querySelector('[id="skx-arrow"]');
           if (!btn || !panel) return;
           btn.style.cursor = 'pointer';
-          let open = false,
-            spin = 0;
+          let open = false;
           btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             open = !open;
             panel.classList.toggle('skx-evt-open', open);
-            if (arrow) {
-              spin += 360;
-              arrow.style.transform = 'rotate(' + spin + 'deg)';
-            }
+            if (arrow) arrow.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+          });
+        })();
+
+        /* 0b) Auto 라디오 버튼(skx-button/auto) — 클릭하면 라디오처럼 선택/해제.
+           선택 시 링이 포인트 색으로 강조되고 가운데 점이 채워진다. */
+        (function autoRadio() {
+          const rbtn = svg.querySelector('[id="skx-button/auto"]');
+          const ring = svg.querySelector('[id="skx-radio"] circle') || svg.querySelector('[id="skx-Ellipse 1"]');
+          if (!rbtn || !ring) return;
+          rbtn.style.cursor = 'pointer';
+          let dot = svg.querySelector('[id="skx-radio-dot"]');
+          if (!dot) {
+            dot = document.createElementNS(SVGNS, 'circle');
+            dot.id = 'skx-radio-dot';
+            dot.setAttribute('cx', ring.getAttribute('cx'));
+            dot.setAttribute('cy', ring.getAttribute('cy'));
+            dot.setAttribute('r', '3.6');
+            dot.style.fill = 'var(--fg-point, #6aa0ff)';
+            dot.style.opacity = '0';
+            dot.style.transition = 'opacity 0.18s ease';
+            dot.style.pointerEvents = 'none';
+            ring.parentNode.appendChild(dot);
+          }
+          let on = false;
+          rbtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            on = !on;
+            rbtn.classList.toggle('skx-radio-on', on);
+            dot.style.opacity = on ? '1' : '0';
           });
         })();
 
@@ -17441,29 +17965,8 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           const mainG = svg.querySelector('[id="skx-main"]') || ev.parentNode;
           mainG.appendChild(ev);
           ev.style.zIndex = '99999';
-
-          const clipRect = svg.querySelector('clipPath[id="skx-clip0_0_1"] rect');
-          const up = 223.5; /* 패널 하단(1303.8) → viewBox 하단(1080.3)에 딱 맞춤 */
-          arrow.style.transformBox = 'fill-box';
-          arrow.style.transformOrigin = 'center';
-          arrow.style.transition = 'transform 0.3s ease';
-          arrow.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const open = ev.dataset.open === '1';
-            if (!open) {
-              ev.dataset.open = '1';
-              if (clipRect) clipRect.setAttribute('height', '273'); /* 데이터 노출 */
-              ev.style.transform = 'translateY(-' + up + 'px)';
-              arrow.style.transform = 'rotate(180deg)';
-            } else {
-              ev.dataset.open = '0';
-              ev.style.transform = ''; /* 아래로 슬라이드 */
-              arrow.style.transform = '';
-              const onEnd = () => { if (clipRect) clipRect.setAttribute('height', '49'); ev.removeEventListener('transitionend', onEnd); };
-              ev.addEventListener('transitionend', onEnd);
-            }
-          });
+          /* 열고 닫기(패널 슬라이드업 + 화살표 360° 회전)는 eventExpand()가 .skx-evt-open
+             클래스 토글로 단독 처리한다. 여기선 데이터 주입·z-order만 담당(핸들러 중복 제거). */
         })();
       }
       /* ── SK하이닉스 화면(하나의 인라인 SVG)의 패널 영역을 좌표로 묶어 그룹(<g>)으로 만들고,
@@ -20319,6 +20822,8 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           /* 삭제 X 등 컨트롤에서 시작한 드래그는 취소한다 — 안 그러면 패널이 끌려가며
              클릭이 삼켜져 '삭제 버튼을 눌러도 안 지워지는' 문제가 생긴다. */
           if (e.target.closest(CTRL_SEL)) { e.preventDefault(); return; }
+          /* 교체 대상 에셋을 집으면 패널 이동으로 번지지 않게 한다(클릭 선택·교체를 위해) */
+          if (e.target.closest('.swap-asset')) { e.preventDefault(); return; }
           /* 에셋 슬롯이 먼저 — 패널보다 안쪽이라 이걸 집으면 에셋만 이동한다 */
           const slot = e.target.closest('.assetslot');
           if (slot) {
@@ -20853,22 +21358,35 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         /* ---------- 내용(글자) ---------- */
         const CK = 'wemb-dt-content';
         const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm';
-        const textEls = [...dt.querySelectorAll(DTSEL)];
-        textEls.forEach((el, i) => (el.dataset.deid = 'x' + i));
-        const DEF = {};
-        textEls.forEach((el) => (DEF[el.dataset.deid] = el.innerHTML));
+        let layoutMode = false, contentMode = false;
+        let textEls = [], DEF = {};
         const saveContent = () => {
           const m = {};
           textEls.forEach((el) => { if (el.innerHTML !== DEF[el.dataset.deid]) m[el.dataset.deid] = el.innerHTML; });
           try { localStorage.setItem(CK, JSON.stringify(m)); } catch (e) {}
         };
-        try {
-          const r = localStorage.getItem(CK);
-          if (r) { const m = JSON.parse(r); textEls.forEach((el) => { if (m[el.dataset.deid] != null) el.innerHTML = m[el.dataset.deid]; }); }
-        } catch (e) {}
+        /* 기본값(글자) 캡처 — PRD 답변으로 트윈 콘텐츠가 새로 그려지면 __dtRecaptureDefaults(true)로
+           다시 불러 새 요소를 추적한다. reset=true면 이전 글자 편집(CK)은 버리고(구조가 바뀌었으니)
+           새 콘텐츠를 기본값으로 삼는다. reset=false면 저장된 글자 편집을 그대로 다시 입힌다. */
+        function captureDefaults(reset) {
+          if (reset) { try { localStorage.removeItem(CK); } catch (e) {} }
+          textEls = [...dt.querySelectorAll(DTSEL)];
+          textEls.forEach((el, i) => (el.dataset.deid = 'x' + i));
+          DEF = {};
+          textEls.forEach((el) => (DEF[el.dataset.deid] = el.innerHTML));
+          if (!reset) {
+            try {
+              const r = localStorage.getItem(CK);
+              if (r) { const m = JSON.parse(r); textEls.forEach((el) => { if (m[el.dataset.deid] != null) el.innerHTML = m[el.dataset.deid]; }); }
+            } catch (e) {}
+          }
+          /* 내용 수정 모드 중에 다시 그려졌으면 새 요소에도 편집 가능 상태를 이어준다 */
+          if (contentMode) textEls.forEach((el) => el.setAttribute('contenteditable', 'true'));
+        }
+        window.__dtRecaptureDefaults = captureDefaults;
+        captureDefaults(false);
 
         /* ---------- 모드 토글 ---------- */
-        let layoutMode = false, contentMode = false;
         function refreshBanner() {
           if (layoutMode) bannerText.textContent = '패널은 끌어서 자유롭게, 에셋은 끌어서 순서를 바꿔보세요. 세로/가로 버튼으로 에셋 정렬도 바꿀 수 있어요.';
           else if (contentMode) bannerText.textContent = '글자를 클릭해 직접 수정하세요. 변경 내용은 자동 저장됩니다.';
@@ -20957,7 +21475,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           if (!(layoutMode || contentMode) || e.button !== 0) return;
           /* 에셋 컨트롤(세로/가로 토글·크기 슬라이더)·에셋 슬롯·삭제 X 등 컨트롤은 패널 이동으로 가로채지 않는다.
              (특히 .pdel 삭제 버튼을 여기서 잡으면 pointerdown이 클릭을 삼켜 삭제가 안 됨) */
-          if (e.target.closest('.assettools, .aszr, .assetslot, .pdel, .psz, .compcopy, .charttype, .ct-btn')) return;
+          if (e.target.closest('.assettools, .aszr, .assetslot, .swap-asset, .pdel, .psz, .compcopy, .charttype, .ct-btn')) return;
           const panel = e.target.closest('.dt-drag');
           if (!panel || !dt.contains(panel)) return;
           /* 클릭한 패널만 편집 — 선택 안 된 패널을 누르면 먼저 선택(이동은 안 함) */
@@ -23259,15 +23777,15 @@ ${wembTipRuntime()}
             return `<div class="ph"><h3>새 게이지</h3></div><div class="addedbody" style="align-items:center"><svg viewBox="0 0 100 100" width="110" height="110"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--point-main)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${(c * v).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 50 50)"/><text x="50" y="56" text-anchor="middle" font-size="22" font-weight="800" fill="var(--text-strong)">72%</text></svg></div>`;
           },
         };
-        const addPanel = (type) => {
+        const addPanel = (type, customHTML) => {
           const cols = activeCols();
           if (!cols) {
             if (typeof toast === 'function') toast('이 화면에서는 패널 추가를 지원하지 않아요.', { type: 'err' });
-            return;
+            return null;
           }
           const panel = document.createElement('div');
           panel.className = 'panel';
-          panel.innerHTML = (build[type] || build.kpi)();
+          panel.innerHTML = customHTML || (build[type] || build.kpi)();
           if (cols.classList.contains('gridmode')) {
             /* 레이아웃(그리드) 모드: 패널은 .cols의 '직속 그리드 아이템'이라 .col로 감싸면
                자동배치 셀에 갇혀 높이가 1px로 찌부러진다(반응형으로 안 나오던 원인).
@@ -23289,11 +23807,194 @@ ${wembTipRuntime()}
           ensureDelBtns();
           if (sizingOn) ensureSzHandles();
           panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          return panel;
         };
-        document.querySelector('.addpanel')?.addEventListener('click', (e) => {
-          const b = e.target.closest('button[data-add]');
-          if (b) addPanel(b.dataset.add);
-        });
+
+        /* ===== 콘텐츠 추가 컨텍스트 창 — 문장 → 그에 맞는 패널 콘텐츠 자동 생성 =====
+           '＋ 패널'을 누르면 입력창이 열리고, 문장을 넣으면 시각화 종류(차트/표/게이지/지표/CCTV)와
+           제목·데이터를 추정해 패널을 채운다. 백엔드 없이 키워드로 결정적으로 동작(임시). */
+        const PANEL = {
+          esc: (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])),
+          titleFrom(raw) {
+            let t = String(raw || '').trim()
+              .replace(/(라인\s*차트|막대\s*차트|바\s*차트|꺾은선|line\s*chart|bar\s*chart)/gi, ' ')
+              .replace(/(차트|그래프|테이블|게이지|그리드|패널|화면|영상그리드|심볼|아이콘|기호)/g, ' ')
+              .replace(/(관련|및|와|과|의|을|를|으로|로)\s*$/g, ' ')
+              .replace(/(보여줘|만들어줘|만들어|생성해줘|생성|추가해줘|추가|넣어줘|넣어)/g, ' ')
+              .replace(/\s+/g, ' ').trim();
+            return t || '새 패널';
+          },
+          /* 아이콘 세트(24x24 stroke) — 심볼 패널용 */
+          ICO: {
+            fire:   '<path d="M12 2s5 5.5 5 10a5 5 0 0 1-10 0c0-4.5 5-10 5-10z"/>',
+            drop:   '<path d="M12 2.7s5.5 6.8 5.5 10.8a5.5 5.5 0 0 1-11 0C6.5 9.5 12 2.7 12 2.7z"/>',
+            gas:    '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+            quake:  '<polyline points="2 12 6 12 9 5 13 19 16 12 22 12"/>',
+            cctv:   '<path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z"/><polygon points="14 11 21 7.5 21 15.5 14 12"/>',
+            thermo: '<path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>',
+            bolt:   '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+            user:   '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
+          },
+          icon(name, size) {
+            const sz = size || 26;
+            return '<svg viewBox="0 0 24 24" width="' + sz + '" height="' + sz + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (this.ICO[name] || this.ICO.bolt) + '</svg>';
+          },
+          /* 문장에서 관련 심볼 추출(화재·누수·가스 등) */
+          symList(s) {
+            const out = [], seen = new Set();
+            /* q = 라이브러리 에셋 조회용 단어(등록된 화재·누수 등과 매칭) */
+            const add = (re, icon, label, q) => { if (re.test(s) && !seen.has(icon)) { seen.add(icon); out.push({ icon, label, q }); } };
+            add(/화재|소방|불|화염|연기/, 'fire', '화재 감지', '화재');
+            add(/누수|침수|물\b|배관|수위/, 'drop', '누수 감지', '누수');
+            add(/가스|유독|메탄|누출/, 'gas', '가스 감지', '가스');
+            add(/지진|진동|기상|재난/, 'quake', '지진·기상', '지진');
+            add(/cctv|영상|카메라/, 'cctv', 'CCTV', 'CCTV');
+            add(/온도|온습도|열\b|항온/, 'thermo', '온습도', '온습도');
+            add(/전력|전기|전압|전류/, 'bolt', '전력', '전력');
+            add(/출입|보안|카드|얼굴|지문/, 'user', '출입 통제', '출입');
+            if (!out.length) { out.push({ icon: 'fire', label: '화재 감지', q: '화재' }, { icon: 'drop', label: '누수 감지', q: '누수' }, { icon: 'thermo', label: '온습도', q: '온습도' }); }
+            return out;
+          },
+          /* 심볼 글리프 — 등록된 라이브러리 에셋이 있으면 그걸, 없으면 내장 아이콘. 항상 '.swap-asset'
+             박스로 감싸 패널 편집 중 라이브러리에서 교체할 수 있게 한다. */
+          glyph(item, size) {
+            let svg = null, tint = false;
+            try {
+              const a = (typeof window.__wembFindAsset === 'function') ? window.__wembFindAsset(item.q, ['symbol', 'icon']) : null;
+              if (a && a.svg) svg = a.svg;
+            } catch (e) {}
+            if (!svg) { svg = this.icon(item.icon, size); tint = true; }
+            const style = `width:${size}px;height:${size}px;` + (tint ? 'color:var(--point-main);' : '');
+            return `<span class="swap-asset apc-lib" data-swap="symbol" style="${style}">${svg}</span>`;
+          },
+          swapChart(frag) {
+            return `<div class="swap-asset" data-swap="chart" style="width:100%">${frag}</div>`;
+          },
+          /* ── 콘텐츠 조각(fragment) ── */
+          barsFrag() {
+            const bars = [42, 68, 55, 80, 63, 74, 90, 58, 66, 79].map((h) => `<i style="height:${h}%"></i>`).join('');
+            return `<div class="minibars">${bars}</div>`;
+          },
+          lineFrag() {
+            const vals = [34, 52, 45, 61, 50, 72, 63, 80, 70, 88];
+            const n = vals.length, W = 300, H = 120, pad = 10;
+            const xs = (i) => (pad + i * (W - 2 * pad) / (n - 1)).toFixed(1);
+            const ys = (v) => (H - pad - (v / 100) * (H - 2 * pad)).toFixed(1);
+            const line = vals.map((v, i) => xs(i) + ',' + ys(v)).join(' ');
+            const area = pad + ',' + (H - pad) + ' ' + line + ' ' + (W - pad) + ',' + (H - pad);
+            const dots = vals.map((v, i) => `<circle cx="${xs(i)}" cy="${ys(v)}" r="2.6" fill="var(--point-main)" vector-effect="non-scaling-stroke"/>`).join('');
+            return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:130px;overflow:visible"><polygon points="${area}" fill="var(--point-main)" opacity="0.12"/><polyline points="${line}" fill="none" stroke="var(--point-main)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;
+          },
+          symbolsFrag(s, compact) {
+            const items = this.symList(s);
+            if (compact) {
+              return '<div style="display:flex;gap:8px;flex-wrap:wrap">' + items.slice(0, 5).map((it) =>
+                `<span style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;font-size:11.5px;color:var(--text-strong)">${this.glyph(it, 16)}${this.esc(it.label)}</span>`
+              ).join('') + '</div>';
+            }
+            const cols = Math.min(items.length, 4);
+            return '<div style="display:grid;grid-template-columns:repeat(' + cols + ',1fr);gap:8px;width:100%">' + items.map((it) =>
+              `<div style="display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 6px;border:1px solid var(--line);border-radius:10px;background:var(--bg-surface)">${this.glyph(it, 28)}<span style="font-size:11.5px;color:var(--text-weak);text-align:center">${this.esc(it.label)}</span></div>`
+            ).join('') + '</div>';
+          },
+          /* ── 종류 결정 ── */
+          resolve(s) {
+            const hasSym = /심볼|아이콘|기호/.test(s);
+            const isLine = /라인|꺾은선|선\s*그래프|선\s*차트|line/.test(s);
+            const isBar = /막대|바\s*차트|bar/.test(s);
+            const wantsChart = /차트|그래프|추이|트렌드|추세|분포|통계|막대|라인|line|bar/.test(s) ||
+              /전력|전압|전류|온도|습도|압력|트래픽|처리량|거래|발전|사용량|소비/.test(s);
+            if (hasSym && wantsChart) return { kind: 'symchart', line: isLine };
+            if (hasSym) return { kind: 'symbol' };
+            if (/cctv|영상|카메라|감시화면/.test(s)) return { kind: 'cctv' };
+            if (/게이지|비율|퍼센트|%|가동률|사용률|점유율|달성률|부하율/.test(s)) return { kind: 'gauge' };
+            if (/표|목록|리스트|테이블|현황표|이벤트|알람|경보|로그|이력|랭킹|순위/.test(s)) return { kind: 'table' };
+            if (isLine) return { kind: 'line' };
+            if (wantsChart) return { kind: isBar ? 'bar' : (isLine ? 'line' : 'bar') };
+            if (/지표|kpi|수치|건수|카운트|개수|합계|총|누적|현재값/.test(s)) return { kind: 'kpi' };
+            return { kind: 'kpi' };
+          },
+          build(kind, title, s, opt) {
+            const T = this.esc(title);
+            const wrap = (body, style) => `<div class="ph"><h3>${T}</h3></div><div class="addedbody"${style ? ' style="' + style + '"' : ''}>${body}</div>`;
+            if (kind === 'line') return wrap(this.swapChart(this.lineFrag()));
+            if (kind === 'bar') return wrap(this.swapChart(this.barsFrag()));
+            if (kind === 'symbol') return wrap(this.symbolsFrag(s, false));
+            if (kind === 'symchart') return wrap(this.symbolsFrag(s, true) + this.swapChart((opt && opt.line) ? this.lineFrag() : this.barsFrag()), 'gap:12px');
+            if (kind === 'gauge') {
+              const r = 40, c = 2 * Math.PI * r, v = 0.72;
+              return wrap(`<svg viewBox="0 0 100 100" width="110" height="110"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--point-main)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${(c * v).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 50 50)"/><text x="50" y="56" text-anchor="middle" font-size="22" font-weight="800" fill="var(--text-strong)">72%</text></svg>`, 'align-items:center');
+            }
+            if (kind === 'kpi') return wrap(`<div class="kpinum num">1,284</div><div class="kpisub">현재값 · 전일 대비 <b style="color:var(--point-main)">+3.2%</b></div>`);
+            if (kind === 'cctv') {
+              const isFire = /소방|화재/.test(s);
+              const names = isFire ? ['소화전 A동', '스프링클러 B동', '감지기 C동', '펌프실'] : ['정문 CCTV #1', '옥외 CCTV #2', '기계실 CCTV #3', '제어동 CCTV #4'];
+              const tiles = names.map((n) => `<div style="position:relative;aspect-ratio:16/9;background:#0d0f14;border:1px solid var(--line);border-radius:6px;display:flex;align-items:flex-end;padding:5px;font-size:10px;color:var(--text-weak);overflow:hidden"><span style="position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--danger,#e5484d)"></span>${this.esc(n)}</div>`).join('');
+              return wrap(`<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%">${tiles}</div>`);
+            }
+            /* table */
+            const evt = /이벤트|알람|경보|로그|이력/.test(s);
+            if (evt) return wrap(`<table><thead><tr><th>시간</th><th>대상</th><th>등급</th></tr></thead><tbody><tr><td class="num">09:41:12</td><td>변압기 #302</td><td>위험</td></tr><tr><td class="num">09:38:05</td><td>CCTV #04</td><td>주의</td></tr><tr><td class="num">09:33:47</td><td>펌프실 #1</td><td>정상</td></tr></tbody></table>`);
+            return wrap(`<table><thead><tr><th>항목</th><th>값</th><th>상태</th></tr></thead><tbody><tr><td>항목 A</td><td class="num">128</td><td>정상</td></tr><tr><td>항목 B</td><td class="num">64</td><td>주의</td></tr><tr><td>항목 C</td><td class="num">301</td><td>정상</td></tr></tbody></table>`);
+          },
+          fromText(raw) {
+            const s = String(raw || '').toLowerCase();
+            const r = this.resolve(s);
+            const title = this.titleFrom(raw);
+            return { type: r.kind, line: !!r.line, title, html: this.build(r.kind, title, s, r) };
+          },
+        };
+        const VIZ_LBL = { bar: '막대 차트', line: '라인 차트', gauge: '게이지', kpi: '지표', table: '표', cctv: 'CCTV 영상', symbol: '심볼', symchart: '심볼+차트' };
+        function addPanelFromText(raw) {
+          const spec = PANEL.fromText(raw);
+          const panel = addPanel(spec.type, spec.html);
+          return panel ? spec : null;
+        }
+
+        /* ── 컨텍스트 창 UI — '＋ 패널' 아래에 인라인으로 열린다 ── */
+        const addpanelBar = document.querySelector('.addpanel');
+        if (addpanelBar) {
+          const ctx = document.createElement('div');
+          ctx.className = 'addpanel-ctx';
+          ctx.innerHTML =
+            '<div class="apc-hint">문장을 넣으면 그에 맞는 콘텐츠가 패널에 채워져요.</div>' +
+            '<div class="apc-row">' +
+              '<input type="text" class="apc-input" maxlength="60" placeholder="예: 전력 사용량 추이 차트 / CCTV 영상 / 알람 이벤트 표" />' +
+              '<button type="button" class="apc-go">생성</button>' +
+            '</div>' +
+            '<div class="apc-foot"><button type="button" class="apc-empty">빈 패널로 추가</button></div>';
+          addpanelBar.insertAdjacentElement('afterend', ctx);
+          const ctxInput = ctx.querySelector('.apc-input');
+          const ctxHint = ctx.querySelector('.apc-hint');
+          const openCtx = () => { ctx.classList.add('open'); setTimeout(() => { try { ctxInput.focus(); } catch (e) {} }, 30); };
+          const closeCtx = () => { ctx.classList.remove('open'); };
+          const runCtx = () => {
+            const v = ctxInput.value.trim();
+            if (!v) { ctxInput.focus(); return; }
+            const spec = addPanelFromText(v);
+            if (!spec) return; /* 해당 화면 미지원 — addPanel이 토스트 */
+            ctxHint.innerHTML = '<b>' + PANEL.esc(spec.title) + '</b> — ' + (VIZ_LBL[spec.type] || '패널') + ' 패널을 추가했어요.';
+            ctxInput.value = '';
+            ctxInput.focus();
+            if (typeof toast === 'function') toast('“' + spec.title + '” ' + (VIZ_LBL[spec.type] || '패널') + ' 패널을 추가했어요.', { type: 'ok' });
+          };
+          ctx.querySelector('.apc-go').onclick = runCtx;
+          ctxInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); runCtx(); } else if (e.key === 'Escape') { closeCtx(); } });
+          ctx.querySelector('.apc-empty').onclick = () => { addPanel('empty'); closeCtx(); };
+          /* '＋ 패널' 클릭 = 컨텍스트 창 토글, 나머지 data-add 버튼은 그대로 즉시 추가 */
+          addpanelBar.addEventListener('click', (e) => {
+            const b = e.target.closest('button[data-add]');
+            if (!b) return;
+            if (b.dataset.add === 'empty') { ctx.classList.contains('open') ? closeCtx() : openCtx(); }
+            else addPanel(b.dataset.add);
+          });
+          window.__addPanelFromText = addPanelFromText; /* 외부/테스트용 */
+        } else {
+          document.querySelector('.addpanel')?.addEventListener('click', (e) => {
+            const b = e.target.closest('button[data-add]');
+            if (b) addPanel(b.dataset.add);
+          });
+        }
 
         /* ── '패널편집' 마스터 버튼 — 패널 조정·배치 수정·내용 수정을 한 번에 켜고 끈다.
            숨겨둔 개별 토글(sizeToggle·editToggle·contentToggle)을 필요한 것만 클릭해 상태를 맞춘다.
@@ -23343,7 +24044,7 @@ ${wembTipRuntime()}
         szBtn?.addEventListener('click', () => setSizing(!sizingOn));
 
         /* 손잡이 드래그(포인터) — 그 패널만 고정 크기로 전환 후 크기 갱신 */
-        let szEl = null, szSX = 0, szSY = 0, szSW = 0, szSH = 0, szMinW = 80, szMinH = 64;
+        let szEl = null, szGrabX = 0, szGrabY = 0, szSW = 0, szSH = 0, szMinW = 80, szMinH = 64, szScale = 1;
         main.addEventListener('pointerdown', (e) => {
           if (!sizingOn) return;
           const h = e.target.closest('.psz');
@@ -23354,10 +24055,18 @@ ${wembTipRuntime()}
           e.stopPropagation();
           const r = p.getBoundingClientRect();
           szEl = p;
-          szSX = e.clientX;
-          szSY = e.clientY;
-          szSW = r.width;
-          szSH = r.height;
+          /* 패널이 배율이 걸린 컨테이너(예: SK하이닉스 1920×1080 화면) 안에 있으면
+             그 배율만큼 나눠야 손잡이가 커서를 '정확히' 따라온다.
+             rect(=화면상 크기) ÷ offset(=레이아웃 크기) 가 누적 배율. 배율이 없으면 1.
+             offset 정수 반올림 오차(≈1px 미만)는 배율 1로 스냅한다. */
+          szScale = (p.offsetWidth ? r.width / p.offsetWidth : 1) || 1;
+          if (Math.abs(szScale - 1) < 0.02) szScale = 1;
+          /* 잡은 지점과 패널 오른쪽·아래 모서리의 간격(화면 px). 매 프레임 이 간격을 유지해
+             모서리를 커서에 붙여 둔다 → 시작 순간 튐 없음 + 드래그한 만큼만 정확히 커짐. */
+          szGrabX = r.right - e.clientX;
+          szGrabY = r.bottom - e.clientY;
+          szSW = r.width / szScale;
+          szSH = r.height / szScale;
           /* 에셋이 든 패널은, 에셋 영역(+상하좌우 패딩)보다 작게 줄지 않도록 최소 크기를 잡는다.
              → 패널을 줄여도 에셋 영역이 침범(클립)되지 않고 패딩 프레임이 유지된다. */
           szMinW = 80; szMinH = 64;
@@ -23370,7 +24079,8 @@ ${wembTipRuntime()}
             const phH = ph ? ph.getBoundingClientRect().height : 0;
             const rrect = arow.getBoundingClientRect();
             const padV = 28, brd = 2; /* .assetwrap 상하 패딩(14+14) + 테두리 */
-            szMinH = Math.ceil(phH + rrect.height + padV + brd);
+            /* phH·rrect 는 화면상 크기 → 배율로 나눠 레이아웃 px 최소치로 맞춘다 */
+            szMinH = Math.ceil((phH + rrect.height) / szScale + padV + brd);
           }
           /* 왼쪽 상단(코너)을 고정하고 오른쪽·아래로만 크기가 자라도록 앵커링.
              place-self:start 는 기둥(flex)·격자(grid) 양쪽에서 stretch 를 눌러
@@ -23387,7 +24097,9 @@ ${wembTipRuntime()}
             /* 2-패스: 먼저 다른 패널들의 '현재 높이'를 전부 측정한 뒤 한꺼번에 고정한다.
                (측정하며 바로 고정하면 그 사이 레이아웃이 다시 흘러 형제 높이가 살짝 튄다) */
             const others = [...col.querySelectorAll(':scope > .panel')].filter((s) => s !== p);
-            const hs = others.map((s) => Math.round(s.getBoundingClientRect().height));
+            /* 형제 높이도 반올림 없는 정확한 레이아웃 px 로 고정 → 위 형제 높이 합이
+               그대로 유지돼, 드래그하는 패널의 '상단'이 조금도 밀리지 않는다. */
+            const hs = others.map((s) => s.getBoundingClientRect().height / szScale);
             others.forEach((s, i) => { s.style.flex = '0 0 ' + hs[i] + 'px'; });
           }
           p.style.flex = '0 0 auto';
@@ -23400,8 +24112,14 @@ ${wembTipRuntime()}
         });
         main.addEventListener('pointermove', (e) => {
           if (!szEl) return;
-          szEl.style.width = Math.max(szMinW, szSW + (e.clientX - szSX)) + 'px';
-          szEl.style.height = Math.max(szMinH, szSH + (e.clientY - szSY)) + 'px';
+          /* 매 프레임 패널의 실제 위치(고정된 상단·왼쪽)를 다시 읽어, 오른쪽·아래 모서리가
+             '커서 + 처음 잡은 간격'에 정확히 오도록 크기를 역산한다. grid·flex·배율 등
+             레이아웃이 어떻든 손잡이가 커서를 그대로 따라오므로 딱 드래그한 만큼만 커진다. */
+          const rect = szEl.getBoundingClientRect();
+          const w = (e.clientX + szGrabX - rect.left) / szScale;
+          const h = (e.clientY + szGrabY - rect.top) / szScale;
+          szEl.style.width = Math.max(szMinW, w) + 'px';
+          szEl.style.height = Math.max(szMinH, h) + 'px';
         });
         const endSz = () => {
           if (!szEl) return;
@@ -23649,6 +24367,46 @@ ${wembTipRuntime()}
             return `<div class="cbox">${chartArt(it.id)}</div>`;
           }
 
+          /* 에셋의 '원본 시각 요소'만 (래퍼 없이 SVG/IMG 코드) — 외부에서 크기를 직접 잡을 때 사용 */
+          function rawVisual(it) {
+            if (it.html && (it.cat === 'symbol' || it.cat === 'icon' || it.cat === 'panel')) return it.html;
+            if (it.cat === 'symbol' && it.src) return `<img src="${it.src}" alt="" draggable="false">`;
+            if (it.cat === 'icon') return iconSvg(ICONS[it.id] || '');
+            if (it.html) return it.html;
+            return chartArt(it.id);
+          }
+          /* ── 라이브러리 에셋 조회 API — 단어로 등록된 에셋/아이콘을 찾아 그 원본 시각을 돌려준다 ──
+             콘텐츠 자동 생성(패널 컨텍스트 창)이 '똑같은 단어의 에셋'을 재사용하도록 노출. */
+          window.__wembFindAsset = function (query, prefCats) {
+            const q = String(query == null ? '' : query).trim();
+            if (!q) return null;
+            const nq = q.toLowerCase().replace(/\s+/g, '');
+            if (!nq) return null;
+            const cats = prefCats && prefCats.length ? prefCats : ['symbol', 'icon'];
+            const pool = [];
+            cats.forEach((cat) => {
+              let arr = [];
+              if (cat === 'chart') { try { arr = buildChartItems(); } catch (e) { arr = []; } }
+              else arr = CATS[cat] || [];
+              arr.forEach((it) => { if (it && it.name) pool.push(it); });
+            });
+            const norm = (s) => String(s || '').toLowerCase().replace(/\s+/g, '');
+            let best = null, bestScore = 0;
+            pool.forEach((it) => {
+              const nm = norm(it.name);
+              if (!nm) return;
+              /* '심볼 01' 같은 번호만 있는 일반명은 단어 매칭에서 제외 */
+              if (/^심볼\d*$/.test(nm) || /^아이콘\d*$/.test(nm)) return;
+              let score = 0;
+              if (nm === nq) score = 100;
+              else if (nm.startsWith(nq) || nq.startsWith(nm)) score = 82;
+              else if (nm.includes(nq) || nq.includes(nm)) score = 64;
+              if (score > bestScore) { bestScore = score; best = it; }
+            });
+            if (!best || bestScore < 60) return null;
+            return { name: best.name, cat: best.cat, svg: rawVisual(best) };
+          };
+
           /* 활성 화면에 새 호스트 패널을 하나 만들어 반환 (패널이 전혀 없을 때만) */
           function createHostPanel(cols) {
             const panel = document.createElement('div');
@@ -23836,13 +24594,93 @@ ${wembTipRuntime()}
             render(b.dataset.lib);
           });
 
-          /* 클릭 삽입 — 패널편집에서 선택한 패널이 있으면 그 패널에 넣는다(기존 패널 포함) */
+          /* ── 패널 편집 중 '에셋 교체' ──
+             패널 편집(크기/배치/내용 중 하나라도)이 켜진 상태에서 패널 안 에셋(.swap-asset 또는 .assetslot)을
+             클릭해 선택하고, 라이브러리 항목을 클릭/드롭하면 '그 자리만' 교체한다. */
+          function editActive() {
+            return !!document.querySelector('.cols.editing, .cols.sizing, .stage.content-editing, .dtstage.dt-editing, .dtstage.dt-content-editing');
+          }
+          /* 삭제 단위 — 심볼 글리프는 라벨까지 포함한 타일/칩째로, 그 외(차트·에셋 슬롯)는 자기 자신 */
+          function deleteUnitOf(sw) {
+            if (!sw) return null;
+            if (sw.classList.contains('assetslot')) return sw;
+            if (sw.dataset.swap === 'symbol' && sw.parentElement) return sw.parentElement;
+            return sw;
+          }
+          function clearSwapSel() {
+            document.querySelectorAll('.swap-sel').forEach((el) => el.classList.remove('swap-sel'));
+            document.querySelectorAll('.swap-del').forEach((b) => b.remove());
+            document.querySelectorAll('.has-swapdel').forEach((el) => el.classList.remove('has-swapdel'));
+            window.__swapTarget = null;
+          }
+          function deleteSwap(sw) {
+            const unit = deleteUnitOf(sw);
+            clearSwapSel();
+            if (unit && unit.parentElement) unit.remove();
+            if (typeof toast === 'function') toast('에셋을 삭제했어요.', { type: 'ok' });
+          }
+          window.__wembDeleteSwap = deleteSwap;
+          function swapInto(el, it) {
+            if (!el || !it) return;
+            const vis = rawVisual(it);
+            const host = el.classList.contains('assetslot') ? (el.querySelector('.avis') || el) : el;
+            if (host.classList.contains('apc-lib')) host.innerHTML = vis;
+            else host.innerHTML = '<span class="apc-lib" style="width:100%;height:100%;display:inline-flex">' + vis + '</span>';
+            el.classList.add('swap-just');
+            setTimeout(() => el.classList.remove('swap-just'), 600);
+          }
+          window.__wembSwapInto = swapInto;
+          /* 에셋 클릭 = 교체 대상 선택 + 삭제(×) 버튼 노출 (편집 중에만) — 캡처 단계에서 먼저 처리 */
+          document.addEventListener('click', (e) => {
+            if (!editActive()) { if (window.__swapTarget) clearSwapSel(); return; }
+            /* 삭제 버튼(×) 먼저 처리 */
+            const delBtn = e.target.closest('.swap-del');
+            if (delBtn) { e.preventDefault(); e.stopPropagation(); deleteSwap(window.__swapTarget); return; }
+            if (e.target.closest('.aszr, .assettools, .pdel, .psz, .szh, .libitem')) return; /* 컨트롤은 제외 */
+            const sw = e.target.closest('.swap-asset, .assetslot');
+            if (!sw || !sw.closest('.panel')) return;
+            e.preventDefault();
+            e.stopPropagation();
+            if (window.__swapTarget === sw) { clearSwapSel(); return; }
+            clearSwapSel();
+            sw.classList.add('swap-sel');
+            window.__swapTarget = sw;
+            /* 선택한 에셋(삭제 단위)에 × 삭제 버튼을 붙인다 */
+            const unit = deleteUnitOf(sw);
+            if (unit) {
+              unit.classList.add('has-swapdel');
+              const del = document.createElement('button');
+              del.type = 'button';
+              del.className = 'swap-del';
+              del.title = '에셋 삭제';
+              del.setAttribute('aria-label', '에셋 삭제');
+              del.textContent = '×';
+              unit.appendChild(del);
+            }
+            if (typeof toast === 'function') toast('교체는 라이브러리에서 고르고, 삭제는 × 또는 Delete 키를 눌러요.', { type: 'info' });
+          }, true);
+          /* Delete/Backspace 로도 선택 에셋 삭제 (입력창 포커스 중엔 무시) */
+          document.addEventListener('keydown', (e) => {
+            if (!window.__swapTarget || !editActive()) return;
+            const t = e.target;
+            if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName || ''))) return;
+            if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); deleteSwap(window.__swapTarget); }
+          });
+
+          /* 클릭 삽입 — 교체 대상이 선택돼 있으면 그 에셋을 교체, 아니면 선택 패널에 삽입 */
           grid.addEventListener('click', (e) => {
             const el = e.target.closest('.libitem');
             if (!el) return;
             const it = CATS[el.dataset.cat][+el.dataset.idx];
+            if (!it) return;
+            if (window.__swapTarget && document.contains(window.__swapTarget) && editActive()) {
+              swapInto(window.__swapTarget, it);
+              clearSwapSel();
+              if (typeof toast === 'function') toast('에셋을 교체했어요.', { type: 'ok' });
+              return;
+            }
             const selp = (typeof state !== 'undefined' && state.screen === 'dt') ? window.__selDtPanel : window.__selPanel;
-            if (it) place(it, selp || null);
+            place(it, selp || null);
           });
 
           /* 드래그 삽입 */
@@ -23878,6 +24716,16 @@ ${wembTipRuntime()}
             const it = window.__libDrag;
             if (!it) return;
             e.preventDefault();
+            /* 특정 에셋(.swap-asset/.assetslot) 위에 떨어뜨리면 그 자리만 교체 */
+            const swapEl = e.target && e.target.closest ? e.target.closest('.swap-asset, .assetslot') : null;
+            if (swapEl && swapEl.closest('.panel')) {
+              swapInto(swapEl, it);
+              clearSwapSel();
+              window.__libDrag = null;
+              main.classList.remove('libdrag');
+              if (typeof toast === 'function') toast('에셋을 교체했어요.', { type: 'ok' });
+              return;
+            }
             const targetPanel = e.target && e.target.closest ? e.target.closest('.panel') : null;
             place(it, targetPanel);
             window.__libDrag = null;
@@ -24811,10 +25659,22 @@ ${wembTipRuntime()}
         ].map((title, i) => {
           const n = i + 1;
           const dt = title.startsWith('Digital Twin');
+          /* 실제로 다양한 등록일(2024~2026) — 최신순 정렬이 뚜렷하게 보이도록 섞어 배치 */
+          const TPL_DATES = [
+            'February 12, 2024', 'November 3, 2025', 'June 18, 2025', 'September 27, 2026',
+            'March 9, 2025', 'December 14, 2025', 'August 1, 2026', 'May 22, 2024',
+            'October 30, 2025', 'January 16, 2026', 'January 17, 2026', 'July 5, 2024',
+            'April 11, 2026', 'February 28, 2025', 'November 24, 2026', 'June 2, 2026',
+            'September 8, 2024', 'December 1, 2026',
+          ];
+          const date = TPL_DATES[i] || 'July 24, 2026';
           return {
             img: 'src/templates/tpl-' + String(n).padStart(2, '0') + '.jpg',
             title,
-            date: n === 1 ? 'February, 2024' : 'July 24, 2026',
+            date,
+            /* 정렬용 값 — ts(최신순): 표시 날짜에서 직접 파싱, pop(인기순): 안정적 의사 조회수 */
+            ts: Date.parse(date),
+            pop: ((n * 7919) % 900) + 100,
             screen: dt ? 'dt' : 'dash',
             badges: [[dt ? 'Digital Twin DT' : 'Dashboard', 'sol'], [n === 1 ? 'FMS' : 'DCIM', 'con']],
           };
@@ -24839,6 +25699,41 @@ ${wembTipRuntime()}
         })();
         let tplFilter = 'All categories';
         let tplSelected = null; /* 상세 페이지로 열어 둔 템플릿(null이면 갤러리) */
+        /* ── 전역 뒤로가기용 — 현재 화면 상태 읽기 / 복원 ──
+           상태: {t:'launcher',v} 런처 뷰 · {t:'tpl',tpl:제목} 템플릿 상세 · {t:'page',p} 스튜디오 페이지 */
+        window.__navState = function () {
+          if (home && home.classList.contains('show')) {
+            return tplSelected ? { t: 'tpl', tpl: tplSelected.title } : { t: 'launcher', v: view };
+          }
+          const op = [...document.querySelectorAll('.page')].find((p) => !p.hidden);
+          return { t: 'page', p: op ? op.dataset.page : ((function () { try { return localStorage.getItem('wemb-view'); } catch (e) { return null; } })() || 'wire') };
+        };
+        window.__navRestore = function (st) {
+          if (!st) return;
+          if (st.t === 'launcher') {
+            tplSelected = null;
+            setView(st.v || 'all');
+            if (home) home.classList.add('show');
+            try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
+          } else if (st.t === 'tpl') {
+            tplSelected = TEMPLATES.find((x) => x.title === st.tpl) || null;
+            renderProjects();
+            if (home) home.classList.add('show');
+          } else if (st.t === 'page') {
+            if (home) home.classList.remove('show');
+            if (window.__setPage) window.__setPage(st.p, { noHistory: true });
+          }
+        };
+        /* 템플릿 정렬 — 최신순(날짜)·이름순(제목)·인기순(조회수) */
+        const TPL_SORTS = { recent: '최신순', name: '이름순', pop: '인기순' };
+        let tplSort = 'recent';
+        function sortTemplates(arr) {
+          const a = arr.slice();
+          if (tplSort === 'name') a.sort((x, y) => x.title.localeCompare(y.title, 'en'));
+          else if (tplSort === 'pop') a.sort((x, y) => (y.pop || 0) - (x.pop || 0));
+          else a.sort((x, y) => (y.ts || 0) - (x.ts || 0));
+          return a;
+        }
 
         const VIEW_META = {
           all: { title: '전체', count: (n) => '프로젝트 ' + n + '개' },
@@ -24890,12 +25785,41 @@ ${wembTipRuntime()}
             b.onclick = () => { tplFilter = c; renderProjects(); };
             cats.appendChild(b);
           });
+
           gal.appendChild(cats);
+
+          /* 정렬 드롭다운 — 카테고리 바 '아래' 행 오른쪽(최신순·이름순·인기순) */
+          const sortIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h13"/><path d="M4 12h9"/><path d="M4 18h5"/><path d="M16 9l3-3 3 3"/><path d="M19 6v12"/></svg>';
+          const chevIcon = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+          const ckIcon = '<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+          const sortBar = document.createElement('div');
+          sortBar.className = 'tplsortbar';
+          const sortWrap = document.createElement('div');
+          sortWrap.className = 'tplsort';
+          sortWrap.innerHTML =
+            '<button type="button" class="tplsort-btn" aria-haspopup="listbox">' + sortIcon +
+              '<span class="tplsort-lbl">' + TPL_SORTS[tplSort] + '</span>' + chevIcon + '</button>' +
+            '<div class="tplsort-menu" role="listbox">' +
+              Object.keys(TPL_SORTS).map((k) => '<button type="button" class="tplsort-opt' + (k === tplSort ? ' on' : '') + '" role="option" data-sort="' + k + '">' + TPL_SORTS[k] + ckIcon + '</button>').join('') +
+            '</div>';
+          sortWrap.querySelector('.tplsort-btn').onclick = (e) => { e.stopPropagation(); sortWrap.classList.toggle('open'); };
+          sortWrap.querySelectorAll('.tplsort-opt').forEach((op) => {
+            op.onclick = (e) => { e.stopPropagation(); tplSort = op.dataset.sort; renderProjects(); };
+          });
+          sortBar.appendChild(sortWrap);
+          gal.appendChild(sortBar);
+          /* 바깥 클릭 시 정렬 메뉴 닫기(한 번만 등록) */
+          if (!window.__tplSortDocClose) {
+            window.__tplSortDocClose = true;
+            document.addEventListener('click', () => {
+              document.querySelectorAll('.tplsort.open').forEach((s) => s.classList.remove('open'));
+            });
+          }
 
           /* 카드 그리드 */
           const grid = document.createElement('div');
           grid.className = 'tplgrid';
-          const list = TEMPLATES.filter((t) => tplFilter === 'All categories' || t.badges.some((bd) => bd[0] === tplFilter));
+          const list = sortTemplates(TEMPLATES.filter((t) => tplFilter === 'All categories' || t.badges.some((bd) => bd[0] === tplFilter)));
           if (!list.length) {
             const e = document.createElement('div');
             e.className = 'tplempty';
@@ -24921,7 +25845,7 @@ ${wembTipRuntime()}
                   '<span class="tplmore">Read More' + arrow + '</span>' +
                 '</div>' +
               '</div>';
-            card.onclick = () => { tplSelected = t; renderProjects(); };
+            card.onclick = () => { tplSelected = t; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'tpl', tpl: t.title }); };
             grid.appendChild(card);
           });
           gal.appendChild(grid);
@@ -24973,7 +25897,7 @@ ${wembTipRuntime()}
             heroHTML +
             '<div class="tpld-cta"><button type="button" class="tpld-start">이 구성으로 스튜디오 열기' + goIcon + '</button></div>';
           g.appendChild(det);
-          det.querySelector('.tpld-back').onclick = () => { tplSelected = null; renderProjects(); };
+          det.querySelector('.tpld-back').onclick = () => { tplSelected = null; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: view }); };
           det.querySelector('.tpld-start').onclick = () => openTemplate(t);
 
           /* 슬라이더 배선 — 화살표/점으로 이동, 메인(0번)이 첫 장 */
@@ -25003,7 +25927,16 @@ ${wembTipRuntime()}
            tpl이 붙은 템플릿(한진)은 디지털 트윈 페이지로 재현하므로 DT 화면으로 연다. */
         function openTemplate(t) {
           const isDT = t.tpl === 'hanjin' || t.screen === 'dt';
-          pending = { name: t.title, screen: isDT ? 'dt' : 'dash', layout: isDT ? 'dt-3l-2r' : 'g3-2r', tpl: t.tpl || null };
+          /* Figma로 구현된 템플릿(한진·SK하이닉스)은 실제 화면으로, 아직 미연결이면 임시 이미지로 연다 */
+          const connected = t.tpl === 'hanjin' || t.tpl === 'skhynix';
+          const useTpl = connected ? t.tpl : 'image';
+          pending = {
+            name: t.title,
+            screen: isDT ? 'dt' : 'dash',
+            layout: isDT ? 'dt-3l-2r' : 'g3-2r',
+            tpl: useTpl,
+            img: connected ? null : t.img,
+          };
           startStudio();
         }
 
@@ -25239,6 +26172,7 @@ ${wembTipRuntime()}
           const b = e.target.closest('.lc-navi');
           if (!b || !b.dataset.view) return;
           setView(b.dataset.view);
+          if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: b.dataset.view });
         });
         document.getElementById('lcSearch')?.addEventListener('input', renderProjects);
         /* 휴지통 전체삭제 — 휴지통의 모든 프로젝트를 영구 삭제 */
@@ -25436,7 +26370,7 @@ ${wembTipRuntime()}
         function startStudio() {
           persistCurrentProjectData(); /* 이전 프로젝트 상태 저장 후 새로 시작 */
           const projs = loadProjects();
-          const proj = { id: newId(), name: pending.name, screen: pending.screen, layout: pending.layout, tpl: pending.tpl || null, ts: Date.now(), fav: false };
+          const proj = { id: newId(), name: pending.name, screen: pending.screen, layout: pending.layout, tpl: pending.tpl || null, img: pending.img || null, ts: Date.now(), fav: false };
           projs.unshift(proj);
           if (projs.length > 48) projs.length = 48;
           saveProjects(projs);
@@ -25446,7 +26380,7 @@ ${wembTipRuntime()}
              디자인 관련 wemb-* 키를 비우고 새로고침한 뒤 이 프로젝트로 바로 진입한다.
              (프로젝트 목록·저장 스냅샷·둘러보기 여부는 유지) */
           try {
-            sessionStorage.setItem('wemb-fresh-open', JSON.stringify({ screen: proj.screen, layout: proj.layout, name: proj.name, tpl: proj.tpl }));
+            sessionStorage.setItem('wemb-fresh-open', JSON.stringify({ screen: proj.screen, layout: proj.layout, name: proj.name, tpl: proj.tpl, img: proj.img }));
             const KEEP = new Set([LS_PROJ, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint']);
             Object.keys(localStorage)
               .filter((k) => k.startsWith('wemb-') && !KEEP.has(k))
@@ -25477,6 +26411,13 @@ ${wembTipRuntime()}
               else localStorage.removeItem('wemb-tpl-dt');
             } catch (e) {}
           }
+          /* 템플릿 마커 동기화 — 이 프로젝트가 미연결 이미지 템플릿이면 이미지 오버레이가, 아니면
+             이전 프로젝트에서 남은 오버레이가 제거되도록 새로고침 전에 플래그를 맞춘다. */
+          try {
+            if (t.tpl === 'image' && t.img) { localStorage.setItem('wemb-tpl-img', t.img); localStorage.removeItem('wemb-tpl-dt'); }
+            else if (t.tpl === 'hanjin' || t.tpl === 'skhynix') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
+            else { localStorage.removeItem('wemb-tpl-img'); localStorage.removeItem('wemb-tpl-dt'); }
+          } catch (e) {}
           location.reload();
         }
 
@@ -25492,6 +26433,7 @@ ${wembTipRuntime()}
           renderProjects();
           home.classList.add('show');
           try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
+          if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: 'all' });
         };
         const quickHome = document.getElementById('quickHome');
         if (quickHome) quickHome.onclick = goHome;
@@ -25634,6 +26576,7 @@ ${wembTipRuntime()}
           setView('all');
           home.classList.add('show');
           try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
+          if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: 'all' });
         };
 
         /* 새 프로젝트로 새로고침해 진입한 경우 — 깨끗한 기본 상태에서 이 프로젝트로 바로 들어간다 */
@@ -25648,11 +26591,13 @@ ${wembTipRuntime()}
               bn.dispatchEvent(new Event('input', { bubbles: true }));
             }
             enterStudio(f.screen || 'dash', f.layout);
-            /* 템플릿 재현 — 한진은 디지털 트윈 페이지로 채운다(새로고침 후에도 유지되게 플래그 저장) */
+            /* 템플릿 재현 — 한진/SK하이닉스는 실제 화면, 미연결 템플릿은 임시 이미지.
+               (새로고침 후에도 유지되게 플래그를 localStorage에 저장) */
             try {
-              if (f.tpl === 'hanjin') { localStorage.setItem('wemb-tpl-dt', 'hanjin'); if (typeof applyHanjinDT === 'function') applyHanjinDT(); }
-              else if (f.tpl === 'skhynix') { localStorage.setItem('wemb-tpl-dt', 'skhynix'); if (typeof applySkhynixDT === 'function') applySkhynixDT(); }
-              else localStorage.removeItem('wemb-tpl-dt');
+              if (f.tpl === 'hanjin') { localStorage.setItem('wemb-tpl-dt', 'hanjin'); localStorage.removeItem('wemb-tpl-img'); if (typeof applyHanjinDT === 'function') applyHanjinDT(); }
+              else if (f.tpl === 'skhynix') { localStorage.setItem('wemb-tpl-dt', 'skhynix'); localStorage.removeItem('wemb-tpl-img'); if (typeof applySkhynixDT === 'function') applySkhynixDT(); }
+              else if (f.tpl === 'image' && f.img) { localStorage.setItem('wemb-tpl-img', f.img); localStorage.removeItem('wemb-tpl-dt'); if (typeof applyImageTemplate === 'function') applyImageTemplate(f.img, f.screen); }
+              else { localStorage.removeItem('wemb-tpl-dt'); localStorage.removeItem('wemb-tpl-img'); }
             } catch (e2) {}
           }
         } catch (e) {}
@@ -25670,6 +26615,9 @@ ${wembTipRuntime()}
           if (__tdt === 'hanjin' && typeof applyHanjinDT === 'function') applyHanjinDT();
           else if (__tdt === 'skhynix' && typeof applySkhynixDT === 'function') applySkhynixDT();
         }
+        /* 미연결 템플릿 임시 이미지 — 화면 종류(대시보드/DT)에 맞게 오버레이 복원 */
+        const __timg = localStorage.getItem('wemb-tpl-img');
+        if (__timg && typeof applyImageTemplate === 'function') applyImageTemplate(__timg, state.screen);
       } catch (e) {}
       apply();
       loadSnapshots();
@@ -25766,6 +26714,7 @@ ${wembTipRuntime()}
         function paintForm() {
           renderPrdSummary();
           if (typeof refreshSteps === 'function') refreshSteps();
+          if (window.__paintDtFromPrd) window.__paintDtFromPrd();
         }
 
         function summaryHTML(tail) {
@@ -26792,6 +27741,329 @@ ${wembTipRuntime()}
           return items;
         };
 
+        /* ===== PRD 답변 → 디지털 트윈 패널 콘텐츠 =====
+           위저드 답변(프로젝트명·산업군·모니터링 대상)으로 트윈 화면의 브랜드명·레이어 심볼·
+           지역 트리·자산 리스트·이벤트 현황을 다시 그린다. 대상이 하나도 없으면(빈 PRD) 기본
+           데모(한국서부발전) 화면을 그대로 둔다. 커스텀 템플릿(한진/SK하이닉스)·편집 중일 땐 건너뛴다. */
+        (function initDtPrd() {
+          let DEMO = null; /* 원본 트윈 데모 스냅샷(빈 PRD 복원용) */
+          const ICO = {
+            all:   '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+            quake: '<polyline points="2 12 6 12 9 5 13 19 16 12 22 12"/>',
+            cctv:  '<path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z"/><polygon points="14 11 21 7.5 21 15.5 14 12"/>',
+            fire:  '<path d="M12 2s5 5.5 5 10a5 5 0 0 1-10 0c0-4.5 5-10 5-10z"/>',
+            power: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+            bolt:  '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+            sensor:'<circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.25a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/>',
+            alert: '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+            shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+            box:   '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+            drop:  '<path d="M12 2.7s5.5 6.8 5.5 10.8a5.5 5.5 0 0 1-11 0C6.5 9.5 12 2.7 12 2.7z"/>',
+            thermo:'<path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>',
+            server:'<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>',
+            user:  '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
+          };
+          const CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+          const svg = (inner, sw) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 1.8) + '" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>';
+
+          /* 모니터링 대상 라벨 → 분류(아이콘·이벤트·자산 유형 공유) */
+          function catOf(lbl) {
+            const s = String(lbl);
+            if (/CCTV|카메라|영상|열화상|녹화/i.test(s)) return 'cctv';
+            if (/화재|소방|소화|제연|화염|연기/.test(s)) return 'fire';
+            if (/지진|기상|재난|관측|경보/.test(s)) return 'quake';
+            if (/누수|가스|수위|상.?하수|배관/.test(s)) return 'drop';
+            if (/온습도|항온|공조|HVAC|압력|환경/i.test(s)) return 'thermo';
+            if (/출입|지문|얼굴|작업자|카운트|보안|PSIM/i.test(s)) return 'user';
+            if (/랙|서버|스토리지|네트워크|데이터센터|상면|DCIM|NMS/i.test(s)) return 'server';
+            if (/발전|터빈|보일러|ESS|태양광|인버터|배터리|풍력|송전|PCS|리튬/i.test(s)) return 'bolt';
+            if (/변압|배전|차단|고압|저압|초고압|수전|UPS|한전|VCB|전력|전기/i.test(s)) return 'power';
+            if (/방재|물품|대피/.test(s)) return 'shield';
+            if (/알람|이벤트/.test(s)) return 'alert';
+            return 'box';
+          }
+          const SYM_LBL = { cctv: 'CCTV', fire: '소방', quake: '지진감지', drop: '누수·가스', thermo: '환경감시', user: '출입통제', server: '전산실', bolt: '발전설비', power: '전력계통', shield: '방재물품', alert: '경보', box: '설비' };
+          /* 산업군별 화면 텍스트 팩 — 브랜드(제목)·상단 내비를 도메인에 맞게 갈아끼운다(임시).
+             자산이 쌓이면 더 구체적으로 확장. */
+          const DOMAIN = {
+            security:      { title: '통합 보안관제', region: '관제 구역', nav: ['보안관제', '출입통제', '영상감시', '대응절차', '이력관리'] },
+            public:        { title: '재난안전 통합관제', region: '관할 구역', nav: ['재난관제', '환경감시', '대응절차', '모의훈련', '이력관리'] },
+            power:         { title: '발전 통합관제', region: '발전 설비', nav: ['발전현황', '설비감시', '전력계통', '대응절차', '이력관리'] },
+            electric:      { title: '전력 통합관제', region: '수배전 계통', nav: ['전력감시', '수배전', '계통현황', '대응절차', '이력관리'] },
+            datacenter:    { title: '데이터센터 통합관제', region: '전산 구역', nav: ['통합현황', '전산실', '항온항습', '네트워크', '이력관리'] },
+            logistics:     { title: '물류 통합관제', region: '물류 구역', nav: ['물류현황', '입출고', '도크관제', '차량관제', '이력관리'] },
+            manufacturing: { title: '스마트팩토리 관제', region: '생산 구역', nav: ['생산현황', '설비감시', '에너지', '품질', '이력관리'] },
+            finance:       { title: '금융 IT 통합관제', region: '시스템 구역', nav: ['종합상황', '거래현황', '채널', '인프라', '이력관리'] },
+            building:      { title: '시설 통합관제', region: '건물 구역', nav: ['시설현황', '설비감시', '에너지', '출입·주차', '이력관리'] },
+            distribution:  { title: '유통 통합관제', region: '매장 구역', nav: ['매장현황', '재고·물류', '출입관제', '에너지', '이력관리'] },
+          };
+          const EV = {
+            power:  '전압 불균형 감지 (Phase A 210V / Phase B 230V) — 즉시 점검 요망',
+            bolt:   '출력 급감 감지 — 정격 대비 62% 하락, 원인 확인 필요',
+            fire:   '열·연기 복합 감지 신호 수신 — 현장 확인 필요',
+            cctv:   '영상 신호 단절 — 카메라 연결 상태 점검 요망',
+            quake:  '지진 계측값 임계 초과 — 진도 3.2 감지, 경보 발령',
+            drop:   '누수 감지 신호 발생 — 배관·집수정 점검 요망',
+            thermo: '항온항습 이상 — 온도 28.5℃ / 습도 71%RH 초과',
+            server: '랙 흡기 온도 상승 — 42℃ 초과, 냉방 부하 확인',
+            user:   '비인가 출입 시도 감지 — 카드 미인증, 확인 필요',
+            shield: '방재물품 재고 부족 — 보충 필요',
+            alert:  '임계 알람 다수 발생 — 상황 확인 요망',
+            box:    '설비 상태 이상 신호 감지 — 점검 요망'
+          };
+          function assetItems(cat, name) {
+            if (cat === 'cctv') return ['정문 CCTV #1', '옥외 CCTV #2', '기계실 CCTV #3', '제어동 CCTV #4'];
+            if (cat === 'fire') return ['옥내 소화전 #1', '스프링클러 A동', '화재감지기 B동', '제연설비 #3'];
+            if (cat === 'user') return ['정문 출입게이트', '제어동 출입문', '통합 보안실'];
+            if (cat === 'server') return ['A랙 #01', 'B랙 #02', '스토리지 #1'];
+            return [name + ' #1', name + ' #2', name + ' #3'];
+          }
+          const pad = (n) => String(n).padStart(2, '0');
+          const tAt = (k) => { const d = new Date(2026, 7, 24, 9, 41, 12); d.setSeconds(d.getSeconds() - k * 137); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); };
+
+          /* 선택 산업군별로 모니터링 대상을 묶는다(각 대상은 첫 매칭 산업군에 귀속) */
+          function buildGroups() {
+            const inds = (G.industries || []).filter((k) => INDUSTRIES[k]);
+            const tg = targetLabels();
+            const groups = [], used = new Set();
+            inds.forEach((k) => {
+              const ind = INDUSTRIES[k];
+              const mine = tg.filter((t) => ind.targets.includes(t) && !used.has(t));
+              mine.forEach((t) => used.add(t));
+              if (mine.length) groups.push({ label: ind.label, targets: mine });
+            });
+            const rest = tg.filter((t) => !used.has(t));
+            if (rest.length) groups.push({ label: inds.length ? '기타 감시 대상' : (siteName() || '감시 대상'), targets: rest });
+            return groups;
+          }
+
+          window.__paintDtFromPrd = function () {
+            const stage = document.getElementById('dtStage');
+            if (!stage) return;
+            /* 커스텀 시안 화면이거나 편집 중이면 손대지 않는다 */
+            if (stage.dataset.tpl || stage.querySelector('.skx-screen') || stage.querySelector('.hj-repro')) return;
+            if (stage.classList.contains('dt-editing') || stage.classList.contains('dt-content-editing')) return;
+            const ui = stage.querySelector('.dt-ui');
+            if (!ui) return;
+
+            /* 원본 데모(한국서부발전) 스냅샷 — 첫 실행(아직 손대기 전 = 원본) 때 한 번만 저장해 둔다.
+               빈 PRD로 돌아가면 이 스냅샷으로 되돌린다. */
+            const table0 = document.getElementById('dtTable');
+            const empty0 = document.getElementById('dtEmpty');
+            if (!DEMO) {
+              const bn0 = stage.querySelector('.dt-bname');
+              const nv0 = stage.querySelector('.dt-nav');
+              const rtab0 = stage.querySelector('.dt-region .dt-tabs b');
+              const sw0 = stage.querySelector('.dt-symbols');
+              const tr0 = stage.querySelector('.dt-region .dt-tree');
+              const dr0 = stage.querySelector('.dt-assets .dt-drops');
+              DEMO = {
+                bname: bn0 ? bn0.textContent : '',
+                nav: nv0 ? nv0.innerHTML : null,
+                regionTab: rtab0 ? rtab0.textContent : null,
+                symbols: sw0 ? sw0.innerHTML : null,
+                tree: tr0 ? tr0.innerHTML : null,
+                drops: dr0 ? dr0.innerHTML : null,
+                rows: table0 ? [...table0.querySelectorAll('.dt-tr:not(.dt-th)')].map((r) => r.outerHTML).join('') : '',
+                counts: stage ? [...stage.querySelectorAll('.dt-counts .dt-cnt')].map((b) => b.innerHTML) : []
+              };
+            }
+
+            const tg = targetLabels();
+            if (!tg.length) {
+              /* 빈 PRD — 원본 데모로 복원 */
+              const bn0 = stage.querySelector('.dt-bname'); if (bn0) bn0.textContent = DEMO.bname;
+              const nv0 = stage.querySelector('.dt-nav'); if (nv0 && DEMO.nav != null) nv0.innerHTML = DEMO.nav;
+              const rt0 = stage.querySelector('.dt-region .dt-tabs b'); if (rt0 && DEMO.regionTab != null) rt0.textContent = DEMO.regionTab;
+              const sw0 = stage.querySelector('.dt-symbols'); if (sw0 && DEMO.symbols != null) sw0.innerHTML = DEMO.symbols;
+              const tr0 = stage.querySelector('.dt-region .dt-tree'); if (tr0 && DEMO.tree != null) tr0.innerHTML = DEMO.tree;
+              const dr0 = stage.querySelector('.dt-assets .dt-drops'); if (dr0 && DEMO.drops != null) dr0.innerHTML = DEMO.drops;
+              if (table0 && empty0) {
+                table0.querySelectorAll('.dt-tr:not(.dt-th)').forEach((r) => r.remove());
+                empty0.insertAdjacentHTML('beforebegin', DEMO.rows);
+                stage.querySelectorAll('.dt-counts .dt-cnt').forEach((b, i) => { if (DEMO.counts[i] != null) b.innerHTML = DEMO.counts[i]; });
+              }
+              try { localStorage.removeItem('wemb-dt-prdsig'); } catch (e) {}
+              if (window.__dtRecaptureDefaults) window.__dtRecaptureDefaults(true);
+              return;
+            }
+
+            const groups = buildGroups();
+            const cats = [];
+            tg.forEach((t) => { const c = catOf(t); if (!cats.includes(c)) cats.push(c); });
+
+            /* 콘텐츠가 실제로 바뀌었는지 판단(바뀌었을 때만 기존 글자 편집을 버린다) */
+            const sig = JSON.stringify({ s: G.site, i: G.industries, t: G.targets, sc: G.scale });
+            let prev = ''; try { prev = localStorage.getItem('wemb-dt-prdsig') || ''; } catch (e) {}
+            const changed = sig !== prev;
+
+            /* 주도 산업군 → 도메인 텍스트 팩(브랜드·내비·구역 라벨) */
+            const primaryInd = (G.industries || []).filter((k) => INDUSTRIES[k])[0] || null;
+            const dom = (primaryInd && DOMAIN[primaryInd]) || null;
+
+            /* 1) 브랜드명 — 프로젝트명이 있으면 우선, 없으면 도메인 제목으로 갈아끼운다 */
+            const bn = stage.querySelector('.dt-bname');
+            if (bn) bn.textContent = G.site || (dom && dom.title) || '한국서부발전(주)';
+
+            /* 1-b) 상단 내비 — 도메인 섹션 이름으로 교체(첫 항목 활성) */
+            if (dom) {
+              const nav = stage.querySelector('.dt-nav');
+              if (nav) nav.innerHTML = dom.nav.map((n, i) => '<a' + (i === 0 ? ' class="on"' : '') + '>' + esc(n) + '</a>').join('');
+            }
+
+            /* 2) 레이어 심볼 — 전체보기 + 대상 분류별 버튼(최대 6) */
+            const symWrap = stage.querySelector('.dt-symbols');
+            if (symWrap) {
+              let html = '<button type="button" class="dt-sym on"><span class="dt-symb">' + svg(ICO.all) + '</span><span>전체보기</span></button>';
+              cats.slice(0, 6).forEach((c) => {
+                html += '<button type="button" class="dt-sym"><span class="dt-symb">' + svg(ICO[c] || ICO.box) + '</span><span>' + esc(SYM_LBL[c] || '설비') + '</span></button>';
+              });
+              symWrap.innerHTML = html;
+            }
+
+            /* 3) 지역 트리 — 산업군 노드 > 모니터링 대상(잎) */
+            const tree = stage.querySelector('.dt-region .dt-tree');
+            if (tree) {
+              let html = '';
+              groups.forEach((g, gi) => {
+                const tico = svg(ICO[catOf(g.targets[0])] || ICO.box);
+                const leaves = g.targets.map((t, li) => '<div class="dt-ti dt-l3 dt-leaf' + (gi === 0 && li === 0 ? ' on' : '') + '"><span class="dt-tnm">' + esc(t) + '</span></div>').join('');
+                html += '<div class="dt-node' + (gi === 0 ? ' open' : '') + '">' +
+                  '<div class="dt-ti dt-l1"><span class="dt-chev">' + CHEV + '</span><span class="dt-tico">' + tico + '</span><span class="dt-tnm">' + esc(g.label) + '</span></div>' +
+                  '<div class="dt-kids"><div class="dt-kidsin">' + leaves + '</div></div></div>';
+                if (gi < groups.length - 1) html += '<div class="dt-tgap"></div>';
+              });
+              tree.innerHTML = html;
+              const tab = stage.querySelector('.dt-region .dt-tabs b'); if (tab) tab.textContent = G.site || (dom && dom.region) || '전체 사이트';
+            }
+
+            /* 4) 자산 리스트 — 대상별 그룹(최대 6) + 샘플 항목 */
+            const drops = stage.querySelector('.dt-assets .dt-drops');
+            if (drops) {
+              let html = '';
+              tg.slice(0, 6).forEach((t, ti) => {
+                const items = assetItems(catOf(t), t).map((x) => '<div class="dt-di' + (ti === 0 ? ' on' : '') + '">' + esc(x) + '</div>').join('');
+                html += '<div class="dt-node' + (ti === 0 ? ' open' : '') + '">' +
+                  '<div class="dt-drop"><span class="dt-chev">' + CHEV + '</span><span class="dt-tnm">' + esc(t) + '</span></div>' +
+                  '<div class="dt-kids"><div class="dt-kidsin">' + items + '</div></div></div>';
+                if (ti < Math.min(tg.length, 6) - 1) html += '<div class="dt-tgap"></div>';
+              });
+              drops.innerHTML = html;
+            }
+
+            /* 5) 이벤트 현황 — 대상별 이벤트 행(최대 8) + 등급 카운트 */
+            const table = document.getElementById('dtTable');
+            const emptyEl = document.getElementById('dtEmpty');
+            if (table && emptyEl) {
+              const SEV = [3, 3, 1, 5, 4, 2, 2, 3];
+              const rows = tg.slice(0, 8);
+              const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+              const vid = '<button type="button" class="dt-abtn">' + svg('<path d="M2 8.5A1.5 1.5 0 0 1 3.5 7h9A1.5 1.5 0 0 1 14 8.5V16H3.5A1.5 1.5 0 0 1 2 14.5z"/><polygon points="14 11 21 7.5 21 15.5 14 12"/>') + '영상</button>';
+              let html = '';
+              rows.forEach((t, i) => {
+                const cat = catOf(t);
+                const sev = SEV[i % SEV.length];
+                counts[sev]++;
+                const crit = sev <= 2;
+                const isNew = (sev === 1) || (i === rows.length - 1 && sev === 2);
+                const equip = esc(t) + ' #' + (301 + i);
+                const acts = (isNew ? '<b class="dt-new">신규</b>' : '') + vid;
+                html += '<div class="dt-tr' + (sev === 1 ? ' on' : '') + '" data-lv="' + sev + '"' + (isNew ? ' data-new="1"' : '') + '>' +
+                  '<span><i class="dt-dot lv' + sev + '"></i></span>' +
+                  '<span>' + equip + '</span>' +
+                  '<span class="num">' + tAt(i) + '</span>' +
+                  '<span><b class="dt-tag' + (crit ? ' crit' : '') + '">' + (crit ? 'CRITICAL' : 'SYSTEM') + '</b></span>' +
+                  '<span>' + esc(EV[cat] || EV.box) + '</span>' +
+                  '<span class="dt-acts">' + acts + '</span></div>';
+              });
+              table.querySelectorAll('.dt-tr:not(.dt-th)').forEach((r) => r.remove());
+              emptyEl.insertAdjacentHTML('beforebegin', html);
+              stage.querySelectorAll('.dt-counts .dt-cnt').forEach((btn) => {
+                const lv = btn.dataset.lv;
+                btn.innerHTML = '<i class="lv' + lv + '"></i>' + (counts[lv] || 0);
+              });
+            }
+
+            /* 편집 모듈이 새 콘텐츠를 추적하도록 기본값 다시 캡처 */
+            if (window.__dtRecaptureDefaults) window.__dtRecaptureDefaults(changed);
+            if (changed) { try { localStorage.setItem('wemb-dt-prdsig', sig); } catch (e) {} }
+          };
+        })();
+
+        /* ===== 자연어 → 시안 자동 생성 (오프라인 v1) =====
+           "cctv 관제 디지털트윈 대시보드" 같은 문장을 받아, 갖고 있는 라이브러리(INDUSTRIES 태그)에
+           키워드로 매칭해 PRD 상태(G)를 채우고, 기존 생성 파이프라인(applyScreen + __paintDtFromPrd)을
+           그대로 태워 시안을 즉시 만든다. 백엔드/LLM 없이 결정적으로 동작한다.
+           나중에 실제 AI로 바꿀 땐 parseIntent만 교체하면 된다. */
+        (function initNlGen() {
+          /* 동의어 규칙 — 각 규칙의 targets는 반드시 해당 산업군 INDUSTRIES[ind].targets 라벨과 정확히 일치해야
+             __paintDtFromPrd의 그룹핑에 실린다. (키워드가 걸리면 산업군+대상을 함께 넣어 항상 정합) */
+          const SYN = [
+            { re: /cctv|카메라|영상|감시\s*카메라|열화상/, ind: ['security'], targets: ['CCTV', 'AI CCTV', '열화상카메라', '출입통제', '화재 감지', '환경 감시 (지진·기상·재난)'] },
+            { re: /소방|화재|연기|화염/, ind: ['building'], targets: ['화재감지기', 'CCTV', '공조', '전력'] },
+            { re: /출입|게이트|얼굴\s*인식|지문|보안|psim/i, ind: ['security'], targets: ['물리보안 (PSIM)', 'CCTV', '출입통제', '얼굴인식', '지문인식기'] },
+            { re: /지진|기상|재난|방재|환경\s*감시|공공|철도|상하수|상·하수/, ind: ['public'], targets: ['환경 감시 (지진·기상)', '재난 경보', '수위감지기', '화재감지기', 'CCTV', '종합 상황'] },
+            { re: /전력|변압|배전|수전|차단기|고압|저압|ups|전기/i, ind: ['electric'], targets: ['변압기반', '배전반·VCB', '차단기', '무정전 전원장치(UPS)', '전력 사용량'] },
+            { re: /발전|태양광|ess|배터리|풍력|송전|재생\s*에너지|에너지/i, ind: ['power'], targets: ['발전량·발전기', '태양광', 'ESS 에너지저장', '인버터', '변압기반', '환경 감시'] },
+            { re: /데이터\s*센터|데이터센터|dcim|서버|랙|스토리지|전산|항온|항습|nms/i, ind: ['datacenter'], targets: ['데이터센터관리 (DCIM)', '랙·서버', '항온항습', 'UPS', '온습도계', 'CCTV'] },
+            { re: /물류|입고|출고|지게차|컨테이너|택배|하역|배송|dms/i, ind: ['logistics'], targets: ['물류관리 (DMS)', '입고', '출고', '도크·하역', '차량·배송', 'CCTV'] },
+            { re: /제조|공장|생산|설비|fems|스마트\s*팩토리/i, ind: ['manufacturing'], targets: ['공장에너지관리 (FEMS)', '생산라인 현황', '설비·자산 상태', '전력', '온습도계', 'CCTV'] },
+            { re: /금융|은행|뱅킹|계정계|거래|tps|트랜잭션|카드/i, ind: ['finance'], targets: ['계정계 (Core Banking)', '거래량', '거래 추이', '트랜잭션', '초당 처리건수(TPS)', '시스템 현황'] },
+            { re: /건물|시설|bms|fms|엘리베이터|주차|공조/i, ind: ['building'], targets: ['건물관리 (BMS)', '시설물관리 (FMS)', '엘리베이터', '주차관제(LPR)', '전력', 'CCTV'] },
+            { re: /유통|매장|리테일|재고/, ind: ['distribution'], targets: ['매장 현황', '재고·물류', '출입 카운트', '주차관제(LPR)', 'CCTV'] },
+          ];
+
+          function parseIntent(text) {
+            const s = String(text || '').toLowerCase();
+            /* 화면 종류 — '트윈/3D/현장'은 디지털 트윈으로, 그 외 대시보드. (둘 다 있으면 트윈이 더 구체적이라 우선) */
+            let screen = /트윈|3d|digital\s*twin|현장|플로어|floor|3차원/.test(s) ? 'dt'
+              : (/대시보드|상황판|dashboard|보드|현황판/.test(s) ? 'dash' : null);
+            const inds = [], targets = [];
+            let ops = null, scale = null;
+            SYN.forEach((rule) => {
+              if (!rule.re.test(s)) return;
+              (rule.ind || []).forEach((k) => { if (!inds.includes(k)) inds.push(k); });
+              (rule.targets || []).forEach((t) => { if (!targets.includes(t)) targets.push(t); });
+            });
+            if (/관제|모니터링|통합|상시|대형\s*화면/.test(s)) ops = 'central';
+            if (/전사|다중\s*사이트|여러\s*사이트|통합\s*관제|본사/.test(s)) scale = 'enterprise';
+            else if (/다중|여러|구역|복수/.test(s)) scale = 'multi';
+            else if (/단일|한\s*대|하나|개별/.test(s)) scale = 'single';
+            return { screen, industries: inds, targets, ops, scale, matched: !!(inds.length || screen) };
+          }
+
+          function applyIntent(intent) {
+            /* 인식된 값만 반영(없으면 기존 유지) */
+            if (intent.screen) G.screen = intent.screen;
+            if (intent.industries.length) G.industries = intent.industries.filter((k) => INDUSTRIES[k]);
+            if (intent.targets.length) G.targets = intent.targets.slice();
+            if (intent.scale) G.scale = intent.scale;
+            if (intent.ops) G.ops = intent.ops;
+            save();
+            /* 새 시안이므로 이전 임시 이미지 오버레이는 걷어낸다 */
+            try { if (window.__clearImageTemplate) window.__clearImageTemplate(); localStorage.removeItem('wemb-tpl-img'); localStorage.removeItem('wemb-tpl-dt'); } catch (e) {}
+            paintForm(); /* 요약 갱신 + __paintDtFromPrd 트리거 */
+            /* 스튜디오에 보이는 화면을 전환 */
+            const scr = intent.screen || G.screen || 'dash';
+            try {
+              if (typeof state !== 'undefined') state.screen = scr;
+              document.querySelectorAll('#screen button').forEach((x) => x.classList.toggle('on', x.dataset.s === scr));
+              if (typeof applyScreen === 'function') applyScreen();
+              if (scr === 'dt' && window.__paintDtFromPrd) window.__paintDtFromPrd();
+              if (scr === 'dash' && window.__applyDashLayout) window.__applyDashLayout('g3-2r');
+            } catch (e) {}
+          }
+
+          window.__wembGenerateFromText = function (text) {
+            const intent = parseIntent(text);
+            if (!intent.matched) return intent; /* 인식 실패 — 호출부에서 안내 */
+            applyIntent(intent);
+            return intent;
+          };
+          /* 상시 하단 오미박스는 제거됨 — 콘텐츠는 '콘텐츠 추가 → ＋ 패널'의 컨텍스트 창에서 채운다.
+             전체 화면 생성이 필요하면 window.__wembGenerateFromText(text)로 그대로 호출 가능. */
+        })();
+
         /* ── PRD 스텝 위저드(모달 팝업) ──
            프로젝트명 → 화면 → 관제 대상 → 모니터링 유형(산업군) → 모니터링 대상(연동) → 운영 환경.
            한 스텝씩 진행하며 마지막에 기능명세서를 생성한다. */
@@ -26992,7 +28264,7 @@ ${wembTipRuntime()}
           syncTabUI(tab);
         }
         /* 상단 중앙 탭 = 페이지 전환(SPA). 'wire'(와이어프레임)=스튜디오, 나머지는 오버레이 페이지 */
-        function setPage(page) {
+        function setPage(page, opts) {
           document.querySelectorAll('.tb-tab').forEach((t) => {
             const on = t.dataset.page === page;
             t.classList.toggle('on', on);
@@ -27007,12 +28279,79 @@ ${wembTipRuntime()}
           if (window.__wembStep) window.__wembStep.refresh();
           /* 페이지 위에 떠 있던 레일 플라이아웃은 닫는다 */
           if (typeof closeFly === 'function') closeFly();
+          /* 전역 뒤로가기 기록 (뒤로가기로 복원 중일 땐 noHistory) */
+          if (!(opts && opts.noHistory) && window.__navOnNavigate) window.__navOnNavigate({ t: 'page', p: page });
         }
         window.__setPage = setPage;
         document.getElementById('tbTabs')?.addEventListener('click', (e) => {
           const b = e.target.closest('.tb-tab');
           if (b) setPage(b.dataset.page);
         });
+
+        /* ── 전역 뒤로가기 — 브라우저 히스토리(History API)와 연동 ──
+           각 화면 이동 함수가 window.__navOnNavigate(state)를 부르면 history.pushState로 브라우저에 항목을
+           쌓는다. 그래서 상단바/런처의 뒤로 버튼은 물론 '크롬 자체 뒤로가기'도 popstate로 동작한다.
+           popstate에서 window.__navRestore로 그 화면을 복원한다. 항목마다 _i(깊이)를 붙여, _i>0일 때만
+           뒤로 버튼을 활성화한다(루트에선 비활성). 새로고침이 일어나는 이동(프로젝트 열기 등)은 세션이
+           리셋되므로 대상이 아니다. */
+        (function initNavBack() {
+          const backBtn = document.getElementById('tbBack');
+          const lcBack = document.getElementById('lcBack');
+          let cur = null;
+          let restoring = false;
+          let navReady = false; /* 초기 로딩 중의 화면 전환은 히스토리에 쌓지 않는다 */
+          const same = (a, b) => !!a && !!b && a.t === b.t && (a.v || '') === (b.v || '') && (a.p || '') === (b.p || '') && (a.tpl || '') === (b.tpl || '');
+          function update() {
+            const off = !(cur && cur._i > 0);
+            [backBtn, lcBack].forEach((b) => {
+              if (!b) return;
+              b.disabled = off;
+              b.title = off ? '이전 화면이 없어요' : '뒤로 (이전 화면)';
+            });
+          }
+          window.__navOnNavigate = function (state) {
+            if (restoring) return;
+            try {
+              if (!state && window.__navState) state = window.__navState();
+              if (!state) return;
+              if (navReady && cur && !same(cur, state)) {
+                /* 새 화면 — 브라우저 히스토리에 항목 추가(크롬 뒤로가기 대상) */
+                state._i = (cur._i || 0) + 1;
+                history.pushState(state, '');
+              } else {
+                /* 초기/동일 화면 — 현재 항목을 이 상태로 대체 */
+                state._i = cur ? (cur._i || 0) : 0;
+                try { history.replaceState(state, ''); } catch (e) {}
+              }
+              cur = state;
+              update();
+            } catch (e) {}
+          };
+          /* 앱 내부 뒤로 버튼 = 브라우저 뒤로가기와 동일하게 history.back() 사용 → 크롬 버튼과 완전 일치 */
+          window.__navBack = function () { try { history.back(); } catch (e) {} };
+          /* 크롬 뒤로/앞으로 버튼 → popstate. 해당 항목의 화면을 복원한다. */
+          window.addEventListener('popstate', function (e) {
+            try {
+              const target = e.state || { t: 'launcher', v: 'all', _i: 0 };
+              restoring = true;
+              if (window.__navRestore) window.__navRestore(target);
+              restoring = false;
+              cur = target;
+              update();
+            } catch (err) { restoring = false; }
+          });
+          if (backBtn) backBtn.addEventListener('click', () => window.__navBack());
+          if (lcBack) lcBack.addEventListener('click', () => window.__navBack());
+          /* 초기화가 끝난 뒤 현재 상태를 히스토리의 기준(_i=0) 항목으로 심는다. 이후 이동부터 항목이 쌓인다. */
+          setTimeout(() => {
+            try {
+              cur = window.__navState ? window.__navState() : null;
+              if (cur) { cur._i = 0; try { history.replaceState(cur, ''); } catch (e) {} }
+              navReady = true;
+              update();
+            } catch (e) {}
+          }, 0);
+        })();
         /* 상단 좌측 브랜드 클릭 → 로고(tb-mark)만 스튜디오 홈(런처)으로.
            'Studio' 이름 글씨·프로젝트명 클릭은 아무 동작도 하지 않는다(스튜디오로 튀지 않게). */
         document.querySelector('.tb-left')?.addEventListener('click', (e) => {
