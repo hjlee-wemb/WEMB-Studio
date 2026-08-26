@@ -11,6 +11,28 @@ WEMB Studio의 버전별 변경 사항을 기록합니다.
 
 ---
 
+#### [0.10.0] — 2026-08-21
+
+### 추가
+
+- SK하이닉스 이천 FMS 디지털 트윈 화면 — Figma export 기반 인라인 SVG(래스터 배경 + 벡터 레이어, `skx-` 네임스페이스)를 대시보드 화면 종류에 편입(`src/skhynix-screen.js`)
+- SK하이닉스 자산 라이브러리 — 심볼·아이콘·차트·패널(카드) 에셋을 라이브러리 탭에 편입(`__SKX_ASSETS`, `src/skhynix-assets.js`)
+- 화면 라이브 인터랙션 — 실시간 시계, 티커 메시지 마퀴(심리스 루프), 경보 아이콘 맥동·확산 링, 센서 심볼 호버, 이벤트 목록 데이터 테이블 주입
+- 이벤트 목록 패널 확장/축소 — 하단 expand 버튼으로 패널 슬라이드업·다운(클립 해제) + 화살표로 상태 표시
+- 'Auto' 라디오 버튼 — 클릭 시 선택/해제(링 강조 + 중앙 도트) 토글
+- 배치 모드 패널 드래그 이동 — SK하이닉스 화면 패널을 좌표 그룹으로 묶어 끌어 이동, 위치 로컬 저장(`wemb-skx-panelpos`)
+- 사용 매뉴얼 — 빠른 사용 흐름 안내서(`문서/사용매뉴얼.html`)와 메뉴·옵션 전체 상세 매뉴얼(`문서/사용매뉴얼_상세.html`, PDF)
+- 제품 문서 정비 — 개요·요구사항·설계서·아키텍처 문서(`문서/01~04`)
+
+### 개선
+
+- 차트 에셋 3종(UPS 전력량·센터 온도·상면 포화도) 카드 배경/테두리(rect) 제거 → 그래프·라벨·미터 콘텐츠만 노출(라이브러리 에셋 한정, `.fig-svg` 스코프)
+- 이벤트 expand 화살표 회전을 360° 누적 → 열림·닫힘 180° 토글로 변경(상태 가독성 향상)
+
+### 수정
+
+- 이벤트 expand 버튼에 클릭 핸들러가 중복 바인딩되어 화살표가 이중 회전하고 버튼 전체가 뒤집히던 문제 → 단일 핸들러(클래스 토글)로 정리, 데이터 주입·z-order만 잔여 로직으로 분리
+
 #### [0.9.0] — 2026-07-22
 
 ### 추가
@@ -110,7 +132,8 @@ WEMB Studio의 버전별 변경 사항을 기록합니다.
 
 ---
 
-[Unreleased]: https://github.com/hjlee-wemb/WEMB-Studio/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/hjlee-wemb/WEMB-Studio/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.10.0
 [0.9.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.9.0
 [0.8.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.8.0
 [0.7.0]: https://github.com/hjlee-wemb/WEMB-Studio/releases/tag/v0.7.0

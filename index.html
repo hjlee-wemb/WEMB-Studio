@@ -11302,37 +11302,37 @@
         to { transform: translateX(calc(-1 * var(--skx-marq, 480px))); }
       }
       /* 이벤트 프레임 슬라이드(위로 올라와 하단에 딱 맞음) */
-      .skx-svg [id='skx-panel/event-list'] {
+      .skx-svg [id='skx-Event List'] {
         transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
       }
 
       /* ===== SK하이닉스 DT 화면 '살아있는' 모션 =====
          인라인 SVG의 Figma named 레이어(한글 id, skx- 프리픽스)를 직접 타겟. 접근성: reduce-motion이면 정지. */
-      .skx-svg [id^='skx-symbol/'],
-      .skx-svg [id='skx-icon/alert'],
-      .skx-svg [id='skx-effect'],
-      .skx-svg [id='skx-chart/ups-power'] [id^='skx-focus'] {
+      .skx-svg [id^='skx-Nav Item/'],
+      .skx-svg [id='skx-Icon/Status/Alert'],
+      .skx-svg [id='skx-Glow'],
+      .skx-svg [id='skx-Metrics/UPS Power'] [id^='skx-Focus'] {
         transform-box: fill-box;
         transform-origin: center;
       }
-      /* 좌측 센서 심볼 — 호버 시 밝기+글로우+살짝 부양 (항상 적용, 모션 아님) */
-      .skx-svg [id^='skx-symbol/'] {
+      /* 좌측 내비 항목 — 호버 시 밝기+글로우+살짝 부양 (항상 적용, 모션 아님) */
+      .skx-svg [id^='skx-Nav Item/'] {
         cursor: pointer;
         transition: transform 0.25s ease, filter 0.25s ease;
       }
-      .skx-svg [id^='skx-symbol/']:hover {
-        transform: translateY(-2px) scale(1.06);
-        filter: brightness(1.32) drop-shadow(0 0 8px rgba(96, 156, 255, 0.8));
+      .skx-svg [id^='skx-Nav Item/']:hover {
+        transform: translateY(-1px) scale(1.03);
+        filter: brightness(1.18) drop-shadow(0 0 7px rgba(96, 156, 255, 0.7));
       }
       @media (prefers-reduced-motion: no-preference) {
         /* 1) Ticker 경보 — 아이콘 맥동 + 확산 링 */
-        .skx-svg [id='skx-icon/alert'] { animation: skxAlertPulse 1.5s ease-in-out infinite; }
-        .skx-svg [id='skx-effect'] { animation: skxAlertRing 1.9s ease-out infinite; }
+        .skx-svg [id='skx-Icon/Status/Alert'] { animation: skxAlertPulse 1.5s ease-in-out infinite; }
+        .skx-svg [id='skx-Glow'] { animation: skxAlertRing 1.9s ease-out infinite; }
         @keyframes skxAlertPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
         @keyframes skxAlertRing { 0% { transform: scale(0.6); opacity: 0.65; } 70% { opacity: 0; } 100% { transform: scale(2); opacity: 0; } }
 
         /* 2) 화재(활성) 심볼 — 은은한 호흡 글로우 */
-        .skx-svg [id='skx-symbol/fire'] { animation: skxBreathe 2.8s ease-in-out infinite; }
+        .skx-svg [id='skx-Nav Item/Fire (Selected)'] { animation: skxBreathe 2.8s ease-in-out infinite; }
         @keyframes skxBreathe {
           0%, 100% { filter: drop-shadow(0 0 2px rgba(255, 92, 60, 0.35)); }
           50% { filter: drop-shadow(0 0 10px rgba(255, 92, 60, 0.85)); }
@@ -11351,16 +11351,28 @@
         }
 
         /* 4) UPS 라인차트 — 두 데이터 선(전일 파랑·금일 초록) 그려지기 반복 + focus 마커 맥동 */
-        .skx-svg [id='skx-chart/ups-power'] path[stroke='#57A6DC'],
-        .skx-svg [id='skx-chart/ups-power'] path[stroke='#C2DB56'] {
+        .skx-svg [id='skx-Metrics/UPS Power'] path[stroke='#57A6DC'],
+        .skx-svg [id='skx-Metrics/UPS Power'] path[stroke='#C2DB56'] {
           stroke-dasharray: 2400;
           animation: skxDraw 5.5s ease-in-out infinite;
         }
-        .skx-svg [id='skx-chart/ups-power'] path[stroke='#C2DB56'] { animation-delay: 0.35s; }
+        .skx-svg [id='skx-Metrics/UPS Power'] path[stroke='#C2DB56'] { animation-delay: 0.35s; }
         @keyframes skxDraw { 0% { stroke-dashoffset: 2400; } 42% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }
-        .skx-svg [id='skx-chart/ups-power'] [id^='skx-focus'] { animation: skxFocus 1.8s ease-in-out infinite; }
+        .skx-svg [id='skx-Metrics/UPS Power'] [id^='skx-Focus'] { animation: skxFocus 1.8s ease-in-out infinite; }
         @keyframes skxFocus { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+        /* 5) 센터 온도 '유도' 화살표 — 주의를 끄는 좌우 넛지 */
+        .skx-svg [id='skx-Icon/Arrow/Right'] {
+          transform-box: fill-box;
+          transform-origin: center;
+          animation: skxNudge 1.6s ease-in-out infinite;
+        }
+        @keyframes skxNudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
       }
+      /* 유도 화살표·헤더 액션 — 항상 포인터 커서(모션 off여도) */
+      .skx-svg [id='skx-Icon/Arrow/Right'],
+      .skx-svg [id='skx-Icon/Action/User'],
+      .skx-svg [id='skx-Icon/Action/Logout'] { cursor: pointer; }
       .libitem.ico .thumb {
         color: var(--point-main);
       }
@@ -11670,34 +11682,31 @@
       .pdel:hover {
         background: rgba(220, 50, 50, 1);
       }
-      /* SK하이닉스 이벤트 리스트 — expand 버튼으로 패널을 올리고(확장) 화살표 360° 회전 */
-      .skx-svg [id="skx-button/event-expand"] {
+      /* SK하이닉스 이벤트 리스트 — Fold 버튼으로 패널을 올리고(확장) 화살표 360° 회전 */
+      .skx-svg [id="skx-Fold Button"] {
         cursor: pointer;
       }
-      .skx-svg [id="skx-panel/event-list"] {
-        transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
-      }
-      .skx-svg [id="skx-panel/event-list"].skx-evt-open {
+      .skx-svg [id="skx-Event List"].skx-evt-open {
         clip-path: none !important;
         transform: translateY(-223px);
       }
       /* 확장 시 패널 배경을 거의 불투명하게 → 뒤 내용이 비쳐 지저분해지지 않게 */
-      .skx-svg [id="skx-panel/event-list"].skx-evt-open [id="skx-bg_3"] {
-        fill-opacity: 0.97;
+      .skx-svg [id="skx-Event List"].skx-evt-open [id="skx-Panel BG"] {
+        fill-opacity: 0.98;
       }
       .skx-svg [id="skx-arrow"] {
         transform-box: fill-box;
         transform-origin: center;
         transition: transform 0.45s ease;
       }
-      /* Auto 라디오 버튼 — 클릭 시 라디오처럼 선택 상태(링 강조) 표시 */
-      .skx-svg [id="skx-button/auto"] {
+      /* Auto 토글 — 클릭 시 라디오처럼 선택 상태(링 강조) 표시 */
+      .skx-svg [id="skx-Auto Toggle"] {
         cursor: pointer;
       }
-      .skx-svg [id="skx-button/auto"] [id="skx-Ellipse 1"] {
+      .skx-svg [id="skx-Auto Toggle"] [id="skx-Ellipse 1"] {
         transition: stroke 0.18s ease;
       }
-      .skx-svg [id="skx-button/auto"].skx-radio-on [id="skx-Ellipse 1"] {
+      .skx-svg [id="skx-Auto Toggle"].skx-radio-on [id="skx-Ellipse 1"] {
         stroke: var(--fg-point, #6aa0ff);
         stroke-width: 1.5;
       }
@@ -13060,11 +13069,92 @@
         background: var(--point-main);
         transform: scale(1.3);
       }
+      /* 2단 계층 — 화면 유형 줄(위) 다음에 업무 영역 줄(아래)이 오면
+         위 줄의 경계선을 없애고 간격을 좁혀 한 묶음으로 보이게 한다 */
+      .tplcats:has(+ .tplsubcats) {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 0;
+      }
+      .tplsubcats {
+        gap: 11px 18px;
+      }
+      .tplsubcats .tplcat {
+        font-size: 13px;
+      }
       /* ── 템플릿 정렬 드롭다운 (카테고리 바 아래 행) ── */
       .tplsortbar {
         display: flex;
-        justify-content: flex-end; /* 카테고리 바로 아래, 오른쪽 정렬 */
+        align-items: center;
+        justify-content: space-between; /* 왼쪽 검색 · 오른쪽 정렬 */
+        gap: 12px;
         margin: -6px 0 22px;
+      }
+      /* ── 템플릿 검색창 (정렬 바 왼쪽) ── */
+      .tplsearch {
+        position: relative;
+        flex: 0 1 320px;
+        min-width: 0;
+      }
+      .tplsearch svg {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        stroke: var(--text-weak);
+        stroke-width: 2;
+        fill: none;
+        pointer-events: none;
+      }
+      .tplsearch input {
+        width: 100%;
+        padding: 8px 34px 8px 36px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--bg-accent);
+        color: var(--text-strong);
+        font: 13px var(--font);
+        transition: border-color 0.15s ease, background 0.15s ease;
+      }
+      .tplsearch input::placeholder {
+        color: var(--text-weak);
+      }
+      .tplsearch input:focus {
+        outline: none;
+        border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+        background: var(--bg-surface);
+      }
+      .tplsearch-clear {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        background: transparent;
+        border-radius: 6px;
+        color: var(--text-weak);
+        cursor: pointer;
+        padding: 0;
+      }
+      .tplsearch-clear svg {
+        position: static;
+        transform: none;
+        width: 13px;
+        height: 13px;
+      }
+      .tplsearch-clear:hover {
+        color: var(--text-strong);
+        background: var(--bg-surface);
+      }
+      .tplsearch.has-val .tplsearch-clear {
+        display: inline-flex;
       }
       .tplsort {
         position: relative;
@@ -14014,7 +14104,7 @@
       }
     </style>
     <!-- SK하이닉스 화면 색상 테마 연동(형상 불변, 색만 토큰화 → dark/light·시드색 반영) -->
-    <link rel="stylesheet" href="src/skhynix-theme.css?v=3" />
+    <link rel="stylesheet" href="src/skhynix-theme.css?v=5" />
   </head>
   <body>
     <!-- 상단 바 — 참고 UI 구조(브랜드 · 중앙 탭 · 우측 액션). 런처가 열리면 그 오버레이가 덮는다. -->
@@ -16652,7 +16742,7 @@
     <div class="toastwrap" id="toastWrap" aria-live="polite" aria-atomic="false"></div>
 
     <!-- SK하이닉스 이천 FMS 화면(HTML/CSS DOM) 모듈 — 메인 스크립트보다 먼저 로드되어 window에 등록됨 -->
-    <script src="src/skhynix-screen.js?v=5"></script>
+    <script src="src/skhynix-screen.js?v=7"></script>
     <script src="src/skhynix-assets.js?v=4"></script>
 
     <script>/* WEMB 심볼 라이브러리 에셋 (Figma Studio 소스, 30종) */
@@ -17745,12 +17835,31 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         if (!svg) return;
         const SVGNS = 'http://www.w3.org/2000/svg';
 
+        /* 0-라이트) fill="white"(키워드) 텍스트·아이콘은 skhynix-theme.css 색맵(6자리 hex)을 안 타므로
+           라이트모드에서 밝은 배경/패널 위에선 안 보인다. 렌더되는(마스크/defs 제외) 흰색 요소 중
+           '라이트 표면 위'의 것만 skx-lighttext로 태깅 → CSS가 라이트모드에서만 짙은 슬레이트로 바꾼다.
+           어두운 3D 건물(래스터)·선택된 내비(빨강 원)·차트 포커스 위의 흰색은 유지한다. */
+        (function tagLightText() {
+          const KEEP = /Building Map|Building Image|Selected|Focus/; /* 이 조상 아래의 흰색은 그대로 흰색 유지 */
+          const NR = { MASK: 1, DEFS: 1, CLIPPATH: 1, PATTERN: 1, SYMBOL: 1, FILTER: 1 }; /* 렌더 안 되는 문맥 */
+          const whites = svg.querySelectorAll('[fill="white"],[fill="#fff"],[fill="#ffffff"],[fill="#FFFFFF"],[fill="#FFF"]');
+          whites.forEach((el) => {
+            let p = el.parentNode, skip = false, keep = false;
+            while (p && p !== svg) {
+              if (p.tagName && NR[p.tagName.toUpperCase()]) { skip = true; break; }
+              if (p.id && KEEP.test(p.id)) keep = true;
+              p = p.parentNode;
+            }
+            if (!skip && !keep) el.classList.add('skx-lighttext');
+          });
+        })();
+
         /* 0) 이벤트 리스트 expand — expand 버튼을 누르면 패널이 올라오고(확장) 화살표가 360° 회전한다.
            (평소엔 하단 헤더 바만 clip 되어 보이고, 열면 clip 해제 + 위로 올려 패널 전체가 올라온다) */
         (function eventExpand() {
-          const btn = svg.querySelector('[id="skx-button/event-expand"]');
-          const panel = svg.querySelector('[id="skx-panel/event-list"]');
-          const arrow = svg.querySelector('[id="skx-arrow"]');
+          const btn = svg.querySelector('[id="skx-Fold Button"]') || svg.querySelector('[id="skx-button/event-expand"]');
+          const panel = svg.querySelector('[id="skx-Event List"]') || svg.querySelector('[id="skx-panel/event-list"]');
+          const arrow = (btn && btn.querySelector('[id="skx-arrow"]')) || svg.querySelector('[id="skx-arrow"]');
           if (!btn || !panel) return;
           btn.style.cursor = 'pointer';
           let open = false;
@@ -17766,17 +17875,21 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         /* 0b) Auto 라디오 버튼(skx-button/auto) — 클릭하면 라디오처럼 선택/해제.
            선택 시 링이 포인트 색으로 강조되고 가운데 점이 채워진다. */
         (function autoRadio() {
-          const rbtn = svg.querySelector('[id="skx-button/auto"]');
-          const ring = svg.querySelector('[id="skx-radio"] circle') || svg.querySelector('[id="skx-Ellipse 1"]');
+          const rbtn = svg.querySelector('[id="skx-Auto Toggle"]') || svg.querySelector('[id="skx-button/auto"]');
+          const ring = (rbtn && (rbtn.querySelector('[id="skx-Ellipse 1"]') || rbtn.querySelector('ellipse,circle'))) || svg.querySelector('[id="skx-radio"] circle');
           if (!rbtn || !ring) return;
           rbtn.style.cursor = 'pointer';
           let dot = svg.querySelector('[id="skx-radio-dot"]');
           if (!dot) {
             dot = document.createElementNS(SVGNS, 'circle');
             dot.id = 'skx-radio-dot';
-            dot.setAttribute('cx', ring.getAttribute('cx'));
-            dot.setAttribute('cy', ring.getAttribute('cy'));
-            dot.setAttribute('r', '3.6');
+            /* Ellipse 1이 <ellipse>/<circle>면 cx/cy, 아니면(path) bbox 중심으로 배치 */
+            let cx = ring.getAttribute && ring.getAttribute('cx');
+            let cy = ring.getAttribute && ring.getAttribute('cy');
+            if (cx == null || cy == null) { try { const bb = ring.getBBox(); cx = bb.x + bb.width / 2; cy = bb.y + bb.height / 2; } catch (e) { cx = 0; cy = 0; } }
+            dot.setAttribute('cx', cx);
+            dot.setAttribute('cy', cy);
+            dot.setAttribute('r', '2.6');
             dot.style.fill = 'var(--fg-point, #6aa0ff)';
             dot.style.opacity = '0';
             dot.style.transition = 'opacity 0.18s ease';
@@ -17795,10 +17908,13 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
 
         /* 1) 헤더 타임스탬프(skx-Date_2 · skx-Time_3, 벡터 패스)를 라이브 <text>로 대체해 매초 갱신 */
         (function clock() {
-          /* 헤더 타임스탬프(skx-timestamp) 내부의 날짜·시각 프레임을 라이브 <text>로 대체 */
-          const ts = svg.querySelector('[id="skx-timestamp"]');
-          const date = ts && ts.querySelector('[id^="skx-date"]');
-          const time = ts && ts.querySelector('[id^="skx-time"]');
+          /* 헤더 타임스탬프 내부의 날짜·시각 프레임을 라이브 <text>로 대체.
+             구버전 export=skx-timestamp(소문자), 신버전(64:1782)=skx-Clock 안의 skx-Timestamp_2. */
+          const ts = svg.querySelector('[id="skx-timestamp"]')
+            || svg.querySelector('[id="skx-Clock"] [id^="skx-Timestamp"]')
+            || svg.querySelector('[id^="skx-Timestamp"]');
+          const date = ts && (ts.querySelector('[id^="skx-date"]') || ts.querySelector('[id^="skx-Date"]'));
+          const time = ts && (ts.querySelector('[id^="skx-time"]') || ts.querySelector('[id^="skx-Time"]'));
           if (!date || !time) return;
           const mk = (bb, fill) => {
             const t = document.createElementNS(SVGNS, 'text');
@@ -17832,13 +17948,19 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
 
         /* 2) 티커 메시지(skx-Txt)를 왼쪽으로 계속 흐르는 마퀴로 — 메시지 영역에 클립 + 2벌 심리스 루프 */
         (function marquee() {
-          const msg = svg.querySelector('[id="skx-message"]');
-          const txt = msg && msg.querySelector('[id^="skx-text"]');
+          const msg = svg.querySelector('[id="skx-Message"]') || svg.querySelector('[id="skx-message"]');
+          const txt = msg && (msg.querySelector('[id^="skx-Text"]') || msg.querySelector('[id^="skx-text"]'));
           if (!txt) return;
           let bb;
           try { bb = txt.getBBox(); } catch (e) { return; }
           const gap = 240, period = Math.round(bb.width + gap);
-          const clipX = 600, clipY = 953, clipW = 586, clipH = 56; /* 아이콘 뒤 ~ 티커 우측 */
+          /* 클립 영역: 메시지 시작 ~ 티커 우측 끝(동적) — 신 디자인(skx-Ticker) 지오메트리에서 산출 */
+          const ticker = svg.querySelector('[id="skx-Ticker"]');
+          let tb = null; try { tb = ticker && ticker.getBBox(); } catch (e) {}
+          const clipX = Math.round(bb.x - 4);
+          const clipY = Math.round(bb.y - 9);
+          const clipW = Math.round((tb ? tb.x + tb.width - 12 : 1176) - clipX);
+          const clipH = Math.round(bb.height + 18);
           let defs = svg.querySelector('defs');
           if (!defs) { defs = document.createElementNS(SVGNS, 'defs'); svg.appendChild(defs); }
           const cpId = 'skx-marquee-clip';
@@ -17869,7 +17991,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         /* 3) 헤더 액션 아이콘(skx-Action_2) — 얇은 아이콘이라 호버 히트영역이 좁다.
            각 아이콘에 투명 히트 rect를 덧대 넉넉한 영역에서 호버 활성되게 한다. */
         (function widenActionHit() {
-          const wrap = svg.querySelector('[id="skx-action-area"]');
+          const wrap = svg.querySelector('[id="skx-Actions"]') || svg.querySelector('[id="skx-action-area"]');
           if (!wrap) return;
           [...wrap.children].forEach((icon) => {
             if (!icon.getBBox || (icon.querySelector && icon.querySelector('rect.skx-hit'))) return;
@@ -17889,9 +18011,11 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         /* 4) 이벤트 리스트 — 데이터 테이블 주입 + 화살표 클릭 시 위로 슬라이드(하단 플러시)해 데이터 노출.
            (원본 SVG엔 테이블 행이 없어 직접 만들어 넣는다. 접힘 상태에선 49px 클립에 가려짐) */
         (function eventList() {
-          const arrow = svg.querySelector('[id="skx-button/event-expand"]');
-          const ev = svg.querySelector('[id="skx-panel/event-list"]');
-          const brow = svg.querySelector('[id="skx-browser"]');
+          const arrow = svg.querySelector('[id="skx-Fold Button"]') || svg.querySelector('[id="skx-button/event-expand"]');
+          const ev = svg.querySelector('[id="skx-Event List"]') || svg.querySelector('[id="skx-panel/event-list"]');
+          /* 데이터 테이블을 넣을 컨테이너: 신 디자인은 이벤트 리스트 패널 자체(clip 안)에 주입해
+             접힘 상태에선 49px 클립에 가려지고, 펼치면(translateY) 함께 올라와 보이게 한다. */
+          const brow = svg.querySelector('[id="skx-browser"]') || ev;
           if (!arrow || !ev || !brow) return;
 
           if (!svg.querySelector('[id="skx-event-data"]')) {
@@ -17924,7 +18048,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
               { x: 712, label: '등급' },
               { x: 928, label: '이벤트' },
             ];
-            cols.forEach((c) => g.appendChild(mkT(c.x, 1116, c.label, { fill: '#8FA0BF', weight: '600', size: 13, anchor: c.anchor })));
+            cols.forEach((c) => g.appendChild(mkT(c.x, 1116, c.label, { fill: '#99A3BE', weight: '600', size: 13, anchor: c.anchor })));
             g.appendChild(mkL(64, 1128, 1864, '#3A4656'));
             const LVC = { CR: '#E1002B', MA: '#F08100', MI: '#E3AF31', WA: '#19B6FF' };
             const DATA = [
@@ -17944,7 +18068,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
                 g.appendChild(bgr);
               }
               const ty = ry + 22;
-              g.appendChild(mkT(104, ty, d.no, { anchor: 'middle', fill: '#9AA3B5' }));
+              g.appendChild(mkT(104, ty, d.no, { anchor: 'middle', fill: '#99A3BE' }));
               g.appendChild(mkT(160, ty, d.time, { fill: '#C7C7C7' }));
               g.appendChild(mkT(330, ty, d.loc, { fill: '#C7C7C7' }));
               g.appendChild(mkT(530, ty, d.type, { fill: '#C7C7C7' }));
@@ -17955,18 +18079,82 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
               badge.setAttribute('stroke', LVC[d.lv]); badge.setAttribute('stroke-opacity', '0.55');
               g.appendChild(badge);
               g.appendChild(mkT(bx + bw / 2, by + 13, d.lv, { anchor: 'middle', fill: LVC[d.lv], weight: '700', size: 11 }));
-              g.appendChild(mkT(928, ty, d.msg, { fill: '#DDE3EC' }));
+              g.appendChild(mkT(928, ty, d.msg, { fill: '#CCCCCC' }));
               g.appendChild(mkL(64, ry + rowH, 1864, '#242A31'));
             });
             brow.appendChild(g);
           }
 
-          /* z-order 최상단 — skx-event를 skx-main 맨 뒤로(마지막에 그려짐) + z-index 99999 */
-          const mainG = svg.querySelector('[id="skx-main"]') || ev.parentNode;
+          /* z-order 최상단 — 이벤트 리스트를 최상위 그룹 맨 뒤로(마지막에 그려짐) → 펼칠 때 위 내용 위로 덮음 */
+          const mainG = svg.querySelector('[id="skx-Screen/FMS Dashboard"]') || svg.querySelector('[id="skx-main"]') || ev.parentNode;
           mainG.appendChild(ev);
           ev.style.zIndex = '99999';
           /* 열고 닫기(패널 슬라이드업 + 화살표 360° 회전)는 eventExpand()가 .skx-evt-open
              클래스 토글로 단독 처리한다. 여기선 데이터 주입·z-order만 담당(핸들러 중복 제거). */
+        })();
+
+        /* 5) 나머지 버튼 활성화 — 맵(층 선택), 헤더 액션(사용자·로그아웃), 센터 온도 유도(화살표). */
+        (function buttons() {
+          /* 5a) 맵 층 선택 버튼(6F/5F/3F/2F) — 클릭하면 그 층이 선택(파랑)으로, 나머지는 기본(검정)으로. */
+          (function floorSelect() {
+            const fs = svg.querySelector('[id="skx-Floor Selector"]');
+            if (!fs) return;
+            const floors = ['skx-Floor 6F', 'skx-Floor 5F', 'skx-Floor 3F', 'skx-Floor 2F (Selected)']
+              .map((id) => svg.querySelector('[id="' + id + '"]')).filter(Boolean);
+            if (!floors.length) return;
+            let SEL = null;
+            floors.forEach((f) => {
+              const rects = [...f.querySelectorAll('rect')];
+              f.__bg = rects.find((r) => { const fl = getComputedStyle(r).fill; return fl && fl !== 'none' && !/url\(/.test(fl); });
+              f.__glow = rects.find((r) => /url\(/.test(getComputedStyle(r).fill)); /* 2F만 가진 글로우 오버레이 */
+              f.style.cursor = 'pointer';
+            });
+            /* 선택색 = 초기 선택(2F)의 파란 배경색을 그대로 재사용 */
+            const init = floors[floors.length - 1];
+            if (init && init.__bg) { try { SEL = getComputedStyle(init.__bg).fill; } catch (e) {} }
+            SEL = SEL || '#5C8DFF';
+            const BASE = '#000000';
+            const paint = (sel) => {
+              floors.forEach((f) => {
+                if (f.__bg) f.__bg.style.fill = (f === sel) ? SEL : BASE;
+                if (f.__glow) f.__glow.style.display = (f === sel) ? '' : 'none';
+              });
+            };
+            paint(init);
+            floors.forEach((f) => f.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); paint(f); }));
+          })();
+
+          /* 5b) 공통 '눌림' 피드백 — 클릭 시 살짝 눌렸다 돌아오는 스케일 트랜지션. */
+          const pressFx = (el) => {
+            el.style.cursor = 'pointer';
+            el.style.transformBox = 'fill-box';
+            el.style.transformOrigin = 'center';
+            el.style.transition = 'transform 0.12s ease';
+            el.addEventListener('click', (e) => {
+              e.preventDefault(); e.stopPropagation();
+              el.style.transform = 'scale(0.86)';
+              setTimeout(() => { el.style.transform = 'scale(1)'; }, 130);
+            });
+          };
+          /* 5c) 헤더 액션 — 사용자·로그아웃 아이콘(목업이라 실제 동작 대신 눌림 피드백만). */
+          ['skx-Icon/Action/User', 'skx-Icon/Action/Logout'].forEach((id) => {
+            const el = svg.querySelector('[id="' + id + '"]'); if (el) pressFx(el);
+          });
+          /* 5d) 센터 온도 유도(화살표) — 평소엔 좌우 넛지(주의 유도, CSS 애니), 클릭 시 크게 한 번 튕김.
+             넛지가 transform을 점유하므로 클릭 땐 애니를 잠시 끄고 lunge 후 복원한다. */
+          const arrow = svg.querySelector('[id="skx-Icon/Arrow/Right"]');
+          if (arrow) {
+            arrow.style.cursor = 'pointer';
+            arrow.style.transformBox = 'fill-box';
+            arrow.style.transformOrigin = 'center';
+            arrow.addEventListener('click', (e) => {
+              e.preventDefault(); e.stopPropagation();
+              arrow.style.animation = 'none';
+              arrow.style.transition = 'transform 0.14s ease';
+              arrow.style.transform = 'translateX(8px) scale(1.12)';
+              setTimeout(() => { arrow.style.transform = ''; arrow.style.animation = ''; }, 170);
+            });
+          }
         })();
       }
       /* ── SK하이닉스 화면(하나의 인라인 SVG)의 패널 영역을 좌표로 묶어 그룹(<g>)으로 만들고,
@@ -18017,8 +18205,8 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           if (!svg.getBoundingClientRect().width) { setTimeout(doGroup, 150); return; } /* 아직 숨김 → 재시도 */
           const tag = (el, pid) => { if (!el) return false; el.classList.add('skx-svgpanel'); el.dataset.pid = pid; return true; };
           let n = 0;
-          if (tag(byId('skx-panel/map'), 'map')) n++;                     /* 중앙 건물/현황 */
-          const mw = byId('skx-metric-group');                                  /* 우측 지표 패널 3개 */
+          if (tag(byId('skx-Building Map') || byId('skx-panel/map'), 'map')) n++; /* 중앙 건물/현황 */
+          const mw = byId('skx-Metrics') || byId('skx-metric-group');           /* 우측 지표 패널 3개 */
           if (mw) {
             const secs = [...mw.children].filter((c) => c.tagName.toLowerCase() === 'g');
             ['ups', 'temp', 'sat'].forEach((pid, i) => { if (tag(secs[i], pid)) n++; });
@@ -25636,7 +25824,14 @@ ${wembTipRuntime()}
         }
         /* ── 템플릿 갤러리 데이터 — Figma Studio(169:150)의 카드/카테고리 그대로 ──
            썸네일은 src/templates/tpl-01..18.jpg. 화면 종류는 제목 접두어로 판별. */
-        const TPL_CATS = ['All categories', 'Dashboard', 'Digital Twin DT', 'Portal', 'Report', 'FinCo', 'MfgCo', 'PwrCo EnerCo', 'Railway', 'LogiCo', 'DCIM', 'DCMS', 'FMS', 'PSIM', 'FEMS', 'DMS', 'BMS', 'Air Conditioning', 'Concept', 'Security', 'SOP'];
+        /* 카테고리 — 2단 계층: 화면 유형(상위) → 업무 영역(하위, 화면 유형 종속) */
+        const TPL_SCREENS = ['2D 대시보드', '3D 디지털트윈'];
+        const TPL_AREAS = {
+          '2D 대시보드': ['종합현황', '인프라', '서비스·거래', '비즈니스', '이벤트·장애', '안전·보안', '에너지·환경', 'AI·예측', '운영·SOP'],
+          '3D 디지털트윈': ['부지·건물·층', '시설·설비', 'IT·데이터센터', '발전·에너지', '안전·소방', '물리보안', '환경·기상', '이벤트', '2D 정보패널', 'SOP·운영'],
+        };
+        /* 각 템플릿의 업무 영역 — 제목 기준 수동 매핑(아래 TEMPLATES 순서와 1:1) */
+        const TPL_AREA_MAP = ['부지·건물·층', '종합현황', '인프라', '종합현황', '서비스·거래', '서비스·거래', '종합현황', '에너지·환경', 'IT·데이터센터', '종합현황', '종합현황', '안전·보안', '종합현황', '인프라', '시설·설비', '부지·건물·층', '종합현황', '서비스·거래'];
         const TEMPLATES = [
           'Digital Twin: SKHynix Icheon 1level',
           'Dashbord: Icheon main',
@@ -25668,6 +25863,8 @@ ${wembTipRuntime()}
             'September 8, 2024', 'December 1, 2026',
           ];
           const date = TPL_DATES[i] || 'July 24, 2026';
+          const screenType = dt ? '3D 디지털트윈' : '2D 대시보드';
+          const area = TPL_AREA_MAP[i] || (dt ? '부지·건물·층' : '종합현황');
           return {
             img: 'src/templates/tpl-' + String(n).padStart(2, '0') + '.jpg',
             title,
@@ -25676,14 +25873,23 @@ ${wembTipRuntime()}
             ts: Date.parse(date),
             pop: ((n * 7919) % 900) + 100,
             screen: dt ? 'dt' : 'dash',
-            badges: [[dt ? 'Digital Twin DT' : 'Dashboard', 'sol'], [n === 1 ? 'FMS' : 'DCIM', 'con']],
+            screenType, /* 화면 유형 필터용 */
+            area,       /* 업무 영역 필터용 */
+            badges: [[screenType, 'sol'], [area, 'con']],
           };
         });
         /* SKHynix Icheon 1level — '스튜디오 열기' 시 Figma(1:139)를 HTML/CSS DOM으로 구현한 화면으로 연다
            (src/skhynix-screen.js). 갤러리·상세 미리보기 썸네일은 카탈로그용 이미지(tpl-01.jpg) 유지. */
         (function () {
           const sk = TEMPLATES.find((t) => t.title === 'Digital Twin: SKHynix Icheon 1level');
-          if (sk) sk.tpl = 'skhynix';
+          if (sk) {
+            sk.tpl = 'skhynix';
+            /* 상세 페이지 이미지 미리보기 — Figma(64:1782 메인 · 64:2658 UPS 전력 상세)를 슬라이드로 보여준다. 메인이 첫 장. */
+            sk.slides = [
+              { img: 'src/templates/skhynix-1.jpg', label: '메인' },
+              { img: 'src/templates/skhynix-2.jpg', label: 'UPS 전력 상세' },
+            ];
+          }
         })();
         /* Hanjin main — 상세 페이지에서 3장(메인·입출문현황·하차현황)을 슬라이드로 보여준다. 메인이 첫 장. */
         (function () {
@@ -25697,7 +25903,9 @@ ${wembTipRuntime()}
             ];
           }
         })();
-        let tplFilter = 'All categories';
+        let tplScreen = 'all'; /* 화면 유형 필터(all | 2D 대시보드 | 3D 디지털트윈) */
+        let tplArea = 'all';   /* 업무 영역 필터(화면 유형 종속) */
+        let tplQuery = ''; /* 템플릿 갤러리 검색어(제목·배지 대상) */
         let tplSelected = null; /* 상세 페이지로 열어 둔 템플릿(null이면 갤러리) */
         /* ── 전역 뒤로가기용 — 현재 화면 상태 읽기 / 복원 ──
            상태: {t:'launcher',v} 런처 뷰 · {t:'tpl',tpl:제목} 템플릿 상세 · {t:'page',p} 스튜디오 페이지 */
@@ -25774,19 +25982,33 @@ ${wembTipRuntime()}
           const gal = document.createElement('div');
           gal.className = 'tplgal';
 
-          /* 카테고리 링크 바 — 클릭하면 그 카테고리(배지)로 카드를 거른다 */
-          const cats = document.createElement('div');
-          cats.className = 'tplcats';
-          TPL_CATS.forEach((c) => {
+          /* 카테고리 — 2단 계층: 윗줄 화면 유형, 아랫줄 업무 영역(화면 유형 종속) */
+          const mkCat = (label, on, onClick) => {
             const b = document.createElement('button');
             b.type = 'button';
-            b.className = 'tplcat' + (c === tplFilter ? ' on' : '');
-            b.textContent = c;
-            b.onclick = () => { tplFilter = c; renderProjects(); };
-            cats.appendChild(b);
+            b.className = 'tplcat' + (on ? ' on' : '');
+            b.textContent = label;
+            b.onclick = onClick;
+            return b;
+          };
+          /* 1단 — 화면 유형 */
+          const cats = document.createElement('div');
+          cats.className = 'tplcats';
+          cats.appendChild(mkCat('전체', tplScreen === 'all', () => { tplScreen = 'all'; tplArea = 'all'; renderProjects(); }));
+          TPL_SCREENS.forEach((s) => {
+            cats.appendChild(mkCat(s, tplScreen === s, () => { tplScreen = s; tplArea = 'all'; renderProjects(); }));
           });
-
           gal.appendChild(cats);
+          /* 2단 — 업무 영역 (특정 화면 유형을 골랐을 때만 노출) */
+          if (tplScreen !== 'all') {
+            const areas = document.createElement('div');
+            areas.className = 'tplcats tplsubcats';
+            areas.appendChild(mkCat('전체', tplArea === 'all', () => { tplArea = 'all'; renderProjects(); }));
+            (TPL_AREAS[tplScreen] || []).forEach((a) => {
+              areas.appendChild(mkCat(a, tplArea === a, () => { tplArea = a; renderProjects(); }));
+            });
+            gal.appendChild(areas);
+          }
 
           /* 정렬 드롭다운 — 카테고리 바 '아래' 행 오른쪽(최신순·이름순·인기순) */
           const sortIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h13"/><path d="M4 12h9"/><path d="M4 18h5"/><path d="M16 9l3-3 3 3"/><path d="M19 6v12"/></svg>';
@@ -25794,6 +26016,31 @@ ${wembTipRuntime()}
           const ckIcon = '<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
           const sortBar = document.createElement('div');
           sortBar.className = 'tplsortbar';
+
+          /* 검색창 — 정렬 바 왼쪽. 제목·배지를 대상으로 실시간 필터 */
+          const searchIcon = '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>';
+          const clearIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+          const searchWrap = document.createElement('div');
+          searchWrap.className = 'tplsearch' + (tplQuery ? ' has-val' : '');
+          searchWrap.innerHTML =
+            searchIcon +
+            '<input type="text" class="tplsearch-input" placeholder="템플릿 검색" aria-label="템플릿 검색">' +
+            '<button type="button" class="tplsearch-clear" aria-label="검색어 지우기">' + clearIcon + '</button>';
+          const searchInput = searchWrap.querySelector('.tplsearch-input');
+          searchInput.value = tplQuery;
+          searchInput.addEventListener('input', () => {
+            tplQuery = searchInput.value;
+            searchWrap.classList.toggle('has-val', !!tplQuery.trim());
+            renderGrid();
+          });
+          searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && tplQuery) { tplQuery = ''; searchInput.value = ''; searchWrap.classList.remove('has-val'); renderGrid(); }
+          });
+          searchWrap.querySelector('.tplsearch-clear').onclick = () => {
+            tplQuery = ''; searchInput.value = ''; searchWrap.classList.remove('has-val'); renderGrid(); searchInput.focus();
+          };
+          sortBar.appendChild(searchWrap);
+
           const sortWrap = document.createElement('div');
           sortWrap.className = 'tplsort';
           sortWrap.innerHTML =
@@ -25816,43 +26063,61 @@ ${wembTipRuntime()}
             });
           }
 
-          /* 카드 그리드 */
+          /* 카드 그리드 — 카테고리·검색어에 맞는 템플릿만 그린다.
+             검색 중 타이핑마다 이 함수만 다시 돌려 입력 포커스를 유지한다. */
           const grid = document.createElement('div');
           grid.className = 'tplgrid';
-          const list = sortTemplates(TEMPLATES.filter((t) => tplFilter === 'All categories' || t.badges.some((bd) => bd[0] === tplFilter)));
-          if (!list.length) {
-            const e = document.createElement('div');
-            e.className = 'tplempty';
-            e.textContent = '‘' + tplFilter + '’ 카테고리에 해당하는 템플릿이 아직 없어요.';
-            grid.appendChild(e);
-          }
-          const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
-          list.forEach((t) => {
-            const card = document.createElement('button');
-            card.type = 'button';
-            card.className = 'tplcard';
-            card.innerHTML =
-              '<div class="tplthumb"><img loading="lazy" src="' + t.img + '" alt="' + esc(t.title) + '"></div>' +
-              '<div class="tplbox">' +
-                '<div class="tplsec1">' +
-                  '<div class="tplbadges">' +
-                    t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
-                  '</div>' +
-                  '<div class="tpltitle">' + esc(t.title) + '</div>' +
-                '</div>' +
-                '<div class="tplsec2">' +
-                  '<span class="tpldate">' + esc(t.date) + '</span>' +
-                  '<span class="tplmore">Read More' + arrow + '</span>' +
-                '</div>' +
-              '</div>';
-            card.onclick = () => { tplSelected = t; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'tpl', tpl: t.title }); };
-            grid.appendChild(card);
-          });
           gal.appendChild(grid);
           g.appendChild(gal);
 
-          const cnt = document.getElementById('lcCount');
-          if (cnt) cnt.textContent = tplFilter === 'All categories' ? VIEW_META.tpl.count() : list.length + '개 · ' + tplFilter;
+          const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
+          function renderGrid() {
+            grid.innerHTML = '';
+            const q = tplQuery.trim().toLowerCase();
+            const list = sortTemplates(TEMPLATES.filter((t) => {
+              if (tplScreen !== 'all' && t.screenType !== tplScreen) return false;
+              if (tplArea !== 'all' && t.area !== tplArea) return false;
+              if (!q) return true;
+              return t.title.toLowerCase().includes(q) || t.badges.some((bd) => bd[0].toLowerCase().includes(q));
+            }));
+            if (!list.length) {
+              const e = document.createElement('div');
+              e.className = 'tplempty';
+              e.textContent = q
+                ? '‘' + tplQuery.trim() + '’ 검색 결과가 없어요.'
+                : '해당 카테고리에 맞는 템플릿이 아직 없어요.';
+              grid.appendChild(e);
+            }
+            list.forEach((t) => {
+              const card = document.createElement('button');
+              card.type = 'button';
+              card.className = 'tplcard';
+              card.innerHTML =
+                '<div class="tplthumb"><img loading="lazy" src="' + t.img + '" alt="' + esc(t.title) + '"></div>' +
+                '<div class="tplbox">' +
+                  '<div class="tplsec1">' +
+                    '<div class="tplbadges">' +
+                      t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
+                    '</div>' +
+                    '<div class="tpltitle">' + esc(t.title) + '</div>' +
+                  '</div>' +
+                  '<div class="tplsec2">' +
+                    '<span class="tpldate">' + esc(t.date) + '</span>' +
+                    '<span class="tplmore">Read More' + arrow + '</span>' +
+                  '</div>' +
+                '</div>';
+              card.onclick = () => { tplSelected = t; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'tpl', tpl: t.title }); };
+              grid.appendChild(card);
+            });
+
+            const cnt = document.getElementById('lcCount');
+            if (cnt) {
+              if (q) cnt.textContent = list.length + '개 · ‘' + tplQuery.trim() + '’ 검색';
+              else if (tplScreen === 'all' && tplArea === 'all') cnt.textContent = VIEW_META.tpl.count();
+              else cnt.textContent = list.length + '개 · ' + [tplScreen !== 'all' ? tplScreen : null, tplArea !== 'all' ? tplArea : null].filter(Boolean).join(' · ');
+            }
+          }
+          renderGrid();
         }
 
         /* 템플릿 상세 페이지 — Figma Studio(170:593): 배지 · 제목/날짜 · 큰 프리뷰 이미지.
@@ -28568,6 +28833,556 @@ ${wembTipRuntime()}
              다음 새로고침에도 홈을 유지한다. */
           try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
         }
+      })();
+    </script>
+
+    <!-- ==========================================================================
+         연결형 템플릿(한진·SK하이닉스) 시안 위 '편집 가능한 텍스트 오버레이'
+         --------------------------------------------------------------------------
+         한진은 통짜 JPG, SK하이닉스는 텍스트가 <path>로 구워진 인라인 SVG라
+         기존 글자를 contenteditable로 켤 수 없다. 그래서 그래픽 위(1920×1080
+         Figma 좌표계)에 사용자가 직접 글자 상자를 얹어 추가·수정·이동·삭제할 수
+         있는 오버레이 레이어를 둔다. '내용 수정'(#contentToggle → #dtStage.dt-content-editing)
+         모드일 때만 편집 가능하고, 위치·내용은 템플릿별 localStorage에 자동 저장된다.
+         기존 스튜디오 코드는 건드리지 않고 DOM 관찰로만 붙는 자립 모듈. -->
+    <style id="tpltext-style">
+      .tpl-textlayer { position: absolute; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
+      .tpl-textstage { position: absolute; pointer-events: none; }
+      .tpl-textlayer.editing .tpl-textstage { pointer-events: auto; cursor: crosshair; }
+      .tpl-tbox {
+        position: absolute; pointer-events: none; white-space: nowrap;
+        color: #fff; font-family: var(--font, "Pretendard", system-ui, sans-serif);
+        font-weight: 600; line-height: 1.15; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        font-size: calc(var(--tpl-fs, 28) * var(--tpl-scale, 1) * 1px);
+        padding: 1px 3px; border-radius: 4px;
+      }
+      .tpl-textlayer.editing .tpl-tbox { pointer-events: auto; cursor: move; outline: 1px dashed rgba(255, 255, 255, 0.4); }
+      .tpl-textlayer.editing .tpl-tbox.sel { outline: 1px solid #4c8dff; background: rgba(76, 141, 255, 0.14); }
+      .tpl-tbox .tpl-t { outline: none; pointer-events: inherit; min-width: 6px; display: inline-block; }
+      .tpl-tbox .tpl-del {
+        position: absolute; top: -9px; right: -9px; width: 18px; height: 18px; border-radius: 50%;
+        border: none; background: #e5484d; color: #fff; font: 700 12px/18px sans-serif; text-align: center;
+        cursor: pointer; display: none; padding: 0; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      }
+      .tpl-textlayer.editing .tpl-tbox.sel .tpl-del { display: block; }
+      .tpl-hint {
+        position: absolute; left: 50%; top: 12px; transform: translateX(-50%); z-index: 7; pointer-events: none;
+        background: rgba(15, 20, 30, 0.86); color: #e8edf5; font: 600 12px/1 var(--font, system-ui, sans-serif);
+        padding: 8px 13px; border-radius: 999px; white-space: nowrap; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4); display: none;
+      }
+      .tpl-textlayer.editing .tpl-hint { display: block; }
+    </style>
+    <script>
+      (function tplTextOverlay() {
+        const dt = document.getElementById('dtStage');
+        if (!dt) return;
+        const NW = 1920, NH = 1080;
+        const KEY = (tpl) => 'wemb-tpl-text-' + tpl;
+
+        let curTpl = null;    /* 'hanjin' | 'skhynix' */
+        let host = null;      /* .hj-repro | .skx-screen */
+        let layer = null, stageEl = null, hintEl = null;
+        let boxes = [];       /* [{id,x,y,text,size}] — x,y,size는 1920×1080 좌표계 px */
+        let scale = 1, sel = null, building = false, ro = null;
+
+        /* 현재 dtStage에 어떤 연결형 시안이 떠 있는지 판별.
+           SK하이닉스(.skx-screen)는 아래 skxTextLayer 모듈이 'Figma 텍스트 재구성(Pretendard)'으로
+           따로 처리하므로 여기선 한진(통짜 JPG)만 자유 텍스트 오버레이 대상으로 삼는다. */
+        function detect() {
+          if (dt.getAttribute('data-tpl') === 'hanjin') {
+            const h = dt.querySelector('.hj-repro');
+            if (h) return { tpl: 'hanjin', host: h };
+          }
+          return null;
+        }
+
+        function load(tpl) {
+          try { const r = localStorage.getItem(KEY(tpl)); if (r) { const a = JSON.parse(r); if (Array.isArray(a)) return a; } } catch (e) {}
+          return [];
+        }
+        function save() { if (!curTpl) return; try { localStorage.setItem(KEY(curTpl), JSON.stringify(boxes)); } catch (e) {} }
+
+        /* 그래픽의 실제 표시 사각형(object-fit:contain / preserveAspectRatio meet)에
+           맞춰 텍스트 스테이지를 배치 — 여기서만 스케일을 계산해 상자 위치/글자크기를 맞춘다. */
+        function fitStage() {
+          if (!host || !stageEl) return;
+          const r = host.getBoundingClientRect();
+          if (!r.width || !r.height) return;
+          scale = Math.min(r.width / NW, r.height / NH);
+          const w = NW * scale, h = NH * scale;
+          stageEl.style.width = w + 'px';
+          stageEl.style.height = h + 'px';
+          stageEl.style.left = ((r.width - w) / 2) + 'px';
+          stageEl.style.top = ((r.height - h) / 2) + 'px';
+          stageEl.style.setProperty('--tpl-scale', scale);
+          positionBoxes();
+        }
+        function positionBoxes() {
+          if (!stageEl) return;
+          [...stageEl.querySelectorAll('.tpl-tbox')].forEach((el) => {
+            const b = boxes.find((x) => x.id === el.dataset.id);
+            if (!b) return;
+            el.style.left = (b.x * scale) + 'px';
+            el.style.top = (b.y * scale) + 'px';
+            el.style.setProperty('--tpl-fs', b.size || 28);
+          });
+        }
+
+        function selectBox(el) {
+          if (sel && sel !== el) sel.classList.remove('sel');
+          sel = el; if (el) el.classList.add('sel');
+        }
+
+        function makeBoxEl(b) {
+          const el = document.createElement('div');
+          el.className = 'tpl-tbox'; el.dataset.id = b.id;
+          el.style.setProperty('--tpl-fs', b.size || 28);
+          const t = document.createElement('span');
+          t.className = 'tpl-t'; t.textContent = b.text;
+          const del = document.createElement('button');
+          del.className = 'tpl-del'; del.type = 'button'; del.textContent = '×'; del.title = '삭제';
+          el.appendChild(t); el.appendChild(del);
+
+          /* 삭제 */
+          del.addEventListener('click', (e) => {
+            e.stopPropagation(); e.preventDefault();
+            boxes = boxes.filter((x) => x.id !== b.id);
+            if (sel === el) sel = null;
+            el.remove(); save();
+          });
+          del.addEventListener('pointerdown', (e) => { e.stopPropagation(); });
+
+          /* 글자 입력 → 디바운스 저장 */
+          let st;
+          t.addEventListener('input', () => {
+            b.text = t.textContent;
+            clearTimeout(st); st = setTimeout(save, 300);
+          });
+          t.addEventListener('blur', () => { b.text = t.textContent; save(); });
+
+          /* 클릭=선택, 끌기=이동, 짧은 클릭=글자 편집 진입 */
+          el.addEventListener('pointerdown', (e) => {
+            if (!layer.classList.contains('editing') || e.button !== 0) return;
+            if (e.target === del) return;
+            e.stopPropagation();
+            selectBox(el);
+            const rect = stageEl.getBoundingClientRect();
+            const st0 = { sx: e.clientX, sy: e.clientY, ox: b.x, oy: b.y, moved: false, pid: e.pointerId };
+            const onMove = (ev) => {
+              const dx = (ev.clientX - st0.sx) / scale, dy = (ev.clientY - st0.sy) / scale;
+              if (!st0.moved && Math.hypot(ev.clientX - st0.sx, ev.clientY - st0.sy) < 3) return;
+              st0.moved = true;
+              b.x = Math.max(0, Math.min(NW, st0.ox + dx));
+              b.y = Math.max(0, Math.min(NH, st0.oy + dy));
+              el.style.left = (b.x * scale) + 'px';
+              el.style.top = (b.y * scale) + 'px';
+            };
+            const onUp = () => {
+              window.removeEventListener('pointermove', onMove);
+              window.removeEventListener('pointerup', onUp);
+              if (st0.moved) { save(); }
+              else {
+                /* 이동 안 했으면 글자 편집으로 — 캐럿 배치 */
+                t.setAttribute('contenteditable', 'true');
+                t.focus();
+                try {
+                  const rg = document.createRange(); rg.selectNodeContents(t);
+                  const s = window.getSelection(); s.removeAllRanges(); s.addRange(rg);
+                } catch (e2) {}
+              }
+            };
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onUp);
+          });
+          return el;
+        }
+
+        function render() {
+          if (!stageEl) return;
+          [...stageEl.querySelectorAll('.tpl-tbox')].forEach((el) => el.remove());
+          boxes.forEach((b) => stageEl.appendChild(makeBoxEl(b)));
+          positionBoxes();
+        }
+
+        function addBox(clientX, clientY) {
+          const rect = stageEl.getBoundingClientRect();
+          const x = Math.max(0, Math.min(NW, (clientX - rect.left) / scale));
+          const y = Math.max(0, Math.min(NH, (clientY - rect.top) / scale));
+          const b = { id: 't' + Date.now().toString(36) + Math.floor(Math.random() * 1e3), x, y, text: '텍스트', size: 28 };
+          boxes.push(b); save();
+          const el = makeBoxEl(b); stageEl.appendChild(el);
+          positionBoxes(); selectBox(el);
+          const t = el.querySelector('.tpl-t');
+          t.setAttribute('contenteditable', 'true'); t.focus();
+          try { const rg = document.createRange(); rg.selectNodeContents(t); const s = window.getSelection(); s.removeAllRanges(); s.addRange(rg); } catch (e) {}
+        }
+
+        function buildLayer() {
+          teardown();
+          building = true;
+          layer = document.createElement('div');
+          layer.className = 'tpl-textlayer';
+          stageEl = document.createElement('div');
+          stageEl.className = 'tpl-textstage';
+          hintEl = document.createElement('div');
+          hintEl.className = 'tpl-hint';
+          hintEl.textContent = '빈 곳을 더블클릭해 글자 추가 · 글자를 끌어 이동 · 클릭해 수정 · × 삭제';
+          layer.appendChild(hintEl);
+          layer.appendChild(stageEl);
+
+          /* 빈 영역 더블클릭 → 새 글자 상자 */
+          stageEl.addEventListener('dblclick', (e) => {
+            if (!layer.classList.contains('editing')) return;
+            if (e.target !== stageEl) return; /* 상자 위 더블클릭은 무시 */
+            addBox(e.clientX, e.clientY);
+          });
+          /* 빈 곳 클릭 시 선택 해제 */
+          stageEl.addEventListener('pointerdown', (e) => { if (e.target === stageEl) selectBox(null); });
+
+          host.appendChild(layer);
+          boxes = load(curTpl);
+          render();
+          fitStage();
+          if (ro) ro.disconnect();
+          ro = new ResizeObserver(() => fitStage());
+          ro.observe(host);
+          building = false;
+        }
+
+        function teardown() {
+          if (ro) { ro.disconnect(); ro = null; }
+          if (layer) { building = true; layer.remove(); building = false; }
+          layer = stageEl = hintEl = null; sel = null; boxes = [];
+        }
+
+        function updateEditing() {
+          if (!layer) return;
+          layer.classList.toggle('editing', dt.classList.contains('dt-content-editing'));
+          if (!dt.classList.contains('dt-content-editing')) {
+            selectBox(null);
+            [...(stageEl ? stageEl.querySelectorAll('.tpl-t[contenteditable]') : [])].forEach((t) => t.removeAttribute('contenteditable'));
+          }
+        }
+
+        function sync() {
+          if (building) return;
+          const d = detect();
+          if (!d) { if (layer) teardown(); curTpl = null; host = null; return; }
+          if (d.host !== host || d.tpl !== curTpl) {
+            curTpl = d.tpl; host = d.host;
+            buildLayer();
+          }
+          updateEditing();
+        }
+
+        /* dtStage 변화 관찰 — 시안 교체(childList)·편집모드 토글(class)·템플릿 전환(data-tpl) */
+        const mo = new MutationObserver((muts) => {
+          if (building) return;
+          /* 내 레이어 내부에서 난 변화는 무시(무한 루프 방지) */
+          for (const m of muts) { if (m.target.closest && m.target.closest('.tpl-textlayer')) continue; }
+          const relevant = muts.some((m) => !(m.target.closest && m.target.closest('.tpl-textlayer')));
+          if (relevant) sync();
+        });
+        mo.observe(dt, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'data-tpl'] });
+
+        /* 리셋 연동은 별도로 두지 않는다: '전체 기본값으로 되돌리기'(doResetAll)는 이미
+           wemb-* 키를 통째로 지우고 새로고침하므로 오버레이 글자(wemb-tpl-text-*)도 함께 초기화되고,
+           '색 정하기 초기화'는 대시보드 내용을 보존해야 하므로 오버레이를 건드리면 안 된다.
+           개별 글자는 편집 모드에서 × 로 지운다. */
+
+        /* 초기 동기화(이미 연결형 시안이 떠 있는 새로고침 복원 대비) */
+        sync();
+        window.addEventListener('resize', fitStage);
+        window.__tplTextSync = sync;
+      })();
+    </script>
+
+    <!-- ==========================================================================
+         SK하이닉스 이천 FMS 시안 — Figma 텍스트를 SVG(벡터 path) 대신 Pretendard(CDN)로
+         렌더되는 '편집 가능한 실제 텍스트'로 재구성.
+         --------------------------------------------------------------------------
+         원본 main.svg는 텍스트가 전부 <path>로 구워져 있어 편집 불가. Figma 원본
+         (node 64:1782)에서 각 텍스트의 문자열·폰트크기·색·정렬을 가져오고, 실제 렌더된
+         SVG 글리프의 정확한 위치(getBoundingClientRect→캔버스 좌표)에 매핑해, 대응하는
+         SVG 텍스트는 숨기고 같은 자리에 Pretendard 편집 텍스트를 얹는다. '내용 수정'
+         (#dtStage.dt-content-editing) 모드에서 클릭해 바로 수정, localStorage 자동 저장. -->
+    <style id="skx-textlayer-style">
+      /* SVG 그룹 내부에 주입되는 편집 텍스트(foreignObject 안 HTML div). SVG 좌표계라
+         스케일·그룹 transform(이벤트 리스트 슬라이드업)·stacking이 SVG와 함께 자연히 적용된다. */
+      .skx-fo { overflow: visible; }
+      .skx-tb.skx-edit { cursor: text; outline: 1px dashed rgba(120, 170, 255, 0.5); outline-offset: 1px; border-radius: 2px; }
+      .skx-tb.skx-edit:focus { outline: 1px solid #4c8dff; background: rgba(76, 141, 255, 0.16); }
+    </style>
+
+    <!-- ==========================================================================
+         SK하이닉스 이천 FMS 시안 — 템플릿 생명주기 애니메이션(차트/위젯을 '살아있게')
+         센터 온도(기포·경보 큐브·상태 점·핀)와 상면 포화도(실린더·도넛 링)에 상시 모션.
+         reduce-motion이면 전부 정지. (거대 <style> 블록 파싱 이슈를 피해 전용 블록으로 분리) -->
+    <style id="skx-motion-style">
+      @media (prefers-reduced-motion: no-preference) {
+        /* 1) 큐브 속 기포(#skx-Bubble ~ _4, 큐브 4개 전부) — 비눗방울처럼 아래→위로 떠올라 사라지고 반복(스태거 연속 스트림) */
+        .skx-svg [id^="skx-Bubble"] > * {
+          transform-box: fill-box; transform-origin: center;
+          animation: skxBubbleRise 3.4s ease-in-out infinite;
+        }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(1) { animation-delay: 0s;    animation-duration: 3.2s; }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(2) { animation-delay: 0.42s; animation-duration: 3.7s; }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(3) { animation-delay: 0.84s; animation-duration: 3.4s; }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(4) { animation-delay: 1.26s; animation-duration: 3.9s; }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(5) { animation-delay: 1.68s; animation-duration: 3.3s; }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(6) { animation-delay: 2.1s;  animation-duration: 3.6s; }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(7) { animation-delay: 2.52s; animation-duration: 3.5s; }
+        .skx-svg [id^="skx-Bubble"] > *:nth-child(8) { animation-delay: 2.94s; animation-duration: 3.8s; }
+        @keyframes skxBubbleRise {
+          0%   { transform: translateY(6px) scale(0.55); opacity: 0; }
+          24%  { opacity: 0.9; }
+          76%  { opacity: 0.9; }
+          100% { transform: translateY(-17px) scale(1.05); opacity: 0; }
+        }
+
+        /* 2) 경보 큐브 M14(노랑 #skx-Union_2)·M16(주황 #skx-Union_3) — 상태 변화 표시: 경보색이 부드럽게 깜빡 */
+        .skx-svg [id="skx-Union_2"] { animation: skxBlinkY 2s ease-in-out infinite; }
+        .skx-svg [id="skx-Union_3"] { animation: skxBlinkO 2.3s ease-in-out infinite; }
+        @keyframes skxBlinkY {
+          0%, 100% { opacity: 0.55; filter: brightness(0.88); }
+          50%      { opacity: 1;    filter: brightness(1.32) drop-shadow(0 0 5px rgba(246, 222, 6, 0.9)); }
+        }
+        @keyframes skxBlinkO {
+          0%, 100% { opacity: 0.55; filter: brightness(0.88); }
+          50%      { opacity: 1;    filter: brightness(1.32) drop-shadow(0 0 5px rgba(246, 126, 6, 0.95)); }
+        }
+
+        /* 3) 온도 상태 점(#skx-Dots ~ _4) + 핀(#skx-Pin ~ _4) — 레벨이 '한 단계 위'로 올라가는 스텝.
+              활성 점 색이 한 칸 위로 이동하고 핀이 한 칸(9px) 위로 동기 이동. 큐브마다 속도·위상을 다르게(제각각). */
+        /* 공통 색 스텝 키프레임(부드러운 스텝) */
+        @keyframes skxLvlG1 { 0%,30% { fill: #414B69; } 46%,80% { fill: #43D28C; } 96%,100% { fill: #414B69; } }
+        @keyframes skxLvlG2 { 0%,30% { fill: #43D28C; } 46%,80% { fill: #26684C; } 96%,100% { fill: #43D28C; } }
+        @keyframes skxLvlG3 { 0%,30% { fill: #26684C; } 46%,80% { fill: #24664A; } 96%,100% { fill: #26684C; } }
+        @keyframes skxLvlG4 { 0%,30% { fill: #24664A; } 46%,80% { fill: #226447; } 96%,100% { fill: #24664A; } }
+        @keyframes skxLvlG5 { 0%,30% { fill: #226447; } 46%,80% { fill: #216345; } 96%,100% { fill: #226447; } }
+        @keyframes skxLvlY1 { 0%,30% { fill: #414B69; } 46%,80% { fill: #FAD01E; } 96%,100% { fill: #414B69; } }
+        @keyframes skxLvlY2 { 0%,30% { fill: #FAD01E; } 46%,80% { fill: #78661A; } 96%,100% { fill: #FAD01E; } }
+        @keyframes skxLvlY3 { 0%,30% { fill: #78661A; } 46%,80% { fill: #756316; } 96%,100% { fill: #78661A; } }
+        @keyframes skxLvlY4 { 0%,30% { fill: #756316; } 46%,80% { fill: #746214; } 96%,100% { fill: #756316; } }
+        @keyframes skxPinStep { 0%,30% { transform: translateY(0); } 46%,80% { transform: translateY(-9px); } 96%,100% { transform: translateY(0); } }
+        .skx-svg [id^="skx-Pin"] { transform-box: fill-box; transform-origin: center; }
+
+        /* 큐브1 (Dots · Pin) — 3.0s, 위상 0s */
+        .skx-svg [id="skx-Dot_7"]  { animation: skxLvlG1 3.0s ease-in-out infinite; }
+        .skx-svg [id="skx-Dot_8"]  { animation: skxLvlG2 3.0s ease-in-out infinite; }
+        .skx-svg [id="skx-Dot_9"]  { animation: skxLvlG3 3.0s ease-in-out infinite; }
+        .skx-svg [id="skx-Dot_10"] { animation: skxLvlG4 3.0s ease-in-out infinite; }
+        .skx-svg [id="skx-Dot_11"] { animation: skxLvlG5 3.0s ease-in-out infinite; }
+        .skx-svg [id="skx-Pin"]    { animation: skxPinStep 3.0s ease-in-out infinite; }
+        /* 큐브2 (Dots_2 · Pin_2) — 3.7s, 위상 0.8s */
+        .skx-svg [id="skx-Dot_17"] { animation: skxLvlG1 3.7s ease-in-out 0.8s infinite; }
+        .skx-svg [id="skx-Dot_18"] { animation: skxLvlG2 3.7s ease-in-out 0.8s infinite; }
+        .skx-svg [id="skx-Dot_19"] { animation: skxLvlG3 3.7s ease-in-out 0.8s infinite; }
+        .skx-svg [id="skx-Dot_20"] { animation: skxLvlG4 3.7s ease-in-out 0.8s infinite; }
+        .skx-svg [id="skx-Dot_21"] { animation: skxLvlG5 3.7s ease-in-out 0.8s infinite; }
+        .skx-svg [id="skx-Pin_2"]  { animation: skxPinStep 3.7s ease-in-out 0.8s infinite; }
+        /* 큐브3 노랑 (Dots_3 · Pin_3) — 4.4s, 위상 1.6s */
+        .skx-svg [id="skx-Dot_28"] { animation: skxLvlY1 4.4s ease-in-out 1.6s infinite; }
+        .skx-svg [id="skx-Dot_29"] { animation: skxLvlY2 4.4s ease-in-out 1.6s infinite; }
+        .skx-svg [id="skx-Dot_30"] { animation: skxLvlY3 4.4s ease-in-out 1.6s infinite; }
+        .skx-svg [id="skx-Dot_31"] { animation: skxLvlY4 4.4s ease-in-out 1.6s infinite; }
+        .skx-svg [id="skx-Pin_3"]  { animation: skxPinStep 4.4s ease-in-out 1.6s infinite; }
+        /* 큐브4 (Dots_4 · Pin_4) — 3.3s, 위상 0.35s */
+        .skx-svg [id="skx-Dot_37"] { animation: skxLvlG1 3.3s ease-in-out 0.35s infinite; }
+        .skx-svg [id="skx-Dot_38"] { animation: skxLvlG2 3.3s ease-in-out 0.35s infinite; }
+        .skx-svg [id="skx-Dot_39"] { animation: skxLvlG3 3.3s ease-in-out 0.35s infinite; }
+        .skx-svg [id="skx-Dot_40"] { animation: skxLvlG4 3.3s ease-in-out 0.35s infinite; }
+        .skx-svg [id="skx-Dot_41"] { animation: skxLvlG5 3.3s ease-in-out 0.35s infinite; }
+        .skx-svg [id="skx-Pin_4"]  { animation: skxPinStep 3.3s ease-in-out 0.35s infinite; }
+        /* 큐브5 주황 (Dots_5 · Pin_5) — 3.9s, 위상 1.0s. 활성이 한 칸 위(Dot_46)라 아래 점이 더 많음 */
+        .skx-svg [id="skx-Dot_45"] { animation: skxLvlO1 3.9s ease-in-out 1s infinite; }
+        .skx-svg [id="skx-Dot_46"] { animation: skxLvlO2 3.9s ease-in-out 1s infinite; }
+        .skx-svg [id="skx-Dot_47"] { animation: skxLvlO3 3.9s ease-in-out 1s infinite; }
+        .skx-svg [id="skx-Dot_48"] { animation: skxLvlO4 3.9s ease-in-out 1s infinite; }
+        .skx-svg [id="skx-Dot_49"] { animation: skxLvlO5 3.9s ease-in-out 1s infinite; }
+        .skx-svg [id="skx-Dot_50"] { animation: skxLvlO6 3.9s ease-in-out 1s infinite; }
+        .skx-svg [id="skx-Dot_51"] { animation: skxLvlO7 3.9s ease-in-out 1s infinite; }
+        .skx-svg [id="skx-Pin_5"]  { animation: skxPinStep 3.9s ease-in-out 1s infinite; }
+        @keyframes skxLvlO1 { 0%,30% { fill: #414B69; } 46%,80% { fill: #F28847; } 96%,100% { fill: #414B69; } }
+        @keyframes skxLvlO2 { 0%,30% { fill: #F28847; } 46%,80% { fill: #774932; } 96%,100% { fill: #F28847; } }
+        @keyframes skxLvlO3 { 0%,30% { fill: #774932; } 46%,80% { fill: #865841; } 96%,100% { fill: #774932; } }
+        @keyframes skxLvlO4 { 0%,30% { fill: #865841; } 46%,80% { fill: #75452D; } 96%,100% { fill: #865841; } }
+        @keyframes skxLvlO5 { 0%,30% { fill: #75452D; } 46%,80% { fill: #74442B; } 96%,100% { fill: #75452D; } }
+        @keyframes skxLvlO6 { 0%,30% { fill: #74442B; } 46%,80% { fill: #724228; } 96%,100% { fill: #74442B; } }
+        @keyframes skxLvlO7 { 0%,30% { fill: #724228; } 46%,80% { fill: #704125; } 96%,100% { fill: #724228; } }
+        /* 큐브6 (Dots_6 · Pin_6) — 3.1s, 위상 0.5s */
+        .skx-svg [id="skx-Dot_57"] { animation: skxLvlG1 3.1s ease-in-out 0.5s infinite; }
+        .skx-svg [id="skx-Dot_58"] { animation: skxLvlG2 3.1s ease-in-out 0.5s infinite; }
+        .skx-svg [id="skx-Dot_59"] { animation: skxLvlG3 3.1s ease-in-out 0.5s infinite; }
+        .skx-svg [id="skx-Dot_60"] { animation: skxLvlG4 3.1s ease-in-out 0.5s infinite; }
+        .skx-svg [id="skx-Dot_61"] { animation: skxLvlG5 3.1s ease-in-out 0.5s infinite; }
+        .skx-svg [id="skx-Pin_6"]  { animation: skxPinStep 3.1s ease-in-out 0.5s infinite; }
+        /* 큐브7 (Dots_7 · Pin_7) — 4.6s, 위상 2.0s */
+        .skx-svg [id="skx-Dot_67"] { animation: skxLvlG1 4.6s ease-in-out 2s infinite; }
+        .skx-svg [id="skx-Dot_68"] { animation: skxLvlG2 4.6s ease-in-out 2s infinite; }
+        .skx-svg [id="skx-Dot_69"] { animation: skxLvlG3 4.6s ease-in-out 2s infinite; }
+        .skx-svg [id="skx-Dot_70"] { animation: skxLvlG4 4.6s ease-in-out 2s infinite; }
+        .skx-svg [id="skx-Dot_71"] { animation: skxLvlG5 4.6s ease-in-out 2s infinite; }
+        .skx-svg [id="skx-Pin_7"]  { animation: skxPinStep 4.6s ease-in-out 2s infinite; }
+        /* 큐브8 (Dots_8 · Pin_8) — 3.5s, 위상 1.3s */
+        .skx-svg [id="skx-Dot_77"] { animation: skxLvlG1 3.5s ease-in-out 1.3s infinite; }
+        .skx-svg [id="skx-Dot_78"] { animation: skxLvlG2 3.5s ease-in-out 1.3s infinite; }
+        .skx-svg [id="skx-Dot_79"] { animation: skxLvlG3 3.5s ease-in-out 1.3s infinite; }
+        .skx-svg [id="skx-Dot_80"] { animation: skxLvlG4 3.5s ease-in-out 1.3s infinite; }
+        .skx-svg [id="skx-Dot_81"] { animation: skxLvlG5 3.5s ease-in-out 1.3s infinite; }
+        .skx-svg [id="skx-Pin_8"]  { animation: skxPinStep 3.5s ease-in-out 1.3s infinite; }
+
+        /* 4) 상면 포화도 실린더(#skx-Column ~ _3, 3개 전부) — 디스크가 아래→위로 착착착 쌓이듯 스냅 인.
+              각 컬럼 내부는 아래→위 순서, 컬럼끼리는 위상을 달리해 물결처럼 이어짐. */
+        .skx-svg [id^="skx-Column"] [id^="skx-item"] {
+          transform-box: fill-box; transform-origin: center;
+          animation-name: skxDiscStack; animation-duration: 3.8s;
+          animation-timing-function: ease-out; animation-iteration-count: infinite;
+        }
+        .skx-svg [id="skx-item"]   { animation-delay: 0s; }
+        .skx-svg [id="skx-item_2"] { animation-delay: 0.26s; }
+        .skx-svg [id="skx-item_3"] { animation-delay: 0.52s; }
+        .skx-svg [id="skx-item_4"] { animation-delay: 0.95s; }
+        .skx-svg [id="skx-item_5"] { animation-delay: 1.21s; }
+        .skx-svg [id="skx-item_6"] { animation-delay: 1.47s; }
+        .skx-svg [id="skx-item_7"] { animation-delay: 1.9s; }
+        .skx-svg [id="skx-item_8"] { animation-delay: 2.16s; }
+        .skx-svg [id="skx-item_9"] { animation-delay: 2.42s; }
+        @keyframes skxDiscStack {
+          0%, 10% { transform: translateY(-12px); opacity: 0; }
+          18%     { transform: translateY(2px);   opacity: 1; }   /* 살짝 지나쳤다가 */
+          25%     { transform: translateY(0);      opacity: 1; }   /* 착! 안착 */
+          88%     { transform: translateY(0);      opacity: 1; }   /* 유지 */
+          100%    { transform: translateY(-12px);  opacity: 0; }   /* 들려서 다음 사이클 대기 */
+        }
+
+        /* 5) 도넛 링(#skx-Ring 금일 · #skx-Ring_2 전일) — 커졌다 작아지는 호흡형 그로우 */
+        .skx-svg [id="skx-Ring"], .skx-svg [id="skx-Ring_2"] {
+          transform-box: fill-box; transform-origin: center;
+          animation: skxRingGrow 2.9s ease-in-out infinite;
+        }
+        .skx-svg [id="skx-Ring_2"] { animation-delay: 0.6s; }
+        @keyframes skxRingGrow {
+          0%, 100% { transform: scale(0.87); opacity: 0.72; }
+          50%      { transform: scale(1);    opacity: 1; }
+        }
+      }
+    </style>
+    <script>
+      (function skxTextLayer() {
+        const dt = document.getElementById('dtStage');
+        if (!dt) return;
+        const NW = 1920, NH = 1081, CK = 'wemb-skx-text';
+        const WMAP = { Regular: 400, Medium: 500, SemiBold: 600, Bold: 700 };
+
+        /* Figma에서 추출한 텍스트(문자열·스타일) + 실제 SVG 글리프의 캔버스 좌표(1920×1081). id는 주입 SVG의 안정적 요소 id. */
+        const SKX_TEXTS = [{"id":"skx-Text","x":630,"y":973,"w":264,"h":17,"t":"CCTV #1에 장애가 발생했습니다.","fs":20,"col":"#ffffff","al":"left","wt":"Regular"},{"id":"skx-Text_2","x":108,"y":976,"w":122,"h":15,"t":"0000-00-00","fs":20,"col":"#b8b8b8","al":"left","wt":"Regular"},{"id":"skx-Text_3","x":254,"y":976,"w":86,"h":15,"t":"00:00:00","fs":20,"col":"#f8f8f8","al":"left","wt":"Regular"},{"id":"skx-Text_4","x":178,"y":117,"w":25,"h":15,"t":"TC","fs":20,"col":"#ffffff","al":"center","wt":"Bold"},{"id":"skx-Label_3","x":477,"y":103,"w":19,"h":12,"t":"6F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Label_4","x":476,"y":136,"w":18,"h":12,"t":"5F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Label_5","x":476,"y":169,"w":18,"h":12,"t":"3F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Label_6","x":477,"y":202,"w":18,"h":12,"t":"2F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-WEMB Studio","x":85,"y":23,"w":111,"h":14,"t":"WEMB Studio","fs":17.8,"col":"rgba(255,255,255,0.9)","al":"left","wt":"Bold"},{"id":"skx-Text_5","x":244,"y":21,"w":40,"h":14,"t":"FMS","fs":20,"col":"#ebebeb","al":"left","wt":"Medium"},{"id":"skx-Text_6","x":294,"y":21,"w":105,"h":15,"t":"Dashboard","fs":20,"col":"#bbbbbb","al":"left","wt":"Regular"},{"id":"skx-Text_7","x":456,"y":23,"w":26,"h":14,"t":"이천","fs":16,"col":"#ffffff","al":"center","wt":"SemiBold"},{"id":"skx-Text_10","x":64,"y":159,"w":30,"h":18,"t":"화재","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_11","x":64,"y":254,"w":30,"h":17,"t":"누수","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_12","x":43,"y":349,"w":71,"h":18,"t":"항온항습기","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_13","x":43,"y":444,"w":71,"h":18,"t":"온습도센서","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_14","x":43,"y":539,"w":71,"h":18,"t":"토출온도계","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_15","x":44,"y":634,"w":70,"h":17,"t":"RACK온도","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_16","x":57,"y":729,"w":44,"h":18,"t":"풍속계","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_17","x":63,"y":825,"w":33,"h":16,"t":"UPS","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_18","x":44,"y":919,"w":69,"h":18,"t":"RACK전력","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Title","x":68,"y":1045,"w":89,"h":15,"t":"Event List","fs":20,"col":"#d3d3d3","al":"left","wt":"SemiBold"},{"id":"skx-Label","x":418,"y":1052,"w":25,"h":9,"t":"Auto","fs":12,"col":"#98a6c0","al":"left","wt":"Medium"},{"id":"skx-Text_23","x":1304,"y":122,"w":133,"h":18,"t":"이천 UPS 전력량","fs":20,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_19","x":1553,"y":143,"w":35,"h":12,"t":"Total","fs":16,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_20","x":1624,"y":143,"w":50,"h":14,"t":"12,345","fs":16,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_21","x":1766,"y":141,"w":26,"h":14,"t":"금일","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Text_22","x":1836,"y":141,"w":26,"h":14,"t":"전일","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Tick_8","x":1278,"y":187,"w":33,"h":10,"t":"3,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_9","x":1279,"y":209,"w":32,"h":10,"t":"2,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_10","x":1278,"y":231,"w":33,"h":10,"t":"2,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_11","x":1281,"y":253,"w":30,"h":10,"t":"1,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_12","x":1281,"y":275,"w":30,"h":10,"t":"1,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_13","x":1289,"y":297,"w":22,"h":9,"t":"500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_14","x":1305,"y":319,"w":6,"h":9,"t":"0","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Period","x":1344,"y":337,"w":17,"h":9,"t":"AM","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_3","x":1338,"y":352,"w":30,"h":9,"t":"12:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_4","x":1423,"y":352,"w":25,"h":9,"t":"4:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_5","x":1504,"y":352,"w":25,"h":9,"t":"8:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Period_2","x":1592,"y":337,"w":16,"h":9,"t":"PM","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_6","x":1585,"y":352,"w":30,"h":9,"t":"12:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_7","x":1670,"y":352,"w":25,"h":9,"t":"4:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_8","x":1751,"y":352,"w":25,"h":9,"t":"8:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Period_3","x":1845,"y":337,"w":17,"h":9,"t":"AM","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_9","x":1832,"y":352,"w":30,"h":9,"t":"12:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Text_41","x":1304,"y":433,"w":112,"h":18,"t":"이천 센터 온도","fs":20,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_24","x":1739,"y":445,"w":123,"h":14,"t":"정상 온도 20°~25°","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Text_26","x":1285,"y":509,"w":37,"h":18,"t":"22°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_28","x":1386,"y":509,"w":29,"h":18,"t":"21°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_30","x":1434,"y":487,"w":33,"h":18,"t":"18°","fs":24,"col":"#fce380","al":"center","wt":"Regular"},{"id":"skx-Text_32","x":1532,"y":487,"w":37,"h":18,"t":"22°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_34","x":1585,"y":509,"w":30,"h":18,"t":"31°","fs":24,"col":"#fc9126","al":"center","wt":"Regular"},{"id":"skx-Text_36","x":1682,"y":509,"w":35,"h":18,"t":"24°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_38","x":1730,"y":487,"w":38,"h":18,"t":"20°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_40","x":1828,"y":487,"w":37,"h":18,"t":"23°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Name","x":1343,"y":637,"w":19,"h":12,"t":"TC","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Name_2","x":1486,"y":615,"w":29,"h":11,"t":"M14","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Name_3","x":1634,"y":637,"w":29,"h":12,"t":"M16","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Name_4","x":1778,"y":615,"w":35,"h":12,"t":"P&T4","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Text_25","x":1294,"y":656,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_27","x":1391,"y":656,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_29","x":1442,"y":634,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_31","x":1539,"y":634,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_33","x":1590,"y":656,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_35","x":1687,"y":656,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_37","x":1738,"y":634,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_39","x":1835,"y":634,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_46","x":1304,"y":744,"w":129,"h":18,"t":"이천 상면 포화도","fs":20,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_45","x":1325,"y":804,"w":117,"h":14,"t":"이천 상면 사용현황","fs":16,"col":"#ffffff","al":"left","wt":"Regular"},{"id":"skx-Text_42","x":1559,"y":756,"w":120,"h":14,"t":"이천 상면 사용 추이","fs":16,"col":"#ffffff","al":"left","wt":"Regular"},{"id":"skx-Text_43","x":1751,"y":756,"w":27,"h":14,"t":"사용","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Text_44","x":1822,"y":756,"w":40,"h":14,"t":"미사용","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Period_5","x":1475,"y":848,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Number_2","x":1475,"y":868,"w":41,"h":15,"t":"50.0","fs":20,"col":"#c2db56","al":"left","wt":"Regular"},{"id":"skx-Unit_2","x":1523,"y":871,"w":9,"h":9,"t":"%","fs":12,"col":"#b4b4b4","al":"left","wt":"Regular"},{"id":"skx-Period_4","x":1475,"y":897,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Number","x":1475,"y":915,"w":41,"h":15,"t":"40.0","fs":20,"col":"#57a6dc","al":"left","wt":"Regular"},{"id":"skx-Unit","x":1523,"y":918,"w":9,"h":9,"t":"%","fs":12,"col":"#b4b4b4","al":"left","wt":"Regular"},{"id":"skx-Tick_15","x":1574,"y":817,"w":32,"h":10,"t":"2,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_16","x":1574,"y":843,"w":33,"h":10,"t":"2,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_17","x":1576,"y":869,"w":30,"h":10,"t":"1,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_18","x":1576,"y":895,"w":30,"h":10,"t":"1,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_19","x":1584,"y":921,"w":22,"h":9,"t":"500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_20","x":1600,"y":947,"w":6,"h":9,"t":"0","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Value_14","x":1650,"y":792,"w":34,"h":15,"t":"870","fs":20,"col":"#b199ff","al":"center","wt":"Regular"},{"id":"skx-Value_13","x":1730,"y":792,"w":34,"h":15,"t":"870","fs":20,"col":"#b199ff","al":"center","wt":"Regular"},{"id":"skx-Value_12","x":1802,"y":792,"w":37,"h":15,"t":"682","fs":20,"col":"#b199ff","al":"center","wt":"Regular"},{"id":"skx-Label_31","x":1634,"y":968,"w":65,"h":14,"t":"25년 12월","fs":16,"col":"#cccccc","al":"center","wt":"Regular"},{"id":"skx-Label_30","x":1718,"y":968,"w":55,"h":14,"t":"26년 1월","fs":16,"col":"#cccccc","al":"center","wt":"Regular"},{"id":"skx-Label_29","x":1790,"y":968,"w":58,"h":14,"t":"26년 2월","fs":16,"col":"#cccccc","al":"center","wt":"Regular"}];
+
+        /* Pretendard 웹폰트 1회 로드(CDN) */
+        (function loadFont() {
+          if (document.getElementById('skx-pretendard')) return;
+          const l = document.createElement('link');
+          l.id = 'skx-pretendard'; l.rel = 'stylesheet';
+          l.href = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css';
+          document.head.appendChild(l);
+        })();
+
+        const SVGNS = 'http://www.w3.org/2000/svg', XHTML = 'http://www.w3.org/1999/xhtml';
+        let svg = null, fos = [], building = false;
+        let edits = {};
+        try { edits = JSON.parse(localStorage.getItem(CK) || '{}') || {}; } catch (e) {}
+        const save = () => { try { localStorage.setItem(CK, JSON.stringify(edits)); } catch (e) {} };
+        const cssId = (id) => '[id="' + id.replace(/"/g, '\\"') + '"]';
+
+        /* 주입한 foreignObject 제거 + 숨겼던 원본 글리프 복원 */
+        function teardown() {
+          fos.forEach((o) => { try { o.fo.remove(); } catch (e) {} try { o.g.style.visibility = ''; } catch (e) {} });
+          fos = []; svg = null;
+        }
+
+        /* 각 텍스트를 대응하는 SVG 글리프의 '형제'로 foreignObject를 주입한다.
+           - 위치는 glyph.getBBox()(부모 좌표계) 기준 → 조상 그룹의 transform(이벤트 리스트 슬라이드업)과
+             viewBox 스케일이 SVG와 함께 자동 적용됨. 별도 스케일/리사이즈 계산 불필요.
+           - 이벤트 리스트 텍스트는 #skx-Event List 그룹 '안'에 들어가므로 펼칠 때 같이 올라간다. */
+        function build() {
+          const s = dt.querySelector('.skx-svg');
+          if (!s) { teardown(); return; }
+          building = true;
+          teardown();
+          svg = s;
+          /* #skx-Event List 를 항상 맨 위(마지막 형제)로 → 펼치면 다른 패널 위를 덮는다 */
+          const evt = svg.querySelector('[id="skx-Event List"]');
+          if (evt && evt.parentNode) evt.parentNode.appendChild(evt);
+
+          SKX_TEXTS.forEach((e) => {
+            const g = svg.querySelector(cssId(e.id));
+            if (!g) return;
+            let bb; try { bb = g.getBBox(); } catch (_) { return; }
+            if (!bb.width && !bb.height) return;                 /* 화면 밖/미표시 글리프는 건너뜀 */
+            g.style.visibility = 'hidden';                       /* 구워진 벡터 텍스트 숨김 */
+
+            const foH = Math.max(e.fs * 1.6, bb.height + 8);
+            let x, w;
+            if (e.al === 'right') { x = bb.x - 240; w = bb.width + 240; }
+            else if (e.al === 'center') { x = bb.x - 140; w = bb.width + 280; }
+            else { x = bb.x; w = bb.width + 320; }
+            const y = bb.y + bb.height / 2 - foH / 2;
+
+            const fo = document.createElementNS(SVGNS, 'foreignObject');
+            fo.setAttribute('class', 'skx-fo');
+            fo.setAttribute('x', x); fo.setAttribute('y', y);
+            fo.setAttribute('width', w); fo.setAttribute('height', foH);
+            fo.style.overflow = 'visible'; fo.style.pointerEvents = 'none';
+
+            const div = document.createElementNS(XHTML, 'div');
+            div.setAttribute('class', 'skx-tb'); div.dataset.id = e.id;
+            const st = div.style;
+            st.width = '100%'; st.height = '100%'; st.display = 'flex'; st.alignItems = 'center';
+            st.justifyContent = e.al === 'center' ? 'center' : (e.al === 'right' ? 'flex-end' : 'flex-start');
+            st.fontFamily = '"Pretendard","Pretendard GOV",-apple-system,system-ui,sans-serif';
+            st.fontSize = e.fs + 'px'; st.lineHeight = '1'; st.letterSpacing = '-0.01em'; st.whiteSpace = 'nowrap';
+            st.color = e.col; st.fontWeight = WMAP[e.wt] || 400; st.pointerEvents = 'none';
+            div.textContent = (e.id in edits) ? edits[e.id] : e.t;
+            div.addEventListener('input', () => { edits[e.id] = div.textContent; clearTimeout(div.__t); div.__t = setTimeout(save, 300); });
+            div.addEventListener('blur', () => { edits[e.id] = div.textContent; save(); });
+            div.addEventListener('pointerdown', (ev) => { if (div.getAttribute('contenteditable') === 'true') ev.stopPropagation(); });
+            fo.appendChild(div);
+            g.parentNode.insertBefore(fo, g.nextSibling);
+            fos.push({ fo, div, g, e });
+          });
+          building = false;
+          applyEditing();
+        }
+
+        /* '내용 수정' 모드일 때만 편집 가능(+포인터 수신). 평소엔 pointer-events:none 이라
+           SVG 인터랙션(층 선택·이벤트 펼침 등)이 그대로 동작한다. */
+        function applyEditing() {
+          const on = dt.classList.contains('dt-content-editing');
+          fos.forEach((o) => {
+            o.fo.style.pointerEvents = on ? 'auto' : 'none';
+            o.div.style.pointerEvents = on ? 'auto' : 'none';
+            if (on) { o.div.setAttribute('contenteditable', 'true'); o.div.classList.add('skx-edit'); }
+            else { o.div.removeAttribute('contenteditable'); o.div.classList.remove('skx-edit'); }
+          });
+        }
+
+        function sync() {
+          if (building) return;
+          const s = dt.querySelector('.skx-svg');
+          if (!s) { if (svg) teardown(); return; }
+          if (s !== svg || !fos.length || !fos[0].fo.isConnected) build();
+          else applyEditing();
+        }
+
+        const mo = new MutationObserver((muts) => {
+          if (building) return;
+          if (muts.every((m) => m.target.closest && m.target.closest('.skx-fo'))) return;
+          sync();
+        });
+        mo.observe(dt, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+
+        sync();
+        window.__skxTextSync = sync;
       })();
     </script>
   </body>

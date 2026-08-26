@@ -204,7 +204,21 @@
   --skx-cFF9B38: #F27F0D;
   --skx-cFFF338: #F2E40D;
 }
+/* ── 라이트모드 배경: 다크 raster(Base)를 숨기고 Figma 84:4698 라이트 배경 이미지를 노출 ── */
+.skx-svg .skx-lightbg{display:none}
+.main[data-mode='light'] .skx-svg .skx-lightbg,
+.app[data-mode='light'] .skx-svg .skx-lightbg{display:inline}
+.main[data-mode='light'] .skx-svg [id="skx-Base"],
+.app[data-mode='light'] .skx-svg [id="skx-Base"]{display:none}
+/* 상단 그라데이션 글로우는 다크 전용 연출 — 라이트에선 배경을 탁하게 만들어 숨긴다 */
+.main[data-mode='light'] .skx-svg [id="skx-Gradient Glow"],
+.app[data-mode='light'] .skx-svg [id="skx-Gradient Glow"]{display:none}
+/* 구버전 폴백(패턴 직접 색칠)도 유지 — lightbg가 못 뜨는 환경 대비 */
 .main[data-mode='light'] .skx-svg [fill="url(#skx-pattern0_0_1)"]{fill:var(--skx-bg-light)}
+/* ── 라이트모드: fill="white" 로 남아 색맵을 안 타는 텍스트/아이콘(사이드바·헤더 워드마크·패널 제목·축 눈금 등)을
+      짙은 슬레이트로 뒤집어 밝은 배경/패널 위에서 읽히게 한다. (initSkxInteractions의 tagLightText가 태깅) ── */
+.main[data-mode='light'] .skx-svg .skx-lighttext,
+.app[data-mode='light'] .skx-svg .skx-lighttext{fill:#20232E}
 .skx-svg [fill="#0056FF"]{fill:var(--skx-c0056FF)}
 .skx-svg [stroke="#0056FF"]{stroke:var(--skx-c0056FF)}
 .skx-svg [stop-color="#0056FF"]{stop-color:var(--skx-c0056FF)}
