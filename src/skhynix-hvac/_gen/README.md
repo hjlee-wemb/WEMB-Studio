@@ -1,0 +1,102 @@
+# src/skhynix-hvac — 생성 자료 (Figma 64:4059 → HTML/CSS)
+
+`src/skhynix-hvac.js`(스튜디오 화면 모듈)와 `src/skhynix-hvac/preview.html`(단독 미리보기)은
+**손으로 쓰지 않고 이 폴더의 스크립트로 생성**한다. 고칠 일이 생기면 `conv.js`(또는 `dark.js`)를 고치고 다시 돌린다.
+
+```bash
+node src/skhynix-hvac/_gen/conv.js            # → src/skhynix-hvac.js · src/skhynix-hvac/preview.html 재생성
+node src/skhynix-hvac/_gen/mk-live-assets.js  # → src/skhynix-hvac-live.js 의 SVG 상수 블록 재생성
+```
+
+## 원본
+
+- Figma 파일 `0R04sQR7srWuzezhRPzkMW`, 페이지 `Light-시안02`, 노드 **64:4059 `Screen/HVAC Detail`** (1920×1080)
+- `figma-design-context.jsx.txt` — Figma MCP `get_design_context` 출력(React+Tailwind + 레이어명/노드id). **레이아웃의 원본**이다.
+- `figma-metadata.xml` / `figma-node-sizes.json` — `get_metadata` 의 노드별 상자 크기(id → 이름/w/h).
+  브라우저 폰트 메트릭이 Figma 와 1~2px 달라 글자 상자가 오토레이아웃을 타고 위젯까지 밀어내므로,
+  텍스트 노드에 이 값을 박아 레이아웃을 고정한다(글자는 그대로 편집 가능).
+- `figma-64-4059.png` — Figma 렌더 원본(1920×1080). 픽셀 대조용 기준 이미지.
+- `dom.png` — 재구축 화면을 같은 크기로 캡처한 것(썸네일 `src/templates/icheon-hvac.jpg` 의 원본).
+- 아이콘·이미지는 `get_design_context` 가 준 에셋 URL에서 그대로 내려받은 개별 파일 43개
+  (`src/skhynix-hvac/*.svg|png`). **손으로 그리지 않는다.**
+  예외 2개는 다크 전용 판(`pointer-dark.svg`·`radio-dark.svg`) — 원본에서 색만 바꾼 사본이다.
+
+## conv.js 가 하는 일
+
+1. Tailwind 유틸리티 → 실제 CSS 선언 1:1 번역(미지원 클래스가 있으면 콘솔에 리포트).
+2. 레이어명 보존: `id="skv-<레이어명>"`(중복은 `_2`), `class="skv-<레이어명> n<노드id>"`, `data-name`/`data-node-id`.
+   스타일은 노드 id 기반 유일 클래스(`.n64_4059`)에만 건다 → 앱 CSS와 충돌 0.
+3. 텍스트 상자 고정(위 `figma-node-sizes.json`).
+4. **Figma stroke 는 '가운데 정렬'이라 레이아웃 공간을 먹지 않는다** — CSS `border` 는 border box 안쪽을 먹으므로
+   폭이 고정된 프레임은 내용이 테두리만큼 좁아진다(Mode Switch 254px 안쪽이 226 → 222 가 되어 알약 3개가 밀렸다).
+   사방이 같은 두께인 테두리는 레이아웃에서 빼고 `::after` 링(`inset:-B/2`, `border:B`)으로 얹는다(18개 변환).
+   예외(`INSIDE_STROKE`) 2개 — 표의 `Body`(64:4434)는 원본이 행을 (1,1)부터 놓으므로 실제로 안쪽 정렬이고,
+   `Event List`(64:4370)는 그라디언트 링을 따로 얹는다.
+5. Figma 코드 출력이 못 담은 값 2건을 원본 SVG export 에서 읽어 되살린다.
+   - `Header`(64:4067) 프레임 stroke = 가로 그라디언트(투명→#788188 60%→#EDECED→투명).
+     헤더 배경 이미지도 패턴 변환이 비균등 스케일이라 원본 행렬에서 직접 계산한 값을 준다:
+     `matrix(0.000558036 0 0 0.0178571 -0.0357143 0)` · image 1920×56 · fill rect (1,1,1918,58)
+     → **left −67.5px · top 1px · 2055×58**.
+   - `Event List`(64:4370) 4px 테두리 = 가로 그라디언트. 패널이 반투명(흰 10%)이라 배경 2겹 기법은 못 쓰고
+     `::before` + `mask-composite:exclude` 링으로 재현한다(라운드 코너 유지).
+6. `dark.js` 의 색 대응표를 같은 순회에서 돌려 **다크 테마 오버라이드 시트**(`SKHYNIX_HVAC_DARK_CSS`)를 함께 만든다.
+
+## dark.js — 다크 테마
+
+형상·좌표는 한 줄도 건드리지 않고 **색이 바뀌는 선언만** `.skv-root[data-theme="dark"] .nXXXX{…}` 로 다시 적는다.
+
+- 역할별 대응표(글자 `color` / 면 `background` / 선 `border` / 그림자 / 그라디언트 정지색)를 따로 둔다 —
+  같은 `#fff` 라도 '표의 행 배경'과 '활성 알약 위의 글자'는 다른 색으로 가야 한다.
+- 브랜드·경보색(보라 알약, 도넛 조각, 시계 주황, 상태 점)은 그대로 둔다. 헤더(64:4067 아래)는 원본이 이미 어두운 띠라 제외.
+- 대비: 표 본문 `#a8b0c6` ↔ 행 배경 `#171b2c` = **7.9:1**, 값 글자 `#eceffa` ↔ 패널 = 14:1 (모두 WCAG AA 이상).
+- 표로 못 담는 것은 `EXTRA` 에 손으로 적는다 —
+  바탕 사진(base.png)을 끄고 같은 구도의 어두운 그라디언트로 교체, 보케 오버레이 세기·채도 낮추기,
+  **`Glow Group`(64:4062)은 그라디언트가 아니라 단색 원 두 개**라 어두운 바탕에서 원 테두리가 그대로 보인다 →
+  원형 마스크로 가장자리를 지워 빛무리로 만든다, 회색 선 에셋 톤 낮추기,
+  흰 바탕 전제로 그려진 두 에셋(툴팁 꼬리·AUTO 라디오)만 다크 판으로 교체.
+
+## 인터랙션 · 라이브 데이터 — `src/skhynix-hvac-live.js`
+
+화면(생성물)과 분리해서 상태·움직임만 얹는 레이어. `applySkhynixHvac()` 와 `preview.html` 이 `initSkhynixHvac(root)` 를 부른다.
+
+- **반응형(꽉 채우기)** — `S = min(W/1920, H/1080)` 로 균일 확대(왜곡 0), 캔버스를 `VW=W/S · VH=H/S` 로 넓혀
+  영역을 남김없이 덮고, 늘어난 만큼을 블록에 나눠 준다: 헤더 폭 = VW(+배경 메시도 같은 비율),
+  오른쪽 `Content Column` 폭 = 1059+exW · 높이 = 947+exH(+`space-between`), 장비 아래 `Toolbar` top = 950+exH,
+  바탕 이미지는 캔버스 전체. **정확히 16:9 면 원본과 픽셀 동일**. 잘라내기(cover)도 비율 왜곡도 쓰지 않는다.
+  (위젯 2개는 원본 폭 479/540 을 유지한 채 양 끝으로 벌어진다 — 늘이면 안쪽 플롯이 고정폭이라 축과 선이 어긋난다.)
+- **Event List 접기/펴기** — 표(64:4415)가 아코디언처럼 닫히고 패널이 헤더 높이까지 줄어든다. 화살표는 180도 회전.
+- **실시간 시계**(초 경계 정렬), **마우스 오버**(모드 스위치·내비 심볼·헤더 액션/배지·폴드/AUTO·등급 칩·표의 행·도넛 범례·콜아웃 배지),
+  **클릭 동작**(모드 전환 공냉/수냉/냉수, AUTO 토글, 등급 필터, 도넛 범례 켜고 끄기),
+  **라이브 데이터**(온도·습도·운전상태, 꺾은선 4계열 + 툴팁, 도넛 비율, 이벤트 카운트와 AUTO 피드).
+- 값이 움직여야 하는 에셋 3종(AUTO 라디오 점·꺾은선 4계열·도넛 조각)만 인라인 SVG 로 바꿔 넣는다.
+  file:// 은 fetch 가 막히므로 원본을 모듈에 문자열로 박아 두고(`mk-live-assets.js`),
+  넣을 때 에셋 안의 id 에 접두사를 붙여 '문서 전체에서 id 는 유일' 규칙을 지킨다.
+- 도넛 조각은 **모양을 바꾸지 않고 각도만** 아주 조금 돌린다 — 원본 path(테이퍼·둥근 끝)를 다시 그리면 픽셀이 달라진다.
+
+### 글자 편집('패널편집' > 내용 수정)
+
+`index.html` 의 `DTSEL` 에 `.skv-root p` 를 넣어 앱의 기존 글자 편집 machinery(자동 저장 `wemb-dt-content`,
+'전체 기본값으로 되돌리기')에 그대로 태웠다(**193개** 글자 전부 편집됨). mount 후 `__dtRecaptureDefaults(false)` 필수.
+라이브 피드로 나중에 생긴 행도 `dt-content-editing` 을 감시해 보충하고, 편집 중에는 피드를 멈춘다.
+고친 글자는 `claimed()` 가 지켜 라이브 값이 덮지 않는다.
+
+## 스튜디오 연결
+
+- 템플릿 `Dashbord: Icheon main`(TEMPLATES, `tpl:'skhynix-hub'`)의 **두 번째 슬라이드**.
+  '스튜디오 열기' 시 같은 프로젝트(폴더)에 화면 2개가 생긴다 — [0] 메인(`Screen/FMS Hub`), [1] 항온항습기 상세(`tplScene:'hvac'`).
+- 지금 보고 있는 장면은 `wemb-hub-screen`('main'|'hvac')에 남기지만, **화면 이름의 정답은 프로젝트 기록의 `tplScene`**
+  이다(`__hubSceneOfScreen()`). 전역 키만 믿으면 메인/상세가 어긋난다.
+- 테마: 메인(FMS Hub)은 Light 전용이지만 이 화면은 다크도 지원한다 → 처음 열 때만 Light 로 시작하고
+  그 뒤로는 고른 값(`wemb-skv-mode`)을 되살린다. 앱의 '화면 테마' 버튼이 `root.dataset.theme` 을 즉시 바꾼다.
+- 색: `TPLTINT.skvTint()` 가 주입한 시트 3장(`skv-style`·`skv-dark-style`·`skv-live-style`)의 색값을 시드 색에 맞춰
+  바꿔 끼우고, 배경/장비 사진은 픽셀을 다시 칠하며, 단색 벡터 에셋은 색상만 돌린다.
+  의미가 정해진 에셋(도넛 조각·꺾은선·상태 점·경보 아이콘·로고)은 건드리지 않는다.
+- 썸네일: 이 화면은 html2canvas 로 잡으면 느리므로 `src/templates/icheon-hvac.jpg`(같은 화면 캡처본)를 대신 그린다.
+
+## 검증(2026-09-01)
+
+- 노드 상자 대조: **520개 중 0개 불일치**(라이브 레이어를 얹은 뒤에도 동일).
+- Figma 렌더 대비 픽셀 차이 **3.6%** — 전부 글자 안티에일리어싱과 이미지 리샘플링이다.
+  영역별 평균 색차는 1단계 미만(패널 −0.3 / 도넛 −0.6 / 이벤트 목록 −0.9), 구조적 어긋남 없음.
+  (Gotham 은 유료 폰트라 헤더 'FMS Dashboard' 가 Pretendard 로 떨어지는 것이 헤더 차이의 대부분이다.)
+- 스튜디오에 얹은 뒤에도 같은 수치, 콘솔 오류 0.

@@ -5788,6 +5788,11 @@
         position: absolute;
         inset: 0;
       }
+      /* Screen/HVAC Detail(항온항습기 상세) 시안도 같은 방식 — src/skhynix-hvac-live.js 가 스스로 배치를 다시 잡는다 */
+      .dtstage > .skv-root {
+        position: absolute;
+        inset: 0;
+      }
 
       /* ============================================================
          Digital Twin 화면 (Figma DT_Sample 16:2407 표준)
@@ -8288,7 +8293,13 @@
         stroke-width: 2;
         opacity: 0;
         transition: opacity 0.16s ease;
-        pointer-events: none;
+        /* 이 사각형이 클릭·호버 판정을 맡는다 — 아이콘 선 위를 정확히 찍지 않아도 눌리도록 */
+        pointer-events: all;
+      }
+      /* 자체 호버 효과가 있는 내비 항목 — 판정만 하고 링은 그리지 않는다 */
+      .skx-screen .skx-hotspot > .skx-hotring.bare {
+        fill: transparent;
+        stroke: none;
       }
       .skx-screen .skx-hotspot:hover > .skx-hotring {
         opacity: 1;
@@ -8300,6 +8311,11 @@
       .dtstage.dt-editing .skx-screen .skx-hotspot:hover > .skx-hotring,
       .dtstage.dt-content-editing .skx-screen .skx-hotspot:hover > .skx-hotring {
         opacity: 0;
+      }
+      /* 편집 중에는 판정 사각형도 비켜 준다 — 배치·글자 수정 클릭을 가로채지 않게 */
+      .dtstage.dt-editing .skx-screen .skx-hotring,
+      .dtstage.dt-content-editing .skx-screen .skx-hotring {
+        pointer-events: none;
       }
       /* 화면 우하단 안내 — '지표 카드를 누르면 팝업이 열려요' */
       .skx-hothint {
@@ -17136,6 +17152,8 @@
     <script src="src/skhynix-popup.js?v=1"></script>
     <script src="src/skhynix-hub.js?v=1"></script>
     <script src="src/skhynix-hub-live.js?v=14"></script>
+    <script src="src/skhynix-hvac.js?v=1"></script>
+    <script src="src/skhynix-hvac-live.js?v=1"></script>
     <script src="src/skhynix-assets.js?v=4"></script>
 
     <script>/* WEMB 심볼 라이브러리 에셋 (Figma Studio 소스, 30종) */
@@ -17713,6 +17731,9 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         updateContrastWarn(); /* (1) 실시간 대비 경고 갱신 */
         scheduleHistory(); /* 변경 히스토리에 디바운스로 기록 */
         enhanceEnterpriseBars(main);
+        /* HVAC 상세 시안의 다크/라이트는 색 다시 칠하기(디바운스)와 달리 즉시 반응해야 한다 —
+           '화면 테마' 버튼을 누른 순간 바로 바뀌게 여기서 먼저 맞춘다(색조는 아래 틴트가 이어서 맞춘다). */
+        try { document.querySelectorAll('.skv-root').forEach((r) => { r.dataset.theme = state.mode === 'dark' ? 'dark' : 'light'; }); } catch (e) {}
         try { window.__applyTplTint && window.__applyTplTint(); } catch (e) {} /* 템플릿 시안도 같은 색조로 */
       }
       /* ===== 활성 색상 소스 관리 — 한 번에 하나만 활성, 나머지는 대기(비활성) ===== */
@@ -18478,6 +18499,8 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           'tpl-07': 231, 'tpl-08': 217, 'tpl-09': 204, 'tpl-10': 234, 'tpl-11': 189, 'tpl-12': 232,
           'tpl-13': 233, 'tpl-14': 233, 'tpl-15': 39, 'tpl-16': 216, 'tpl-17': 219, 'tpl-18': 232,
           'hanjin-studio': 220, 'skhynix-1': 217, 'skhynix-2': 217,
+          /* Icheon main 계열(Light-시안02) — 남보라 계열이 주조색이다 */
+          'icheon-hub': 250, 'icheon-hvac': 250,
         },
         canvasOK: true,    /* 픽셀을 읽어 다시 칠할 수 있는 환경인지 */
         hueCache: {},      /* 원본 이미지 src → 주조 hue */
@@ -18812,6 +18835,56 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
               return (a ? 'rgba(' : 'rgb(') + o[0] + ',' + o[1] + ',' + o[2] + (a ? ',' + a.replace(/^,\s*/, '') : '') + ')';
             });
         },
+        /* ── Screen/HVAC Detail 시안 ──
+           SVG 가 아니라 HTML/CSS 재구축이라, 주입한 스타일시트(라이트·다크 두 장)의 색값을 같은 규칙으로
+           바꿔 끼운다. 배경 사진은 픽셀을 다시 칠하고, 한 가지 색으로 그려진 벡터 에셋은 같은 각도만큼
+           색상만 돌린다. 의미가 정해진 에셋(도넛 조각·꺾은선·상태 점·경보 아이콘·로고)은 건드리지 않는다. */
+        skvRefHue() { return this.hueOf('icheon-hvac.jpg', null); },
+        skvTint(t, mode) {
+          const roots = document.querySelectorAll('.skv-root');
+          if (!roots.length) return;
+          /* 화면 테마(다크/라이트)는 앱의 밝기 토글을 그대로 따라간다 */
+          const dark = mode === 'dark';
+          roots.forEach((r) => { r.dataset.theme = dark ? 'dark' : 'light'; });
+          try { localStorage.setItem('wemb-skv-mode', dark ? 'dark' : 'light'); } catch (e) {}
+
+          const P = this.paramsFor(this.skvRefHue(), t);
+          const key = P ? P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) : '';
+          /* 화면 시트(라이트)·다크 시트·인터랙션 시트를 함께 바꾼다 —
+             활성 알약 그라디언트·호버색·포커스 링처럼 '움직일 때만 보이는 색'도 같은 팔레트를 따라야 한다. */
+          ['skv-style', 'skv-dark-style', 'skv-live-style'].forEach((id) => {
+            const st = document.getElementById(id);
+            if (!st) return;
+            if (st.__orig == null) st.__orig = st.textContent;
+            if (st.__tintKey === key) return;
+            st.__tintKey = key;
+            if (!P) { st.textContent = st.__orig; return; }
+            st.textContent = st.__orig
+              /* 6자리·3자리 hex 를 함께 잡는다(#666·#fff 같은 축약형이 이 시안에 많다) */
+              .replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b(?![0-9a-f])/gi, (m) => {
+                const h = m.length === 4 ? '#' + m[1] + m[1] + m[2] + m[2] + m[3] + m[3] : m;
+                return this.mapHex(h, P);
+              })
+              .replace(/\brgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*([^)]*)\)/gi, (m, r, g, b, rest) => {
+                const o = this.mapRGB(+r, +g, +b, P);
+                const a = (rest || '').trim();
+                return (a ? 'rgba(' : 'rgb(') + o[0] + ',' + o[1] + ',' + o[2] + (a ? ',' + a.replace(/^,\s*/, '') : '') + ')';
+              });
+          });
+          /* 이미지 — 큰 배경/장비 사진만 픽셀을 다시 칠하고(색이 정확히 옮겨진다),
+             단색 계열 벡터는 색상만 돌린다(래스터로 바꾸면 확대 시 흐려진다). */
+          const RASTER = /(base|overlay|overlay-1|hero-image|header)\.png(\?|$)/i;
+          const KEEP = /(arc|lines|dot|dot-\d|status-dot|status-dot-\d|icon-callout-[a-z]+|icon|icon-\d|logo|point)\.svg(\?|$)/i;
+          const deg = P ? P.d : 0;
+          roots.forEach((r) => {
+            r.querySelectorAll('img').forEach((im) => {
+              const src = im.__origSrc || im.getAttribute('src') || '';
+              if (RASTER.test(src)) { this.rasterTint(im, t, this.skvRefHue()); return; }
+              if (KEEP.test(src)) { im.style.filter = ''; return; }
+              im.style.filter = P && Math.abs(deg) > 1 ? 'hue-rotate(' + deg.toFixed(1) + 'deg)' : '';
+            });
+          });
+        },
         apply() {
           const t = this.target();
           const main = document.querySelector('.main');
@@ -18819,6 +18892,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           document.querySelectorAll('.tplimg-shot, .hj-studioimg').forEach((im) => this.rasterTint(im, t));
           document.querySelectorAll('.skx-screen').forEach((scr) => this.skxTint(scr, t, mode));
           this.skxpTint(t);
+          this.skvTint(t, mode);
           try { TPLLOGO.apply(); } catch (e) {}
         },
         /* 색을 고르는 동안 매 입력마다 다시 칠하지 않도록 잠깐 모아서 처리 */
@@ -18972,10 +19046,122 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         document.querySelectorAll('#dtStage .skh-root').forEach((e) => e.remove());
       }
       window.__clearSkhynixHub = clearSkhynixHub;
+
+      /* ── SK하이닉스 이천 FMS — Screen/HVAC Detail(항온항습기 상세) ──
+         Icheon main 프로젝트의 두 번째 화면. Figma 64:4059 를 순수 HTML/CSS DOM 으로 재구축한
+         src/skhynix-hvac.js 를 스테이지에 얹는다(글자는 편집 가능한 실제 텍스트, 아이콘·이미지만 원본 에셋).
+         라이트가 원본이지만 다크 시트(SKHYNIX_HVAC_DARK_CSS)를 함께 깔아 '화면 테마'로 자유롭게 전환된다. */
+      function applySkhynixHvac() {
+        const stage = document.getElementById('dtStage');
+        if (!stage || typeof window.buildSkhynixHvac !== 'function') return;
+        /* 이 시안도 스스로 반응형이다 → 1920x1080 고정 캔버스 모드는 끈다 */
+        try { if (window.__setCanvas1920) window.__setCanvas1920(false); } catch (e) {}
+        /* 원본이 Light 시안(Figma "Light-시안02")이라 처음 열 때는 Light 로 시작한다.
+           그 뒤로는 '화면 테마'에서 고른 값(wemb-skv-mode)을 그대로 되살린다 — 다크도 지원하는 화면이라
+           메인(FMS Hub)처럼 Light 로 못박지 않는다. */
+        try {
+          const want = localStorage.getItem('wemb-skv-mode') === 'dark' ? 'dark' : 'light';
+          if (typeof state !== 'undefined' && state.mode !== want) {
+            state.mode = want;
+            document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+            if (typeof apply === 'function') apply();
+          }
+        } catch (e) {}
+        const bn = stage.querySelector('.dt-bname');
+        if (bn) bn.textContent = 'SK하이닉스 이천 FMS';
+        /* 다른 SK하이닉스 시안이 떠 있으면 치운다 */
+        try { if (window.__clearSkhynixPopup) window.__clearSkhynixPopup(); } catch (e) {}
+        try { if (window.__clearSkhynixHub) window.__clearSkhynixHub(); } catch (e) {}
+        stage.querySelectorAll('.skx-screen').forEach((e) => e.remove());
+        /* 화면 CSS + 다크 시트 1회 주입(다크가 뒤에 와야 오버라이드가 먹는다) */
+        if (!document.getElementById('skv-style') && window.SKHYNIX_HVAC_CSS) {
+          const st = document.createElement('style');
+          st.id = 'skv-style';
+          st.textContent = window.SKHYNIX_HVAC_CSS;
+          document.head.appendChild(st);
+        }
+        if (!document.getElementById('skv-dark-style') && window.SKHYNIX_HVAC_DARK_CSS) {
+          const sd = document.createElement('style');
+          sd.id = 'skv-dark-style';
+          sd.textContent = window.SKHYNIX_HVAC_DARK_CSS;
+          document.head.appendChild(sd);
+        }
+        let scr = stage.querySelector('.skv-root');
+        if (scr) scr.remove();
+        scr = document.createElement('div');
+        scr.className = 'skv-root';
+        scr.dataset.theme = (state && state.mode === 'dark') ? 'dark' : 'light';
+        scr.innerHTML = window.buildSkhynixHvac();
+        /* '패널 추가'로 넣는 패널이 얹힐 영역 */
+        if (!scr.querySelector('.dt-added')) {
+          const added = document.createElement('div');
+          added.className = 'dt-added';
+          added.innerHTML = '<div class="cols gridmode"></div>';
+          scr.appendChild(added);
+        }
+        stage.appendChild(scr);
+        /* 시안의 주요 블록을 '끌어서 이동' 가능한 DT 패널로 등록.
+           Event List(64:4370)는 제외한다 — 접기/펴기가 높이를 다루는데 드래그가 겹치면 어긋난다. */
+        [['[data-node-id="64:4185"]', 'hvac-trend'], ['[data-node-id="64:4237"]', 'hvac-center'],
+         ['[data-node-id="113:294"]', 'hvac-toolbar'], ['[data-node-id="113:291"]', 'hvac-callouts']]
+          .forEach(function (pair) {
+            const el = scr.querySelector(pair[0]);
+            if (el) { el.classList.add('dt-drag'); el.dataset.did = pair[1]; }
+          });
+        try {
+          const saved = JSON.parse(localStorage.getItem('wemb-dt-layout') || '{}');
+          scr.querySelectorAll('.dt-drag').forEach(function (el) {
+            const o = saved[el.dataset.did];
+            if (o && (o.dx || o.dy)) el.style.transform = (el.style.transform || '') + ' translate(' + (o.dx || 0) + 'px,' + (o.dy || 0) + 'px)';
+          });
+        } catch (e) {}
+        try { syncSkxControls(); } catch (e) {}
+        try { window.__refreshTpl && window.__refreshTpl(); } catch (e) {}
+        /* 인터랙션·라이브 데이터(접기/펴기·실시간 시계·호버·차트) + 반응형 배치 */
+        try { window.initSkhynixHvac && window.initSkhynixHvac(scr); } catch (e) {}
+        /* '패널편집'(내용 수정)이 이 화면의 글자도 잡도록 편집 대상을 다시 수집한다 */
+        try { window.__dtRecaptureDefaults && window.__dtRecaptureDefaults(false); } catch (e) {}
+      }
+      window.__applySkhynixHvac = applySkhynixHvac;
+      function clearSkhynixHvac() {
+        document.querySelectorAll('#dtStage .skv-root').forEach((e) => e.remove());
+      }
+      window.__clearSkhynixHvac = clearSkhynixHvac;
+
+      /* Icheon main 프로젝트의 두 화면(메인 = FMS Hub, 항온항습기 상세 = HVAC Detail) 전환.
+         '지금 보고 있는 장면'은 wemb-hub-screen 에 남기지만, 화면 이름의 정답은 프로젝트 기록의 tplScene 이다
+         (skhynix 시안에서 겪은 것과 같은 어긋남을 막는다). */
+      window.__hubSceneOfScreen = function () {
+        try {
+          const id = localStorage.getItem('wemb-current-proj');
+          const p = (JSON.parse(localStorage.getItem('wemb-projects') || '[]') || []).find((x) => x && x.id === id);
+          if (p && p.tpl === 'skhynix-hub') return p.tplScene === 'hvac' ? 'hvac' : 'main';
+        } catch (e) {}
+        return localStorage.getItem('wemb-hub-screen') === 'hvac' ? 'hvac' : 'main';
+      };
+      window.__openHubScreen = function (which) {
+        const hvac = which === 'hvac';
+        try { localStorage.setItem('wemb-tpl-dt', 'skhynix-hub'); localStorage.setItem('wemb-hub-screen', hvac ? 'hvac' : 'main'); } catch (e) {}
+        if (hvac) { clearSkhynixHub(); applySkhynixHvac(); }
+        else { clearSkhynixHvac(); applySkhynixHub(); }
+      };
       function clearSkhynixPopup() {
         document.querySelectorAll('#dtStage .skxp-root').forEach((e) => e.remove());
       }
       window.__clearSkhynixPopup = clearSkhynixPopup;
+      /* 이 '화면'이 원래 어떤 장면인지 — 정답은 프로젝트 기록의 tplScene 이다.
+         (메인 화면 = tplScene 없음, 'UPS 전력 상세' 화면 = 'popup')
+         전역 wemb-skx-screen 은 '지금 보고 있는 장면'일 뿐이라, 메인에서 핫스팟으로 팝업을 열어 두거나
+         팝업에서 ✕로 메인을 띄운 채 새로고침하면 화면 이름과 그려지는 시안이 어긋났다
+         (‘UPS 전력 상세’ 화면인데 메인이 뜨는 식). 복원할 때는 프로젝트 기록을 먼저 본다. */
+      window.__skxSceneOfScreen = function () {
+        try {
+          const id = localStorage.getItem('wemb-current-proj');
+          const p = (JSON.parse(localStorage.getItem('wemb-projects') || '[]') || []).find((x) => x && x.id === id);
+          if (p && p.tpl === 'skhynix') return p.tplScene === 'popup' ? 'popup' : 'main';
+        } catch (e) {}
+        return localStorage.getItem('wemb-skx-screen') === 'popup' ? 'popup' : 'main';
+      };
       /* 메인/팝업 두 화면을 전환한다 — 프로젝트 안의 '화면'으로 각각 열린다 */
       window.__openSkxScreen = function (which) {
         try { localStorage.setItem('wemb-tpl-dt', 'skhynix'); localStorage.setItem('wemb-skx-screen', which === 'popup' ? 'popup' : 'main'); } catch (e) {}
@@ -19586,10 +19772,14 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
          Figma 메인(64:1782)의 'UPS 전력' 지표 카드와 좌측 'UPS' 내비를 누르면 그 자리에서
          UPS 전력 상세 팝업(64:2504)이 열린다. 팝업의 ✕를 누르면 다시 메인으로 돌아온다.
          편집(배치·내용) 중에는 이동/글자수정이 우선이라 핫스팟은 동작하지 않는다. */
-      /* [레이어 id, 호버 링 radius(0이면 링 없음 — 이미 자체 호버 효과가 있는 내비), 툴팁] */
+      /* [레이어 id, 호버 링 radius(0이면 링을 그리지 않는다 — 이미 자체 호버 효과가 있는 내비),
+          툴팁, 가로 범위를 잡을 기준 자식(선택)]
+         네 번째 값이 필요한 이유: Figma 텍스트 노드의 상자가 실제 글자보다 좌우로 크게 넘쳐서
+         그룹 getBBox() 가 화면 밖(내비는 x=-77, 지표 카드는 x=2182)까지 벌어진다.
+         그대로 쓰면 클릭 판정·호버 링이 엉뚱한 빈 공간까지 덮으므로, 가로만 실제 카드/아이콘으로 잡는다. */
       const SKX_HOTSPOTS = [
-        ['skx-Metrics/UPS Power', 12, 'UPS 전력 상세 팝업 열기'],
-        ['skx-Nav Item/UPS', 0, 'UPS 전력 상세 팝업 열기'],
+        ['skx-Metrics/UPS Power', 12, 'UPS 전력 상세 팝업 열기', '[id="skx-Card"] > rect'],
+        ['skx-Nav Item/UPS', 0, 'UPS 전력 상세 팝업 열기', '[id="skx-Visual_9"]'],
       ];
       function skxWireHotspots(svg, stage) {
         if (!svg || svg.__skxHot) return;
@@ -19609,17 +19799,25 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
             let b = null;
             try { b = g.getBBox(); } catch (e) {}
             if (!b || !b.width) return;
-            g.classList.add('skx-hotspot');
-            if (h[1]) {
-              const ring = document.createElementNS(SVGNS, 'rect');
-              ring.setAttribute('class', 'skx-hotring');
-              ring.setAttribute('x', b.x - 4);
-              ring.setAttribute('y', b.y - 4);
-              ring.setAttribute('width', b.width + 8);
-              ring.setAttribute('height', b.height + 8);
-              ring.setAttribute('rx', h[1]);
-              g.appendChild(ring);
+            /* 가로 범위는 기준 자식(실제 카드 테두리 · 내비 아이콘)으로 — 넘치는 글자 상자를 따라가지 않게 */
+            let bx = b.x, bw = b.width;
+            if (h[3]) {
+              const src = g.querySelector(h[3]);
+              if (!src) return; /* 아직 안 그려졌으면 다음 폴링에서 다시 */
+              try { const sb = src.getBBox(); if (sb.width) { bx = sb.x; bw = sb.width; } } catch (e) {}
             }
+            g.classList.add('skx-hotspot');
+            /* 클릭 판정용 사각형은 링을 안 그리는 항목에도 반드시 넣는다 —
+               이 그룹들은 아이콘 선과 글자뿐이라, 없으면 선 위 몇 px 을 정확히 찍어야만 눌리고
+               나머지 클릭은 전부 배경으로 빠져 '눌러도 아무 일이 없는' 상태가 된다. */
+            const ring = document.createElementNS(SVGNS, 'rect');
+            ring.setAttribute('class', 'skx-hotring' + (h[1] ? '' : ' bare'));
+            ring.setAttribute('x', bx - 4);
+            ring.setAttribute('y', b.y - 4);
+            ring.setAttribute('width', bw + 8);
+            ring.setAttribute('height', b.height + 8);
+            ring.setAttribute('rx', h[1] || 10);
+            g.appendChild(ring);
             const tip = document.createElementNS(SVGNS, 'title');
             tip.textContent = h[2];
             g.insertBefore(tip, g.firstChild);
@@ -23194,7 +23392,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         const CK = 'wemb-dt-content';
         /* .skh-root p — SK하이닉스 FMS Hub 시안의 모든 글자(Figma 텍스트 노드 = <p>).
            '패널편집'(내용 수정)을 켜면 화면의 글자를 전부 그 자리에서 고칠 수 있고, 수정분은 여기 CK 키에 자동 저장된다. */
-        const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm, .skxp-txt, .skh-root p';
+        const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm, .skxp-txt, .skh-root p, .skv-root p';
         let layoutMode = false, contentMode = false;
         let textEls = [], DEF = {};
         const saveContent = () => {
@@ -27729,7 +27927,12 @@ ${wembTipRuntime()}
           const ic = TEMPLATES.find((t) => t.title === 'Dashbord: Icheon main');
           if (ic) {
             ic.tpl = 'skhynix-hub';
-            ic.slides = [{ img: 'src/templates/icheon-hub.jpg', label: '메인' }];
+            /* 두 장 — [0] 메인(64:3367 Screen/FMS Hub), [1] 항온항습기 상세(64:4059 Screen/HVAC Detail).
+               두 번째 장은 '스튜디오 열기' 시 같은 프로젝트의 두 번째 화면으로 함께 만들어진다. */
+            ic.slides = [
+              { img: 'src/templates/icheon-hub.jpg', label: '메인' },
+              { img: 'src/templates/icheon-hvac.jpg', label: '항온항습기 상세' },
+            ];
           }
         })();
         /* Hanjin main — 상세 페이지에서 3장(메인·입출문현황·하차현황)을 슬라이드로 보여준다. 메인이 첫 장. */
@@ -28291,9 +28494,10 @@ ${wembTipRuntime()}
             }
             /* 2-b) FMS Hub 시안(HTML/CSS DOM 635노드) — html2canvas 로는 실측 4.9초가 걸려 홈 전환이 멈춘 것처럼 보인다.
                     형상이 고정된 시안이므로 같은 화면을 그대로 캡처해 둔 이미지를 대신 그린다(추가 패널만 따로 합성). */
-            if (!canvas && el.querySelector('.skh-root')) {
+            if (!canvas && (el.querySelector('.skh-root') || el.querySelector('.skv-root'))) {
               try {
-                const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = 'src/templates/icheon-hub.jpg'; });
+                const shotSrc = el.querySelector('.skv-root') ? 'src/templates/icheon-hvac.jpg' : 'src/templates/icheon-hub.jpg';
+                const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = shotSrc; });
                 const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
                 const cx = cv.getContext('2d'); cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
                 /* 시안은 16:9, 스테이지는 그렇지 않을 수 있다 → 늘이지 말고 cover 로 채운다 */
@@ -28892,7 +29096,9 @@ ${wembTipRuntime()}
               img: proj.img,
               thumb: (sl && sl.img) || null,
               /* 이 화면이 템플릿의 몇 번째 장면인지 — 열 때 해당 시안을 그린다 */
-              tplScene: proj.tpl === 'skhynix' && i === 0 ? 'popup' : ('scene' + (i + 2)),
+              tplScene: proj.tpl === 'skhynix' && i === 0 ? 'popup'
+                : proj.tpl === 'skhynix-hub' && i === 0 ? 'hvac'
+                  : ('scene' + (i + 2)),
               ts: Date.now() - (i + 1),
               fav: false,
               projectId: proj.projectId,
@@ -28904,7 +29110,8 @@ ${wembTipRuntime()}
           saveProjects(projs);
           /* 상세에서 보고 있던 장면을 그대로 연다 — 메인이면 [0], 팝업 슬라이드였으면 그 화면 */
           const openProj = screens[Math.min(pending.slideIndex || 0, screens.length - 1)] || proj;
-          const openScene = openProj.tplScene === 'popup' ? 'popup' : 'main';
+          /* 열 장면 — skhynix 는 'popup', Icheon main 은 'hvac'(항온항습기 상세), 그 외는 메인 */
+          const openScene = openProj.tplScene === 'popup' ? 'popup' : openProj.tplScene === 'hvac' ? 'hvac' : 'main';
           try { localStorage.setItem(CUR_PROJ, openProj.id); } catch (e) {}
           /* 새 프로젝트는 '처음 상태'에서 시작해야 한다(이전 프로젝트의 색·대시보드 편집이 남지 않게).
              색/대시보드 설정은 프로젝트별 저장이 아니라 하나의 전역 상태를 공유하므로,
@@ -28918,6 +29125,7 @@ ${wembTipRuntime()}
               .forEach((k) => localStorage.removeItem(k));
             /* 열 장면(메인/팝업) 표시 — 위 정리에서 지워지므로 정리가 끝난 뒤에 쓴다 */
             if (openProj.tpl === 'skhynix') localStorage.setItem('wemb-skx-screen', openScene);
+            if (openProj.tpl === 'skhynix-hub') localStorage.setItem('wemb-hub-screen', openScene === 'hvac' ? 'hvac' : 'main');
             history.replaceState(null, '', location.pathname + location.search); /* 공유 해시 제거 */
           } catch (e) {}
           location.reload();
@@ -28935,6 +29143,7 @@ ${wembTipRuntime()}
           applyProjectData(t);
           /* 템플릿 장면(메인/팝업) 지정 — 새로고침 후 그 장면으로 그린다 */
           try { localStorage.setItem('wemb-skx-screen', t.tplScene === 'popup' ? 'popup' : 'main'); } catch (e) {}
+          try { localStorage.setItem('wemb-hub-screen', t.tplScene === 'hvac' ? 'hvac' : 'main'); } catch (e) {}
           /* (3) 새로고침 시 런처가 아니라 이 프로젝트 스튜디오로 바로 열리도록 */
           try { localStorage.setItem('wemb-view', 'wire'); } catch (e) {}
           /* 저장된 상태가 없던(구버전) 프로젝트는 화면 종류·레이아웃만이라도 반영 */
@@ -29149,7 +29358,14 @@ ${wembTipRuntime()}
                 try { const wantPopup = f.scene === 'popup' || localStorage.getItem('wemb-skx-screen') === 'popup';
                       localStorage.setItem('wemb-skx-screen', wantPopup ? 'popup' : 'main');
                       if (wantPopup) setTimeout(() => { try { window.__openSkxScreen && window.__openSkxScreen('popup'); } catch (e3) {} }, 300); } catch (e2) {} }
-              else if (f.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', 'skhynix-hub'); localStorage.removeItem('wemb-tpl-img'); if (typeof applySkhynixHub === 'function') applySkhynixHub(); }
+              else if (f.tpl === 'skhynix-hub') {
+                localStorage.setItem('wemb-tpl-dt', 'skhynix-hub'); localStorage.removeItem('wemb-tpl-img');
+                /* 템플릿 상세에서 '항온항습기 상세' 장면을 보고 들어왔으면 그 시안을 그린다 */
+                const wantHvac = f.scene === 'hvac' || localStorage.getItem('wemb-hub-screen') === 'hvac';
+                try { localStorage.setItem('wemb-hub-screen', wantHvac ? 'hvac' : 'main'); } catch (e3) {}
+                if (wantHvac) { if (typeof applySkhynixHvac === 'function') applySkhynixHvac(); }
+                else if (typeof applySkhynixHub === 'function') applySkhynixHub();
+              }
               else if (f.tpl === 'image' && f.img) { localStorage.setItem('wemb-tpl-img', f.img); localStorage.removeItem('wemb-tpl-dt'); if (typeof applyImageTemplate === 'function') applyImageTemplate(f.img, f.screen); }
               else { localStorage.removeItem('wemb-tpl-dt'); localStorage.removeItem('wemb-tpl-img'); }
             } catch (e2) {}
@@ -29167,12 +29383,23 @@ ${wembTipRuntime()}
         const __tdt = localStorage.getItem('wemb-tpl-dt');
         if (state.screen === 'dt') {
           if (__tdt === 'hanjin' && typeof applyHanjinDT === 'function') applyHanjinDT();
-          else if (__tdt === 'skhynix-hub' && typeof applySkhynixHub === 'function') applySkhynixHub();
+          else if (__tdt === 'skhynix-hub') {
+            /* 이 화면이 '항온항습기 상세' 장면이면 그 시안을 그린다.
+               기준은 전역 키가 아니라 지금 열려 있는 화면(프로젝트)의 tplScene 이다. */
+            const __hs = window.__hubSceneOfScreen ? window.__hubSceneOfScreen() : localStorage.getItem('wemb-hub-screen');
+            try { localStorage.setItem('wemb-hub-screen', __hs === 'hvac' ? 'hvac' : 'main'); } catch (e2) {}
+            if (__hs === 'hvac' && typeof applySkhynixHvac === 'function') applySkhynixHvac();
+            else if (typeof applySkhynixHub === 'function') applySkhynixHub();
+          }
           else if (__tdt === 'skhynix' && typeof applySkhynixDT === 'function') {
             applySkhynixDT();
-            /* 이 화면이 '팝업(UPS 전력 상세)' 장면이면 팝업 시안을 그린다 */
+            /* 이 화면이 '팝업(UPS 전력 상세)' 장면이면 팝업 시안을 그린다.
+               기준은 전역 키가 아니라 지금 열려 있는 화면(프로젝트)의 tplScene 이다 — 그래야
+               메인 화면에서 팝업을 열어 둔 채 새로고침해도 메인 화면은 메인으로 돌아온다. */
             try {
-              if (localStorage.getItem('wemb-skx-screen') === 'popup' && typeof applySkhynixPopup === 'function') {
+              const __scene = window.__skxSceneOfScreen ? window.__skxSceneOfScreen() : localStorage.getItem('wemb-skx-screen');
+              try { localStorage.setItem('wemb-skx-screen', __scene === 'popup' ? 'popup' : 'main'); } catch (e2) {}
+              if (__scene === 'popup' && typeof applySkhynixPopup === 'function') {
                 setTimeout(() => { try { window.__openSkxScreen && window.__openSkxScreen('popup'); } catch (e) {} }, 300);
               }
             } catch (e) {}
@@ -29205,11 +29432,18 @@ ${wembTipRuntime()}
           document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === 'dark'));
           if (typeof apply === 'function') apply();
         }
-        /* FMS Hub 시안은 반대로 Light 가 원본(Figma "Light-시안02") */
-        if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'skhynix-hub' && state.mode !== 'light') {
-          state.mode = 'light';
-          document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === 'light'));
-          if (typeof apply === 'function') apply();
+        /* Icheon main 시안은 반대로 Light 가 원본(Figma "Light-시안02").
+           ① 메인(FMS Hub) 화면 — 라이트 전용이라 늘 Light 로 맞춘다.
+           ② 항온항습기 상세 화면 — 다크 시트를 함께 만들어 두었으므로 '화면 테마'로 자유롭게 바꿀 수 있다.
+              처음 열 때만 원본대로 Light 로 시작하고, 그 뒤로는 고른 값(wemb-skv-mode)을 그대로 되살린다. */
+        if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'skhynix-hub') {
+          const __hs = window.__hubSceneOfScreen ? window.__hubSceneOfScreen() : localStorage.getItem('wemb-hub-screen');
+          const want = __hs === 'hvac' ? (localStorage.getItem('wemb-skv-mode') === 'dark' ? 'dark' : 'light') : 'light';
+          if (state.mode !== want) {
+            state.mode = want;
+            document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+            if (typeof apply === 'function') apply();
+          }
         }
       } catch (e) {}
       commitHistory();
