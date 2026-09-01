@@ -60,6 +60,14 @@ node src/icheon-assets/_gen/mk-assets.js   # → src/icheon-assets.js · src/ich
   원본 비율을 패널 기본 `aspect-ratio` 로 잡는다(인라인 SVG 는 viewBox, 파일은 naturalWidth/Height).
 - `rawVisual` 이 `src` 를 지원하므로 `__wembFindAsset()`(패널 콘텐츠 자동 생성)도 이 에셋을 찾아 쓴다.
 
+## 추가한 패널이 시안 위에 뜨게
+
+두 화면의 루트는 자식이 전부 절대배치인데 **화면 프레임만 100% 높이의 흐름 요소**라,
+`.dt-added`(콘텐츠 추가 레이어)를 그냥 두면 그 프레임 아래 — 즉 화면 밖 하단 — 으로 밀려나 보이지 않았다.
+index.html 에 `.skh-root > .dt-added` · `.skv-root > .dt-added` 규칙을 넣어 시안 한가운데에 절대배치로
+띄운다(z-index 30). 빈 영역은 `pointer-events:none` 이라 클릭이 시안으로 통과하고, 카드만 클릭을 받는다.
+카드는 밝은 유리(원본이 라이트 시안), `[data-theme="dark"]` 이면 어두운 유리로 바뀐다.
+
 ## 등록 결과 (2026-09-02)
 
 차트 19 · 심볼 19 · 아이콘 22 · 패널 7 — **전체 67개**. 네 탭 모두 깨진 이미지 0건, 콘솔 오류 0.

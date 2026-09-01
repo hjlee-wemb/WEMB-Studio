@@ -6570,9 +6570,82 @@
         border-radius: 12px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
       }
+      /* ── 이천 FMS 두 시안(메인 Screen/FMS Hub · 항온항습기 상세) 위에 '콘텐츠 추가' 패널 얹기 ──
+         두 화면의 루트는 자식이 전부 절대배치인데 '화면 프레임'만 100% 높이의 흐름 요소라,
+         .dt-added 를 그냥 두면 그 프레임 아래(= 화면 밖 하단)로 밀려나 보이지 않았다.
+         → 시안 한가운데에 절대배치로 띄우고, 빈 영역은 클릭을 통과시켜 시안 조작을 막지 않는다. */
+      .skh-root > .dt-added,
+      .skv-root > .dt-added {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: min(56%, 760px);
+        max-height: 82%;
+        overflow: visible;
+        z-index: 30; /* 시안의 모든 레이어(헤더·이벤트 목록) 위 */
+        pointer-events: none;
+      }
+      .skh-root > .dt-added > .cols,
+      .skv-root > .dt-added > .cols {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: var(--panel-gap, 12px);
+        grid-auto-rows: minmax(130px, auto);
+        align-content: start;
+      }
+      /* 시안 위에 얹히는 카드 — 원본이 밝은 시안이라 밝은 유리로, 다크 테마면 어두운 유리로 */
+      .skh-root .dt-added .panel,
+      .skv-root .dt-added .panel {
+        pointer-events: auto;
+        position: relative;
+        background: rgba(255, 255, 255, 0.82);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(120, 130, 170, 0.28);
+        border-radius: 12px;
+        padding: 14px;
+        color: #2f2c5c;
+        box-shadow: 0 10px 30px rgba(44, 19, 78, 0.18);
+      }
+      .skh-root[data-theme='dark'] .dt-added .panel,
+      .skv-root[data-theme='dark'] .dt-added .panel {
+        background: rgba(23, 27, 44, 0.86);
+        border-color: rgba(255, 255, 255, 0.16);
+        color: #e9ecf6;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+      .skh-root .dt-added .panel .ph,
+      .skv-root .dt-added .panel .ph {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .skh-root .dt-added .panel .ph h3,
+      .skv-root .dt-added .panel .ph h3 {
+        font-size: 15px;
+        font-weight: 700;
+        margin: 0;
+        color: inherit;
+      }
+      .skh-root .dt-added .panel .addedbody,
+      .skv-root .dt-added .panel .addedbody {
+        font-size: 13px;
+        color: inherit;
+      }
+      /* 편집 모드에선 X(삭제)를 바로, 그 외에도 호버하면 노출 — skx 시안과 같은 흐름 */
+      .dtstage.dt-editing .skh-root .dt-added .panel > .pdel,
+      .dtstage.dt-editing .skv-root .dt-added .panel > .pdel,
+      .skh-root .dt-added .panel:hover > .pdel,
+      .skv-root .dt-added .panel:hover > .pdel {
+        display: inline-flex;
+      }
       /* 드래그로 넣은 '패널' 에셋(.assetpanel) — 기본 카드 배경/보더/패딩 없이 에셋 원본만 보이게.
          (.skx-screen .dt-added .panel 보다 특이도가 높아 skhynix 주입 CSS도 덮는다) */
       .dt-body > .dt-added .panel.assetpanel,
+      .skh-root .dt-added .panel.assetpanel,
+      .skv-root .dt-added .panel.assetpanel,
       .skx-screen .dt-added .panel.assetpanel {
         background: transparent;
         border: 0;
