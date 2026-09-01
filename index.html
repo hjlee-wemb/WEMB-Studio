@@ -5781,6 +5781,13 @@
         transform: scale(var(--canvas-scale, 1));
         transform-origin: center center;
       }
+      /* SK하이닉스 FMS Hub 시안은 canvas1920 을 쓰지 않고 스스로 반응형이다(src/skhynix-hub-live.js).
+         1920x1080 기준을 유지한 채 캔버스를 작업 영역 비율만큼 넓히고 블록을 가장자리에 다시 붙이므로,
+         잘림·왜곡 없이 화면을 꽉 채운다. 여기서는 그 시안이 스테이지를 통째로 덮게만 해 준다. */
+      .dtstage > .skh-root {
+        position: absolute;
+        inset: 0;
+      }
 
       /* ============================================================
          Digital Twin 화면 (Figma DT_Sample 16:2407 표준)
@@ -17128,6 +17135,7 @@
     <script src="src/skhynix-screen.js?v=7"></script>
     <script src="src/skhynix-popup.js?v=1"></script>
     <script src="src/skhynix-hub.js?v=1"></script>
+    <script src="src/skhynix-hub-live.js?v=14"></script>
     <script src="src/skhynix-assets.js?v=4"></script>
 
     <script>/* WEMB 심볼 라이브러리 에셋 (Figma Studio 소스, 30종) */
@@ -18900,8 +18908,9 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
       function applySkhynixHub() {
         const stage = document.getElementById('dtStage');
         if (!stage || typeof window.buildSkhynixHub !== 'function') return;
-        /* 1920x1080 고정 캔버스 + 남는 공간에 맞춰 통째로 축소 */
-        try { if (window.__setCanvas1920) window.__setCanvas1920(true); } catch (e) {}
+        /* 이 시안은 스스로 반응형이다(skhynix-hub-live.js 가 1920x1080 기준을 유지한 채 영역을 꽉 채운다)
+           → 1920x1080 고정 캔버스 모드는 끄고 스테이지가 작업 영역을 그대로 쓰게 둔다. */
+        try { if (window.__setCanvas1920) window.__setCanvas1920(false); } catch (e) {}
         /* 이 시안의 기본 테마는 Light(Figma 원본이 Light-시안02) */
         try {
           if (typeof state !== 'undefined' && state.mode !== 'light') {
@@ -18935,10 +18944,11 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           scr.appendChild(added);
         }
         stage.appendChild(scr);
-        /* 시안의 주요 블록도 '끌어서 이동' 가능하게 DT 패널로 등록(UPS 팝업 시안과 같은 방식) */
+        /* 시안의 주요 블록도 '끌어서 이동' 가능하게 DT 패널로 등록(UPS 팝업 시안과 같은 방식).
+           Event List 는 제외한다 — 접기/펴기가 transform 을 쓰는데 드래그가 인라인 transform 으로 덮어써 버린다. */
         [['[data-node-id="64:3397"]', 'hub-ups'], ['[data-node-id="64:3483"]', 'hub-saturation'],
          ['[data-node-id="64:3571"]', 'hub-centertemp'], ['[data-node-id="64:3674"]', 'hub-containment'],
-         ['[data-node-id="64:3894"]', 'hub-events'], ['[data-node-id="64:3737"]', 'hub-nav']]
+         ['[data-node-id="64:3737"]', 'hub-nav']]
           .forEach(function (pair) {
             const el = scr.querySelector(pair[0]);
             if (el) { el.classList.add('dt-drag'); el.dataset.did = pair[1]; }
@@ -18952,6 +18962,10 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         } catch (e) {}
         try { syncSkxControls(); } catch (e) {} /* 이 시안도 버전 구분이 없다 */
         try { window.__refreshTpl && window.__refreshTpl(); } catch (e) {}
+        /* 인터랙션·라이브 데이터(접기/펴기·실시간 시계·호버·차트) + 반응형 배치 — src/skhynix-hub-live.js */
+        try { window.initSkhynixHub && window.initSkhynixHub(scr); } catch (e) {}
+        /* '패널편집'(내용 수정)이 이 화면의 글자도 잡도록 편집 대상을 다시 수집한다(저장해 둔 수정분도 여기서 되살아난다) */
+        try { window.__dtRecaptureDefaults && window.__dtRecaptureDefaults(false); } catch (e) {}
       }
       window.__applySkhynixHub = applySkhynixHub;
       function clearSkhynixHub() {
@@ -23178,7 +23192,9 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
 
         /* ---------- 내용(글자) ---------- */
         const CK = 'wemb-dt-content';
-        const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm, .skxp-txt';
+        /* .skh-root p — SK하이닉스 FMS Hub 시안의 모든 글자(Figma 텍스트 노드 = <p>).
+           '패널편집'(내용 수정)을 켜면 화면의 글자를 전부 그 자리에서 고칠 수 있고, 수정분은 여기 CK 키에 자동 저장된다. */
+        const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm, .skxp-txt, .skh-root p';
         let layoutMode = false, contentMode = false;
         let textEls = [], DEF = {};
         const saveContent = () => {
@@ -28280,7 +28296,10 @@ ${wembTipRuntime()}
                 const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = 'src/templates/icheon-hub.jpg'; });
                 const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
                 const cx = cv.getContext('2d'); cx.fillStyle = bg; cx.fillRect(0, 0, W, H);
-                cx.drawImage(im, 0, 0, W, H);
+                /* 시안은 16:9, 스테이지는 그렇지 않을 수 있다 → 늘이지 말고 cover 로 채운다 */
+                const sc = Math.max(W / im.naturalWidth, H / im.naturalHeight);
+                const dw = im.naturalWidth * sc, dh = im.naturalHeight * sc;
+                cx.drawImage(im, (W - dw) / 2, (H - dh) / 2, dw, dh);
                 canvas = await overlayAdded(el, cv, W);
               } catch (e) { canvas = null; }
             }

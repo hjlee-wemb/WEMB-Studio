@@ -383,13 +383,24 @@ fs.writeFileSync(path.join(STUDIO, 'src/skhynix-hub.js'), MODULE);
 
 const PREVIEW = [
   '<!doctype html><html lang="ko"><head><meta charset="utf-8">',
+  '<meta name="viewport" content="width=device-width,initial-scale=1">',
   '<title>Screen/FMS Hub — Figma 64:3367 재구축</title>',
-  '<style>html,body{margin:0;padding:0;background:#fff;}',
-  '.skh-stage{position:relative;width:1920px;height:1080px;overflow:hidden;}',
+  /* 주의: @import 는 다른 규칙보다 앞에 와야 무시되지 않는다 → 화면 CSS(첫 줄이 Pretendard @import)를 먼저 깐다 */
+  '<style>',
   CSS.split('{{B}}').join('./'),
-  '</style></head><body><div class="skh-stage"><div class="skh-root">',
+  /* 시안은 1920x1080 기준으로 그리되, 화면을 꽉 채운다 —
+     skhynix-hub-live.js 가 창 비율만큼 캔버스를 넓히고 블록(헤더·좌우 위젯열·이벤트 목록)을 가장자리에 다시 붙인다.
+     글자·위젯은 균일 배율로만 커지므로 왜곡이 없고, 16:9 창에서는 Figma 원본과 완전히 같은 그림이 된다. */
+  'html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#e3e9f0;}',
+  '.skh-fit{position:fixed;inset:0;overflow:hidden;}',
+  '.skh-stage{position:absolute;inset:0;overflow:hidden;}',
+  '</style></head><body><div class="skh-fit"><div class="skh-stage"><div class="skh-root">',
   HTML.split('{{B}}').join('./'),
-  '</div></div></body></html>',
+  '</div></div></div>',
+  /* 인터랙션·라이브 데이터 레이어(스튜디오와 같은 모듈) */
+  '<script src="../skhynix-hub-live.js?v=14"></script>',
+  '<script>window.initSkhynixHub(document.querySelector(".skh-root"));</script>',
+  '</body></html>',
 ].join('\n');
 fs.writeFileSync(path.join(STUDIO, 'src/skhynix-hub/preview.html'), PREVIEW);
 console.log('wrote src/skhynix-hub.js (' + MODULE.length + ') · src/skhynix-hub/preview.html');
