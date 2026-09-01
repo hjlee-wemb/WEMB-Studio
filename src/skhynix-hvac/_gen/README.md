@@ -86,12 +86,21 @@ node src/skhynix-hvac/_gen/mk-live-assets.js  # → src/skhynix-hvac-live.js 의
   '스튜디오 열기' 시 같은 프로젝트(폴더)에 화면 2개가 생긴다 — [0] 메인(`Screen/FMS Hub`), [1] 항온항습기 상세(`tplScene:'hvac'`).
 - 지금 보고 있는 장면은 `wemb-hub-screen`('main'|'hvac')에 남기지만, **화면 이름의 정답은 프로젝트 기록의 `tplScene`**
   이다(`__hubSceneOfScreen()`). 전역 키만 믿으면 메인/상세가 어긋난다.
-- 테마: 메인(FMS Hub)은 Light 전용이지만 이 화면은 다크도 지원한다 → 처음 열 때만 Light 로 시작하고
-  그 뒤로는 고른 값(`wemb-skv-mode`)을 되살린다. 앱의 '화면 테마' 버튼이 `root.dataset.theme` 을 즉시 바꾼다.
-- 색: `TPLTINT.skvTint()` 가 주입한 시트 3장(`skv-style`·`skv-dark-style`·`skv-live-style`)의 색값을 시드 색에 맞춰
+- 테마: 두 화면 모두 다크를 지원한다 → 처음 열 때만 Light(원본)로 시작하고, 그 뒤로는 화면별로 고른 값
+  (메인 `wemb-skh-mode` / 이 화면 `wemb-skv-mode`)을 되살린다. 앱의 '화면 테마' 버튼이 `root.dataset.theme` 을 즉시 바꾼다.
+- 색: `TPLTINT.icheonTint()` 가 주입한 시트 3장(`skv-style`·`skv-dark-style`·`skv-live-style`)의 색값을 시드 색에 맞춰
   바꿔 끼우고, 배경/장비 사진은 픽셀을 다시 칠하며, 단색 벡터 에셋은 색상만 돌린다.
   의미가 정해진 에셋(도넛 조각·꺾은선·상태 점·경보 아이콘·로고)은 건드리지 않는다.
+  메인 화면과 같은 함수·기준 hue(250)를 공유한다 — 한 프로젝트의 두 화면이라 색이 갈리면 안 된다.
 - 썸네일: 이 화면은 html2canvas 로 잡으면 느리므로 `src/templates/icheon-hvac.jpg`(같은 화면 캡처본)를 대신 그린다.
+
+## 화면 전환 (2026-09-01 추가)
+
+시안 위(제목 '항온항습기' 옆 빈 자리)에 **'← 메인으로' 알약 버튼**을 얹어 메인(FMS Hub)으로 돌아간다.
+원본에 없던 요소라 index.html 의 `addIcheonBackButton()` 에서만 붙인다 —
+단독 미리보기(preview.html)는 Figma 원본 그대로다. 반대 방향(메인 → 상세)은 메인 화면의 내비 심볼
+`Nav Item/HVAC`(64:3790) 클릭. 버튼은 시안의 알약 언어(반투명 흰 판·흰 테두리·Pretendard SemiBold)를
+따르고 다크 판도 함께 두었으며, 시드 색 틴트도 같이 탄다.
 
 ## 검증(2026-09-01)
 
@@ -100,3 +109,4 @@ node src/skhynix-hvac/_gen/mk-live-assets.js  # → src/skhynix-hvac-live.js 의
   영역별 평균 색차는 1단계 미만(패널 −0.3 / 도넛 −0.6 / 이벤트 목록 −0.9), 구조적 어긋남 없음.
   (Gotham 은 유료 폰트라 헤더 'FMS Dashboard' 가 Pretendard 로 떨어지는 것이 헤더 차이의 대부분이다.)
 - 스튜디오에 얹은 뒤에도 같은 수치, 콘솔 오류 0.
+- 다크 대비 실측(189개 텍스트, 시드 틴트 적용 상태): **4.5:1 미만 0건**.

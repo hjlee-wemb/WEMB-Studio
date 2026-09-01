@@ -34,6 +34,38 @@ node src/skhynix-hub/_gen/conv.js     # → src/skhynix-hub.js · src/skhynix-hu
 5. Figma 의 이미지 채우기는 **border box** 기준인데 CSS 절대배치는 padding box 기준이라,
    테두리가 있는 부모 안의 `inset:0` 자식은 음수 위치 + `calc(100% + 2×테두리)` 로 되돌린다.
 
+## dark.js — 다크 테마 (2026-09-01 추가)
+
+```bash
+node src/skhynix-hub/_gen/conv.js   # 라이트 CSS 와 함께 SKHYNIX_HUB_DARK_CSS 도 만든다
+```
+
+형상·좌표는 한 줄도 건드리지 않고 **색이 바뀌는 선언만** `.skh-root[data-theme="dark"] .nXXXX{…}` 로 다시 적는다.
+(라이트 CSS·HTML 출력은 패치 전후 바이트까지 동일 — 다크 시트 한 줄만 늘었다.)
+
+- 역할별 대응표(글자 `color` / 면 `background` / 선 `border` / 그림자 / 그라디언트 정지색)를 따로 둔다 —
+  같은 `#fff` 라도 '표의 행 배경'과 '헤더 배지 위 글자'는 다른 색으로 가야 한다.
+  **항온항습기 상세 화면(src/skhynix-hvac/_gen/dark.js)과 같은 팔레트를 쓴다** — 한 프로젝트의 두 화면이라 색이 갈리면 안 된다.
+- 브랜드·경보색(도넛 조각·꺾은선·상태 점·Today 주황·시계 주황)은 그대로. 헤더(64:3855 아래)는 원본이 이미 어두운 띠라 제외.
+- 대비 실측(157개 텍스트): **4.5:1 미만 0건**. 표 본문 #a8b0c6 ↔ 행 #171b2c = 7.9:1.
+  (x축 AM/PM 4개는 원본 Figma 에서도 투명한 자리맞춤용 글자라 제외.)
+- 표로 못 담는 것은 `EXTRA` 에 손으로 적는다 —
+  바탕 사진(base.png)을 끄고 같은 구도의 어두운 그라디언트로 교체, 보케 오버레이 세기·채도 낮추기,
+  **`Glow`(64:3370·64:3371)는 그라디언트가 아니라 단색 원(#EBF0F4)** 이라 어두운 바탕에서 원 테두리가
+  그대로 보인다 → 원형 마스크로 지운다, 회색 선 에셋 톤 낮추기,
+  게이지 바늘(흰 판 + 검은 바늘)은 인라인 SVG 안쪽을 직접 칠하고, AUTO 라디오 점도 뒤집는다,
+  미니 막대차트의 밝은 격자는 색만 바꾼 사본(`mini-chart*-dark.svg`)으로 교체(전체 filter 를 걸면 계열 선까지 어두워진다).
+
+스튜디오에서는 '화면 테마' 버튼이 `.skh-root` 의 `data-theme` 을 즉시 바꾸고, 고른 값은 `wemb-skh-mode` 에 남는다
+(처음 열 때만 원본대로 Light). 시드 색은 `TPLTINT.icheonTint()` 가 시트 3장(`skh-style`·`skh-dark-style`·`skh-live-style`)을
+함께 바꿔 끼우고, 큰 사진은 픽셀 재도색·단색 벡터는 색상 회전·의미색 에셋은 제외한다 — 상세 화면과 같은 함수를 공유한다.
+
+## 화면 전환 (2026-09-01 추가)
+
+내비 심볼 `Nav Item/HVAC`(64:3790)을 누르면 항온항습기 상세 화면이 열린다(`__openHubScreen('hvac')`).
+그림은 그대로 두고 커서·툴팁·키보드 포커스만 붙였다. 반대 방향은 상세 화면 위의 '← 메인으로' 버튼.
+둘 다 index.html 에서만 붙인다 — 단독 미리보기(preview.html)는 Figma 원본 그대로다.
+
 ## 인터랙션 · 라이브 데이터 — `src/skhynix-hub-live.js`
 
 화면(생성물)과 분리해서 상태·움직임만 얹는 레이어. `applySkhynixHub()` 와 `preview.html` 이 `initSkhynixHub(root)` 를 부른다.

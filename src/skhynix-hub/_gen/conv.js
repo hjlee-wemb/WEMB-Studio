@@ -237,7 +237,11 @@ let textFixes = 0;
 
 let out = [];
 const borderFixes = [];
-function walk(node, depth, parentBorder) {
+/* 다크 테마 — 색 대응표(_gen/dark.js)를 같은 순회에서 함께 돌려 오버라이드 시트를 만든다.
+   형상·좌표는 건드리지 않고 색이 바뀌는 선언만 다시 적는다. */
+const DARK = require('./dark.js');
+const darkRules = [];
+function walk(node, depth, parentBorder, inHeader) {
   const pad = '  '.repeat(depth);
   if (node.tag === '#text') { out.push(pad + esc(node.text)); return; }
   const a = node.attrs;
@@ -277,6 +281,12 @@ function walk(node, depth, parentBorder) {
     textFixes++;
   }
   if (decls.length) rules.push('.skh-root .' + uc + '{' + decls.map(([p, v]) => p + ':' + v).join(';') + '}');
+  /* 다크 테마 — 헤더(원본이 이미 어두운 띠)는 그대로 두고, 색이 바뀌는 선언만 다시 적는다 */
+  if (!inHeader && nid !== '64:3855' && decls.length) {
+    const dd = [];
+    decls.forEach(([p, v]) => { const nv = DARK.darkDecl(p, v); if (nv) dd.push([p, nv]); });
+    if (dd.length) darkRules.push('.skh-root[data-theme="dark"] .' + uc + '{' + dd.map(([p, v]) => p + ':' + v).join(';') + '}');
+  }
 
   const cls = [uc];
   if (a['data-name']) cls.push('skh-' + slug(a['data-name']));
@@ -305,10 +315,10 @@ function walk(node, depth, parentBorder) {
   /* 자식에게 넘길 테두리 두께(있을 때만) */
   const bw = decls.find((x) => x[0] === 'border-width');
   const kid = bw && bw[1] !== '0' ? bw[1] : null;
-  node.children.forEach((c) => walk(c, depth + 1, kid));
+  node.children.forEach((c) => walk(c, depth + 1, kid, inHeader || nid === '64:3855'));
   out.push(pad + '</' + node.tag + '>');
 }
-walk(tree, 1, null);
+walk(tree, 1, null, false);
 if (borderFixes.length) console.log('border-box 이미지 보정:', borderFixes.join(' | '));
 
 if (unknown.size) {
@@ -344,6 +354,12 @@ rules.push('.skh-root .n64_3894::before{content:"";position:absolute;inset:-4px;
   + '-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;'
   + 'mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;pointer-events:none;}');
 
+/* Event List 그라디언트 링의 다크판 — 흰 계열 정지색을 흰색 투명도로 바꾼다(유리 테두리 느낌 유지) */
+darkRules.push('.skh-root[data-theme="dark"] .n64_3894::before{background:linear-gradient(to right,'
+  + 'rgba(255,255,255,0.22) 0%,rgba(255,255,255,0.10) 50%,rgba(255,255,255,0.20) 75%,'
+  + 'rgba(255,255,255,0.08) 87.5%,rgba(255,255,255,0.06) 100%);}');
+darkRules.push(...DARK.EXTRA);
+
 /* ── 5) 스튜디오 모듈 · 단독 미리보기 파일 출력 ── */
 const STUDIO = path.join(__dirname, '..', '..', '..');
 const HTML = html;
@@ -362,6 +378,10 @@ const BASE_CSS = [
   '.skh-root img{display:block;border:0;max-width:none;}',
 ].join('\n');
 const CSS = BASE_CSS + '\n' + rules.join('\n');
+/* 다크 테마 시트 — 화면 CSS 뒤에 따로 깔린다(.skh-root[data-theme="dark"] 로만 걸린다) */
+const DARK_CSS = [
+  '/* Screen/FMS Hub — 다크 테마(형상 동일, 색만 반전). 생성기: _gen/dark.js */',
+].concat(darkRules).join('\n');
 
 const MODULE = [
   '/* SK하이닉스 이천 FMS — Screen/FMS Hub',
@@ -374,7 +394,9 @@ const MODULE = [
   "  var A = 'src/skhynix-hub/';",
   '  var CSS = ' + JSON.stringify(CSS) + ';',
   '  var HTML = ' + JSON.stringify(HTML) + ';',
+  '  var DARK = ' + JSON.stringify(DARK_CSS) + ';',
   '  window.SKHYNIX_HUB_CSS = CSS.split(\'{{B}}\').join(A);',
+  '  window.SKHYNIX_HUB_DARK_CSS = DARK.split(\'{{B}}\').join(A);',
   '  window.buildSkhynixHub = function (base) { return HTML.split(\'{{B}}\').join(base || A); };',
   '})();',
   '',
@@ -388,6 +410,7 @@ const PREVIEW = [
   /* 주의: @import 는 다른 규칙보다 앞에 와야 무시되지 않는다 → 화면 CSS(첫 줄이 Pretendard @import)를 먼저 깐다 */
   '<style>',
   CSS.split('{{B}}').join('./'),
+  DARK_CSS.split('{{B}}').join('./'),
   /* 시안은 1920x1080 기준으로 그리되, 화면을 꽉 채운다 —
      skhynix-hub-live.js 가 창 비율만큼 캔버스를 넓히고 블록(헤더·좌우 위젯열·이벤트 목록)을 가장자리에 다시 붙인다.
      글자·위젯은 균일 배율로만 커지므로 왜곡이 없고, 16:9 창에서는 Figma 원본과 완전히 같은 그림이 된다. */
@@ -400,6 +423,9 @@ const PREVIEW = [
   /* 인터랙션·라이브 데이터 레이어(스튜디오와 같은 모듈) */
   '<script src="../skhynix-hub-live.js?v=14"></script>',
   '<script>window.initSkhynixHub(document.querySelector(".skh-root"));</script>',
+  /* 미리보기 전용 — 다크/라이트 확인용 토글(스튜디오에서는 앱의 '화면 테마' 버튼이 같은 일을 한다) */
+  '<button id="tt" style="position:fixed;right:12px;bottom:12px;z-index:99;padding:8px 14px;border-radius:8px;border:1px solid #8888;background:#fff8;font:13px system-ui;cursor:pointer">theme</button>',
+  '<script>tt.onclick=function(){var r=document.querySelector(".skh-root");r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";};</script>',
   '</body></html>',
 ].join('\n');
 fs.writeFileSync(path.join(STUDIO, 'src/skhynix-hub/preview.html'), PREVIEW);
