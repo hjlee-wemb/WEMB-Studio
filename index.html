@@ -18955,6 +18955,10 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
            색상만 돌린다. 의미가 정해진 에셋(도넛 조각·꺾은선·상태 점·경보 아이콘·로고)은 건드리지 않는다.
            두 화면은 같은 시안 계열이라 기준 hue(250)와 규칙을 공유한다. */
         icheonRefHue() { return this.hueOf('icheon-hvac.jpg', null); },
+        /* 이 시안의 '기본 색' — 시안 안에서 실제로 쓰인 브랜드 보라들의 평균 색상각(250°)에 맞춘 값이다.
+           (#6059E5 243 · #4747B9 240 · #9773EC 258 · #A37CFF 258 · #7B51D8 259 → 평균 ≈ 250)
+           템플릿을 처음 열 때 '색 정하기'의 시작값을 이 색으로 놓아, 시안이 원래 색 그대로 보이게 한다. */
+        ICHEON_SEED: '#7B61FF',
         /* 색을 그대로 두는(의미가 정해진) 에셋 — 두 화면 공통 */
         ICHEON_KEEP: /(arc|lines?|line-series[-\d]*|dot|dot-\d|status-dot[-\d]*|icon-callout-[a-z]+|icon|icon-\d|icon-trend-\w+|icon-widget-\w+|icon-action-\w+|logo|point|chart-\d+|needle|marker[-\d]*|radio)\.svg(\?|$)/i,
         ICHEON_RASTER: /(base|overlay[-\d]*|hero-image|header)\.png(\?|$)/i,
@@ -18967,8 +18971,23 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           roots.forEach((r) => { r.dataset.theme = dark ? 'dark' : 'light'; });
           try { localStorage.setItem(modeKey, dark ? 'dark' : 'light'); } catch (e) {}
 
-          const P = this.paramsFor(this.icheonRefHue(), t);
-          const key = P ? P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) : '';
+          /* ── '시안 원본 색' 상태면 아예 칠하지 않는다 ──
+             템플릿을 처음 열면 색 시작값을 시안의 브랜드 색으로 놓는다(seedIcheonBaseColor).
+             그 값이 그대로인 동안은 Figma 원본 색을 그대로 보여 주고, 사용자가 '색 정하기'에서
+             색·이미지·프리셋을 바꾸거나 미세조정을 하면 그때부터 팔레트를 따라 칠한다.
+             판정 기준은 시드(state.seed)다 — 팔레트에서 나온 --point-main 은 라이트/다크에 따라
+             값이 달라져서 '안 바꿨다'의 기준으로 쓸 수 없다. */
+          let atBase = false;
+          try {
+            atBase = !!localStorage.getItem('wemb-icheon-seeded')
+              && typeof state !== 'undefined'
+              && (state.source || 'seed') === 'seed'
+              && String(state.seed || '').toLowerCase() === this.ICHEON_SEED.toLowerCase()
+              && !(state.overrides && Object.keys(state.overrides).length);
+          } catch (e) {}
+
+          const P = atBase ? null : this.paramsFor(this.icheonRefHue(), t);
+          const key = P ? P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) : 'base';
           /* 화면 시트(라이트)·다크 시트·인터랙션 시트를 함께 바꾼다 —
              활성 알약 그라디언트·호버색·포커스 링처럼 '움직일 때만 보이는 색'도 같은 팔레트를 따라야 한다. */
           sheets.forEach((id) => {
@@ -18996,9 +19015,16 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           roots.forEach((r) => {
             r.querySelectorAll('img').forEach((im) => {
               const src = im.__origSrc || im.getAttribute('src') || '';
+              /* 원본 색 상태 — 다시 칠한 그림이 있으면 원본 파일로 되돌린다 */
+              if (!P) {
+                im.style.filter = '';
+                im.__tintKey = '';
+                if (im.__origSrc && im.getAttribute('src') !== im.__origSrc) im.src = im.__origSrc;
+                return;
+              }
               if (this.ICHEON_RASTER.test(src)) { this.rasterTint(im, t, this.icheonRefHue()); return; }
               if (this.ICHEON_KEEP.test(src)) { im.style.filter = ''; return; }
-              im.style.filter = P && Math.abs(deg) > 1 ? 'hue-rotate(' + deg.toFixed(1) + 'deg)' : '';
+              im.style.filter = Math.abs(deg) > 1 ? 'hue-rotate(' + deg.toFixed(1) + 'deg)' : '';
             });
           });
         },
@@ -19106,6 +19132,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         /* 원본이 Light 시안(Figma "Light-시안02")이라 처음 열 때는 Light 로 시작한다.
            그 뒤로는 '화면 테마'에서 고른 값(wemb-skh-mode)을 그대로 되살린다 — 다크 시트를
            함께 만들어 두었으므로 이 화면도 자유롭게 전환된다. */
+        seedIcheonBaseColor(); /* 시안 색을 '색 정하기' 시작값으로 */
         try {
           const want = localStorage.getItem('wemb-skh-mode') === 'dark' ? 'dark' : 'light';
           if (typeof state !== 'undefined' && state.mode !== want) {
@@ -19190,6 +19217,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         /* 원본이 Light 시안(Figma "Light-시안02")이라 처음 열 때는 Light 로 시작한다.
            그 뒤로는 '화면 테마'에서 고른 값(wemb-skv-mode)을 그대로 되살린다 — 다크도 지원하는 화면이라
            메인(FMS Hub)처럼 Light 로 못박지 않는다. */
+        seedIcheonBaseColor(); /* 시안 색을 '색 정하기' 시작값으로 */
         try {
           const want = localStorage.getItem('wemb-skv-mode') === 'dark' ? 'dark' : 'light';
           if (typeof state !== 'undefined' && state.mode !== want) {
@@ -19260,6 +19288,24 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         document.querySelectorAll('#dtStage .skv-root').forEach((e) => e.remove());
       }
       window.__clearSkhynixHvac = clearSkhynixHvac;
+
+      /* ── 이천 FMS 시안의 '기본 색' ──
+         템플릿을 처음 열면 '색 정하기'의 시작값을 시안 자신의 브랜드 색으로 놓는다. 그래야
+         업로드한 시안이 원래 색 그대로 보이고, 색 팔레트 UI 도 그 색에서 출발한다.
+         이 시드가 그대로인 동안은 TPLTINT.icheonTint 가 '아직 안 바꿨다'로 보고 다시 칠하지 않는다 —
+         사용자가 색을 바꾸는 순간부터 팔레트가 따라온다. */
+      function seedIcheonBaseColor() {
+        try {
+          if (localStorage.getItem('wemb-icheon-seeded')) return;
+          localStorage.setItem('wemb-icheon-seeded', '1');
+          if (typeof state === 'undefined') return;
+          state.source = 'seed';
+          state.sourceView = 'seed';
+          state.seed = TPLTINT.ICHEON_SEED;
+          state.overrides = {};
+          if (typeof apply === 'function') apply();
+        } catch (e) {}
+      }
 
       /* ── 두 화면을 화면 안에서 오가는 길 ──
          상세 → 메인 : 시안 위에 '← 메인으로' 알약 버튼을 얹는다(제목 옆 빈 자리, 원본에 없던 요소).
