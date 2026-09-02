@@ -19317,33 +19317,37 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         if (document.getElementById('icheon-link-style')) return;
         const st = document.createElement('style');
         st.id = 'icheon-link-style';
+        /* ⚠ 두 시안의 화면 CSS 에는 `.skh-root *` / `.skv-root *` 초기화(배경·글꼴·색·여백 제거)가 있다.
+           이 시트가 나중에 깔리면 같은 특이도(0,1,0)라 버튼 스타일이 통째로 지워진다
+           (실제로 메인 → 상세 순서로 열면 상세의 '메인으로' 버튼이 민무늬 글자가 됐다).
+           그래서 모든 규칙을 두 루트 아래로 한 단계 더 감싸 특이도를 (0,2,x)로 올린다. */
+        const R = (sel) => '.skh-root ' + sel + ',.skv-root ' + sel;
         st.textContent = [
           /* 시안의 알약 언어(반투명 흰 판 + 흰 테두리 + Pretendard SemiBold)를 그대로 따랐다 */
-          '.icheon-navbtn{position:absolute;top:90px;z-index:25;display:flex;align-items:center;gap:6px;',
+          R('.icheon-navbtn') + '{position:absolute;top:90px;z-index:25;display:flex;align-items:center;gap:6px;',
           'height:32px;padding:0 16px;border-radius:100px;border:1.5px solid rgba(255,255,255,.9);',
           'background:rgba(255,255,255,.72);box-shadow:0 2px 6px rgba(82,76,194,.16);',
           'font-family:"Pretendard","Pretendard Variable","Malgun Gothic",system-ui,sans-serif;',
           'font-size:13px;font-weight:600;color:#3a3679;cursor:pointer;white-space:nowrap;',
           'transition:background-color .18s cubic-bezier(.4,0,.2,1),transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s cubic-bezier(.4,0,.2,1);}',
-          '.icheon-navbtn:hover{background:rgba(255,255,255,.95);box-shadow:0 6px 14px rgba(82,76,194,.24);}',
-          '.icheon-navbtn:focus-visible{outline:2px solid #7b78ff;outline-offset:3px;}',
-          '.icheon-navbtn i{font-style:normal;font-size:15px;line-height:1;transition:transform .18s cubic-bezier(.4,0,.2,1);}',
-          /* 상세 → 메인 : 제목 옆 빈 자리 */
-          '.icheon-back{left:158px;}',
-          '.icheon-back:hover{transform:translateY(-1px);}',
-          '.icheon-back:active{transform:translateY(0) scale(.96);}',
-          '.icheon-back:hover i{transform:translateX(-3px);}',
-          /* 메인 → 상세 : 위쪽 가운데(헤더 아래 빈 띠). 캔버스가 넓어져도 가운데를 지킨다 */
-          '.icheon-fwd{left:50%;transform:translateX(-50%);}',
-          '.icheon-fwd:hover{transform:translateX(-50%) translateY(-1px);}',
-          '.icheon-fwd:active{transform:translateX(-50%) scale(.96);}',
-          '.icheon-fwd:hover i{transform:translateX(3px);}',
+          R('.icheon-navbtn:hover') + '{background:rgba(255,255,255,.95);box-shadow:0 6px 14px rgba(82,76,194,.24);}',
+          R('.icheon-navbtn:focus-visible') + '{outline:2px solid #7b78ff;outline-offset:3px;}',
+          R('.icheon-navbtn i') + '{font-style:normal;font-size:15px;line-height:1;transition:transform .18s cubic-bezier(.4,0,.2,1);}',
+          R('.icheon-navbtn span') + '{font:inherit;color:inherit;}',
+          R('.icheon-navbtn:hover') + '{transform:translateY(-1px);}',
+          R('.icheon-navbtn:active') + '{transform:translateY(0) scale(.96);}',
+          /* 두 버튼은 같은 자리(왼쪽 위 제목 옆)에 같은 모양으로 둔다 — 화면을 오갈 때 눈이 따라가기 쉽게.
+             제목 길이만 달라서(상세 '항온항습기' 87px · 메인 '센터 UPS 전력' 118px) x 만 다르다. */
+          R('.icheon-back') + '{left:158px;}',
+          R('.icheon-back:hover i') + '{transform:translateX(-3px);}',
+          R('.icheon-fwd') + '{left:176px;}',
+          R('.icheon-fwd:hover i') + '{transform:translateX(3px);}',
           /* 다크 — 시안의 다크 패널과 같은 톤 */
-          '.skv-root[data-theme="dark"] .icheon-navbtn,.skh-root[data-theme="dark"] .icheon-navbtn{',
+          '.skh-root[data-theme="dark"] .icheon-navbtn,.skv-root[data-theme="dark"] .icheon-navbtn{',
           'background:rgba(28,33,54,.82);border-color:rgba(255,255,255,.18);color:#c9c7ff;box-shadow:0 2px 8px rgba(0,0,0,.45);}',
-          '.skv-root[data-theme="dark"] .icheon-navbtn:hover,.skh-root[data-theme="dark"] .icheon-navbtn:hover{background:rgba(38,44,72,.92);}',
+          '.skh-root[data-theme="dark"] .icheon-navbtn:hover,.skv-root[data-theme="dark"] .icheon-navbtn:hover{background:rgba(38,44,72,.92);}',
           /* 메인의 내비 심볼 '항온항습기' — 누를 수 있다는 것만 알린다(그림은 그대로) */
-          '.icheon-openable{cursor:pointer;}',
+          R('.icheon-openable') + '{cursor:pointer;}',
         ].join('');
         document.head.appendChild(st);
       }
