@@ -19035,8 +19035,8 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           document.querySelectorAll('.tplimg-shot, .hj-studioimg').forEach((im) => this.rasterTint(im, t));
           document.querySelectorAll('.skx-screen').forEach((scr) => this.skxTint(scr, t, mode));
           this.skxpTint(t);
-          this.icheonTint(t, mode, '.skh-root', ['skh-style', 'skh-dark-style', 'skh-live-style'], 'wemb-skh-mode');
-          this.icheonTint(t, mode, '.skv-root', ['skv-style', 'skv-dark-style', 'skv-live-style'], 'wemb-skv-mode');
+          this.icheonTint(t, mode, '.skh-root', ['skh-style', 'skh-dark-style', 'skh-live-style', 'icheon-link-style'], 'wemb-skh-mode');
+          this.icheonTint(t, mode, '.skv-root', ['skv-style', 'skv-dark-style', 'skv-live-style', 'icheon-link-style'], 'wemb-skv-mode');
           try { TPLLOGO.apply(); } catch (e) {}
         },
         /* 색을 고르는 동안 매 입력마다 다시 칠하지 않도록 잠깐 모아서 처리 */
@@ -19194,7 +19194,9 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         try { window.__refreshTpl && window.__refreshTpl(); } catch (e) {}
         /* 인터랙션·라이브 데이터(접기/펴기·실시간 시계·호버·차트) + 반응형 배치 — src/skhynix-hub-live.js */
         try { window.initSkhynixHub && window.initSkhynixHub(scr); } catch (e) {}
-        /* 내비 심볼 '항온항습기' → 항온항습기 상세 화면(그림은 그대로, 커서·툴팁만 붙는다) */
+        /* 상세 화면으로 가는 길 — 눈에 보이는 '항온항습기 상세 →' 버튼과,
+           내비 심볼 '항온항습기' 클릭(그림은 그대로, 커서·툴팁만 붙는다) 두 가지 */
+        try { addIcheonForwardButton(scr); } catch (e) {}
         try { addIcheonDetailLink(scr); } catch (e) {}
         /* '패널편집'(내용 수정)이 이 화면의 글자도 잡도록 편집 대상을 다시 수집한다(저장해 둔 수정분도 여기서 되살아난다) */
         try { window.__dtRecaptureDefaults && window.__dtRecaptureDefaults(false); } catch (e) {}
@@ -19317,42 +19319,66 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         st.id = 'icheon-link-style';
         st.textContent = [
           /* 시안의 알약 언어(반투명 흰 판 + 흰 테두리 + Pretendard SemiBold)를 그대로 따랐다 */
-          '.icheon-back{position:absolute;left:158px;top:90px;display:flex;align-items:center;gap:6px;',
+          '.icheon-navbtn{position:absolute;top:90px;z-index:25;display:flex;align-items:center;gap:6px;',
           'height:32px;padding:0 16px;border-radius:100px;border:1.5px solid rgba(255,255,255,.9);',
           'background:rgba(255,255,255,.72);box-shadow:0 2px 6px rgba(82,76,194,.16);',
           'font-family:"Pretendard","Pretendard Variable","Malgun Gothic",system-ui,sans-serif;',
           'font-size:13px;font-weight:600;color:#3a3679;cursor:pointer;white-space:nowrap;',
           'transition:background-color .18s cubic-bezier(.4,0,.2,1),transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s cubic-bezier(.4,0,.2,1);}',
-          '.icheon-back:hover{background:rgba(255,255,255,.95);transform:translateY(-1px);box-shadow:0 6px 14px rgba(82,76,194,.24);}',
+          '.icheon-navbtn:hover{background:rgba(255,255,255,.95);box-shadow:0 6px 14px rgba(82,76,194,.24);}',
+          '.icheon-navbtn:focus-visible{outline:2px solid #7b78ff;outline-offset:3px;}',
+          '.icheon-navbtn i{font-style:normal;font-size:15px;line-height:1;transition:transform .18s cubic-bezier(.4,0,.2,1);}',
+          /* 상세 → 메인 : 제목 옆 빈 자리 */
+          '.icheon-back{left:158px;}',
+          '.icheon-back:hover{transform:translateY(-1px);}',
           '.icheon-back:active{transform:translateY(0) scale(.96);}',
-          '.icheon-back:focus-visible{outline:2px solid #7b78ff;outline-offset:3px;}',
-          '.icheon-back i{font-style:normal;font-size:15px;line-height:1;transition:transform .18s cubic-bezier(.4,0,.2,1);}',
           '.icheon-back:hover i{transform:translateX(-3px);}',
+          /* 메인 → 상세 : 위쪽 가운데(헤더 아래 빈 띠). 캔버스가 넓어져도 가운데를 지킨다 */
+          '.icheon-fwd{left:50%;transform:translateX(-50%);}',
+          '.icheon-fwd:hover{transform:translateX(-50%) translateY(-1px);}',
+          '.icheon-fwd:active{transform:translateX(-50%) scale(.96);}',
+          '.icheon-fwd:hover i{transform:translateX(3px);}',
           /* 다크 — 시안의 다크 패널과 같은 톤 */
-          '.skv-root[data-theme="dark"] .icheon-back,.skh-root[data-theme="dark"] .icheon-back{',
+          '.skv-root[data-theme="dark"] .icheon-navbtn,.skh-root[data-theme="dark"] .icheon-navbtn{',
           'background:rgba(28,33,54,.82);border-color:rgba(255,255,255,.18);color:#c9c7ff;box-shadow:0 2px 8px rgba(0,0,0,.45);}',
-          '.skv-root[data-theme="dark"] .icheon-back:hover,.skh-root[data-theme="dark"] .icheon-back:hover{background:rgba(38,44,72,.92);}',
+          '.skv-root[data-theme="dark"] .icheon-navbtn:hover,.skh-root[data-theme="dark"] .icheon-navbtn:hover{background:rgba(38,44,72,.92);}',
           /* 메인의 내비 심볼 '항온항습기' — 누를 수 있다는 것만 알린다(그림은 그대로) */
           '.icheon-openable{cursor:pointer;}',
         ].join('');
         document.head.appendChild(st);
       }
-      /* 상세 화면 위에 '← 메인으로' 버튼을 얹는다 */
-      function addIcheonBackButton(scr) {
+      /* 시안 위에 화면 이동 버튼을 얹는다(원본에 없던 요소 — 스튜디오에서만) */
+      function addIcheonNavButton(scr, opt) {
         icheonSceneCss();
-        const screen = scr.querySelector('[data-node-id="64:4059"]') || scr;
-        if (screen.querySelector('.icheon-back')) return;
+        const screen = scr.querySelector('[data-node-id="' + opt.screenNode + '"]') || scr;
+        if (screen.querySelector('.' + opt.cls)) return;
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'icheon-back';
-        b.title = '메인 화면(FMS Hub)으로 돌아가기';
-        b.innerHTML = '<i>←</i><span>메인으로</span>';
+        b.className = 'icheon-navbtn ' + opt.cls;
+        b.title = opt.title;
+        b.innerHTML = opt.arrowFirst
+          ? '<i>' + opt.arrow + '</i><span>' + opt.label + '</span>'
+          : '<span>' + opt.label + '</span><i>' + opt.arrow + '</i>';
         b.addEventListener('click', function (e) {
           e.preventDefault(); e.stopPropagation();
-          try { window.__openHubScreen && window.__openHubScreen('main'); } catch (err) {}
-          if (typeof toast === 'function') toast('메인 화면으로 돌아왔어요.', { type: 'info' });
+          try { window.__openHubScreen && window.__openHubScreen(opt.to); } catch (err) {}
+          if (typeof toast === 'function') toast(opt.toast, { type: 'info' });
         });
         screen.appendChild(b);
+      }
+      /* 상세 화면 위 '← 메인으로' */
+      function addIcheonBackButton(scr) {
+        addIcheonNavButton(scr, {
+          screenNode: '64:4059', cls: 'icheon-back', to: 'main', arrow: '←', arrowFirst: true,
+          label: '메인으로', title: '메인 화면(FMS Hub)으로 돌아가기', toast: '메인 화면으로 돌아왔어요.',
+        });
+      }
+      /* 메인 화면 위 '항온항습기 상세 →' */
+      function addIcheonForwardButton(scr) {
+        addIcheonNavButton(scr, {
+          screenNode: '64:3367', cls: 'icheon-fwd', to: 'hvac', arrow: '→', arrowFirst: false,
+          label: '항온항습기 상세', title: '항온항습기 상세 화면 열기', toast: '항온항습기 상세 화면을 열었어요.',
+        });
       }
       /* 메인 화면의 '항온항습기' 심볼 → 상세 화면 */
       function addIcheonDetailLink(scr) {

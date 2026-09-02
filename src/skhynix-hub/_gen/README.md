@@ -62,8 +62,9 @@ node src/skhynix-hub/_gen/conv.js   # 라이트 CSS 와 함께 SKHYNIX_HUB_DARK_
 
 ## 화면 전환 (2026-09-01 추가)
 
-내비 심볼 `Nav Item/HVAC`(64:3790)을 누르면 항온항습기 상세 화면이 열린다(`__openHubScreen('hvac')`).
-그림은 그대로 두고 커서·툴팁·키보드 포커스만 붙였다. 반대 방향은 상세 화면 위의 '← 메인으로' 버튼.
+위쪽 가운데(헤더 아래 빈 띠)에 **'항온항습기 상세 →'** 버튼을 얹어 상세 화면으로 간다(`__openHubScreen('hvac')`).
+내비 심볼 `Nav Item/HVAC`(64:3790) 클릭으로도 열린다 — 그림은 그대로 두고 커서·툴팁·키보드 포커스만 붙였다.
+반대 방향은 상세 화면 위의 '← 메인으로' 버튼.
 둘 다 index.html 에서만 붙인다 — 단독 미리보기(preview.html)는 Figma 원본 그대로다.
 
 ## 인터랙션 · 라이브 데이터 — `src/skhynix-hub-live.js`

@@ -98,9 +98,14 @@ node src/skhynix-hvac/_gen/mk-live-assets.js  # → src/skhynix-hvac-live.js 의
 
 시안 위(제목 '항온항습기' 옆 빈 자리)에 **'← 메인으로' 알약 버튼**을 얹어 메인(FMS Hub)으로 돌아간다.
 원본에 없던 요소라 index.html 의 `addIcheonBackButton()` 에서만 붙인다 —
-단독 미리보기(preview.html)는 Figma 원본 그대로다. 반대 방향(메인 → 상세)은 메인 화면의 내비 심볼
-`Nav Item/HVAC`(64:3790) 클릭. 버튼은 시안의 알약 언어(반투명 흰 판·흰 테두리·Pretendard SemiBold)를
-따르고 다크 판도 함께 두었으며, 시드 색 틴트도 같이 탄다.
+단독 미리보기(preview.html)는 Figma 원본 그대로다.
+
+반대 방향(메인 → 상세)도 눈에 보이는 버튼으로 간다 — 메인 화면 위쪽 가운데(헤더 아래 빈 띠)의
+**'항온항습기 상세 →'**(`addIcheonForwardButton()`). 캔버스가 넓어져도 가운데를 지키도록 `left:50%`+`translateX(-50%)` 로 둔다.
+내비 심볼 `Nav Item/HVAC`(64:3790) 클릭도 그대로 살아 있다(그림은 안 건드리고 커서·툴팁만).
+
+두 버튼은 같은 알약 스타일(`.icheon-navbtn`)을 쓰고 다크 판도 함께 두었으며,
+시트 이름을 틴트 목록에 넣어 **시드 색도 같이 따라온다**(안 넣으면 시안만 바뀌고 버튼은 원래 보라로 남는다).
 
 ## 시안 색이 기본값 (2026-09-02)
 
