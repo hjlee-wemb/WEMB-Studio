@@ -11574,6 +11574,12 @@
       .libitem .thumb.figimg-icon {
         padding: 12px;
       }
+      /* 배경을 걷어낸 라이트 시안 컴포넌트 — Figma 캔버스와 같은 밝은 판 위에 올려야
+         위젯 제목 같은 어두운 글자가 묻히지 않는다(어두운 유리 썸네일에서는 안 보였다) */
+      .libitem .thumb.figimg-light {
+        background: linear-gradient(180deg, #f7f8fa 0%, #e9ecf1 100%);
+        padding: 8px;
+      }
       .thumb.figimg img,
       .figimg-embed img {
         width: 100%;
@@ -26708,7 +26714,7 @@ ${wembTipRuntime()}
              분류·이름은 레이어명에서 뽑아 뒀다 — window.__ICHEON_ASSETS, src/icheon-assets.js
              (생성기: src/icheon-assets/_gen/mk-assets.js) */
           const ICH = window.__ICHEON_ASSETS || { charts: [], symbols: [], icons: [], panels: [] };
-          const ichItems = (arr, cat) => (arr || []).map((a) => ({ cat: cat, id: a.id, name: a.name, fig: a.fig, src: a.src }));
+          const ichItems = (arr, cat) => (arr || []).map((a) => ({ cat: cat, id: a.id, name: a.name, fig: a.fig, src: a.src, light: a.light }));
 
           const CATS = {
             chart: [],
@@ -26790,7 +26796,7 @@ ${wembTipRuntime()}
             /* SK하이닉스 Figma 차트(Chart-line·Chart Canvas) — 인라인 SVG로 편입 */
             (SKX.charts || []).forEach((a) => add(a.id, skxDispName(a.name), skxWithAnim(a.id, a.html)));
             /* 이천 FMS 두 화면의 차트 그래픽 — Figma 원본 파일 그대로 */
-            (ICH.charts || []).forEach((a) => items.push({ cat: 'chart', id: a.id, name: a.name, fig: a.fig, src: a.src }));
+            (ICH.charts || []).forEach((a) => items.push({ cat: 'chart', id: a.id, name: a.name, fig: a.fig, src: a.src, light: a.light }));
             return items;
           }
 
@@ -26805,11 +26811,14 @@ ${wembTipRuntime()}
               inner = `<div class="thumb fighost fighost-${it.cat}">${it.html}</div>`;
             } else if (it.cat === 'symbol') {
               cls = 'sym';
-              inner = `<div class="thumb"><img src="${it.src}" draggable="false" alt=""></div>`;
+              /* 배경을 걷어낸 라이트 시안 컴포넌트(콜아웃 등)는 밝은 판 위에 — 심볼 기본 썸네일은 어둡다 */
+              inner = it.light
+                ? `<div class="thumb figimg figimg-symbol figimg-light"><img src="${it.src}" draggable="false" alt=""></div>`
+                : `<div class="thumb"><img src="${it.src}" draggable="false" alt=""></div>`;
             } else if (it.src) {
               /* 이천 FMS 화면의 원본 에셋 — Figma 가 내보낸 파일을 그대로 그린다(차트·아이콘·패널 공통) */
               cls = it.cat === 'icon' ? 'ico' : it.cat === 'panel' ? 'pnl' : 'cht';
-              inner = `<div class="thumb figimg figimg-${it.cat}"><img src="${it.src}" draggable="false" alt=""></div>`;
+              inner = `<div class="thumb figimg figimg-${it.cat}${it.light ? ' figimg-light' : ''}"><img src="${it.src}" draggable="false" alt=""></div>`;
             } else if (it.cat === 'icon') {
               cls = 'ico';
               inner = `<div class="thumb">${iconSvg(ICONS[it.id] || '')}</div>`;

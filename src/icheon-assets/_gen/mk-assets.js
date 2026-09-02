@@ -149,6 +149,39 @@ function panelSvg(p) {
     + `${shape} fill="${p.fill}"${st}${fx}/>\n</svg>\n`;
 }
 
+/* ── 3-b) 내보낸 컴포넌트에서 '놓여 있던 자리의 배경'을 걷어낸다 ──
+   Figma 프레임 내보내기는 그 노드만 그리지 않는다. 노드 상자와 겹치는 조상들의 배경을 함께 그린다:
+     <rect width=W height=H fill="#F4F4F4"/>            ← Figma 캔버스 색
+     <g id="Screen/…"><rect width=1920 height=1080 …fill="white"/>  ← 화면 프레임의 흰 판
+     <g id="Event List"><rect …/>                        ← 칩이 얹혀 있던 유리 패널 같은 중간 컨테이너
+   라이브러리 에셋에는 컴포넌트 자신만 있어야 하므로 **컴포넌트 그룹부터 잘라 낸다**.
+   (이미 잘라 낸 파일을 다시 돌려도 결과가 같다 — 그룹이 곧 첫 요소라 버릴 게 없다) */
+function extractGroup(s, name) {
+  const esc = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const m = new RegExp('<g id="' + esc + '"[^>]*>').exec(s);
+  if (!m) return null;
+  const tag = /<\/?g\b[^>]*>/g;
+  tag.lastIndex = m.index;
+  let depth = 0, t;
+  while ((t = tag.exec(s))) {
+    if (t[0][1] === '/') { depth--; if (depth === 0) return s.slice(m.index, t.index + t[0].length); }
+    else if (!/\/>\s*$/.test(t[0])) depth++;
+  }
+  return null;
+}
+function stripBackground(file, figName) {
+  const p = path.join(OUT_DIR, file);
+  const s = fs.readFileSync(p, 'utf8');
+  const head = (s.match(/<svg[^>]*>/) || [])[0];
+  const group = extractGroup(s, figName);
+  if (!head || !group) { console.log('!! 배경 제거 실패(구조가 다름):', file, '/', figName); return false; }
+  const defs = (s.match(/<defs>[\s\S]*<\/defs>/) || [''])[0];
+  const out = head + '\n' + group + '\n' + (defs ? defs + '\n' : '') + '</svg>\n';
+  if (out === s) return false;
+  fs.writeFileSync(p, out);
+  return true;
+}
+
 /* ── 4) 목록 만들기 — 컴포넌트가 먼저, 그다음 최소 단위 원본, 마지막에 패널 ── */
 fs.mkdirSync(OUT_DIR, { recursive: true });
 PANELS.forEach((p) => fs.writeFileSync(path.join(OUT_DIR, p.file), panelSvg(p)));
@@ -157,12 +190,17 @@ const COMP = JSON.parse(fs.readFileSync(path.join(__dirname, 'components.json'),
 const cats = { charts: [], symbols: [], icons: [], panels: [] };
 const KEY = { chart: 'charts', symbol: 'symbols', icon: 'icons', panel: 'panels' };
 
-/* 4-a) Figma 컴포넌트 프레임 */
+/* 4-a) Figma 컴포넌트 프레임 — 배경을 걷어낸 뒤 등록 */
+let stripped = 0;
 COMP.forEach((c) => {
   const f = path.join(OUT_DIR, c.file);
   if (!fs.existsSync(f)) { console.log('!! 파일 없음(다시 내보내야 함):', c.file); return; }
-  cats[KEY[c.cat]].push({ id: 'c_' + c.file.replace(/^comp-|\.svg$/g, '').replace(/[^\w]/g, '_'), name: c.name, fig: c.fig + ' (' + c.nid + ')', src: 'src/icheon-assets/' + c.file });
+  if (stripBackground(c.file, c.fig)) stripped++;
+  /* light: 썸네일을 밝은 판 위에 그린다 — 배경을 걷어낸 라이트 시안 컴포넌트라
+     어두운 썸네일에서는 위젯 제목 같은 어두운 글자가 묻힌다(Figma 캔버스와 같은 조건으로 맞춘다). */
+  cats[KEY[c.cat]].push({ id: 'c_' + c.file.replace(/^comp-|\.svg$/g, '').replace(/[^\w]/g, '_'), name: c.name, fig: c.fig + ' (' + c.nid + ')', src: 'src/icheon-assets/' + c.file, light: true });
 });
+if (stripped) console.log('배경 제거:', stripped, '개');
 
 /* 4-b) 그 자체가 최소 단위인 원본 파일 */
 const seenHash = new Set(), seenName = new Set();
