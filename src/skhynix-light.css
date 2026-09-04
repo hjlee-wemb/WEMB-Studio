@@ -1,0 +1,153 @@
+/* SK하이닉스 이천 FMS(Figma 64:1782) — 라이트 테마 손보정
+   ───────────────────────────────────────────────────────────────────────────
+   src/skhynix-theme.css 는 gen_theme.py 가 만든 '명도 플립' 색맵이다. 글자에는 잘 맞지만
+   두 가지를 놓친다:
+
+     ① **너무 어두운 색 23개를 손대지 않고 넘어간다**(#252B40 · #010307 · #101B3B · #414B69 …).
+        다크에서 '어두운 판'이던 것들이라 라이트에서도 그대로 검게 남는다
+        → 센터 온도의 LED 트랙, 티커 시각 배경, 이벤트 카운트 칩이 검은 덩어리로 보였다.
+     ② **같은 hex 가 글자와 표면 양쪽에 쓰인다**. #CCCCCC 는 이벤트 목록 글자이면서
+        온도 큐브의 밝은 면이기도 해서, 글자에 맞춰 뒤집으면 큐브가 새까매진다.
+
+   그래서 ①은 변수 값을 역할에 맞게 다시 잡고, ②는 Figma 레이어 id 로 범위를 좁혀 고친다.
+   (레이어명이 id 로 그대로 남아 있어서 역할을 정확히 집을 수 있다 — skhynix-figma-layer-naming)
+
+   **이 파일은 손으로 쓴다.** skhynix-theme.css 는 재생성될 수 있으므로 손보정을 섞지 않는다.
+   반드시 skhynix-theme.css **뒤에** 불러야 한다(뒤에 온 값이 이긴다).
+
+   시안 틴트(index.html TPLTINT.skxMap)는 스타일시트를 훑어 '선택자에 skx-svg 와 light 가 든
+   규칙'의 --skx-c* 값을 라이트 기준값으로 삼는다 → 아래 변수 블록의 선택자 형태를 바꾸지 말 것.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.main[data-mode='light'] .skx-svg,
+.app[data-mode='light'] .skx-svg {
+  /* 라이트 표면 팔레트 — 시안의 라이트 배경(보케 #e7ebf1)·흰 카드에 맞춘 값 */
+  --skx-l-card: #ffffff;
+  --skx-l-chip: #eef2f9; /* 칩·트랙처럼 카드 위에 한 단 들어간 면 */
+  --skx-l-track: #dfe5f0; /* LED 트랙 */
+  --skx-l-dot-off: #aeb8cd; /* 꺼진 LED */
+  --skx-l-ink: #20232e;
+
+  /* ── ① 생성기가 넘어간 23색 — 역할에 맞는 라이트 값 ────────────────────── */
+  /* 판·트랙(무채색 계열): 검정 → 밝은 회청색 */
+  --skx-c010307: #e6ecf6; /* 티커 시각 배경 끝 */
+  --skx-c101B3B: #dbe3f1; /* 티커 바탕 */
+  --skx-c252B40: #dfe5f0; /* 센터 온도 LED 트랙 */
+  --skx-c414B69: #aeb8cd; /* 꺼진 LED 점 */
+  --skx-c010002: #2b3242; /* AUTO 라디오 점 — 밝은 칩 위 점이라 어둡게 남긴다 */
+  --skx-c3C3A68: #454875; /* 작은 유도 화살표 */
+  /* 켜진 LED 점: 색상(hue)은 그대로 두고 명도만 올린다 — 5단계 구분이 그대로 유지된다.
+     원본은 어두운 판 위에서 빛나는 색이라 흰 판에서는 그냥 탁한 점으로 보였다. */
+  --skx-c216345: #17a06a;
+  --skx-c226447: #18a56e;
+  --skx-c24664A: #19aa72;
+  --skx-c26684C: #1aaf76;
+  --skx-c746214: #c9a200;
+  --skx-c756316: #cfa800;
+  --skx-c78661A: #d5ae00;
+  --skx-c704125: #d2691e;
+  --skx-c724228: #d86e20;
+  --skx-c74442B: #de7422;
+  --skx-c75452D: #e37a24;
+  --skx-c774932: #e88030;
+  --skx-c865841: #ed8b3c;
+  /* 패널 배지 글로우(작은 차트 아이콘 뒤) — 흰 카드에서 보이도록 파랑을 한 단 밝게 */
+  --skx-c173458: #7ba4d9;
+  --skx-c315985: #5b8fcb;
+  /* ── 카드 제목 띠 · 이벤트 목록 헤더 — 이 셋만 쓰는 색이라 통째로 다시 잡아도 안전하다 ──
+     명도만 뒤집으면 흰 카드 위에 회청색 띠가 얹혀 '아직 다크가 남은' 것처럼 보였다.
+     ADB3C7 은 어느 자리에서든 불투명도 0 으로 빠지는 **가장자리 하이라이트**라(5곳 모두 확인),
+     라이트에서는 흰색이어야 원래 역할(빛나는 모서리)이 된다 — 뒤집힌 값(#303546)은 되레 띠를 탁하게 만든다. */
+  --skx-c1F2228: #eef3fa; /* 제목 띠 시작 · 이벤트 목록 판 */
+  --skx-c565D72: #d3dcec; /* 제목 띠 끝 */
+  --skx-cADB3C7: #ffffff; /* 제목 띠·폴드 버튼 가장자리 하이라이트 */
+  /* 티커 경보 원 — 붉은 계열 유지, 흰 배경에서 뜨도록 밝게 */
+  --skx-c9A352F: #e85b54;
+  --skx-cA20A42: #d6265f;
+}
+
+/* ── ② 역할이 겹치는 색: Figma 레이어 id 로 범위를 좁혀 고친다 ─────────────── */
+
+/* 온도 큐브·상면 포화도 실린더의 '유리 볼륨'.
+   stop-color 로 쓰인 #CCCCCC·#6C6F8E 는 이 두 그래픽에서만 쓰이므로(확인함) 통째로 뒤집어도 안전하다.
+   fill 로 쓰인 #CCCCCC 는 글자에도 쓰이니 큐브 안쪽만 고른다. */
+.main[data-mode='light'] .skx-svg [stop-color='#CCCCCC'],
+.app[data-mode='light'] .skx-svg [stop-color='#CCCCCC'] {
+  /* 반투명(10~30%) 유리면이라 흰 판 위에 흰색을 얹으면 큐브가 아예 사라진다 →
+     같은 역할을 하려면 라이트에서는 '어두운 쪽'으로 비쳐야 한다. */
+  stop-color: #7e8ca8;
+}
+.main[data-mode='light'] .skx-svg [stop-color='#6C6F8E'],
+.app[data-mode='light'] .skx-svg [stop-color='#6C6F8E'] {
+  stop-color: #5e6c8c;
+}
+.main[data-mode='light'] .skx-svg [id^='skx-Cube'] [fill='#CCCCCC'],
+.app[data-mode='light'] .skx-svg [id^='skx-Cube'] [fill='#CCCCCC'] {
+  fill: #dbe2ee;
+}
+
+/* 센터 온도 LED 트랙 — 그라디언트 첫 정지색에 stop-color 속성이 없어(=검정 기본값)
+   색맵이 닿지 않는다. 트랙은 평평한 면이면 충분하므로 그라디언트를 걷어낸다. */
+.main[data-mode='light'] .skx-svg [id^='skx-Track'] [id^='skx-Bar'],
+.app[data-mode='light'] .skx-svg [id^='skx-Track'] [id^='skx-Bar'] {
+  fill: var(--skx-l-track);
+}
+
+/* ── 이벤트 목록 ───────────────────────────────────────────────────────── */
+/* 등급 카운트 칩(ALL·CR·MA·MI·WA) — 배경이 fill="black" 이라 색맵을 안 탄다.
+   ('black' 키워드를 전역으로 바꾸면 <mask> 안의 검정까지 건드려 마스크가 깨진다 — id 로 좁힌다) */
+.main[data-mode='light'] .skx-svg [id^='skx-Count/'] rect[fill='black'],
+.app[data-mode='light'] .skx-svg [id^='skx-Count/'] rect[fill='black'] {
+  fill: var(--skx-l-chip);
+}
+/* 목록 판 — 다크의 어두운 판이 회청색으로만 뒤집혀 바닥이 탁했다. 카드처럼 밝게. */
+.main[data-mode='light'] .skx-svg [id='skx-Event List'] [id='skx-Panel'] > [fill='#1F2228'],
+.app[data-mode='light'] .skx-svg [id='skx-Event List'] [id='skx-Panel'] > [fill='#1F2228'] {
+  fill: #f4f7fc;
+}
+
+/* ── 맵(건물 현황) ─────────────────────────────────────────────────────── */
+/* 층 선택 버튼(6F·5F·3F) — 3D 렌더 위에 얹히는 컨트롤이라 다크에선 검은 칩이었다.
+   라이트에선 밝은 유리 칩 + 짙은 글자로 바꿔 화면 톤과 맞춘다. 배경색은 floorSelect() 가
+   인라인 style 로 칠하므로(틴트 캐시를 피하려고) --skx-floor-chip 변수로 넘긴다.
+   선택된 2F 는 강조색 배경 + 흰 글자 그대로 — 선택 상태가 한눈에 남는다. */
+
+/* ── 티커(하단 알림 바) ────────────────────────────────────────────────── */
+/* 경보 아이콘 뒤 글로우 — 다크에선 밝은 회색 번짐이었는데 뒤집혀 검은 얼룩이 됐다.
+   라이트에선 경보색과 어울리는 따뜻한 옅은 번짐으로. */
+.main[data-mode='light'] .skx-svg [id='skx-Ticker'] [id^='skx-Glow'] [fill='#B1B1B1'],
+.app[data-mode='light'] .skx-svg [id='skx-Ticker'] [id^='skx-Glow'] [fill='#B1B1B1'] {
+  fill: #ffe0cb;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ③ 화면 글자 — index.html 의 foreignObject 오버레이(.skx-tb)
+   이 시안의 보이는 글자는 전부 .skx-tb 다(구워진 SVG 글리프는 숨겨져 있다).
+   빌더가 색을 var(--skx-c<HEX>) / var(--skx-tb-<HEX>) / var(--skx-tb-fg) 로 넘기므로
+   여기서 라이트 값만 정해 주면 91개 글자가 한 번에 따라온다.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 흰 글자의 기본값 = 다크 그대로 */
+.skx-screen,
+.main .skx-svg {
+  --skx-tb-fg: #ffffff;
+  --skx-tb-C9D1E0: #c9d1e0; /* 차트 축 눈금 — 생성 색맵에 없는 유일한 글자색 */
+  --skx-floor-chip: black; /* 맵 층 선택 칩(평상시) 배경 */
+  --skx-floor-ink: #ffffff; /* 〃 글자 */
+}
+
+.main[data-mode='light'] .skx-svg,
+.app[data-mode='light'] .skx-svg {
+  --skx-tb-fg: #20232e; /* 흰 글자 → 짙은 슬레이트 */
+  --skx-tb-C9D1E0: #5c6780; /* 축 눈금 — 흰 카드에서 4.5:1 넘게 */
+  --skx-floor-chip: #f2f5fa; /* 맵 층 칩 — 밝은 유리 */
+  --skx-floor-ink: #20232e; /* 〃 짙은 글자 */
+}
+
+/* 라이트에서도 흰 글자로 남아야 하는 곳 — 어두운 3D 렌더 위에 얹힌 맵 라벨.
+   .skx-tb 의 color 는 인라인이라 CSS 규칙으로는 못 이긴다 → 그 인라인이 읽는 **변수**를 덮는다.
+   (층 칩은 선택/호버 상태에 따라 floorSelect() 가 같은 변수를 직접 얹는다) */
+.main[data-mode='light'] .skx-svg [id='skx-Label_2'],
+.app[data-mode='light'] .skx-svg [id='skx-Label_2'] {
+  --skx-tb-fg: #ffffff;
+}

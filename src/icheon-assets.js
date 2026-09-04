@@ -7,48 +7,6 @@
 window.__ICHEON_ASSETS = {
  "charts": [
   {
-   "id": "c_widget_ups_power",
-   "name": "UPS 전력 위젯",
-   "fig": "Widget/UPS Power (64:3397)",
-   "src": "src/icheon-assets/comp-widget-ups-power.svg",
-   "light": true
-  },
-  {
-   "id": "c_widget_floor_saturation",
-   "name": "상면 포화도 위젯",
-   "fig": "Widget/Floor Saturation (64:3483)",
-   "src": "src/icheon-assets/comp-widget-floor-saturation.svg",
-   "light": true
-  },
-  {
-   "id": "c_widget_center_temp",
-   "name": "센터 온도 위젯",
-   "fig": "Widget/Center Temp (64:3571)",
-   "src": "src/icheon-assets/comp-widget-center-temp.svg",
-   "light": true
-  },
-  {
-   "id": "c_widget_containment_temp",
-   "name": "컨테인먼트 온도 위젯",
-   "fig": "Widget/Containment Temp (64:3674)",
-   "src": "src/icheon-assets/comp-widget-containment-temp.svg",
-   "light": true
-  },
-  {
-   "id": "c_widget_event_trend",
-   "name": "시간대별 이벤트 위젯",
-   "fig": "Widget/Event Trend (64:4185)",
-   "src": "src/icheon-assets/comp-widget-event-trend.svg",
-   "light": true
-  },
-  {
-   "id": "c_widget_event_by_center",
-   "name": "센터별 이벤트 위젯",
-   "fig": "Widget/Event By Center (64:4237)",
-   "src": "src/icheon-assets/comp-widget-event-by-center.svg",
-   "light": true
-  },
-  {
    "id": "c_gauge",
    "name": "온도 게이지",
    "fig": "Gauge (64:3585)",
@@ -364,43 +322,50 @@ window.__ICHEON_ASSETS = {
    "id": "pan_widget",
    "name": "위젯 카드",
    "fig": "64:4188 Line Chart / 64:4240 Body",
-   "src": "src/icheon-assets/panel-widget-card.svg"
+   "src": "src/icheon-assets/panel-widget-card.svg",
+   "light": true
   },
   {
    "id": "pan_metric",
    "name": "지표 카드",
    "fig": "64:3400 Body",
-   "src": "src/icheon-assets/panel-metric-card.svg"
+   "src": "src/icheon-assets/panel-metric-card.svg",
+   "light": true
   },
   {
    "id": "pan_summary",
    "name": "요약 카드",
    "fig": "64:3401 Summary Card",
-   "src": "src/icheon-assets/panel-summary-card.svg"
+   "src": "src/icheon-assets/panel-summary-card.svg",
+   "light": true
   },
   {
    "id": "pan_glass",
    "name": "유리 목록 패널",
    "fig": "64:3894 / 64:4370 Event List",
-   "src": "src/icheon-assets/panel-glass-list.svg"
+   "src": "src/icheon-assets/panel-glass-list.svg",
+   "light": true
   },
   {
    "id": "pan_measure",
    "name": "측정값 알약",
    "fig": "64:4155 Measurement",
-   "src": "src/icheon-assets/panel-measurement-pill.svg"
+   "src": "src/icheon-assets/panel-measurement-pill.svg",
+   "light": true
   },
   {
    "id": "pan_switch",
    "name": "스위치 알약",
    "fig": "64:4120 Mode Switch",
-   "src": "src/icheon-assets/panel-switch-pill.svg"
+   "src": "src/icheon-assets/panel-switch-pill.svg",
+   "light": true
   },
   {
    "id": "pan_label",
    "name": "라벨 알약",
    "fig": "64:3577 Label",
-   "src": "src/icheon-assets/panel-label-pill.svg"
+   "src": "src/icheon-assets/panel-label-pill.svg",
+   "light": true
   }
  ]
 };

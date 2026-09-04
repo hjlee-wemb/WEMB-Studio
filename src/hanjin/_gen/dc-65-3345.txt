@@ -1,0 +1,542 @@
+const imgShape1 = "https://www.figma.com/api/mcp/asset/8b126781-517f-4957-86c2-d34be463ac68.svg";
+const imgShape6 = "https://www.figma.com/api/mcp/asset/4b27c7a7-673a-469d-a928-ce141374afcd.svg";
+const imgShape15 = "https://www.figma.com/api/mcp/asset/8c24a4d9-31bb-41e7-b114-e0258452ed84.svg";
+const imgShape8 = "https://www.figma.com/api/mcp/asset/eb847fd4-2738-4f73-8aa4-bdf867b87bf1.svg";
+const imgShape14 = "https://www.figma.com/api/mcp/asset/978a048f-a72d-4bf1-abd5-b1244aacbf54.svg";
+const imgShape3 = "https://www.figma.com/api/mcp/asset/d3d88029-23b4-4d45-a54a-9206c9bdd059.svg";
+const imgShape4 = "https://www.figma.com/api/mcp/asset/70dcfe56-e6f5-4d00-8fa8-5a4b9841838d.svg";
+const imgShape10 = "https://www.figma.com/api/mcp/asset/fb7c4f85-219f-4dcd-b380-d9532e8acf9c.svg";
+const imgShape5 = "https://www.figma.com/api/mcp/asset/ea702a0b-e468-4d34-8f26-7c071281df72.svg";
+const imgShape9Copy = "https://www.figma.com/api/mcp/asset/b3c070a5-3c0a-4ff2-ab58-709e3e1f5ace.svg";
+const imgShape9Copy3 = "https://www.figma.com/api/mcp/asset/1af3bdf2-72fa-4b75-8823-118b05353e07.svg";
+const imgShape12 = "https://www.figma.com/api/mcp/asset/586583b5-fb74-4011-900c-155bb9b70a6c.svg";
+const imgShape7 = "https://www.figma.com/api/mcp/asset/36c70fa4-cd77-4d48-b288-dc4426478ca7.svg";
+const imgShape2122 = "https://www.figma.com/api/mcp/asset/dc055dd0-abac-4248-8b34-848aea307ed6.svg";
+const imgShape2120Copy = "https://www.figma.com/api/mcp/asset/450fa032-fc23-4e2e-997b-a607669c94e3.svg";
+const imgShape9Copy2 = "https://www.figma.com/api/mcp/asset/dd551e26-45c2-4d01-900f-273dee4ce5e2.svg";
+const imgShape11 = "https://www.figma.com/api/mcp/asset/50e7b06f-1a14-4189-baea-c383a575e7e1.svg";
+const imgShape11Copy = "https://www.figma.com/api/mcp/asset/7d3a419c-75b9-4b6b-ba61-dcbae854a8b7.svg";
+const imgShape2123Copy = "https://www.figma.com/api/mcp/asset/b91d89a7-c99b-4570-b43a-7104fe72ec08.svg";
+const imgShape9Copy4 = "https://www.figma.com/api/mcp/asset/55713a24-b62a-4303-a7d5-c0e3ee20ac87.svg";
+const imgVector8 = "https://www.figma.com/api/mcp/asset/e00d7fa8-38fa-4f34-86e8-b181a93545d1.svg";
+const imgShape13 = "https://www.figma.com/api/mcp/asset/13c07df1-8295-43b5-85a9-fdbb8dc647e4.svg";
+const imgVector6 = "https://www.figma.com/api/mcp/asset/105ffc53-59eb-459d-853d-636f588480e8.svg";
+const imgShape2124 = "https://www.figma.com/api/mcp/asset/33dd71d8-56e0-43e8-9a8a-077335a64185.svg";
+const imgVector7 = "https://www.figma.com/api/mcp/asset/4359dc80-6ec1-4e8f-b6d9-87d5473b1a23.svg";
+const imgShape9Copy1 = "https://www.figma.com/api/mcp/asset/8f151f1e-577c-479e-a190-3b03d603145c.svg";
+const imgShape2123Copy1 = "https://www.figma.com/api/mcp/asset/055bc638-0745-422d-9f5a-9b4c178389a3.svg";
+const imgVector = "https://www.figma.com/api/mcp/asset/41a6fa4d-5265-4718-9d78-3ebe8eefdcfa.svg";
+const imgVector9 = "https://www.figma.com/api/mcp/asset/1a9a145d-cefb-4101-aa73-f05dc3460a57.svg";
+const imgVector1 = "https://www.figma.com/api/mcp/asset/d509fd85-6b50-4505-bb3d-45757c414f73.svg";
+const imgVisual = "https://www.figma.com/api/mcp/asset/46c7210d-e048-4da8-8c7d-c1929b4e3a70.svg";
+const imgVisual1 = "https://www.figma.com/api/mcp/asset/88e58e9d-c054-4fd8-9750-93a16047bcef.svg";
+const imgVisual2 = "https://www.figma.com/api/mcp/asset/56a47d09-96f1-4649-9717-f0c86b6d08a4.svg";
+const imgVisual3 = "https://www.figma.com/api/mcp/asset/9ed6c9c1-9001-4d6b-8698-cb2abc5415a7.svg";
+const imgVisual4 = "https://www.figma.com/api/mcp/asset/931fc4a1-a51f-479e-a8a7-e5a74de863ac.svg";
+
+type ComponentProps = {
+  className?: string;
+  floor?: "5F" | "1F" | "2F" | "3F" | "4F";
+};
+
+function Component({ className, floor = "1F" }: ComponentProps) {
+  const is1F = floor === "1F";
+  const is1FOr3F = ["1F", "3F"].includes(floor);
+  const is2FOr3FOr5F = ["2F", "3F", "5F"].includes(floor);
+  const is2FOr4F = ["2F", "4F"].includes(floor);
+  const is3F = floor === "3F";
+  const is3FOr5F = ["3F", "5F"].includes(floor);
+  const is4F = floor === "4F";
+  const is4FOr1F = ["4F", "1F"].includes(floor);
+  const is5F = floor === "5F";
+  return (
+    <div className={className || `relative ${is5F ? "h-[100.11px] w-[103.728px]" : is1F ? "h-[100.13px] w-[103.724px]" : "h-[100.11px] w-[103.724px]"}`} id={is5F ? "node-65_3324" : is3F ? "node-65_3301" : is1F ? "node-65_3280" : is4F ? "node-65_3257" : "node-65_3234"}>
+      <div className={`absolute ${is1F ? "inset-[0_0_0.02%_0.24%]" : "inset-[0_0_0_0.24%]"}`} id={is5F ? "node-65_3325" : is3F ? "node-65_3302" : is1F ? "node-65_3281" : is4F ? "node-65_3258" : "node-65_3235"} data-name="Shape 1">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape1} />
+      </div>
+      {["4F", "1F", "3F"].includes(floor) && (
+        <div className={`absolute ${is3F ? "inset-[34.6%_1.3%_27.93%_2.32%]" : is1F ? "inset-[34.59%_1.3%_27.94%_2.32%]" : "inset-[34.6%_1.43%_27.93%_2.19%]"}`} id={is3F ? "node-65_3303" : is1F ? "node-65_3282" : "node-65_3259"} data-name="Shape 9 copy 2">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape9Copy4} />
+        </div>
+      )}
+      {is2FOr3FOr5F && (
+        <>
+          <div className="absolute inset-[0_0.28%_77.26%_0.32%]" id={is5F ? "node-65_3326" : is3F ? "node-65_3304" : "node-65_3236"} data-name="Shape 6">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape6} />
+          </div>
+          <div className="absolute inset-[0.86%_1.92%_89.16%_62.65%]" id={is5F ? "node-65_3327" : is3F ? "node-65_3305" : "node-65_3237"} data-name="Shape 15">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape15} />
+          </div>
+          <div className="absolute inset-[6.35%_14.25%_77.26%_16.85%]" id={is5F ? "node-65_3328" : is3F ? "node-65_3306" : "node-65_3238"} data-name="Shape 8">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape8} />
+          </div>
+          <div className="absolute inset-[21.57%_54.28%_0.67%_31.3%]" id={is5F ? "node-65_3329" : is3F ? "node-65_3307" : "node-65_3239"} data-name="Shape 14">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape14} />
+          </div>
+          <div className={`absolute ${is5F ? "inset-[13.21%_2.57%_61.54%_2%]" : "inset-[13.21%_2.56%_61.54%_2%]"}`} id={is5F ? "node-65_3330" : is3F ? "node-65_3308" : "node-65_3240"} data-name="Shape 3">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape3} />
+          </div>
+          <div className="absolute inset-[23.92%_2.56%_45.15%_2.48%]" id={is5F ? "node-65_3331" : is3F ? "node-65_3309" : "node-65_3241"} data-name="Shape 4">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape4} />
+          </div>
+          <div className="absolute inset-[44.98%_2.43%_13.55%_3.76%]" id={is5F ? "node-65_3332" : is3F ? "node-65_3310" : "node-65_3242"} data-name="Shape 10">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape10} />
+          </div>
+          <div className={`absolute ${is5F ? "inset-[34.62%_2.57%_29.2%_4.56%]" : "inset-[34.62%_2.56%_29.2%_4.56%]"}`} id={is5F ? "node-65_3333" : is3F ? "node-65_3311" : "node-65_3243"} data-name="Shape 5">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape5} />
+          </div>
+        </>
+      )}
+      {is4FOr1F && (
+        <>
+          <div className={`absolute ${is1F ? "inset-[45.56%_1.74%_0_2.97%]" : "inset-[13.06%_0.8%_47.94%_1.21%]"}`} id={is1F ? "node-65_3283" : "node-65_3260"}>
+            <div className={`absolute ${is1F ? "inset-[-5.5%_0_0_0]" : "inset-[-5.12%_0_0_0]"}`}>
+              <img alt="" className="block max-w-none size-full" src={is1F ? imgVector6 : imgVector8} />
+            </div>
+          </div>
+          <div className={`absolute ${is1F ? "inset-[0_0.28%_77.27%_0.32%]" : "inset-[0_0.28%_77.26%_0.32%]"}`} id={is1F ? "node-65_3284" : "node-65_3261"} data-name="Shape 6">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape6} />
+          </div>
+          <div className="absolute inset-[0.86%_1.92%_89.16%_62.65%]" id={is1F ? "node-65_3285" : "node-65_3262"} data-name="Shape 15">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape15} />
+          </div>
+          <div className="absolute inset-[6.35%_14.25%_77.26%_16.85%]" id={is1F ? "node-65_3286" : "node-65_3263"} data-name="Shape 8">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape8} />
+          </div>
+          <div className={`absolute ${is1F ? "inset-[21.57%_54.28%_0.69%_31.3%]" : "inset-[21.57%_54.28%_0.67%_31.3%]"}`} id={is1F ? "node-65_3287" : "node-65_3264"} data-name="Shape 14">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape14} />
+          </div>
+          <div className={`absolute ${is1F ? "inset-[13.21%_2.56%_61.55%_2%]" : "inset-[13.21%_2.56%_61.54%_2%]"}`} id={is1F ? "node-65_3288" : "node-65_3265"} data-name="Shape 3">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape3} />
+          </div>
+          <div className={`absolute ${is1F ? "inset-[23.91%_2.56%_45.17%_2.48%]" : "inset-[23.92%_2.56%_45.15%_2.48%]"}`} id={is1F ? "node-65_3289" : "node-65_3266"} data-name="Shape 4">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape4} />
+          </div>
+          <div className={`absolute ${is1F ? "inset-[44.97%_2.43%_13.57%_3.76%]" : "inset-[44.98%_2.43%_13.55%_3.76%]"}`} id={is1F ? "node-65_3290" : "node-65_3267"} data-name="Shape 10">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape10} />
+          </div>
+          <div className={`absolute ${is1F ? "inset-[34.61%_2.56%_29.22%_4.56%]" : "inset-[34.62%_2.56%_29.2%_4.56%]"}`} id={is1F ? "node-65_3291" : "node-65_3268"} data-name="Shape 5">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape5} />
+          </div>
+        </>
+      )}
+      {["2F", "4F", "1F"].includes(floor) && (
+        <div className={`absolute ${is1F ? "inset-[23.91%_1.12%_43.82%_1.84%]" : "inset-[23.91%_1.12%_43.81%_1.84%]"}`} id={is1F ? "node-65_3292" : is4F ? "node-65_3269" : "node-65_3244"} data-name="Shape 9 copy">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape9Copy} />
+        </div>
+      )}
+      {is2FOr4F && (
+        <div className="absolute inset-[44.99%_2.08%_13.5%_3.3%]" id={is4F ? "node-65_3270" : "node-65_3245"} data-name="Shape 9 copy 3">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape9Copy3} />
+        </div>
+      )}
+      {["2F", "4F", "3F"].includes(floor) && (
+        <div className="absolute inset-[13.05%_0.8%_60.2%_1.2%]" id={is3F ? "node-65_3312" : is4F ? "node-65_3271" : "node-65_3246"} data-name="Shape 12">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={is4F ? imgShape13 : imgShape12} />
+        </div>
+      )}
+      {is2FOr4F && (
+        <div className="absolute inset-[0.33%_0.59%_76.92%_0]" id={is4F ? "node-65_3272" : "node-65_3247"} data-name="Shape 7">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape7} />
+        </div>
+      )}
+      {floor === "2F" && (
+        <div className="absolute inset-[35.48%_1.28%_14.79%_2.32%]" data-node-id="65:3250" data-name="Shape 2122">
+          <div className="absolute inset-[-6.03%_0_0_0]">
+            <img alt="" className="block max-w-none size-full" src={imgShape2122} />
+          </div>
+        </div>
+      )}
+      {is2FOr4F && (
+        <div className="absolute inset-[35.47%_1.28%_53.31%_88.86%] mix-blend-overlay" id={is4F ? "node-65_3275" : "node-65_3251"} data-name="Shape 2120 copy">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape2120Copy} />
+        </div>
+      )}
+      {["2F", "5F"].includes(floor) && (
+        <div className="absolute inset-[34.6%_1.3%_27.93%_2.32%]" id={is5F ? "node-65_3334" : "node-65_3252"} data-name="Shape 9 copy 2">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={is5F ? imgShape9Copy4 : imgShape9Copy2} />
+        </div>
+      )}
+      {is2FOr4F && (
+        <>
+          <div className="absolute inset-[22.24%_67.09%_0.17%_31.46%] mix-blend-screen" id={is4F ? "node-65_3276" : "node-65_3253"} data-name="Shape 11">
+            <div className="absolute inset-[-0.14%_-50.16%_0_-49.89%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11} />
+            </div>
+          </div>
+          <div className="absolute inset-[21.91%_54.06%_1.68%_45.03%] mix-blend-screen" id={is4F ? "node-65_3277" : "node-65_3254"} data-name="Shape 11 copy">
+            <div className="absolute inset-[-0.6%_-79.97%_0_-79.95%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11Copy} />
+            </div>
+          </div>
+          <div className={`absolute ${is4F ? "inset-[38.57%_55.11%_48.61%_44.89%]" : "inset-[70.54%_55.11%_16.65%_44.89%]"}`} id={is4F ? "node-65_3278" : "node-65_3255"} data-name="Shape 2123 copy">
+            <div className="absolute inset-[0_-0.5px]">
+              <img alt="" className="block max-w-none size-full" src={imgShape2123Copy} />
+            </div>
+          </div>
+          <div className={`absolute ${is4F ? "inset-[39.57%_67.44%_47.61%_32.56%]" : "inset-[71.54%_67.44%_15.65%_32.56%]"}`} id={is4F ? "node-65_3279" : "node-65_3256"} data-name="Shape 2123">
+            <div className="absolute inset-[0_-0.5px]">
+              <img alt="" className="block max-w-none size-full" src={imgShape2123Copy} />
+            </div>
+          </div>
+        </>
+      )}
+      {is3FOr5F && (
+        <div className="absolute inset-[44.99%_1.95%_13.5%_3.43%]" id={is5F ? "node-65_3335" : "node-65_3313"} data-name="Shape 9 copy 3">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape9Copy3} />
+        </div>
+      )}
+      {is1F && (
+        <>
+          <div className="absolute inset-[44.97%_2.43%_13.57%_3.76%]" data-node-id="65:3293" data-name="Shape 2124">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape2124} />
+          </div>
+          <div className="absolute inset-[13.04%_0.8%_60.21%_1.2%]" data-node-id="65:3294" data-name="Shape 12">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape12} />
+          </div>
+        </>
+      )}
+      {is1FOr3F && (
+        <>
+          <div className={`absolute ${is3F ? "inset-[0.33%_0.59%_76.92%_0]" : "inset-[0.33%_0.59%_76.93%_0]"}`} id={is3F ? "node-65_3314" : "node-65_3295"} data-name="Shape 7">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape7} />
+          </div>
+          <div className={`absolute mix-blend-overlay ${is3F ? "inset-[35.47%_1.28%_53.31%_88.86%]" : "inset-[35.46%_1.28%_53.32%_88.86%]"}`} id={is3F ? "node-65_3317" : "node-65_3298"} data-name="Shape 2120 copy">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape2120Copy} />
+          </div>
+        </>
+      )}
+      {is1F && (
+        <>
+          <div className="absolute inset-[22.24%_67.09%_0.19%_31.46%] mix-blend-screen" data-node-id="65:3299" data-name="Shape 11">
+            <div className="absolute inset-[-0.14%_-50.16%_0_-49.89%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11} />
+            </div>
+          </div>
+          <div className="absolute inset-[21.9%_54.06%_1.7%_45.03%] mix-blend-screen" data-node-id="65:3300" data-name="Shape 11 copy">
+            <div className="absolute inset-[-0.6%_-79.97%_0_-79.95%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11Copy} />
+            </div>
+          </div>
+        </>
+      )}
+      {is3F && (
+        <>
+          <div className="absolute inset-[24.01%_0.93%_31.33%_1.54%]" data-node-id="65:3318">
+            <div className="absolute inset-[-4.47%_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgVector7} />
+            </div>
+          </div>
+          <div className="absolute inset-[22.24%_67.09%_0.17%_31.46%] mix-blend-screen" data-node-id="65:3319" data-name="Shape 11">
+            <div className="absolute inset-[-0.14%_-50.16%_0_-49.89%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11} />
+            </div>
+          </div>
+        </>
+      )}
+      {is3FOr5F && (
+        <div className="absolute inset-[23.91%_1.12%_43.81%_1.84%]" id={is5F ? "node-65_3336" : "node-65_3320"} data-name="Shape 9 copy">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={is5F ? imgShape9Copy : imgShape9Copy1} />
+        </div>
+      )}
+      {is3F && (
+        <>
+          <div className="absolute inset-[21.91%_54.06%_1.68%_45.03%] mix-blend-screen" data-node-id="65:3321" data-name="Shape 11 copy">
+            <div className="absolute inset-[-0.6%_-79.97%_0_-79.95%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11Copy} />
+            </div>
+          </div>
+          <div className="absolute inset-[55.59%_55.11%_32.63%_44.89%]" data-node-id="65:3322" data-name="Shape 2123 copy">
+            <div className="absolute inset-[0_-0.5px]">
+              <img alt="" className="block max-w-none size-full" src={imgShape2123Copy1} />
+            </div>
+          </div>
+          <div className="absolute inset-[55.55%_67.44%_31.63%_32.56%]" data-node-id="65:3323" data-name="Shape 2123">
+            <div className="absolute inset-[0_-0.5px]">
+              <img alt="" className="block max-w-none size-full" src={imgShape2123Copy} />
+            </div>
+          </div>
+        </>
+      )}
+      {is5F && (
+        <>
+          <div className="absolute inset-[13.05%_0.8%_60.2%_1.2%]" data-node-id="65:3337" data-name="Shape 12">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape12} />
+          </div>
+          <div className="absolute inset-[0.33%_0.59%_76.92%_0]" data-node-id="65:3338" data-name="Vector">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVector} />
+          </div>
+          <div className="absolute inset-[4.21%_0_64.45%_0.37%]" data-node-id="65:3339">
+            <div className="absolute inset-[-6.38%_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgVector9} />
+            </div>
+          </div>
+          <div className="absolute inset-[35.47%_1.28%_53.31%_88.85%] mix-blend-overlay" data-node-id="65:3340" data-name="Shape 2120 copy">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape2120Copy} />
+          </div>
+          <div className="absolute inset-[22.24%_67.1%_0.17%_31.46%] mix-blend-screen" data-node-id="65:3341" data-name="Shape 11">
+            <div className="absolute inset-[-0.14%_-50.16%_0_-49.89%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11} />
+            </div>
+          </div>
+          <div className="absolute inset-[21.91%_54.07%_1.68%_45.03%] mix-blend-screen" data-node-id="65:3342" data-name="Shape 11 copy">
+            <div className="absolute inset-[-0.6%_-79.97%_0_-79.95%]">
+              <img alt="" className="block max-w-none size-full" src={imgShape11Copy} />
+            </div>
+          </div>
+          <div className="absolute inset-[21.59%_55.11%_65.59%_44.89%]" data-node-id="65:3343" data-name="Shape 2123 copy">
+            <div className="absolute inset-[0_-0.5px]">
+              <img alt="" className="block max-w-none size-full" src={imgShape2123Copy} />
+            </div>
+          </div>
+          <div className="absolute inset-[22.59%_67.44%_64.59%_32.56%]" data-node-id="65:3344" data-name="Shape 2123">
+            <div className="absolute inset-[0_-0.5px]">
+              <img alt="" className="block max-w-none size-full" src={imgShape2123Copy} />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+type BtnMapProps = {
+  className?: string;
+  status?: "Idle" | "Select";
+};
+
+function BtnMap({ className, status = "Idle" }: BtnMapProps) {
+  const isIdle = status === "Idle";
+  const isSelect = status === "Select";
+  return (
+    <div className={className || `border border-solid content-stretch flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] w-[132px] ${isSelect ? "border-[#2861ff]" : "bg-[#1a1e2b] border-[#565e71]"}`} id={isSelect ? "node-65_3229" : "node-65_3221"}>
+      {isIdle && (
+        <>
+          <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="65:3222" data-name="Floor">
+            <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-white whitespace-nowrap" data-node-id="65:3223">
+              2F
+            </p>
+          </div>
+          <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="65:3224">
+            상차도크
+          </p>
+        </>
+      )}
+      {isSelect && (
+        <>
+          <div aria-hidden className="absolute bg-[#0a0a14] inset-0 pointer-events-none rounded-[2px]" />
+          <div className="border-2 border-[#9edaec] border-solid content-stretch flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="65:3230" style={{ backgroundImage: "linear-gradient(0deg, rgba(24, 54, 95, 0.902) 0%, rgba(24, 54, 95, 0.863) 21.5%, rgba(75, 108, 255, 0.816) 46.2%, rgba(75, 108, 254, 0.812) 46.3%, rgba(40, 69, 121, 0.859) 73.5%, rgba(40, 69, 121, 0.902) 100%)" }} data-name="Floor">
+            <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-white whitespace-nowrap" data-node-id="65:3231">
+              2F
+            </p>
+          </div>
+          <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[10px] text-white whitespace-nowrap" data-node-id="65:3232">
+            상차도크
+          </p>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_10px_0px_#003ce5]" />
+        </>
+      )}
+    </div>
+  );
+}
+
+type Component1Props = {
+  className?: string;
+  map?: "5F" | "1F" | "2F" | "3F" | "4F";
+};
+
+export default function Component1({ className, map = "1F" }: Component1Props) {
+  const is1FOr2FOr3F = ["1F", "2F", "3F"].includes(map);
+  const is2F = map === "2F";
+  const is3F = map === "3F";
+  const is4F = map === "4F";
+  const is5F = map === "5F";
+  return (
+    <div className={className || "h-[147.5px] relative w-[270.5px]"} id={is5F ? "node-65_3398" : is3F ? "node-65_3385" : is4F ? "node-65_3372" : is2F ? "node-65_3359" : "node-65_3346"}>
+      <div className="absolute inset-[2.93%_40.29%_0_0]" id={is5F ? "node-65_3399" : is3F ? "node-65_3386" : is4F ? "node-65_3373" : is2F ? "node-65_3360" : "node-65_3347"} data-name="Vector">
+        <div className="absolute inset-[-0.35%_-0.31%]">
+          <img alt="" className="block max-w-none size-full" src={imgVector1} />
+        </div>
+      </div>
+      <Component className={`absolute ${["2F", "4F", "3F", "5F"].includes(map) ? "inset-[19.63%_57.35%_12.5%_4.3%]" : "inset-[19.63%_57.35%_12.49%_4.3%]"}`} floor={is5F ? "5F" : is3F ? "3F" : is4F ? "4F" : is2F ? "2F" : undefined} />
+      <div className="absolute contents inset-[0_0_4.41%_41.22%]" id={is5F ? "node-65_3401" : is3F ? "node-65_3388" : is4F ? "node-65_3375" : is2F ? "node-65_3362" : "node-65_3349"}>
+        <div className="absolute content-stretch flex flex-col gap-[4px] inset-[0_0_4.41%_51.2%] items-start" id={is5F ? "node-65_3402" : is3F ? "node-65_3389" : is4F ? "node-65_3376" : is2F ? "node-65_3363" : "node-65_3350"} data-name="List">
+          {["1F", "2F", "4F", "3F"].includes(map) && (
+            <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" id={is3F ? "node-65_3390" : is4F ? "node-65_3377" : is2F ? "node-65_3364" : "node-65_3351"} data-name="Btn Map">
+              <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" id={is3F ? "node-I65_3390-65_3222" : is4F ? "node-I65_3377-65_3222" : is2F ? "node-I65_3364-65_3222" : "node-I65_3351-65_3222"} data-name="Floor">
+                <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" id={is3F ? "node-I65_3390-65_3223" : is4F ? "node-I65_3377-65_3223" : is2F ? "node-I65_3364-65_3223" : "node-I65_3351-65_3223"}>
+                  5F
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" id={is3F ? "node-I65_3390-65_3224" : is4F ? "node-I65_3377-65_3224" : is2F ? "node-I65_3364-65_3224" : "node-I65_3351-65_3224"}>
+                하차대기/주차장
+              </p>
+            </button>
+          )}
+          {is1FOr2FOr3F && (
+            <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" id={is3F ? "node-65_3391" : is2F ? "node-65_3365" : "node-65_3352"} data-name="Btn Map">
+              <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" id={is3F ? "node-I65_3391-65_3222" : is2F ? "node-I65_3365-65_3222" : "node-I65_3352-65_3222"} data-name="Floor">
+                <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" id={is3F ? "node-I65_3391-65_3223" : is2F ? "node-I65_3365-65_3223" : "node-I65_3352-65_3223"}>
+                  4F
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" id={is3F ? "node-I65_3391-65_3224" : is2F ? "node-I65_3365-65_3224" : "node-I65_3352-65_3224"}>
+                하차도크
+              </p>
+            </button>
+          )}
+          {["4F", "3F", "5F"].includes(map) && (
+            <div className="border border-[#2861ff] border-solid content-stretch flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" id={is5F ? "node-65_3403" : is3F ? "node-65_3392" : "node-65_3378"} data-name="Btn Map">
+              <div aria-hidden className="absolute bg-[#0a0a14] inset-0 pointer-events-none rounded-[2px]" />
+              <div className="border-2 border-[#9edaec] border-solid content-stretch flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" id={is5F ? "node-I65_3403-65_3230" : is3F ? "node-I65_3392-65_3230" : "node-I65_3378-65_3230"} style={{ backgroundImage: "linear-gradient(0deg, rgba(24, 54, 95, 0.902) 0%, rgba(24, 54, 95, 0.863) 21.5%, rgba(75, 108, 255, 0.816) 46.2%, rgba(75, 108, 254, 0.812) 46.3%, rgba(40, 69, 121, 0.859) 73.5%, rgba(40, 69, 121, 0.902) 100%)" }} data-name="Floor">
+                <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-white whitespace-nowrap" id={is5F ? "node-I65_3403-65_3231" : is3F ? "node-I65_3392-65_3231" : "node-I65_3378-65_3231"}>
+                  {is5F ? "5F" : is3F ? "3F" : is4F ? "4F" : ""}
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[10px] text-white whitespace-nowrap" id={is5F ? "node-I65_3403-65_3232" : is3F ? "node-I65_3392-65_3232" : "node-I65_3378-65_3232"}>
+                {is5F ? "하차대기/주차장" : is3F ? "상차대기" : is4F ? "하차도크" : ""}
+              </p>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_10px_0px_#003ce5]" />
+            </div>
+          )}
+          {is1FOr2FOr3F && (
+            <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" id={is3F ? "node-65_3393" : is2F ? "node-65_3366" : "node-65_3353"} data-name="Btn Map">
+              <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" id={is3F ? "node-I65_3393-65_3222" : is2F ? "node-I65_3366-65_3222" : "node-I65_3353-65_3222"} data-name="Floor">
+                <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" id={is3F ? "node-I65_3393-65_3223" : is2F ? "node-I65_3366-65_3223" : "node-I65_3353-65_3223"}>
+                  {is3F ? "2F" : is2F ? "3F" : "3F"}
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" id={is3F ? "node-I65_3393-65_3224" : is2F ? "node-I65_3366-65_3224" : "node-I65_3353-65_3224"}>
+                {is3F ? "상차도크" : is2F ? "상차대기" : "상차대기"}
+              </p>
+            </button>
+          )}
+          {["1F", "3F"].includes(map) && (
+            <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" id={is3F ? "node-65_3394" : "node-65_3354"} data-name="Btn Map">
+              <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" id={is3F ? "node-I65_3394-65_3222" : "node-I65_3354-65_3222"} data-name="Floor">
+                <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" id={is3F ? "node-I65_3394-65_3223" : "node-I65_3354-65_3223"}>
+                  {is3F ? "1F" : "2F"}
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" id={is3F ? "node-I65_3394-65_3224" : "node-I65_3354-65_3224"}>
+                상차도크
+              </p>
+            </button>
+          )}
+          {map === "1F" && (
+            <div className="border border-[#2861ff] border-solid content-stretch flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3355" data-name="Btn Map">
+              <div aria-hidden className="absolute bg-[#0a0a14] inset-0 pointer-events-none rounded-[2px]" />
+              <div className="border-2 border-[#9edaec] border-solid content-stretch flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3355;65:3230" style={{ backgroundImage: "linear-gradient(0deg, rgba(24, 54, 95, 0.902) 0%, rgba(24, 54, 95, 0.863) 21.5%, rgba(75, 108, 255, 0.816) 46.2%, rgba(75, 108, 254, 0.812) 46.3%, rgba(40, 69, 121, 0.859) 73.5%, rgba(40, 69, 121, 0.902) 100%)" }} data-name="Floor">
+                <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-white whitespace-nowrap" data-node-id="I65:3355;65:3231">
+                  1F
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[10px] text-white whitespace-nowrap" data-node-id="I65:3355;65:3232">
+                상차도크
+              </p>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_10px_0px_#003ce5]" />
+            </div>
+          )}
+          {is2F && (
+            <>
+              <BtnMap className="border border-[#2861ff] border-solid content-stretch flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" status="Select" />
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3368" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3368;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3368;65:3223">
+                    1F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3368;65:3224">
+                  상차도크
+                </p>
+              </button>
+            </>
+          )}
+          {is4F && (
+            <>
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3379" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3379;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3379;65:3223">
+                    3F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3379;65:3224">
+                  상차대기
+                </p>
+              </button>
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3380" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3380;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3380;65:3223">
+                    2F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3380;65:3224">
+                  상차도크
+                </p>
+              </button>
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3381" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3381;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3381;65:3223">
+                    1F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3381;65:3224">
+                  상차도크
+                </p>
+              </button>
+            </>
+          )}
+          {is5F && (
+            <>
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3404" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3404;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3404;65:3223">
+                    4F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3404;65:3224">
+                  하차도크
+                </p>
+              </button>
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3405" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3405;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3405;65:3223">
+                    3F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3405;65:3224">
+                  상차대기
+                </p>
+              </button>
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3406" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3406;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3406;65:3223">
+                    2F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3406;65:3224">
+                  상차도크
+                </p>
+              </button>
+              <button className="bg-[#1a1e2b] border border-[#565e71] border-solid content-stretch cursor-pointer flex gap-[10px] h-[25px] items-center pl-[5px] relative rounded-[2px] shrink-0 w-[132px]" data-node-id="65:3407" data-name="Btn Map">
+                <div className="bg-[#414a64] content-stretch drop-shadow-[2.828px_2.828px_0px_rgba(0,0,0,0.35)] flex h-[16px] items-center justify-center relative shrink-0 w-[34px]" data-node-id="I65:3407;65:3222" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Dinbol:Regular'] leading-[normal] not-italic relative shrink-0 text-[11px] text-left text-white whitespace-nowrap" data-node-id="I65:3407;65:3223">
+                    1F
+                  </p>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[10px] text-[rgba(255,255,255,0.5)] text-left whitespace-nowrap" data-node-id="I65:3407;65:3224">
+                  상차도크
+                </p>
+              </button>
+            </>
+          )}
+        </div>
+        <div className={`absolute ${is5F ? "inset-[6.49%_47.32%_74.92%_41.22%]" : is3F ? "inset-[40%_47.32%_50.12%_41.22%]" : is4F ? "inset-[26.16%_47.32%_67.46%_41.22%]" : is2F ? "inset-[46.78%_47.32%_30.45%_41.22%]" : "inset-[54.24%_47.32%_11.47%_41.22%]"}`} id={is5F ? "node-65_3408" : is3F ? "node-65_3395" : is4F ? "node-65_3382" : is2F ? "node-65_3369" : "node-65_3356"} data-name="Visual">
+          <div className={`absolute ${is5F ? "inset-[0_0_-1.82%_0]" : is3F ? "inset-[-3.43%_0_0_0]" : is4F ? "inset-[0_0_-5.31%_0]" : is2F ? "inset-[-1.49%_0_0_0]" : "inset-[-0.99%_0_0_0]"}`}>
+            <img alt="" className="block max-w-none size-full" src={is5F ? imgVisual4 : is3F ? imgVisual3 : is4F ? imgVisual2 : is2F ? imgVisual1 : imgVisual} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

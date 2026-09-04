@@ -219,8 +219,8 @@ const seenHash = new Set(), seenName = new Set();
     });
   });
 
-/* 4-c) 패널 컨테이너 */
-PANELS.forEach((p) => cats.panels.push({ id: p.id, name: p.name, fig: p.src, src: 'src/icheon-assets/' + p.file }));
+/* 4-c) 패널 컨테이너 — 라이트 시안(이천 main)의 CSS 값으로 만든 밝은 판이므로 컴포넌트와 같은 light 취급 */
+PANELS.forEach((p) => cats.panels.push({ id: p.id, name: p.name, fig: p.src, src: 'src/icheon-assets/' + p.file, light: true }));
 
 const mod = [
   '/* 자동 생성물 — 이천 FMS 두 화면(Figma 64:3367 · 64:4059)의 에셋 라이브러리 등록 목록.',
