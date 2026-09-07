@@ -1377,6 +1377,136 @@
     });
   }
 
+  /* ══════════════════ 6-k. 건물 조감도 — 옮겨 보고 키워 보기 ══════════════════
+     통합관제 한가운데 3D 렌더(`#hjc-Asset_2` = building-image.png)를 지도 다루듯 본다.
+     **돌리지는 않는다** — 한 장짜리 평면이라 어떻게 돌려도(회전이든 깊이 시차든) 일그러진다.
+     · **호버는 무반응**, **왼쪽 버튼 드래그**로 이동, **휠**로 확대·축소(0.6~3배), **더블클릭**이면 제자리.
+     · 휠은 **커서가 가리키는 지점을 붙잡고** 키운다 — 보려던 곳이 화면 밖으로 밀려나지 않는다.
+     · 시안이 통째로 늘어나 있어도 손에 딱 붙도록, 움직인 화면 픽셀을 배치 좌표로 환산해서 옮긴다
+       (`rect.width / clientWidth`).
+     · **자르지 않는다.** 이 그림은 배경 층이라 판 밖으로 나간 부분은 위에 얹힌 판들 아래로 자연스럽게
+       미끄러진다. 잘라 두면 허공에 직선으로 잘린 자국이 남는다.
+     · 옮길 수 있는 범위는 판 크기의 ±30%(배율에 비례) — 끌다가 그림을 아주 놓치지 않게.
+     · 제자리(0,0 · 1배)면 `transform` 을 아예 지운다 → 원본과 픽셀 동일.
+     · 패널편집 중에는 잡지 않는다. */
+  var VIEW = { min: 0.6, max: 3, wheel: 0.0014, room: 0.30 };
+
+  function installBuildingPan(root, st) {
+    var img = one(root, '[data-name="Building Image"] img');
+    if (!img) return;
+    var box = img.parentElement;
+    if (!box) return;
+
+    var old = {
+      pe: box.style.pointerEvents, cur: box.style.cursor, ta: box.style.touchAction,
+      ipe: img.style.pointerEvents, itr: img.style.transition,
+    };
+    box.style.pointerEvents = 'auto';         /* 원본 CSS 는 그림이 pointer-events:none 이다 */
+    box.style.cursor = 'grab';
+    box.style.touchAction = 'none';
+    img.style.pointerEvents = 'auto';
+
+    var tx = 0, ty = 0, zoom = 1, drag = null, af = 0, anim = false;
+
+    /* 시안이 화면에 맞춰 통째로 늘어나 있다 — 화면 1px 이 배치 좌표로 몇 px 인지 */
+    var stageScale = function () {
+      var r = box.getBoundingClientRect();
+      var w = box.clientWidth || 1;
+      return r.width ? r.width / w : 1;
+    };
+    var hold = function () {
+      var rx = (box.clientWidth || 1605) * VIEW.room * zoom;
+      var ry = (box.clientHeight || 586) * VIEW.room * zoom;
+      tx = clamp(tx, -rx, rx);
+      ty = clamp(ty, -ry, ry);
+    };
+    var paint = function () {
+      af = 0;
+      img.style.transition = anim ? 'transform .2s cubic-bezier(.22,.9,.24,1)' : 'none';
+      if (!tx && !ty && Math.abs(zoom - 1) < 0.002) { img.style.transform = ''; return; }
+      img.style.transform = 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) scale(' + zoom.toFixed(4) + ')';
+    };
+    /* 한 프레임에 한 번만 그린다 */
+    var draw = function (smooth) {
+      anim = !!smooth;
+      if (!af) af = requestAnimationFrame(paint);
+    };
+
+    var down = function (e) {
+      if (editing() || e.button !== 0) return;           /* 왼쪽 버튼만 */
+      drag = { id: e.pointerId, x: e.clientX, y: e.clientY, tx: tx, ty: ty, k: stageScale() };
+      box.style.cursor = 'grabbing';
+      try { box.setPointerCapture(e.pointerId); } catch (err) { }
+      e.preventDefault();                                /* 그림이 통째로 끌려가는 기본 동작을 막는다 */
+    };
+    var move = function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      tx = drag.tx + (e.clientX - drag.x) / drag.k;      /* 끄는 동안은 손에 딱 붙게 — 지연 없음 */
+      ty = drag.ty + (e.clientY - drag.y) / drag.k;
+      hold();
+      draw(false);
+    };
+    var up = function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      try { box.releasePointerCapture(drag.id); } catch (err) { }
+      drag = null;
+      box.style.cursor = 'grab';
+    };
+    var wheel = function (e) {
+      if (editing()) return;
+      e.preventDefault();                                /* 화면이 같이 스크롤되지 않게 */
+      /* deltaMode 가 줄(1)·쪽(2)인 브라우저도 있어 픽셀로 환산한 뒤 배율에 곱한다 */
+      var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1);
+      var z2 = clamp(zoom * Math.exp(-d * VIEW.wheel), VIEW.min, VIEW.max);
+      if (z2 === zoom) return;
+      /* 커서 밑에 있던 지점을 그 자리에 붙잡아 둔다 */
+      var k = stageScale();
+      var r = box.getBoundingClientRect();
+      var cx = (e.clientX - (r.left + r.width / 2)) / k;
+      var cy = (e.clientY - (r.top + r.height / 2)) / k;
+      tx = tx + (cx - tx) / zoom * (zoom - z2);
+      ty = ty + (cy - ty) / zoom * (zoom - z2);
+      zoom = z2;
+      hold();
+      draw(true);
+    };
+    var reset = function (e) {
+      if (editing()) return;
+      tx = 0; ty = 0; zoom = 1;
+      draw(true);
+      e.preventDefault();
+    };
+    var nodrag = function (e) { e.preventDefault(); };
+    var loose = function () { if (drag) { drag = null; box.style.cursor = 'grab'; } };
+
+    box.addEventListener('pointerdown', down);
+    box.addEventListener('pointermove', move);
+    box.addEventListener('pointerup', up);
+    box.addEventListener('pointercancel', up);
+    box.addEventListener('wheel', wheel, { passive: false });
+    box.addEventListener('dblclick', reset);
+    box.addEventListener('dragstart', nodrag);
+    window.addEventListener('blur', loose);
+
+    st.cleanup.push(function () {
+      box.removeEventListener('pointerdown', down);
+      box.removeEventListener('pointermove', move);
+      box.removeEventListener('pointerup', up);
+      box.removeEventListener('pointercancel', up);
+      box.removeEventListener('wheel', wheel);
+      box.removeEventListener('dblclick', reset);
+      box.removeEventListener('dragstart', nodrag);
+      window.removeEventListener('blur', loose);
+      if (af) cancelAnimationFrame(af);
+      img.style.transform = '';
+      img.style.transition = old.itr;
+      img.style.pointerEvents = old.ipe;
+      box.style.pointerEvents = old.pe;
+      box.style.cursor = old.cur;
+      box.style.touchAction = old.ta;
+    });
+  }
+
   /* ══════════════════ 6-h. 헤더 메뉴 — 화면 이동 ══════════════════
      · `대시보드` → 통합관제(메인) 화면
      · `통합관제` → 드롭다운 펼치기/접기. 하위 화면에는 원본에 드롭다운이 없어 conv.js 가 메인 것을
@@ -1621,6 +1751,7 @@
     try { installMenu(root, st); } catch (e) { }
     try { installSearch(root, st); } catch (e) { }
     try { installRadioChip(root, st); } catch (e) { }
+    try { installBuildingPan(root, st); } catch (e) { }
     return st;
   }
 

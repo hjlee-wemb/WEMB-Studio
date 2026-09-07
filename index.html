@@ -11552,8 +11552,9 @@
         display: block;
       }
       .libtabs {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        /* 탭이 다섯이라 한 줄에 다 못 들어간다 — 넘치면 다음 줄로 흐르게 둔다 */
+        display: flex;
+        flex-wrap: wrap;
         gap: 4px;
         margin: 4px 0 8px;
         padding: 3px;
@@ -11562,6 +11563,7 @@
         border-radius: 10px;
       }
       .libtabs button {
+        flex: 1 1 auto;
         padding: 7px 4px;
         border: 0;
         border-radius: 7px;
@@ -11650,6 +11652,47 @@
         height: 100%;
         object-fit: contain;
         pointer-events: none;
+      }
+      /* ── 한진 화면 컴포넌트(살아 있는 DOM) 에셋 ──
+         시안 CSS(.hjX-root …)를 그대로 쓰되, 화면 뿌리가 갖는 '화면 전체를 덮는' 성질만 끈다.
+         배경도 끄므로 썸네일 바탕은 투명하다 — 컴포넌트 자신의 면색만 보인다. */
+      .hj-asset.hjc-root,
+      .hj-asset.hjg-root,
+      .hj-asset.hju-root {
+        position: relative;
+        inset: auto;
+        overflow: visible;
+        background: none;
+        z-index: auto;
+        flex: 0 0 auto;
+        transform: scale(var(--k, 1));
+        transform-origin: center center;
+      }
+      /* 컴포넌트 뿌리는 화면 좌표에 절대배치돼 있다 — 그 자리 지정만 풀고 속은 그대로 둔다 */
+      .hj-asset > * {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        margin: 0 !important;
+        transform: none !important;
+      }
+      .libitem .thumb.domhost {
+        padding: 6px;
+        overflow: hidden;
+      }
+      /* 화면·패널에 넣은 한진 에셋 — 가로에 맞춰 줄이고 높이는 줄어든 만큼만 차지한다 */
+      .hj-embed {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        width: 100%;
+      }
+      .hj-embed .hj-asset {
+        transform-origin: center center;
       }
       /* SK하이닉스 Figma 레이어 → 인라인 SVG(코드) 에셋 */
       .libitem .thumb.fighost {
@@ -15612,6 +15655,7 @@
               <button type="button" data-lib="symbol">심볼</button>
               <button type="button" data-lib="icon">아이콘</button>
               <button type="button" data-lib="panel">패널</button>
+              <button type="button" data-lib="event">이벤트 패널</button>
             </div>
             <div class="libgrid" id="libGrid" data-theme="dark" aria-label="에셋 라이브러리"></div>
             </div><!-- /dsec panels -->
@@ -17397,6 +17441,7 @@
     <!-- 한진 SMART 통합관제 화면 3장(HTML/CSS DOM 재구축) — Figma A11hAZefK5FSuEE9MagOgj
          Control Main 65:429 · Gate Status 65:943 · Unload Status 65:2243.
          글자는 편집 가능한 실제 텍스트, 아이콘·그래픽만 원본에서 내려받은 개별 에셋(src/hanjin/). -->
+    <script src="src/hanjin-assets.js?v=1"></script>
     <script src="src/hanjin-control.js?v=1"></script>
     <script src="src/hanjin-gate.js?v=1"></script>
     <script src="src/hanjin-unload.js?v=1"></script>
@@ -27206,22 +27251,147 @@ ${wembTipRuntime()}
              (생성기: src/icheon-assets/_gen/mk-assets.js) */
           const ICH = window.__ICHEON_ASSETS || { charts: [], symbols: [], icons: [], panels: [] };
           const ichItems = (arr, cat) => (arr || []).map((a) => ({ cat: cat, id: a.id, name: a.name, fig: a.fig, src: a.src, light: a.light }));
+          /* 이벤트 패널 탭 등록 기준 — 이름에 '이벤트'가 들어간 등록물(이벤트 목록·이벤트 로그 …) */
+          const isEventNamed = (it) => /이벤트/.test(String(it && it.name));
           /* 아이콘 탭 등록 기준 — 이름이 '…아이콘'인 것만 아이콘으로 본다 */
           const isIconNamed = (it) => /아이콘/.test(String(it.name));
           /* 라벨에서 '아이콘' 꼬리표는 뺀다 — 아이콘 탭 안에서는 군더더기다.
              (툴팁·검색은 원래 이름을 그대로 쓰므로 '아이콘'으로도 찾을 수 있다) */
           const lname = (s) => String(s).replace(/아이콘/g, '').replace(/\s+/g, ' ').trim() || String(s);
 
+          /* ── 한진 SMART 통합관제 3화면의 컴포넌트 에셋 ──
+             그림 파일이 아니라 **화면 DOM 을 그대로 잘라 쓴다**(src/hanjin-assets.js = 등록 목록).
+             · 이 시안의 이벤트 현황 판은 화면 밖으로 269px 나가 있어 Figma 내보내기가 61px 만 준다.
+               재구축한 화면에는 온전한 DOM 이 있으니 거기서 노드 id 로 잘라 오는 편이 정확하다.
+             · 글자가 실제 텍스트 그대로라 '패널편집'으로 고칠 수 있고, 화면 테마(다크/라이트)와
+               '색 정하기'가 라이브러리 썸네일에도 똑같이 먹는다.
+             · 시트는 스튜디오가 시안을 얹을 때 쓰는 것과 같은 style#hjX-style 로 한 번만 붙인다
+               (`.hjX-root` 안으로 스코프돼 있어 라이브러리 밖으로 새지 않는다). */
+          const HJ = window.__HANJIN_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+          const hjHtmlCache = {};
+          function hjScreenHtml(px) {
+            if (hjHtmlCache[px]) return hjHtmlCache[px];
+            const S = (HJ.screens || {})[px];
+            const build = S && window[S.build];
+            if (typeof build !== 'function') return (hjHtmlCache[px] = '');
+            /* 시트도 이때 한 번만 — 다크가 먼저, 라이트가 뒤(오버라이드 순서) */
+            [[px + '-style', window[S.css]], [px + '-light-style', window[S.light]]].forEach((p) => {
+              if (!p[1] || document.getElementById(p[0])) return;
+              const st = document.createElement('style');
+              st.id = p[0];
+              st.textContent = p[1];
+              document.head.appendChild(st);
+            });
+            return (hjHtmlCache[px] = build(HJ.base || 'src/hanjin/'));
+          }
+          /* 노드 하나의 서브트리를 잘라 낸다(여는/닫는 태그 짝 세기) */
+          const hjSubCache = {};
+          function hjSub(px, nid) {
+            const key = px + '|' + nid;
+            if (hjSubCache[key] != null) return hjSubCache[key];
+            const html = hjScreenHtml(px);
+            const at = html.indexOf('data-node-id="' + nid + '"');
+            if (at < 0) return (hjSubCache[key] = '');
+            const start = html.lastIndexOf('<', at);
+            const tag = (/^<([a-zA-Z0-9]+)/.exec(html.slice(start, start + 20)) || [])[1];
+            if (!tag) return (hjSubCache[key] = '');
+            const open = new RegExp('<' + tag + '(?=[\\s>])', 'g');
+            const close = new RegExp('</' + tag + '>', 'g');
+            let depth = 0, i = start;
+            while (i < html.length) {
+              open.lastIndex = i; close.lastIndex = i;
+              const o = open.exec(html), c = close.exec(html);
+              if (!c) break;
+              if (o && o.index < c.index) { depth++; i = o.index + 1; continue; }
+              depth--; i = c.index + 1;
+              if (depth === 0) return (hjSubCache[key] = html.slice(start, c.index + c[0].length));
+            }
+            return (hjSubCache[key] = '');
+          }
+          /* 에셋 하나를 감싸 그린다 — 크기는 Figma 값 그대로, 자리는 .hj-asset 이 잡는다 */
+          function hjDom(it, theme) {
+            const inner = hjSub(it.px, it.nid);
+            if (!inner) return '';
+            const th = theme || (grid.dataset.theme === 'light' ? 'light' : 'dark');
+            return '<div class="' + it.px + '-root hj-asset" data-theme="' + th + '" data-hjw="' + it.w + '" data-hjh="' + it.h + '"'
+              + ' style="width:' + it.w + 'px;height:' + it.h + 'px">' + inner + '</div>';
+          }
+          const hjItems = (arr, cat) => (arr || []).map((a) => ({
+            cat: cat, id: a.id, name: a.name, fig: a.fig, px: a.px, nid: a.nid, w: a.w, h: a.h, dom: true,
+          }));
+          const hjIcons = (arr, cat) => (arr || []).map((a) => ({ cat: cat, id: a.id, name: a.name, fig: a.fig, src: a.src }));
+          /* 담는 상자에 맞춰 배율을 잡는다(썸네일·삽입 공통). 원본 비율 그대로 줄이기만 한다. */
+          function hjFit(root) {
+            (root || document).querySelectorAll('.hj-asset').forEach((el) => {
+              const box = el.parentElement;
+              if (!box) return;
+              const bw = box.clientWidth, bh = box.clientHeight;
+              const w = +el.dataset.hjw || el.offsetWidth || 1;
+              const h = +el.dataset.hjh || el.offsetHeight || 1;
+              if (!bw || !w || !h) return;
+              if (box.classList.contains('hj-embed')) return;   /* 삽입 자리는 hjEmbedFit 이 맡는다 */
+              const pad = 12;
+              const kw = (bw - pad) / w, kh = (bh - pad) / h;
+              let k, origin = 'center center';
+              {
+                /* 썸네일: 보통은 통째로 보이게 맞추고(fit), 이벤트 헤더(1800x28)처럼 상자와 비율이
+                   크게 어긋나는 것만 채워서 자른다(cover) — 안 그러면 실오라기 한 줄로 보인다.
+                   자를 때는 왼쪽부터 — 판의 제목·머리글이 그쪽에 있어 알아보기 쉽다. */
+                /* 칩·배지처럼 작은 것은 조금 키워도 된다(벡터·실제 글자라 흐려지지 않는다) */
+                const cap = 1.8;
+                const fit = Math.min(kw, kh), cover = Math.min(Math.max(kw, kh), cap);
+                k = Math.min(cover / fit > 2.6 ? cover : fit, cap);
+                if (w * k > bw - pad + 1) origin = 'left center';
+              }
+              k = Math.max(0.02, k);
+              el.style.setProperty('--k', k.toFixed(4));
+              el.style.transformOrigin = origin;
+              /* 잘라서 보여줄 때는 상자 왼쪽에 붙여야 한다 — 가운데 정렬로 두면 원본 폭(1840px)의
+                 절반이 상자 왼쪽 밖으로 나가 있어, 왼쪽 기준으로 줄여도 빈 곳만 보인다. */
+              box.style.justifyContent = origin === 'left center' ? 'flex-start' : 'center';
+            });
+          }
+          /* 패널·화면에 넣은 에셋은 **폭**부터 맞춘다. transform 은 레이아웃 상자를 그대로 둬서
+             1840px 짜리 판을 넣으면 슬롯이 그만큼 넓어져 패널 밖으로 삐져나간다 → zoom 으로 줄인다
+             (zoom 은 레이아웃까지 줄어든다). 높이는 그 뒤 스튜디오의 기존 맞춤(FIT_H)이 이어받는다. */
+          function hjEmbedFit(root) {
+            (root || document).querySelectorAll('.hj-embed .hj-asset').forEach((el) => {
+              const w = +el.dataset.hjw || el.offsetWidth || 1;
+              const host = el.closest('.assetrow') || el.closest('.addedbody') || el.closest('.panel');
+              const bw = host ? host.clientWidth : 0;
+              if (!bw || !w) return;
+              el.style.zoom = Math.min(1, (bw - 8) / w).toFixed(4);
+            });
+          }
+          window.__hjFitEmbeds = hjEmbedFit;
+          window.__hjFitAssets = hjFit;
+          window.addEventListener('resize', () => { hjFit(); hjEmbedFit(); });
+          /* 라이브러리가 접혀 있을 때 그린 썸네일은 상자 크기가 0이라 배율을 못 잡는다 —
+             펼쳐져 크기가 잡히는 순간 다시 맞춘다(사이드바 폭이 바뀔 때도 같이). */
+          if (window.ResizeObserver) {
+            let pending = 0;
+            new ResizeObserver(() => {
+              if (pending) return;
+              pending = requestAnimationFrame(() => { pending = 0; hjFit(grid); });
+            }).observe(grid);
+          }
+
           const CATS = {
             chart: [],
             /* SK하이닉스 패널(콘텐츠를 감싸는 카드/섹션) — 인라인 SVG 에셋 */
             /* 패널 탭은 '카드'만 노출 (보드·바 제외) */
             panel: skxItems((SKX.panels || []).filter((a) => String(a.name).split('/').pop().trim() === 'card'), 'panel')
-              .concat(ichItems(ICH.panels, 'panel')),
+              .concat(ichItems((ICH.panels || []).filter((a) => !isEventNamed(a)), 'panel'))
+              .concat(hjItems(HJ.panels, 'panel')),
+            /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리들.
+               한진 시안의 이벤트 현황(판·머리글·카운트·표·행·등급 배지)과 이천 FMS 의 이벤트 목록이 함께 산다. */
+            event: hjItems(HJ.events, 'event')
+              .concat(ichItems((ICH.panels || []).filter(isEventNamed), 'event')),
             symbol: (window.__WEMB_SYMBOLS || [])
               .map((s, i) => ({ cat: 'symbol', id: s.i, name: '심볼 ' + String(i + 1).padStart(2, '0'), src: s.s }))
               .concat(skxItems(SKX.symbols, 'symbol'))
-              .concat(ichItems(ICH.symbols, 'symbol')),
+              .concat(ichItems(ICH.symbols, 'symbol'))
+              .concat(hjItems(HJ.symbols, 'symbol')),
             icon: [
               { id: 'home', name: '홈' },
               { id: 'chart', name: '차트' },
@@ -27245,7 +27415,8 @@ ${wembTipRuntime()}
                  화살표·로고처럼 아이콘이 아닌 부품이 아이콘 탭에 섞이지 않게. 위 기본 라인
                  아이콘 세트는 그대로 둔다. */
               .concat(skxItems(SKX.icons, 'icon').filter(isIconNamed))
-              .concat(ichItems(ICH.icons, 'icon').filter(isIconNamed)),
+              .concat(ichItems(ICH.icons, 'icon').filter(isIconNamed))
+              .concat(hjIcons(HJ.icons, 'icon')),
             /* 검색 결과 임시 버킷 — data-cat="__search" 로 클릭/드래그가 여기서 항목을 찾는다 */
             __search: [],
           };
@@ -27404,6 +27575,8 @@ ${wembTipRuntime()}
             (SKX.charts || []).forEach((a) => add(a.id, skxDispName(a.name), skxWithAnim(a.id, a.html)));
             /* 이천 FMS 두 화면의 차트 그래픽 — Figma 원본 파일 그대로 */
             (ICH.charts || []).forEach((a) => items.push({ cat: 'chart', id: a.id, name: a.name, fig: a.fig, src: a.src, light: a.light }));
+            /* 한진 통합관제 3화면의 차트 — 화면 DOM 그대로 */
+            hjItems(HJ.charts, 'chart').forEach((a) => items.push(a));
             return items;
           }
 
@@ -27412,7 +27585,11 @@ ${wembTipRuntime()}
             catKey = catKey || it.cat; /* 검색 렌더 시 '__search' 로 넘겨 클릭/드래그 조회를 맞춘다 */
             let inner = '';
             let cls = '';
-            if (it.html && (it.cat === 'symbol' || it.cat === 'icon' || it.cat === 'panel')) {
+            if (it.dom) {
+              /* 한진 화면 컴포넌트 — 살아 있는 DOM 을 그대로(배율만 hjFit 이 잡는다) */
+              cls = it.cat === 'icon' ? 'ico' : it.cat === 'symbol' ? 'sym' : 'pnl';
+              inner = `<div class="thumb domhost">${hjDom(it)}</div>`;
+            } else if (it.html && (it.cat === 'symbol' || it.cat === 'icon' || it.cat === 'panel')) {
               /* Figma에서 변환된 인라인 SVG(코드) 에셋 — 심볼/아이콘/패널 탭 */
               cls = it.cat === 'icon' ? 'ico' : it.cat === 'panel' ? 'pnl' : 'sym';
               inner = `<div class="thumb fighost fighost-${it.cat}">${it.html}</div>`;
@@ -27438,6 +27615,9 @@ ${wembTipRuntime()}
 
           /* 화면에 삽입될 패널 본문 */
           function panelHtml(it) {
+            if (it.dom) {
+              return `<div class="ph"><h3>${esc(it.name)}</h3></div><div class="addedbody symbody"><div class="hj-embed">${hjDom(it, state.mode === 'light' ? 'light' : 'dark')}</div></div>`;
+            }
             if (it.html && (it.cat === 'symbol' || it.cat === 'icon' || it.cat === 'panel')) {
               return `<div class="ph"><h3>${esc(it.name)}</h3></div><div class="addedbody symbody"><div class="symwrap fighost fighost-${it.cat} fig-embed">${it.html}</div></div>`;
             }
@@ -27456,6 +27636,7 @@ ${wembTipRuntime()}
 
           /* 에셋의 시각 요소만 (기존 패널 '안'에 덧붙일 때 사용) */
           function assetVisual(it) {
+            if (it.dom) return `<div class="hj-embed">${hjDom(it, state.mode === 'light' ? 'light' : 'dark')}</div>`;
             if (it.html && (it.cat === 'symbol' || it.cat === 'icon' || it.cat === 'panel')) return `<div class="fighost fighost-${it.cat} fig-embed">${it.html}</div>`;
             if (it.cat === 'symbol') return `<div class="symwrap"><img src="${it.src}" alt="${esc(it.name)}" draggable="false"></div>`;
             if (it.src) return `<div class="figimg-embed"><img src="${it.src}" alt="${esc(it.name)}" draggable="false"></div>`;
@@ -27466,6 +27647,7 @@ ${wembTipRuntime()}
 
           /* 에셋의 '원본 시각 요소'만 (래퍼 없이 SVG/IMG 코드) — 외부에서 크기를 직접 잡을 때 사용 */
           function rawVisual(it) {
+            if (it.dom) return hjDom(it, state.mode === 'light' ? 'light' : 'dark');
             if (it.html && (it.cat === 'symbol' || it.cat === 'icon' || it.cat === 'panel')) return it.html;
             if (it.src) return `<img src="${it.src}" alt="" draggable="false">`;
             if (it.cat === 'icon') return iconSvg(ICONS[it.id] || '');
@@ -27601,7 +27783,10 @@ ${wembTipRuntime()}
           /* 패널 하나에 넣을 에셋 수 상한 — 넘으면 다음 패널로 넘겨 아래로만 길어지는 걸 막는다 */
           const MAX_SLOTS = 3;
           function place(it, targetPanel) {
-            if (it && it.cat === 'panel') return addPanelItem(it, targetPanel);
+            /* '패널' 카테고리 중에서도 카드 컨테이너(빈 프레임)만 새 .panel 로 세운다.
+               한진 위젯처럼 그 자체가 완성된 판인 DOM 에셋은 다른 에셋과 같이 패널 '안'에 넣는다 —
+               빈 카드 프레임으로 세우면 그릴 프레임이 없어 빈 판만 생긴다. */
+            if (it && it.cat === 'panel' && !it.dom) return addPanelItem(it, targetPanel);
             const cols = activeCols();
             if (!cols) {
               if (typeof toast === 'function') toast('이 화면에서는 에셋 삽입을 지원하지 않아요.', { type: 'err' });
@@ -27653,7 +27838,10 @@ ${wembTipRuntime()}
             wrap.querySelector('.assetrow').appendChild(slot);
             /* 원본 그대로면 화면에 비해 너무 크다 — 넣는 순간 기준 높이에 맞춰 줄여 둔다.
                (그림이 늦게 로드되면 높이를 다시 재야 하므로 load 뒤에도 한 번 더 맞춘다) */
-            const fitOnce = () => window.__wembFitAsset && window.__wembFitAsset(slot);
+            const fitOnce = () => {
+              hjEmbedFit(slot);                       /* 한진 DOM 에셋은 폭부터(zoom) — 슬롯이 넓어지지 않게 */
+              if (window.__wembFitAsset) window.__wembFitAsset(slot);
+            };
             requestAnimationFrame(fitOnce);
             slot.querySelectorAll('img').forEach((im) => { if (!im.complete) im.addEventListener('load', fitOnce, { once: true }); });
             ensureDelBtns();
@@ -27667,6 +27855,7 @@ ${wembTipRuntime()}
             if (cat === 'chart') CATS.chart = buildChartItems();
             grid.innerHTML = CATS[cat].map((it, i) => thumbHtml(it, i)).join('');
             themeThumbs();
+            hjFit(grid);
           }
 
           /* ── 검색 — 라이브러리 맨 위 검색창. 입력하면 전체 카테고리에서 이름으로 필터 ── */
@@ -27677,7 +27866,7 @@ ${wembTipRuntime()}
           /* 모든 카테고리의 항목을 하나로 모은다(차트는 화면 캡처라 매번 새로 구성) */
           function allItems() {
             CATS.chart = buildChartItems();
-            return [].concat(CATS.chart, CATS.symbol, CATS.icon, CATS.panel);
+            return [].concat(CATS.chart, CATS.symbol, CATS.icon, CATS.panel, CATS.event);
           }
           function renderSearch(q) {
             const items = allItems().filter((it) => String(it.name).toLowerCase().includes(q));
@@ -27686,6 +27875,7 @@ ${wembTipRuntime()}
               ? items.map((it, i) => thumbHtml(it, i, '__search')).join('')
               : `<div class="libempty">'${esc(searchInput.value.trim())}'에 해당하는 에셋이 없어요.</div>`;
             themeThumbs();
+            hjFit(grid);
           }
           /* 검색어가 있으면 검색 결과, 없으면 현재 탭을 렌더 */
           function applyView() {
@@ -27744,6 +27934,7 @@ ${wembTipRuntime()}
             const host = el.classList.contains('assetslot') ? (el.querySelector('.avis') || el) : el;
             if (host.classList.contains('apc-lib')) host.innerHTML = vis;
             else host.innerHTML = '<span class="apc-lib" style="width:100%;height:100%;display:inline-flex">' + vis + '</span>';
+            hjEmbedFit(el);
             el.classList.add('swap-just');
             setTimeout(() => el.classList.remove('swap-just'), 600);
           }
