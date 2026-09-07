@@ -192,7 +192,9 @@
     if (!root.dataset.theme) root.dataset.theme = 'light';   /* Figma 원본이 Light 시안 */
 
     var timers = [];
-    var every = function (ms, fn) { var id = setInterval(function () { if (!root.isConnected) return stop(); if (!document.hidden) fn(); }, ms); timers.push(id); return id; };
+    /* 런처(스튜디오 홈)에 덮여 아무도 안 보는 동안엔 쉰다 — index.html 의 window.__wembIdle 과 짝 */
+    var idle = function () { return typeof window.__wembIdle === "function" ? window.__wembIdle() : document.hidden; };
+    var every = function (ms, fn) { var id = setInterval(function () { if (!root.isConnected) return stop(); if (!idle()) fn(); }, ms); timers.push(id); return id; };
     function stop() { timers.forEach(clearInterval); timers.length = 0; }
 
     /* ── 0. 반응형 — 영역을 꽉 채운다(잘림·왜곡 없음) ── */
@@ -394,6 +396,15 @@
 
     /* 이벤트 목록 안쪽 범위 — 화면에는 같은 이름("Body"·"Row")의 위젯이 여럿 있다 */
     var evBody = txt(root, '64:4434');
+
+    /* 발생시각을 열 때마다 최근으로 다시 찍는다(src/recent-time.js) — 시안에 박힌 26-12-xx 는
+       만든 날에 멈춰 있어, 그대로 두면 오지 않은 날짜를 가리킨다. 줄 사이 간격과 글자 모양
+       ('YY-MM-DD HH:mm:ss')은 원본 그대로 두고 표만 '방금'으로 옮겨 온다.
+       '패널편집'이 글자 기본값을 잡기(__dtRecaptureDefaults) 전에 도는 자리다 — 그래야 새 시각이
+       기본값이 되고, 손으로 고쳐 둔 시각은 그 캡처가 다시 덮어 준다. */
+    try {
+      if (window.wembRestampTimesIn && evBody) window.wembRestampTimesIn(evBody, '[data-name="Td/Time"] p');
+    } catch (e) { }
 
     /* ── 6. 등급 칩 — 오버 + 클릭하면 해당 등급만 남기고 흐리게 ── */
     var filter = { grade: '' };

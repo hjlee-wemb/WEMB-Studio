@@ -145,6 +145,10 @@
   function editing() {
     return !!document.querySelector('.dtstage.dt-content-editing, .dtstage.dt-editing');
   }
+  /* 런처(스튜디오 홈)가 화면을 덮어 아무도 이 시안을 보지 않는 동안엔 주기 갱신을 쉰다.
+     (index.html 의 window.__wembIdle 과 짝 — 없으면 탭 뒤로 갔는지만 본다) */
+  function idle() { return typeof window.__wembIdle === "function" ? window.__wembIdle() : document.hidden; }
+  function every(ms, fn) { return setInterval(function () { if (!idle()) fn(); }, ms); }
   var rnd = function (a, b) { return a + Math.random() * (b - a); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
   function all(root, sel) { return Array.prototype.slice.call(root.querySelectorAll(sel)); }
@@ -674,7 +678,7 @@
       }
     };
     tick();
-    var id = setInterval(tick, 1000);
+    var id = every(1000, tick);
     st.cleanup.push(function () { clearInterval(id); });
   }
 
@@ -1076,7 +1080,7 @@
         tween(900, from, target, function (v) { setNum(c.el, v, c.src); });
       });
     };
-    var id = setInterval(step, 3200);
+    var id = every(3200, step);
     setTimeout(step, 900);
     st.cleanup.push(function () { clearInterval(id); });
   }
@@ -1145,7 +1149,7 @@
       var from = cur; cur = to;
       tween(1600, from, to, setV);
     };
-    var id = setInterval(step, 5200);
+    var id = every(5200, step);
     setTimeout(step, 1800);
     st.cleanup.push(function () { clearInterval(id); });
   }
@@ -1168,7 +1172,7 @@
         b.style.transform = 'scaleX(' + rnd(0.88, 1.1).toFixed(3) + ')';
       });
     };
-    var id = setInterval(step, 3600);
+    var id = every(3600, step);
     setTimeout(step, 1400);
     st.cleanup.push(function () {
       clearInterval(id);
@@ -1189,7 +1193,7 @@
         p.style.transform = 'rotate(' + rnd(-9, 9).toFixed(2) + 'deg)';
       });
     };
-    var id = setInterval(step, 4200);
+    var id = every(4200, step);
     setTimeout(step, 2200);
     st.cleanup.push(function () { clearInterval(id); plots.forEach(function (p) { p.style.transform = ''; }); });
   }
@@ -1214,7 +1218,7 @@
       var from = cur; cur = to;
       tween(1400, from, to, setA);
     };
-    var id = setInterval(step, 6000);
+    var id = every(6000, step);
     st.cleanup.push(function () { clearInterval(id); if (needle) needle.style.rotate = ''; });
   }
 
@@ -1325,7 +1329,7 @@
         fill(rows[i], ev);
       }
     };
-    var id = setInterval(push, 4800);
+    var id = every(4800, push);
     setTimeout(seed, 700);
     st.cleanup.push(function () { clearInterval(id); });
   }
