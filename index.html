@@ -13164,6 +13164,11 @@
       body:has(#flowHome.show) > #app > .main {
         content-visibility: hidden;
       }
+      /* 썸네일을 찍는 동안만 예외 — 레이아웃이 없으면 html2canvas 가 빈 그림을 찍는다 */
+      body.wemb-capturing > #app > .sidebar,
+      body.wemb-capturing > #app > .main {
+        content-visibility: visible;
+      }
 
       /* ── 런처 홈 (Mockplus식 프로젝트 목록) ── */
       .lc {
@@ -29924,6 +29929,9 @@ ${wembTipRuntime()}
                    : document.querySelector('.main');
           if (!el || !el.offsetWidth) return;
           __capturing = true;
+          /* 런처가 덮고 있으면 스튜디오는 content-visibility:hidden 이라 레이아웃이 없다 —
+             그대로 찍으면 빈 그림이 나온다. 찍는 동안만 되살린다(끝나면 finally 에서 되돌린다). */
+          document.body.classList.add('wemb-capturing');
           try {
             const W = THUMB_W, H = Math.max(1, Math.round(W * (el.offsetHeight / el.offsetWidth)));
             let bg = '#0a0a0e'; try { const cb = getComputedStyle(el).backgroundColor; if (cb && cb !== 'rgba(0, 0, 0, 0)' && cb !== 'transparent') bg = cb; } catch (e) {}
@@ -29965,7 +29973,19 @@ ${wembTipRuntime()}
                   한 번 시간을 재 보고 느리면 그 뒤로는 자동 캡처를 하지 않는다 — 이미 만들어 둔
                   썸네일(없으면 배치 와이어프레임)을 그대로 쓰고, 조작 중에 다시 멈추지 않게 한다. */
             if (!canvas) {
-              if (__slowPath && hasThumb) return; /* 갱신만 건너뛴다 — 첫 썸네일은 항상 만든다 */
+              /* ── 무거운 길(html2canvas)은 **썸네일이 아직 없을 때만** 간다 ──
+                 이미 있는 썸네일을 홈으로 나갈 때마다 다시 찍느라, 런처가 뜬 직후 메인 스레드가
+                 통째로 멈췄다(실측: 한 프레임 4.8초 · 막힌 시간 합 5.4초). 목록이 떠 있는데 스크롤도
+                 호버도 몇 초간 안 먹는 게 '스튜디오 홈이 버벅인다' 의 정체였다.
+                 갱신해서 얻는 건 '조금 더 최신인 그림' 하나뿐이라 바꿀 값이 아니다.
+                 · 시안(인라인 SVG·통짜 이미지·이천 FMS)은 위쪽 빠른 길이 밀리초에 끝내므로 매번 갱신된다.
+                 · 썸네일이 없는 화면은 scheduleThumbCapture 가 **스튜디오에 있는 동안 유휴 시점에**
+                   한 번 찍어 두므로, 홈으로 나갈 때는 대개 여기까지 오지도 않는다. */
+              if (hasThumb) return;
+              /* 런처가 떠 있는 동안에도 가지 않는다 — 목록이 뜬 채로 몇 초씩 얼어붙는다.
+                 썸네일이 없는 화면은 다음에 그 화면을 열 때 enterStudio 가 걸어 둔 유휴 캡처
+                 (scheduleThumbCapture)가 스튜디오 안에서 조용히 찍는다. */
+              if (document.getElementById('flowHome')?.classList.contains('show')) return;
               const h2c = () => window.html2canvas || window.html2canvasPro;
               if (!h2c()) { try { await loadH2C(); } catch (e) {} }
               const render = h2c();
@@ -30003,7 +30023,7 @@ ${wembTipRuntime()}
           } catch (e) {
             /* 캔버스 오염(SecurityError) 이면 이후 캡처를 중단 — 무의미한 3초 멈춤 방지 */
             if (e && (e.name === 'SecurityError' || /[Tt]ainted/.test(String(e.message || e)))) __captureBlocked = true;
-          } finally { __capturing = false; }
+          } finally { __capturing = false; document.body.classList.remove('wemb-capturing'); }
         }
         window.__wembCaptureThumb = captureScreenThumb;
         /* 캡처 라이브러리(html2canvas-pro)를 미리 받아둔다 — 나중 캡처가 지연 없이 즉시 되게 */
