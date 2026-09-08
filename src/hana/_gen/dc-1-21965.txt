@@ -1,0 +1,1737 @@
+const imgItem = "https://www.figma.com/api/mcp/asset/a5c0d3d5-5899-44fe-8445-eb8cc3559423.svg";
+const imgItem1 = "https://www.figma.com/api/mcp/asset/a388915f-ea10-4220-872f-e2500ffdd1ec.svg";
+const imgItem2 = "https://www.figma.com/api/mcp/asset/11fdc008-76dd-468d-a2dc-b39ed1497944.svg";
+const imgItem3 = "https://www.figma.com/api/mcp/asset/cd39cb82-cf96-4e4b-a0e5-4e9a11ec584b.svg";
+const imgStatusGreen = "https://www.figma.com/api/mcp/asset/bdc03932-7de1-4a71-98d6-9f538307c498.svg";
+const imgStatusYellow = "https://www.figma.com/api/mcp/asset/c2117c9e-0e5a-4e05-a0b3-e5a110c6a43f.svg";
+const imgStatusRed = "https://www.figma.com/api/mcp/asset/9449e35c-1b9b-4569-a25e-b6114714c61c.svg";
+const imgLine11 = "https://www.figma.com/api/mcp/asset/2a96552a-aeb9-4b5e-a4ca-c953e75ab655.svg";
+const img4 = "https://www.figma.com/api/mcp/asset/38e72f2d-0190-4680-8d4f-0b93ba495b01.svg";
+const img5 = "https://www.figma.com/api/mcp/asset/835d67da-e712-48a1-87f9-5c5c70cfcac5.svg";
+const img6 = "https://www.figma.com/api/mcp/asset/6d763bc2-a150-4e26-bbbd-a8d9853eddcf.svg";
+const img8 = "https://www.figma.com/api/mcp/asset/446d79f1-f031-4812-8661-4e4596022f3c.svg";
+const img9 = "https://www.figma.com/api/mcp/asset/3d273423-253f-47d5-ad0a-4b4aae2f54a2.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/88b28400-e85e-4127-8317-fda3ab84dd1f.png";
+const imgLogoMark = "https://www.figma.com/api/mcp/asset/9df65e80-1bc6-4478-af5c-1bc0ceaffcc9.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/df4d5ac1-9354-4c72-a636-20c17d736d81.svg";
+const imgIcon1 = "https://www.figma.com/api/mcp/asset/1d584d64-6527-49c3-b2d0-3284207328c0.svg";
+const imgIcon2 = "https://www.figma.com/api/mcp/asset/66f81622-6c84-45b9-abd3-1dfb0d7adbbe.svg";
+const imgIcon3 = "https://www.figma.com/api/mcp/asset/b226ed4f-d2cf-4d29-a46b-e4030e2dd003.svg";
+const imgIcon4 = "https://www.figma.com/api/mcp/asset/eca46be1-1329-4a5b-9f0a-82fc09e826db.svg";
+const imgIconWidgetTps = "https://www.figma.com/api/mcp/asset/9eedfbe9-4736-43ec-8954-cc9338a70645.svg";
+const img7 = "https://www.figma.com/api/mcp/asset/e59b0f8e-6d5c-4bf0-bae6-0ff39f53ca44.svg";
+const imgRing = "https://www.figma.com/api/mcp/asset/79707cee-b009-4205-bab7-28c0896242a7.svg";
+const imgMarker = "https://www.figma.com/api/mcp/asset/0bb3f25d-cf90-4860-b81f-084e73fcca50.svg";
+const imgMarker1 = "https://www.figma.com/api/mcp/asset/20f52600-e3b7-488c-abe2-002f174bd7f8.svg";
+const imgMarker2 = "https://www.figma.com/api/mcp/asset/7a481ea8-6cb2-47db-b5d7-e285be51de0a.svg";
+const imgBtnArrowUp = "https://www.figma.com/api/mcp/asset/85fd9d62-4191-42cf-a92a-a57ab6a30860.svg";
+const imgBtnArrowDown = "https://www.figma.com/api/mcp/asset/5fbb654a-e836-44e9-ba9f-91b1838e4893.svg";
+const imgHome = "https://www.figma.com/api/mcp/asset/9aebed84-c05f-4382-84c6-03aeed5c86cb.svg";
+
+type StatusLevelProps = {
+  className?: string;
+  status?: "심각" | "정상" | "경계" | "주의";
+};
+
+function StatusLevel({ className, status = "심각" }: StatusLevelProps) {
+  const is = status === "경계";
+  const is1 = status === "주의";
+  const is2 = status === "정상";
+  return (
+    <div className={className || `border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] w-[100px] ${is2 ? "border-[#32d28c]" : is1 ? "border-[#fdd01f]" : is ? "border-[#fd8002]" : "border-[#f53132]"}`} id={is2 ? "node-1_2621" : is1 ? "node-1_2613" : is ? "node-1_2605" : "node-1_2597"} style={is2 ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(50,210,140,1)' offset='0'/><stop stop-color='rgba(50,210,140,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : is1 ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(253,208,31,1)' offset='0'/><stop stop-color='rgba(253,208,31,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : is ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(253,128,2,1)' offset='0'/><stop stop-color='rgba(253,128,2,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(245,49,50,1)' offset='0'/><stop stop-color='rgba(245,49,50,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" }}>
+      <div className="content-stretch flex items-center relative shrink-0 w-full" id={is2 ? "node-1_2622" : is1 ? "node-1_2614" : is ? "node-1_2606" : "node-1_2598"} data-name="block">
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" id={is2 ? "node-1_2623" : is1 ? "node-1_2615" : is ? "node-1_2607" : "node-1_2599"} data-name="box">
+          <div className="content-stretch flex gap-[6px] items-center relative shrink-0 w-[38px]" id={is2 ? "node-1_2624" : is1 ? "node-1_2616" : is ? "node-1_2608" : "node-1_2600"} data-name="group">
+            <div className={`relative shrink-0 size-[10px] ${is2 ? "drop-shadow-[0px_0px_0.596px_rgba(13,183,109,0.37)]" : is1 ? "drop-shadow-[0px_0px_0.596px_rgba(157,132,21,0.37)]" : is ? "drop-shadow-[0px_0px_0.596px_rgba(157,78,21,0.37)]" : "drop-shadow-[0px_0px_0.596px_rgba(157,21,21,0.37)]"}`} id={is2 ? "node-1_2625" : is1 ? "node-1_2617" : is ? "node-1_2609" : "node-1_2601"} data-name="item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={is2 ? imgItem3 : is1 ? imgItem2 : is ? imgItem1 : imgItem} />
+              <div className={`absolute border-[0.248px] border-solid inset-0 opacity-85 rounded-[6.683px] ${is2 ? "border-[#0ddf83]" : is1 ? "border-[#e3dc09]" : is ? "border-[#e35d09]" : "border-[#e30909]"}`} id={is2 ? "node-I1_2625-6028_8218" : is1 ? "node-I1_2617-6028_8226" : is ? "node-I1_2609-6028_8234" : "node-I1_2601-6028_8242"} data-name="stroke" />
+            </div>
+            <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] text-right tracking-[-0.52px] whitespace-nowrap" id={is2 ? "node-1_2626" : is1 ? "node-1_2618" : is ? "node-1_2610" : "node-1_2602"}>
+              {is2 ? "정상" : is1 ? "주의" : is ? "경계" : "심각"}
+            </p>
+          </div>
+          <div className={`h-[10.108px] relative shrink-0 w-[1.011px] ${is2 ? "bg-[#32d28c]" : is1 ? "bg-[#fdd01f]" : is ? "bg-[#fd7f04]" : "bg-[#f53132]"}`} id={is2 ? "node-1_2627" : is1 ? "node-1_2619" : is ? "node-1_2611" : "node-1_2603"} />
+        </div>
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex-[1_0_0] font-['Pretendard:Medium'] h-[10px] leading-[normal] min-w-px not-italic relative text-[#f2f9ef] text-[14px] text-right tracking-[-0.56px]" id={is2 ? "node-1_2628" : is1 ? "node-1_2620" : is ? "node-1_2612" : "node-1_2604"}>
+          {is2 ? "216" : is1 ? "8" : is ? "10" : "23"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type ItemProps = {
+  className?: string;
+  status?: "green" | "red" | "yellow";
+};
+
+function Item({ className, status = "red" }: ItemProps) {
+  const isRed = status === "red";
+  const isYellow = status === "yellow";
+  return (
+    <div className={className || `relative size-[10.108px] ${isRed ? "drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)]" : isYellow ? "drop-shadow-[0px_0px_0.602px_rgba(171,112,35,0.37)]" : "drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)]"}`} id={isRed ? "node-1_2465" : isYellow ? "node-1_2449" : "node-1_2441"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isRed ? imgStatusRed : isYellow ? imgStatusYellow : imgStatusGreen} />
+      <div className={`absolute border-[0.251px] border-solid inset-0 opacity-85 rounded-[6.683px] ${isRed ? "border-[#f71d45]" : isYellow ? "border-[#f7ba1d]" : "border-[#14baff]"}`} id={isRed ? "node-1_2472" : isYellow ? "node-1_2456" : "node-1_2448"} data-name="stroke" />
+    </div>
+  );
+}
+
+type Item1Props = {
+  className?: string;
+  boolean?: boolean;
+  stauts?: "정상" | "심각";
+};
+
+function Item1({ className, boolean = false, stauts = "심각" }: Item1Props) {
+  const isAndBoolean = stauts === "정상" && boolean;
+  return (
+    <div className={className || "content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative w-[122px]"} id={isAndBoolean ? "node-1_2502" : "node-1_2474"}>
+      <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" id={isAndBoolean ? "node-1_2503" : "node-1_2475"} data-name="Component 2">
+        <Item className={`relative shrink-0 size-[10.108px] ${isAndBoolean ? "drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)]" : "drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)]"}`} status={isAndBoolean ? "green" : undefined} />
+        <p className={`[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-["Pretendard:Medium"] leading-[normal] not-italic relative shrink-0 text-[13.14px] whitespace-nowrap ${isAndBoolean ? "text-[#eff9f6]" : "text-[#e4e4e4]"}`} id={isAndBoolean ? "node-1_2505" : "node-1_2477"}>
+          {isAndBoolean ? "정상" : "심각"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function Dummy02({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[93px] relative w-[639px]"} data-node-id="1:22064" data-name="dummy02">
+      <div className="absolute contents left-[110px] top-0" data-node-id="1:22065" data-name="block">
+        <div className="absolute bg-[rgba(34,34,34,0.5)] border border-[#7b7b7b] border-solid inset-[0_0_0_17.21%] rounded-[10px]" data-node-id="1:22066" data-name="bg" />
+        <div className="absolute contents left-[110px] top-0" data-node-id="1:22067" data-name="group">
+          <div className="absolute content-stretch flex gap-[14px] items-center right-[13.4px] top-[6.5px]" data-node-id="1:22068" data-name="box">
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22069" data-name="CPU">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22070" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22071">
+                  CPU
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22072" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22073" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22074" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22075" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22076" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22077" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22078" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22079" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22080" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22081" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22082" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22083" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22084" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22085" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22086" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22087" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22088" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22089" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22090" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22091" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22092" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22093" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#2bdf8a] text-[15px] tracking-[-0.45px]" data-node-id="1:22094">
+                  50
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22095">
+                  %
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22096" data-name="memory">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22097" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22098">
+                  Memory
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22099" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22100" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22101" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22102" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22103" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22104" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22105" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22106" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22107" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22108" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22109" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22110" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22111" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22112" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22113" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22114" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22115" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22116" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22117" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22118" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22119" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22120" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#5bdcc6] text-[15px] tracking-[-0.45px]" data-node-id="1:22121">
+                  90
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22122">
+                  %
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-[25.81%_0.16%_74.19%_33.8%]" data-node-id="1:22123">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgLine11} />
+            </div>
+          </div>
+          <div className="absolute bg-[rgba(123,123,123,0.2)] border border-[#7b7b7b] border-solid content-stretch flex h-[24px] items-center left-[110px] px-[8px] py-[12.486px] rounded-bl-[4px] rounded-br-[4px] rounded-tl-[10px] rounded-tr-[4px] top-0 w-[135px]" data-node-id="1:22124" data-name="btn">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[12px] whitespace-nowrap" data-node-id="1:22125">
+              sys-web-prd-01-02
+            </p>
+          </div>
+        </div>
+        <div className="absolute contents left-[110px] top-[23px]" data-node-id="1:22126" data-name="group">
+          <div className="absolute content-stretch flex gap-[14px] items-center right-[13.4px] top-[29.5px]" data-node-id="1:22127" data-name="box">
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22128" data-name="CPU">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22129" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22130">
+                  CPU
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22131" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22132" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22133" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22134" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22135" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22136" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22137" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22138" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22139" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22140" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22141" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22142" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22143" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22144" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22145" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22146" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22147" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22148" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22149" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22150" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22151" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22152" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#2bdf8a] text-[15px] tracking-[-0.45px]" data-node-id="1:22153">
+                  50
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22154">
+                  %
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22155" data-name="memory">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22156" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22157">
+                  Memory
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22158" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22159" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22160" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22161" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22162" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22163" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22164" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22165" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22166" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22167" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22168" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22169" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22170" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22171" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22172" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22173" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22174" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22175" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22176" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22177" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22178" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22179" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#5bdcc6] text-[15px] tracking-[-0.45px]" data-node-id="1:22180">
+                  90
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22181">
+                  %
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-[50.54%_0.16%_49.46%_33.8%]" data-node-id="1:22182">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgLine11} />
+            </div>
+          </div>
+          <div className="absolute bg-[rgba(123,123,123,0.2)] border border-[#7b7b7b] border-solid content-stretch flex h-[24px] items-center left-[110px] px-[8px] py-[12.486px] rounded-[4px] top-[23px] w-[135px]" data-node-id="1:22183" data-name="btn">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[12px] whitespace-nowrap" data-node-id="1:22184">
+              sys-web-prd-01-sys
+            </p>
+          </div>
+        </div>
+        <div className="absolute contents left-[110px] top-[46px]" data-node-id="1:22185" data-name="group">
+          <div className="absolute content-stretch flex gap-[14px] items-center right-[13.4px] top-[52.5px]" data-node-id="1:22186" data-name="box">
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22187" data-name="CPU">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22188" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22189">
+                  CPU
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22190" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22191" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22192" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22193" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22194" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22195" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22196" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22197" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22198" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22199" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22200" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22201" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22202" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22203" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22204" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22205" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22206" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22207" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22208" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22209" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22210" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22211" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#2bdf8a] text-[15px] tracking-[-0.45px]" data-node-id="1:22212">
+                  50
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22213">
+                  %
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22214" data-name="memory">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22215" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22216">
+                  Memory
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22217" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22218" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22219" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22220" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22221" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22222" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22223" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22224" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22225" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22226" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22227" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22228" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22229" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22230" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22231" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22232" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22233" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22234" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22235" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22236" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22237" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22238" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#5bdcc6] text-[15px] tracking-[-0.45px]" data-node-id="1:22239">
+                  90
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22240">
+                  %
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-[75.27%_0.16%_24.73%_33.8%]" data-node-id="1:22241">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgLine11} />
+            </div>
+          </div>
+          <div className="absolute bg-[rgba(123,123,123,0.2)] border border-[#7b7b7b] border-solid content-stretch flex h-[24px] items-center left-[110px] px-[8px] py-[12.486px] rounded-[4px] top-[46px] w-[135px]" data-node-id="1:22242" data-name="btn">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[12px] whitespace-nowrap" data-node-id="1:22243">
+              sys-web-prd-01-189
+            </p>
+          </div>
+        </div>
+        <div className="absolute contents left-[110px] top-[69px]" data-node-id="1:22244" data-name="group">
+          <div className="absolute content-stretch flex gap-[14px] items-center right-[13.4px] top-[75.5px]" data-node-id="1:22245" data-name="box">
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22246" data-name="CPU">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22247" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22248">
+                  CPU
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22249" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22250" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22251" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22252" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22253" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22254" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22255" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22256" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22257" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#2bdf8a] relative rounded-[2px] size-full to-[#1fa163]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22258" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22259" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22260" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22261" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22262" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22263" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22264" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22265" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22266" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22267" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22268" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22269" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22270" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#2bdf8a] text-[15px] tracking-[-0.45px]" data-node-id="1:22271">
+                  50
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22272">
+                  %
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[5px] h-[13px] items-center relative shrink-0" data-node-id="1:22273" data-name="memory">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="1:22274" data-name="name">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[16px] not-italic relative shrink-0 text-[#7b7b7b] text-[12px] whitespace-nowrap" data-node-id="1:22275">
+                  Memory
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[2px] h-[10px] items-center relative shrink-0 w-[104px]" data-node-id="1:22276" data-name="gauge">
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22277" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22278" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22279" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22280" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22281" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22282" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22283" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22284" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22285" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22286" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22287" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22288" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22289" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22290" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22291" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22292" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22293" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22294" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#5bdcc6] relative rounded-[2px] size-full to-[#038c8c] to-[74.522%]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22295" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+                <div className="flex flex-[1_0_0] h-full items-center justify-center min-w-px relative" data-node-id="1:22296" style={{ containerType: "size" }}>
+                  <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                    <div className="bg-gradient-to-r from-[#7b7b7b] relative rounded-[2px] size-full to-[#605f5f]" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex font-['Pretendard:SemiBold'] items-end leading-[normal] not-italic relative shrink-0 text-right whitespace-nowrap" data-node-id="1:22297" data-name="count">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#5bdcc6] text-[15px] tracking-[-0.45px]" data-node-id="1:22298">
+                  90
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[#7b7b7b] text-[9px]" data-node-id="1:22299">
+                  %
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bg-[rgba(123,123,123,0.2)] border border-[#7b7b7b] border-solid content-stretch flex h-[24px] items-center left-[110px] px-[8px] py-[12.486px] rounded-bl-[10px] rounded-br-[4px] rounded-tl-[4px] rounded-tr-[4px] top-[69px] w-[135px]" data-node-id="1:22300" data-name="btn">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[12px] whitespace-nowrap" data-node-id="1:22301">
+              sys-web-prd
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute h-[58px] left-[29px] opacity-60 top-[3px] w-[41.189px]" data-node-id="1:22302" data-name="component">
+        <div className="absolute inset-[0_1.41%_0.44%_0]" data-node-id="I1:22302;1:22350" data-name="4">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={img4} />
+        </div>
+      </div>
+      <div className="absolute bg-[rgba(153,153,153,0.2)] border border-[#223331] border-solid bottom-0 content-stretch flex items-end justify-center left-[0.6px] py-[6px] rounded-[8px] w-[98px]" data-node-id="1:22303" data-name="obj">
+        <p className="[word-break:break-word] flex-[1_0_0] font-['Pretendard:Medium'] h-[16px] leading-[normal] min-w-px not-italic relative text-[13px] text-center text-white" data-node-id="1:22304">
+          빅데이터플랫폼
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type GroupProps = {
+  className?: string;
+  status?: "default" | "normal" | "major" | "critical";
+};
+
+function Group({ className, status = "default" }: GroupProps) {
+  const isCritical = status === "critical";
+  const isMajor = status === "major";
+  const isMajorOrCritical = ["major", "critical"].includes(status);
+  const isNormal = status === "normal";
+  const isNormalOrMajorOrCritical = ["normal", "major", "critical"].includes(status);
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[11.149px] items-center justify-center relative"} id={isCritical ? "node-1_22329" : isMajor ? "node-1_22326" : isNormal ? "node-1_22320" : "node-1_22317"}>
+      <div className={`relative shrink-0 ${isMajorOrCritical ? "h-[92.908px] opacity-90 w-[65.965px]" : isNormal ? "h-[91.979px] opacity-90 w-[65.035px]" : "h-[91.979px] opacity-60 w-[65.965px]"}`} id={isCritical ? "node-1_22330" : isMajor ? "node-1_22327" : isNormal ? "node-1_22321" : "node-1_22318"} data-name="component">
+        {["default", "normal"].includes(status) && (
+          <div className={`absolute ${isNormal ? "inset-[0_0_0.44%_0]" : "inset-[0_1.41%_0.44%_0]"}`} id={isNormal ? "node-I1_22321-1_22418" : "node-I1_22318-1_22350"} data-name="4">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isNormal ? img6 : img5} />
+          </div>
+        )}
+        {isMajorOrCritical && (
+          <div className={`absolute ${isCritical ? "inset-[0.9%_0.01%_0.53%_1.4%]" : "inset-[0.9%_1.23%_0.53%_0.18%]"}`} id={isCritical ? "node-I1_22330-1_22622" : "node-I1_22327-1_22554"} data-name="8">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCritical ? img9 : img8} />
+          </div>
+        )}
+      </div>
+      <div className={`content-stretch flex items-end justify-center px-[20.44px] py-[6.504px] relative shrink-0 ${isNormalOrMajorOrCritical ? "rounded-[7.433px]" : "rounded-[8px]"}`} id={isCritical ? "node-1_22331" : isMajor ? "node-1_22328" : isNormal ? "node-1_22322" : "node-1_22319"} data-name="label">
+        <div aria-hidden className={`absolute inset-0 pointer-events-none ${isNormalOrMajorOrCritical ? "rounded-[7.433px]" : "bg-[rgba(153,153,153,0.2)] rounded-[8px]"}`} style={isCritical ? { backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(244, 48, 49, 0.2) 0%, rgba(244, 48, 49, 0.2) 100%)" } : isMajor ? { backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(255, 108, 18, 0.2) 0%, rgba(153, 65, 11, 0.2) 100%)" } : isNormal ? { backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(42, 227, 255, 0.2) 0%, rgba(25, 136, 153, 0.2) 100%)" } : undefined} />
+        <p className={`[word-break:break-word] font-["Pretendard:Bold"] leading-[normal] not-italic relative shrink-0 text-[13.94px] text-center w-[90.121px] ${isCritical ? "text-[#f43031]" : isMajor ? "text-[#f6701e]" : isNormal ? "text-[#00cded]" : "text-white"}`} id={isCritical ? "node-I1_22331-1_22315" : isMajor ? "node-I1_22328-1_22313" : isNormal ? "node-I1_22322-1_22309" : "node-I1_22319-1_22307"}>
+          빅데이터플랫폼
+        </p>
+        <div className={`absolute inset-0 pointer-events-none rounded-[inherit] ${isCritical ? "shadow-[inset_0.929px_0.929px_0.929px_0px_rgba(244,48,49,0.35),inset_-0.929px_0.929px_0.929px_0px_rgba(244,48,49,0.35),inset_0px_0.929px_0px_0px_rgba(244,48,49,0.55)]" : isMajor ? "shadow-[inset_0.929px_0.929px_0.929px_0px_rgba(255,108,18,0.35),inset_-0.929px_0.929px_0.929px_0px_rgba(255,108,18,0.35),inset_0px_0.929px_0px_0px_rgba(255,108,18,0.55)]" : isNormal ? "shadow-[inset_0.929px_0.929px_0.929px_0px_rgba(0,205,237,0.35),inset_-0.929px_0.929px_0.929px_0px_rgba(0,205,237,0.35),inset_0px_0.929px_0px_0px_rgba(0,205,237,0.55)]" : "shadow-[inset_0.929px_0.929px_0.929px_0px_rgba(84,105,104,0.35),inset_-0.929px_0.929px_0.929px_0px_rgba(84,105,104,0.35),inset_0px_0.929px_0px_0px_rgba(84,105,104,0.55)]"}`} />
+      </div>
+    </div>
+  );
+}
+
+export default function ScreenInfrastructureMain() {
+  return (
+    <div className="bg-[#051811] relative size-full" data-node-id="1:21965" data-name="Screen/Infrastructure Main">
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[1080px] left-1/2 opacity-60 top-1/2 w-[1920px]" data-node-id="1:21966" data-name="Background">
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 overflow-hidden">
+            <img alt="" className="absolute h-[144.61%] left-[-33.96%] max-w-none top-[-13.38%] w-[167.92%]" src={imgBackground} />
+          </div>
+          <div className="absolute bg-gradient-to-b from-[33.472%] from-[rgba(5,24,17,0)] inset-0 to-[rgba(0,0,0,0.8)]" />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute h-[80px] left-1/2 top-0 w-[1920px]" data-node-id="1:21967" data-name="Header">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex items-center justify-between left-1/2 top-1/2 w-[1860px]" data-node-id="I1:21967;1:61826" data-name="Header Bar">
+          <div className="content-stretch flex gap-[6.772px] items-center relative shrink-0" data-node-id="I1:21967;2:27336" data-name="Logo">
+            <div className="relative shrink-0 size-[27.09px]" data-node-id="I1:21967;2:27337" data-name="Logo Mark">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoMark} />
+            </div>
+            <p className="[word-break:break-word] font-['Pretendard_GOV:Bold'] leading-[normal] not-italic relative shrink-0 text-[16.931px] text-white tracking-[-0.3386px] whitespace-nowrap" data-node-id="I1:21967;2:27339">
+              WEMB Studio
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[10.677px] items-center relative shrink-0" data-node-id="I1:21967;1:61828" data-name="Menu">
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:21967;1:61829" data-name="Menu Item/Overview (Selected)">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:61829;6028:8732" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:61829;6028:8733">
+                  종합현황
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:21967;1:61830" data-name="Menu Item/Cloud">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:61830;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:61830;6869:9564">
+                  클라우드
+                </p>
+                <div className="relative shrink-0 size-[15px]" data-node-id="I1:21967;1:61830;6869:9565" data-name="icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:21967;1:62745" data-name="Menu Item/Middleware">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:62745;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:62745;6869:9564">
+                  미들웨어
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[40px] shrink-0" data-node-id="I1:21967;1:61832" data-name="Menu Item/Infrastructure">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[40px]">
+                <div className="absolute bg-[#004e42] inset-0 rounded-[40px]" />
+                <div className="absolute inset-0 mix-blend-overlay rounded-[40px]" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 119 47' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.5'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-3.0383e-15 2.35 -5.95 1.3641e-14 59.5 49.238)'><stop stop-color='rgba(224,255,238,1)' offset='0'/><stop stop-color='rgba(255,255,255,0)' offset='1'/></radialGradient></defs></svg>\")" }} />
+              </div>
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:61832;6869:9553" data-name="group">
+                <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:61832;6869:9554">
+                  인프라
+                </p>
+                <div className="relative shrink-0 size-[15px]" data-node-id="I1:21967;1:61832;6869:9555" data-name="icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon1} />
+                </div>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(128,188,183,0.5),inset_0px_1px_0px_0px_rgba(128,188,183,0.5)]" />
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:21967;1:61833" data-name="Menu Item/Event">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:61833;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:61833;6869:9564">
+                  이벤트
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:21967;1:62821" data-name="Menu Item/Network">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:62821;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:62821;6869:9564">
+                  네트워크
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:21967;1:61834" data-name="Menu Item/Facility">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:61834;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:61834;6869:9564">
+                  상면관리
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:21967;1:61835" data-name="Menu Item/Operations">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:21967;1:61835;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:21967;1:61835;6869:9564">
+                  운영관리
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[21.354px] items-center relative shrink-0" data-node-id="I1:21967;1:61836" data-name="Toolbar">
+            <div className="[word-break:break-word] content-stretch flex flex-col font-['Pretendard:Medium'] gap-[2.135px] items-end justify-center leading-[0] not-italic relative shrink-0 text-[#f5fffd] whitespace-nowrap" data-node-id="I1:21967;1:61837" data-name="Timestamp">
+              <div className="flex flex-col justify-center relative shrink-0 text-[17.084px]" data-node-id="I1:21967;1:61838">
+                <p className="leading-[normal]">2026-00-00(수)</p>
+              </div>
+              <div className="flex flex-col justify-center relative shrink-0 text-[21.354px]" data-node-id="I1:21967;1:61839">
+                <p className="leading-[normal]">09:00:00</p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[6.406px] h-[61.928px] items-center relative shrink-0" data-node-id="I1:21967;1:61840" data-name="Actions">
+              <div className="bg-[#172d27] content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12px] shrink-0 size-[42.709px]" data-node-id="I1:21967;1:61841" data-name="Button/Logout">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:21967;1:61841;6869:9538" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon2} />
+                </div>
+              </div>
+              <div className="bg-[#172d27] border-[#009178] border-[1.473px] border-solid content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12.813px] shrink-0 size-[42.709px]" data-node-id="I1:21967;1:61842" data-name="Button/User">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:21967;1:61842;6869:9540" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon3} />
+                </div>
+              </div>
+              <div className="bg-[#172d27] content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12px] shrink-0 size-[42.709px]" data-node-id="I1:21967;1:61843" data-name="Button/Settings">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:21967;1:61843;6869:9538" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon4} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col gap-[20px] h-[952px] items-start left-[30px] top-[98px] w-[1860px]" data-node-id="1:21968" data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] gap-[10px] items-center min-h-px relative w-full" data-node-id="1:21969" data-name="Content Row">
+          <div className="backdrop-blur-[2px] bg-gradient-to-b border border-[#3b4c46] border-solid content-stretch flex flex-col from-[rgba(32,44,40,0.5)] h-full items-start pb-[24px] pt-[14px] px-[24px] relative rounded-[14.831px] shrink-0 to-[rgba(8,33,25,0.5)] w-[1181px]" data-node-id="1:21970" data-name="Widget/TPS Active Thread">
+            <div className="content-stretch flex flex-[1_0_0] flex-col gap-[20px] items-start min-h-px relative w-full" data-node-id="1:21971" data-name="Content">
+              <div className="content-stretch flex h-[38px] items-center justify-between relative shrink-0 w-full" data-node-id="1:21972" data-name="Header">
+                <div className="content-stretch flex gap-[9px] items-center relative shrink-0" data-node-id="1:21973" data-name="Title">
+                  <div className="h-[18.27px] relative shrink-0 w-[16.681px]" data-node-id="1:21974" data-name="Icon/Widget/TPS">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconWidgetTps} />
+                  </div>
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[18px] whitespace-nowrap" data-node-id="1:21975">
+                    TPS/Active Thread
+                  </p>
+                </div>
+                <div className="[word-break:break-word] bg-[#1f2b2a] content-stretch flex font-['Pretendard:Medium'] gap-[7px] h-[29px] items-center justify-center leading-[normal] not-italic px-[17px] py-[6px] relative rounded-[8px] shrink-0 text-[#d9efeb] text-[14px] whitespace-nowrap" data-node-id="1:21976" data-name="Timestamp">
+                  <p className="relative shrink-0" data-node-id="1:21977">
+                    06/11
+                  </p>
+                  <p className="relative shrink-0" data-node-id="1:21978">
+                    13:48
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[30px] items-center justify-center min-h-px px-[30px] relative w-full" data-node-id="1:21979" data-name="Body">
+                <div className="content-stretch flex items-start justify-between py-[12px] relative shrink-0 w-full" data-node-id="1:21980" data-name="Row">
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                </div>
+                <div className="content-stretch flex items-start justify-between py-[12px] relative shrink-0 w-full" data-node-id="1:21988" data-name="Row">
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="major" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" />
+                  <div className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" data-node-id="1:21992" data-name="Server Card">
+                    <div className="h-[91.979px] opacity-90 relative shrink-0 w-[65.035px]" data-node-id="I1:21992;1:22321" data-name="component">
+                      <div className="absolute inset-[0_0_0.44%_0]" data-node-id="I1:21992;1:22321;1:22418" data-name="4">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={img6} />
+                      </div>
+                    </div>
+                    <div className="content-stretch flex items-end justify-center px-[20.44px] py-[6.504px] relative rounded-[7.433px] shrink-0" data-node-id="I1:21992;1:22322" data-name="label">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[7.433px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(42, 227, 255, 0.2) 0%, rgba(25, 136, 153, 0.2) 100%)" }} />
+                      <div className="[word-break:break-word] font-['Pretendard:Bold'] leading-[0] not-italic relative shrink-0 text-[#00cded] text-[13.94px] text-center w-[90.121px]" data-node-id="I1:21992;1:22322;1:22309">
+                        <p className="leading-[normal] mb-0">빅데이터플랫폼</p>
+                        <p className="leading-[normal]">빅데이터플랫폼</p>
+                      </div>
+                      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.929px_0.929px_0.929px_0px_rgba(0,205,237,0.35),inset_-0.929px_0.929px_0.929px_0px_rgba(0,205,237,0.35),inset_0px_0.929px_0px_0px_rgba(0,205,237,0.55)]" />
+                    </div>
+                  </div>
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <div className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" data-node-id="1:21994" data-name="Server Card">
+                    <div className="h-[91.979px] opacity-90 relative shrink-0 w-[65.035px]" data-node-id="I1:21994;1:22324" data-name="component">
+                      <div className="absolute inset-[0.4%_0_0.03%_0]" data-node-id="I1:21994;1:22324;1:22486" data-name="7">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={img7} />
+                      </div>
+                    </div>
+                    <div className="content-stretch flex items-end justify-center px-[20.44px] py-[6.504px] relative rounded-[7.433px] shrink-0" data-node-id="I1:21994;1:22325" data-name="label">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[7.433px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(253, 208, 31, 0.2) 0%, rgba(151, 124, 19, 0.2) 100%)" }} />
+                      <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[#f3c200] text-[13.94px] text-center w-[90.121px]" data-node-id="I1:21994;1:22325;1:22311">
+                        빅데이터플랫폼
+                      </p>
+                      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.929px_0.929px_0.929px_0px_rgba(255,226,7,0.35),inset_-0.929px_0.929px_0.929px_0px_rgba(255,226,7,0.35),inset_0px_0.929px_0px_0px_rgba(255,226,7,0.55)]" />
+                    </div>
+                  </div>
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                </div>
+                <div className="content-stretch flex items-start justify-between py-[12px] relative shrink-0 w-full" data-node-id="1:21996" data-name="Row">
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="critical" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                  <Group className="content-stretch flex flex-col gap-[11.149px] items-center justify-center relative shrink-0" status="normal" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px px-[10px] relative" data-node-id="1:22004" data-name="Side Column">
+            <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="1:22005" data-name="Widget/Batch Status">
+              <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="1:22006" data-name="Content">
+                <div className="content-stretch flex flex-col items-center justify-center relative shrink-0 w-full" data-node-id="1:22007" data-name="Header">
+                  <div className="content-stretch flex h-[38px] items-center justify-between relative shrink-0 w-full" data-node-id="1:22008" data-name="Header Row">
+                    <div className="content-stretch flex gap-[9px] items-center relative shrink-0" data-node-id="1:22009" data-name="Title">
+                      <div className="h-[18.27px] relative shrink-0 w-[16.681px]" data-node-id="1:22010" data-name="Icon/Widget/Batch">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconWidgetTps} />
+                      </div>
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[18px] whitespace-nowrap" data-node-id="1:22011">
+                        배치현황
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[22px] h-[118px] items-center justify-center relative rounded-[11.68px] shrink-0 w-full" data-node-id="1:22012" data-name="Body">
+                  <div className="content-stretch flex h-full items-center relative shrink-0" data-node-id="1:22013" data-name="Chart">
+                    <div className="content-stretch flex flex-col items-end relative shrink-0" data-node-id="1:22014" data-name="Donut Chart">
+                      <div className="relative shrink-0 size-[120px]" data-node-id="1:22015" data-name="Ring">
+                        <div className="absolute inset-[-26.51%_-47.72%_-47.72%_-26.51%]">
+                          <img alt="" className="block max-w-none size-full" src={imgRing} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[4px] items-start relative shrink-0" data-node-id="1:22021" data-name="Side Panel">
+                    <div className="content-stretch flex flex-col gap-[7.3px] items-end justify-end px-[8px] relative self-stretch shrink-0" data-node-id="1:22022" data-name="Summary">
+                      <div className="bg-[rgba(42,42,42,0.5)] border-[#778985] border-[0.3px] border-solid content-stretch flex items-center justify-center px-[10px] py-[4px] relative rounded-[4.528px] shrink-0 w-full" data-node-id="1:22023" data-name="Chip/Total">
+                        <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] whitespace-nowrap" data-node-id="1:22024">
+                          전체
+                        </p>
+                      </div>
+                      <div className="content-stretch flex items-center justify-end relative shrink-0 w-full" data-node-id="1:22025" data-name="Measurement">
+                        <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[28px] tracking-[-0.56px] whitespace-nowrap" data-node-id="1:22026">
+                          10,607
+                        </p>
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(42,42,42,0.5)] border-[#778985] border-[0.3px] border-solid content-stretch flex flex-col items-center justify-center px-[10px] py-[14px] relative rounded-[15px] shrink-0 w-[180px]" data-node-id="1:22027" data-name="List">
+                      <div className="content-stretch flex h-[30px] items-center justify-between p-[8px] relative rounded-[5.629px] shrink-0 w-full" data-node-id="1:22028" data-name="Item/Success">
+                        <div className="content-stretch flex gap-[4px] items-center pr-[5.629px] py-[1.407px] relative rounded-[5.629px] shrink-0" data-node-id="1:22029" data-name="Content">
+                          <div className="relative shrink-0 size-[11.258px]" data-node-id="1:22030" data-name="Marker">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+                          </div>
+                          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] whitespace-nowrap" data-node-id="1:22032">
+                            성공
+                          </p>
+                        </div>
+                        <div className="border-[#778985] border-[0.75px] border-solid content-stretch flex h-[24px] items-center justify-center px-[9px] py-[3px] relative rounded-[6px] shrink-0 w-[60px]" data-node-id="1:22033" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Value">
+                          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] text-center whitespace-nowrap" data-node-id="1:22034">
+                            123
+                          </p>
+                        </div>
+                      </div>
+                      <div className="content-stretch flex h-[30px] items-center justify-between p-[8px] relative rounded-[5.629px] shrink-0 w-full" data-node-id="1:22035" data-name="Item/In Progress">
+                        <div className="content-stretch flex gap-[4px] items-center pr-[5.629px] py-[1.407px] relative rounded-[5.629px] shrink-0" data-node-id="1:22036" data-name="Content">
+                          <div className="relative shrink-0 size-[11.258px]" data-node-id="1:22037" data-name="Marker">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker1} />
+                          </div>
+                          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] whitespace-nowrap" data-node-id="1:22039">
+                            진행중
+                          </p>
+                        </div>
+                        <div className="border-[#778985] border-[0.75px] border-solid content-stretch flex h-[24px] items-center justify-center px-[5px] py-[3px] relative rounded-[6px] shrink-0 w-[60px]" data-node-id="1:22040" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Value">
+                          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] text-center whitespace-nowrap" data-node-id="1:22041">
+                            1,123
+                          </p>
+                        </div>
+                      </div>
+                      <div className="content-stretch flex h-[30px] items-center justify-between p-[8px] relative rounded-[5.629px] shrink-0 w-full" data-node-id="1:22042" data-name="Item/Failed">
+                        <div className="content-stretch flex gap-[4px] items-center pr-[5.629px] py-[1.407px] relative rounded-[5.629px] shrink-0" data-node-id="1:22043" data-name="Content">
+                          <div className="relative shrink-0 size-[11.258px]" data-node-id="1:22044" data-name="Marker">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker2} />
+                          </div>
+                          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] whitespace-nowrap" data-node-id="1:22046">
+                            실패
+                          </p>
+                        </div>
+                        <div className="border-[#778985] border-[0.75px] border-solid content-stretch flex h-[24px] items-center justify-center px-[15px] py-[3px] relative rounded-[6px] shrink-0 w-[60px]" data-node-id="1:22047" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Value">
+                          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] text-center whitespace-nowrap" data-node-id="1:22048">
+                            8
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] flex-col gap-[10px] items-start min-h-px relative rounded-[24px] w-full" data-node-id="1:22049" data-name="Widget/Product Processing">
+              <div className="content-stretch flex flex-col items-center justify-center relative shrink-0 w-full" data-node-id="1:22050" data-name="Header">
+                <div className="content-stretch flex h-[38px] items-center justify-between relative shrink-0 w-full" data-node-id="1:22051" data-name="Header Row">
+                  <div className="content-stretch flex gap-[9px] items-center relative shrink-0" data-node-id="1:22052" data-name="Title">
+                    <div className="h-[18.27px] relative shrink-0 w-[16.681px]" data-node-id="1:22053" data-name="Icon/Widget/Product">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconWidgetTps} />
+                    </div>
+                    <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[18px] whitespace-nowrap" data-node-id="1:22054">
+                      상품처리
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col gap-[10px] items-start px-[10px] relative shrink-0 w-full" data-node-id="1:22055" data-name="List">
+                <Dummy02 className="h-[93px] relative shrink-0 w-[639px]" />
+                <Dummy02 className="h-[93px] relative shrink-0 w-[639px]" />
+                <Dummy02 className="h-[93px] relative shrink-0 w-[639px]" />
+                <Dummy02 className="h-[93px] relative shrink-0 w-[639px]" />
+                <Dummy02 className="h-[93px] relative shrink-0 w-[639px]" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="h-[220px] relative shrink-0 w-[1860px]" data-node-id="1:22061" data-name="Event Log">
+          <div className="absolute backdrop-blur-[2px] bg-gradient-to-b border border-[#4d634e] border-solid from-[rgba(32,44,40,0.8)] inset-0 rounded-[24px] to-[rgba(8,33,25,0.8)]" data-node-id="I1:22061;6896:9563" />
+          <div className="absolute content-stretch flex gap-[4.043px] inset-[23.51%_1.83%_66.15%_1.4%] items-center" data-node-id="I1:22061;6896:9564">
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[122px]" data-node-id="I1:22061;6896:9565" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9566">
+                등급
+              </p>
+            </div>
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22061;6896:9567" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9568">
+                업무그룹
+              </p>
+            </div>
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22061;6896:9569" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9570">
+                업무명
+              </p>
+            </div>
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22061;6896:9571" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9572">
+                호스트명
+              </p>
+            </div>
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[165px]" data-node-id="I1:22061;6896:9573" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9574">
+                발생시간
+              </p>
+            </div>
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22061;6896:9575" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9576">
+                솔루션
+              </p>
+            </div>
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22061;6896:9577" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9578">
+                영역
+              </p>
+            </div>
+            <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex flex-[1_0_0] items-center justify-center min-w-px px-[30.323px] py-[10.108px] relative rounded-[8.086px]" data-node-id="I1:22061;6896:9579" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22061;6896:9580">
+                내용
+              </p>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col inset-[36.35%_1.83%_10.19%_1.4%] items-start" data-node-id="I1:22061;6896:9581" data-name="list">
+            <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22061;6896:9583" data-name="row">
+              <Item1 className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" />
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9583;6867:13500" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9583;6867:13501">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9583;6867:13502" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9583;6867:13503">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9583;6867:13504" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9583;6867:13505">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22061;6896:9583;6867:13506" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9583;6867:13507">
+                  2025-00-00 00:00:00
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9583;6867:13508" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9583;6867:13509">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22061;6896:9583;6867:13510" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9583;6867:13511">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22061;6896:9583;6867:13512" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9583;6867:13513">
+                  contents txt
+                </p>
+              </div>
+            </div>
+            <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22061;6896:9584" data-name="row">
+              <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:22061;6896:9584;6867:13499" data-name="item">
+                <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:22061;6896:9584;6867:13499;6867:13638" data-name="Component 2">
+                  <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,112,35,0.37)] relative shrink-0 size-[10.108px]" status="yellow" />
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13499;6867:13640">
+                    주의
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9584;6867:13500" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13501">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9584;6867:13502" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13503">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9584;6867:13504" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13505">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22061;6896:9584;6867:13506" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13507">
+                  2025-00-00 00:00:00
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9584;6867:13508" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13509">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22061;6896:9584;6867:13510" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13511">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22061;6896:9584;6867:13512" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9584;6867:13513">
+                  contents txt
+                </p>
+              </div>
+            </div>
+            <div className="bg-[rgba(0,145,120,0.3)] border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22061;6896:9585" data-name="row">
+              <Item1 boolean className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" stauts="정상" />
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9585;6867:13532" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9585;6867:13533">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9585;6867:13534" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9585;6867:13535">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9585;6867:13536" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9585;6867:13537">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22061;6896:9585;6867:13538" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9585;6867:13539">
+                  2025-00-00 00:00:00
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9585;6867:13540" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9585;6867:13541">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22061;6896:9585;6867:13542" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9585;6867:13543">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22061;6896:9585;6867:13544" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22061;6896:9585;6867:13545">
+                  contents txt
+                </p>
+              </div>
+            </div>
+            <button className="bg-[rgba(35,77,72,0.3)] border-[#34605b] border-b-[1.011px] border-solid content-stretch cursor-pointer flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22061;6896:9586" data-name="row">
+              <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:22061;6896:9586;6867:13515" data-name="item">
+                <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:22061;6896:9586;6867:13515;6867:13650" data-name="Component 2">
+                  <Item className="drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)] relative shrink-0 size-[10.108px]" status="green" />
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#eff9f6] text-[13.14px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13515;6867:13652">
+                    정상
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9586;6867:13516" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13517">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22061;6896:9586;6867:13518" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13519">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9586;6867:13520" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13521">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22061;6896:9586;6867:13522" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13523">
+                  2025-00-00 00:00:00
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22061;6896:9586;6867:13524" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13525">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22061;6896:9586;6867:13526" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13527">
+                  item
+                </p>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22061;6896:9586;6867:13528" data-name="item">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:22061;6896:9586;6867:13529">
+                  contents txt
+                </p>
+              </div>
+            </button>
+          </div>
+          <div className="absolute content-stretch flex inset-[6.42%_1.83%_83.6%_1.45%] items-center justify-between" data-node-id="I1:22061;6896:9587" data-name="header">
+            <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:22061;6896:9588" data-name="title">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[18px] whitespace-nowrap" data-node-id="I1:22061;6896:9589">
+                이벤트 현황
+              </p>
+              <div className="content-stretch flex gap-[18px] items-center relative shrink-0" data-node-id="I1:22061;6896:9590" data-name="action">
+                <div className="content-stretch flex gap-[4.043px] items-center relative shrink-0" data-node-id="I1:22061;6896:9591" data-name="arrow">
+                  <div className="relative shrink-0 size-[18.194px]" data-node-id="I1:22061;6896:9592" data-name="btn-arrow-up">
+                    <div className="absolute inset-[-12.5%]">
+                      <img alt="" className="block max-w-none size-full" src={imgBtnArrowUp} />
+                    </div>
+                  </div>
+                  <div className="relative shrink-0 size-[18.194px]" data-node-id="I1:22061;6896:9595" data-name="btn-arrow-down">
+                    <div className="absolute inset-[-12.5%]">
+                      <img alt="" className="block max-w-none size-full" src={imgBtnArrowDown} />
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="I1:22061;6896:9598" data-name="event">
+                  <div className="bg-gradient-to-b border-[#6c726e] border-[0.5px] border-solid content-stretch flex from-[9.459%] from-[rgba(215,237,230,0.2)] h-[24px] items-center justify-center px-[19px] py-[7px] relative rounded-[4px] shrink-0 to-[81.081%] to-[rgba(215,237,230,0)] w-[72px]" data-node-id="I1:22061;6896:9599" data-name="btn">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] text-center whitespace-nowrap" data-node-id="I1:22061;6896:9600">
+                      초기화
+                    </p>
+                  </div>
+                  <div className="bg-gradient-to-b border-[#009178] border-[0.5px] border-solid content-stretch flex from-[9.459%] from-[rgba(0,145,120,0.3)] h-[24px] items-center justify-center px-[24px] py-[7px] relative rounded-[4px] shrink-0 to-[81.081%] to-[rgba(0,145,120,0)] w-[72px]" data-node-id="I1:22061;6896:9601" data-name="btn">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-center whitespace-nowrap" data-node-id="I1:22061;6896:9602">
+                      삭제
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[6px] items-center justify-end relative shrink-0 w-[927.306px]" data-node-id="I1:22061;6896:9603" data-name="group">
+              <StatusLevel className="border-[#f53132] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" />
+              <StatusLevel className="border-[#fd8002] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="경계" />
+              <StatusLevel className="border-[#fdd01f] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="주의" />
+              <StatusLevel className="border-[#32d28c] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="정상" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col items-start left-0 px-[37px] top-[70px] w-[1920px]" data-node-id="1:22062" data-name="Breadcrumb">
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full" data-node-id="I1:22062;6331:21786" data-name="box">
+          <div className="relative shrink-0 size-[11px]" data-node-id="I1:22062;6331:21787" data-name="home">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHome} />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[11px] text-[color:var(--basic\/999,#999)] text-center whitespace-nowrap" data-node-id="I1:22062;6331:21788">
+            <p className="leading-[normal]">/</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[12px] text-[color:var(--basic\/444,#444)] text-center whitespace-nowrap" data-node-id="I1:22062;6331:21789">
+            <p className="leading-[normal]">종합현황</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[11px] text-[color:var(--basic\/999,#999)] text-center whitespace-nowrap" data-node-id="I1:22062;6331:21790">
+            <p className="leading-[normal]">/</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#00c8a5] text-[12px] text-center whitespace-nowrap" data-node-id="I1:22062;6331:21791">
+            <p className="leading-[normal]">인프라현황</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: 하나은행/Primary/009178: #009178, New/Contents/Title: #E9EBEB, New/Table/Stroke: #3B4C46, New/Contents/Main/Effect: Effect(type: BACKGROUND_BLUR, radius: 4), New/Contents/Sub/Fill: #2A2A2A, New/Contents/Sub/Stroke: #778985, New/Table/Data/Fill01: #3B4C46,#000000, New/Contents/Main/Fill: , New/Contents/Main/Stroke: #4D634E, New/Table/Names/Txt: #E4E4E4, New/Bg: #051811.
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

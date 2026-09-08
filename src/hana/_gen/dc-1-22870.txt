@@ -1,0 +1,1208 @@
+const imgItem = "https://www.figma.com/api/mcp/asset/39960906-42af-4ec9-9bbb-9de196ccc60b.svg";
+const imgItem1 = "https://www.figma.com/api/mcp/asset/aac56737-3527-4b93-bae4-c8ef2622f716.svg";
+const imgItem2 = "https://www.figma.com/api/mcp/asset/be35c82c-4405-4b3f-806b-266c1c2678e1.svg";
+const imgItem3 = "https://www.figma.com/api/mcp/asset/102c0966-e94f-402a-b56f-23a757dc9d08.svg";
+const imgStatusGreen = "https://www.figma.com/api/mcp/asset/9af64b59-d71f-4a81-92ed-10f20546e02d.svg";
+const imgStatusYellow = "https://www.figma.com/api/mcp/asset/381fe125-1f59-4d98-8289-590bacfdfcd3.svg";
+const imgStatusRed = "https://www.figma.com/api/mcp/asset/a2b283c4-bd24-484a-9fa1-2b1fb886fc29.svg";
+const imgProperty101 = "https://www.figma.com/api/mcp/asset/6e2f3b65-ca75-4813-b193-b1f7bf8a8a02.svg";
+const imgSymbol = "https://www.figma.com/api/mcp/asset/3741ba24-db3c-4b46-be1b-73b8afbdafff.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/0edf7d14-9485-4371-8d23-860a726c6236.png";
+const imgFloorPlan = "https://www.figma.com/api/mcp/asset/af8728ce-640e-460f-ac22-6388ecff76e4.png";
+const imgIconWidgetSite = "https://www.figma.com/api/mcp/asset/1051b39f-43d5-408b-9716-2f775322b439.svg";
+const imgConnector = "https://www.figma.com/api/mcp/asset/a77d296a-5c24-4cb1-bb89-e82225d8d0e0.svg";
+const imgPath = "https://www.figma.com/api/mcp/asset/9c40fbb2-5c9d-4710-9b55-56c635846c65.svg";
+const imgPath1 = "https://www.figma.com/api/mcp/asset/7a87b1e2-748f-43d9-a2ef-d5afe669196d.svg";
+const imgBtnArrowUp = "https://www.figma.com/api/mcp/asset/eed4f78d-e9c8-4b80-a72b-ae41822f2bba.svg";
+const imgBtnArrowDown = "https://www.figma.com/api/mcp/asset/50826b0b-56ee-4cc4-82d3-ea3af671978e.svg";
+const imgHome = "https://www.figma.com/api/mcp/asset/e3bdc7f0-8be6-49d5-ac9b-274c2045a811.svg";
+const imgIconActionClose = "https://www.figma.com/api/mcp/asset/9ad2b5fc-26b1-4dea-a069-c8721ab1b6af.svg";
+const imgIconWidgetRack = "https://www.figma.com/api/mcp/asset/1875e7ca-adfd-4d20-a839-19b420693dc7.svg";
+const imgIconWidgetAsset = "https://www.figma.com/api/mcp/asset/1409be0e-77a0-4a4a-84f2-15324509ea0d.svg";
+const imgIconWidgetTrend = "https://www.figma.com/api/mcp/asset/fb01db52-b0c1-4728-b663-abad8d34c7ac.svg";
+const imgGrid = "https://www.figma.com/api/mcp/asset/7f53fc32-3ad2-45c6-a0f5-fb9988386dcf.svg";
+const imgData = "https://www.figma.com/api/mcp/asset/ed096769-76fc-4271-b6ea-232c33e4ddaf.svg";
+const imgMarker = "https://www.figma.com/api/mcp/asset/5454231e-be2b-4557-a130-f0e5b627b1f0.svg";
+const imgMarker1 = "https://www.figma.com/api/mcp/asset/f5a548ca-1a65-4119-bf54-e44ae92a95c7.svg";
+const imgIconWidgetEvent = "https://www.figma.com/api/mcp/asset/f1004157-413b-4890-98f5-a6a6809dc75e.svg";
+const imgLogoMark = "https://www.figma.com/api/mcp/asset/4a044fb9-0088-404d-8171-23e9fc57b125.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/64e6f434-d082-4512-99f2-8d115c1d80bb.svg";
+const imgIcon1 = "https://www.figma.com/api/mcp/asset/5bacf77b-93c2-481a-a179-35ec9f7ec967.svg";
+const imgIcon2 = "https://www.figma.com/api/mcp/asset/259da489-b676-41cf-a865-62655db9dac0.svg";
+const imgIcon3 = "https://www.figma.com/api/mcp/asset/60b58e74-4613-461f-87e7-073c9e93a7fb.svg";
+
+type StatusLevelProps = {
+  className?: string;
+  status?: "심각" | "정상" | "경계" | "주의";
+};
+
+function StatusLevel({ className, status = "심각" }: StatusLevelProps) {
+  const is = status === "경계";
+  const is1 = status === "주의";
+  const is2 = status === "정상";
+  return (
+    <div className={className || `border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] w-[100px] ${is2 ? "border-[#32d28c]" : is1 ? "border-[#fdd01f]" : is ? "border-[#fd8002]" : "border-[#f53132]"}`} id={is2 ? "node-1_2621" : is1 ? "node-1_2613" : is ? "node-1_2605" : "node-1_2597"} style={is2 ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(50,210,140,1)' offset='0'/><stop stop-color='rgba(50,210,140,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : is1 ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(253,208,31,1)' offset='0'/><stop stop-color='rgba(253,208,31,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : is ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(253,128,2,1)' offset='0'/><stop stop-color='rgba(253,128,2,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(245,49,50,1)' offset='0'/><stop stop-color='rgba(245,49,50,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" }}>
+      <div className="content-stretch flex items-center relative shrink-0 w-full" id={is2 ? "node-1_2622" : is1 ? "node-1_2614" : is ? "node-1_2606" : "node-1_2598"} data-name="block">
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" id={is2 ? "node-1_2623" : is1 ? "node-1_2615" : is ? "node-1_2607" : "node-1_2599"} data-name="box">
+          <div className="content-stretch flex gap-[6px] items-center relative shrink-0 w-[38px]" id={is2 ? "node-1_2624" : is1 ? "node-1_2616" : is ? "node-1_2608" : "node-1_2600"} data-name="group">
+            <div className={`relative shrink-0 size-[10px] ${is2 ? "drop-shadow-[0px_0px_0.596px_rgba(13,183,109,0.37)]" : is1 ? "drop-shadow-[0px_0px_0.596px_rgba(157,132,21,0.37)]" : is ? "drop-shadow-[0px_0px_0.596px_rgba(157,78,21,0.37)]" : "drop-shadow-[0px_0px_0.596px_rgba(157,21,21,0.37)]"}`} id={is2 ? "node-1_2625" : is1 ? "node-1_2617" : is ? "node-1_2609" : "node-1_2601"} data-name="item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={is2 ? imgItem3 : is1 ? imgItem2 : is ? imgItem1 : imgItem} />
+              <div className={`absolute border-[0.248px] border-solid inset-0 opacity-85 rounded-[6.683px] ${is2 ? "border-[#0ddf83]" : is1 ? "border-[#e3dc09]" : is ? "border-[#e35d09]" : "border-[#e30909]"}`} id={is2 ? "node-I1_2625-6028_8218" : is1 ? "node-I1_2617-6028_8226" : is ? "node-I1_2609-6028_8234" : "node-I1_2601-6028_8242"} data-name="stroke" />
+            </div>
+            <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] text-right tracking-[-0.52px] whitespace-nowrap" id={is2 ? "node-1_2626" : is1 ? "node-1_2618" : is ? "node-1_2610" : "node-1_2602"}>
+              {is2 ? "정상" : is1 ? "주의" : is ? "경계" : "심각"}
+            </p>
+          </div>
+          <div className={`h-[10.108px] relative shrink-0 w-[1.011px] ${is2 ? "bg-[#32d28c]" : is1 ? "bg-[#fdd01f]" : is ? "bg-[#fd7f04]" : "bg-[#f53132]"}`} id={is2 ? "node-1_2627" : is1 ? "node-1_2619" : is ? "node-1_2611" : "node-1_2603"} />
+        </div>
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex-[1_0_0] font-['Pretendard:Medium'] h-[10px] leading-[normal] min-w-px not-italic relative text-[#f2f9ef] text-[14px] text-right tracking-[-0.56px]" id={is2 ? "node-1_2628" : is1 ? "node-1_2620" : is ? "node-1_2612" : "node-1_2604"}>
+          {is2 ? "216" : is1 ? "8" : is ? "10" : "23"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type ItemProps = {
+  className?: string;
+  status?: "green" | "red" | "yellow";
+};
+
+function Item({ className, status = "red" }: ItemProps) {
+  const isRed = status === "red";
+  const isYellow = status === "yellow";
+  return (
+    <div className={className || `relative size-[10.108px] ${isRed ? "drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)]" : isYellow ? "drop-shadow-[0px_0px_0.602px_rgba(171,112,35,0.37)]" : "drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)]"}`} id={isRed ? "node-1_2465" : isYellow ? "node-1_2449" : "node-1_2441"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isRed ? imgStatusRed : isYellow ? imgStatusYellow : imgStatusGreen} />
+      <div className={`absolute border-[0.251px] border-solid inset-0 opacity-85 rounded-[6.683px] ${isRed ? "border-[#f71d45]" : isYellow ? "border-[#f7ba1d]" : "border-[#14baff]"}`} id={isRed ? "node-1_2472" : isYellow ? "node-1_2456" : "node-1_2448"} data-name="stroke" />
+    </div>
+  );
+}
+
+type Item1Props = {
+  className?: string;
+  boolean?: boolean;
+  stauts?: "정상" | "심각";
+};
+
+function Item1({ className, boolean = false, stauts = "심각" }: Item1Props) {
+  const isAndBoolean = stauts === "정상" && boolean;
+  return (
+    <div className={className || "content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative w-[122px]"} id={isAndBoolean ? "node-1_2502" : "node-1_2474"}>
+      <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" id={isAndBoolean ? "node-1_2503" : "node-1_2475"} data-name="Component 2">
+        <Item className={`relative shrink-0 size-[10.108px] ${isAndBoolean ? "drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)]" : "drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)]"}`} status={isAndBoolean ? "green" : undefined} />
+        <p className={`[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-["Pretendard:Medium"] leading-[normal] not-italic relative shrink-0 text-[13.14px] whitespace-nowrap ${isAndBoolean ? "text-[#eff9f6]" : "text-[#e4e4e4]"}`} id={isAndBoolean ? "node-1_2505" : "node-1_2477"}>
+          {isAndBoolean ? "정상" : "심각"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type RowProps = {
+  className?: string;
+  status?: "default" | "active";
+};
+
+function Row({ className, status = "default" }: RowProps) {
+  const isActive = status === "active";
+  return (
+    <div className={className || `border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative w-[1819.355px] ${isActive ? "bg-[rgba(0,145,120,0.3)]" : ""}`} id={isActive ? "node-1_2539" : "node-1_2507"}>
+      <Item1 boolean={isActive ? true : undefined} className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" stauts={isActive ? "정상" : undefined} />
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" id={isActive ? "node-1_2541" : "node-1_2509"} data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" id={isActive ? "node-1_2542" : "node-1_2510"}>
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" id={isActive ? "node-1_2543" : "node-1_2511"} data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" id={isActive ? "node-1_2544" : "node-1_2512"}>
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" id={isActive ? "node-1_2545" : "node-1_2513"} data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" id={isActive ? "node-1_2546" : "node-1_2514"}>
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" id={isActive ? "node-1_2547" : "node-1_2515"} data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" id={isActive ? "node-1_2548" : "node-1_2516"}>
+          2025-00-00 00:00:00
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" id={isActive ? "node-1_2549" : "node-1_2517"} data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" id={isActive ? "node-1_2550" : "node-1_2518"}>
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" id={isActive ? "node-1_2551" : "node-1_2519"} data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" id={isActive ? "node-1_2552" : "node-1_2520"}>
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" id={isActive ? "node-1_2553" : "node-1_2521"} data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" id={isActive ? "node-1_2554" : "node-1_2522"}>
+          contents txt
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type MapProps = {
+  className?: string;
+  property1?: "01";
+};
+
+function Map({ className, property1 = "01" }: MapProps) {
+  return (
+    <div className={className || "h-[240px] relative shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25),2px_3px_0px_0px_rgba(0,0,0,0.2),3px_3px_3px_0px_rgba(87,87,87,0.15)] w-[224.81px]"} data-node-id="1:4719">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgProperty101} />
+      <div className="absolute contents left-[35.97px] top-[123.78px]" data-node-id="1:4740" data-name="group">
+        <div className="absolute border-[#00c8a5] border-[0.5px] border-solid content-stretch flex gap-[2px] h-[19px] items-center justify-center left-[35.97px] px-[6px] rounded-[10px] top-[123.78px]" data-node-id="1:4741" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 47 19' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(1.2706e-14 -3.0659 4.6626 6.1398e-9 23.961 41.455)'><stop stop-color='rgba(0,200,165,1)' offset='0'/><stop stop-color='rgba(0,200,165,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(42, 49, 45) 0%, rgb(42, 49, 45) 100%)" }} data-name="label">
+          <div className="h-[10.43px] relative shrink-0 w-[10px]" data-node-id="1:4742" data-name="symbol">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSymbol} />
+          </div>
+          <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="1:4746">
+            청라
+          </p>
+        </div>
+        <div className="absolute content-stretch flex gap-[2px] h-[19px] items-center justify-center left-[101.97px] px-[6px] rounded-[10px] top-[150.78px]" data-node-id="1:4747" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 47 19' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(1.2706e-14 -3.0659 4.6626 6.1398e-9 23.961 41.455)'><stop stop-color='rgba(0,200,165,1)' offset='0'/><stop stop-color='rgba(0,200,165,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(42, 49, 45) 0%, rgb(42, 49, 45) 100%)" }} data-name="label">
+          <div className="h-[10.43px] relative shrink-0 w-[10px]" data-node-id="1:4748" data-name="symbol">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSymbol} />
+          </div>
+          <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#999] text-[13px] whitespace-nowrap" data-node-id="1:4752">
+            분당
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ScreenFacilityManagement() {
+  return (
+    <div className="bg-[#051811] relative size-full" data-node-id="1:22870" data-name="Screen/Facility Management">
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[1080px] left-1/2 opacity-60 top-1/2 w-[1920px]" data-node-id="1:22871" data-name="Background">
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 overflow-hidden">
+            <img alt="" className="absolute h-[144.61%] left-[-33.96%] max-w-none top-[-13.38%] w-[167.92%]" src={imgBackground} />
+          </div>
+          <div className="absolute bg-gradient-to-b from-[33.472%] from-[rgba(5,24,17,0)] inset-0 to-[rgba(0,0,0,0.8)]" />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[996px] left-1/2 top-[calc(50%+42px)] w-[1920px]" data-node-id="1:22872" data-name="Floor Plan">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[108.43%] left-0 max-w-none top-[-8.43%] w-full" src={imgFloorPlan} />
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col gap-[16px] items-start left-[30px] top-[98px] w-[319px]" data-node-id="1:22873" data-name="Side Column">
+        <div className="backdrop-blur-[2px] bg-gradient-to-b border border-[#4d634e] border-solid content-stretch flex flex-col from-[rgba(32,44,40,0.8)] h-[296px] items-center justify-center px-[16px] py-[18px] relative rounded-[15px] shrink-0 to-[rgba(8,33,25,0.8)] w-full" data-node-id="1:22874" data-name="Widget/Site Map">
+          <Map className="h-[240px] relative shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25),2px_3px_0px_0px_rgba(0,0,0,0.2),3px_3px_3px_0px_rgba(87,87,87,0.15)] shrink-0 w-[224.81px]" />
+        </div>
+        <div className="backdrop-blur-[2px] bg-gradient-to-b border border-[#4d634e] border-solid content-stretch flex flex-col from-[rgba(32,44,40,0.8)] h-[267px] items-center justify-center px-[16px] py-[18px] relative rounded-[15px] shrink-0 to-[rgba(8,33,25,0.8)] w-full" data-node-id="1:22876" data-name="Widget/Location Tree">
+          <div className="content-stretch flex flex-col gap-[13px] items-center justify-center relative shrink-0 w-full" data-node-id="1:22877" data-name="Content">
+            <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="1:22878" data-name="Header">
+              <div className="content-stretch flex gap-[9px] items-center relative shrink-0" data-node-id="1:22879" data-name="Title">
+                <div className="relative shrink-0 size-[18px]" data-node-id="1:22880" data-name="Icon/Widget/Site">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconWidgetSite} />
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:22881">
+                  서울
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:22882" data-name="Tabs">
+                <div className="bg-[#162420] border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[10px] py-[4px] relative rounded-[6px] shrink-0" data-node-id="1:22883" data-name="Tab/청라 (Selected)">
+                  <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#5bdcc6] text-[12px] text-right whitespace-nowrap" data-node-id="1:22884">
+                    청라
+                  </p>
+                </div>
+                <div className="bg-[#30403b] content-stretch flex items-center justify-center px-[10px] py-[4px] relative rounded-[6px] shrink-0" data-node-id="1:22885" data-name="Tab/분당">
+                  <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#6f8c83] text-[12px] text-right whitespace-nowrap" data-node-id="1:22886">
+                    분당
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="border-[#778985] border-[0.3px] border-solid content-stretch flex flex-col h-[196px] items-end py-[18px] relative rounded-[10px] shrink-0 w-full" data-node-id="1:22887" data-name="Body">
+              <div aria-hidden className="absolute bg-[rgba(42,42,42,0.5)] inset-0 pointer-events-none rounded-[10px]" />
+              <div className="content-stretch flex flex-[1_0_0] items-start justify-between min-h-px px-[11px] relative w-full" data-node-id="1:22888" data-name="Content">
+                <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="1:22889" data-name="Tree">
+                  <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-0 mt-0 place-items-start relative row-1" data-node-id="1:22890" data-name="Node/Level 1">
+                    <div className="col-1 h-0 ml-[7.5px] mt-[12px] relative row-1 w-[22px]" data-node-id="1:22891" data-name="Connector">
+                      <div className="absolute inset-[-0.5px_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgConnector} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(26,26,26,0.7)] border border-[#144940] border-solid col-1 content-stretch flex h-[25px] items-center ml-[29.5px] mt-0 px-[10px] py-[4px] relative rounded-[6px] row-1 w-[140px]" data-node-id="1:22892" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] whitespace-nowrap" data-node-id="1:22893">
+                        2층
+                      </p>
+                    </div>
+                    <div className="bg-[#175d51] col-1 ml-0 mt-[8.5px] relative rounded-[8.421px] row-1 size-[8px]" data-node-id="1:22894" data-name="Icon/Tree/Node" />
+                  </div>
+                  <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-0 mt-[33px] place-items-start relative row-1" data-node-id="1:22895" data-name="Node/Level 2">
+                    <div className="col-1 h-0 ml-[7.5px] mt-[12px] relative row-1 w-[22px]" data-node-id="1:22896" data-name="Connector">
+                      <div className="absolute inset-[-0.5px_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgConnector} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(26,26,26,0.7)] border border-[#144940] border-solid col-1 content-stretch flex h-[25px] items-center ml-[29.5px] mt-0 px-[10px] py-[4px] relative rounded-[6px] row-1 w-[140px]" data-node-id="1:22897" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] whitespace-nowrap" data-node-id="1:22898">
+                        3층
+                      </p>
+                    </div>
+                    <div className="bg-[#175d51] col-1 ml-0 mt-[8.5px] relative rounded-[8.421px] row-1 size-[8px]" data-node-id="1:22899" data-name="Icon/Tree/Node" />
+                  </div>
+                  <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-[3.5px] mt-[55px] place-items-start relative row-1" data-node-id="1:22900" data-name="Node/Level 3">
+                    <div className="col-1 h-0 ml-[28px] mt-[23px] relative row-1 w-[22px]" data-node-id="1:22901" data-name="Connector">
+                      <div className="absolute inset-[-0.5px_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgConnector} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(26,26,26,0.7)] border border-[#144940] border-solid col-1 content-stretch flex h-[25px] items-center ml-[50px] mt-[11px] px-[10px] py-[4px] relative rounded-[6px] row-1 w-[140px]" data-node-id="1:22902" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] whitespace-nowrap" data-node-id="1:22903">
+                        서버실
+                      </p>
+                    </div>
+                    <div className="bg-[#175d51] col-1 ml-[20.5px] mt-[19.5px] relative rounded-[8.421px] row-1 size-[8px]" data-node-id="1:22904" data-name="Icon/Tree/Node" />
+                    <div className="col-1 h-[23px] ml-0 mt-0 relative row-1 w-[15px]" data-node-id="1:22905" data-name="Path">
+                      <div className="absolute inset-[0_0_-2.17%_-3.33%]">
+                        <img alt="" className="block max-w-none size-full" src={imgPath} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-[27.5px] mt-[88px] place-items-start relative row-1" data-node-id="1:22906" data-name="Node/Level 4">
+                    <div className="col-1 h-0 ml-[28px] mt-[23px] relative row-1 w-[22px]" data-node-id="1:22907" data-name="Connector">
+                      <div className="absolute inset-[-0.5px_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgConnector} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(26,26,26,0.7)] border border-[#144940] border-solid col-1 content-stretch flex h-[25px] items-center ml-[50px] mt-[11px] px-[10px] py-[4px] relative rounded-[6px] row-1 w-[140px]" data-node-id="1:22908" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] whitespace-nowrap" data-node-id="1:22909">
+                        Room 01
+                      </p>
+                    </div>
+                    <div className="bg-[#175d51] col-1 ml-[20.5px] mt-[19.5px] relative rounded-[8.421px] row-1 size-[8px]" data-node-id="1:22910" data-name="Icon/Tree/Node" />
+                    <div className="col-1 grid-cols-[max-content] grid-rows-[max-content] inline-grid ml-[20.5px] mt-[44px] place-items-start relative row-1" data-node-id="1:22911" data-name="Visual">
+                      <div className="col-1 h-0 ml-[7.5px] mt-[12px] relative row-1 w-[22px]" data-node-id="1:22912" data-name="Path">
+                        <div className="absolute inset-[-0.5px_0]">
+                          <img alt="" className="block max-w-none size-full" src={imgPath1} />
+                        </div>
+                      </div>
+                      <div className="bg-[rgba(26,26,26,0.7)] border border-[#5bdcc6] border-solid col-1 content-stretch flex h-[25px] items-center ml-[29.5px] mt-0 px-[10px] py-[4px] relative rounded-[6px] row-1 w-[140px]" data-node-id="1:22913" data-name="Path">
+                        <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#5bdcc6] text-[13px] whitespace-nowrap" data-node-id="1:22914">
+                          Room 02
+                        </p>
+                      </div>
+                      <div className="bg-[rgba(91,220,198,0.2)] border border-[#5bdcc6] border-solid col-1 ml-0 mt-[8.5px] relative rounded-[8.421px] row-1 size-[8px]" data-node-id="1:22915" data-name="Path" />
+                    </div>
+                    <div className="col-1 h-[23px] ml-0 mt-0 relative row-1 w-[15px]" data-node-id="1:22916" data-name="Connector">
+                      <div className="absolute inset-[0_0_-2.17%_-3.33%]">
+                        <img alt="" className="block max-w-none size-full" src={imgPath} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute content-stretch flex h-[194px] items-start left-[260px] p-[10px] top-[-17px]" data-node-id="1:22917" data-name="Scrollbar">
+                  <div className="bg-[#666] h-[111px] relative rounded-[50px] shrink-0 w-[7px]" data-node-id="1:22918" data-name="Thumb" />
+                </div>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_4px_4px_4px_0px_rgba(0,0,0,0.06)]" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[284px] left-1/2 top-[calc(100%+79px)] w-[1860px]" data-node-id="1:22919" data-name="Event Log">
+        <div className="absolute backdrop-blur-[2px] bg-gradient-to-b border border-[#4d634e] border-solid from-[rgba(32,44,40,0.8)] inset-0 rounded-[24px] to-[rgba(8,33,25,0.8)]" data-node-id="I1:22919;6896:9563" />
+        <div className="absolute content-stretch flex gap-[4.043px] inset-[23.51%_1.83%_66.15%_1.4%] items-center" data-node-id="I1:22919;6896:9564">
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[122px]" data-node-id="I1:22919;6896:9565" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9566">
+              등급
+            </p>
+          </div>
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22919;6896:9567" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9568">
+              업무그룹
+            </p>
+          </div>
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22919;6896:9569" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9570">
+              업무명
+            </p>
+          </div>
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22919;6896:9571" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9572">
+              호스트명
+            </p>
+          </div>
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[165px]" data-node-id="I1:22919;6896:9573" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9574">
+              발생시간
+            </p>
+          </div>
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22919;6896:9575" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9576">
+              솔루션
+            </p>
+          </div>
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="I1:22919;6896:9577" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9578">
+              영역
+            </p>
+          </div>
+          <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex flex-[1_0_0] items-center justify-center min-w-px px-[30.323px] py-[10.108px] relative rounded-[8.086px]" data-node-id="I1:22919;6896:9579" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="item">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:22919;6896:9580">
+              내용
+            </p>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex flex-col inset-[36.35%_1.83%_10.19%_1.4%] items-start" data-node-id="I1:22919;6896:9581" data-name="list">
+          <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22919;6896:9582" data-name="row">
+            <Item1 className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" />
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9582;6867:13500" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9582;6867:13501">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9582;6867:13502" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9582;6867:13503">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9582;6867:13504" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9582;6867:13505">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22919;6896:9582;6867:13506" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9582;6867:13507">
+                2025-00-00 00:00:00
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9582;6867:13508" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9582;6867:13509">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22919;6896:9582;6867:13510" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9582;6867:13511">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22919;6896:9582;6867:13512" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9582;6867:13513">
+                contents txt
+              </p>
+            </div>
+          </div>
+          <div className="bg-[rgba(35,77,72,0.3)] border-[#34605b] border-b-[1.011px] border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22919;6896:9583" data-name="row">
+            <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:22919;6896:9583;6867:13515" data-name="item">
+              <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:22919;6896:9583;6867:13515;6867:13626" data-name="Component 2">
+                <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13515;6867:13628">
+                  심각
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9583;6867:13516" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13517">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9583;6867:13518" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13519">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9583;6867:13520" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13521">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22919;6896:9583;6867:13522" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13523">
+                2025-00-00 00:00:00
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9583;6867:13524" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13525">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22919;6896:9583;6867:13526" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13527">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22919;6896:9583;6867:13528" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9583;6867:13529">
+                contents txt
+              </p>
+            </div>
+          </div>
+          <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22919;6896:9584" data-name="row">
+            <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:22919;6896:9584;6867:13499" data-name="item">
+              <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:22919;6896:9584;6867:13499;6867:13638" data-name="Component 2">
+                <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,112,35,0.37)] relative shrink-0 size-[10.108px]" status="yellow" />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13499;6867:13640">
+                  주의
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9584;6867:13500" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13501">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9584;6867:13502" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13503">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9584;6867:13504" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13505">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22919;6896:9584;6867:13506" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13507">
+                2025-00-00 00:00:00
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9584;6867:13508" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13509">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22919;6896:9584;6867:13510" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13511">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22919;6896:9584;6867:13512" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9584;6867:13513">
+                contents txt
+              </p>
+            </div>
+          </div>
+          <Row className="bg-[rgba(0,145,120,0.3)] border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" status="active" />
+          <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="I1:22919;6896:9586" data-name="row">
+            <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:22919;6896:9586;6867:13499" data-name="item">
+              <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:22919;6896:9586;6867:13499;6867:13646" data-name="Component 2">
+                <Item className="drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)] relative shrink-0 size-[10.108px]" status="green" />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13499;6867:13648">
+                  정상
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9586;6867:13500" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13501">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:22919;6896:9586;6867:13502" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13503">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9586;6867:13504" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13505">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:22919;6896:9586;6867:13506" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13507">
+                2025-00-00 00:00:00
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:22919;6896:9586;6867:13508" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13509">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:22919;6896:9586;6867:13510" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13511">
+                item
+              </p>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:22919;6896:9586;6867:13512" data-name="item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:22919;6896:9586;6867:13513">
+                contents txt
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex inset-[6.42%_1.83%_83.6%_1.45%] items-center justify-between" data-node-id="I1:22919;6896:9587" data-name="header">
+          <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:22919;6896:9588" data-name="title">
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[18px] whitespace-nowrap" data-node-id="I1:22919;6896:9589">
+              이벤트 현황
+            </p>
+            <div className="content-stretch flex gap-[18px] items-center relative shrink-0" data-node-id="I1:22919;6896:9590" data-name="action">
+              <div className="content-stretch flex gap-[4.043px] items-center relative shrink-0" data-node-id="I1:22919;6896:9591" data-name="arrow">
+                <div className="relative shrink-0 size-[18.194px]" data-node-id="I1:22919;6896:9592" data-name="btn-arrow-up">
+                  <div className="absolute inset-[-12.5%]">
+                    <img alt="" className="block max-w-none size-full" src={imgBtnArrowUp} />
+                  </div>
+                </div>
+                <div className="relative shrink-0 size-[18.194px]" data-node-id="I1:22919;6896:9595" data-name="btn-arrow-down">
+                  <div className="absolute inset-[-12.5%]">
+                    <img alt="" className="block max-w-none size-full" src={imgBtnArrowDown} />
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="I1:22919;6896:9598" data-name="event">
+                <div className="bg-gradient-to-b border-[#6c726e] border-[0.5px] border-solid content-stretch flex from-[9.459%] from-[rgba(215,237,230,0.2)] h-[24px] items-center justify-center px-[19px] py-[7px] relative rounded-[4px] shrink-0 to-[81.081%] to-[rgba(215,237,230,0)] w-[72px]" data-node-id="I1:22919;6896:9599" data-name="btn">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] text-center whitespace-nowrap" data-node-id="I1:22919;6896:9600">
+                    초기화
+                  </p>
+                </div>
+                <div className="bg-gradient-to-b border-[#009178] border-[0.5px] border-solid content-stretch flex from-[9.459%] from-[rgba(0,145,120,0.3)] h-[24px] items-center justify-center px-[24px] py-[7px] relative rounded-[4px] shrink-0 to-[81.081%] to-[rgba(0,145,120,0)] w-[72px]" data-node-id="I1:22919;6896:9601" data-name="btn">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-center whitespace-nowrap" data-node-id="I1:22919;6896:9602">
+                    삭제
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[6px] items-center justify-end relative shrink-0 w-[927.306px]" data-node-id="I1:22919;6896:9603" data-name="group">
+            <StatusLevel className="border-[#f53132] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" />
+            <StatusLevel className="border-[#fd8002] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="경계" />
+            <StatusLevel className="border-[#fdd01f] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="주의" />
+            <StatusLevel className="border-[#32d28c] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="정상" />
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col items-start left-0 px-[37px] top-[70px] w-[1920px]" data-node-id="1:22920" data-name="Breadcrumb">
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full" data-node-id="I1:22920;6331:21786" data-name="box">
+          <div className="relative shrink-0 size-[11px]" data-node-id="I1:22920;6331:21787" data-name="home">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHome} />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[11px] text-[color:var(--basic\/999,#999)] text-center whitespace-nowrap" data-node-id="I1:22920;6331:21788">
+            <p className="leading-[normal]">/</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[12px] text-[color:var(--basic\/444,#444)] text-center whitespace-nowrap" data-node-id="I1:22920;6331:21789">
+            <p className="leading-[normal]">종합현황</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[11px] text-[color:var(--basic\/999,#999)] text-center whitespace-nowrap" data-node-id="I1:22920;6331:21790">
+            <p className="leading-[normal]">/</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#00c8a5] text-[12px] text-center whitespace-nowrap" data-node-id="I1:22920;6331:21791">
+            <p className="leading-[normal]">상면관리</p>
+          </div>
+        </div>
+      </div>
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute backdrop-blur-[32px] bg-[rgba(4,10,9,0.7)] border-[#787878] border-[0.5px] border-solid content-stretch flex flex-col h-[740px] items-center justify-center left-[calc(83.33%-110px)] pb-[20px] px-[20px] rounded-[24.258px] shadow-[0px_0px_30px_0px_rgba(0,0,0,0.5)] top-[calc(50%-72px)] w-[800px]" data-node-id="1:22921" data-name="Popup/Asset Detail">
+        <div className="content-stretch flex h-[40px] items-end justify-end relative shrink-0 w-full" data-node-id="1:22922" data-name="Actions">
+          <div className="border-[#778985] border-[0.3px] border-solid content-stretch flex items-center justify-center relative rounded-[8px] shrink-0 size-[25px]" data-node-id="1:22923" data-name="Button/Close">
+            <div aria-hidden className="absolute bg-[rgba(42,42,42,0.5)] inset-0 pointer-events-none rounded-[8px]" />
+            <div className="flex items-center justify-center relative shrink-0 size-[13.827px]" data-node-id="1:22924">
+              <div className="flex-none rotate-45">
+                <div className="relative size-[9.777px]" data-name="Icon/Action/Close">
+                  <div className="absolute inset-[-7.14%]">
+                    <img alt="" className="block max-w-none size-full" src={imgIconActionClose} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_4px_4px_4px_0px_rgba(0,0,0,0.06)]" />
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] gap-[15px] items-center min-h-px relative w-full" data-node-id="1:22927" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[10px] h-full items-start overflow-clip relative shrink-0 w-[190px]" data-node-id="1:22928" data-name="Rack">
+            <div className="content-stretch flex h-[20px] items-end justify-between relative shrink-0 w-full" data-node-id="1:22929" data-name="Header">
+              <div className="content-stretch flex gap-[5.833px] items-center relative shrink-0" data-node-id="1:22930" data-name="Title">
+                <div className="relative shrink-0 size-[18.667px]" data-node-id="1:22931" data-name="Icon/Widget/Rack">
+                  <div className="absolute inset-[0_0_-0.89%_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgIconWidgetRack} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[18px] whitespace-nowrap" data-node-id="1:22933">
+                  A-9-B-09
+                </p>
+              </div>
+            </div>
+            <div className="border-4 border-[#666] border-solid content-stretch flex flex-[1_0_0] flex-col items-start min-h-px relative" data-node-id="1:22934" data-name="Slots">
+              <div className="bg-[#222] border border-[#666] border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22935" data-name="Slot/01" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22936" data-name="Slot/02" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22937" data-name="Slot/03" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22938" data-name="Slot/04" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22939" data-name="Slot/05" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22940" data-name="Slot/06" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22941" data-name="Slot/07" />
+              <div className="bg-[#444] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22942" data-name="Slot/08" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22943" data-name="Slot/09" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22944" data-name="Slot/10" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22945" data-name="Slot/11" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22946" data-name="Slot/12" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22947" data-name="Slot/13" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22948" data-name="Slot/14" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22949" data-name="Slot/15" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22950" data-name="Slot/16" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22951" data-name="Slot/17" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22952" data-name="Slot/18" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22953" data-name="Slot/19" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22954" data-name="Slot/20" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22955" data-name="Slot/21" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22956" data-name="Slot/22" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22957" data-name="Slot/23" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22958" data-name="Slot/24" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22959" data-name="Slot/25" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22960" data-name="Slot/26" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22961" data-name="Slot/27" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22962" data-name="Slot/28" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22963" data-name="Slot/29" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22964" data-name="Slot/30" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22965" data-name="Slot/31" />
+              <div className="bg-[#222] border-[#666] border-b border-l border-r border-solid flex-[1_0_0] min-h-px relative w-[190px]" data-node-id="1:22966" data-name="Slot/32" />
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[15px] h-full items-start min-w-px relative" data-node-id="1:22967" data-name="Detail Column">
+            <div className="content-stretch flex flex-[1_0_0] flex-col gap-[10px] items-start min-h-px relative rounded-[24px] w-full" data-node-id="1:22968" data-name="Widget/Asset Info">
+              <div className="content-stretch flex h-[20px] items-end justify-between relative shrink-0 w-full" data-node-id="1:22969" data-name="Header">
+                <div className="content-stretch flex gap-[5.833px] items-center relative shrink-0" data-node-id="1:22970" data-name="Title">
+                  <div className="relative shrink-0 size-[18.667px]" data-node-id="1:22971" data-name="Icon/Widget/Asset">
+                    <div className="absolute inset-[0_0_-3.13%_0]">
+                      <img alt="" className="block max-w-none size-full" src={imgIconWidgetAsset} />
+                    </div>
+                  </div>
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[18px] whitespace-nowrap" data-node-id="1:22973">
+                    자산정보
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[2px] items-start min-h-px relative w-full" data-node-id="1:22974" data-name="Body">
+                <div className="content-stretch flex flex-[1_0_0] gap-[4px] items-center min-h-px relative w-full" data-node-id="1:22975" data-name="Row">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:22976" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:22977" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:22978">
+                        자산번호
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:22979" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:22980">
+                        NW112212552248585
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:22981" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:22982" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:22983">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:22984" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:22985">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] gap-[4px] items-center min-h-px relative w-full" data-node-id="1:22986" data-name="Row">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:22987" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:22988" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:22989">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:22990" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:22991">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:22992" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:22993" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:22994">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:22995" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:22996">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] gap-[4px] items-center min-h-px relative w-full" data-node-id="1:22997" data-name="Row">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:22998" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:22999" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23000">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23001" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23002">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:23003" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:23004" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23005">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23006" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23007">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] gap-[4px] items-center min-h-px relative w-full" data-node-id="1:23008" data-name="Row">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:23009" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:23010" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23011">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23012" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23013">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:23014" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:23015" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23016">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23017" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23018">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] gap-[4px] items-center min-h-px relative w-full" data-node-id="1:23019" data-name="Row">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:23020" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:23021" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23022">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23023" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23024">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:23025" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:23026" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23027">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23028" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23029">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] gap-[4px] items-center min-h-px relative w-full" data-node-id="1:23030" data-name="Row">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:23031" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:23032" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23033">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23034" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23035">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] gap-[2px] h-full items-center min-w-px relative" data-node-id="1:23036" data-name="Field">
+                    <div className="bg-[rgba(3,140,140,0.3)] content-stretch flex h-full items-center justify-center overflow-clip px-[12.35px] py-[3.8px] relative rounded-[6px] shrink-0 w-[90px]" data-node-id="1:23037" data-name="Label">
+                      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[14px] whitespace-nowrap" data-node-id="1:23038">
+                        Label
+                      </p>
+                    </div>
+                    <div className="bg-[rgba(45,58,54,0.9)] content-stretch flex flex-[1_0_0] h-full items-center min-w-px overflow-clip px-[7.6px] py-[5.7px] relative rounded-[6px]" data-node-id="1:23039" data-name="Value">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f1f1f1] text-[14px] whitespace-nowrap" data-node-id="1:23040">
+                        txt
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] flex-col gap-[2px] items-center min-h-px pt-[4px] relative rounded-[24px] w-full" data-node-id="1:23041" data-name="Widget/Performance Trend">
+              <div className="content-stretch flex h-[20px] items-end justify-between relative shrink-0 w-full" data-node-id="1:23042" data-name="Header">
+                <div className="content-stretch flex gap-[5.556px] items-center relative shrink-0" data-node-id="1:23043" data-name="Title">
+                  <div className="relative shrink-0 size-[17.778px]" data-node-id="1:23044" data-name="Icon/Widget/Trend">
+                    <div className="absolute inset-[0_0_-3.13%_0]">
+                      <img alt="" className="block max-w-none size-full" src={imgIconWidgetTrend} />
+                    </div>
+                  </div>
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[17.143px] whitespace-nowrap" data-node-id="1:23046">
+                    성능추이
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[18px] items-start min-h-px relative w-full" data-node-id="1:23047" data-name="Body">
+                <div className="content-stretch flex gap-[6px] items-start justify-end relative shrink-0 w-full" data-node-id="1:23048" data-name="Filter">
+                  <div className="bg-[#30403b] content-stretch flex h-[28px] items-center justify-center px-[12px] py-[4px] relative rounded-[4.8px] shrink-0" data-node-id="1:23049" data-name="Option/Group 1">
+                    <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#6f8c83] text-[15px] whitespace-nowrap" data-node-id="1:23050">
+                      <p className="leading-[normal]">Group</p>
+                    </div>
+                  </div>
+                  <div className="bg-[#172d27] border border-[#009178] border-solid content-stretch flex h-[28px] items-center justify-center px-[12px] py-[4px] relative rounded-[4.8px] shrink-0" data-node-id="1:23051" data-name="Option/Group 2">
+                    <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#5bdcc6] text-[15px] whitespace-nowrap" data-node-id="1:23052">
+                      <p className="leading-[normal]">Group</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[18px] items-center min-h-px relative w-full" data-node-id="1:23053" data-name="Content">
+                  <div className="flex-[1_0_0] grid-rows-[max-content] inline-grid leading-[0] min-h-px place-items-start relative w-full" data-node-id="1:23054" data-name="Line Chart">
+                    <div className="col-1 h-[88.088px] ml-[6.56%] mt-[5.77px] relative row-1 w-[93.44%]" data-node-id="1:23055" data-name="Grid">
+                      <div className="absolute inset-[-1.14%_0_0_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgGrid} />
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] col-1 font-['Pretendard:Regular'] grid-rows-[max-content] inline-grid ml-[6.36%] mt-[98.57px] not-italic place-items-start relative row-1 text-[#d2d8d6] text-[13px] w-[93.23%]" data-node-id="1:23061" data-name="X Axis">
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-0 mt-0 relative row-1 w-[11.2%]" data-node-id="1:23062">
+                        08:00
+                      </p>
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-[13.04%] mt-0 relative row-1 w-[11.21%]" data-node-id="1:23063">
+                        09:00
+                      </p>
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-[26.41%] mt-0 relative row-1 w-[10.5%]" data-node-id="1:23064">
+                        10:00
+                      </p>
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-[39.1%] mt-0 relative row-1 w-[9.81%]" data-node-id="1:23065">
+                        11:00
+                      </p>
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-[51.45%] mt-0 relative row-1 w-[10.5%]" data-node-id="1:23066">
+                        12:00
+                      </p>
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-[64.11%] mt-0 relative row-1 w-[10.85%]" data-node-id="1:23067">
+                        13:00
+                      </p>
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-[76.81%] mt-0 relative row-1 w-[10.85%]" data-node-id="1:23068">
+                        14:00
+                      </p>
+                      <p className="col-1 h-[12.426px] leading-[normal] ml-[89.5%] mt-0 relative row-1 w-[10.5%]" data-node-id="1:23069">
+                        15:00
+                      </p>
+                    </div>
+                    <div className="[word-break:break-word] col-1 font-['Pretendard:Regular'] grid-rows-[max-content] inline-grid ml-0 mt-0 not-italic place-items-start relative row-1 text-[#d2d8d6] text-[13px] text-right w-[3.93%]" data-node-id="1:23070" data-name="Y Axis">
+                      <p className="col-1 h-[12.07px] leading-[20.066px] ml-[70.03%] mt-[87.22px] relative row-1 w-[28.7%]" data-node-id="1:23071">
+                        0
+                      </p>
+                      <p className="col-1 h-[12.07px] leading-[20.066px] ml-0 mt-[43.28px] relative row-1 w-full" data-node-id="1:23072">
+                        50
+                      </p>
+                      <p className="col-1 h-[12.07px] leading-[20.066px] ml-0 mt-0 relative row-1 w-full" data-node-id="1:23073">
+                        100
+                      </p>
+                    </div>
+                    <div className="col-1 h-[86.789px] ml-[6.56%] mt-[5.33px] relative row-1 w-[93.44%]" data-node-id="1:23074" data-name="Data">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgData} />
+                    </div>
+                  </div>
+                  <div className="border border-[#778985] border-solid content-stretch flex gap-[9px] items-center justify-center px-[14px] py-[4px] relative rounded-[8px] shrink-0" data-node-id="1:23078" data-name="Legend">
+                    <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:23079" data-name="Item/CPU">
+                      <div className="relative shrink-0 size-[4px]" data-node-id="1:23080" data-name="Marker">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+                      </div>
+                      <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#d2d8d6] text-[13px] whitespace-nowrap" data-node-id="1:23081">
+                        <p className="leading-[normal]">CPU</p>
+                      </div>
+                    </div>
+                    <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:23082" data-name="Item/Memory">
+                      <div className="relative shrink-0 size-[4px]" data-node-id="1:23083" data-name="Marker">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker1} />
+                      </div>
+                      <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#d2d8d6] text-[13px] whitespace-nowrap" data-node-id="1:23084">
+                        <p className="leading-[normal]">Memory</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col gap-[10px] h-[200px] items-center relative rounded-[24px] shrink-0 w-full" data-node-id="1:23085" data-name="Widget/Event Log">
+              <div className="content-stretch flex h-[20px] items-end justify-between relative shrink-0 w-full" data-node-id="1:23086" data-name="Header">
+                <div className="content-stretch flex gap-[5.556px] items-center relative shrink-0" data-node-id="1:23087" data-name="Title">
+                  <div className="relative shrink-0 size-[17.778px]" data-node-id="1:23088" data-name="Icon/Widget/Event">
+                    <div className="absolute inset-[0_0_-3.13%_0]">
+                      <img alt="" className="block max-w-none size-full" src={imgIconWidgetEvent} />
+                    </div>
+                  </div>
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[17.143px] whitespace-nowrap" data-node-id="1:23090">
+                    이벤트 현황
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[3px] items-center min-h-px relative w-full" data-node-id="1:23091" data-name="Body">
+                <div className="content-stretch flex gap-px items-center overflow-clip relative rounded-[3.8px] shrink-0 w-full" data-node-id="1:23092" data-name="Header Row">
+                  <div className="flex flex-row items-center self-stretch" data-node-id="1:23093">
+                    <div className="bg-[rgba(59,76,70,0.7)] content-stretch flex h-full items-center justify-center px-[12.35px] py-[5px] relative rounded-[3.8px] shrink-0 w-[43px]" data-name="Th/No">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center whitespace-nowrap" data-node-id="1:23094">
+                        No
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-row items-center self-stretch" data-node-id="1:23095">
+                    <div className="bg-[rgba(59,76,70,0.7)] content-stretch flex h-full items-center justify-center px-[12.35px] py-[5px] relative rounded-[3.8px] shrink-0 w-[64px]" data-name="Th/Level">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center whitespace-nowrap" data-node-id="1:23096">
+                        등급
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-row items-center self-stretch" data-node-id="1:23097">
+                    <div className="bg-[rgba(59,76,70,0.7)] content-stretch flex h-full items-center justify-center px-[86.45px] py-[5px] relative rounded-[3.8px] shrink-0 w-[132px]" data-name="Th/Occurred At">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center whitespace-nowrap" data-node-id="1:23098">
+                        발생시간
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-[1_0_0] flex-row items-center self-stretch" data-node-id="1:23099">
+                    <div className="bg-[rgba(59,76,70,0.7)] content-stretch flex flex-[1_0_0] h-full items-center justify-center min-w-px px-[86.45px] py-[5px] relative rounded-[3.8px]" data-name="Th/Message">
+                      <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center whitespace-nowrap" data-node-id="1:23100">
+                        내용
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="border border-[#3b4c46] border-solid content-stretch flex flex-[1_0_0] flex-col gap-px items-start min-h-px overflow-clip relative rounded-[3.8px] w-full" data-node-id="1:23101" data-name="Table">
+                  <div className="content-stretch flex flex-[1_0_0] items-center min-h-px relative w-full" data-node-id="1:23102" data-name="Row">
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[44px]" data-node-id="1:23103" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/No">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23104">
+                        1111
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[64px]" data-node-id="1:23105" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Level">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23106">
+                        심각
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[132px]" data-node-id="1:23107" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Occurred At">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23108">
+                        2025.00.00 00:00:00
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex flex-[1_0_0] h-full items-center min-w-px px-[8px] py-[5px] relative" data-node-id="1:23109" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Message">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23110">
+                        이벤트 현황 내용
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] items-center min-h-px relative w-full" data-node-id="1:23111" data-name="Row">
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[44px]" data-node-id="1:23112" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/No">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23113">
+                        1112
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[64px]" data-node-id="1:23114" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/Level">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23115">
+                        주의
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[132px]" data-node-id="1:23116" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/Occurred At">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23117">
+                        2025.00.00 00:00:00
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex flex-[1_0_0] h-full items-center min-w-px px-[8px] py-[5px] relative" data-node-id="1:23118" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/Message">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23119">
+                        이벤트 현황 내용
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] items-center min-h-px relative w-full" data-node-id="1:23120" data-name="Row">
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[44px]" data-node-id="1:23121" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/No">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23122">
+                        1113
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[64px]" data-node-id="1:23123" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Level">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23124">
+                        정상
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[132px]" data-node-id="1:23125" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Occurred At">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23126">
+                        2025.00.00 00:00:00
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex flex-[1_0_0] h-full items-center min-w-px px-[8px] py-[5px] relative" data-node-id="1:23127" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Message">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23128">
+                        이벤트 현황 내용
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] items-center min-h-px relative w-full" data-node-id="1:23129" data-name="Row">
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[44px]" data-node-id="1:23130" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/No">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23131">
+                        1114
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[64px]" data-node-id="1:23132" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/Level">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23133">
+                        심각
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[132px]" data-node-id="1:23134" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/Occurred At">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23135">
+                        2025.00.00 00:00:00
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex flex-[1_0_0] h-full items-center min-w-px px-[8px] py-[5px] relative" data-node-id="1:23136" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.7) 0%, rgba(59, 76, 70, 0.7) 100%)" }} data-name="Td/Message">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23137">
+                        이벤트 현황 내용
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] items-center min-h-px relative w-full" data-node-id="1:23138" data-name="Row">
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[44px]" data-node-id="1:23139" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/No">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23140">
+                        1115
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[64px]" data-node-id="1:23141" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Level">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23142">
+                        주의
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex h-full items-center justify-center px-[10px] py-[5px] relative shrink-0 w-[132px]" data-node-id="1:23143" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Occurred At">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23144">
+                        2025.00.00 00:00:00
+                      </p>
+                    </div>
+                    <div className="border-[#3b4c46] border-dashed border-r-[0.75px] content-stretch flex flex-[1_0_0] h-full items-center min-w-px px-[8px] py-[5px] relative" data-node-id="1:23145" style={{ backgroundImage: "linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(90deg, rgba(59, 76, 70, 0.3) 0%, rgba(59, 76, 70, 0.3) 100%)" }} data-name="Td/Message">
+                      <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[13px] text-center tracking-[-0.26px] whitespace-nowrap" data-node-id="1:23146">
+                        이벤트 현황 내용
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute h-[80px] left-1/2 top-0 w-[1920px]" data-node-id="1:23147" data-name="Header">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex items-center justify-between left-1/2 top-1/2 w-[1860px]" data-node-id="I1:23147;1:61826" data-name="Header Bar">
+          <div className="content-stretch flex gap-[6.772px] items-center relative shrink-0" data-node-id="I1:23147;2:27336" data-name="Logo">
+            <div className="relative shrink-0 size-[27.09px]" data-node-id="I1:23147;2:27337" data-name="Logo Mark">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoMark} />
+            </div>
+            <p className="[word-break:break-word] font-['Pretendard_GOV:Bold'] leading-[normal] not-italic relative shrink-0 text-[16.931px] text-white tracking-[-0.3386px] whitespace-nowrap" data-node-id="I1:23147;2:27339">
+              WEMB Studio
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[10.677px] items-center relative shrink-0" data-node-id="I1:23147;1:61828" data-name="Menu">
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:23147;1:61829" data-name="Menu Item/Overview (Selected)">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:61829;6028:8732" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:61829;6028:8733">
+                  종합현황
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:23147;1:61830" data-name="Menu Item/Cloud">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:61830;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:61830;6869:9564">
+                  클라우드
+                </p>
+                <div className="relative shrink-0 size-[15px]" data-node-id="I1:23147;1:61830;6869:9565" data-name="icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:23147;1:62745" data-name="Menu Item/Middleware">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:62745;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:62745;6869:9564">
+                  미들웨어
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[26px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:23147;1:61832" data-name="Menu Item/Infrastructure">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:61832;6869:9553" data-name="group">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:61832;6869:9554">
+                  인프라
+                </p>
+                <div className="relative shrink-0 size-[15px]" data-node-id="I1:23147;1:61832;6869:9555" data-name="icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:23147;1:61833" data-name="Menu Item/Event">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:61833;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:61833;6869:9564">
+                  이벤트
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:23147;1:62821" data-name="Menu Item/Network">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:62821;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:62821;6869:9564">
+                  네트워크
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[40px] shrink-0" data-node-id="I1:23147;1:61834" data-name="btn-gnb">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[40px]">
+                <div className="absolute bg-[#004e42] inset-0 rounded-[40px]" />
+                <div className="absolute inset-0 mix-blend-overlay rounded-[40px]" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 120 47' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.5'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-3.0638e-15 2.35 -6 1.3641e-14 60 49.238)'><stop stop-color='rgba(224,255,238,1)' offset='0'/><stop stop-color='rgba(255,255,255,0)' offset='1'/></radialGradient></defs></svg>\")" }} />
+              </div>
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:61834;6869:9558" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:61834;6869:9559">
+                  상면관리
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(128,188,183,0.5),inset_0px_1px_0px_0px_rgba(128,188,183,0.5)]" />
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:23147;1:61835" data-name="Menu Item/Operations">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:23147;1:61835;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:23147;1:61835;6869:9564">
+                  운영관리
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[21.354px] items-center relative shrink-0" data-node-id="I1:23147;1:61836" data-name="Toolbar">
+            <div className="[word-break:break-word] content-stretch flex flex-col font-['Pretendard:Medium'] gap-[2.135px] items-end justify-center leading-[0] not-italic relative shrink-0 text-[#f5fffd] whitespace-nowrap" data-node-id="I1:23147;1:61837" data-name="Timestamp">
+              <div className="flex flex-col justify-center relative shrink-0 text-[17.084px]" data-node-id="I1:23147;1:61838">
+                <p className="leading-[normal]">2026-00-00(수)</p>
+              </div>
+              <div className="flex flex-col justify-center relative shrink-0 text-[21.354px]" data-node-id="I1:23147;1:61839">
+                <p className="leading-[normal]">09:00:00</p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[6.406px] h-[61.928px] items-center relative shrink-0" data-node-id="I1:23147;1:61840" data-name="Actions">
+              <div className="bg-[#172d27] content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12px] shrink-0 size-[42.709px]" data-node-id="I1:23147;1:61841" data-name="Button/Logout">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:23147;1:61841;6869:9538" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon1} />
+                </div>
+              </div>
+              <div className="bg-[#172d27] border-[#009178] border-[1.473px] border-solid content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12.813px] shrink-0 size-[42.709px]" data-node-id="I1:23147;1:61842" data-name="Button/User">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:23147;1:61842;6869:9540" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon2} />
+                </div>
+              </div>
+              <div className="bg-[#172d27] content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12px] shrink-0 size-[42.709px]" data-node-id="I1:23147;1:61843" data-name="Button/Settings">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:23147;1:61843;6869:9538" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon3} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: 하나은행/Basic/999999: #999999, New/Contents/Main/Fill: , New/Contents/Main/Stroke: #4D634E, New/Contents/Main/Effect: Effect(type: BACKGROUND_BLUR, radius: 4), New/Contents/Sub/Stroke: #778985, New/Contents/Sub/Effect: Effect(type: INNER_SHADOW, color: #0000000F, offset: (4, 4), radius: 4, spread: 0), New/Table/Names/Txt: #E4E4E4, New/Contents/Sub/Fill: #2A2A2A, New/Contents/Title: #E9EBEB, New/Table/Head/Fill02: #3B4C46, New/Table/Data/Fill01: #3B4C46,#000000, New/Table/Stroke: #3B4C46, New/Table/Data/Fill02: #3B4C46,#000000, 하나은행/Primary/009178: #009178, New/Bg: #051811.
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

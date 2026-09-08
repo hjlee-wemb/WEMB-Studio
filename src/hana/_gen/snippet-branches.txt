@@ -1,0 +1,25 @@
+    /* 본문 — 이 파일의 컴포넌트는 상태마다 일찍 돌려보낸다:
+         if (status === "hover") { return ( … ); } … return ( … );
+       가지를 전부 모아 두고, 펼칠 때 props 로 조건을 실제로 평가해 고른다(근사 없음). */
+    const bodyStart = re.lastIndex;
+    const endFn = src.indexOf('\n}\n', bodyStart);
+    const body = src.slice(bodyStart, endFn < 0 ? src.length : endFn);
+    const derived = [];
+    const branches = [];
+    let cur = 0;
+    for (;;) {
+      const r = body.indexOf('return (', cur);
+      if (r < 0) break;
+      const head = body.slice(cur, r);
+      if (!branches.length) for (const d of head.matchAll(/const (\w+) = ([^;]+);/g)) derived.push([d[1], d[2]]);
+      const ifs = [...head.matchAll(/if \(([^)]*)\)\s*\{/g)];
+      const cond = ifs.length ? ifs[ifs.length - 1][1] : null;
+      /* 닫는 자리 = return 과 같은 들여쓰기의 ');' 줄 */
+      const ls = body.lastIndexOf('\n', r) + 1;
+      const indent = body.slice(ls, r);
+      const close = body.indexOf('\n' + indent + ');', r);
+      const end = close < 0 ? body.length : close;
+      branches.push({ cond, jsx: body.slice(body.indexOf('<', r), end) });
+      cur = end + 1;
+    }
+    comps[name] = { params, derived, branches, jsx: branches.length ? branches[branches.length - 1].jsx : '' };

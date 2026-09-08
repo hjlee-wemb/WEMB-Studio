@@ -1,0 +1,1535 @@
+const imgStatusGreen = "https://www.figma.com/api/mcp/asset/eb395a15-dcad-4389-9c41-6970fb7ca4ef.svg";
+const imgStatusRed = "https://www.figma.com/api/mcp/asset/37f6a765-1315-48d7-9e13-06534d117aa2.svg";
+const imgStatusYellow = "https://www.figma.com/api/mcp/asset/5d09fddd-94d5-4543-837e-23e025157540.svg";
+const imgItem = "https://www.figma.com/api/mcp/asset/6d7a7bf3-6700-4518-985f-0d2d504ff75d.svg";
+const imgItem1 = "https://www.figma.com/api/mcp/asset/e21ad03d-179d-48a3-95ca-6514b9b1bd1b.svg";
+const imgItem2 = "https://www.figma.com/api/mcp/asset/533c422f-7fa0-4bff-9808-b7ff6d2db575.svg";
+const imgItem3 = "https://www.figma.com/api/mcp/asset/29dd6352-128d-410c-aacf-51e66ad02798.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/a77d393a-d3c7-43b0-9c89-dde49c61546c.png";
+const imgIconWidgetEvent = "https://www.figma.com/api/mcp/asset/5e5f0a72-5447-40fe-b10b-184d9c69f605.svg";
+const imgUnion = "https://www.figma.com/api/mcp/asset/c2a3f407-a7b3-4154-bf6e-4a364537fcee.svg";
+const imgHome = "https://www.figma.com/api/mcp/asset/87e9a988-e113-4a18-a21c-fe3d1a387a47.svg";
+const imgLogoMark = "https://www.figma.com/api/mcp/asset/2dbb580f-aacc-4783-84e4-bcc1de21de09.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/7e615cd9-c53d-4808-bb92-d16e33bacb53.svg";
+const imgIcon1 = "https://www.figma.com/api/mcp/asset/82932086-aeb5-4799-acf7-10d4bbff7486.svg";
+const imgIcon2 = "https://www.figma.com/api/mcp/asset/4e64e5e7-deba-40c5-b80c-5b729a415603.svg";
+const imgIcon3 = "https://www.figma.com/api/mcp/asset/3a8d0a35-7dc8-4c1f-9d0d-af1a504de0a5.svg";
+
+type ItemProps = {
+  className?: string;
+  status?: "green" | "red";
+};
+
+function Item({ className, status = "red" }: ItemProps) {
+  const isRed = status === "red";
+  return (
+    <div className={className || `relative size-[10.108px] ${isRed ? "drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)]" : "drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)]"}`} id={isRed ? "node-1_2465" : "node-1_2441"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isRed ? imgStatusRed : imgStatusGreen} />
+      <div className={`absolute border-[0.251px] border-solid inset-0 opacity-85 rounded-[6.683px] ${isRed ? "border-[#f71d45]" : "border-[#14baff]"}`} id={isRed ? "node-1_2472" : "node-1_2448"} data-name="stroke" />
+    </div>
+  );
+}
+
+type Item1Props = {
+  className?: string;
+  boolean?: boolean;
+  stauts?: "정상" | "심각";
+};
+
+function Item1({ className, boolean = false, stauts = "심각" }: Item1Props) {
+  const isAndBoolean = stauts === "정상" && boolean;
+  return (
+    <div className={className || "content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative w-[122px]"} id={isAndBoolean ? "node-1_2502" : "node-1_2474"}>
+      <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" id={isAndBoolean ? "node-1_2503" : "node-1_2475"} data-name="Component 2">
+        <Item className={`relative shrink-0 size-[10.108px] ${isAndBoolean ? "drop-shadow-[0px_0px_0.602px_rgba(29,199,188,0.37)]" : "drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)]"}`} status={isAndBoolean ? "green" : undefined} />
+        <p className={`[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-["Pretendard:Medium"] leading-[normal] not-italic relative shrink-0 text-[13.14px] whitespace-nowrap ${isAndBoolean ? "text-[#eff9f6]" : "text-[#e4e4e4]"}`} id={isAndBoolean ? "node-1_2505" : "node-1_2477"}>
+          {isAndBoolean ? "정상" : "심각"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type RowProps = {
+  className?: string;
+  status?: "hover" | "default" | "active";
+};
+
+function Row({ className, status = "default" }: RowProps) {
+  if (status === "hover") {
+    return (
+      <button className={className || "bg-[rgba(35,77,72,0.3)] border-[#34605b] border-b-[1.011px] border-solid content-stretch cursor-pointer flex gap-[4px] items-center pr-[2px] relative w-[1819.355px]"} data-node-id="1:4512" data-name="status=hover">
+        <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="1:4513" data-name="item">
+          <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:4513;6867:13626" data-name="Component 2">
+            <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+            <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="I1:4513;6867:13628">
+              심각
+            </p>
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="1:4514" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="1:4515">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="1:4516" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="1:4517">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="1:4518" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="1:4519">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="1:4520" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="1:4521">
+            2025-00-00 00:00:00
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="1:4522" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="1:4523">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="1:4524" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="1:4525">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="1:4526" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#00c8a5] text-[13px] text-left whitespace-nowrap" data-node-id="1:4527">
+            contents txt
+          </p>
+        </div>
+      </button>
+    );
+  }
+  if (status === "active") {
+    return (
+      <div className={className || "bg-[rgba(0,145,120,0.3)] border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative w-[1819.355px]"} data-node-id="1:4528" data-name="status=active">
+        <Item1 boolean className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" stauts="정상" />
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="1:4530" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4531">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="1:4532" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4533">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="1:4534" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4535">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="1:4536" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4537">
+            2025-00-00 00:00:00
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="1:4538" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4539">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="1:4540" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4541">
+            item
+          </p>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="1:4542" data-name="item">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4543">
+            contents txt
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative w-[1819.355px]"} data-node-id="1:4496" data-name="status=default">
+      <Item1 className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" />
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="1:4498" data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4499">
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="1:4500" data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4501">
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="1:4502" data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4503">
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="1:4504" data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4505">
+          2025-00-00 00:00:00
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="1:4506" data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4507">
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="1:4508" data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4509">
+          item
+        </p>
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="1:4510" data-name="item">
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="1:4511">
+          contents txt
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type Item2Props = {
+  className?: string;
+  status?: "yellow";
+};
+
+function Item2({ className, status = "yellow" }: Item2Props) {
+  return (
+    <div className={className || "drop-shadow-[0px_0px_0.602px_rgba(157,132,21,0.37)] relative size-[10.108px]"} data-node-id="1:2564">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusYellow} />
+      <div className="absolute border-[#e3dc09] border-[0.251px] border-solid inset-0 opacity-85 rounded-[6.683px]" data-node-id="1:2571" data-name="stroke" />
+    </div>
+  );
+}
+
+type StatusLevelProps = {
+  className?: string;
+  status?: "심각" | "정상" | "경계" | "주의";
+};
+
+function StatusLevel({ className, status = "심각" }: StatusLevelProps) {
+  const is = status === "경계";
+  const is1 = status === "주의";
+  const is2 = status === "정상";
+  return (
+    <div className={className || `border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] w-[100px] ${is2 ? "border-[#32d28c]" : is1 ? "border-[#fdd01f]" : is ? "border-[#fd8002]" : "border-[#f53132]"}`} id={is2 ? "node-1_4487" : is1 ? "node-1_4479" : is ? "node-1_4471" : "node-1_4463"} style={is2 ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(50,210,140,1)' offset='0'/><stop stop-color='rgba(50,210,140,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : is1 ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(253,208,31,1)' offset='0'/><stop stop-color='rgba(253,208,31,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : is ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(253,128,2,1)' offset='0'/><stop stop-color='rgba(253,128,2,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" } : { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 100 28' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.699999988079071'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2339e-7 0.65625 -5.066 -0.000024253 50 30.188)'><stop stop-color='rgba(245,49,50,1)' offset='0'/><stop stop-color='rgba(245,49,50,0)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(41, 40, 43) 0%, rgb(41, 40, 43) 100%)" }}>
+      <div className="content-stretch flex items-center relative shrink-0 w-full" id={is2 ? "node-1_4488" : is1 ? "node-1_4480" : is ? "node-1_4472" : "node-1_4464"} data-name="block">
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" id={is2 ? "node-1_4489" : is1 ? "node-1_4481" : is ? "node-1_4473" : "node-1_4465"} data-name="box">
+          <div className="content-stretch flex gap-[6px] items-center relative shrink-0 w-[38px]" id={is2 ? "node-1_4490" : is1 ? "node-1_4482" : is ? "node-1_4474" : "node-1_4466"} data-name="group">
+            <div className={`relative shrink-0 size-[10px] ${is2 ? "drop-shadow-[0px_0px_0.596px_rgba(29,199,188,0.37)]" : is1 ? "drop-shadow-[0px_0px_0.596px_rgba(171,112,35,0.37)]" : is ? "drop-shadow-[0px_0px_0.596px_rgba(171,78,35,0.37)]" : "drop-shadow-[0px_0px_0.596px_rgba(171,35,60,0.37)]"}`} id={is2 ? "node-1_4491" : is1 ? "node-1_4483" : is ? "node-1_4475" : "node-1_4467"} data-name="item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={is2 ? imgItem3 : is1 ? imgItem2 : is ? imgItem1 : imgItem} />
+              <div className={`absolute border-[0.248px] border-solid inset-0 opacity-85 rounded-[6.683px] ${is2 ? "border-[#14baff]" : is1 ? "border-[#f7ba1d]" : is ? "border-[#f75b1d]" : "border-[#f71d45]"}`} id={is2 ? "node-I1_4491-6867_13554" : is1 ? "node-I1_4483-6867_13562" : is ? "node-I1_4475-6867_13570" : "node-I1_4467-6867_13578"} data-name="stroke" />
+            </div>
+            <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[13px] text-right tracking-[-0.52px] whitespace-nowrap" id={is2 ? "node-1_4492" : is1 ? "node-1_4484" : is ? "node-1_4476" : "node-1_4468"}>
+              {is2 ? "정상" : is1 ? "주의" : is ? "경계" : "심각"}
+            </p>
+          </div>
+          <div className={`h-[10.108px] relative shrink-0 w-[1.011px] ${is2 ? "bg-[#32d28c]" : is1 ? "bg-[#fdd01f]" : is ? "bg-[#fd7f04]" : "bg-[#f53132]"}`} id={is2 ? "node-1_4493" : is1 ? "node-1_4485" : is ? "node-1_4477" : "node-1_4469"} />
+        </div>
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex-[1_0_0] font-['Pretendard:Medium'] h-[10px] leading-[normal] min-w-px not-italic relative text-[#f2f9ef] text-[14px] text-right tracking-[-0.56px]" id={is2 ? "node-1_4494" : is1 ? "node-1_4486" : is ? "node-1_4478" : "node-1_4470"}>
+          {is2 ? "216" : is1 ? "8" : is ? "10" : "23"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type BtnProps = {
+  className?: string;
+  status?: "hover" | "default";
+};
+
+function Btn({ className, status = "default" }: BtnProps) {
+  const isHover = status === "hover";
+  return (
+    <div className={className || `bg-gradient-to-b border-[0.5px] border-solid content-stretch flex from-[9.459%] h-[28px] items-center justify-center py-[7px] relative rounded-[4px] to-[81.081%] w-[72px] ${isHover ? "border-[#009178] from-[rgba(0,145,120,0.3)] px-[24px] to-[rgba(0,145,120,0)]" : "border-[#6c726e] from-[rgba(215,237,230,0.2)] px-[19px] to-[rgba(215,237,230,0)]"}`} id={isHover ? "node-1_4458" : "node-1_4454"}>
+      <p className={`[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-["Pretendard:Medium"] leading-[normal] not-italic relative shrink-0 text-[13px] text-center whitespace-nowrap ${isHover ? "text-[#00c8a5]" : "text-[#f2f9ef]"}`} id={isHover ? "node-1_4459" : "node-1_4455"}>
+        {isHover ? "조회" : "초기화"}
+      </p>
+    </div>
+  );
+}
+
+export default function ScreenEventStatus() {
+  return (
+    <div className="bg-[#051811] relative size-full" data-node-id="1:19018" data-name="Screen/Event Status">
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[1080px] left-1/2 opacity-60 top-1/2 w-[1920px]" data-node-id="1:19019" data-name="Background">
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 overflow-hidden">
+            <img alt="" className="absolute h-[144.61%] left-[-33.96%] max-w-none top-[-13.38%] w-[167.92%]" src={imgBackground} />
+          </div>
+          <div className="absolute bg-gradient-to-b from-[33.472%] from-[rgba(5,24,17,0)] inset-0 to-[rgba(0,0,0,0.8)]" />
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col gap-[14px] items-start left-[30px] top-[113px] w-[1860px]" data-node-id="1:19020" data-name="Content">
+        <div className="content-stretch flex gap-[9px] items-center relative shrink-0" data-node-id="1:19021" data-name="Title">
+          <div className="h-[18.27px] relative shrink-0 w-[16.681px]" data-node-id="1:19022" data-name="Icon/Widget/Event">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconWidgetEvent} />
+          </div>
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#e9ebeb] text-[18px] whitespace-nowrap" data-node-id="1:19023">
+            이벤트 현황
+          </p>
+        </div>
+        <div className="backdrop-blur-[2px] bg-gradient-to-b border border-[#4d634e] border-solid content-stretch flex flex-col from-[rgba(32,44,40,0.8)] gap-[20px] h-[894px] items-center justify-center pb-[30px] pt-[20px] px-[26px] relative rounded-[24px] shrink-0 to-[rgba(8,33,25,0.8)] w-full" data-node-id="1:19024" data-name="Widget/Event Log">
+          <div className="content-stretch flex h-[28.345px] items-center justify-between relative shrink-0 w-full" data-node-id="1:19025" data-name="Header">
+            <div className="content-stretch flex items-center relative shrink-0" data-node-id="1:19026" data-name="Filters">
+              <div className="content-stretch flex gap-[40px] items-center relative shrink-0" data-node-id="1:19027" data-name="Content">
+                <div className="content-stretch flex gap-[16px] items-center relative shrink-0" data-node-id="1:19028" data-name="Field Group">
+                  <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="1:19029" data-name="Field/Workload Group">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[16px] whitespace-nowrap" data-node-id="I1:19029;145:12128">
+                      업무그룹
+                    </p>
+                    <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I1:19029;145:12129">
+                      <div className="bg-[rgba(242,249,239,0.1)] border-[0.5px] border-[rgba(242,249,239,0.3)] border-solid col-1 h-[26px] ml-0 mt-0 relative rounded-[2px] row-1 w-[146.936px]" data-node-id="I1:19029;145:12130" />
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] col-1 font-['Pretendard:Light'] leading-[normal] ml-[9px] mt-[8px] not-italic relative row-1 text-[#7e7e7e] text-[14px] whitespace-nowrap" data-node-id="I1:19029;145:12131">
+                        search...
+                      </p>
+                      <div className="col-1 h-[9.998px] ml-[127.59px] mt-[8px] relative row-1 w-[9.88px]" data-node-id="I1:19029;145:12132" data-name="Union">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUnion} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="1:19030" data-name="Field/Host">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[16px] whitespace-nowrap" data-node-id="I1:19030;145:12140">
+                      호스트
+                    </p>
+                    <button className="cursor-pointer grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I1:19030;145:12141">
+                      <div className="bg-[rgba(242,249,239,0.2)] border-[0.5px] border-[rgba(242,249,239,0.5)] border-solid col-1 h-[26px] ml-0 mt-0 relative rounded-[2px] row-1 w-[146.936px]" data-node-id="I1:19030;145:12142" />
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] col-1 font-['Pretendard:Regular'] leading-[normal] ml-[9px] mt-[8px] not-italic relative row-1 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="I1:19030;145:12143">
+                        input filed contents
+                      </p>
+                    </button>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="1:19031" data-name="Actions">
+                  <Btn className="bg-gradient-to-b border-[#6c726e] border-[0.5px] border-solid content-stretch flex from-[9.459%] from-[rgba(215,237,230,0.2)] h-[28px] items-center justify-center px-[19px] py-[7px] relative rounded-[4px] shrink-0 to-[81.081%] to-[rgba(215,237,230,0)] w-[72px]" />
+                  <Btn className="bg-gradient-to-b border-[#009178] border-[0.5px] border-solid content-stretch flex from-[9.459%] from-[rgba(0,145,120,0.3)] h-[28px] items-center justify-center px-[24px] py-[7px] relative rounded-[4px] shrink-0 to-[81.081%] to-[rgba(0,145,120,0)] w-[72px]" status="hover" />
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[6px] items-center justify-end relative shrink-0 w-[927.306px]" data-node-id="1:19034" data-name="Status Summary">
+              <StatusLevel className="border-[#f53132] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" />
+              <StatusLevel className="border-[#fd8002] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="경계" />
+              <StatusLevel className="border-[#fdd01f] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="주의" />
+              <StatusLevel className="border-[#32d28c] border-solid border-t-[1.011px] content-stretch drop-shadow-[0px_0px_2.022px_rgba(0,0,0,0.25),0px_0px_1.011px_black] flex flex-col h-[28px] items-center justify-center px-[11px] py-[6px] relative rounded-[8.086px] shrink-0 w-[100px]" status="정상" />
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col gap-[7px] items-start relative shrink-0 w-full" data-node-id="1:19039" data-name="Body">
+            <div className="content-stretch flex gap-[4.043px] h-[29.357px] items-center relative shrink-0 w-full" data-node-id="1:19040" data-name="Header Row">
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[122px]" data-node-id="1:19041" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Level">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19042">
+                  등급
+                </p>
+              </div>
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="1:19043" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Workload Group">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19044">
+                  업무그룹
+                </p>
+              </div>
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="1:19045" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Workload">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19046">
+                  업무명
+                </p>
+              </div>
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="1:19047" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Host">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19048">
+                  호스트명
+                </p>
+              </div>
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[165px]" data-node-id="1:19049" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Occurred At">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19050">
+                  발생시간
+                </p>
+              </div>
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="1:19051" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Solution">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19052">
+                  솔루션
+                </p>
+              </div>
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative rounded-[8.086px] shrink-0 w-[135px]" data-node-id="1:19053" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Area">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19054">
+                  영역
+                </p>
+              </div>
+              <div className="border-[#009178] border-[0.75px] border-solid content-stretch flex flex-[1_0_0] items-center justify-center min-w-px px-[30.323px] py-[10.108px] relative rounded-[8.086px]" data-node-id="1:19055" style={{ backgroundImage: "linear-gradient(180deg, rgba(77, 99, 78, 0.1) 27.439%, rgba(0, 145, 120, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%)" }} data-name="Th/Message">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[14px] whitespace-nowrap" data-node-id="1:19056">
+                  내용
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="1:19057" data-name="Table">
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19058" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19058;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19058;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19058;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19058;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19058;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19058;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19058;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19058;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19058;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19058;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19058;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19058;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19058;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19058;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19058;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19058;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19058;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19059" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19059;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19059;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19059;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19059;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19059;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19059;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19059;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19059;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19059;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19059;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19059;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19059;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19059;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19059;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19059;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19059;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19059;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19060" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19060;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19060;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19060;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19060;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19060;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19060;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19060;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19060;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19060;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19060;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19060;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19060;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19060;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19060;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19060;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19060;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19060;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19061" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19061;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19061;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19061;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19061;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19061;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19061;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19061;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19061;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19061;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19061;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19061;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19061;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19061;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19061;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19061;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19061;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19061;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19062" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19062;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19062;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19062;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19062;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19062;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19062;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19062;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19062;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19062;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19062;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19062;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19062;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19062;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19062;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19062;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19062;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19062;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19063" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19063;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19063;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19063;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19063;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19063;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19063;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19063;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19063;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19063;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19063;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19063;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19063;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19063;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19063;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19063;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19063;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19063;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19064" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19064;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19064;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19064;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19064;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19064;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19064;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19064;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19064;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19064;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19064;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19064;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19064;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19064;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19064;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19064;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19064;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19064;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19065" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19065;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19065;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19065;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19065;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19065;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19065;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19065;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19065;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19065;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19065;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19065;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19065;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19065;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19065;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19065;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19065;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19065;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19066" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19066;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19066;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19066;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19066;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19066;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19066;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19066;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19066;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19066;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19066;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19066;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19066;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19066;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19066;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19066;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19066;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19066;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19067" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19067;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19067;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19067;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19067;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19067;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19067;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19067;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19067;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19067;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19067;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19067;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19067;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19067;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19067;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19067;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19067;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19067;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19068" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19068;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19068;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19068;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19068;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19068;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19068;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19068;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19068;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19068;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19068;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19068;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19068;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19068;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19068;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19068;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19068;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19068;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19069" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19069;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19069;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19069;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19069;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19069;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19069;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19069;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19069;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19069;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19069;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19069;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19069;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19069;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19069;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19069;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19069;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19069;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19070" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19070;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19070;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19070;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19070;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19070;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19070;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19070;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19070;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19070;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19070;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19070;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19070;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19070;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19070;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19070;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19070;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19070;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19071" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19071;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19071;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19071;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19071;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19071;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19071;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19071;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19071;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19071;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19071;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19071;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19071;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19071;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19071;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19071;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19071;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19071;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19072" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19072;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19072;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19072;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19072;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19072;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19072;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19072;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19072;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19072;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19072;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19072;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19072;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19072;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19072;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19072;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19072;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19072;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19073" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19073;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19073;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19073;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19073;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19073;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19073;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19073;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19073;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19073;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19073;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19073;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19073;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19073;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19073;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19073;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19073;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19073;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19074" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19074;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19074;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19074;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19074;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19074;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19074;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19074;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19074;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19074;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19074;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19074;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19074;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19074;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19074;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19074;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19074;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19074;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19075" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19075;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19075;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19075;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19075;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19075;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19075;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19075;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19075;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19075;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19075;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19075;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19075;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19075;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19075;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19075;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19075;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19075;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19076" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19076;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19076;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19076;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19076;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19076;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19076;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19076;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19076;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19076;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19076;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19076;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19076;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19076;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19076;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19076;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19076;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19076;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19077" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19077;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19077;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19077;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19077;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19077;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19077;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19077;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19077;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19077;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19077;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19077;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19077;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19077;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19077;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19077;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19077;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19077;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19078" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19078;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19078;6894:31692;6867:13622" data-name="Component 2">
+                    <Item className="drop-shadow-[0px_0px_0.602px_rgba(171,35,60,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19078;6894:31692;6867:13624">
+                      심각
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19078;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19078;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19078;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19078;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19078;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19078;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19078;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19078;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19078;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19078;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19078;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19078;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19078;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19078;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <Row className="bg-[rgba(35,77,72,0.3)] border-[#34605b] border-b-[1.011px] border-solid content-stretch cursor-pointer flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" status="hover" />
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19080" data-name="Row">
+                <div className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" data-node-id="I1:19080;6894:31692" data-name="item">
+                  <div className="content-stretch flex gap-[8.086px] items-center relative shrink-0" data-node-id="I1:19080;6894:31692;6028:8302" data-name="Component 2">
+                    <Item2 className="drop-shadow-[0px_0px_0.602px_rgba(157,132,21,0.37)] relative shrink-0 size-[10.108px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13.14px] whitespace-nowrap" data-node-id="I1:19080;6894:31692;6028:8304">
+                      주의
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19080;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19080;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19080;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19080;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19080;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19080;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19080;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19080;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19080;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19080;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19080;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19080;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19080;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19080;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+              <Row className="bg-[rgba(0,145,120,0.3)] border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" status="active" />
+              <div className="border-[rgba(255,255,255,0.2)] border-b border-solid content-stretch flex gap-[4px] items-center pr-[2px] relative shrink-0 w-full" data-node-id="1:19082" data-name="Row">
+                <Item1 className="content-stretch flex items-center justify-center pr-[2px] py-[10.108px] relative shrink-0 w-[122px]" />
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19082;6894:31693" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19082;6894:31694">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[135px]" data-node-id="I1:19082;6894:31695" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19082;6894:31696">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19082;6894:31697" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19082;6894:31698">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[163px]" data-node-id="I1:19082;6894:31699" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19082;6894:31700">
+                    2025-00-00 00:00:00
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[137px]" data-node-id="I1:19082;6894:31701" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19082;6894:31702">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[30.323px] py-[10.108px] relative shrink-0 w-[136px]" data-node-id="I1:19082;6894:31703" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19082;6894:31704">
+                    item
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] items-center min-w-px px-[30.323px] py-[10.108px] relative" data-node-id="I1:19082;6894:31705" data-name="item">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#e4e4e4] text-[13px] whitespace-nowrap" data-node-id="I1:19082;6894:31706">
+                    contents txt
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col items-start left-0 px-[37px] top-[70px] w-[1920px]" data-node-id="1:19083" data-name="Breadcrumb">
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0 w-full" data-node-id="I1:19083;6331:21786" data-name="box">
+          <div className="relative shrink-0 size-[11px]" data-node-id="I1:19083;6331:21787" data-name="home">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHome} />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[11px] text-[color:var(--basic\/999,#999)] text-center whitespace-nowrap" data-node-id="I1:19083;6331:21788">
+            <p className="leading-[normal]">/</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[12px] text-[color:var(--basic\/444,#444)] text-center whitespace-nowrap" data-node-id="I1:19083;6331:21789">
+            <p className="leading-[normal]">종합현황</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[11px] text-[color:var(--basic\/999,#999)] text-center whitespace-nowrap" data-node-id="I1:19083;6331:21790">
+            <p className="leading-[normal]">/</p>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#00c8a5] text-[12px] text-center whitespace-nowrap" data-node-id="I1:19083;6331:21791">
+            <p className="leading-[normal]">이벤트 현황</p>
+          </div>
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute h-[80px] left-1/2 top-0 w-[1920px]" data-node-id="1:19084" data-name="Header">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex items-center justify-between left-1/2 top-1/2 w-[1860px]" data-node-id="I1:19084;1:61826" data-name="Header Bar">
+          <div className="content-stretch flex gap-[6.772px] items-center relative shrink-0" data-node-id="I1:19084;2:27336" data-name="Logo">
+            <div className="relative shrink-0 size-[27.09px]" data-node-id="I1:19084;2:27337" data-name="Logo Mark">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoMark} />
+            </div>
+            <p className="[word-break:break-word] font-['Pretendard_GOV:Bold'] leading-[normal] not-italic relative shrink-0 text-[16.931px] text-white tracking-[-0.3386px] whitespace-nowrap" data-node-id="I1:19084;2:27339">
+              WEMB Studio
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[10.677px] items-center relative shrink-0" data-node-id="I1:19084;1:61828" data-name="Menu">
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:19084;1:61829" data-name="Menu Item/Overview (Selected)">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:61829;6028:8732" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:61829;6028:8733">
+                  종합현황
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:19084;1:61830" data-name="Menu Item/Cloud">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:61830;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:61830;6869:9564">
+                  클라우드
+                </p>
+                <div className="relative shrink-0 size-[15px]" data-node-id="I1:19084;1:61830;6869:9565" data-name="icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:19084;1:62745" data-name="Menu Item/Middleware">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:62745;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:62745;6869:9564">
+                  미들웨어
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[26px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:19084;1:61832" data-name="Menu Item/Infrastructure">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:61832;6869:9553" data-name="group">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:61832;6869:9554">
+                  인프라
+                </p>
+                <div className="relative shrink-0 size-[15px]" data-node-id="I1:19084;1:61832;6869:9555" data-name="icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[40px] shrink-0" data-node-id="I1:19084;1:61833" data-name="btn-gnb">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[40px]">
+                <div className="absolute bg-[#004e42] inset-0 rounded-[40px]" />
+                <div className="absolute inset-0 mix-blend-overlay rounded-[40px]" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 106 47' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.5'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-2.7064e-15 2.35 -5.3 1.3641e-14 53 49.238)'><stop stop-color='rgba(224,255,238,1)' offset='0'/><stop stop-color='rgba(255,255,255,0)' offset='1'/></radialGradient></defs></svg>\")" }} />
+              </div>
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:61833;6869:9558" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2f9ef] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:61833;6869:9559">
+                  이벤트현황
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(128,188,183,0.5),inset_0px_1px_0px_0px_rgba(128,188,183,0.5)]" />
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:19084;1:62821" data-name="Menu Item/Network">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:62821;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:62821;6869:9564">
+                  네트워크
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:19084;1:61834" data-name="Menu Item/Facility">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:61834;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:61834;6869:9564">
+                  상면관리
+                </p>
+              </div>
+            </div>
+            <div className="bg-[#172d27] content-stretch flex items-center justify-center px-[32px] py-[14px] relative rounded-[50px] shrink-0" data-node-id="I1:19084;1:61835" data-name="Menu Item/Operations">
+              <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I1:19084;1:61835;6869:9563" data-name="txt">
+                <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[#829291] text-[16px] whitespace-nowrap" data-node-id="I1:19084;1:61835;6869:9564">
+                  운영관리
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[21.354px] items-center relative shrink-0" data-node-id="I1:19084;1:61836" data-name="Toolbar">
+            <div className="[word-break:break-word] content-stretch flex flex-col font-['Pretendard:Medium'] gap-[2.135px] items-end justify-center leading-[0] not-italic relative shrink-0 text-[#f5fffd] whitespace-nowrap" data-node-id="I1:19084;1:61837" data-name="Timestamp">
+              <div className="flex flex-col justify-center relative shrink-0 text-[17.084px]" data-node-id="I1:19084;1:61838">
+                <p className="leading-[normal]">2026-00-00(수)</p>
+              </div>
+              <div className="flex flex-col justify-center relative shrink-0 text-[21.354px]" data-node-id="I1:19084;1:61839">
+                <p className="leading-[normal]">09:00:00</p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[6.406px] h-[61.928px] items-center relative shrink-0" data-node-id="I1:19084;1:61840" data-name="Actions">
+              <div className="bg-[#172d27] content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12px] shrink-0 size-[42.709px]" data-node-id="I1:19084;1:61841" data-name="Button/Logout">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:19084;1:61841;6869:9538" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon1} />
+                </div>
+              </div>
+              <div className="bg-[#172d27] border-[#009178] border-[1.473px] border-solid content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12.813px] shrink-0 size-[42.709px]" data-node-id="I1:19084;1:61842" data-name="Button/User">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:19084;1:61842;6869:9540" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon2} />
+                </div>
+              </div>
+              <div className="bg-[#172d27] content-stretch flex items-center justify-center p-[10.309px] relative rounded-[12px] shrink-0 size-[42.709px]" data-node-id="I1:19084;1:61843" data-name="Button/Settings">
+                <div className="relative shrink-0 size-[21.354px]" data-node-id="I1:19084;1:61843;6869:9538" data-name="Icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon3} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: New/Contents/Title: #E9EBEB, New/Table/Names/Txt: #E4E4E4, New/Contents/Main/Fill: , New/Contents/Main/Stroke: #4D634E, New/Contents/Main/Effect: Effect(type: BACKGROUND_BLUR, radius: 4), 하나은행/Primary/009178: #009178, New/Bg: #051811.
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.
