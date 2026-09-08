@@ -126,6 +126,23 @@ node crop.js A.png B.png x y w h out.png [배율]        # 같은 자리 위아�
 
 ---
 
+## 로고 교체 (`logo.svg` · `logo-lt.svg`)
+
+세 화면의 브랜드 로고는 원본(HANJIN)이 아니라 **WEMB Studio 로고**다.
+Figma `A11hAZefK5FSuEE9MagOgj` 의 `114:5437`(Logo — 칩 + WEMB Studio 워드마크)에서 받아
+`src/hanjin/logo.svg`(다크) · `logo-lt.svg`(라이트, white → #16191d)로 덮어썼다.
+
+- **생성물은 손대지 않았다.** 파일 이름이 그대로라 `asset-map.json`(`imgLogo → logo.svg`)과
+  `light-assets.json`(`logo.svg → logo-lt.svg`)이 그대로 맞물린다.
+- 로고 자리는 113x23.905 인데 이 로고는 148x29 다. 늘리면 일그러지므로 SVG 에
+  `preserveAspectRatio="xMidYMid meet"` 를 줘 비율을 지킨 채 그 상자 안에 맞춰 넣는다
+  (한진 원본 에셋들은 상자를 딱 맞춰 뽑아 `none` 을 쓴다 — 이 파일만 예외다).
+- ⚠️ **`node dl.js` 를 다시 돌리면 원본 HANJIN 로고를 다시 받아 덮어쓴다.** 그때는 이 두 파일을
+  Figma `114:5437` 에서 다시 받아 넣어야 한다.
+- 런처 썸네일용 통짜 캡처(`src/templates/hanjin-*.jpg`)에는 옛 로고가 그림으로 박혀 있다 —
+  화면을 다시 캡처해야 바뀐다.
+
+---
 ## 라이트 테마 (`light.js` · `mk-light-assets.js`)
 
 원본이 **다크** 시안이라 라이트를 파생한다. 형상·좌표는 한 줄도 건드리지 않고 색만 다시 적는다.
