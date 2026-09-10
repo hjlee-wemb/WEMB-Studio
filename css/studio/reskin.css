@@ -1,0 +1,688 @@
+/* ── 사이드바 리스킨 · 빠른 가이드 카드 ── */
+
+/* ── index3 — 하단 '빠른 가이드' 프로모 카드 (index2의 Figma식 온보딩 카드) ── */
+.promocard {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-page) 60%, var(--bg-surface));
+  border-radius: 16px;
+  padding: 14px 14px 13px;
+  cursor: pointer;
+  font-family: var(--font);
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+.promocard:hover {
+  border-color: color-mix(in srgb, var(--point-main) 45%, var(--line));
+  transform: translateY(-1px);
+}
+.promocard .pc-ttl {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: -0.2px;
+}
+.promocard .pc-sub {
+  font-size: 11px;
+  color: var(--text-weak);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+.promocard .pc-thumb {
+  position: relative;
+  margin-top: 12px;
+  height: 96px;
+  border-radius: 11px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 120% at 20% 15%, color-mix(in srgb, var(--point-main) 55%, transparent), transparent 60%),
+    radial-gradient(120% 120% at 90% 90%, color-mix(in srgb, var(--point-sub) 42%, transparent), transparent 55%),
+    linear-gradient(135deg, #1a2a4a 0%, #10192e 100%);
+  background-color: #121c33;
+}
+.promocard .pc-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: grid;
+  place-items: center;
+}
+.promocard .pc-play svg {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+  margin-left: 2px;
+}
+
+/* ============================================================
+   index3 — 사이드바 메뉴 UI를 index2 디자인 언어로 리스킨.
+   CSS만 덮어씀(마크업·JS·ID 무수정) → index.html의 모든 옵션·메뉴·
+   기능은 그대로 살아있고 '보이는 모양'만 index2를 따른다.
+
+   index2 언어 = ① 라운드 스케일(칩·버튼은 pill, 카드는 18px)
+                 ② 세그먼트는 '트랙 + 안에서 채워지는 활성칩'
+                 ③ 스와치·아이콘 버튼은 원형
+                 ④ 대문자/자간 트래킹 없는 평범한 라벨
+                 ⑤ 얕고 넓은 그림자
+   ============================================================ */
+:root {
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-pill: 999px;
+  --i2-shadow: 0 6px 14px -7px rgba(0, 0, 0, 0.6);
+  /* 모션 토큰 —
+     ease-out은 '등장/퇴장'용. 슬라이딩 필은 이미 화면에 있는 물체가
+     '이동'하는 것이므로 가속·감속이 다 있는 ease-in-out이 맞다.
+     색 변화는 ease, 누름 피드백은 즉각 반응하도록 ease-out.
+
+     곡선은 완만한 ease-in-out(easeInOutQuad). 흔히 쓰는 강한
+     cubic-bezier(.77,0,.175,1)은 중반이 너무 빨라, 아래 두-모서리
+     방식에서 앞뒤 모서리가 과하게 벌어져 필이 64%나 부풀어 버린다
+     (트랙을 거의 다 덮음). 완만한 곡선이라야 변형이 적정선에 들어온다. */
+  --i2-ease-move: cubic-bezier(0.45, 0, 0.55, 1);
+  --i2-dur-color: 200ms;
+  --i2-dur-press: 140ms;
+  /* 스쿼시&스트레치 —
+     필의 두 모서리를 다른 속도로 보낸다. 진행 방향의 '앞 모서리'가
+     먼저 도착(lead)하고 '뒤 모서리'가 늦게 따라붙으면(trail), 그 시간차
+     만큼 필이 늘어났다가(길쭉해져 덜 둥글어짐) 다시 오므라든다
+     = 공이 튕길 때의 변형. 이동거리가 길수록 더 늘어나 물리적으로 맞다.
+     두 값의 **차이가 곧 변형의 크기**다. 40ms 차이(200/240)는 +18.5%로
+     240ms 안에 스쳐 지나가 눈에 안 잡혔음 → 100ms 차이로 벌려 +40%대로.
+     체감 도착은 lead(200ms)라 느려 보이지 않고, 뒤 모서리가 남아서
+     따라붙는 300ms가 '늘어났다 오므라드는' 탄성으로 읽힌다. */
+  --i2-dur-lead: 200ms;
+  --i2-dur-trail: 300ms;
+  --i2-dur-flat: 240ms; /* 변형 없이 평범하게 이동할 때 */
+}
+
+/* ── 사이드바 컨테이너 ── */
+.sidepanel {
+  padding: 20px 18px;
+  gap: 20px;
+}
+.sidepanel::-webkit-scrollbar-thumb {
+  border-radius: var(--r-pill);
+}
+
+/* ── 브랜드 헤더 → 사이드바에 평평하게(알약 카드 배경 제거) ── */
+.brandhead {
+  padding: 0;
+  gap: 10px;
+}
+/* 접기·초기화 → index2 원형 아이콘 버튼 */
+#closer,
+.qh {
+  border-radius: 50%;
+  background: var(--bg-accent);
+  border: 1px solid var(--line);
+}
+#closer:hover,
+.qh:hover {
+  border-color: var(--point-main);
+  color: var(--point-main);
+}
+
+/* ── 상단 탭 → index2 세그먼트 트랙(2칸, 동일한 슬라이딩) ── */
+.sbtabs {
+  position: relative;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 4px;
+  gap: 4px;
+}
+.sbtabs::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  right: calc(50% + 2px);
+  border-radius: calc(var(--r-md) - 5px);
+  background: var(--point-main);
+  box-shadow: var(--i2-shadow);
+  opacity: 0;
+  transition-property: left, right, opacity;
+  transition-timing-function: var(--i2-ease-move), var(--i2-ease-move), ease;
+  transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+}
+.sbtabs:has(.sbtab.on)::before {
+  opacity: 1;
+}
+.sbtabs:has(.sbtab:nth-child(2).on)::before {
+  left: calc(50% + 2px);
+  right: 4px;
+  transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+}
+.sbtab {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--r-md) - 5px);
+  padding: 9px 5px;
+  transition:
+    color var(--i2-dur-color) ease,
+    background var(--i2-dur-color) ease,
+    transform var(--i2-dur-press) ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sbtab:hover:not(.on) {
+    background: var(--bg-accent);
+    color: var(--text-strong);
+  }
+}
+/* 사이드바 크롬은 :root 고정 팔레트라 활성칩 배경도 항상 고정 네이비 →
+   글자색은 프리뷰용 --on-point가 아니라 흰색 고정(대비 4.6:1 확보) */
+.sbtab.on {
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+}
+.sbtab.on .ko {
+  color: rgba(255, 255, 255, 0.82);
+}
+/* 대시보드 편집은 대시보드 화면에서만 — 다른 화면에선 잠김 */
+.sbtab.locked {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* ── 프로젝트 · 화면 내비 (첨부 이미지식 심플 리스트) ──
+   '새 프로젝트'로 시작해, 구성하고자 하는 화면(대시보드/디지털 트윈/포탈)을
+   Figma 페이지 목록처럼 담백한 행으로 고른다. 아래 스텝 카드로 색·검증·저장이 이어진다. */
+.fignav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.fignav-new {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--point-fill);
+  color: #fff;
+  border: 0;
+  border-radius: var(--r-md);
+  font: 600 13px/1 var(--font);
+  cursor: pointer;
+  box-shadow: var(--i2-shadow);
+  transition:
+    transform var(--i2-dur-press) ease-out,
+    filter var(--i2-dur-color) ease;
+}
+.fignav-new svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+.fignav-new:hover {
+  filter: brightness(1.08);
+}
+.fignav-new:active {
+  transform: scale(0.985);
+}
+.fignav-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.fignav-lbl {
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-weak);
+}
+.fignav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 5px;
+}
+.fignav-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 10px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-sm);
+  color: var(--text-strong);
+  cursor: pointer;
+  transition:
+    background var(--i2-dur-color) ease,
+    color var(--i2-dur-color) ease;
+}
+.fignav-row .chev {
+  flex: none;
+  width: 12px;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text-weak);
+  transition:
+    transform var(--i2-dur-color) var(--i2-ease-move),
+    color var(--i2-dur-color) ease;
+}
+.fignav-row .ficon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--text-weak);
+  transition: color var(--i2-dur-color) ease;
+}
+.fignav-row .ficon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+}
+.fignav-row .txt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.fignav-row .txt b {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+.fignav-row .txt .sub {
+  font-size: 11px;
+  line-height: 1.15;
+  color: var(--text-weak);
+}
+.fignav-row .badge {
+  margin-left: auto;
+  flex: none;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  background: var(--bg-accent);
+  color: var(--text-weak);
+}
+@media (hover: hover) and (pointer: fine) {
+  .fignav-row:not(.on):not(:disabled):hover {
+    background: var(--bg-accent);
+  }
+}
+.fignav-row.on {
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+  color: #fff;
+}
+.fignav-row.on .chev {
+  transform: rotate(90deg);
+  color: var(--point-main);
+}
+.fignav-row.on .ficon {
+  color: var(--point-main);
+}
+.fignav-row.on .txt .sub {
+  color: rgba(255, 255, 255, 0.62);
+}
+.fignav-row:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+/* ── 스텝 번호 → 원형 ── */
+.stephdr .stepno {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+/* index2는 라벨에 대문자·자간을 쓰지 않음 */
+.substep {
+  letter-spacing: 0;
+}
+
+/* ── 아코디언 → index2 카드(18px) + 평범한 라벨 ── */
+.acc {
+  border-radius: var(--r-md);
+}
+/* 위의 .acc > summary(596행)를 덮어쓰는 후순위 규칙 — 실제로 화면에 나오는 건 이쪽이다.
+   제목 위계 값(12.5px/600)은 한 곳에서만 정하도록 크기는 위 규칙에 맡기고
+   여기서는 이 카드 스타일에만 필요한 padding만 남긴다. */
+.acc > summary {
+  padding: 12px 14px;
+}
+.acc .accbody {
+  padding: 13px 14px 15px;
+}
+.acc .srcbadge {
+  color: #fff;
+}
+/* 셰브론 글리프 → index2식 얇은 선(회전 유지) */
+.acc > summary .chev {
+  font-size: 11px;
+}
+
+/* ── 세그먼트(.seg · 색 소스 .srcbtns) → index2 트랙 + 활성칩 ──
+   활성칩은 버튼 배경이 아니라 트랙의 ::before 인디케이터가 그린다.
+   선택이 바뀌면 이 인디케이터가 다음 칸으로 **미끄러진다**(sliding pill).
+   JS는 .on 클래스만 토글하므로(버튼 재생성 없음) CSS만으로 성립. */
+.seg,
+.srcseg .srcbtns {
+  position: relative;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  padding: 4px;
+  gap: 4px;
+}
+/* 필의 위치를 translateX가 아니라 **left/right 인셋**으로 잡는다.
+   두 모서리를 따로 움직일 수 있어야 늘어남(스트레치)이 생기기 때문.
+   (transform 하나로는 시작·끝 scaleX가 같아 중간 변형을 만들 수 없고,
+    translateX와 scaleX는 같은 속성이라 transition/animation으로 못 쪼갬)
+   기준 컨테이닝 블록 = 트랙의 패딩 박스, 패딩 4px, 칸 사이 간격 4px. */
+.seg::before,
+.srcseg .srcbtns::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--point-main) 46%, var(--bg-page));
+  box-shadow: var(--i2-shadow);
+  opacity: 0;
+  transition-property: left, right, opacity;
+  transition-timing-function: var(--i2-ease-move), var(--i2-ease-move), ease;
+}
+/* 선택된 게 있을 때만 인디케이터 표시 */
+.seg:has(button.on)::before,
+.srcseg .srcbtns:has(button.on)::before {
+  opacity: 1;
+}
+
+/* ── 2칸 트랙(.seg — 버전·밝기·추출·갤러리) ──
+   칸1 오른쪽 인셋 = 50% + 2px, 칸2 왼쪽 인셋 = 50% + 2px */
+.seg::before {
+  left: 4px;
+  right: calc(50% + 2px);
+  /* 칸1로 이동 = 왼쪽으로 감 → left가 앞 모서리(먼저 도착), right가 뒤따라옴 */
+  transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+}
+.seg:has(button:nth-child(2).on)::before {
+  left: calc(50% + 2px);
+  right: 4px;
+  /* 칸2로 이동 = 오른쪽으로 감 → right가 앞 모서리 */
+  transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+}
+
+/* ── 3칸 트랙(.seg.seg3 — 화면 종류) — 2칸 규칙을 같은 방식으로 덮어씀 ── */
+.seg.seg3::before {
+  left: 4px;
+  right: calc(66.6667% + 1.3333px);
+  transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+}
+.seg.seg3:has(button:nth-child(2).on)::before {
+  left: calc(33.3333% + 2.6667px);
+  right: calc(33.3333% + 2.6667px);
+  transition-duration: var(--i2-dur-flat), var(--i2-dur-flat), 160ms;
+}
+.seg.seg3:has(button:nth-child(3).on)::before {
+  left: calc(66.6667% + 1.3333px);
+  right: 4px;
+  transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+}
+
+/* ── 3칸 트랙(#srcSeg — 직접색·사진·추천) ──
+   칸폭 = (100% - 패딩8 - 간격8)/3 → 경계 인셋 = 33.3333%+2.6667px, 66.6667%+1.3333px */
+.srcseg .srcbtns::before {
+  left: 4px;
+  right: calc(66.6667% + 1.3333px);
+  transition-duration: var(--i2-dur-lead), var(--i2-dur-trail), 160ms;
+}
+/* 가운데 칸은 왼쪽·오른쪽 양쪽에서 올 수 있어 '앞 모서리'를 정할 수 없음
+   → 한쪽으로 정하면 반대 방향에서 올 때 거꾸로 오므라듦(스쿼시)이 생기므로,
+     변형 없이 평범하게 이동시킨다(짧은 이동이라 티가 거의 안 남) */
+.srcseg .srcbtns:has(button:nth-child(2).on)::before {
+  left: calc(33.3333% + 2.6667px);
+  right: calc(33.3333% + 2.6667px);
+  transition-duration: var(--i2-dur-flat), var(--i2-dur-flat), 160ms;
+}
+.srcseg .srcbtns:has(button:nth-child(3).on)::before {
+  left: calc(66.6667% + 1.3333px);
+  right: 4px;
+  transition-duration: var(--i2-dur-trail), var(--i2-dur-lead), 160ms;
+}
+/* 버튼은 인디케이터 위에 얹힌 '글자'만 담당.
+   색 전환은 이동보다 빨라야 라벨이 중간에 흐리멍덩해 보이지 않음. */
+.seg button,
+.srcseg .srcbtns button {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-pill);
+  color: var(--text-weak);
+  transition:
+    color var(--i2-dur-color) ease,
+    background var(--i2-dur-color) ease,
+    transform var(--i2-dur-press) ease-out;
+}
+.seg button {
+  padding: 9px 8px;
+}
+/* 3칸 세그먼트. minmax(0,1fr)이 핵심 — 1fr의 최소값은 auto(=min-content)라
+   가장 긴 라벨이 든 칸이 제 몫보다 넓어진다. 실측으로 68.4/79.3/68.4가 되어
+   라벨이 칸에 끼는 동시에, 정확히 1/3을 가정하고 좌표를 잡는 ::before 인디케이터가
+   버튼과 어긋나 있었다. 0을 최소값으로 주면 세 칸이 반드시 같은 폭이 된다. */
+.seg.seg3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.seg.seg3 button {
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+.srcseg .srcbtns button {
+  padding: 8px 4px;
+}
+/* hover 배경은 비활성 칸에만 — 활성 칸에 깔면 인디케이터를 덮어버림.
+   터치기기는 탭이 hover로 오인되므로 마우스 환경으로 한정 */
+@media (hover: hover) and (pointer: fine) {
+  .seg button:hover:not(.on),
+  .srcseg .srcbtns button:hover:not(.on) {
+    background: var(--bg-accent);
+    color: var(--text-strong);
+    border-color: transparent;
+  }
+}
+.seg button.on,
+.srcseg .srcbtns button.on {
+  background: transparent;
+  border-color: transparent;
+  color: #fff;
+  box-shadow: none;
+}
+
+/* ── 기준 색 스와치 → index2 원형 ── */
+.swprev {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border-width: 2px;
+}
+.seedpick {
+  border-radius: 50%;
+}
+/* HEX 입력 → 알약 */
+.hex {
+  border-radius: var(--r-pill);
+  padding: 10px 15px;
+}
+
+/* ── 배색 방식 칩 → index2 고스트 알약 ──
+   이건 트랙이 아니라 줄바꿈되는 칩 묶음이라 슬라이딩이 성립하지 않음
+   → 선택된 칩이 살짝 부풀었다 돌아오는 팝으로 대신 */
+.pills button {
+  background: var(--bg-accent);
+  padding: 8px 15px;
+  transition:
+    background var(--i2-dur-color) ease,
+    color var(--i2-dur-color) ease,
+    border-color var(--i2-dur-color) ease,
+    transform var(--i2-dur-press) ease-out;
+}
+.pills button.on {
+  color: #fff;
+  box-shadow: var(--i2-shadow);
+  animation: chipPop 240ms var(--i2-ease-move);
+}
+@keyframes chipPop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ── 누름 피드백 ──
+   전역 규칙이 이 버튼들에 translateY(1px)를 주는데, 가로로 미끄러지는
+   컨트롤에 세로 눌림은 방향이 어긋남 → 즉각 반응하는 scale로 교체 */
+.seg button:active,
+.srcseg .srcbtns button:active,
+.sbtab:active,
+.pills button:active {
+  transform: scale(0.97);
+}
+
+/* ── 버튼류 → 알약 통일 ── */
+.genbtn,
+.savebtn {
+  border-radius: var(--r-pill);
+  box-shadow: var(--i2-shadow);
+}
+.ghostbtn,
+.galnav,
+.editbtn,
+.imgbtn {
+  border-radius: var(--r-pill);
+}
+.editbtn {
+  background: var(--bg-accent);
+}
+
+/* ── 카드류 → index2 18px ── */
+.stepcard,
+.pcard,
+.trendchip,
+.promocard,
+.designpanel,
+.cwarn {
+  border-radius: var(--r-md);
+}
+
+/* ── 슬라이더 → index2 토글 노브 느낌(둥근 트랙 + 원형 손잡이) ── */
+.slider input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--bg-accent);
+  border: 1px solid var(--line);
+}
+.slider input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--point-main);
+  border: 2px solid var(--bg-surface);
+  box-shadow: var(--i2-shadow);
+  cursor: pointer;
+}
+.slider input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--point-main);
+  border: 2px solid var(--bg-surface);
+  box-shadow: var(--i2-shadow);
+  cursor: pointer;
+  border-color: var(--bg-surface);
+}
+
+/* ── 이미지 미리보기 썸네일 → index2 라운드 타일 ── */
+.imgprev img {
+  border-radius: var(--r-sm);
+}
+
+/* :has() 미지원 브라우저 안전망 — 슬라이딩 인디케이터가 성립하지 않으므로
+   인디케이터를 숨기고 활성칩을 예전처럼 '버튼 배경'으로 되돌린다.
+   (없으면 선택 표시가 통째로 사라짐) */
+@supports not selector(:has(*)) {
+  .seg::before,
+  .srcseg .srcbtns::before,
+  .sbtabs::before {
+    display: none;
+  }
+  .seg button.on,
+  .srcseg .srcbtns button.on,
+  .sbtab.on {
+    background: var(--point-main);
+    box-shadow: var(--i2-shadow);
+  }
+}
+
+/* 움직임 최소화 설정 — '전부 끄기'가 아니라 **이동만** 제거.
+   색·투명도 전환은 어느 칸이 선택됐는지 이해를 돕므로 남긴다. */
+@media (prefers-reduced-motion: reduce) {
+  .seg::before,
+  .srcseg .srcbtns::before,
+  .sbtabs::before {
+    /* 위치(left/right)는 즉시 반영 → 미끄러짐·늘어남 없음 */
+    transition-property: opacity;
+    transition-duration: 160ms;
+    transition-timing-function: ease;
+  }
+  .seg button,
+  .srcseg .srcbtns button,
+  .sbtab,
+  .pills button {
+    transition:
+      color var(--i2-dur-color) ease,
+      background var(--i2-dur-color) ease;
+  }
+  .pills button.on {
+    animation: none;
+  }
+  .seg button:active,
+  .srcseg .srcbtns button:active,
+  .sbtab:active,
+  .pills button:active {
+    transform: none;
+  }
+}

@@ -1,0 +1,849 @@
+/* ── 런처 — 프로젝트 목록 · 템플릿 갤러리 ── */
+
+/* ============================================================
+   온보딩 플로우 — 런처(프로젝트 목록) → 새 프로젝트(화면 종류)
+   → 레이아웃 선택 → 스튜디오. 전부 :root 고정 네이비 크롬 팔레트.
+   ============================================================ */
+.flow {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: var(--bg-page);
+  color: var(--text-strong);
+  font-family: var(--font);
+  display: none;
+}
+.flow.show {
+  display: block;
+}
+.flow[hidden] {
+  display: none !important;
+}
+/* ── 런처가 화면을 덮는 동안엔 뒤 스튜디오를 렌더 트리에서 뺀다 ──
+   런처는 position:fixed · z-index:300 으로 화면 전체를 가리는데, 그 아래에서 사이드바와
+   스튜디오(합쳐 6,100여 노드 · SVG 100여 개)가 그대로 살아 레이아웃·페인트를 계속 치렀다.
+   그래서 홈에서는 마우스를 움직이거나 색을 하나 바꾸기만 해도 스타일 재계산이 판마다
+   ~9ms 씩 들어 버벅였다(재계산 20회 177ms → 14.8ms 로 줄었다).
+   content-visibility:hidden 은 **자기 상자는 남기고 속만 건너뛴다** — display:none 과 달리
+   되돌릴 때 안쪽 상태를 복원해 주고, 해제되면 ResizeObserver 가 알아서 다시 맞춘다.
+   (썸네일 캡처는 홈으로 나가기 *전에* 끝나므로 여기에 걸리지 않는다) */
+body:has(#flowHome.show) > #app > .sidebar,
+body:has(#flowHome.show) > #app > .main {
+  content-visibility: hidden;
+}
+/* 썸네일을 찍는 동안만 예외 — 레이아웃이 없으면 html2canvas 가 빈 그림을 찍는다 */
+body.wemb-capturing > #app > .sidebar,
+body.wemb-capturing > #app > .main {
+  content-visibility: visible;
+}
+
+/* ── 런처 홈 (Mockplus식 프로젝트 목록) ── */
+.lc {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  height: 100%;
+}
+.lc-side {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--line);
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+.lc-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px;
+}
+.lc-brand img {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+.lc-brand b {
+  font-size: 17px;
+  font-weight: 700;
+}
+.lc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.lc-navi {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  color: var(--text-weak);
+  font-size: 13px;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  transition: background var(--i2-dur-color) ease, color var(--i2-dur-color) ease;
+}
+.lc-navi svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+}
+.lc-navi:hover {
+  background: var(--bg-accent);
+  color: var(--text-strong);
+}
+.lc-navi.on {
+  background: color-mix(in srgb, var(--point-main) 18%, transparent);
+  color: #fff;
+}
+.lc-navsep {
+  margin-top: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.lc-main {
+  padding: 30px 34px;
+  overflow: auto;
+}
+/* ── 프로젝트 안(화면 목록)에 들어왔음을 알리는 경로 표시 ── */
+.lc-crumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+.lc-crumb[hidden] { display: none; }
+.lc-crumb-root {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-page);
+  color: var(--text-weak);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+}
+.lc-crumb-root svg { width: 14px; height: 14px; }
+.lc-crumb-root:hover {
+  background: var(--bg-accent);
+  color: var(--text-strong);
+  border-color: color-mix(in srgb, var(--point-main) 45%, var(--line));
+}
+.lc-crumb-sep { color: var(--text-weak); opacity: 0.6; }
+.lc-crumb-cur { color: var(--text-strong); font-weight: 600; }
+/* 제목 앞 폴더 아이콘 — 화면 목록일 때만 */
+.lc-title {
+  font-size: 21px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lc-title .lc-titleico {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--point-main);
+}
+/* 화면 목록(프로젝트 안)일 때 카드 그리드에 옅은 강조 — 목록이 바뀌었음을 인지시킨다 */
+.lc-grid.inproject {
+  border-radius: 12px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--point-main) 5%, transparent);
+  outline: 1px dashed color-mix(in srgb, var(--point-main) 30%, transparent);
+  outline-offset: -1px;
+}
+.lc-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.lc-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 20px;
+}
+/* display:flex가 [hidden]의 display:none을 덮으므로 명시적으로 숨김 우선 */
+.lc-new[hidden] {
+  display: none;
+}
+.lc-new {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--point-fill);
+  color: #fff;
+  font: 600 13px/1 var(--font);
+  cursor: pointer;
+  box-shadow: var(--i2-shadow);
+  transition: filter var(--i2-dur-color) ease, transform var(--i2-dur-press) ease-out;
+}
+.lc-new svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  fill: none;
+}
+.lc-new:hover {
+  filter: brightness(1.08);
+}
+.lc-new:active {
+  transform: scale(0.98);
+}
+.lc-ghost {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 15px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg-accent);
+  color: var(--text-weak);
+  font: 500 13px/1 var(--font);
+  cursor: pointer;
+  transition: color var(--i2-dur-color) ease, border-color var(--i2-dur-color) ease;
+}
+.lc-ghost svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+}
+.lc-ghost:hover {
+  color: var(--text-strong);
+  border-color: var(--point-main);
+}
+.lc-searchwrap {
+  margin-left: auto;
+  position: relative;
+}
+.lc-searchwrap svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  stroke: var(--text-weak);
+  stroke-width: 2;
+  fill: none;
+}
+.lc-searchwrap input {
+  width: 230px;
+  padding: 9px 12px 9px 33px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg-accent);
+  color: var(--text-strong);
+  font: 13px var(--font);
+}
+.lc-searchwrap input::placeholder {
+  color: var(--text-weak);
+}
+.lc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+  gap: 22px;
+}
+.lc-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-surface);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  transition: border-color var(--i2-dur-color) ease, transform var(--i2-dur-press) ease-out;
+}
+.lc-card:hover {
+  border-color: var(--point-main);
+  transform: translateY(-2px);
+}
+/* 프로젝트 삭제 버튼 — 카드 우상단, 호버/포커스 시 노출 */
+.lc-del {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(3, 7, 18, 0.72);
+  color: var(--text-weak);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--i2-dur-color) ease, background var(--i2-dur-color) ease, color var(--i2-dur-color) ease;
+}
+.lc-del svg {
+  width: 15px;
+  height: 15px;
+}
+.lc-card:hover .lc-del,
+.lc-del:focus-visible {
+  opacity: 1;
+}
+.lc-del:hover {
+  background: var(--danger-fill);
+  color: #fff;
+}
+.lc-thumb {
+  aspect-ratio: 16 / 10;
+  background: var(--bg-page);
+  display: grid;
+  place-items: center;
+  border-bottom: 1px solid var(--line);
+}
+.lc-thumb .wf {
+  width: 78%;
+}
+.lc-cardbody {
+  padding: 12px 14px 14px;
+}
+.lc-cardttl {
+  font-size: 13px;
+  font-weight: 600;
+}
+.lc-cardmeta {
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--text-weak);
+  display: flex;
+  justify-content: space-between;
+}
+.lc-cardnew {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  min-height: 210px;
+  color: var(--text-weak);
+  border-style: dashed;
+}
+.lc-cardnew svg {
+  width: 30px;
+  height: 30px;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  fill: none;
+}
+/* 카드 즐겨찾기(별) 토글 — 삭제 버튼과 대칭으로 좌상단 */
+.lc-fav {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(3, 7, 18, 0.72);
+  color: var(--text-weak);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--i2-dur-color) ease, background var(--i2-dur-color) ease, color var(--i2-dur-color) ease;
+}
+.lc-fav svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+.lc-card:hover .lc-fav,
+.lc-fav:focus-visible {
+  opacity: 1;
+}
+.lc-fav:hover {
+  color: #f6c454;
+}
+/* 즐겨찾기된 상태 — 항상 노출 + 금색 채움 */
+.lc-fav.on {
+  opacity: 1;
+  color: #f6c454;
+}
+.lc-fav.on svg {
+  fill: #f6c454;
+  stroke: #f6c454;
+}
+/* 휴지통 카드의 복원 버튼 — 좌상단 (삭제 버튼과 대칭) */
+.lc-restore {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(3, 7, 18, 0.72);
+  color: var(--text-weak);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--i2-dur-color) ease, background var(--i2-dur-color) ease, color var(--i2-dur-color) ease;
+}
+.lc-restore svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+.lc-card:hover .lc-restore,
+.lc-restore:focus-visible {
+  opacity: 1;
+}
+.lc-restore:hover {
+  background: var(--point-fill);
+  color: #fff;
+}
+/* 휴지통 카드는 열리지 않고, 클릭하면 선택 토글 */
+.lc-card.trashed {
+  cursor: pointer;
+}
+.lc-card.trashed:hover {
+  transform: none;
+  border-color: color-mix(in srgb, var(--point-main) 40%, var(--line));
+}
+/* 선택된 휴지통 카드 */
+.lc-card.trashed.sel {
+  border-color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 9%, var(--bg-surface));
+}
+/* 선택 체크박스 — 휴지통 카드 좌상단 (항상 노출) */
+.lc-check {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 2px solid color-mix(in srgb, var(--text-weak) 70%, transparent);
+  border-radius: 50%;
+  background: rgba(3, 7, 18, 0.72);
+  color: transparent;
+  cursor: pointer;
+  transition: background var(--i2-dur-color) ease, border-color var(--i2-dur-color) ease, color var(--i2-dur-color) ease;
+}
+.lc-check svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+}
+.lc-card.trashed.sel .lc-check {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+}
+/* 휴지통 카드 우상단 액션 묶음(복원·영구삭제) */
+.lc-cardacts {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+.lc-cardacts .lc-restore,
+.lc-cardacts .lc-del,
+.lc-cardacts .lc-dup {
+  position: static;
+  top: auto;
+  right: auto;
+  left: auto;
+}
+/* 복제 버튼 (프로젝트/화면 계층) */
+.lc-dup {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(3, 7, 18, 0.72);
+  color: var(--text-weak);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--i2-dur-color) ease, background var(--i2-dur-color) ease, color var(--i2-dur-color) ease;
+}
+.lc-dup svg { width: 15px; height: 15px; }
+.lc-card:hover .lc-dup,
+.lc-dup:focus-visible { opacity: 1; }
+.lc-dup:hover { background: var(--fg-point, #4c8dff); color: #fff; }
+/* ── 프로젝트(폴더) 카드 — 여러 화면을 묶은 그룹임이 드러나게 ── */
+.lc-folder .lc-cardttl { display: flex; align-items: center; gap: 6px; }
+.lc-folderico { display: inline-grid; place-items: center; width: 16px; height: 16px; flex: 0 0 auto; color: var(--fg-point, #4c8dff); }
+.lc-folderico svg { width: 16px; height: 16px; fill: color-mix(in srgb, var(--fg-point, #4c8dff) 16%, transparent); }
+/* 화면 카드 — 프로젝트(폴더)와 구분되는 모니터 아이콘 */
+.lc-screencard .lc-cardttl { display: flex; align-items: center; gap: 6px; }
+.lc-screenico { display: inline-grid; place-items: center; width: 16px; height: 16px; flex: 0 0 auto; color: var(--text-weak); }
+.lc-screenico svg { width: 15px; height: 15px; }
+/* 실제 시안 이미지 썸네일 */
+.lc-shot { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.lc-foldercover { position: relative; display: block; overflow: hidden; padding: 0; }
+/* 대표 화면(안착) — 트랙의 현재 슬라이드가 항상 보인다 */
+.lc-thumbtrack { position: absolute; inset: 0; display: flex; width: 100%; height: 100%; transition: transform 0.22s ease; }
+.lc-thumbslide { flex: 0 0 100%; height: 100%; display: grid; place-items: center; background: var(--bg-page); }
+.lc-thumbslide .wf { width: 78%; }
+/* 좌·우 화살표 — 마우스 오버 시 나타나 클릭으로 화면 넘김 */
+.lc-thumbarrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 4;
+  width: 28px; height: 28px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+  background: rgba(3, 7, 18, 0.62); color: #fff; cursor: pointer; opacity: 0;
+  transition: opacity 0.16s ease, background 0.16s ease;
+}
+.lc-thumbarrow.prev { left: 7px; }
+.lc-thumbarrow.next { right: 7px; }
+.lc-thumbarrow svg { width: 16px; height: 16px; }
+.lc-foldercover:hover .lc-thumbarrow { opacity: 1; }
+.lc-thumbarrow:hover { background: var(--fg-point, #4c8dff); }
+/* 넘김 점 인디케이터 (호버 시) */
+.lc-thumbdots {
+  position: absolute; left: 0; right: 0; bottom: 7px; z-index: 3;
+  display: flex; gap: 5px; justify-content: center; pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+}
+.lc-foldercover:hover .lc-thumbdots { opacity: 1; }
+.lc-thumbdots span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(230, 235, 245, 0.6); transition: background 0.15s ease, transform 0.15s ease;
+}
+.lc-thumbdots span.on { background: var(--fg-point, #4c8dff); transform: scale(1.4); }
+/* 빈 상태 / 템플릿 플레이스홀더 — 그리드 전체 폭 차지 */
+.lc-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 300px;
+  text-align: center;
+  color: var(--text-weak);
+  border: 1.5px dashed var(--line);
+  border-radius: var(--r-md);
+  padding: 40px 30px;
+}
+.lc-empty svg {
+  width: 44px;
+  height: 44px;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  fill: none;
+  opacity: 0.7;
+}
+.lc-empty b {
+  font-size: 15px;
+  color: var(--text-strong);
+  font-weight: 700;
+}
+.lc-empty p {
+  font-size: 12px;
+  max-width: 380px;
+  line-height: 1.55;
+  margin: 0;
+}
+/* 빈 상태의 두 번째 진입로 — 템플릿 갤러리로 보낸다.
+   정적 배지가 아니라 실제 버튼이므로 버튼 기본 스타일을 지우고 상태를 준다. */
+.lc-empty .lc-tplbadge {
+  margin-top: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 14px;
+  min-height: 24px;
+  border: 1px solid color-mix(in srgb, var(--point-main) 38%, transparent);
+  border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+  color: var(--point-main);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.lc-empty .lc-tplbadge:hover {
+  background: color-mix(in srgb, var(--point-main) 26%, transparent);
+  border-color: var(--point-main);
+}
+/* ── 템플릿 갤러리 — Figma Studio(169:150) 재현. 라이트 서피스 위 3열 카드 ── */
+.lc-grid.tplmode {
+  display: block; /* 갤러리는 자체 그리드를 쓰므로 런처 그리드를 끈다 */
+}
+.tplgal {
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px 30px 34px;
+  margin-top: 4px;
+}
+.tplcats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px 22px;
+  padding-bottom: 22px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--line);
+}
+.tplcat {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-weak);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.tplcat::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+.tplcat:hover {
+  color: var(--text-strong);
+}
+.tplcat.on {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.tplcat.on::before {
+  opacity: 1;
+  background: var(--point-main);
+  transform: scale(1.3);
+}
+/* 2단 계층 — 화면 유형 줄(위) 다음에 업무 영역 줄(아래)이 오면
+   위 줄의 경계선을 없애고 간격을 좁혀 한 묶음으로 보이게 한다 */
+.tplcats:has(+ .tplsubcats) {
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 0;
+}
+.tplsubcats {
+  gap: 11px 18px;
+}
+.tplsubcats .tplcat {
+  font-size: 13px;
+}
+/* 연도 필터는 분류(카테고리)가 아니라 **추리는 도구**다 — 검색·정렬과 같은 줄에 두고
+   정렬 드롭다운과 똑같은 부품을 쓴다. 새 생김새를 들이지 않아 화면이 조용하다. */
+.tplbarright {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* 메뉴 안의 개수 — 눌러 보기 전에 그 해에 몇 개인지 알 수 있다 */
+.tplsort-opt .num {
+  margin-left: auto;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-weak);
+  opacity: 0.7;
+}
+.tplsort-opt.on .num,
+.tplsort-opt:hover .num {
+  opacity: 1;
+}
+/* 연도를 고른 동안에는 단추에 표가 난다 — 목록이 왜 줄었는지 바로 보인다 */
+.tplsort-btn.filtered {
+  border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+  color: var(--text-strong);
+}
+.tplsort-btn.filtered .yico {
+  color: var(--point-sub);
+}
+/* ── 템플릿 정렬 드롭다운 (카테고리 바 아래 행) ── */
+.tplsortbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 왼쪽 검색 · 오른쪽 정렬 */
+  gap: 12px;
+  margin: -6px 0 22px;
+}
+/* ── 템플릿 검색창 (정렬 바 왼쪽) ── */
+.tplsearch {
+  position: relative;
+  flex: 0 1 320px;
+  min-width: 0;
+}
+.tplsearch svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-weak);
+  stroke-width: 2;
+  fill: none;
+  pointer-events: none;
+}
+.tplsearch input {
+  width: 100%;
+  padding: 8px 34px 8px 36px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-accent);
+  color: var(--text-strong);
+  font: 13px var(--font);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.tplsearch input::placeholder {
+  color: var(--text-weak);
+}
+.tplsearch input:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+  background: var(--bg-surface);
+}
+.tplsearch-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  border-radius: 6px;
+  color: var(--text-weak);
+  cursor: pointer;
+  padding: 0;
+}
+.tplsearch-clear svg {
+  position: static;
+  transform: none;
+  width: 13px;
+  height: 13px;
+}
+.tplsearch-clear:hover {
+  color: var(--text-strong);
+  background: var(--bg-surface);
+}
+.tplsearch.has-val .tplsearch-clear {
+  display: inline-flex;
+}
+.tplsort {
+  position: relative;
+}
+.tplsort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-accent);
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-strong);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.tplsort-btn:hover {
+  border-color: color-mix(in srgb, var(--point-main) 45%, var(--line));
+}
+.tplsort-btn svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+.tplsort-btn .chev {
+  opacity: 0.65;
+  transition: transform 0.18s ease;
+}
+.tplsort.open .tplsort-btn .chev {
+  transform: rotate(180deg);
+}
+.tplsort-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 148px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  z-index: 30;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+.tplsort.open .tplsort-menu {
+  display: flex;
+}
+.tplsort-opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-weak);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.tplsort-opt:hover {
+  background: var(--bg-accent);
+  color: var(--text-strong);
+}
+.tplsort-opt.on {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.tplsort-opt .ck {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  opacity: 0;
+  color: var(--point-main);
+}
+.tplsort-opt.on .ck {
+  opacity: 1;
+}
+.tplgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 28px 20px;
+}

@@ -1,0 +1,1040 @@
+/* ── UX 보강 — 대비 경고 · 온보딩 · 토스트 · 접근성 ── */
+
+/* ============================================================
+ *  index2 개선 — 비디자이너 PM 대상 UX 보강
+ *  (1)실시간 대비 경고 (2)색 소스 세그먼트 (3)첫 실행 온보딩
+ *  (4)백업/복원 (5)고급 접기 (6)미리보기 편집 힌트
+ * ============================================================ */
+
+/* (2) 색 소스 세그먼트 — 지금 만드는 방식 한 곳에서 표시/전환 */
+.srcseg {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 2px 0 4px;
+}
+/* '지금 만드는 방식'은 '화면 형식'·'색 고르기'와 같은 섹션 소제목 위계 → .substep과 동일 값 */
+.srcseg .srclbl {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-weak);
+}
+/* .seg와 동일한 세그먼트 문법(테두리 칩 + 활성 채움) — 컨트롤 방언 통일 */
+.srcseg .srcbtns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+}
+.srcseg .srcbtns button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text-weak);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.srcseg .srcbtns button .sc {
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+.srcseg .srcbtns button:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.srcseg .srcbtns button.on {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+}
+.srcseg .srcbtns button.on .sc {
+  opacity: 0.9;
+}
+
+/* (1) 실시간 대비 경고 배너 — 검증 모달을 열지 않아도 위험을 상시 노출 */
+.cwarn {
+  display: none;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--warning) 55%, var(--line));
+  background: color-mix(in srgb, var(--warning) 14%, var(--bg-surface));
+  margin-top: 2px;
+}
+.cwarn.show {
+  display: flex;
+}
+.cwarn.danger {
+  border-color: color-mix(in srgb, var(--danger) 60%, var(--line));
+  background: color-mix(in srgb, var(--danger) 15%, var(--bg-surface));
+}
+/* 경고 배지 — 배경을 경고색으로 가득 채운 채움 배지 (아이콘은 어두운 색) */
+.cwarn .cwico {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  padding: 4px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  background: var(--warning);
+  color: #1a1206;
+}
+.cwarn.danger .cwico {
+  background: var(--danger-fill);
+  color: #fff;
+}
+.cwarn .cwbody {
+  flex: 1;
+  min-width: 0;
+}
+.cwarn .cwttl {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin-bottom: 2px;
+}
+.cwarn .cwdesc {
+  font-size: 11px;
+  color: var(--text-weak);
+  line-height: 1.4;
+}
+.cwarn .cwacts {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+/* 보조 버튼(어디가 문제인지 보기) — 경고창 배경과 확실히 구분되게 또렷한 칩으로 */
+.cwarn .cwacts button {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--warning) 45%, var(--line));
+  background: var(--bg-page);
+  color: var(--text-strong);
+}
+.cwarn.danger .cwacts button {
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--line));
+}
+.cwarn .cwacts button.primary {
+  background: var(--warning);
+  border-color: var(--warning);
+  color: #1a1206;
+}
+.cwarn.danger .cwacts button.primary {
+  background: var(--danger-fill);
+  border-color: var(--danger);
+  color: #fff;
+}
+.cwarn .cwacts button:hover {
+  filter: brightness(1.08);
+}
+/* 통과 상태 — 안심 배지(작게) */
+.cok {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--point-sub) 70%, var(--text-strong));
+  padding: 2px 2px;
+  margin-top: 2px;
+}
+.cok.show {
+  display: flex;
+}
+.cok svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* (3) 첫 실행 온보딩 오버레이 */
+.onbd {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(5, 8, 15, 0.72);
+  backdrop-filter: blur(4px);
+}
+.onbd.show {
+  display: flex;
+  animation: panelIn 0.22s ease;
+}
+.onbd .obcard {
+  width: min(440px, 100%);
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px 26px 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.onbd .obkicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--point-sub);
+  text-transform: uppercase;
+}
+.onbd h2 {
+  margin: 8px 0 4px;
+  font-size: 20px;
+  color: var(--text-strong);
+}
+.onbd .obsub {
+  font-size: 13px;
+  color: var(--text-weak);
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+.onbd .obsteps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.onbd .obstep {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.onbd .obstep .n {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--point-fill);
+}
+.onbd .obstep .t b {
+  display: block;
+  font-size: 13px;
+  color: var(--text-strong);
+  margin-bottom: 1px;
+}
+.onbd .obstep .t span {
+  font-size: 12px;
+  color: var(--text-weak);
+  line-height: 1.45;
+}
+.onbd .obfoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+/* 체크박스 자체는 13×13 이지만 라벨 전체가 클릭 영역이다 —
+   최소 24px 높이를 보장해 실제로 누를 수 있게 한다. 11px 는 판독 한계라 12px 로. */
+.onbd .obfoot label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 24px;
+  padding: 3px 6px 3px 2px;
+  font-size: 12px;
+  color: var(--text-weak);
+  cursor: pointer;
+}
+.onbd .obfoot label input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--point-main);
+}
+.onbd .obstart {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  background: var(--point-fill);
+  color: #fff;
+}
+.onbd .obstart:hover {
+  filter: brightness(1.1);
+}
+
+/* (3) 프리셋 '여기서 시작' 배지 */
+.startbadge {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: #1a1206;
+  background: var(--warning);
+  padding: 2px 7px;
+  border-radius: 999px;
+  flex: none;
+}
+
+/* (4) 저장 소실 방지 안내 + 백업/복원 */
+.dataloss {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-weak);
+  background: var(--bg-page);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-top: 8px;
+}
+.dataloss svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  color: var(--warning);
+}
+.snapio {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.snapio button {
+  flex: 1;
+  min-width: 0; /* flex 항목 기본값(auto)이면 글자 길이만큼 버티다 넘친다 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-page);
+  color: var(--text-strong);
+  cursor: pointer;
+  line-height: 1.25;
+}
+/* 동작(강) 위, 설명(약) 아래 — 두 줄 다 nowrap이라 임의 위치에서 끊기지 않는다 */
+.snapio .lb {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+.snapio .lb b {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.snapio .lb .ko {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--text-weak) 85%, transparent);
+}
+.snapio button:hover {
+  border-color: var(--point-main);
+}
+.snapio button svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+
+/* (6) 미리보기 편집 발견성 힌트 칩 */
+.previewhint {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 8px 12px;
+  border-radius: 998px;
+  background: rgba(20, 24, 34, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+  color: #eef1f7;
+  animation: panelIn 0.3s ease;
+}
+.previewhint.hide {
+  display: none;
+}
+.previewhint svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: #9fb4ff;
+}
+.previewhint b {
+  font-weight: 700;
+}
+.previewhint .phx {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: #cfd6e4;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  /* 원의 지름은 힌트 바의 밀도라 유지하고, 히트 영역만 24×24 로 넓힌다 */
+  position: relative;
+}
+.previewhint .phx::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+}
+.previewhint .phx:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ============================================================
+ *  index2 2차 개선 — (2)토스트 (3)날씨 옵트인 (4)데스크톱 안내
+ *  (5)디자인 사양서 (6)온보딩 스포트라이트
+ * ============================================================ */
+
+/* (2) 토스트 — 액션 결과 피드백 (여러 기능에서 재사용) */
+.toastwrap {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: var(--z-float);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: 92vw;
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: #1b2130;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+  color: #eef1f7;
+  font-size: 13px;
+  pointer-events: auto;
+  animation: toastIn 0.22s ease;
+}
+.toast.out {
+  animation: toastOut 0.2s ease forwards;
+}
+.toast .tico {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+.toast.ok .tico {
+  color: #4ade80;
+}
+.toast.warn .tico {
+  color: var(--warning);
+}
+.toast.err .tico {
+  color: var(--danger);
+}
+.toast .tmsg b {
+  font-weight: 700;
+}
+.toast .tkbd {
+  margin-left: 2px;
+  font-size: 11px;
+  color: #aab2c4;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+.toast .tundo {
+  margin-left: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9fb4ff;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.toast .tundo:hover {
+  text-decoration: underline;
+}
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes toastOut {
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast,
+  .toast.out {
+    animation: none;
+  }
+}
+
+/* (6) 온보딩 스포트라이트(코치마크) */
+.coach {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-coach);
+  display: none;
+}
+.coach.show {
+  display: block;
+}
+/* 하이라이트 창(대상 위에 얹혀 주변을 어둡게) */
+.coach .spot {
+  position: absolute;
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(5, 8, 15, 0.72);
+  outline: 2px solid var(--point-sub);
+  outline-offset: 3px;
+  /* top/left/width/height 트랜지션은 레이아웃 속성 애니메이션이라 제거 — 스텝 전환은 즉시 이동 */
+  pointer-events: none;
+}
+.coach .ctip {
+  position: absolute;
+  width: min(300px, 78vw);
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 15px 16px 13px;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+}
+.coach .ctstep {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--point-sub);
+  text-transform: uppercase;
+}
+.coach .cttl {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 4px 0 3px;
+}
+.coach .ctdesc {
+  font-size: 12px;
+  color: var(--text-weak);
+  line-height: 1.5;
+}
+.coach .ctfoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 13px;
+}
+.coach .ctskip {
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--text-weak);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 5px 8px;
+  min-height: 24px;
+}
+.coach .ctskip:hover {
+  color: var(--text-strong);
+}
+.coach .ctnav {
+  display: flex;
+  gap: 6px;
+}
+.coach .ctnav button {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-accent);
+  color: var(--text-strong);
+  cursor: pointer;
+}
+.coach .ctnav button.primary {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+}
+.coach .ctnav button:hover {
+  filter: brightness(1.1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .coach .spot,
+  .coach .ctip {
+    transition: none;
+  }
+}
+
+/* (3) 날씨 위젯 — 옵트인 안내(클릭 가능 표시) */
+#weather {
+  cursor: pointer;
+}
+#weather.wopt {
+  outline: 1px dashed rgba(255, 255, 255, 0.25);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+ *  index2 3차 개선 — (1)작업 자동저장 (2)내보내기 대비가드
+ *  (3)둘러보기 재실행+단축키 (4)스포이드 (5)스냅샷 이름변경/갱신
+ *  (6)모달 포커스 트랩
+ * ============================================================ */
+
+/* (4) 스포이드(EyeDropper) 버튼 — seed 행 */
+.seedrow .seedpick {
+  flex: none;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-accent);
+  color: var(--text-strong);
+  cursor: pointer;
+}
+.seedrow .seedpick:hover {
+  border-color: var(--point-main);
+}
+.seedrow .seedpick svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* (2) 내보내기 대비 가드 알림바 */
+.exguard {
+  display: none;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 11px 13px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--danger) 55%, rgba(255, 255, 255, 0.1));
+  background: color-mix(in srgb, var(--danger) 16%, #0f1320);
+}
+.exguard.show {
+  display: flex;
+}
+.exguard svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--danger);
+  margin-top: 1px;
+}
+.exguard .egb {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: #eef1f7;
+  line-height: 1.45;
+}
+.exguard .egfix {
+  margin-top: 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 11px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--danger-fill);
+  color: #fff;
+  cursor: pointer;
+}
+.exguard .egfix:hover {
+  filter: brightness(1.08);
+}
+
+/* (3) 사이드바 도움말/둘러보기 버튼 */
+.helpbtn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: -12px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-weak);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.helpbtn:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.helpbtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* (3) 온보딩 단축키 안내 줄 */
+.onbd .obkbd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0 0 18px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--text-weak);
+}
+.onbd .obkbd span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.onbd .obkbd kbd {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-strong);
+  background: var(--bg-accent);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* (5) 스냅샷 이름 인라인 편집 입력 */
+.snaprow .nmedit {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text-strong);
+  background: var(--bg-accent);
+  border: 1px solid var(--point-main);
+  border-radius: 4px;
+  padding: 3px 6px;
+}
+
+/* ============================================================
+ *  색 소스 = 탭 방식 — 세그먼트(직접색·사진·추천)로 고른 방식의
+ *  메뉴만 표시하고 나머지 아코디언은 완전히 숨김
+ * ============================================================ */
+.colorset .acc.src-idle {
+  display: none;
+}
+.colorset .acc.src-active {
+  display: block;
+  opacity: 1;
+  filter: none;
+  border-color: color-mix(in srgb, var(--point-main) 45%, var(--line));
+}
+/* ── 상자 속 상자 풀기 ──
+   이 아코디언들은 스텝 카드(테두리 1px · radius 18px · --bg-page) 안에서
+   **똑같은 크롬**을 한 겹 더 그리고 있었다. 게다가 헤더는 이미 화살표·배지·요약값을
+   전부 감춘 상태라, 바로 위 세그먼트가 고른 방식을 한 번 더 말하는 빈 제목줄만
+   남아 있었다(‘직접색’ 선택 → ‘기준 색’ 헤더). 한 번에 하나만 보이므로 상자로
+   구분할 대상도 없다 → 크롬과 헤더를 걷어내고 세그먼트에 그대로 이어 붙인다.
+   컨트롤 폭이 좌우 28px(카드 14 + 아코디언 14)만큼 넓어지는 효과도 같이 온다. */
+.colorset .acc[data-src] {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.colorset .acc[data-src] > summary {
+  display: none;
+}
+.colorset .acc[data-src] > .accbody {
+  padding: 0;
+}
+/* 소스별 도움말 — 지금 고른 방식의 것 하나만 */
+.substep .srchelp {
+  display: none;
+}
+.substep .srchelp.on {
+  display: inline-flex;
+}
+
+/* 이미지 색 추출 중 로딩 표시 */
+.imgname .spin {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--line);
+  border-top-color: var(--point-main);
+  border-radius: 50%;
+  animation: imgspin 0.7s linear infinite;
+  vertical-align: -1px;
+  margin-right: 5px;
+}
+@keyframes imgspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .imgname .spin {
+    animation-duration: 1.6s;
+  }
+}
+
+/* ============================================================
+ *  audit/distill 개선 — 접근성 + 스텝 카드
+ * ============================================================ */
+
+/* 스크린리더 전용 텍스트 (h1→h3 헤딩 건너뜀 브리지) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 키보드 포커스 링 — 무채색 크롬·생성 테마 양쪽에서 보이도록 point-sub 사용 */
+:focus-visible {
+  outline: 2px solid var(--point-sub);
+  outline-offset: 2px;
+}
+input.hex:focus-visible,
+.swhex .hx:focus-visible {
+  outline: 2px solid var(--point-sub);
+  outline-offset: 1px;
+}
+
+/* 스텝 카드 — 검증·저장·내보내기를 접힌 카드로 (제목만 상시 노출) */
+.stepcard {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-page);
+}
+.stepcard:hover {
+  border-color: color-mix(in srgb, var(--point-main) 35%, var(--line));
+}
+.stepcard > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.stepcard > summary::-webkit-details-marker {
+  display: none;
+}
+.stepcard > summary .stephdr {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+.stepcard > summary .chev {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-weak);
+  transition: transform 0.2s;
+}
+.stepcard[open] > summary .chev {
+  transform: rotate(180deg);
+}
+/* 접히는 동안엔 open이 아직 붙어 있으므로(JS가 애니메이션 끝에 내림)
+   ▾는 .closing으로 먼저 되돌려 손끝 반응을 즉시 보여 준다 */
+.stepcard.closing > summary .chev {
+  transform: rotate(0deg);
+}
+/* 스텝 카드끼리는 12px 간격으로 하나의 흐름처럼 — .tabbody gap(24px)에서 되돌린다.
+   인접(+)이 아닌 일반 형제(~)를 쓰는 이유: 스텝2와 스텝3 사이에는 대시보드 탭 전용
+   .grp가 끼어 있어(테마 탭에선 display:none) +로는 규칙이 닿지 않는다. */
+.stepcard ~ .stepcard {
+  margin-top: -12px;
+}
+.stepcard .stepbody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2px 14px 14px;
+}
+/* 테마 만들기 단계 이동(이전/다음) */
+.stepnav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 4px 14px 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.snav-prev,
+.snav-next {
+  border-radius: 9px;
+  padding: 8px 16px;
+  font: 700 12px var(--font);
+  cursor: pointer;
+  border: 1px solid var(--line);
+}
+.snav-prev {
+  background: transparent;
+  color: var(--text-strong);
+}
+.snav-prev:hover {
+  background: var(--bg-accent);
+}
+.snav-next {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+}
+.snav-next:hover {
+  filter: brightness(1.06);
+}
+/* 스텝 내부 자동 유도 — 메뉴 이름·구성은 항상 보이고, 이전 단계 전에는 '옵션'만 잠근다(.locked).
+   무슨 메뉴가 있는지는 알 수 있게 하되, 값(옵션)은 순서대로 열린다.
+   gateColor는 stepbody flex 직계 자식이 갖던 12px 간격을 자체 flex로 되살린다. */
+#gateColor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cgate.locked {
+  opacity: 0.72;
+}
+/* 밝기: 라벨(화면 밝기)은 두고 옵션(Dark/Light)만 숨김 */
+.fmtrow.cgate.locked .seg {
+  display: none;
+}
+/* 색 고르기: 제목 + 소스 메뉴 이름은 보이되 잠그고, 실제 옵션(아코디언·팔레트)만 숨김 */
+#gateColor.locked .srcseg {
+  pointer-events: none;
+  opacity: 0.55;
+}
+#gateColor.locked .acc,
+#gateColor.locked .csgen {
+  display: none;
+}
+.cgate .lockhint {
+  display: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-weak);
+  margin: 2px 0 0;
+}
+.cgate .lockhint b {
+  color: var(--text-strong);
+  font-weight: 700;
+}
+/* 잠금 아이콘 — OS 컬러 이모지(🔒) 대신 나머지와 같은 선 아이콘 */
+.lockhint::before,
+.pq-lock::before {
+  content: '';
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-right: 4px;
+  vertical-align: -1px;
+  background: currentColor;
+  -webkit-mask: var(--ic-lock) center / contain no-repeat;
+  mask: var(--ic-lock) center / contain no-repeat;
+}
+
+.cgate.locked .lockhint {
+  display: block;
+}
+/* ── 다크 전용 시안 — 화면 테마를 고를 수 없는 상태 ──
+   잠금(.locked)과 달리 옵션을 감추지 않는다. 'Dark 로 고정돼 있다'는 사실 자체가
+   정보라서, 세그먼트를 그대로 두고 흐리게 잠근 뒤 이유를 한 줄로 적는다. */
+.fmtrow.cgate.darkonly .seg {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.cgate .darkhint {
+  display: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-weak);
+  margin: 2px 0 0;
+}
+.cgate.darkonly:not(.locked) .darkhint {
+  display: block;
+}
+.cgate:not(.locked) {
+  animation: cgateIn 0.3s ease;
+}
+@keyframes cgateIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* 변경 히스토리 — '히스토리 보기' 버튼으로 펼치기 전엔 숨김 */
+.histwrap {
+  display: none;
+}
+.histwrap.open {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: cgateIn 0.28s ease;
+}
+#histToggle .chev {
+  margin-left: auto;
+  transition: transform 0.2s;
+}
+#histToggle[aria-expanded='true'] .chev {
+  transform: rotate(180deg);
+}

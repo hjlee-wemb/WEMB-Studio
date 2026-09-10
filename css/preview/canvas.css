@@ -1,0 +1,63 @@
+/* ── 미리보기 캔버스 — 스크롤 · 1920 고정 ── */
+
+/* ── 잘림 대신 스크롤 ──
+   html·body 가 overflow:hidden 이라, 프리뷰가 좁아져 넘친 내용은 스크롤도 팬도 없이
+   그냥 사라졌다(1024px 에서 KPI 숫자가 우측 절단되던 현상). 통짜 축소를 쓰지 않는
+   프리뷰에는 최소 폭을 주고, 그 아래에서는 잘리는 대신 가로로 스크롤되게 한다.
+   canvas1920(한진·래스터 시안)은 스케일로 이미 해결하므로 제외한다. */
+.main:not(.canvas1920) > .stage,
+.main:not(.canvas1920) > .dtstage {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.main:not(.canvas1920) > .stage > *,
+.main:not(.canvas1920) > .dtstage > .dt-ui {
+  min-width: 760px;
+}
+/* 프리뷰 안쪽 스크롤바는 툴 크롬이 아니라 프리뷰 팔레트를 따른다 */
+.main:not(.canvas1920) > .stage::-webkit-scrollbar,
+.main:not(.canvas1920) > .dtstage::-webkit-scrollbar {
+  height: 8px;
+}
+.main:not(.canvas1920) > .stage::-webkit-scrollbar-thumb,
+.main:not(.canvas1920) > .dtstage::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text-weak) 45%, transparent);
+  border-radius: 999px;
+}
+.main:not(.canvas1920) > .stage::-webkit-scrollbar-track,
+.main:not(.canvas1920) > .dtstage::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* ── 1920x1080 고정 캔버스(통짜 축소) ──
+   템플릿(시안)은 1920x1080 기준으로 그려졌는데, 예전엔 스테이지가 남는 공간 크기(예: 1568x1032)로
+   늘어나 비율이 어긋나고 잘려 보였다. 스테이지를 1920x1080 으로 고정하고 남는 공간에 맞춰
+   통째로 축소(scale)하면 그 안의 모든 UI가 같은 비율로 함께 움직인다.
+   **여백이 남는다** — 작업 영역이 16:9 가 아니면 위아래(또는 좌우)에 빈 띠가 생긴다. 그래서
+   한 장짜리 래스터 시안(한진·미연결 이미지 템플릿)처럼 달리 방법이 없는 화면에서만 쓴다.
+   SK하이닉스 시안들은 좌표계만 1920x1080 으로 두고 캔버스를 넓혀 여백 없이 채우므로 이걸 끈다
+   (skxFitResponsive · skxpFitResponsive · src/skhynix-{hub,hvac}-live.js 의 relayout). */
+.main.canvas1920 {
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.main.canvas1920 > .stage,
+.main.canvas1920 > .dtstage {
+  width: 1920px;
+  height: 1080px;
+  flex: none;
+  transform: scale(var(--canvas-scale, 1));
+  transform-origin: center center;
+}
+/* SK하이닉스 FMS Hub 시안은 고정 캔버스를 쓰지 않고 스스로 반응형이다(src/skhynix-hub-live.js).
+   1920x1080 기준을 유지한 채 캔버스를 작업 영역 비율만큼 넓히고 블록을 가장자리에 다시 붙이므로,
+   잘림·왜곡·여백 없이 화면을 꽉 채운다. 여기서는 그 시안이 스테이지를 통째로 덮게만 해 준다. */
+.dtstage > .skh-root {
+  position: absolute;
+  inset: 0;
+}
+/* Screen/HVAC Detail(항온항습기 상세) 시안도 같은 방식 — src/skhynix-hvac-live.js 가 스스로 배치를 다시 잡는다 */
+.dtstage > .skv-root {
+  position: absolute;
+  inset: 0;
+}

@@ -1,0 +1,1231 @@
+/* ── 색상 설정 컨트롤 ── */
+
+/* ===== 색상 설정 아코디언 — 헤더만 보이고 클릭하면 펼쳐짐(드롭다운식) ===== */
+.colorset {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.colorset .csttl {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-weak);
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.colorset .csttl .ko {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--text-weak) 85%, transparent);
+  font-size: 11px;
+  margin-left: 5px;
+}
+.acc {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-page);
+  transition: border-color 0.15s;
+}
+.acc[open] {
+  border-color: color-mix(in srgb, var(--point-main) 40%, var(--line));
+}
+/* 아코디언 제목도 '항목 제목' 위계다 — .fmtlbl·.sublbl과 같은 12.5px/600/strong.
+   예전엔 여기만 uppercase + letter-spacing 1.2px에 weak 색이라 혼자 튀었다.
+   uppercase는 한글에 아무 효과가 없고 자간만 벌어져 오히려 읽기 나빴으며,
+   그 탓에 자식들(.accval·.ko·.info)이 매번 letter-spacing을 되돌리고 있었다. */
+.acc > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+  user-select: none;
+  transition: color 0.15s;
+}
+.acc > summary::-webkit-details-marker {
+  display: none;
+}
+.acc > summary:hover {
+  color: var(--text-strong);
+}
+.acc[open] > summary {
+  color: var(--text-strong);
+  border-bottom: 1px solid var(--line);
+}
+.acc > summary .acttl {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 접힘 상태에선 값 요약(accval)이 활성 소스를 알려주므로 '사용 중' 배지는 생략 */
+.acc:not([open]) > summary .srcbadge {
+  display: none;
+}
+.acc > summary .info {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.acc > summary .chev {
+  font-size: 11px;
+  color: var(--text-weak);
+  flex: none;
+  transition: transform 0.2s;
+}
+.acc[open] > summary .chev {
+  transform: rotate(180deg);
+}
+.acc .accbody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 13px 14px 15px;
+}
+.colorset .csgen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+/* 활성/비활성(대기) 소스 표시 — 지금 화면에 적용 중인 방식만 또렷하게 */
+.acc .srcbadge {
+  display: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: none;
+  color: #fff;
+  background: var(--point-fill);
+  padding: 2px 8px;
+  border-radius: 999px;
+  flex: none;
+}
+.acc.src-active .srcbadge {
+  display: inline-block;
+}
+.acc.src-active {
+  border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+}
+.acc.src-active > summary {
+  color: var(--text-strong);
+}
+/* 비활성 소스 — 흐리게 + 흑백 처리해 '사용 안 함'을 분명히. 누르면 다시 활성화됨 */
+.acc.src-idle {
+  opacity: 0.45;
+  filter: grayscale(0.5);
+  transition:
+    opacity 0.2s,
+    filter 0.2s;
+}
+.acc.src-idle:hover {
+  opacity: 0.85;
+  filter: grayscale(0);
+}
+/* 대기 상태의 '기준 색' 미리보기 — 색을 비워 빗금으로 표시 */
+.swprev.empty {
+  background: repeating-linear-gradient(45deg, var(--bg-accent), var(--bg-accent) 5px, transparent 5px, transparent 10px) !important;
+}
+.seedrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.swprev {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+  flex: none;
+  background: var(--point-main);
+  transition: border-color 0.15s;
+}
+.swprev:hover {
+  border-color: var(--point-main);
+}
+.swprev input[type='color'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+}
+.hex {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  color: var(--text-strong);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+.hex:focus {
+  outline: none;
+  border-color: var(--point-main);
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.pills button {
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  color: var(--text-weak);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.pills button:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.pills button.on {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+  font-weight: 600;
+}
+.seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+/* 3칸 세그먼트(화면 종류 — 대시보드·Digital Twin·포탈) */
+.seg.seg3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.seg button[disabled] {
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--text-weak) 60%, transparent);
+}
+.seg.seg3 button[disabled] {
+  position: relative;
+}
+.seg.seg3 button[disabled]::after {
+  content: '준비중';
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  color: var(--warning);
+}
+.seg button {
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  color: var(--text-weak);
+  border-radius: 12px;
+  padding: 11px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.seg button:hover {
+  border-color: var(--point-main);
+}
+.seg button.on {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+  font-weight: 600;
+}
+/* 1순위 주요 동작(CTA) — 가장 강하게 */
+.genbtn {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  font-family: var(--font);
+  background: var(--point-fill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition:
+    background 0.15s,
+    transform 0.12s;
+}
+.genbtn:hover {
+  background: color-mix(in srgb, var(--point-main) 86%, #000);
+}
+.genbtn svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+.imgbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 12px;
+  color: var(--text-weak);
+  cursor: pointer;
+  transition: 0.15s;
+}
+.imgbtn:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.imgprev {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.imgprev:empty {
+  display: none;
+}
+.imgprev img {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  /* 전체 사진을 담아 보여줌 — 가운데만 쓰는 게 아님을 시각적으로 전달 */
+  object-fit: contain;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  flex: none;
+}
+.imgprev .sws {
+  display: flex;
+  gap: 4px;
+}
+.imgprev .sws i {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.imgprev .ihint {
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.chk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-weak);
+  cursor: pointer;
+  margin-top: 2px;
+}
+.chk input {
+  accent-color: var(--point-main);
+  width: 15px;
+  height: 15px;
+}
+/* hidden native file input — upload is triggered by the styled button above */
+#imgfile {
+  display: none;
+}
+.imgbtn svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.imgname {
+  display: block;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-weak);
+  word-break: break-all;
+}
+.imgname:empty {
+  display: none;
+}
+.imgname b {
+  color: var(--point-main);
+  font-weight: 600;
+}
+.chkhint {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-weak);
+  margin: 2px 0 0;
+  transition: color 0.2s;
+}
+/* "?" 도움말 배지 + 호버/포커스 툴팁 */
+.info {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  color: var(--text-weak);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  position: relative;
+  flex: none;
+  transition: 0.15s;
+}
+/* 히트 영역만 24×24 로 넓힌다 — 원의 지름(17px)은 스텝 헤더의 밀도라 그대로 둔다 */
+.info::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+}
+.info:hover {
+  border-color: var(--point-main);
+  color: var(--point-main);
+}
+/* 호버와 같은 처리로 끝내면 키보드 초점이 '호버인지 포커스인지' 구분되지 않는다.
+   색 변화는 유지하고 링을 따로 남긴다. */
+.info:focus-visible {
+  border-color: var(--point-main);
+  color: var(--point-main);
+  outline: 2px solid var(--point-sub);
+  outline-offset: 3px;
+}
+/* 경고용 배지 — '이 브라우저에만 저장' 같은 주의 사항을 호버 툴팁으로 */
+.info.warn {
+  border-color: #e0a13a;
+  background: #e0a13a;
+  color: #1a1206;
+}
+.info.warn:hover,
+.info.warn:focus-visible {
+  border-color: #f0b74e;
+  background: #f0b74e;
+  color: #1a1206;
+}
+/* 툴팁은 표시될 때 JS가 document.body 로 옮겨 position:fixed 로 띄운다 —
+   비활성 색상소스(.acc.src-idle {filter})나 스크롤/transform 조상에 갇혀 좌표가
+   어긋나거나 잘리는 것을 원천 차단. 좌표·표시는 JS가 관리(.tip-on). */
+.tip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 248px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 11px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--text-weak);
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    visibility 0.16s;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+}
+/* 화살표 — 배지 중심에 맞춰 JS가 --arrow-x 를 지정(없으면 왼쪽 기본) */
+.tip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: var(--arrow-x, 14px);
+  border: 6px solid transparent;
+  border-bottom-color: var(--line);
+}
+/* 위로 펼침(.up) — 화살표를 아래 모서리로 */
+.tip.up {
+  transform: translateY(4px);
+}
+.tip.up::after {
+  top: 100%;
+  bottom: auto;
+  border-bottom-color: transparent;
+  border-top-color: var(--line);
+}
+/* 표시 상태 — JS가 토글 (조상 :hover 에 의존하지 않음) */
+.tip.tip-on {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.tip b {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.tip .accent {
+  color: var(--point-main);
+  font-weight: 700;
+}
+/* 접이식 "미세 조정" — 또렷한 버튼 형태라 눈에 잘 띈다 */
+.more {
+  margin-top: 4px;
+}
+.more > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-page);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-weak);
+  user-select: none;
+  transition: 0.15s;
+}
+.more > summary::-webkit-details-marker {
+  display: none;
+}
+.more > summary svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+.more > summary:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+  background: color-mix(in srgb, var(--point-main) 8%, var(--bg-page));
+}
+.more[open] > summary {
+  color: var(--text-strong);
+  border-color: color-mix(in srgb, var(--point-main) 40%, var(--line));
+  background: color-mix(in srgb, var(--point-main) 10%, var(--bg-page));
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.more > summary .chev {
+  font-size: 11px;
+  margin-left: 2px;
+  transition: transform 0.2s;
+}
+.more[open] > summary .chev {
+  transform: rotate(180deg);
+}
+.more .morebody {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 15px 13px 14px;
+  border: 1px solid color-mix(in srgb, var(--point-main) 40%, var(--line));
+  border-top: 0;
+  border-radius: 0 0 12px 12px;
+  background: color-mix(in srgb, var(--point-main) 4%, var(--bg-page));
+}
+.slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.slider span {
+  width: 30px;
+  flex: none;
+}
+/* 슬라이더 우측 현재값 표시 (예: 8px) */
+.slider .rval {
+  width: 38px;
+  text-align: right;
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.slider input[type='range'] {
+  flex: 1;
+  accent-color: var(--point-main);
+  height: 4px;
+  cursor: pointer;
+}
+.slider input[type='range']:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ghostbtn {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-weak);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.ghostbtn:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.ghostbtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ghostbtn:disabled:hover {
+  border-color: var(--line);
+  color: var(--text-weak);
+}
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.trendchip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 11px;
+  font-size: 13px;
+  color: var(--text-strong);
+  cursor: pointer;
+  font-family: var(--font);
+  text-align: left;
+  transition: 0.15s;
+}
+.trendchip:hover {
+  border-color: var(--point-main);
+  transform: translateX(2px);
+}
+.trendchip i {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex: none;
+}
+.trendchip span {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.trendchip .yr {
+  font-size: 11px;
+  color: var(--text-weak);
+  flex: none;
+}
+.trendchip .pcode {
+  font-size: 11px;
+  font-family: Consolas, monospace;
+  color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex: none;
+  letter-spacing: 0.2px;
+}
+/* 현재 적용 중인 추천 테마만 강조색으로 '선택' 표시 */
+.trendchip.sel,
+.gallery .pcard.sel {
+  border-color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 14%, var(--bg-page));
+  box-shadow: inset 0 0 0 1px var(--point-main);
+}
+.lblrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+#trendYear {
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  color: var(--text-strong);
+  border-radius: 8px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-family: var(--font);
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+}
+#trendYear:hover {
+  border-color: var(--point-main);
+}
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* 현재 팔레트 미리보기 — 방금 만든 색을 '컬러 모음' 카드처럼 보여줌 */
+.curpal {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+.curpal.show {
+  display: flex;
+}
+.curpal .pcard {
+  cursor: default;
+  gap: 11px;
+}
+.curpal .pcard:hover {
+  transform: none;
+  border-color: var(--line);
+}
+.curpal .phead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.curpal .pname {
+  font-weight: 600;
+}
+.curpal .pname .ko {
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--text-weak);
+  margin-left: 4px;
+}
+.curpal .phead .cpreset {
+  align-self: center;
+  flex: none;
+  padding: 4px 9px;
+  font-size: 11px;
+}
+.curpal .pseed {
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: var(--point-main);
+}
+.swhexes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.swhexes[hidden] {
+  display: none;
+}
+/* 개별 색상 펼치기/접기 토글 */
+.curpal .cptoggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  color: var(--text-weak);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: 0.15s;
+}
+.curpal .cptoggle:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.curpal .cptoggle .cnt {
+  color: var(--text-weak);
+  font-weight: 400;
+  font-size: 11px;
+}
+.curpal .cptoggle .chev {
+  font-size: 11px;
+  transition: transform 0.2s;
+}
+.curpal .cptoggle.open .chev {
+  transform: rotate(180deg);
+}
+.swhex {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-family: var(--font);
+  min-width: 0;
+  transition: border-color 0.15s;
+}
+.swhex:hover {
+  border-color: color-mix(in srgb, var(--point-main) 35%, var(--line));
+}
+/* 검증표에서 미달 행을 눌러 찾아온 색 — 어느 줄로 온 건지 잠깐 짚어 준다.
+   팔레트 색(--danger 등)이 아니라 고정색을 쓴다: 지금 이 칩이 가리키는 색 자체가
+   '미달이라 고쳐야 하는 색'이라, 그 색으로 강조하면 안 보일 수 있다. */
+@keyframes swFocusFlash {
+  0%,
+  55% {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.28);
+  }
+  100% {
+    border-color: var(--line);
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0);
+  }
+}
+.swhex.swfocus {
+  animation: swFocusFlash 2.2s ease;
+}
+/* 스포트라이트 — 도착 직후 나머지 색칸을 잠깐 물려서 눈이 목표에 꽂히게 한다.
+   opacity만 건드린다(색을 바꾸면 '이 칩이 무슨 색인지' 자체가 흐려져서 안 된다). */
+.swhexes.spot .swhex:not(.swfocus) {
+  opacity: 0.28;
+}
+.swhexes .swhex {
+  transition:
+    border-color 0.15s,
+    opacity 0.45s ease;
+}
+/* 목적지 안내 카드 — '이 색이 어떤 검사에 걸렸는지'를 숫자로 보여준다.
+   색을 고치는 동안 숫자가 실시간으로 따라오므로, 얼마나 더 가야 하는지가 보인다. */
+.swnote {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: -2px;
+  padding: 9px 10px;
+  /* 사방 1px 링. 예전엔 왼쪽만 3px로 상태를 표시했는데, radius가 8px이라 그 막대가
+     위아래 모서리를 따라 휘어 보였다 — 한쪽 보더 + radius는 같이 못 쓴다.
+     상태는 링 색·배경 틴트·행 앞의 ✓/✕가 이미 세 겹으로 알려 주므로 굵기는 필요 없다. */
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-surface) 88%, #ff6b6b);
+  font-size: 11px;
+}
+.swnote.done {
+  border-color: #45d99e;
+  background: color-mix(in srgb, var(--bg-surface) 88%, #45d99e);
+}
+.swnote .snhead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.swnote .snhead .snx {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-weak);
+  font-size: 13px;
+  cursor: pointer;
+}
+.swnote .snhead .snx:hover {
+  background: color-mix(in srgb, var(--text-strong) 10%, transparent);
+  color: var(--text-strong);
+}
+.swnote .snrow {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  color: var(--text-weak);
+}
+.swnote .snrow .snmk {
+  flex: none;
+  font-weight: 700;
+}
+.swnote .snrow.fail .snmk {
+  color: #ff8f8f;
+}
+.swnote .snrow.pass .snmk {
+  color: #45d99e;
+}
+.swnote .snrow .snlb {
+  min-width: 0;
+  flex: 1;
+}
+.swnote .snrow .snnum {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.swnote .snrow.fail .snnum {
+  color: #ff8f8f;
+}
+.swnote .snrow .snnum small {
+  font-weight: 400;
+  color: var(--text-weak);
+}
+.swnote .sntip {
+  color: var(--text-weak);
+  font-size: 11px;
+}
+/* 색칸 = 색상 선택기 트리거(클릭 시 피커) */
+.swhex .swc {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  cursor: pointer;
+}
+.swhex .swc i {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.swhex .swc input[type='color'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+}
+.swhex .wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.3;
+}
+.swhex .rl {
+  font-size: 11px;
+  color: var(--text-weak);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* '직접 지정한 색' 표시 점 — 평소엔 숨김, override일 때만 표시 */
+.swhex .rl .ovd {
+  display: none;
+  margin-left: 4px;
+  color: var(--point-main);
+  font-size: 11px;
+  vertical-align: middle;
+}
+.swhex.ov .rl .ovd {
+  display: inline;
+}
+/* 글자 = 색상 코드 직접 입력 */
+.swhex input.hx {
+  width: 100%;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 1px 4px;
+  margin-left: -4px;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: var(--text-strong);
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+.swhex input.hx:hover {
+  border-color: var(--line);
+}
+.swhex input.hx:focus {
+  outline: none;
+  border-color: var(--point-main);
+  background: var(--bg-page);
+}
+/* 복사 아이콘 버튼 (수정과 분리) */
+.swhex .cpy {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-weak);
+  cursor: pointer;
+  transition: 0.15s;
+}
+.swhex .cpy:hover {
+  border-color: var(--point-main);
+  color: var(--point-main);
+}
+.swhex .cpy.done {
+  color: var(--point-main);
+  border-color: var(--point-main);
+}
+.swhex .cpy svg {
+  width: 13px;
+  height: 13px;
+}
+.pcard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  font-family: var(--font);
+  width: 100%;
+  transition: 0.15s;
+}
+.pcard:hover {
+  border-color: var(--point-main);
+  transform: translateX(2px);
+}
+/* 컬러 모음 카드: 팔레트(원형) + 다크/라이트 배지를 같은 가로 줄에 */
+.gallery .pcard {
+  gap: 7px;
+}
+.gallery .pcard .pcardtop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+/* 이름은 한 줄로(넘치면 …) */
+.gallery .pcard .pname {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pmode {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  flex: none;
+  border: 1px solid var(--line);
+  color: var(--text-weak);
+}
+.pmode i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+.pmode-dark i {
+  background: #1a2130;
+  border: 1px solid #5a657a;
+}
+.pmode-light i {
+  background: #f5f4ef;
+  border: 1px solid #cfcdc4;
+}
+.circles {
+  display: flex;
+  align-items: center;
+}
+.circles i {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-page);
+  /* 배경과 같은 색(맨 왼쪽 '배경' 색)도 보이도록 옅은 외곽선 추가 */
+  box-shadow: 0 0 0 1px var(--line);
+  margin-left: -9px;
+  flex: none;
+}
+.circles i:first-child {
+  margin-left: 0;
+}
+.pname {
+  font-size: 12px;
+  color: var(--text-strong);
+  text-align: left;
+}
+.pgrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 7px;
+}
+.pgrid .sw {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.14s;
+}
+.pgrid .sw:hover {
+  transform: scale(1.15);
+}
+.plist2 {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.prole {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 42px;
+  border-radius: 12px;
+  padding: 0 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform 0.12s,
+    filter 0.15s;
+}
+.prole:hover {
+  transform: translateX(3px);
+  filter: brightness(1.08);
+}
+.prole .rn {
+  font-size: 12px;
+  font-weight: 600;
+}
+.prole .rh {
+  font-size: 12px;
+  font-family: Consolas, monospace;
+  opacity: 0.85;
+}
+.sbfoot {
+  font-size: 12px;
+  color: var(--text-weak);
+  text-align: center;
+  margin-top: -12px;
+  padding-top: 6px;
+}
+/* 대시보드 배치 편집 토글 */
+.editbtn {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-strong);
+  background: var(--bg-page);
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.editbtn:hover {
+  border-color: var(--point-main);
+}
+.editbtn svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.editbtn.on {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+}
+/* 패널 편집 도구 — 크기·배치·내용을 한 줄(3칸) 콤팩트 그룹으로 묶어 자리를 아낀다 */
+.editgrp {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.editbtn.ebtn-mini {
+  flex-direction: column;
+  gap: 5px;
+  padding: 9px 4px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+}
+.editbtn.ebtn-mini svg {
+  width: 17px;
+  height: 17px;
+}
+.editbtn.ebtn-mini .lbl {
+  white-space: nowrap;
+}
+/* 디자인 편집 버튼 — 펼침 화살표(누르면 회전).
+   절대배치로 흐름에서 빼내, 아이콘+라벨은 다른 두 버튼과 완전히 동일하게 가운데 정렬 */
+.editbtn .chev {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  transition: transform 0.2s;
+}
+.editbtn.on .chev {
+  transform: translateY(-50%) rotate(180deg);
+}
+/* 디자인 편집 하위 메뉴 — 버튼을 누르면 토글로 펼쳐짐 */
+.designpanel {
+  display: none;
+  flex-direction: column;
+  gap: 13px;
+  padding: 14px 13px;
+  margin-top: -3px;
+  border: 1px solid color-mix(in srgb, var(--point-main) 40%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--point-main) 5%, var(--bg-page));
+}
+/* 디자인 패널 안의 '이 부분만 초기화' 버튼 — 아래 주 리셋(배치·내용 되돌리기)과 구분되게 작고 subtle하게 */
+.designpanel .subreset {
+  align-self: flex-end;
+  width: auto;
+  margin-top: -4px;
+  padding: 4px 9px;
+  font-size: 11px;
+  color: var(--text-weak);
+  background: transparent;
+  border-color: transparent;
+}
+.designpanel .subreset:hover {
+  color: var(--text-strong);
+  background: color-mix(in srgb, var(--text-strong) 8%, transparent);
+  border-color: transparent;
+}
+.designpanel.show {
+  display: flex;
+  animation: panelIn 0.25s ease;
+}

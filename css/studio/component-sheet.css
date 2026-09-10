@@ -1,0 +1,537 @@
+/* ── 컴포넌트 시트 ── */
+
+/* ===== 컴포넌트 시트(상태 갤러리) — 선택 테마 색을 컨테이너에 스코프 ===== */
+.cssheet {
+  display: grid;
+  /* 3열 + dense — 작은 카드가 촘촘히 채워져 빈 공간 낭비를 줄임 */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: row dense;
+  gap: 13px;
+  background: var(--bg-page);
+  color: var(--text-strong);
+  padding: 16px;
+  border-radius: 12px;
+  font-family: var(--font);
+}
+.cscard {
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.cscard.span2 {
+  grid-column: span 2;
+}
+.cscard.span3 {
+  grid-column: 1 / -1;
+}
+.cscard > .cslbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-weak);
+  font-weight: 700;
+}
+.csrow {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.csmeta {
+  font-size: 11px;
+  color: var(--text-weak);
+}
+/* 버튼 */
+.csbtn {
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 15px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.csbtn.primary {
+  background: var(--point-main);
+  color: var(--on-main);
+}
+.csbtn.primary:hover {
+  background: color-mix(in srgb, var(--point-main) 86%, #000);
+}
+.csbtn.sub {
+  background: var(--point-sub);
+  color: var(--on-sub);
+}
+.csbtn.ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-weak);
+}
+.csbtn.ghost:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.csbtn.danger {
+  background: var(--danger);
+  color: var(--on-danger);
+}
+.csbtn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+/* 배지 */
+.csbadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.csbadge.ok {
+  color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+}
+.csbadge.info {
+  color: var(--point-sub);
+  background: color-mix(in srgb, var(--point-sub) 18%, transparent);
+}
+.csbadge.warn {
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 16%, transparent);
+}
+.csbadge.crit {
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+}
+/* 입력 */
+.csinput {
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  color: var(--text-strong);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-family: var(--font);
+  font-size: 13px;
+  width: 100%;
+}
+.csinput:focus {
+  outline: none;
+  border-color: var(--point-main);
+}
+.csinput::placeholder {
+  color: var(--text-weak);
+}
+/* 스위치 */
+.csswitch {
+  width: 44px;
+  height: 25px;
+  border-radius: 999px;
+  background: var(--bg-accent);
+  border: 1px solid var(--line);
+  position: relative;
+  cursor: pointer;
+  transition: 0.2s;
+  flex: none;
+}
+.csswitch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--text-weak);
+  transition: 0.2s;
+}
+.csswitch.on {
+  background: var(--point-main);
+  border-color: var(--point-main);
+}
+.csswitch.on::after {
+  left: 21px;
+  background: var(--on-main);
+}
+/* 체크 / 라디오 */
+.cscheck {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1.5px solid var(--line);
+  background: var(--bg-page);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.cscheck.round {
+  border-radius: 50%;
+}
+.cscheck.on {
+  background: var(--point-main);
+  border-color: var(--point-main);
+}
+.cscheck svg {
+  width: 13px;
+  height: 13px;
+  color: var(--on-main);
+  opacity: 0;
+}
+.cscheck.on svg {
+  opacity: 1;
+}
+.cscheck.round.on::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--on-main);
+}
+.cscheck.round.on svg {
+  display: none;
+}
+.cschkrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-strong);
+  cursor: pointer;
+}
+/* 진행률 */
+.cstrack {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-accent);
+  overflow: hidden;
+  width: 100%;
+}
+.csfill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--point-sub), var(--point-main));
+}
+/* 탭 */
+.cstabs {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.cstab {
+  font-size: 12px;
+  color: var(--text-weak);
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+}
+.cstab.on {
+  color: var(--on-main);
+  background: var(--point-main);
+}
+.cstab:hover:not(.on) {
+  color: var(--text-strong);
+  background: color-mix(in srgb, var(--point-main) 12%, transparent);
+}
+/* 칩 */
+.cschip {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-page);
+  color: var(--text-weak);
+  cursor: pointer;
+}
+.cschip.on {
+  background: var(--point-main);
+  border-color: var(--point-main);
+  color: var(--on-main);
+  font-weight: 600;
+}
+/* 알림 배너 */
+.csalert {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+.csalert i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.csalert.info {
+  background: color-mix(in srgb, var(--point-main) 12%, transparent);
+  color: var(--text-strong);
+}
+.csalert.info i {
+  background: var(--point-main);
+}
+.csalert.warn {
+  background: color-mix(in srgb, var(--warning) 13%, transparent);
+  color: var(--text-strong);
+}
+.csalert.warn i {
+  background: var(--warning);
+}
+.csalert.crit {
+  background: color-mix(in srgb, var(--danger) 13%, transparent);
+  color: var(--text-strong);
+}
+.csalert.crit i {
+  background: var(--danger);
+}
+/* 이름 충돌 차단: 알림/배지의 info 변형이 도움말 배지용 전역 .info(width:17px;height:17px;…)에
+   걸려 박스가 찌그러지고 글자가 넘치는 문제를 스코프 특정성으로 무력화 */
+.cscard .csalert.info,
+.cscard .csbadge.info {
+  width: auto;
+  height: auto;
+  justify-content: flex-start;
+  cursor: default;
+}
+/* ===== 상태 전용 컴포넌트(C) — 라이브 대시보드가 안 보여주는 상태들 ===== */
+/* 빈 상태 */
+.csempty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+  padding: 12px 8px 6px;
+}
+.csempty .eic {
+  font-size: 26px;
+  line-height: 1;
+  color: var(--text-weak);
+  opacity: 0.75;
+}
+.csempty .et {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.csempty .es {
+  font-size: 11px;
+  color: var(--text-weak);
+  margin-bottom: 8px;
+}
+/* 로딩 스켈레톤 */
+.csskel {
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--bg-accent) 25%, var(--line) 50%, var(--bg-accent) 75%);
+  background-size: 200% 100%;
+  animation: csShimmer 1.3s linear infinite;
+}
+@keyframes csShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+/* 키보드 포커스 링(대시보드에선 안 보이는 상태) */
+.csfocus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg-surface),
+    0 0 0 4px var(--point-main);
+}
+/* 내보내기(B) 버튼 — 헤더 */
+.csexport {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.csexport:hover {
+  border-color: #4a9eff;
+  background: rgba(74, 158, 255, 0.16);
+}
+.csexport svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+/* ===== 갤러리 확장 컴포넌트 ===== */
+.cssheet .cssection {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 2px 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--point-main);
+}
+.cssheet .cssection::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.cssheet .cssection small {
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-weak);
+}
+.csgauge {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: conic-gradient(var(--point-main) var(--v, 60%), var(--bg-accent) 0);
+}
+.csgauge > i {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.csspin {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  border-top-color: var(--point-main);
+  animation: csSpin 0.8s linear infinite;
+  flex: none;
+}
+@keyframes csSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes csIndeterminate {
+  0% {
+    margin-left: -45%;
+  }
+  100% {
+    margin-left: 100%;
+  }
+}
+.csdot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  vertical-align: middle;
+}
+.cstag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+/* 표 */
+.cstable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.cstable th {
+  text-align: left;
+  color: var(--text-weak);
+  font-weight: 500;
+  font-size: 11px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.cstable td {
+  padding: 7px 8px;
+  color: var(--text-strong);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+}
+.cstable .v2 {
+  color: var(--point-main);
+  font-weight: 600;
+}
+/* KPI 미니 */
+.cskpi .lab {
+  font-size: 11px;
+  color: var(--text-weak);
+}
+.cskpi .val {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-top: 3px;
+}
+.cskpi .val b {
+  color: var(--point-main);
+}
+@media (max-width: 860px) {
+  .cssheet {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cscard.span2,
+  .cscard.span3 {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 560px) {
+  .cssheet {
+    grid-template-columns: 1fr;
+  }
+  .cscard.span2,
+  .cscard.span3 {
+    grid-column: auto;
+  }
+}
+
+/* dashboard shell */
+.stage {
+  width: 100%;
+  padding: calc(16px * var(--pad-scale, 1)) calc(22px * var(--pad-scale, 1));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+/* 화면 종류 전환 — display:flex가 hidden 속성을 이기므로 명시적으로 끔 */
+.stage[hidden] {
+  display: none;
+}

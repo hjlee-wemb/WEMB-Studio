@@ -1,0 +1,659 @@
+/* ── SK하이닉스 화면 인터랙션 · 모션 ── */
+
+/* ===== SK하이닉스 화면 인터랙션(호버 활성 · 마퀴 · 이벤트 슬라이드) ===== */
+/* 층 버튼 · 헤더 액션 아이콘 · 패널 화살표 — 마우스 오버 시 활성(밝기+글로우) */
+.skx-svg [id^='skx-button/floor-'],
+.skx-svg [id='skx-action-area'] [id^='skx-icon'],
+.skx-svg [id='skx-arrow-induce'] {
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+.skx-svg [id^='skx-button/floor-']:hover,
+.skx-svg [id='skx-action-area'] [id^='skx-icon']:hover,
+.skx-svg [id='skx-arrow-induce']:hover {
+  filter: brightness(1.55) drop-shadow(0 0 5px var(--fg-point, #6aa0ff));
+  transform: scale(1.08);
+}
+.skx-svg [id='skx-button/event-expand'] {
+  cursor: pointer;
+}
+/* 티커 메시지 마퀴 — 왼쪽으로 계속 흐르고 반복(심리스 2벌) */
+.skx-marquee {
+  will-change: transform;
+  animation-name: skxMarq;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes skxMarq {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-1 * var(--skx-marq, 480px))); }
+}
+/* 이벤트 프레임 슬라이드(위로 올라와 하단에 딱 맞음) */
+.skx-svg [id='skx-Event List'] {
+  transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ===== SK하이닉스 DT 화면 '살아있는' 모션 =====
+   인라인 SVG의 Figma named 레이어(한글 id, skx- 프리픽스)를 직접 타겟. 접근성: reduce-motion이면 정지. */
+.skx-svg [id^='skx-Nav Item/'],
+.skx-svg [id='skx-Icon/Status/Alert'],
+.skx-svg [id='skx-Glow'],
+.skx-svg [id='skx-Metrics/UPS Power'] [id^='skx-Focus'] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+/* 좌측 내비 항목 — 호버 시 밝기+글로우+살짝 부양 (항상 적용, 모션 아님).
+   글로우는 반드시 무채색으로 둔다. 예전엔 파란빛(rgba(96,156,255))이 박혀 있어서
+   화면 테마를 초록·주황으로 바꾸면 이 효과만 혼자 파랗게 남아 부딪혔다.
+   흰빛·검은빛은 어떤 기준색과도 충돌하지 않으므로 테마를 타지 않아도 된다. */
+.skx-svg [id^='skx-Nav Item/'] {
+  cursor: pointer;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+.skx-svg [id^='skx-Nav Item/']:hover {
+  transform: translateY(-1px) scale(1.03);
+  filter: brightness(1.14) drop-shadow(0 0 7px rgba(255, 255, 255, 0.45));
+}
+/* 라이트 모드에선 배경이 밝고 아이콘이 어두워져 흰 글로우가 보이지 않는다.
+   같은 무채색 계열로 방향만 뒤집어 부드러운 그림자로 띄운다. */
+.main[data-mode='light'] .skx-svg [id^='skx-Nav Item/']:hover,
+.app[data-mode='light'] .skx-svg [id^='skx-Nav Item/']:hover {
+  filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.38));
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* 1) Ticker 경보 — 아이콘 맥동 + 확산 링 */
+  .skx-svg [id='skx-Icon/Status/Alert'] { animation: skxAlertPulse 1.5s ease-in-out infinite; }
+  .skx-svg [id='skx-Glow'] { animation: skxAlertRing 1.9s ease-out infinite; }
+  @keyframes skxAlertPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+  @keyframes skxAlertRing { 0% { transform: scale(0.6); opacity: 0.65; } 70% { opacity: 0; } 100% { transform: scale(2); opacity: 0; } }
+
+  /* 2) 화재(활성) 심볼 — 은은한 호흡 글로우 */
+  .skx-svg [id='skx-Nav Item/Fire (Selected)'] { animation: skxBreathe 2.8s ease-in-out infinite; }
+  @keyframes skxBreathe {
+    0%, 100% { filter: drop-shadow(0 0 2px rgba(255, 92, 60, 0.35)); }
+    50% { filter: drop-shadow(0 0 10px rgba(255, 92, 60, 0.85)); }
+  }
+
+  /* 3) 온도 경보 큐브 M14(노랑)·M16(주황) — 열 글로우 맥동 */
+  .skx-svg [fill='#F6DE06'] { animation: skxHotY 1.9s ease-in-out infinite; }
+  .skx-svg [fill='#F67E06'] { animation: skxHotO 2.1s ease-in-out infinite; }
+  @keyframes skxHotY {
+    0%, 100% { filter: drop-shadow(0 0 1px rgba(246, 222, 6, 0.5)); }
+    50% { filter: drop-shadow(0 0 9px rgba(246, 222, 6, 1)); }
+  }
+  @keyframes skxHotO {
+    0%, 100% { filter: drop-shadow(0 0 1px rgba(246, 126, 6, 0.5)); }
+    50% { filter: drop-shadow(0 0 10px rgba(246, 126, 6, 1)); }
+  }
+
+  /* 4) UPS 라인차트 — 두 데이터 선(전일 파랑·금일 초록) 그려지기 반복 + focus 마커 맥동 */
+  .skx-svg [id='skx-Metrics/UPS Power'] path[stroke='#57A6DC'],
+  .skx-svg [id='skx-Metrics/UPS Power'] path[stroke='#C2DB56'] {
+    stroke-dasharray: 2400;
+    animation: skxDraw 5.5s ease-in-out infinite;
+  }
+  .skx-svg [id='skx-Metrics/UPS Power'] path[stroke='#C2DB56'] { animation-delay: 0.35s; }
+  @keyframes skxDraw { 0% { stroke-dashoffset: 2400; } 42% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }
+  .skx-svg [id='skx-Metrics/UPS Power'] [id^='skx-Focus'] { animation: skxFocus 1.8s ease-in-out infinite; }
+  @keyframes skxFocus { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+  /* 5) 센터 온도 '유도' 화살표 — 주의를 끄는 좌우 넛지 */
+  .skx-svg [id='skx-Icon/Arrow/Right'] {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: skxNudge 1.6s ease-in-out infinite;
+  }
+  @keyframes skxNudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+}
+/* 유도 화살표·헤더 액션 — 항상 포인터 커서(모션 off여도) */
+.skx-svg [id='skx-Icon/Arrow/Right'],
+.skx-svg [id='skx-Icon/Action/User'],
+.skx-svg [id='skx-Icon/Action/Logout'] { cursor: pointer; }
+
+/* ===== 맵 층 선택 — Figma 컴포넌트 액션(Btn Floor 107:438 / Building Map 107:389) =====
+   Btn Floor.Status = Idle(black / #565E71) → Hover(#4876F5 / white) → Select(#2861FF + 사선 시트 / white).
+   상태 전환은 JS가 fill·stroke '속성'으로 바꾼다(인라인 style 아님) — 속성이어야
+   skhynix-theme.css의 [stroke="#565E71"] 매핑(라이트 명도 반전)이 계속 먹는다.
+   배경색은 반대로 인라인 style + CSS 변수로 넣는다 — 자세한 이유는 floorSelect() 주석 참고. */
+.skx-svg [id='skx-Floor 6F'],
+.skx-svg [id='skx-Floor 5F'],
+.skx-svg [id='skx-Floor 3F'],
+.skx-svg [id='skx-Floor 2F (Selected)'] { cursor: pointer; }
+.skx-svg [id='skx-Floor 6F'] rect,
+.skx-svg [id='skx-Floor 5F'] rect,
+.skx-svg [id='skx-Floor 3F'] rect,
+.skx-svg [id='skx-Floor 2F (Selected)'] rect {
+  transition: fill 0.3s ease-out, stroke 0.3s ease-out, opacity 0.3s ease-out;
+}
+/* Building Map.Floor 배리언트 전환 = 하이라이트 밴드가 그 층으로 이동.
+   Figma 프로토타입 지정 그대로: Smart Animate, ease-out, 300ms. */
+.skx-svg [id='skx-Floor Highlight'] { transition: transform 0.3s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .skx-svg [id='skx-Floor 6F'] rect,
+  .skx-svg [id='skx-Floor 5F'] rect,
+  .skx-svg [id='skx-Floor 3F'] rect,
+  .skx-svg [id='skx-Floor 2F (Selected)'] rect,
+  .skx-svg [id='skx-Floor Highlight'] { transition: none; }
+}
+.libitem.ico .thumb {
+  color: var(--point-main);
+}
+.libitem.ico .thumb svg {
+  width: 42%;
+  height: 42%;
+}
+.libitem.cht .thumb svg {
+  width: 88%;
+  height: 74%;
+}
+.libitem .lname {
+  font-size: 11px;
+  line-height: 1;
+  color: var(--lib-name);
+  text-align: center;
+  padding: 4px 3px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-top: 1px solid var(--lib-line);
+}
+/* 드롭 대상(화면) 강조 — 라이브러리 에셋을 끌고 있을 때 */
+.main.libdrag .stage,
+.main.libdrag .dtstage,
+.main.libdrag .cols {
+  outline: 2px dashed var(--point-main);
+  outline-offset: -8px;
+  border-radius: 12px;
+}
+/* 삽입된 심볼 패널 — 어떤 테마에서도 원본이 보이도록 다크 카드로 감싼다 */
+.addedbody.symbody,
+.addedbody.iconbody {
+  align-items: center;
+}
+.symwrap {
+  width: 100%;
+  min-height: 156px;
+  border-radius: 12px;
+  background: radial-gradient(130% 120% at 50% 6%, #17233c 0%, #0a1019 74%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.symwrap img {
+  max-width: 190px;
+  max-height: 190px;
+  width: 100%;
+  object-fit: contain;
+}
+.iconwrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  color: var(--point-main);
+}
+.iconwrap svg {
+  width: 64px;
+  height: 64px;
+}
+.cbox {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cbox svg {
+  width: 92%;
+  height: 100%;
+}
+
+/* 빈 패널(콘텐츠 추가 → ＋ 패널) — 에셋을 끌어 넣기 전 안내 상태 */
+.emptybody {
+  min-height: 100px;
+  align-items: center;
+  justify-content: center;
+}
+.emptyhint {
+  font-size: 12px;
+  color: var(--text-weak);
+  opacity: 0.8;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+/* 화면에서 캡처한 실제 차트 — 라이브러리 썸네일용.
+   원본은 패널 폭 기준이라, 넓게(300px) 깔고 축소(scale)해 미니 프리뷰로 보여준다. */
+.libitem.cht .thumb.chost {
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.libitem.cht .thumb.chost > * {
+  width: 300px;
+  flex: none;
+  transform: scale(0.23);
+  transform-origin: center center;
+  pointer-events: none;
+}
+/* 패널 안에 삽입된 실제 차트 — 패널 폭에 맞춰 원본대로 렌더 */
+.assetslot .chost {
+  width: 100%;
+}
+.assetslot .chost > * {
+  width: 100%;
+}
+
+/* UPS 전력량·센터 온도·상면 포화도 차트 에셋 — 카드 배경/테두리 rect 제거,
+   에셋 콘텐츠(그래프·라벨·미터)만 노출. paint0=배경 채움, paint1=테두리. */
+.fig-svg rect[fill="url(#c_chart_ups_paint0_linear_0_1)"],
+.fig-svg rect[stroke="url(#c_chart_ups_paint1_linear_0_1)"],
+.fig-svg rect[fill="url(#c_chart_centertemp_paint0_linear_0_1)"],
+.fig-svg rect[stroke="url(#c_chart_centertemp_paint1_linear_0_1)"],
+.fig-svg rect[fill="url(#c_chart_saturation_paint0_linear_0_1)"],
+.fig-svg rect[stroke="url(#c_chart_saturation_paint1_linear_0_1)"] {
+  display: none;
+}
+
+/* 에셋을 '패널 안'에 넣을 때 — 패널/배경 형태 없이 그래픽(에셋)만 넣는다.
+   바깥 여백(상하좌우 패딩)은 .assetwrap 이 담당하므로 슬롯 자체 패딩은 두지 않는다
+   (슬롯끼리 간격은 .assetrow 의 gap 이 담당). */
+.assetslot {
+  position: relative;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.assetslot .avis {
+  width: 100%;
+  transform-origin: top center;
+}
+/* 에셋 그래픽은 슬롯 폭에 맞춰 줄어들게(가로로 좁아져도 잘리지 않게) — 모든 배치 공통 */
+.assetslot img,
+.assetslot svg {
+  max-width: 100%;
+}
+/* 패널 안 '에셋 영역' — 상하좌우 균일 패딩 프레임을 갖고, 패널 높이에 맞춰 채운다.
+   패널을 키우거나 줄여도 이 패딩 프레임은 유지되고, 에셋은 이 영역 밖으로 나가지 않는다. */
+.assetwrap {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+/* .addedbody 가 에셋 영역을 감싸면, 자체 패딩은 없애 이중 패딩을 막고 영역을 채우게 한다.
+   (KPI·표 등 다른 addedbody 는 그대로 자기 패딩 유지) */
+.addedbody:has(> .assetwrap) {
+  padding: 0;
+  gap: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+/* 에셋이 든 패널은 헤더(.ph) 아래로 에셋 영역이 남은 높이를 채우도록 */
+.cols .panel:has(.assetslot) > .addedbody,
+.cols .panel:has(.assetslot) > .assetwrap {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.assetrow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.assetwrap[data-dir='row'] .assetrow {
+  flex-direction: row;
+  /* 좁은 패널(디지털 트윈 유리 카드 등)에서도 '가로'가 진짜 가로로 보이게 —
+     줄바꿈 없이 슬롯들이 폭을 나눠 갖는다(예전엔 flex-basis 200px+wrap 이라
+     좁은 폭에서 다시 세로로 접혀 가로 전환이 눈에 안 보였음). */
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+}
+.assetwrap[data-dir='row'] .assetslot {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
+}
+/* 가로로 좁아진 슬롯 안에서 이미지·차트가 넘치지 않게 슬롯 폭에 맞춘다 */
+.assetwrap[data-dir='row'] .assetslot img,
+.assetwrap[data-dir='row'] .assetslot svg {
+  max-width: 100%;
+  height: auto;
+}
+/* 가로/세로 배치 토글 — 배치 수정 중에만 노출 */
+.assettools {
+  display: none;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: 7;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.cols.editing .assettools,
+.dtstage.dt-editing .assettools {
+  display: inline-flex;
+}
+.assettools button {
+  border: 0;
+  background: transparent;
+  color: var(--text-weak);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.assettools button.on {
+  background: var(--point-fill);
+  color: #fff;
+}
+/* 크기 조절 슬라이더 — 평소엔 숨기고, '패널편집'(크기 조절 .sizing 포함)을 켠 동안에만 노출.
+   '편집 끝내기'를 누르면 슬라이더도 함께 사라진다. 에셋 '아래' 자기 자리에 흐름으로 놓인다. */
+.assetslot > .aszr {
+  display: none;
+  width: 74%;
+  max-width: 160px;
+  height: 16px;
+  margin: 8px 0 2px;
+  cursor: ew-resize;
+  accent-color: var(--point-main);
+}
+.cols.sizing .panel.psel .assetslot > .aszr {
+  display: block;
+}
+/* 에셋이 들어간 패널은 flex로 눌려 잘리지 않도록 '내용 높이만큼' 차지하게 한다.
+   (그래야 에셋 전체와 조절 UI까지 보인다) */
+.cols .panel:has(.assetslot) {
+  flex: 0 0 auto;
+  min-height: 0;
+  height: auto;
+}
+.assetslot .symwrap {
+  min-height: 0;
+  padding: 0;
+  background: none;
+}
+.assetslot .symwrap img {
+  max-width: 150px;
+  max-height: 150px;
+}
+.assetslot .iconwrap {
+  min-height: 0;
+}
+.assetslot .iconwrap svg {
+  width: 52px;
+  height: 52px;
+}
+.assetslot .cbox {
+  height: 128px;
+}
+
+/* ── 화면에 얹은 에셋은 뷰포트 밖으로 자라지 않는다 ──
+   에셋을 계속 넣으면 패널이 아래로만 길어져 시안 밖(화면 하단)으로 흘러내렸다.
+   패널·에셋 영역에 뷰포트 기준 상한을 두고, .assetrow 의 wrap 이 넘치는 에셋을
+   옆 칸으로 넘긴다. 상한을 넘는 아래쪽은 .dt-added 의 overflow:hidden 이 감춘다. */
+.dt-added .panel {
+  max-height: 82vh;
+  overflow: hidden;
+}
+.dt-added .assetwrap {
+  max-height: 76vh;
+}
+.dt-added .assetrow {
+  max-height: 66vh;
+}
+/* 패널 에셋(카드 컨테이너)도 화면에 비해 과하게 크지 않게 상한을 둔다 */
+.dt-added .panel.assetpanel.cardhost {
+  max-height: 34vh;
+}
+
+/* 패널 삭제 버튼 — 배치 수정 중에만 노출 */
+.pdel {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 7;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(200, 40, 40, 0.92);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.cols.editing .panel {
+  position: relative;
+}
+/* 삭제 버튼은 '선택된' 패널(.psel)에서만 노출 — 패널편집은 클릭한 패널만 편집 */
+.cols.editing .panel.psel > .pdel,
+.dtstage.dt-editing .panel.psel > .pdel {
+  display: inline-flex;
+}
+/* SK하이닉스 인라인 SVG 화면의 '콘텐츠 추가' 패널 — 기존 .psel 선택 흐름을 안 타므로
+   편집 모드에선 X(삭제)를 바로 노출하고, 그 외에도 패널에 호버하면 X를 보여 삭제 가능하게 한다.
+   (삭제 클릭 핸들러는 main 전역이라 여기서 노출만 열어 주면 동작한다) */
+.dtstage.dt-editing .skx-screen .dt-added .panel > .pdel,
+.skx-screen .dt-added .panel:hover > .pdel {
+  display: inline-flex;
+}
+.pdel:hover {
+  background: rgba(220, 50, 50, 1);
+}
+/* SK하이닉스 이벤트 리스트 — Fold 버튼으로 패널을 올리고(확장) 화살표 360° 회전 */
+.skx-svg [id="skx-Fold Button"] {
+  cursor: pointer;
+}
+.skx-svg [id="skx-Event List"].skx-evt-open {
+  clip-path: none !important;
+  transform: translateY(-223px);
+}
+/* 확장 시 패널 배경을 거의 불투명하게 → 뒤 내용이 비쳐 지저분해지지 않게 */
+.skx-svg [id="skx-Event List"].skx-evt-open [id="skx-Panel BG"] {
+  fill-opacity: 0.98;
+}
+.skx-svg [id="skx-arrow"] {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.45s ease;
+}
+/* Auto 토글 — 클릭 시 라디오처럼 선택 상태(링 강조) 표시 */
+.skx-svg [id="skx-Auto Toggle"] {
+  cursor: pointer;
+}
+.skx-svg [id="skx-Auto Toggle"] [id="skx-Ellipse 1"] {
+  transition: stroke 0.18s ease;
+}
+.skx-svg [id="skx-Auto Toggle"].skx-radio-on [id="skx-Ellipse 1"] {
+  stroke: var(--fg-point, #6aa0ff);
+  stroke-width: 1.5;
+}
+/* 패널편집 중: 선택 대상 패널은 클릭 가능 표시 */
+.cols.sizing .panel,
+.cols.editing .panel,
+.dtstage.dt-editing .panel {
+  cursor: pointer;
+}
+/* 편집할 패널을 선택하면 → 그 패널만 또렷하게 포커싱, 나머지는 흐리게 */
+.cols:has(.panel.psel) .panel:not(.psel) {
+  opacity: 0.35;
+  filter: saturate(0.7);
+}
+.cols .panel,
+.cols .panel.psel {
+  transition: opacity 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+.cols .panel.psel {
+  position: relative;
+  z-index: 15;
+  outline: 2px solid var(--point-main);
+  outline-offset: -2px;
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--point-main) 22%, transparent),
+    0 10px 30px rgba(0, 0, 0, 0.38);
+  cursor: default;
+}
+
+/* ── 패널 조정(개별 크기 조절) 모드 ──
+   '패널 조정'을 켜면 각 패널에 오른쪽 아래 손잡이(.psz)가 나타나고,
+   끌어서 그 패널만 자유롭게 크기를 바꾼다. 손잡이를 더블클릭하면 초기화. */
+.cols.sizing .panel {
+  position: relative;
+  outline: 1px dashed color-mix(in srgb, var(--point-main) 50%, transparent);
+  outline-offset: -1px;
+}
+.psz {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 18px;
+  height: 18px;
+  z-index: 8;
+  display: none;
+  cursor: nwse-resize;
+  border-radius: 4px;
+  opacity: 0.8;
+  touch-action: none;
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 46%,
+      var(--point-main) 46% 58%,
+      transparent 58% 70%,
+      var(--point-main) 70% 82%,
+      transparent 82% 100%
+    );
+}
+.cols.sizing .panel.psel > .psz {
+  display: block;
+}
+.psz:hover {
+  opacity: 1;
+}
+/* 크기를 바꾼 패널은 이웃 칸 위로 올라와야, 하단·오른쪽으로 커진 부분이
+   이웃 패널에 가려지지 않고 그대로 보인다. (position:relative 는 z-index 활성화용) */
+.panel.psized {
+  position: relative;
+  z-index: 20;
+}
+.panel.sizing-active {
+  position: relative;
+  z-index: 40;
+  outline: 1.5px solid var(--point-main);
+  outline-offset: -1px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--point-main) 22%, transparent);
+}
+/* 배치 수정만 켠 경우엔 크기 조절 손잡이를 감춘다(삭제 버튼과 겹치지 않게).
+   단, '패널편집'처럼 크기 조절(.sizing)도 함께 켜져 있으면 손잡이를 보여준다. */
+.cols.editing:not(.sizing) .panel > .psz,
+.dtstage.dt-editing .cols:not(.sizing) .panel > .psz {
+  display: none;
+}
+
+/* 추가된 패널 내부 — 테마 변수를 그대로 사용해 기존 패널과 톤 일치 */
+.addedbody {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.addedbody .kpinum {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text-strong);
+  line-height: 1;
+}
+.addedbody .kpisub {
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.addedbody .minibars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 88px;
+}
+.addedbody .minibars i {
+  flex: 1;
+  background: var(--point-main, #3f64a8);
+  border-radius: 4px 4px 0 0;
+  opacity: 0.85;
+}
+.addedbody table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  color: var(--text-strong);
+}
+.addedbody th,
+.addedbody td {
+  text-align: left;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.addedbody th {
+  color: var(--text-weak);
+  font-weight: 600;
+}
+
+/* 창 제어 아이콘 — 텍스트 글리프(↻☰‹✕⠿×)를 SVG 세트로 통일 */
+.qh svg {
+  width: 15px;
+  height: 15px;
+}
+#opener svg {
+  width: 18px;
+  height: 18px;
+}
+#closer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#closer svg {
+  width: 15px;
+  height: 15px;
+}
+.abclose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.abclose svg {
+  width: 16px;
+  height: 16px;
+}
+.ctdrag svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+.phx svg {
+  width: 11px;
+  height: 11px;
+}

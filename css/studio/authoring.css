@@ -1,0 +1,728 @@
+/* ── 저작 — 브랜드 · 화면 구성 · 콘텐츠 추가 · 에셋 라이브러리 ── */
+
+/* ── 와이어프레임 선택(시작 진입점) ── */
+.wfmodal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-picker);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(8, 12, 22, 0.72);
+  backdrop-filter: blur(4px);
+}
+.wfmodal.show {
+  display: flex;
+}
+.wfcard {
+  width: min(880px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: #0f1524;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 28px;
+  color: #e7ecf5;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+.wfkicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #6b8afd;
+  margin-bottom: 8px;
+}
+.wfcard h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 800;
+}
+.wfsub {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+.wfgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.wfopt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+.wfopt:hover {
+  border-color: #6b8afd;
+  background: rgba(107, 138, 253, 0.12);
+  transform: translateY(-2px);
+}
+/* 265×198 카드 9장 중 어디에 초점이 있는지는 링으로만 알 수 있다 */
+.wfopt:focus-visible {
+  border-color: #6b8afd;
+  background: rgba(107, 138, 253, 0.12);
+  transform: translateY(-2px);
+  outline: 2px solid var(--point-sub);
+  outline-offset: 3px;
+}
+.wfthumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 108px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #9fb2e6;
+}
+.wfthumb svg {
+  width: 82%;
+  height: auto;
+}
+.wfname {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+}
+.wfdesc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.4;
+}
+.wfskip {
+  margin-top: 18px;
+  background: none;
+  border: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 5px 8px;
+  min-height: 24px;
+}
+.wfskip:hover {
+  color: #fff;
+}
+@media (max-width: 680px) {
+  .wfgrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 브랜드 입력 (로고·브랜드명·화면명) ── */
+.brandgrid {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.brandrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brandlogo {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.brandlogo img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+.brandbtns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+.brandbtns .imgbtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--point-main, #3f64a8);
+  cursor: pointer;
+  border: 0;
+}
+.brandfield {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.brandfield label {
+  flex: none;
+  width: 52px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.brandfield input {
+  flex: 1;
+  min-width: 0;
+}
+/* 읽기 전용(프로젝트명) — PRD에서 온 고정값이라 편집 불가임을 시각적으로 표시 */
+.brandfield input[readonly] {
+  background: var(--bg-accent);
+  color: var(--text-weak);
+  cursor: default;
+  opacity: 0.85;
+}
+.brandfield input[readonly]:focus {
+  outline: none;
+  border-color: var(--line);
+}
+.main .brand .brandname {
+  /* 스튜디오 시안에는 브랜드명 텍스트를 표시하지 않는다 */
+  display: none;
+}
+
+/* ── 화면 구성 (열 수 · 패널 추가) ── */
+.lcolrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lcol-lbl,
+.addpanel + p .lcol-lbl {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+  flex: none;
+}
+.lcolrow .seg {
+  flex: 1;
+}
+.addpanel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.addpanel button {
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: 0.14s;
+}
+.addpanel button:hover {
+  border-color: var(--point-main);
+  color: var(--point-main);
+}
+/* '패널편집' 마스터 버튼 — 켜지면 강조(패널 조정·배치·내용 동시 활성 상태) */
+.addpanel .editallbtn.on {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+}
+.addpanel .editallbtn.on:hover {
+  color: #fff;
+}
+
+/* ── 콘텐츠 추가 컨텍스트 창 — '＋ 패널' 누르면 열리고, 문장을 넣으면 그에 맞는 패널이 채워진다 ── */
+.addpanel-ctx {
+  display: none;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-surface);
+}
+.addpanel-ctx.open {
+  display: block;
+  animation: apcIn 0.16s ease;
+}
+@keyframes apcIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+.apc-row {
+  display: flex;
+  gap: 6px;
+}
+.apc-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--text-strong);
+  background: var(--bg-page);
+  outline: none;
+}
+.apc-input:focus {
+  border-color: var(--point-main);
+}
+.apc-input::placeholder {
+  color: var(--text-weak);
+}
+.apc-go {
+  flex: none;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--point-fill);
+  cursor: pointer;
+}
+.apc-go:hover {
+  filter: brightness(1.08);
+}
+.apc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 빈 패널 버튼을 왼쪽으로 */
+  gap: 10px;
+  margin-top: 8px;
+}
+.apc-hint {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-weak);
+  margin-bottom: 8px; /* 입력창(apc-row)보다 위에 먼저 보이도록 */
+}
+.apc-hint b {
+  color: var(--point-main);
+}
+.apc-empty {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--line);
+  background: var(--bg-page);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+  cursor: pointer;
+  padding: 7px 12px;
+  white-space: nowrap;
+  transition: border-color 0.14s ease, color 0.14s ease;
+}
+.apc-empty::before {
+  content: "＋";
+  font-weight: 700;
+  color: var(--text-weak);
+}
+.apc-empty:hover {
+  border-color: var(--point-main);
+  color: var(--point-main);
+}
+.apc-empty:hover::before {
+  color: var(--point-main);
+}
+/* 라이브러리에서 가져온 심볼/아이콘 에셋 — 지정한 박스에 꽉 차게 맞춘다 */
+.apc-lib {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.apc-lib svg,
+.apc-lib img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  display: block;
+}
+/* ── 패널 편집 중 교체 가능한 에셋 표시 ── */
+.swap-asset {
+  position: relative;
+}
+:is(.cols.editing, .cols.sizing, .stage.content-editing, .dtstage.dt-editing, .dtstage.dt-content-editing) :is(.swap-asset, .assetslot) {
+  cursor: pointer;
+  outline: 1px dashed transparent;
+  outline-offset: 2px;
+  border-radius: 6px;
+  transition: outline-color 0.12s ease;
+}
+:is(.cols.editing, .cols.sizing, .stage.content-editing, .dtstage.dt-editing, .dtstage.dt-content-editing) :is(.swap-asset, .assetslot):hover {
+  outline-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+}
+.swap-asset.swap-sel,
+.assetslot.swap-sel {
+  outline: 2px solid var(--point-main) !important;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.swap-just {
+  animation: swapFlash 0.6s ease;
+}
+@keyframes swapFlash {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--point-main) 55%, transparent); }
+  100% { box-shadow: 0 0 0 10px transparent; }
+}
+/* 선택한 에셋의 삭제(×) 버튼 */
+.has-swapdel {
+  position: relative;
+}
+.swap-del {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 6;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, #000 20%, var(--danger, #e5484d));
+  border-radius: 50%;
+  background: var(--danger, #e5484d);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.32);
+}
+.swap-del:hover {
+  filter: brightness(1.12);
+}
+
+/* ── 에셋 라이브러리 (차트·심볼·아이콘 팔레트 + 드래그 삽입) ── */
+/* 에셋 검색창 — 라이브러리 맨 위. 입력하면 전체 카테고리에서 이름으로 필터 */
+.libsearch-wrap {
+  position: relative;
+  margin: 4px 0 6px;
+}
+.libsearch-wrap > svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  stroke: var(--text-weak);
+  fill: none;
+  stroke-width: 2;
+  pointer-events: none;
+}
+.libsearch {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 28px 8px 30px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--bg-page);
+  color: var(--text-strong);
+  font-family: var(--font);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.14s;
+}
+.libsearch:focus {
+  border-color: var(--point-main);
+}
+.libsearch::placeholder {
+  color: var(--text-weak);
+}
+.libsearch-wrap .libsearch-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-weak);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: none;
+}
+.libsearch-wrap.has-q .libsearch-clear {
+  display: block;
+}
+.libtabs {
+  /* 탭이 다섯이라 한 줄에 다 못 들어간다 — 넘치면 다음 줄로 흐르게 둔다 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 8px;
+  padding: 3px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.libtabs button {
+  flex: 1 1 auto;
+  padding: 7px 4px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-weak);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.14s;
+}
+/* 검색 결과가 없을 때 안내 */
+.libempty {
+  grid-column: 1 / -1;
+  padding: 22px 8px;
+  text-align: center;
+  color: var(--text-weak);
+  font-size: 12px;
+}
+.libtabs button:hover {
+  color: var(--text-strong);
+}
+.libtabs button.on {
+  background: var(--point-fill);
+  color: #fff;
+}
+/* 에셋 썸네일 테마 — 사이드바 크롬은 고정 다크지만, 라이브러리 썸네일만은
+   화면(프리뷰) 테마를 그대로 따라간다. #libGrid[data-theme]에 state.mode가 실린다.
+   아래 값은 다크(기본). */
+.libgrid {
+  --lib-card: var(--bg-surface);
+  --lib-line: var(--line);
+  --lib-name: var(--text-weak);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 4px 4px 6px;
+  scrollbar-width: thin;
+}
+.libgrid[data-theme='light'] {
+  --lib-card: #eef1f6;
+  --lib-line: #ccd3df;
+  --lib-name: #5a6478;
+}
+.libitem {
+  position: relative;
+  border: 1px solid var(--lib-line);
+  border-radius: 10px;
+  background: var(--lib-card);
+  cursor: grab;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.libitem:hover {
+  border-color: var(--point-main);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+.libitem:active {
+  cursor: grabbing;
+}
+.libitem.dragging {
+  opacity: 0.45;
+}
+/* 썸네일은 어떤 에셋이든 판을 깔지 않는다 — 카드 바탕(--lib-card)이 그대로 비친다 */
+.libitem .thumb {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 6px;
+  background: transparent;
+}
+.libitem.sym .thumb {
+  padding: 4px;
+}
+.libitem.sym .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+/* ── 한진 화면 컴포넌트(살아 있는 DOM) 에셋 ──
+   시안 CSS(.hjX-root …)를 그대로 쓰되, 화면 뿌리가 갖는 '화면 전체를 덮는' 성질만 끈다.
+   배경도 끄므로 썸네일 바탕은 투명하다 — 컴포넌트 자신의 면색만 보인다. */
+.hj-asset.hjc-root,
+.hj-asset.hjg-root,
+.hj-asset.hju-root,
+.hj-asset.hno2-root,
+.hj-asset.hnc1-root,
+.hj-asset.hnc2-root,
+.hj-asset.hnm-root,
+.hj-asset.hni1-root,
+.hj-asset.hni2-root,
+.hj-asset.hne-root,
+.hj-asset.hnn1-root,
+.hj-asset.hnn2-root,
+.hj-asset.hnn3-root,
+.hj-asset.hnf-root,
+.hj-asset.hns1-root,
+.hj-asset.hns2-root,
+.hj-asset.hnl-root {
+  position: relative;
+  inset: auto;
+  overflow: visible;
+  background: none;
+  z-index: auto;
+  flex: 0 0 auto;
+  transform: scale(var(--k, 1));
+  transform-origin: center center;
+}
+/* 화면 전체를 덮는 배경 층은 썸네일에서 걷어낸다 — 바탕은 무조건 투명해야 한다.
+   (컴포넌트 자신의 면색·테두리는 그대로 남는다) */
+.hj-asset > [data-name="Background"],
+.hj-asset > [data-name="Base"] {
+  display: none !important;
+}
+/* 컴포넌트 뿌리는 화면 좌표에 절대배치돼 있다 — 그 자리 지정만 풀고 속은 그대로 둔다 */
+.hj-asset > * {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+.libitem .thumb.domhost {
+  padding: 6px;
+  overflow: hidden;
+}
+/* 화면·패널에 넣은 한진 에셋 — 가로에 맞춰 줄이고 높이는 줄어든 만큼만 차지한다 */
+.hj-embed {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+}
+.hj-embed .hj-asset {
+  transform-origin: center center;
+}
+/* SK하이닉스 Figma 레이어 → 인라인 SVG(코드) 에셋 */
+.libitem .thumb.fighost {
+  padding: 7px;
+}
+.libitem .thumb.fighost-icon {
+  padding: 12px;
+}
+/* 이천 FMS 두 화면의 원본 에셋(파일 그대로 <img> 로 그린다) */
+.libitem .thumb.figimg {
+  padding: 7px;
+}
+.libitem .thumb.figimg-icon {
+  padding: 12px;
+}
+/* 배경을 걷어낸 라이트 시안 컴포넌트 */
+.libitem .thumb.figimg-light {
+  padding: 8px;
+}
+/* 라이트 시안에서 뽑은 에셋(figimg-light)은 파일이 한 벌뿐이라 — 흰 판에 어두운 글자 —
+   다크 화면에서는 그대로 두면 어긋난다. 다크 썸네일은 JS(darkenSvg)가 SVG 색을
+   하나씩 다시 계산해 만든다: 무채색(판·글자·선)만 명도를 뒤집고 강조색은 색상을 지킨다.
+   아래 필터는 fetch 가 막힌 환경(file:// 로 열었을 때)용 예비수단으로만 걸린다. */
+.libgrid[data-theme='dark'][data-imgfallback='1'] .thumb.figimg-light img,
+.libgrid[data-imgfallback='1'] .libitem.cht .thumb.figimg-light img {
+  filter: invert(1) hue-rotate(180deg);
+}
+/* 차트 에셋(.cht)만은 화면 테마를 따르지 않고 늘 다크 — 라이브러리 안에서 차트가
+   한 가지 밝기로만 보이도록 카드·판·이름을 다크 값으로 고정한다.
+   (커스텀 속성을 항목에 직접 걸어 .libgrid[data-theme] 상속을 덮는다) */
+.libitem.cht {
+  --lib-card: var(--bg-surface);
+  --lib-line: var(--line);
+  --lib-name: var(--text-weak);
+}
+.thumb.figimg img,
+.figimg-embed img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+.figimg-embed {
+  width: 100%;
+}
+.figimg-embed img {
+  height: auto;
+}
+.panel.assetpanel .figimg-embed {
+  width: 100%;
+  height: 100%;
+}
+.panel.assetpanel .figimg-embed img {
+  height: 100%;
+}
+/* 인라인 SVG는 width/height 없이 viewBox만 → 컨테이너에 맞춰 축소(비율 유지) */
+.fighost .fig-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+/* 패널에 삽입될 때는 폭 기준으로 배치하고 높이는 비율로 계산 */
+.fig-embed .fig-svg {
+  width: 100%;
+  height: auto;
+}
+.fig-embed {
+  width: 100%;
+}
+/* SK하이닉스 화면에서 비활성화된 버전 토글 */
+#version button:disabled,
+#version button.locked {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* SK하이닉스 헤더 타임스탬프용 — Tomorrow (테크 디스플레이 폰트) */
+@font-face {
+  font-family: 'Tomorrow';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('src/fonts/Tomorrow-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Tomorrow';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('src/fonts/Tomorrow-SemiBold.ttf') format('truetype');
+}

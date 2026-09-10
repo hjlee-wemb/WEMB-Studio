@@ -1,0 +1,189 @@
+/* ── 라이트 모드 팝업 · 모달 ── */
+
+/* ============================================================
+   라이트 모드 팝업·모달 — html[data-mode='light']일 때 어두운
+   크롬(오버레이·카드·표·코드블록)을 밝은 디자인으로 전환.
+   (툴팁 .tip, 컴포넌트 시트 .cssheet, 차트종류 메뉴는 이미 테마
+    변수를 쓰므로 여기서 다루지 않음)
+   ============================================================ */
+html[data-mode='light'] .abmodal,
+html[data-mode='light'] .exmodal,
+html[data-mode='light'] .ctpopup {
+  background: rgba(28, 36, 51, 0.32);
+}
+/* 카드/컨테이너 표면 */
+html[data-mode='light'] .excard,
+html[data-mode='light'] .ctcard {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
+}
+html[data-mode='light'] .abcol {
+  background: #fbfcfe;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+/* 헤더/제목/보조 텍스트 */
+html[data-mode='light'] .abhead,
+html[data-mode='light'] .abthumb,
+html[data-mode='light'] .exhead {
+  color: #1a1f2b;
+}
+html[data-mode='light'] .exhead {
+  border-bottom-color: rgba(15, 23, 42, 0.1);
+}
+html[data-mode='light'] .abhead .abnote {
+  color: rgba(26, 31, 43, 0.6);
+}
+html[data-mode='light'] .exhead .exnote,
+html[data-mode='light'] .ctpopup .ctdrag {
+  color: rgba(26, 31, 43, 0.5);
+}
+/* 닫기 버튼 */
+html[data-mode='light'] .abclose {
+  border-color: rgba(15, 23, 42, 0.18);
+  color: #1a1f2b;
+}
+html[data-mode='light'] .abclose:hover {
+  background: rgba(15, 23, 42, 0.06);
+}
+/* 셀렉트/입력 */
+html[data-mode='light'] .abpick select,
+html[data-mode='light'] .exsel {
+  background: #f4f6f9;
+  color: #1a1f2b;
+  border-color: rgba(15, 23, 42, 0.16);
+}
+/* 탭 버튼 */
+html[data-mode='light'] .extabs button {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.12);
+  color: rgba(26, 31, 43, 0.72);
+}
+html[data-mode='light'] .extabs button:hover {
+  color: #1a1f2b;
+}
+html[data-mode='light'] .extabs button.on {
+  color: #fff;
+}
+/* 코드 블록 — 밝은 회색 배경 + 어두운 글자 */
+html[data-mode='light'] .excode pre {
+  background: #f5f7fa;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+html[data-mode='light'] .excode pre::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.18);
+}
+html[data-mode='light'] .excode code {
+  color: #2a2f3a;
+}
+html[data-mode='light'] .excopy {
+  background: rgba(15, 23, 42, 0.06);
+  border-color: rgba(15, 23, 42, 0.16);
+  color: #1a1f2b;
+}
+/* 섹션 구분 라벨/선 */
+html[data-mode='light'] .exseclbl {
+  color: rgba(26, 31, 43, 0.45);
+}
+html[data-mode='light'] .exsec::after {
+  background: rgba(15, 23, 42, 0.1);
+}
+/* 액션 버튼 */
+html[data-mode='light'] .exactions button {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.14);
+  color: #1a1f2b;
+}
+html[data-mode='light'] .exactions button:hover {
+  background: rgba(74, 158, 255, 0.12);
+}
+html[data-mode='light'] .exhint {
+  color: rgba(26, 31, 43, 0.6);
+}
+/* 컴포넌트 시트 헤더의 'HTML 내보내기' 버튼 — 밝은 배경에서 흰 글자가 안 보이므로 전환 */
+html[data-mode='light'] .csexport {
+  border-color: rgba(15, 23, 42, 0.16);
+  background: rgba(15, 23, 42, 0.04);
+  color: #1a1f2b;
+}
+html[data-mode='light'] .csexport:hover {
+  border-color: #4a9eff;
+  background: rgba(74, 158, 255, 0.12);
+}
+/* A/B 하단 메타 */
+html[data-mode='light'] .abmeta {
+  border-top-color: rgba(15, 23, 42, 0.1);
+}
+html[data-mode='light'] .abradius {
+  color: rgba(26, 31, 43, 0.6);
+  border-color: rgba(15, 23, 42, 0.18);
+}
+html[data-mode='light'] .abchip {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.1);
+}
+html[data-mode='light'] .abchip b {
+  color: #1a1f2b;
+}
+html[data-mode='light'] .abchip code {
+  color: rgba(26, 31, 43, 0.6);
+}
+html[data-mode='light'] .abthumb .circles i {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.15);
+}
+html[data-mode='light'] .abcolors::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.2);
+}
+/* 대비비 검증표 */
+html[data-mode='light'] .cttablewrap {
+  border-color: rgba(15, 23, 42, 0.1);
+}
+html[data-mode='light'] .cttable {
+  color: #2a2f3a;
+}
+html[data-mode='light'] .cttable th {
+  color: rgba(26, 31, 43, 0.6);
+  background: rgba(15, 23, 42, 0.03);
+  border-bottom-color: rgba(15, 23, 42, 0.12);
+}
+html[data-mode='light'] .cttable td {
+  border-bottom-color: rgba(15, 23, 42, 0.07);
+}
+html[data-mode='light'] .ctsw,
+html[data-mode='light'] .ctchange .ccsw {
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.16);
+}
+html[data-mode='light'] .ctlabel,
+html[data-mode='light'] .ctratio,
+html[data-mode='light'] .ctfixmsg,
+html[data-mode='light'] .ctchange {
+  color: #1a1f2b;
+}
+html[data-mode='light'] .ctlabel small,
+html[data-mode='light'] .ctchange .ccratio,
+html[data-mode='light'] .ctchanges .cchead span {
+  color: rgba(26, 31, 43, 0.55);
+}
+html[data-mode='light'] .ctchange code {
+  color: rgba(26, 31, 43, 0.78);
+}
+html[data-mode='light'] .ctchange .ccarrow {
+  color: rgba(26, 31, 43, 0.45);
+}
+html[data-mode='light'] .ctfixbar {
+  border-color: rgba(15, 23, 42, 0.1);
+  background: rgba(15, 23, 42, 0.02);
+}
+/* 상태 텍스트는 흰 배경에서 대비 확보를 위해 진하게 */
+html[data-mode='light'] .ctpass,
+html[data-mode='light'] .ctchange .ccratio b.ok,
+html[data-mode='light'] .ctfixbar.all-ok .ctfixmsg,
+html[data-mode='light'] .ctchanges .cchead {
+  color: #1f9d6b;
+}
+html[data-mode='light'] .ctfail,
+html[data-mode='light'] .ctfixmsg b,
+html[data-mode='light'] .ctchange .ccratio b {
+  color: #d1453b;
+}

@@ -1,0 +1,1865 @@
+/* ── 대시보드 — 와이어프레임 캔버스 · 차트 · 편집 상태 ── */
+
+/* ============================================================
+ *  화면 만들기 — 와이어프레임 캔버스 (Figma 좌표 기반 절대 배치)
+ *  선택한 와이어프레임의 패널을 %좌표로 배치하고, 박스 크기에 맞는
+ *  대표 콘텐츠(차트·표·KPI·리스트)를 채워 테마 색을 미리 본다.
+ * ============================================================ */
+.wfcanvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.wfcanvas[hidden] {
+  display: none;
+}
+.wfcanvas.dt {
+  position: absolute;
+  inset: 0;
+}
+/* 와이어프레임을 원본(1920 기준 bbox) 크기로 그린 뒤 통째로 view에 맞게 축소한다.
+   → 콘텐츠 밀도가 실제 대시보드와 같아 글자·차트가 박스에 자연스럽게 들어간다. */
+.wfboard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  will-change: transform;
+}
+.wfpanel {
+  /* 반드시 절대배치 유지 — 콘텐츠가 담긴 패널은 .panel 클래스가 붙는데,
+     .panel의 position:relative가 이를 덮으면 패널들이 좌표 대신 문서 흐름으로 쌓여
+     레이아웃(썸네일)과 다르게 나온다. !important로 좌표 배치를 보장한다. */
+  position: absolute !important;
+  background: var(--panel-bg, var(--bg-surface));
+  border: var(--panel-border-w, 1px) solid var(--line);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--panel-shadow, none);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 9px 11px;
+  animation: panelIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.wfcanvas.dt .wfpanel {
+  background: color-mix(in srgb, var(--panel-bg, var(--bg-surface)) var(--dt-glass-op, 70%), transparent);
+  border-color: var(--dt-stroke, var(--line));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+/* 실제 대시보드 패널(.ph+.pbody)을 그대로 복제해 넣을 땐 자체 여백이 있으니
+   wfpanel 자체 패딩은 없앤다. .kpis 클론은 약간의 안쪽 여백만. */
+.wfpanel.panel {
+  padding: 0;
+  gap: 0;
+}
+.wfpanel.kpibox {
+  padding: 10px 16px;
+}
+/* KPI 블록을 스트립 세로 가운데로 정렬 — 스트립이 내용보다 높아도 위·아래 여백이 균형 있게
+   (그리드 자체를 세로로 늘리지 않고, 감싸는 .wffit 이 내용 높이 그대로의 블록을 가운데 둔다) */
+.wfpanel.kpibox > .wffit {
+  justify-content: center;
+}
+.wfpanel.kpibox .kpis {
+  flex: none; /* 내용 높이만 차지 → 위쪽에 큰 빈칸이 생기지 않게 */
+  min-height: 0;
+  margin: 0;
+  align-items: center;
+}
+/* KPI 칸이 그리드 폭(1fr)을 넘겨 잘리지 않도록 min-width 해제(그리드 오버플로 방지) +
+   칸 폭에 맞춰 숫자를 자동 축소(container query) + 칸마다 안쪽 여백을 넉넉히 줘
+   숫자가 구분선·패널 가장자리에 붙지 않게 한다. (대시보드 원본 KPI에는 영향 없음) */
+.wfpanel.kpibox .kpi {
+  min-width: 0;
+  container-type: inline-size;
+  padding: 4px 16px;
+}
+.wfpanel.kpibox .kpi:first-child {
+  padding-left: 16px;
+}
+.wfpanel.kpibox .kpi .val {
+  font-size: clamp(14px, 12cqi, 30px);
+  white-space: nowrap;
+  margin-top: 2px;
+}
+/* 라벨·숫자·증감·보조줄 사이 세로 간격을 촘촘하게 — 칸이 위아래로 벌어져 보이던 문제 해소 */
+.wfpanel.kpibox .kpi .kchg {
+  margin-top: 2px;
+}
+.wfpanel.kpibox .kpi .sub {
+  margin-top: 3px;
+}
+.wfpanel.kpibox .kpi .lab,
+.wfpanel.kpibox .kpi .sub {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 콘텐츠 래퍼 — 패널을 꽉 채우되, 콘텐츠 자연높이가 패널보다 크면
+   fitContents가 transform:scale로 축소해 '잘려 안 보이는' 대신 통째로 줄여 담는다. */
+.wffit {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  transform-origin: top left;
+  overflow: hidden;
+}
+.wfpanel .pbody {
+  overflow: visible;
+}
+.wfhead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+.wfhead .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--point-main);
+  flex: 0 0 auto;
+}
+.wfhead .t {
+  height: 8px;
+  width: 42%;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text-strong) 50%, transparent);
+}
+/* PRD 제목 텍스트 — 실제 글자로 표시(플레이스홀더 바 대신) */
+.wfhead .t.tx {
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  background: none;
+  border-radius: 0;
+  color: var(--text-strong);
+  font: 700 15px var(--font);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wfbody {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+/* KPI 칸 */
+.wfkpis {
+  flex: 1;
+  display: grid;
+  gap: 7px;
+}
+.wfkpi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--text-weak) 9%, transparent);
+}
+.wfkpi .n {
+  height: 12px;
+  width: 62%;
+  border-radius: 3px;
+  background: var(--point-main);
+}
+.wfkpi .l {
+  height: 6px;
+  width: 84%;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text-weak) 42%, transparent);
+}
+/* 막대 차트 */
+.wfbars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  min-height: 0;
+}
+.wfbars i {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(var(--point-main), color-mix(in srgb, var(--point-main) 25%, transparent));
+}
+/* 선 차트 */
+.wfline {
+  flex: 1;
+  min-height: 0;
+}
+.wfline svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* 표 */
+.wftable {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.wftr {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+}
+.wftr:last-child {
+  border-bottom: 0;
+}
+.wftr i {
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text-weak) 30%, transparent);
+}
+.wftr.h i {
+  background: color-mix(in srgb, var(--point-main) 55%, transparent);
+}
+/* 리스트/로그 */
+.wflist {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  justify-content: center;
+  min-height: 0;
+}
+.wfrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.wfrow .b {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--point-main);
+  flex: 0 0 auto;
+}
+.wfrow i {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text-weak) 28%, transparent);
+}
+.wfrow .v {
+  width: 20px;
+  height: 8px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--text-strong) 42%, transparent);
+  flex: 0 0 auto;
+}
+/* 도넛 */
+.wfdonut {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+.wfdonut svg {
+  height: 100%;
+  width: auto;
+  max-height: 140px;
+  display: block;
+}
+/* 얇은 띠(탭·이벤트 바) */
+.wfstrip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+}
+.wfstrip i {
+  height: 10px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--text-weak) 22%, transparent);
+}
+/* 갤러리 썸네일 — 좌표 기반 미니 배치 */
+.wthumb.pos {
+  display: block;
+  position: relative;
+}
+.wthumb.pos i {
+  position: absolute;
+  border-radius: 2px;
+}
+.panel:hover {
+  border-color: color-mix(in srgb, var(--point-main) 30%, var(--line));
+}
+/* 배치 편집 모드 — 패널을 끌어 옮길 수 있는 상태 */
+.cols.editing .panel {
+  cursor: grab;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--point-main) 50%, var(--line));
+  /* 포인터로 끌 때 패널 글자가 선택돼 이동을 방해하지 않게 — 텍스트 선택을 끈다.
+     (내용 수정 중인 contenteditable 글자만 아래에서 다시 선택 가능하게 되돌린다.) */
+  -webkit-user-select: none;
+  user-select: none;
+}
+/* 위에서 패널 전체의 텍스트 선택을 껐기 때문에, 이 규칙이 없으면 contenteditable 이어도
+   마우스로 캐럿을 놓을 수 없다 — '내용 수정' 중인 글자만 다시 선택 가능하게 되돌린다. */
+.cols.editing .panel [contenteditable='true'] {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+.cols.editing .panel img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+.cols.editing .panel:hover {
+  border-color: var(--point-main);
+}
+/* 끌고 있는 패널 — 제자리에서 transform 으로 이동하며 다른 패널 위로 떠오른다 */
+.cols.editing .panel.dragging {
+  cursor: grabbing;
+  pointer-events: none;
+  position: relative;
+  z-index: 50; /* 형제 패널(0~8)보다만 위면 된다 — 9999 는 의미 없는 큰 수였다 */
+  opacity: 0.92;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+  border-style: solid;
+  border-color: var(--point-main);
+  transition: none !important;
+}
+/* 드롭될 자리를 보여주는 빈 칸(placeholder) — 실제 패널과 같은 flex 비중(1 1 0)으로 두어,
+   드롭했을 때 딱 그 크기/자리에 들어감을 미리 정확히 보여준다(반응형 그리드 스냅). */
+.cols .panel.drag-placeholder {
+  flex: 1 1 0;
+  min-height: 0;
+  background: color-mix(in srgb, var(--point-main) 12%, transparent) !important;
+  border: 2px dashed var(--point-main) !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}
+.cols .panel.drag-placeholder > * {
+  display: none;
+}
+/* 편집 중에는 진입 애니메이션(panelIn)을 끈다 — 패널을 옮기면 애니메이션이 다시 시작되면서
+   지연(animation-delay) 구간의 opacity:0 상태로 남아 위젯이 통째로 사라져 보였다. */
+.cols.editing .panel,
+.cols.editing .kpi,
+.panel.no-anim {
+  animation: none !important;
+  opacity: 1 !important;
+}
+/* 자리를 맞바꿀 대상 패널 — 놓으면 끌고 있는 패널과 위치가 서로 바뀐다 */
+.cols.editing .panel.swap-target {
+  outline: 2px solid var(--point-main);
+  outline-offset: -2px;
+  background: color-mix(in srgb, var(--point-main) 14%, var(--panel-bg, transparent));
+}
+/* 이동 중 다른 위젯이 새 자리로 부드럽게 미끄러져 들어가도록(스냅 느낌) */
+.cols.editing .panel.reflowing {
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* 배치 편집 중 — 에셋(차트·심볼·아이콘)도 끌어서 위치 이동 (대시보드·디지털 트윈 공통) */
+.cols.editing .assetslot,
+.dtstage.dt-editing .assetslot {
+  cursor: grab;
+  outline: 1px dashed color-mix(in srgb, var(--point-main) 45%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.cols.editing .assetslot:hover,
+.dtstage.dt-editing .assetslot:hover {
+  outline-color: var(--point-main);
+}
+.cols.editing .assetslot.dragging,
+.dtstage.dt-editing .assetslot.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+/* 편집 모드 안내 배너 */
+.editbanner {
+  display: none;
+  align-items: center;
+  gap: 9px;
+  flex: none;
+  padding: 9px 14px;
+  border: 1px dashed color-mix(in srgb, var(--point-main) 55%, var(--line));
+  background: color-mix(in srgb, var(--point-main) 10%, var(--bg-surface));
+  color: var(--text-strong);
+  border-radius: 9px;
+  font-size: 13px;
+}
+.editbanner.show {
+  display: flex;
+}
+/* 선택한 위젯 이동을 끝내는 '완료' 버튼 — 배너 오른쪽 끝에 붙는다(선택 중일 때만 노출) */
+.editbanner .editdone {
+  margin-left: auto;
+  flex: none;
+  padding: 5px 14px;
+  border: 1px solid var(--point-main);
+  border-radius: 7px;
+  background: var(--point-fill);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.14s ease;
+}
+.editbanner .editdone:hover {
+  background: color-mix(in srgb, var(--point-main) 86%, #000);
+}
+.editbanner .editdone[hidden] {
+  display: none;
+}
+.editbanner svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--point-main);
+}
+/* 내용 수정 모드 — 글자에 마우스를 올리거나 클릭할 때만 표시(평소엔 깔끔) */
+.stage.content-editing [contenteditable] {
+  cursor: text;
+}
+/* 편집 중인 칸만 옅은 회색 외곽선으로 표시(색상 강조 없음) */
+.stage.content-editing [contenteditable]:focus {
+  outline: 1px solid var(--line);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+/* ===== 차트 종류 선택기 — 내용 수정 모드에서만 노출 ===== */
+.charttype {
+  display: none;
+  margin-left: auto;
+  flex: none;
+}
+.stage.content-editing .panel .charttype {
+  display: inline-flex;
+}
+/* 편집 중엔 자리 확보를 위해 탭/힌트는 숨김(차트 패널 한정) */
+.stage.content-editing .panel:has(.charttype) .tabs,
+.stage.content-editing .panel:has(.charttype) .hint {
+  display: none;
+}
+/* ── SK하이닉스 메인 시안의 '팝업 열기' 핫스팟(UPS 전력 지표 카드 · 좌측 UPS 내비) ──
+   편집(배치/내용) 중에는 이동·글자수정이 우선이라 핫스팟 표시를 끈다. */
+.skx-screen .skx-hotspot {
+  cursor: pointer;
+}
+.skx-screen .skx-hotspot > .skx-hotring {
+  fill: color-mix(in srgb, var(--point-main) 10%, transparent);
+  stroke: var(--point-main);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 0.16s ease;
+  /* 이 사각형이 클릭·호버 판정을 맡는다 — 아이콘 선 위를 정확히 찍지 않아도 눌리도록 */
+  pointer-events: all;
+}
+/* 자체 호버 효과가 있는 내비 항목 — 판정만 하고 링은 그리지 않는다 */
+.skx-screen .skx-hotspot > .skx-hotring.bare {
+  fill: transparent;
+  stroke: none;
+}
+.skx-screen .skx-hotspot:hover > .skx-hotring {
+  opacity: 1;
+}
+.dtstage.dt-editing .skx-screen .skx-hotspot,
+.dtstage.dt-content-editing .skx-screen .skx-hotspot {
+  cursor: inherit;
+}
+.dtstage.dt-editing .skx-screen .skx-hotspot:hover > .skx-hotring,
+.dtstage.dt-content-editing .skx-screen .skx-hotspot:hover > .skx-hotring {
+  opacity: 0;
+}
+/* 편집 중에는 판정 사각형도 비켜 준다 — 배치·글자 수정 클릭을 가로채지 않게 */
+.dtstage.dt-editing .skx-screen .skx-hotring,
+.dtstage.dt-content-editing .skx-screen .skx-hotring {
+  pointer-events: none;
+}
+/* 화면 우하단 안내 — '지표 카드를 누르면 팝업이 열려요' */
+.skx-hothint {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 320px;
+  padding: 9px 12px;
+  border: 1px solid color-mix(in srgb, var(--point-main) 45%, transparent);
+  border-radius: 999px;
+  background: rgba(10, 14, 22, 0.82);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #dfe6f2;
+  font-size: 12px;
+  line-height: 1.3;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.skx-hothint b {
+  color: var(--point-main);
+  font-weight: 700;
+}
+.skx-hothint button {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: inherit;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+.skx-hothint button:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+.dtstage.dt-editing .skx-hothint,
+.dtstage.dt-content-editing .skx-hothint {
+  display: none;
+}
+/* ── Digital Twin 편집(배치/내용) 상태 ── */
+.dtstage.dt-editing .dt-drag {
+  cursor: grab;
+  outline: 1px dashed color-mix(in srgb, var(--point-main) 60%, transparent);
+  outline-offset: 3px;
+}
+.dtstage.dt-editing .dt-drag:hover {
+  outline-color: var(--point-main);
+}
+.dtstage.dt-editing .dt-drag.dragging {
+  opacity: 0.7;
+  cursor: grabbing;
+}
+.dtstage.dt-content-editing [contenteditable] {
+  cursor: text;
+}
+.dtstage.dt-content-editing [contenteditable]:focus {
+  outline: 1px solid var(--point-main);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+/* PRD 플로우로 만든 유리 패널(wfCanvasDt)도 배치·내용 편집 대상 —
+   .dt-ui 고정 배치가 숨겨진 상태에서 와이어프레임 패널을 서로 자리 바꿔(배치) 글자를 고친다.
+   배치 수정은 '자유 이동'이 아니라 '같은 크기 패널끼리 자리 맞바꾸기'라 레이아웃(격자)은 그대로 유지된다. */
+.dtstage.dt-editing .wfcanvas.dt .wfpanel {
+  cursor: grab;
+  outline: 1px dashed color-mix(in srgb, var(--point-main) 60%, transparent);
+  outline-offset: 2px;
+  transition: left 0.18s ease, top 0.18s ease, width 0.18s ease, height 0.18s ease;
+}
+.dtstage.dt-editing .wfcanvas.dt .wfpanel:hover {
+  outline-color: var(--point-main);
+}
+/* 끌고 있는 패널 — 다른 패널 위로 떠오르고, 자리 이동 트랜지션은 끈다(포인터에 딱 붙게) */
+.dtstage.dt-editing .wfcanvas.dt .wfpanel.wf-dragging {
+  opacity: 0.9;
+  cursor: grabbing;
+  z-index: 50;
+  outline-color: var(--point-main);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  transition: none;
+}
+/* 맞바꿀 대상(같은 크기 패널) — 그 위에 놓으면 자리를 바꾼다 */
+.dtstage.dt-editing .wfcanvas.dt .wfpanel.wf-swaptarget {
+  outline: 2px solid var(--point-main);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--point-main) 22%, transparent);
+}
+
+.ct-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+  background: var(--bg-accent);
+  border: 1px solid var(--line);
+  padding: 4px 9px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.15s;
+}
+.ct-btn:hover {
+  border-color: var(--point-main);
+}
+.ct-ico {
+  font-size: 13px;
+  line-height: 1;
+}
+.ct-cv {
+  color: var(--text-weak);
+  font-size: 11px;
+}
+/* 드롭다운 — .main 안에 fixed로 띄워(패널 overflow:hidden 회피) 미리보기 테마를 그대로 사용 */
+.ct-menu {
+  display: none;
+  position: fixed;
+  z-index: var(--z-popover-1);
+  width: 250px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+  padding: 7px;
+}
+.ct-menu.open {
+  display: block;
+}
+.ct-hd {
+  font-size: 11px;
+  color: var(--text-weak);
+  font-weight: 600;
+  padding: 5px 8px 7px;
+}
+/* 카테고리 행(1단계 메뉴) — 마우스를 올리면 오른쪽에 하위 메뉴가 펼쳐짐 */
+.ct-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  padding: 9px 8px;
+  cursor: pointer;
+  color: var(--text-strong);
+}
+.ct-cat-row:hover,
+.ct-cat-row.active {
+  background: var(--bg-accent);
+}
+/* 현재 선택된 종류가 들어있는 카테고리 표시 — 여기도 radius(9px)가 있어
+   왼쪽 막대가 모서리를 따라 휘었다. .dt-di.on과 같은 이유로 사방 링으로 통일. */
+.ct-cat-row.has-cur {
+  box-shadow: inset 0 0 0 1px var(--fg-point);
+}
+.ct-cat-ico {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  flex: none;
+}
+.ct-cat-nm {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ct-cat-arrow {
+  flex: none;
+  color: var(--text-weak);
+  font-size: 11px;
+}
+.ct-cat-rec {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+/* 하위 메뉴(2단계 flyout) — .main 안에 fixed로 띄움 */
+.ct-sub {
+  display: none;
+  position: fixed;
+  z-index: var(--z-popover-2);
+  width: 238px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+  padding: 7px;
+}
+.ct-sub.open {
+  display: block;
+}
+.ct-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text-strong);
+}
+.ct-opt:hover {
+  background: var(--bg-accent);
+}
+.ct-opt.on {
+  background: color-mix(in srgb, var(--point-main) 14%, var(--bg-surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--point-main) 45%, var(--line));
+}
+.ct-opt .ct-ico {
+  font-size: 17px;
+  width: 22px;
+  text-align: center;
+  flex: none;
+}
+.ct-tx {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.ct-tx b {
+  font-size: 12px;
+  font-weight: 600;
+}
+.ct-tx small {
+  font-size: 11px;
+  color: var(--text-weak);
+  line-height: 1.3;
+  white-space: normal;
+}
+.ct-badge {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--point-fill);
+  padding: 2px 6px;
+  border-radius: 999px;
+  align-self: flex-start;
+}
+/* title row — fixed at top, separated from scrollable body (no overlap) */
+.ph {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: calc(12px * var(--pad-scale, 1)) calc(16px * var(--pad-scale, 1)) calc(10px * var(--pad-scale, 1));
+  flex: none;
+  flex-wrap: nowrap;
+}
+.ph h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex-shrink: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ph h3::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--point-main);
+  flex: none;
+}
+.ph .tabs {
+  margin-left: auto;
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+.ph .tabs b {
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-weak);
+  padding: 3px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: 0.15s;
+  white-space: nowrap;
+}
+.ph .tabs b.on {
+  /* 글자색은 JS(apply)가 강조색 명도에 맞춰 흰/검 자동 선택 — 소형 칩 4.5:1 확보 */
+  color: var(--on-point, #fff);
+  background: var(--point-main);
+}
+.ph .tabs b:hover:not(.on) {
+  color: var(--text-strong);
+}
+.ph .hint {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.ph .hint b {
+  color: var(--fg-point);
+  font-weight: 600;
+}
+.pbody {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 12px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.pbody::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.pbody::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 3px;
+}
+
+/* chart with axes */
+.clegend {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-weak);
+  margin-bottom: 4px;
+}
+.clegend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.clegend span::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.clegend .s-sub::before {
+  background: var(--point-sub);
+}
+.clegend .s-main::before {
+  background: var(--point-main);
+}
+.clegend .s-danger::before {
+  background: var(--danger);
+}
+.clegend .s-warn::before {
+  background: var(--warning);
+}
+.chart {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-template-rows: 1fr 16px;
+  column-gap: 12px;
+  row-gap: 4px;
+}
+.yax {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.plot {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+.plot svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+.xax {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.pulse-dot {
+  animation: pdot 1.7s ease-in-out infinite;
+}
+.plot rect {
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+
+/* ── 차트 호버 툴팁 ──
+   .main 안에 두어 생성된 팔레트 변수를 그대로 쓴다. position:fixed +
+   transform 이동이라 패널의 overflow:hidden에 잘리지 않는다. */
+.chart-tip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-9999px, -9999px);
+  min-width: 96px;
+  max-width: 260px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bg-surface) 94%, transparent);
+  color: var(--text-strong);
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(8px);
+  transition: opacity 0.12s ease;
+}
+.chart-tip.on {
+  opacity: 1;
+}
+.chart-tip .tt-h {
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-weak);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.chart-tip .tt-r {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.chart-tip .tt-r + .tt-r {
+  margin-top: 2px;
+}
+.chart-tip .tt-r i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.chart-tip .tt-r span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chart-tip .tt-r b {
+  margin-left: auto;
+  padding-left: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 크로스헤어(세로선 · 강조 밴드 · 값 점) */
+.plot .cx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.plot.cx-on .cx {
+  opacity: 1;
+}
+.cx-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  margin-left: -0.5px;
+  background: color-mix(in srgb, var(--point-main) 62%, transparent);
+}
+.cx-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 3px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--point-main) 14%, transparent);
+}
+.cx-dot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin: -4.5px 0 0 -4.5px;
+  box-shadow: 0 0 0 2px var(--bg-surface);
+}
+
+/* 호버 대상 강조 */
+.donut-svg [data-tip]:hover,
+.dleg .row[data-tip]:hover {
+  filter: brightness(1.14);
+}
+.mini[data-tip]:hover .d,
+.prow:hover .track {
+  filter: brightness(1.12);
+}
+.hcell[data-tip]:hover {
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--point-main) 14%, transparent);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th {
+  text-align: right;
+  color: var(--text-weak);
+  font-weight: 500;
+  padding: 6px 7px;
+  font-size: 12px;
+}
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+td {
+  padding: 7px 7px;
+  color: var(--text-strong);
+  transition: background 0.12s;
+}
+/* 표 hover — 행 전체를 같은 색으로 강조 + 사방 1px 링.
+   한쪽 막대(예전 inset 3px 0 0)는 쓰지 않는다. 다만 tr에는 box-shadow가 안 먹으므로
+   칸마다 나눠 그린다: 모든 칸이 위/아래를, 첫 칸이 왼쪽을, 끝 칸이 오른쪽을 맡아
+   이어 붙이면 행을 두르는 하나의 링이 된다. 색은 클램프된 --fg-point. */
+tbody tr:not(.bandh):not(.bandgap):hover td {
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+  color: var(--text-strong);
+  box-shadow:
+    inset 0 1px 0 var(--fg-point),
+    inset 0 -1px 0 var(--fg-point);
+}
+tbody tr:not(.bandh):not(.bandgap):hover td:first-child {
+  box-shadow:
+    inset 0 1px 0 var(--fg-point),
+    inset 0 -1px 0 var(--fg-point),
+    inset 1px 0 0 var(--fg-point);
+}
+tbody tr:not(.bandh):not(.bandgap):hover td:last-child {
+  box-shadow:
+    inset 0 1px 0 var(--fg-point),
+    inset 0 -1px 0 var(--fg-point),
+    inset -1px 0 0 var(--fg-point);
+}
+/* 묶음(밴드) 사이 여백 — 위 그룹과 아래 그룹을 시각적으로 분리 */
+.bandgap td {
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.bandh td:first-child {
+  background: none;
+}
+.bandh td {
+  background: var(--bg-accent);
+  background-clip: padding-box;
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-radius: 7px;
+  color: var(--text-weak);
+  text-align: center;
+  font-size: 12px;
+  padding: 4px;
+}
+.pair .v2 {
+  color: var(--fg-point);
+  font-weight: 600;
+}
+.pair.teal .v2 {
+  color: var(--fg-sub);
+}
+.pair .sl {
+  color: var(--text-weak);
+  margin: 0 4px;
+}
+.rowline td {
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+}
+.tag {
+  font-size: 12px;
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: var(--bg-accent);
+  color: var(--text-weak);
+  margin-right: 7px;
+  font-weight: 600;
+}
+/* 기관 분류 뱃지 — 종류별로 색 구분 */
+.tag.t-elec {
+  color: var(--fg-point);
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+}
+.tag.t-bank {
+  color: var(--fg-sub);
+  background: color-mix(in srgb, var(--point-sub) 18%, transparent);
+}
+.badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.b-ok {
+  color: var(--fg-point);
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+}
+.b-warn {
+  color: var(--fg-warning);
+  background: color-mix(in srgb, var(--warning) 16%, transparent);
+}
+.b-crit {
+  color: var(--fg-danger);
+  background: color-mix(in srgb, var(--danger) 16%, transparent);
+}
+
+/* donut (segmented) */
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+}
+.donut-svg {
+  width: 128px;
+  height: 128px;
+  flex: none;
+}
+.dleg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.dleg .row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--bg-accent) 50%, transparent);
+  font-size: 13px;
+  color: var(--text-weak);
+}
+.dleg .row i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.dleg .row b {
+  margin-left: auto;
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+/* progress lists */
+.plist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sec-lab {
+  font-size: 12px;
+  color: var(--fg-point);
+  font-weight: 700;
+  margin: 2px 0 8px;
+}
+.prow {
+  display: grid;
+  grid-template-columns: 1fr 84px 34px;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.prow .nm {
+  color: var(--text-weak);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.track {
+  height: 8px;
+  border-radius: 6px;
+  background: var(--bg-accent);
+  overflow: hidden;
+}
+.fill {
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--point-sub), var(--point-main));
+  /* width 트랜지션은 레이아웃 리플로우를 유발해 제거 — 값 갱신은 즉시 반영 */
+}
+.prow .pv {
+  text-align: right;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-size: 13px;
+}
+
+/* mini donuts */
+.mini-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex: 1;
+  align-items: center;
+}
+.mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.mini .d {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  position: relative;
+  transition: --v 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: conic-gradient(var(--point-main) 0 var(--v), var(--bg-accent) var(--v) 100%);
+}
+.mini .d::after {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  transition: background 0.35s;
+}
+.mini .d b {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--text-strong);
+}
+
+/* log */
+.loglist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+.logrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 11px;
+  background: color-mix(in srgb, var(--bg-accent) 50%, transparent);
+  border-radius: 9px;
+  transition: transform 0.12s;
+}
+.logrow:hover {
+  transform: translateX(2px);
+}
+.logrow span:nth-child(2) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.logrow .t {
+  color: var(--text-weak);
+  margin-left: auto;
+  font-size: 12px;
+  flex: none;
+}
+
+/* ===== Production 페이지 전용 컴포넌트 =====
+   Overview에 없는 형태들 — 공정 파이프라인 · 100% 스택 막대 · 간트 · 표 안 스파크라인.
+   색은 전부 팔레트 변수만 쓴다. */
+
+/* 공정 흐름 — 단계 카드와 그 사이의 재공(WIP) 연결 */
+.pflow {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  justify-content: space-between;
+}
+.pstage {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--bg-accent) 55%, transparent);
+}
+.pstage .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--point-main);
+}
+.pstage.warn .dot {
+  background: var(--warning);
+}
+.pstage.crit .dot {
+  background: var(--danger);
+}
+.pstage .nm {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pstage .v {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+/* 단계 사이 재공 — 세로 연결선 + 수량 */
+.pwip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 0 0 15px;
+  font-size: 11px;
+  line-height: 13px;
+  color: var(--text-weak);
+}
+.pwip::before {
+  content: '';
+  width: 1px;
+  height: 9px;
+  background: var(--line);
+}
+.pwip b {
+  color: var(--point-sub);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 100% 스택 막대 — 한 줄이 곧 100%인 시간 구성 */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+  min-height: 0;
+  justify-content: center;
+}
+.strow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.strow .nm {
+  width: 42px;
+  flex: none;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.stbar {
+  flex: 1;
+  display: flex;
+  height: 14px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg-accent);
+}
+.stbar span {
+  display: block;
+  height: 100%;
+  transform-origin: left;
+  animation: stgrow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+@keyframes stgrow {
+  from {
+    transform: scaleX(0);
+  }
+}
+.strow .pct {
+  width: 34px;
+  flex: none;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 간트 — 작업지시 시간대 스케줄 */
+.gantt {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  justify-content: space-between;
+}
+.gthead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-weak);
+  margin-left: 92px;
+}
+.gtrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gtrow .nm {
+  width: 84px;
+  flex: none;
+  font-size: 12px;
+  color: var(--text-weak);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gttrack {
+  position: relative;
+  flex: 1;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--bg-accent);
+}
+.gtbar {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 3px;
+  background: var(--point-main);
+  transform-origin: left;
+  animation: stgrow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.gtbar.done {
+  background: color-mix(in srgb, var(--point-main) 42%, var(--line));
+}
+.gtbar.late {
+  background: var(--danger);
+}
+.gtbar.wait {
+  background: color-mix(in srgb, var(--text-weak) 40%, var(--line));
+}
+
+/* 표 안 스파크라인 — 행마다 최근 추세를 작게 */
+.spark {
+  width: 52px;
+  height: 16px;
+  display: block;
+}
+
+/* 종류 전환이 가능한 생산 차트 호스트 — 기본 렌더러가 자기 display를 직접 잡고,
+   축 차트로 바뀌면 axisTarget이 .chart 자식을 만들어 채운다(빈 컨테이너 역할) */
+.pchart {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 안돈 현황판 — 라인별 신호등 타일 */
+.andon {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+.atile {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 9px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--bg-accent) 50%, transparent);
+  border-left: 3px solid var(--point-main);
+}
+.atile.run {
+  border-left-color: var(--point-main);
+}
+.atile.warn {
+  border-left-color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 10%, transparent);
+}
+.atile.stop {
+  border-left-color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+.atile .ln {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.atile .ln i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--point-main);
+}
+.atile.warn .ln i {
+  background: var(--warning);
+  animation: pdot 1.4s ease-in-out infinite;
+}
+.atile.stop .ln i {
+  background: var(--danger);
+  animation: pdot 1.1s ease-in-out infinite;
+}
+.atile .stt {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.atile .ov {
+  font-size: 11px;
+  color: var(--text-weak);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 불량 유형 분석 — 가로 랭킹 막대 */
+.hbars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  justify-content: center;
+}
+.hbrow {
+  display: grid;
+  grid-template-columns: 78px 1fr 40px;
+  align-items: center;
+  gap: 8px;
+}
+.hbrow .nm {
+  font-size: 12px;
+  color: var(--text-weak);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hbtrack {
+  height: 15px;
+  border-radius: 4px;
+  background: var(--bg-accent);
+  overflow: hidden;
+}
+.hbtrack i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--point-sub), var(--point-main));
+  transform-origin: left;
+  animation: stgrow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.hbrow .vv {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 불릿 차트 — 실적 막대 + 목표 눈금 + 성능 밴드 */
+.bullet {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  justify-content: center;
+}
+.blrow {
+  display: grid;
+  grid-template-columns: 42px 1fr 62px;
+  align-items: center;
+  gap: 9px;
+}
+.blrow .nm {
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.bltrack {
+  position: relative;
+  height: 16px;
+  border-radius: 3px;
+  overflow: hidden;
+  /* 성능 밴드: 미달(어두움) → 근접 → 양호 3구간 */
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--text-weak) 22%, var(--line)) 0 70%,
+    color-mix(in srgb, var(--text-weak) 12%, var(--line)) 70% 90%,
+    var(--bg-accent) 90% 100%
+  );
+}
+.blmeasure {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 2px;
+  background: var(--point-main);
+  transform-origin: left;
+  animation: stgrow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.blmeasure.miss {
+  background: var(--warning);
+}
+.bltarget {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--text-strong);
+}
+.blrow .vv {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+/* heatmap (status dots) */
+.heat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  justify-content: space-between;
+}
+.hrow {
+  display: grid;
+  grid-template-columns: 74px repeat(6, 1fr);
+  align-items: center;
+}
+.hrow .hh {
+  font-size: 12px;
+  color: var(--text-weak);
+  text-align: center;
+}
+.hrow .rl {
+  font-size: 13px;
+  color: var(--text-weak);
+}
+.hcell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hcell .ok {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-weak);
+  opacity: 0.45;
+}
+.hcell .al {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hcell .al i {
+  width: 11px;
+  height: 11px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+/* ===== 실시간 관제 신호: 상태점 깜빡임 ===== */
+/* 패널 제목 점 — 살아있는 모니터링 느낌의 은은한 맥박 */
+.ph h3::before {
+  animation: liveDot 2.2s ease-in-out infinite;
+}
+/* 정상(online) 상태 점 — 초록 + 부드러운 심박 */
+.hcell .ok {
+  background: #22b07d;
+  opacity: 0.6;
+  animation: okPulse 2.6s ease-in-out infinite;
+}
+/* 장애(critical) 알람 — 빨강 점멸 + 링 확산 */
+.hcell .al {
+  animation: alarmBlink 1.1s ease-in-out infinite;
+}
+/* Critical 배지 — 배경이 은은히 깜빡여 경보 강조 */
+.badge.b-crit {
+  animation: critPulse 1.5s ease-in-out infinite;
+}
+@keyframes liveDot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.82);
+  }
+}
+@keyframes okPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+@keyframes alarmBlink {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--danger) 55%, transparent);
+  }
+  50% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--danger) 0%, transparent);
+  }
+}
+@keyframes critPulse {
+  0%,
+  100% {
+    background: color-mix(in srgb, var(--danger) 16%, transparent);
+  }
+  50% {
+    background: color-mix(in srgb, var(--danger) 34%, transparent);
+  }
+}
+/* 움직임 최소화 설정 사용자는 깜빡임 끄기 */
+@media (prefers-reduced-motion: reduce) {
+  .ph h3::before,
+  .hcell .ok,
+  .hcell .al,
+  .badge.b-crit {
+    animation: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes pdot {
+  0%,
+  100% {
+    r: 3;
+    opacity: 1;
+  }
+  50% {
+    r: 6;
+    opacity: 0.3;
+  }
+}
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@property --v {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
+.kpi,
+.col .panel {
+  animation: panelIn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+/* interaction states */
+.kpi {
+  transition: transform 0.12s;
+}
+tbody tr {
+  transition: background 0.12s;
+}
+/* 클릭 가능한 모든 요소 → 손가락(클릭) 커서로 통일 */
+.nav a,
+.ph .tabs b,
+.pills button,
+.seg button,
+.genbtn,
+.editbtn,
+.ghostbtn,
+.imgbtn,
+.trendchip,
+.pcard,
+.pgrid .sw,
+.prole,
+.swprev,
+#trendYear,
+.more > summary {
+  cursor: pointer;
+}
+.nav a:active,
+.ph .tabs b:active,
+.genbtn:active,
+.seg button:active,
+.pills button:active {
+  transform: translateY(1px);
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+.prole:focus-visible {
+  outline: 2px solid var(--point-main);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1500px) {
+  .cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .kpis {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 820px) {
+  .cols {
+    grid-template-columns: 1fr;
+  }
+  .kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

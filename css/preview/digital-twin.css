@@ -1,0 +1,1745 @@
+/* ── 디지털 트윈 화면 ── */
+
+/* ============================================================
+   Digital Twin 화면 (Figma DT_Sample 16:2407 표준)
+   ── 색 규칙 ──
+   이 블록에는 리터럴 색이 없다. 전부 .main에 주입되는 팔레트 변수에서
+   파생한다. Figma의 고정 토큰 → 팔레트 변수 대응:
+     Contets/Bg      #101114cc → --dt-glass  (bg/surface + 투명도)
+     Contets/Stroke  #ffffff33 → --dt-stroke (text/strong 20%)
+     Secondary       #2a74f4   → --point-main
+     Text/Primary    #e5e7eb   → --text-strong
+     Text/Secondary  #99a1af   → --text-weak
+     Critical·Major·Minor·Warning·Normal → danger → warning → 혼합 → point/sub → point/main
+   라이트/다크는 색을 뒤집는 게 아니라 --text-strong·--bg-surface가 이미
+   모드에 맞게 생성되므로 color-mix가 자동으로 따라간다.
+   3D 현장 사진(dt-bg.jpg)만은 예외로 원본 그대로 두고 테마를 입히지 않는다.
+   ============================================================ */
+.dtstage {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-page);
+  /* 프리뷰의 반응형 기준은 뷰포트가 아니라 '이 칸의 폭'이다.
+     사이드바(300)+레일(52)이 고정이라 뷰포트 1440 에서도 프리뷰는 이미 1088px 인데,
+     @media (max-width:1180px) 는 발화하지 않아 패널 제목과 KPI 숫자가 잘렸다.
+     already position:relative 이므로 컨테이너 지정이 절대배치 기준을 바꾸지 않는다. */
+  container-type: inline-size;
+  container-name: preview;
+  /* 유리 패널 — 3D 배경 위에 얹히는 반투명 표면 */
+  /* 유리 불투명도 — 한 곳에서만 정한다(헤더·카드·버튼이 모두 이 값을 쓴다).
+     사진이 비쳐 보이는 만큼 표면 밝기가 사진에 끌려가므로, 이 값이 곧 대비의 바닥이다.
+     라이트는 사진의 **가장 어두운** 곳이(평균 RGB 11,22,17), 다크는 **가장 밝은**
+     곳이(190,181,175 — 이미지 전체를 글자 한 줄 크기로 훑어 찾은 최댓값) 제약이다.
+     실측: 라이트는 80%로 전 항목 통과하지만, 다크는 80%에서 dim 글자가 4.1~4.28로
+     미달하고 88%부터 통과 → 다크에서만 올린다(라이트의 글라스 느낌은 그대로 유지). */
+  --dt-glass-op: 80%;
+  /* 헤더 전용 불투명도 — 유리 카드/패널(--dt-glass-op)과 분리해 가독성 위해 고정 유지 */
+  --dt-hdr-op: 80%;
+  --dt-glass: color-mix(in srgb, var(--bg-surface) var(--dt-glass-op), transparent);
+  --dt-glass-solid: color-mix(in srgb, var(--bg-surface) 94%, var(--bg-page));
+  --dt-stroke: color-mix(in srgb, var(--text-strong) 20%, transparent);
+  --dt-hair: color-mix(in srgb, var(--text-strong) 9%, transparent);
+  --dt-hover: color-mix(in srgb, var(--text-strong) 7%, transparent);
+  /* ── 이벤트 5단계 · 강조색 전경 ──
+     원본(*-raw)과 실제 사용값(--dt-*)을 분리한다. 버전(Flat/Enterprise)은 **원본만**
+     갈아끼우고, 밝기 보정은 모드(라이트/다크)가 **사용값에만** 건다. 서로 다른 속성을
+     건드리므로 두 규칙의 특이도가 같아도(둘 다 0,3,0) 순서와 무관하게 안전하다.
+
+     Minor(lv3)는 두 역할색을 섞지 않는다: --point-sub는 배색 방식(유사/보색/…)에 따라
+     아무 색이나 될 수 있어 --warning과 섞으면 결과 색상이 예측 불가하고 탁해진다.
+     대신 lv2의 명도·채도를 두고 색상만 돌려 Figma의 Major(주황) → Minor(노랑) 관계를 만든다. */
+  --lv1-raw: var(--danger);
+  --lv2-raw: var(--warning);
+  --lv3-raw: var(--lv2-raw); /* 관계형 색 문법 미지원 브라우저용 대체값 */
+  --lv4-raw: var(--point-sub);
+  --lv5-raw: var(--point-main);
+  --dt-lv1: var(--lv1-raw);
+  --dt-lv2: var(--lv2-raw);
+  --dt-lv3: var(--lv3-raw);
+  --dt-lv4: var(--lv4-raw);
+  --dt-lv5: var(--lv5-raw);
+  /* 유리 위에 '글자·아이콘으로' 올라가는 강조색.
+     --point-main을 날것으로 쓰면 안 된다 — 팔레트가 만드는 강조색은 밝기가 제각각이라
+     밝은 유리 위에 밝은 강조색이 얹히면 그냥 사라진다(실측: Enterprise 라이트의
+     강조색 = 밝은 민트 → 1.0 : 1). 배경으로 쓸 땐 --on-point가 글자색을 자동으로
+     골라주지만, 강조색 자신이 전경일 땐 그런 보호막이 없다. */
+  --dt-accent-fg: var(--point-main);
+}
+/* 색상(hue)·채도(chroma)는 그대로 두고 **명도만** 읽히는 범위로 고정.
+   실측으로 정한 한계값(라이트 유리 200~211 기준, Flat·Enterprise 양쪽 통과):
+     강조색 전경 → 활성 탭 '글자'라 4.5:1 필요 → l ≤ 0.40 (Ent 4.81 · Flat 5.76)
+                    l=0.45면 Ent 3.91로 미달, l=0.42도 Ent 4.42로 아슬하게 미달
+     등급 점     → 그래픽이라 3:1 → l ≤ 0.50 (3.20~4.09). 색상은 안 건드리므로
+                    5단계가 서로 구분되는 성질은 그대로 유지됨
+   min()/max()라서 이미 조건을 만족하는 팔레트는 손대지 않고 통과한다. */
+@supports (color: oklch(from red l c h)) {
+  .dtstage {
+    --lv3-raw: oklch(from var(--lv2-raw) l c calc(h + 28));
+  }
+  /* .abstage(A/B 비교 복제본)도 같은 규칙을 받아야 한다 — 자기 data-mode를 들고
+     있는데 여기서 빠지면 비교 화면만 보정 없는 날 색으로 렌더된다.
+     html에도 data-mode가 있지만 그건 툴 크롬용으로 항상 'dark' 고정이므로
+     [data-mode='dark'] 같은 넓은 선택자를 쓰면 라이트 프리뷰까지 물든다. */
+  .main[data-mode='light'] .dtstage,
+  .abstage[data-mode='light'] .dtstage {
+    --dt-lv1: oklch(from var(--lv1-raw) min(l, 0.5) c h);
+    --dt-lv2: oklch(from var(--lv2-raw) min(l, 0.5) c h);
+    --dt-lv3: oklch(from var(--lv3-raw) min(l, 0.5) c h);
+    --dt-lv4: oklch(from var(--lv4-raw) min(l, 0.5) c h);
+    --dt-lv5: oklch(from var(--lv5-raw) min(l, 0.5) c h);
+    --dt-accent-fg: oklch(from var(--point-main) min(l, 0.4) c h);
+  }
+  .main[data-mode='dark'] .dtstage,
+  .abstage[data-mode='dark'] .dtstage {
+    /* 0.72는 유리 '카드' 위(활성 탭) 기준이었다. 같은 색을 --dt-hover가 살짝
+       밝힌 칩 위에 올리면 카드보다 불리해 4.27~4.45로 미달한다(실측).
+       0.76이면 칩 4.82~5.05 · 탭 6.35~6.91로 둘 다 통과. */
+    --dt-accent-fg: oklch(from var(--point-main) max(l, 0.76) c h);
+  }
+}
+/* 다크에서만 헤더 유리를 88%로 — 근거는 --dt-hdr-op 선언부 주석 참고.
+   (카드·패널 --dt-glass-op는 40% 그대로 두고 헤더만 가독성 위해 올린다) */
+.main[data-mode='dark'] .dtstage,
+.abstage[data-mode='dark'] .dtstage {
+  --dt-hdr-op: 88%;
+}
+.dtstage[hidden] {
+  display: none;
+}
+
+/* ── 헤더 ── 글라스모피즘: 사진이 헤더 뒤까지 깔려 있고(.dt-scene이 .dtstage 직속),
+   반투명 표면 + backdrop blur로 뒤 사진이 비쳐 보인다.
+   불투명도 80%는 임의값이 아니라 **라이트 모드 대비의 하한**이다. 헤더가 덮는 사진
+   상단이 매우 어두워(평균 RGB 20,34,29) 유리를 더 투명하게 하면 밝은 표면이 어두워지고
+   --text-weak(비활성 내비)가 묻힌다 — 실측 72%=4.05로 AA 미달, 80%=4.88로 통과.
+   다크 모드는 어느 값이든 7:1 이상이라 라이트가 제약 조건. */
+.dt-hdr {
+  flex: none;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 18px;
+  background: color-mix(in srgb, var(--bg-surface) var(--dt-hdr-op), transparent);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--dt-stroke);
+  box-shadow: 0 1px 24px color-mix(in srgb, var(--bg-page) 45%, transparent);
+  position: relative;
+  z-index: 2;
+}
+.dt-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: none;
+}
+.dt-brand .logo {
+  display: flex;
+  align-items: center;
+}
+.dt-brand .wlogo {
+  height: 20px;
+}
+.dt-bname {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-strong);
+  white-space: nowrap;
+}
+.dt-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+}
+.dt-nav a {
+  position: relative;
+  padding: 16px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-weak);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.dt-nav a:hover {
+  color: var(--text-strong);
+}
+.dt-nav a.on {
+  color: var(--text-strong);
+}
+.dt-nav a.on::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--point-main);
+}
+.dt-hstat {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dt-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--dt-stroke);
+  background: var(--dt-hover);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-strong);
+  white-space: nowrap;
+}
+/* '정상' 점 — 등급 램프의 lv4를 그대로 써서 라이트 밝기 보정을 같이 받게 함
+   (--point-sub 날것을 쓰면 라이트 유리 위에서 1.74:1로 안 보임) */
+.dt-live i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dt-lv4);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--dt-lv4) 22%, transparent);
+}
+.dt-hicons {
+  display: flex;
+  gap: 6px;
+}
+.dt-ico {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--dt-stroke);
+  background: transparent;
+  color: var(--text-weak);
+  cursor: pointer;
+  transition: 0.15s;
+}
+.dt-ico svg {
+  width: 14px;
+  height: 14px;
+}
+.dt-ico:hover {
+  color: var(--text-strong);
+  border-color: var(--point-main);
+}
+.dt-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.25;
+  padding-left: 12px;
+  border-left: 1px solid var(--dt-hair);
+}
+.dt-clock b {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-strong);
+  white-space: nowrap;
+}
+.dt-clock small {
+  font-size: 11px;
+  color: var(--text-weak);
+}
+
+/* ── 본문: 3D 씬 + 그 위의 UI ── */
+.dt-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+/* 씬은 헤더 뒤까지 포함해 화면 전체를 덮는다 (.dtstage 직속, 맨 아래 층) */
+.dt-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.dt-scene > div {
+  position: absolute;
+  inset: 0;
+}
+/* 3D 현장 사진은 원본 그대로 — 색조·명암 보정 없음.
+   테마는 그 위에 얹히는 유리 패널·강조색만 바꾼다. */
+.dt-scene-img {
+  background: url('src/dt-bg.jpg') center / cover no-repeat;
+}
+
+/* ── HANA Bank H.I.T — Figma 그대로 재현: 기본 DT 크롬을 숨기고 재현 캔버스만 보인다 ── */
+.dtstage[data-tpl='hana'] .dt-hdr,
+.dtstage[data-tpl='hana'] .dt-ui,
+.dtstage[data-tpl='hana'] .dt-scene {
+  display: none !important;
+}
+
+/* ── 한진 SMART 통합관제 — Figma 그대로 재현: 기본 DT 크롬을 숨기고 재현 캔버스만 보인다 ── */
+.dtstage[data-tpl='hanjin'] .dt-hdr,
+.dtstage[data-tpl='hanjin'] .dt-ui,
+.dtstage[data-tpl='hanjin'] .dt-scene {
+  display: none !important;
+}
+
+/* ── 미연결 템플릿 임시 이미지 재현 — 대시보드/DT 공통 ── */
+.dtstage[data-tpl='image'] .dt-hdr,
+.dtstage[data-tpl='image'] .dt-ui,
+.dtstage[data-tpl='image'] .dt-scene {
+  display: none !important;
+}
+.stage[data-tpl='image'] {
+  position: relative;
+  padding: 0;
+}
+.stage[data-tpl='image'] > *:not(.tplimg-repro) {
+  display: none !important;
+}
+.tplimg-repro {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #05050a;
+  z-index: 4;
+}
+.tplimg-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── 템플릿 시안(미연결 이미지·한진 JPG) 위에 '콘텐츠 추가'로 넣은 패널이 놓이는 영역 ──
+   시안 레이어(.tplimg-repro / .hj-repro)가 스테이지 맨 위(z-index 3~4)에 깔리는데,
+   추가 패널이 담기던 .dt-body는 z-index:1 로 별도 쌓임 맥락이라 패널이 시안 '뒤'로
+   숨어 버렸다(→ 보이지도, 눌리지도 않아 글자 편집이 안 됨). SK하이닉스 화면처럼
+   시안 레이어 '안'에 패널 영역을 두어 항상 시안 위에 뜨고 클릭이 먹게 한다. */
+.tplimg-repro > .dt-added,
+.hj-repro > .dt-added {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(56%, 680px);
+  max-height: 82%;
+  overflow: visible;
+  /* 한진 시안의 자유 텍스트 오버레이(.tpl-textlayer, z-index 6)보다 위에 둔다 —
+     안 그러면 '내용 수정' 중 오버레이가 클릭을 삼켜 패널을 고를 수 없다. */
+  z-index: 7;
+  /* 영역 상자 자체는 클릭을 통과시키고(빈 곳 더블클릭 = 시안 위 글자 추가 유지),
+     실제 패널만 클릭을 받는다. */
+  pointer-events: none;
+}
+.tplimg-repro > .dt-added > .cols,
+.hj-repro > .dt-added > .cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--panel-gap, 12px);
+  grid-auto-rows: minmax(130px, auto);
+  align-content: start;
+}
+/* 시안 위에 얹히는 패널 — 유리 카드처럼 읽히도록(스테이지 배경이 시안 이미지라 반투명 처리) */
+.tplimg-repro > .dt-added .panel,
+.hj-repro > .dt-added .panel {
+  pointer-events: auto;
+  background: color-mix(in srgb, var(--bg-surface) 78%, transparent);
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.hj-repro {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #05050a;
+  z-index: 3;
+}
+/* 업로드한 브랜드 로고로 갈아 끼운 시안 로고 자리 — 통짜 래스터 시안(한진·미연결 이미지)용.
+   원래 로고를 시안에서 뽑은 헤더 배경색으로 덮고 그 위에 업로드 로고를 얹는다. */
+.tpl-logoswap {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center; /* 로고가 원래 자리보다 낮으면 위아래 가운데로 */
+  justify-content: flex-start;
+  overflow: hidden;
+  pointer-events: none;
+}
+.tpl-logoswap img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.hj-canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: center center;
+}
+.hj-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  object-fit: cover;
+}
+/* 화면 시안(185:124) — 전체 디자인이 잘리지 않게 contain으로 표시 */
+.hj-studioimg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+/* 재현 요소는 모두 캔버스 직속 절대배치(Figma 좌표 px) */
+.hj-canvas > div {
+  position: absolute;
+  box-sizing: border-box;
+}
+.hrt {
+  white-space: nowrap;
+  font-family: var(--font);
+  line-height: 1;
+  color: #b3d3ea;
+  font-size: 13px;
+}
+.hr-panelbg {
+  background: rgba(7, 11, 24, 0.92);
+  border: 1px solid rgba(179, 211, 234, 0.16);
+  border-radius: 6px;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.hr-headbar {
+  background: linear-gradient(90deg, rgba(111, 137, 255, 0.22), rgba(7, 11, 24, 0.5));
+  border: 1px solid rgba(179, 211, 234, 0.14);
+  border-radius: 6px 6px 0 0;
+}
+.hr-rowbar { background: rgba(179, 211, 234, 0.05); border-radius: 4px; }
+.hr-cell { background: rgba(179, 211, 234, 0.05); border: 1px solid rgba(179, 211, 234, 0.12); border-radius: 6px; }
+.hr-evcell { background: rgba(7, 11, 24, 0.55); border: 1px solid rgba(179, 211, 234, 0.16); border-radius: 4px; }
+.hr-tabon { background: rgba(111, 137, 255, 0.18); border: 1px solid rgba(111, 137, 255, 0.45); border-radius: 6px; }
+.hr-tab2 { background: rgba(7, 11, 24, 0.5); border: 1px solid rgba(179, 211, 234, 0.1); border-bottom: none; border-radius: 6px 6px 0 0; }
+.hr-tabaccent { background: #6f89ff; }
+.hr-clockbox { background: rgba(111, 137, 255, 0.14); border: 1px solid rgba(111, 137, 255, 0.4); border-radius: 6px; }
+.hr-auto { background: rgba(7, 11, 24, 0.5); border: 1px solid rgba(179, 211, 234, 0.2); border-radius: 15px; }
+.hr-pullon { background: rgba(111, 137, 255, 0.18); border-radius: 5px; }
+.hr-flooron { background: rgba(111, 137, 255, 0.16); border-radius: 5px; }
+.hr {
+  position: absolute;
+  box-sizing: border-box;
+  font-family: var(--font);
+  color: #b3d3ea;
+  font-size: 13px;
+}
+.hr-p {
+  background: rgba(7, 11, 24, 0.94);
+  border: 1px solid rgba(179, 211, 234, 0.16);
+  border-radius: 6px;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+.hr-top { display: flex; align-items: center; gap: 14px; padding: 0 18px; }
+.hr-ci { font-weight: 800; font-size: 17px; letter-spacing: 1px; color: #f8f8f8; }
+.hr-div { width: 1px; height: 20px; background: rgba(179, 211, 234, 0.25); }
+.hr-sub2 { color: #8fa3bd; font-size: 13px; }
+.hr-tabs { margin-left: 22px; display: flex; gap: 6px; }
+.hr-tabs b { padding: 8px 18px; font-size: 14px; font-weight: 600; color: #9fb2cc; border-radius: 6px; }
+.hr-tabs b.on { color: #f8f8f8; background: rgba(111, 137, 255, 0.18); border: 1px solid rgba(111, 137, 255, 0.5); }
+.hr-clock { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 14px; }
+.hr-clock b { color: #f8f8f8; font-weight: 700; }
+.hr-clock i { font-style: normal; color: #8fa3bd; }
+.hr-filter { display: flex; align-items: center; gap: 10px; }
+.hr-fchip { padding: 5px 14px; border-radius: 14px; font-size: 12px; color: #9fb2cc; border: 1px solid rgba(179, 211, 234, 0.18); }
+.hr-fchip.on { color: #f8f8f8; background: rgba(111, 137, 255, 0.2); border-color: rgba(111, 137, 255, 0.5); }
+.hr-pull { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+.hr-pullitem { padding: 9px 12px; font-size: 13px; color: #b3d3ea; border-radius: 5px; }
+.hr-pullitem.on { color: #f8f8f8; background: rgba(111, 137, 255, 0.18); }
+.hr-tablewrap { padding: 0; display: flex; flex-direction: column; overflow: hidden; }
+.hr-phead { padding: 11px 16px; font-size: 14px; font-weight: 700; color: #f8f8f8; border-bottom: 1px solid rgba(179, 211, 234, 0.14); }
+.hr-table { padding: 4px 8px; }
+.hr-tr { display: grid; grid-template-columns: 52px 82px 88px 108px 108px 56px; gap: 6px; padding: 8px 8px; font-size: 12px; color: #cfe0ef; border-bottom: 1px solid rgba(179, 211, 234, 0.08); }
+.hr-tr span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hr-trh { color: #8fa3bd; font-size: 11px; font-weight: 600; border-bottom: 1px solid rgba(179, 211, 234, 0.2); }
+.hr-bottom { padding: 0; }
+.hr-btabs { display: flex; }
+.hr-btabs b { padding: 9px 22px; font-size: 13px; font-weight: 700; color: #8fa3bd; }
+.hr-btabs b.on { color: #f8f8f8; border-bottom: 2px solid #6f89ff; }
+.hr-bwrap { display: flex; align-items: center; gap: 16px; padding: 12px 16px; }
+.hr-summary { display: flex; flex-direction: column; gap: 2px; padding-right: 16px; border-right: 1px solid rgba(179, 211, 234, 0.14); }
+.hr-summary span { font-size: 12px; color: #9fb2cc; }
+.hr-summary b { font-size: 26px; font-weight: 800; color: #f8f8f8; }
+.hr-stages { display: flex; gap: 10px; flex: 1; }
+.hr-stage { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; border-radius: 6px; background: rgba(179, 211, 234, 0.05); }
+.hr-stage span { font-size: 12px; color: #9fb2cc; white-space: nowrap; }
+.hr-stage b { font-size: 22px; font-weight: 800; color: #f8f8f8; }
+.hr-evbar { display: flex; align-items: center; gap: 16px; padding: 0 18px; }
+.hr-evtitle { font-size: 13px; color: #b3d3ea; font-weight: 600; }
+.hr-auto { font-size: 12px; color: #9fb2cc; padding: 4px 12px; border: 1px solid rgba(179, 211, 234, 0.2); border-radius: 14px; }
+.hr-evs { margin-left: auto; display: flex; gap: 6px; }
+.hr-ev { font-size: 12px; color: #b3d3ea; padding: 4px 12px; border: 1px solid rgba(179, 211, 234, 0.16); border-radius: 5px; }
+.hr-ev b { color: #f8f8f8; }
+.hr-ev-cr { color: #e4575a; }
+.hr-ev-ma { color: #ed8151; }
+.hr-ev-mi { color: #e9ba47; }
+.hr-ev-wa { color: #6ef5ae; }
+.hr-compass { padding: 10px 12px; display: flex; flex-direction: column; }
+.hr-clabel { font-size: 11px; color: #9fb2cc; }
+.hr-cbig { font-size: 34px; font-weight: 800; color: #f8f8f8; text-align: center; margin-top: 22px; }
+.hr-cdir { display: flex; justify-content: space-between; font-size: 11px; color: #8fa3bd; margin-top: auto; }
+.hr-minimap { display: flex; align-items: flex-start; padding: 10px 12px; }
+.hr-mmlabel { font-size: 11px; color: #9fb2cc; }
+.hr-floors { padding: 8px; display: flex; flex-direction: column; gap: 5px; }
+.hr-floor { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 5px; }
+.hr-floor b { font-size: 13px; color: #6f89ff; min-width: 22px; }
+.hr-floor span { font-size: 11px; color: #9fb2cc; }
+.hr-floor.on { background: rgba(111, 137, 255, 0.16); }
+.hr-floor.on span { color: #e7ebff; }
+/* (구) 테마 토큰형 한진 패널 — 현재는 미사용 */
+.hj-tablewrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 10px 10px;
+}
+.hj-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.hj-table th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-weak);
+  padding: 6px 6px;
+  border-bottom: 1px solid var(--dt-stroke);
+  background: color-mix(in srgb, var(--bg-page) 55%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+}
+.hj-table td {
+  color: var(--text-strong);
+  padding: 7px 6px;
+  border-bottom: 1px solid color-mix(in srgb, var(--dt-stroke) 60%, transparent);
+  white-space: nowrap;
+}
+.hj-table tbody tr:hover {
+  background: var(--dt-hover);
+}
+.hj-floors {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 10px 10px;
+  overflow: auto;
+}
+.hj-floor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--dt-stroke);
+  background: transparent;
+  color: var(--text-strong);
+  cursor: pointer;
+  font-family: var(--font);
+  text-align: left;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.hj-floor b {
+  font-size: 14px;
+  min-width: 24px;
+  color: var(--point-main);
+}
+.hj-floor span {
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.hj-floor.on,
+.hj-floor:hover {
+  background: var(--dt-hover);
+  border-color: var(--point-main);
+}
+.hj-log {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  width: 100%;
+}
+.hj-logtop {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.hj-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.hj-sumlabel {
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.hj-sumnum {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--point-main);
+  font-variant-numeric: tabular-nums;
+}
+.hj-stagetabs {
+  display: flex;
+  gap: 6px;
+}
+.hj-stagetabs b {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--dt-stroke);
+  color: var(--text-weak);
+  cursor: pointer;
+  font-weight: 600;
+}
+.hj-stagetabs b.on {
+  color: var(--text-strong);
+  border-color: var(--point-main);
+  background: var(--dt-hover);
+}
+.hj-events {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hj-evtitle {
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.hj-evbtns {
+  display: flex;
+  gap: 4px;
+}
+.hj-ev {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--dt-stroke);
+  color: var(--text-weak);
+  white-space: nowrap;
+}
+.hj-stages {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+.hj-stage {
+  flex: 1;
+  min-width: 92px;
+  display: flex;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--dt-stroke);
+  background: color-mix(in srgb, var(--bg-page) 30%, transparent);
+}
+.hj-stage-t {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hj-stage-t span {
+  font-size: 11px;
+  color: var(--text-weak);
+  white-space: nowrap;
+}
+.hj-stage-t b {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.dt-ui {
+  position: absolute;
+  inset: 0;
+  padding: calc(14px * var(--pad-scale, 1)) calc(18px * var(--pad-scale, 1));
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 246px;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--panel-gap, 10px);
+  align-items: start;
+}
+.dt-navbtns {
+  grid-column: 1;
+  grid-row: 1;
+}
+.dt-symbols {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+}
+.dt-region {
+  grid-column: 1;
+  grid-row: 2;
+}
+.dt-assets {
+  grid-column: 3;
+  grid-row: 2;
+}
+.dt-log {
+  grid-column: 1 / -1;
+  grid-row: 3;
+}
+
+/* ── 디지털 트윈 그리드 변형 ──
+   화면 만들기의 그리드 선택(data-grid)이 유리 카드 배치를 바꾼다.
+   3단(g3)은 위 기본값(좌·우 분할). 와이어프레임은 어떤 카드를 띄울지(표시/숨김)를 JS가 정한다. */
+/* 2단 — 카드를 왼쪽 한 줄로 모으고 오른쪽 씬을 넓게 */
+.dt-ui[data-grid='g2'] {
+  grid-template-columns: 250px minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr) auto;
+}
+.dt-ui[data-grid='g2'] .dt-navbtns {
+  grid-column: 1;
+  grid-row: 1;
+}
+.dt-ui[data-grid='g2'] .dt-symbols {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+.dt-ui[data-grid='g2'] .dt-region {
+  grid-column: 1;
+  grid-row: 2;
+}
+.dt-ui[data-grid='g2'] .dt-assets {
+  grid-column: 1;
+  grid-row: 3;
+}
+.dt-ui[data-grid='g2'] .dt-log {
+  grid-column: 1 / -1;
+  grid-row: 4;
+}
+/* 모듈 — 카드가 위쪽 두 코너에 컴팩트하게 뜨고 로그는 아래 폭 전체(벤토 느낌) */
+.dt-ui[data-grid='mod'] .dt-region,
+.dt-ui[data-grid='mod'] .dt-assets {
+  align-self: start;
+  max-height: 62%;
+}
+/* 와이어프레임이 숨긴 유리 카드 — .dt-card의 display:flex를 이겨야 하므로 명시적으로 끈다 */
+.dt-ui .dt-card[hidden] {
+  display: none;
+}
+
+/* ── 디지털 트윈: '콘텐츠 추가'로 넣은 패널/에셋이 놓이는 영역 ──
+   .dt-body 직속에 얹어, 기본(.dt-ui) 모드든 레이아웃(와이어프레임) 모드든 항상 보이게 한다.
+   씬(3D) 위 가운데에 떠서 실제로 화면에 반영된다. */
+.dt-body > .dt-added {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  transform: translate(-50%, -50%);
+  width: min(48%, 540px);
+  max-height: min(78%, 100vh);
+  overflow: hidden;
+  z-index: 6;
+}
+.dt-body > .dt-added:empty {
+  pointer-events: none;
+}
+.dt-body > .dt-added > .cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--panel-gap, 12px);
+  grid-auto-rows: minmax(120px, auto);
+  align-content: start;
+}
+/* 씬 위에 얹히는 추가 패널 — 유리 카드처럼 반투명하게 읽히도록 */
+.dt-body > .dt-added .panel {
+  background: color-mix(in srgb, var(--bg-surface) 74%, transparent);
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+/* ── 이천 FMS 두 시안(메인 Screen/FMS Hub · 항온항습기 상세) 위에 '콘텐츠 추가' 패널 얹기 ──
+   두 화면의 루트는 자식이 전부 절대배치인데 '화면 프레임'만 100% 높이의 흐름 요소라,
+   .dt-added 를 그냥 두면 그 프레임 아래(= 화면 밖 하단)로 밀려나 보이지 않았다.
+   → 시안 한가운데에 절대배치로 띄우고, 빈 영역은 클릭을 통과시켜 시안 조작을 막지 않는다. */
+.skh-root > .dt-added,
+.skv-root > .dt-added {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(56%, 760px);
+  max-height: min(82%, 100vh);
+  overflow: hidden;
+  z-index: 30; /* 시안의 모든 레이어(헤더·이벤트 목록) 위 */
+  pointer-events: none;
+}
+.skh-root > .dt-added > .cols,
+.skv-root > .dt-added > .cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--panel-gap, 12px);
+  grid-auto-rows: minmax(130px, auto);
+  align-content: start;
+}
+/* 시안 위에 얹히는 카드 — 원본이 밝은 시안이라 밝은 유리로, 다크 테마면 어두운 유리로 */
+.skh-root .dt-added .panel,
+.skv-root .dt-added .panel {
+  pointer-events: auto;
+  position: relative;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(120, 130, 170, 0.28);
+  border-radius: 12px;
+  padding: 14px;
+  color: #2f2c5c;
+  box-shadow: 0 10px 30px rgba(44, 19, 78, 0.18);
+}
+.skh-root[data-theme='dark'] .dt-added .panel,
+.skv-root[data-theme='dark'] .dt-added .panel {
+  background: rgba(23, 27, 44, 0.86);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #e9ecf6;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.skh-root .dt-added .panel .ph,
+.skv-root .dt-added .panel .ph {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.skh-root .dt-added .panel .ph h3,
+.skv-root .dt-added .panel .ph h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  color: inherit;
+}
+.skh-root .dt-added .panel .addedbody,
+.skv-root .dt-added .panel .addedbody {
+  font-size: 13px;
+  color: inherit;
+}
+/* 편집 모드에선 X(삭제)를 바로, 그 외에도 호버하면 노출 — skx 시안과 같은 흐름 */
+.dtstage.dt-editing .skh-root .dt-added .panel > .pdel,
+.dtstage.dt-editing .skv-root .dt-added .panel > .pdel,
+.skh-root .dt-added .panel:hover > .pdel,
+.skv-root .dt-added .panel:hover > .pdel {
+  display: inline-flex;
+}
+
+/* ── 한진 통합관제 시안 3장 위에 '콘텐츠 추가' 패널 얹기 ──
+   이천 FMS 와 같은 구조(루트 자식이 전부 절대배치)라 처리도 같다. 다만 원본이 '다크' 시안이라
+   카드 기본값을 어두운 유리로 두고, 화면 테마를 라이트로 바꾸면 밝은 유리로 뒤집는다. */
+.hjc-root > .dt-added,
+.hjg-root > .dt-added,
+.hju-root > .dt-added {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(56%, 760px);
+  max-height: min(82%, 100vh);
+  overflow: hidden;
+  z-index: 30; /* 시안의 모든 레이어(헤더·이벤트 현황) 위 */
+  pointer-events: none;
+}
+.hjc-root > .dt-added > .cols,
+.hjg-root > .dt-added > .cols,
+.hju-root > .dt-added > .cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--panel-gap, 12px);
+  grid-auto-rows: minmax(130px, auto);
+  align-content: start;
+}
+.hjc-root .dt-added .panel,
+.hjg-root .dt-added .panel,
+.hju-root .dt-added .panel {
+  pointer-events: auto;
+  position: relative;
+  background: rgba(23, 27, 44, 0.86);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 14px;
+  color: #e9ecf6;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.hjc-root[data-theme='light'] .dt-added .panel,
+.hjg-root[data-theme='light'] .dt-added .panel,
+.hju-root[data-theme='light'] .dt-added .panel {
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(120, 130, 170, 0.28);
+  color: #1b2233;
+  box-shadow: 0 10px 30px rgba(30, 45, 80, 0.18);
+}
+.hjc-root .dt-added .panel .ph,
+.hjg-root .dt-added .panel .ph,
+.hju-root .dt-added .panel .ph {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.hjc-root .dt-added .panel .ph h3,
+.hjg-root .dt-added .panel .ph h3,
+.hju-root .dt-added .panel .ph h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  color: inherit;
+}
+.hjc-root .dt-added .panel .addedbody,
+.hjg-root .dt-added .panel .addedbody,
+.hju-root .dt-added .panel .addedbody {
+  font-size: 13px;
+  color: inherit;
+}
+.dtstage.dt-editing .hjc-root .dt-added .panel > .pdel,
+.dtstage.dt-editing .hjg-root .dt-added .panel > .pdel,
+.dtstage.dt-editing .hju-root .dt-added .panel > .pdel,
+.hjc-root .dt-added .panel:hover > .pdel,
+.hjg-root .dt-added .panel:hover > .pdel,
+.hju-root .dt-added .panel:hover > .pdel {
+  display: inline-flex;
+}
+.hjc-root .dt-added .panel.assetpanel,
+.hjg-root .dt-added .panel.assetpanel,
+.hju-root .dt-added .panel.assetpanel {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding: 0;
+}
+/* 드래그로 넣은 '패널' 에셋(.assetpanel) — 기본 카드 배경/보더/패딩 없이 에셋 원본만 보이게.
+   (.skx-screen .dt-added .panel 보다 특이도가 높아 skhynix 주입 CSS도 덮는다) */
+.dt-body > .dt-added .panel.assetpanel,
+.skh-root .dt-added .panel.assetpanel,
+.skv-root .dt-added .panel.assetpanel,
+.skx-screen .dt-added .panel.assetpanel {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding: 0;
+}
+/* 패널 에셋도 그리드 칸 하나씩 차지한다 — 전에는 전체 폭(grid-column: 1/-1)을 차지해
+   하나씩 아래로만 쌓이면서 시안 밖으로 흘러내렸다. */
+.dt-added > .cols > .panel.assetpanel {
+  min-width: 0;
+  width: 100%;
+  /* 행 높이에 맞춰 늘어나면 aspect-ratio 가 '높이 기준'으로 폭을 계산해 칸 밖으로 삐져나온다.
+     → 위로 붙여 두고 비율은 폭 기준으로 계산되게 한다. */
+  align-self: start;
+}
+/* 에셋이 패널 박스를 꽉 채우도록 → 패널 조정(리사이즈)한 크기에 맞춰 에셋도 함께 스케일 */
+.panel.assetpanel .fighost-panel,
+.panel.assetpanel .fig-embed {
+  width: 100%;
+  height: 100%;
+}
+.panel.assetpanel .fig-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* 카드 컨테이너: 프레임(SVG)은 배경으로 깔고(.cardframe, 절대배치),
+   그 위 .cardbody 에 드롭한 콘텐츠(차트·심볼·아이콘)를 담는다. */
+.panel.assetpanel.cardhost {
+  position: relative;
+  min-height: 120px;
+}
+.panel.assetpanel.cardhost > .cardframe {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+/* 원본 파일(<img>)로 온 카드 프레임 — 패널 박스에 꽉 차게(SVG 의 preserveAspectRatio:none 과 같은 효과) */
+.cardframe.figimg-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  display: block;
+}
+/* 콘텐츠 영역이 카드(패널) 전체를 채운다 → 에셋 크기 기준 = 패널 크기 */
+.panel.assetpanel.cardhost > .cardbody {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+.panel.assetpanel.cardhost .assetwrap {
+  padding: 26px 0 0; /* 상단 세로/가로 토글 자리 확보 */
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: visible;
+}
+.panel.assetpanel.cardhost .assetrow {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  align-items: stretch;
+}
+.panel.assetpanel.cardhost .assetrow > .assetslot {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  justify-content: center;
+}
+/* 에셋 그래픽은 개별 스케일 대신 슬롯(=패널 분할) 크기에 맞춰 채운다 */
+.panel.assetpanel.cardhost .assetslot > .avis {
+  width: 100%;
+  height: 100%;
+  transform: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.panel.assetpanel.cardhost .assetslot > .avis > * {
+  max-width: 100%;
+  max-height: 100%;
+}
+.panel.assetpanel.cardhost .assetslot svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+}
+.panel.assetpanel.cardhost .assetslot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.panel.assetpanel.cardhost .assetslot > .aszr {
+  display: none !important; /* 크기 기준이 패널이므로 개별 크기 슬라이더 숨김 */
+}
+/* 세로/가로 배치 토글 — 카드 상단에 항상 보이게 */
+.panel.assetpanel.cardhost .assettools {
+  display: inline-flex;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+}
+
+/* ── 유리 카드 공통 ── */
+.dt-card {
+  background: color-mix(in srgb, var(--panel-bg, var(--bg-surface)) var(--dt-glass-op), transparent);
+  border: var(--panel-border-w, 1px) solid var(--dt-stroke);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--panel-shadow, none);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.dt-cardhead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(11px * var(--pad-scale, 1)) calc(12px * var(--pad-scale, 1));
+}
+.dt-chico {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--dt-stroke);
+  background: var(--dt-hover);
+  color: var(--text-strong);
+}
+.dt-chico svg {
+  width: 14px;
+  height: 14px;
+}
+.dt-cardhead h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.dt-search {
+  flex: none;
+  margin: 0 10px 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--dt-stroke);
+  background: color-mix(in srgb, var(--bg-page) 45%, transparent);
+}
+.dt-search svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: var(--text-weak);
+}
+.dt-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font-family: var(--font);
+  font-size: 12px;
+  outline: none;
+}
+.dt-search input::placeholder {
+  color: var(--text-weak);
+}
+.dt-search:focus-within {
+  border-color: var(--point-main);
+}
+
+/* ── 좌상단 뷰 전환 버튼 ── */
+.dt-navbtns {
+  display: flex;
+  gap: 8px;
+}
+.dt-navbtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 4px;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--dt-stroke);
+  background: var(--dt-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--text-weak);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.dt-navbtn svg {
+  width: 20px;
+  height: 20px;
+}
+.dt-navbtn:hover {
+  color: var(--text-strong);
+  border-color: var(--point-main);
+}
+.dt-navbtn.on {
+  background: var(--point-main);
+  border-color: var(--point-main);
+  color: var(--on-point, #fff);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--point-main) 40%, transparent);
+}
+
+/* ── 우상단 레이어 심볼 ── */
+.dt-symbols {
+  display: flex;
+  gap: 10px;
+}
+.dt-sym {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--text-weak);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.dt-symb {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--dt-stroke);
+  background: var(--dt-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: 0.15s;
+}
+.dt-symb svg {
+  width: 18px;
+  height: 18px;
+}
+/* 심볼 이름표 — DT에서 **유일하게 유리 없이 3D 사진 위에 바로 얹히는 글자**다.
+   그래서 두 가지가 보통 규칙과 다르다.
+
+   ① 모드를 따르지 않는다. 뒤가 팔레트 표면이 아니라 '사진'이라, 라이트 모드에서
+      어두운 글자로 바뀌면 어두운 야경 사진 위에서 그대로 사라진다(실측 1.04:1).
+      사진은 모드와 무관하게 항상 어두우므로 라벨은 양쪽 모드 모두 흰색이다.
+
+   ② 그림자로 자기 바탕을 만든다. 사진은 테마를 입히지 않기로 한 고정 자산이고,
+      cover 크롭이라 **창 크기에 따라 라벨 뒤로 오는 부분이 달라진다.** 폭·높이를
+      760~1800 × 560~1080으로 훑어 보면 흰 글자 기준 최저 대비가
+        높이 ≥800px … 5.5~14.6  (통과)
+        높이 ≤760px … 1.47~3.25 (미달 — 밝은 설비가 심볼 줄까지 올라옴)
+      로, **색만으로는 창 높이에 따라 무너진다.** 배경 박스를 두지 않으려면
+      글자 자신이 바탕을 들고 다녀야 한다 → 불투명 그림자를 겹쳐 글자 둘레만
+      어둡게 깔았다. 4px를 세 번 겹쳐 근처를 확실히 눌러 두고, 10px 한 겹으로
+      가장자리를 풀어 경계가 도드라지지 않게 한다.
+
+   실제 폰트·크기·그림자로 사진 위에 렌더해 글자 경계(2~3px)의 픽셀을 직접 잰 값:
+     어두운 사진(25,45,39) … 17.5   ← 대부분의 창 크기가 여기 해당
+     밝은 설비(166,167,166) …  4.69
+     사진 최대 밝기(203,198,197) … 3.43  ← 낮은 창(높이 ≤760px)에서만 닿는 구간
+   그림자 없이 흰 글자만 쓰면 같은 자리가 각각 14.5 / 2.41 / 1.69이므로,
+   그림자가 실제로 대비를 지탱하고 있다. 다만 가장 밝은 구간은 4.5:1에 못 미친다 —
+   측정 가능한 AA 보장이 필요하면 배경(불투명 유리 알약)을 다시 깔아야 한다. */
+.dt-sym > span:not(.dt-symb) {
+  color: #fff;
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 1),
+    0 0 4px rgba(0, 0, 0, 1),
+    0 0 4px rgba(0, 0, 0, 1),
+    0 0 10px rgba(0, 0, 0, 0.85);
+}
+.dt-sym:hover {
+  color: var(--text-strong);
+}
+.dt-sym:hover .dt-symb {
+  border-color: var(--point-main);
+}
+.dt-sym.on {
+  color: var(--text-strong);
+}
+.dt-sym.on .dt-symb {
+  background: var(--point-main);
+  border-color: var(--point-main);
+  color: var(--on-point, #fff);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--point-main) 40%, transparent);
+}
+
+/* ── 지역 탭 ── */
+.dt-tabs {
+  flex: none;
+  display: flex;
+  gap: 14px;
+  margin: 0 10px;
+  border-bottom: 1px solid var(--dt-hair);
+}
+.dt-tabs b {
+  position: relative;
+  padding: 8px 2px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-weak);
+  cursor: pointer;
+}
+.dt-tabs b.on {
+  color: var(--dt-accent-fg);
+}
+/* 밑줄은 배경이라 강조색 원본 그대로 — 밝기가 눌리지 않아 색이 또렷하다 */
+.dt-tabs b.on::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--point-main);
+}
+
+/* ── 트리 / 드롭 리스트 ── */
+.dt-tree,
+.dt-drops {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px 10px 10px;
+}
+.dt-tgap {
+  height: 8px;
+}
+.dt-ti,
+.dt-drop,
+.dt-di {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.12s;
+}
+.dt-ti {
+  height: 32px;
+  padding-right: 6px;
+  font-size: 12px;
+  color: var(--text-strong);
+}
+.dt-l1 {
+  padding-left: 4px;
+}
+.dt-l2 {
+  padding-left: 20px;
+}
+.dt-l3 {
+  padding-left: 52px;
+  color: var(--text-weak);
+}
+/* 화살표 = 접기/펴기 손잡이. 아이콘은 chevron-right 하나만 쓰고 열리면 90° 회전 */
+.dt-chev {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+  color: var(--text-weak);
+  cursor: pointer;
+}
+.dt-chev svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.18s ease;
+}
+.dt-chev:hover {
+  background: color-mix(in srgb, var(--text-strong) 12%, transparent);
+  color: var(--text-strong);
+}
+.dt-node.open > .dt-ti > .dt-chev svg,
+.dt-node.open > .dt-drop > .dt-chev svg {
+  transform: rotate(90deg);
+}
+/* 높이 0↔auto 전환 — grid 1fr 트릭(interpolate-size 불필요, details 렌더 스킵 이슈도 없음) */
+.dt-kids {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease-out;
+}
+.dt-node.open > .dt-kids {
+  grid-template-rows: 1fr;
+}
+.dt-kidsin {
+  overflow: hidden;
+  min-height: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dt-kids {
+    transition: none;
+  }
+  .dt-chev svg {
+    transition: none;
+  }
+}
+.dt-tico {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  display: grid;
+  place-items: center;
+  color: var(--dt-accent-fg);
+}
+.dt-tico svg {
+  width: 14px;
+  height: 14px;
+}
+.dt-tnm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dt-ti:hover,
+.dt-drop:hover,
+.dt-di:hover {
+  background: var(--dt-hover);
+}
+/* 검색으로 걸러낼 때 — flex/block이 hidden 속성을 이기므로 명시적으로 끔 */
+.dt-ti[hidden],
+.dt-di[hidden],
+.dt-drop[hidden],
+.dt-node[hidden],
+.dt-tgap[hidden] {
+  display: none;
+}
+.dt-ti.on {
+  background: color-mix(in srgb, var(--text-strong) 11%, transparent);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.dt-drop {
+  height: 32px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.dt-node.open > .dt-drop {
+  background: var(--dt-hover);
+}
+.dt-di {
+  height: 26px;
+  padding-left: 24px;
+  font-size: 11px;
+  color: var(--text-weak);
+}
+/* 선택된 자산 = 감시 중. 여러 개를 동시에 켜므로 한눈에 세어져야 한다.
+   ── 한쪽 보더 금지 ──
+   예전엔 `inset 2px 0 0`으로 왼쪽 막대를 그렸는데, 이 줄은 border-radius: 6px이라
+   inset 그림자가 둥근 테두리 상자에 클리핑되면서 막대가 위아래 모서리를 따라
+   휘어 초승달처럼 보였다. 한 변에만 있는 보더와 radius는 같이 쓸 수 없다 —
+   radius가 자연스러우려면 보더가 사방에 다 있어야 한다.
+   → 막대 대신 사방 1px 링. 옅은 배경은 남겨 여러 줄을 훑을 때의 스캔성을 유지한다.
+
+   링은 **불투명 원색**이어야 한다. 틴트만으로는 비선택 행과 1.2:1밖에 안 나서
+   상태를 실제로 알리는 건 링이고, 링은 UI 상태 경계라 3:1이 필요하다(WCAG 1.4.11).
+   실측(링 vs 비선택 행): 55% → 2.41~3.04(미달) · 85% → 3.59~5.45 · 100% → 4.32~7.19.
+
+   색은 --point-main 날것이 아니라 **--dt-accent-fg**(명도 클램프된 강조색)를 쓴다.
+   강조색을 전경으로 쓸 때의 함정이 테두리에도 똑같이 적용된다 — 시드를 초록/노랑/
+   시안으로 바꾸면 Enterprise 라이트의 --accent가 아주 밝아져서 밝은 표면 위 링이
+   1.56:1까지 떨어졌다(실측: #12a97a 1.56 · #00c8ff 1.95 · #e0a020 2.18).
+   클램프된 값을 쓰면 시드 7종 × 4조합 전부 4.4:1 이상. */
+.dt-di.on {
+  color: var(--text-strong);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--point-main) 13%, transparent);
+  box-shadow: inset 0 0 0 1px var(--dt-accent-fg);
+}
+
+/* ── 하단 이벤트 로그 ── */
+.dt-log {
+  max-height: 236px;
+}
+.dt-loghead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+}
+.dt-loghead h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+.dt-lsep {
+  width: 1px;
+  height: 14px;
+  background: var(--dt-hair);
+}
+.dt-lsound {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-weak);
+}
+.dt-lsound svg {
+  width: 13px;
+  height: 13px;
+}
+.dt-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 4px 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--dt-stroke);
+}
+.dt-switch b {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: 0.4px;
+}
+.dt-switch i {
+  position: relative;
+  width: 30px;
+  height: 17px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-strong) 18%, transparent);
+  transition: background 0.2s ease;
+}
+.dt-switch i::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--text-strong);
+  transition: transform 0.2s ease;
+}
+.dt-switch i.on {
+  background: var(--point-main);
+}
+.dt-switch i.on::after {
+  transform: translateX(13px);
+  background: var(--on-point, #fff);
+}
+.dt-sp {
+  flex: 1;
+}
+.dt-chip {
+  padding: 5px 13px;
+  border-radius: 6px;
+  border: 1px solid var(--dt-stroke);
+  background: var(--dt-hover);
+  color: var(--text-strong);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.dt-chip:hover {
+  border-color: var(--point-main);
+  color: var(--dt-accent-fg);
+}
+.dt-counts {
+  display: flex;
+  gap: 7px;
+}
+.dt-cnt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--dt-stroke);
+  background: var(--dt-hover);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.dt-cnt:hover {
+  border-color: var(--point-main);
+}
+/* 등급 필터가 걸린 칩 — 테두리·링만 해당 등급색으로. 숫자 글자색은 --text-strong 유지
+   (등급색을 글자에 쓰면 노랑/주황이 카드 위에서 대비 미달) */
+.dt-cnt.on {
+  background: color-mix(in srgb, var(--text-strong) 14%, transparent);
+}
+.dt-cnt[data-lv='1'].on {
+  border-color: var(--dt-lv1);
+  box-shadow: 0 0 0 1px var(--dt-lv1);
+}
+.dt-cnt[data-lv='2'].on {
+  border-color: var(--dt-lv2);
+  box-shadow: 0 0 0 1px var(--dt-lv2);
+}
+.dt-cnt[data-lv='3'].on {
+  border-color: var(--dt-lv3);
+  box-shadow: 0 0 0 1px var(--dt-lv3);
+}
+.dt-cnt[data-lv='4'].on {
+  border-color: var(--dt-lv4);
+  box-shadow: 0 0 0 1px var(--dt-lv4);
+}
+.dt-cnt[data-lv='5'].on {
+  border-color: var(--dt-lv5);
+  box-shadow: 0 0 0 1px var(--dt-lv5);
+}
+.dt-chip.on {
+  border-color: var(--point-main);
+  color: var(--dt-accent-fg);
+}
+.dt-cnt i,
+.dt-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  display: inline-block;
+}
+.lv1 {
+  background: var(--dt-lv1);
+}
+.lv2 {
+  background: var(--dt-lv2);
+}
+.lv3 {
+  background: var(--dt-lv3);
+}
+.lv4 {
+  background: var(--dt-lv4);
+}
+.lv5 {
+  background: var(--dt-lv5);
+}
+
+.dt-table {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border-top: 1px solid var(--dt-hair);
+}
+.dt-tr {
+  display: grid;
+  grid-template-columns: 44px 110px 160px 92px minmax(0, 1fr) 132px;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 14px;
+  font-size: 11px;
+  color: var(--text-strong);
+  border-bottom: 1px solid var(--dt-hair);
+  cursor: pointer;
+}
+.dt-th {
+  cursor: default;
+}
+.dt-tr > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dt-th {
+  height: 28px;
+  color: var(--text-weak);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  background: var(--dt-glass-solid);
+  z-index: 1;
+}
+.dt-tr:not(.dt-th):hover {
+  background: var(--dt-hover);
+}
+/* 선택 행 — 사방 1px 링. 한쪽 막대는 쓰지 않는다(.dt-di.on과 같은 규칙).
+   색은 클램프된 --dt-accent-fg: 시드가 밝은 색이면 원색 링은 표면에 묻힌다. */
+.dt-tr.on {
+  background: color-mix(in srgb, var(--point-main) 22%, transparent);
+  box-shadow: inset 0 0 0 1px var(--dt-accent-fg);
+  font-weight: 600;
+}
+.dt-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--dt-stroke);
+  /* --dt-hover(7%)를 깔면 다크에서 표면이 밝아져 --text-weak가 4.32까지 떨어진다.
+     글자를 올리는 대신 배경 틴트를 3%로 낮춰 dim 위계를 그대로 두고 4.81을 확보. */
+  background: color-mix(in srgb, var(--text-strong) 3%, transparent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--text-weak);
+}
+/* CRITICAL — 채운 배지. Figma는 '반투명 빨강 배경 + 빨강 글자' 아웃라인 스타일이지만,
+   그 조합은 유리 카드 위에서 어느 모드에서도 4.5:1을 못 넘긴다(실측 다크 4.46 · 라이트 3.27
+   — 사진을 원본으로 되돌리며 카드가 어두워져 더 나빠짐). 배지를 채우고 글자색은
+   --on-danger(흰/검 자동 선택, --on-point와 같은 방식)로 두면 어떤 팔레트에서도 읽힌다.
+   최고 심각도 배지는 눈에 띄는 게 목적이라 채움이 의도에도 더 맞음. */
+.dt-tag.crit {
+  color: var(--on-danger, #fff);
+  border-color: transparent;
+  background: var(--danger);
+}
+/* 액션은 선택된 행·마우스 올린 행에서만 — 늘 떠 있으면 표가 시끄러워짐 */
+.dt-acts {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.dt-tr.on .dt-acts,
+.dt-tr:hover .dt-acts,
+.dt-acts:focus-within {
+  opacity: 1;
+}
+.dt-tr:not([data-new]) .dt-new {
+  display: none;
+}
+.dt-empty {
+  padding: 22px 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-weak);
+}
+.dt-tr[hidden] {
+  display: none;
+}
+.dt-new {
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--point-main);
+  color: var(--on-point, #fff);
+  font-size: 11px;
+  font-weight: 700;
+}
+.dt-abtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--dt-stroke);
+  background: var(--dt-hover);
+  color: var(--text-strong);
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.dt-abtn svg {
+  width: 11px;
+  height: 11px;
+}
+.dt-abtn:hover {
+  border-color: var(--point-main);
+  color: var(--point-main);
+}

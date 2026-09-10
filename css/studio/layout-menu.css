@@ -1,0 +1,84 @@
+/* ── 사이드바 레이아웃 메뉴 ── */
+
+/* ── 사이드바 레이아웃 메뉴 — 큰 카테고리(2단/3단/모듈)는 접히는 아코디언,
+   그 안의 레이아웃 행은 .fignav-row 재사용. 화살표(셰브론)는 카테고리 헤더에만. ── */
+#layList {
+  max-height: 360px;
+  overflow: auto;
+}
+/* 레일에서 '레이아웃'만 볼 때(다른 옵션 숨김)는 목록을 자체 높이로 자르지 않고 전부 펼친다.
+   → 사이드패널 전체가 하나의 자연스러운 스크롤을 갖게 해, 중간에 짤리는 이중 스크롤을 없앤다. */
+.sidepanel[data-section='layout'] #layList {
+  max-height: none;
+  overflow: visible;
+}
+.laygrp-sec:not(:last-child) {
+  border-bottom: 1px solid var(--line);
+}
+/* 카테고리 헤더 — 유일하게 화살표를 가진다 */
+.laygrp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font: 600 12px var(--font);
+  cursor: pointer;
+  text-align: left;
+  border-radius: var(--r-sm);
+  transition: background var(--i2-dur-color) ease;
+}
+.laygrp:hover {
+  background: var(--bg-accent);
+}
+.laygrp-chev {
+  flex: none;
+  color: var(--text-weak);
+  font-size: 12px;
+  line-height: 1;
+  transition: transform var(--i2-dur-color) var(--i2-ease-move);
+}
+.laygrp-sec.open .laygrp-chev {
+  transform: rotate(90deg);
+  color: var(--point-main);
+}
+.laygrp-lbl {
+  flex: 1;
+}
+.laygrp-count {
+  flex: none;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-weak);
+}
+.laygrp-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 0 5px;
+}
+.laygrp-rows[hidden] {
+  display: none;
+}
+/* 하위 레이아웃 행 — 화살표 없음, 살짝 들여쓰기로 계층 표시 */
+.laygrp-rows .fignav-row {
+  padding-left: 16px;
+}
+/* 레이아웃 글리프 — 구성 화면 아이콘 자리(.ficon)에 채운 미니 그리드 */
+#layList .fignav-row .ficon svg.laygl {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+  stroke: none;
+}
+@media (max-width: 900px) {
+  .lc {
+    grid-template-columns: 1fr;
+  }
+  .lc-side {
+    display: none;
+  }
+}

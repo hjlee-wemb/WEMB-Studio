@@ -1,0 +1,335 @@
+/* ── 새 프로젝트 · 레이아웃 선택 모달 ── */
+
+/* ── 공통 모달(새 프로젝트) ── */
+.flow-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-flowmodal);
+  display: none;
+  place-items: center;
+  background: rgba(3, 7, 18, 0.66);
+  backdrop-filter: blur(3px);
+  font-family: var(--font);
+}
+.flow-modal.show {
+  display: grid;
+}
+.np {
+  width: min(680px, 92vw);
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+  padding: 26px 28px 22px;
+  position: relative;
+}
+.np-x {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg-accent);
+  color: var(--text-weak);
+  cursor: pointer;
+}
+.np-x:hover {
+  color: var(--text-strong);
+}
+.np-name {
+  width: 100%;
+  padding: 10px 2px;
+  border: 0;
+  border-bottom: 2px solid var(--point-main);
+  background: transparent;
+  color: var(--text-strong);
+  font: 600 16px var(--font);
+  margin-bottom: 22px;
+}
+/* 밑줄이 곧 입력 필드의 테두리라 사각 아웃라인은 어울리지 않는다.
+   대신 마우스 클릭(:focus)에서는 밑줄만 굵히고, 키보드(:focus-visible)에서는
+   반드시 보이는 표시를 남긴다. */
+.np-name:focus {
+  outline: none;
+  border-bottom-color: var(--point-sub);
+}
+.np-name:focus-visible {
+  outline: 2px solid var(--point-sub);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.np-lbl {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-weak);
+  margin-bottom: 18px;
+}
+.np-opts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.np-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 14px 18px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-page);
+  color: var(--text-strong);
+  cursor: pointer;
+  transition: border-color var(--i2-dur-color) ease, background var(--i2-dur-color) ease;
+}
+.np-opt .np-ico {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  color: var(--text-weak);
+  transition: color var(--i2-dur-color) ease;
+}
+.np-opt .np-ico svg {
+  width: 42px;
+  height: 42px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+}
+.np-opt b {
+  font-size: 14px;
+  font-weight: 600;
+}
+.np-opt small {
+  font-size: 11px;
+  color: var(--text-weak);
+  text-align: center;
+  line-height: 1.35;
+}
+.np-opt:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--point-main) 60%, var(--line));
+}
+.np-opt.on {
+  border-color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 12%, var(--bg-page));
+}
+.np-opt.on .np-ico {
+  color: var(--point-main);
+}
+.np-opt:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.np-opt .np-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--bg-accent);
+  color: var(--text-weak);
+}
+.np-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 24px;
+}
+.np-ok {
+  padding: 10px 26px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--point-fill);
+  color: #fff;
+  font: 600 13px var(--font);
+  cursor: pointer;
+}
+.np-ok:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.np-cancel {
+  border: 0;
+  background: transparent;
+  color: var(--text-weak);
+  font: 500 13px var(--font);
+  cursor: pointer;
+  /* 텍스트 버튼은 줄 높이가 그대로 클릭 영역이 된다 — 최소 24px 를 세로 패딩으로 확보 */
+  padding: 5px 8px;
+  min-height: 24px;
+}
+.np-cancel:hover {
+  color: var(--text-strong);
+}
+
+/* ── 레이아웃 선택 — 화면 종류 선택(npModal)과 같은 팝업(모달) 형식 ── */
+.lp {
+  display: flex;
+  flex-direction: column;
+  width: min(880px, 92vw);
+  max-height: 86vh;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+.lp-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+.lp-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg-accent);
+  color: var(--text-weak);
+  font: 500 13px var(--font);
+  cursor: pointer;
+}
+.lp-back:hover {
+  color: var(--text-strong);
+  border-color: var(--point-main);
+}
+.lp-back svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+.lp-heads b {
+  font-size: 16px;
+  font-weight: 700;
+}
+.lp-heads span {
+  margin-left: 10px;
+  font-size: 12px;
+  color: var(--text-weak);
+}
+.lp-start {
+  margin-left: auto;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--point-fill);
+  color: #fff;
+  font: 600 13px var(--font);
+  cursor: pointer;
+  box-shadow: var(--i2-shadow);
+}
+.lp-start:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.lp-body {
+  flex: 1;
+  overflow: auto;
+  padding: 26px 30px 40px;
+}
+.lp-group {
+  margin-bottom: 30px;
+}
+.lp-gh {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.lp-gh b {
+  font-size: 14px;
+  font-weight: 700;
+}
+.lp-gh span {
+  font-size: 11px;
+  color: var(--text-weak);
+}
+.lp-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 18px;
+}
+.lp-card {
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-surface);
+  /* 버튼은 color를 상속하지 않아 .lp-name이 기본 검정으로 보이지 않던 문제 수정 */
+  color: var(--text-strong);
+  padding: 16px 16px 14px;
+  cursor: pointer;
+  transition: border-color var(--i2-dur-color) ease, transform var(--i2-dur-press) ease-out;
+  position: relative;
+}
+.lp-card:hover {
+  border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+  transform: translateY(-2px);
+}
+.lp-card.on {
+  border-color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 9%, var(--bg-surface));
+}
+.lp-card.on::after {
+  content: '✓';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--point-fill);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+.lp-card .wf {
+  aspect-ratio: 466 / 230;
+  margin-bottom: 12px;
+}
+.lp-card .lp-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+.lp-card .lp-desc {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--text-weak);
+}
+
+/* ── 와이어프레임 미니(레이아웃 썸네일) ── */
+.wf {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  aspect-ratio: 466 / 230;
+  padding: 9px;
+  border-radius: var(--r-sm);
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+}
+.wf-c {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--point-main) 22%, var(--bg-accent)), var(--bg-accent));
+  border: 1px solid color-mix(in srgb, var(--point-main) 25%, var(--line));
+  border-radius: 5px;
+  min-width: 0;
+  min-height: 0;
+}
+/* 레이아웃 선택을 미리보기에 반영할 때 — 패널이 .cols의 직속 grid 아이템이 된다 */
+.cols.gridmode > .panel {
+  min-width: 0;
+  min-height: 0;
+}

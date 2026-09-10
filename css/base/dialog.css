@@ -1,0 +1,115 @@
+/* ── 확인 대화상자 · 움직임 최소화 ── */
+
+/* ── 확인 대화상자 ── */
+.askmodal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-confirm);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(6, 6, 10, 0.62);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.askmodal[hidden] {
+  display: none;
+}
+.ask {
+  width: min(430px, 100%);
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+}
+.ask-t {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: -0.01em;
+}
+.ask-b {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-weak);
+  white-space: pre-line;
+}
+.ask-b b {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+/* 되돌릴 수 없다는 사실은 문단이 아니라 표시로 — 훑어봐도 걸리게 */
+.ask-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: color-mix(in srgb, var(--danger) 30%, var(--text-strong));
+  font-size: 12px;
+  font-weight: 600;
+}
+.ask-warn svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  margin-top: 1px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ask-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+.ask-btn {
+  font: 600 13px var(--font);
+  padding: 9px 16px;
+  min-height: 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: var(--bg-accent);
+  color: var(--text-strong);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.ask-btn.ghost:hover {
+  border-color: var(--text-weak);
+}
+/* 위험한 쪽은 색으로 구분한다 — 네이티브 confirm 으로는 불가능했던 것 */
+.ask-btn.danger {
+  background: var(--danger-fill);
+  border-color: var(--danger-fill);
+  color: #fff;
+}
+.ask-btn.danger:hover {
+  filter: brightness(1.08);
+}
+
+/* ── 움직임 최소화 요청의 마지막 그물 ──
+   위쪽 블록들이 선택자별로 모션을 끄지만, 무한 반복(pdot)과 진입 애니메이션(panelIn·rise)이
+   빠져 있었다. 특히 rise 는 차트 코드가 인라인 style 로 걸어서 CSS 만으로는 못 막는다(!important 필요).
+   '끄기'가 아니라 '즉시 완료'로 두는 이유: backwards/forwards 채움을 쓰는 진입 애니메이션을
+   animation:none 으로 지우면 요소가 시작 상태(opacity 0)로 남을 수 있다.
+   전환(transition)은 대부분 사용자가 직접 일으킨 피드백이라 여기서 건드리지 않는다. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
+}
