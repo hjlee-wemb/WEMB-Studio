@@ -27198,9 +27198,21 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         sheet.style.setProperty('--on-danger', contrast(hex['danger']));
         sheet.innerHTML = componentSheetHTML();
       }
+      /* 앱 스타일 전체를 문서 순서대로 모은다 — 자립형 HTML 내보내기가 이 문자열을 통째로 박아 넣는다.
+         인라인 <style> 과 파일로 분리한 앱 스타일시트(<link data-app-css>)를 함께 읽는다.
+         링크 쪽은 CSSOM 에서 읽으므로 http(s) 로 열었을 때만 채워진다(file:// 은 브라우저가 막는다). */
+      function collectAppCss() {
+        return [...document.querySelectorAll('style, link[rel="stylesheet"][data-app-css]')]
+          .map((el) => {
+            if (el.tagName === 'STYLE') return el.textContent;
+            try { return [...el.sheet.cssRules].map((r) => r.cssText).join('\n'); } catch (e) { return ''; }
+          })
+          .join('\n');
+      }
+
       /* ===== 내보내기(B) — 검증 보드를 자립형 HTML로 저장 ===== */
       function componentSheetExportHTML() {
-        const css = [...document.querySelectorAll('style')].map((s) => s.textContent).join('\n');
+        const css = collectAppCss();
         const sheet = document.getElementById('csSheet');
         const mode = sheet.getAttribute('data-mode') || 'dark';
         const themeName = document.getElementById('csSel').selectedOptions[0].textContent.trim().replace(/^●\s*/, '');
@@ -27312,7 +27324,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
       /* 페이지 전체 <style>을 모아 넣고, 테마 변수를 html/.main에 얹은 자립형 문서 골격 */
       function wembStandaloneDoc(bodyHTML, extraCSS) {
         const t = wembThemeInline();
-        const css = [...document.querySelectorAll('style')].map((s) => s.textContent).join('\n');
+        const css = collectAppCss();
         let pageBg = '#0f1320';
         try {
           pageBg = themeCoreMap(captureTheme())['bg/page'] || pageBg;
@@ -27377,7 +27389,7 @@ ${wembTipRuntime()}
 
         const rootVars = pickCssVars(t.rootStyle);
         const mainVars = pickCssVars(t.mainStyle);
-        const allCss = [...document.querySelectorAll('style')].map((s) => s.textContent).join('\n');
+        const allCss = collectAppCss();
         const css =
           `/* ── WEMB 테마 변수 — 색은 .main, 모서리·간격 등 레이아웃은 :root 에 ── */\n` +
           `:root {\n${rootVars.map((v) => '  ' + v + ';').join('\n')}\n}\n` +
