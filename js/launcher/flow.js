@@ -368,6 +368,8 @@ function initFlow() {
     return {
       img: d.slides[0].img,
       title: d.title,
+      /* 주소용 이름 — 'Digital Twin: SKHynix Icheon 1level' → digital-twin-skhynix-icheon-1level */
+      slug: d.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
       date: d.date,
       /* 정렬용 값 — ts(최신순): 표시 날짜에서 직접 파싱, pop(인기순): 안정적 의사 조회수 */
       ts: Date.parse(d.date),
@@ -470,43 +472,51 @@ function initFlow() {
   let tplYear = 'all';   /* 등록 연도 필터 — 화면 유형·업무 영역과 나란한 별개 축이다 */
   let tplQuery = ''; /* 템플릿 갤러리 검색어(제목·배지 대상) */
   let tplSelected = null; /* 상세 페이지로 열어 둔 템플릿(null이면 갤러리) */
-  /* ── 전역 뒤로가기용 — 현재 화면 상태 읽기 / 복원 ──
-     상태: {t:'launcher',v} 런처 뷰 · {t:'tpl',tpl:제목} 템플릿 상세 · {t:'page',p} 스튜디오 페이지 */
-  window.__navState = function () {
-    if (home && home.classList.contains('show')) {
-      if (tplSelected) return { t: 'tpl', tpl: tplSelected.title };
-      /* 폴더(프로젝트 그룹) 안에 들어가 있으면 그 상태도 히스토리에 남긴다 → 크롬 뒤로가기가 폴더 목록으로 정확히 복귀 */
-      if (curGroup && view !== 'trash') return { t: 'group', g: curGroup, v: view };
-      return { t: 'launcher', v: view };
-    }
-    const op = [...document.querySelectorAll('.page')].find((p) => !p.hidden);
-    return { t: 'page', p: op ? op.dataset.page : ((function () { try { return localStorage.getItem('wemb-view'); } catch (e) { return null; } })() || 'wire') };
-  };
-  window.__navRestore = function (st) {
-    if (!st) return;
-    if (st.t === 'launcher') {
+  /* ── 주소 ↔ 런처 화면 ──
+     좌측 메뉴: /projects · /recent · /favorites · /trash · /templates
+     프로젝트(폴더) 안: /projects/:gid   템플릿 상세: /templates/:slug
+     화면을 바꾸는 코드는 주소만 바꾸고(router.navigate), 실제로 그리는 건 아래 라우트다. */
+  const router = WEMB.router;
+  const VIEW_PATH = { all: '/projects', recent: '/recent', fav: '/favorites', trash: '/trash', tpl: '/templates' };
+  const goView = (v) => router.navigate(VIEW_PATH[v] || VIEW_PATH.all);
+  /* 새로고침이 필요한 이동(프로젝트 열기 · 새 프로젝트) — 목적지 주소를 먼저 심고 새로고침한다 */
+  const reloadAt = (p) => { try { history.replaceState(null, '', router.href(p)); } catch (e) {} location.reload(); };
+  const markNav = () => document.querySelectorAll('.lc-navi').forEach((b) => b.classList.toggle('on', b.dataset.view === view));
+  function showLauncher(prev) {
+    home.classList.add('show');
+    /* 처음 열 때(새로고침 · 주소 직접 입력)는 런처 뒤 상단 탭이 잠긴 단계를 가리키지 않게
+       첫 단계(PRD)로 맞춰 둔다 — 예전 부팅 복원과 같은 처리 */
+    if (!prev && window.__showPage) window.__showPage('prd');
+  }
+  Object.keys(VIEW_PATH).forEach((v) => {
+    router.add('launcher:' + v, VIEW_PATH[v], (params, query, prev) => {
       tplSelected = null;
-      setView(st.v || 'all'); /* setView가 curGroup=null로 폴더 밖(목록)으로 되돌린다 */
-      if (home) home.classList.add('show');
-      try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
-    } else if (st.t === 'group') {
-      /* 폴더 안(화면 목록)으로 복원 */
-      tplSelected = null;
-      view = st.v || 'all';
-      document.querySelectorAll('.lc-navi').forEach((b) => b.classList.toggle('on', b.dataset.view === view));
-      curGroup = st.g || null;
-      renderProjects();
-      if (home) home.classList.add('show');
-      try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
-    } else if (st.t === 'tpl') {
-      tplSelected = TEMPLATES.find((x) => x.title === st.tpl) || null;
-      renderProjects();
-      if (home) home.classList.add('show');
-    } else if (st.t === 'page') {
-      if (home) home.classList.remove('show');
-      if (window.__setPage) window.__setPage(st.p, { noHistory: true });
-    }
-  };
+      setView(v);
+      showLauncher(prev);
+    });
+  });
+  router.add('launcher:folder', '/projects/:gid', (params, query, prev) => {
+    const grp = groupById(params.gid);
+    if (!grp || grp.deleted) return VIEW_PATH.all; /* 없어졌거나 휴지통으로 간 프로젝트 */
+    tplSelected = null;
+    if (view === 'trash' || view === 'tpl') view = 'all'; /* 폴더는 살아 있는 프로젝트 뷰에서만 연다 */
+    curGroup = grp.id;
+    trashSel.clear();
+    markNav();
+    renderProjects();
+    showLauncher(prev);
+  });
+  router.add('launcher:template', '/templates/:slug', (params, query, prev) => {
+    const t = TEMPLATES.find((x) => x.slug === params.slug);
+    if (!t) return VIEW_PATH.tpl;
+    view = 'tpl';
+    curGroup = null;
+    trashSel.clear();
+    tplSelected = t;
+    markNav();
+    renderProjects();
+    showLauncher(prev);
+  });
   /* 템플릿 정렬 — 최신순(날짜)·이름순(제목)·인기순(조회수) */
   const TPL_SORTS = { recent: '최신순', name: '이름순', pop: '인기순' };
   let tplSort = 'recent';
@@ -755,7 +765,7 @@ function initFlow() {
               '<span class="tplmore">자세히 보기' + arrow + '</span>' +
             '</div>' +
           '</div>';
-        card.onclick = () => { tplSelected = t; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'tpl', tpl: t.title }); };
+        card.onclick = () => router.navigate('/templates/' + t.slug);
         grid.appendChild(card);
       });
 
@@ -813,7 +823,7 @@ function initFlow() {
     g.appendChild(det);
     /* 지금 보고 있는 슬라이드 번호(0=메인). CTA는 '보고 있는 그 시안'으로 스튜디오를 연다 */
     let curSlide = 0;
-    det.querySelector('.tpld-back').onclick = () => { tplSelected = null; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: view }); };
+    det.querySelector('.tpld-back').onclick = () => router.navigate(VIEW_PATH.tpl);
     const startBtn = det.querySelector('.tpld-start');
     startBtn.onclick = () => openTemplate(t, curSlide);
 
@@ -1372,12 +1382,7 @@ function initFlow() {
       }));
       card.appendChild(fav); card.appendChild(acts);
       card.setAttribute('role', 'button'); card.tabIndex = 0;
-      const open = () => {
-        curGroup = grp.id;
-        renderProjects();
-        /* 폴더 진입을 히스토리에 쌓아 크롬 뒤로가기가 스튜디오 화면이 아니라 폴더 목록으로 돌아가게 */
-        if (window.__navOnNavigate) window.__navOnNavigate({ t: 'group', g: grp.id, v: view });
-      };
+      const open = () => router.navigate('/projects/' + encodeURIComponent(grp.id));
       card.onclick = open;
       card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
     }
@@ -1465,25 +1470,24 @@ function initFlow() {
   }
   /* 경로 표시의 '프로젝트 목록' 클릭 → 폴더 밖으로 (뒤로가기와 동일) */
   document.getElementById('lcCrumbRoot')?.addEventListener('click', () => {
-    if (curGroup) { curGroup = null; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: view }); }
+    if (curGroup) goView(view);
   });
-  /* 뒤로가기 — 폴더 내부(화면 목록)에서 프로젝트 목록으로 */
+  /* 뒤로가기 — 폴더 내부(화면 목록)에서 프로젝트 목록으로. 목록에서 들어왔으면 브라우저 뒤로가기와 같고,
+     폴더 주소로 바로 들어왔으면 목록 주소로 대체 이동한다. */
   document.getElementById('lcBack')?.addEventListener('click', () => {
-    if (curGroup) { curGroup = null; renderProjects(); }
+    if (curGroup) router.back(VIEW_PATH[view] || VIEW_PATH.all);
   });
   document.querySelector('.lc-nav')?.addEventListener('click', (e) => {
     const b = e.target.closest('.lc-navi');
     if (!b || !b.dataset.view) return;
-    setView(b.dataset.view);
-    if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: b.dataset.view });
+    goView(b.dataset.view);
   });
   /* 빈 상태 안의 '만들어 둔 시안 먼저 둘러보기' — 왼쪽 메뉴를 거치지 않는 두 번째 진입로.
      빈 상태는 매 렌더마다 다시 만들어지므로 그리드에 위임해 붙인다. */
   document.querySelector('.lc-grid')?.addEventListener('click', (e) => {
     const b = e.target.closest('.lc-tplbadge');
     if (!b || !b.dataset.view) return;
-    setView(b.dataset.view);
-    if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: b.dataset.view });
+    goView(b.dataset.view);
   });
   document.getElementById('lcSearch')?.addEventListener('input', renderProjects);
   /* 휴지통 전체삭제 — 휴지통의 모든 프로젝트를 영구 삭제 */
@@ -1541,9 +1545,8 @@ function initFlow() {
     try {
       if (gid) localStorage.setItem(PENDING_GROUP, gid); else localStorage.removeItem(PENDING_GROUP);
       localStorage.removeItem(CUR_PROJ);
-      localStorage.setItem('wemb-view', 'prd');
     } catch (e) {}
-    location.reload();
+    reloadAt('/prd');
   }
   const startNewProject = () => beginNewScreen(null);
   function startNewScreen(gid) { beginNewScreen(gid || null); }
@@ -1619,7 +1622,6 @@ function initFlow() {
   document.getElementById('lpBack').onclick = () => {
     layout.classList.remove('show');
     home.classList.add('show');
-    try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
     openModal();
   };
   /* 바깥(백드롭) 클릭 시 이전 단계로 — npModal과 동일한 모달 동작 */
@@ -1791,9 +1793,8 @@ function initFlow() {
       if (openProj.tpl === 'skhynix') localStorage.setItem('wemb-skx-screen', openScene);
       if (openProj.tpl === 'skhynix-hub') localStorage.setItem('wemb-hub-screen', openScene === 'hvac' ? 'hvac' : 'main');
       if (openProj.tpl === 'hana') localStorage.setItem('wemb-hana-screen', openScene);
-      history.replaceState(null, '', location.pathname + location.search); /* 공유 해시 제거 */
     } catch (e) {}
-    location.reload();
+    reloadAt('/studio'); /* 공유 해시(#t=)가 남아 있어도 스튜디오 주소로 덮는다 */
   }
   function openProject(p) {
     /* (1) 지금 보고 있던 프로젝트의 상태를 먼저 저장 */
@@ -1811,8 +1812,6 @@ function initFlow() {
     try { localStorage.setItem('wemb-hub-screen', t.tplScene === 'hvac' ? 'hvac' : 'main'); } catch (e) {}
     try { localStorage.setItem('wemb-hanjin-screen', (t.tplScene === 'gate' || t.tplScene === 'unload') ? t.tplScene : 'main'); } catch (e) {}
     try { if (t.tpl === 'hana') localStorage.setItem('wemb-hana-screen', t.tplScene || 'overview-02'); } catch (e) {}
-    /* (3) 새로고침 시 런처가 아니라 이 프로젝트 스튜디오로 바로 열리도록 */
-    try { localStorage.setItem('wemb-view', 'wire'); } catch (e) {}
     /* 저장된 상태가 없던(구버전) 프로젝트는 화면 종류·레이아웃만이라도 반영 */
     if (!t.data) {
       try { localStorage.setItem('wemb-layout', t.layout || ''); } catch (e) {}
@@ -1829,7 +1828,8 @@ function initFlow() {
       else if (t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
       else { localStorage.removeItem('wemb-tpl-img'); localStorage.removeItem('wemb-tpl-dt'); }
     } catch (e) {}
-    location.reload();
+    /* (3) 스튜디오 주소로 새로고침 — 방금 되돌려 쓴 상태 묶음으로 이 화면이 열린다 */
+    reloadAt('/studio');
   }
 
   /* 사이드바 '새 프로젝트' → 완전히 새 프로젝트로 시작(현재 프로젝트는 저장) */
@@ -1842,11 +1842,7 @@ function initFlow() {
     const wasInStudio = !home.classList.contains('show');
     persistCurrentProjectData();
     /* 홈으로 '즉시' 전환 — 로고 클릭이 곧바로 반응하게(예전엔 썸네일 캡처를 최대 1.5초 기다렸음). */
-    setView('all');
-    renderProjects();
-    home.classList.add('show');
-    try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
-    if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: 'all' });
+    router.navigate(VIEW_PATH.all);
     /* 썸네일 캡처는 '홈 화면이 실제로 그려진 뒤'에 시작한다.
        캡처는 메인 스레드를 수 초 잡아먹는데, 예전엔 페인트 전에 시작해 홈 전환이 3초 넘게 걸려 보였다.
        두 번의 rAF(=페인트 완료 보장) + 약간의 여유 뒤에 돌린다. */
@@ -1997,12 +1993,7 @@ function initFlow() {
     if (sv) applyDashLayout(sv);
   } catch (e) {}
   syncSideLayout();
-  window.__openLauncher = () => {
-    setView('all');
-    home.classList.add('show');
-    try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
-    if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: 'all' });
-  };
+  window.__openLauncher = () => router.navigate(VIEW_PATH.all);
 
   /* 새 프로젝트로 새로고침해 진입한 경우 — 깨끗한 기본 상태에서 이 프로젝트로 바로 들어간다 */
   try {

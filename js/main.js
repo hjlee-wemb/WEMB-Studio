@@ -1,9 +1,6 @@
 /* ── 초기화 순서 — 저장 상태 복원 후 각 모듈 init ── */
 
 /* ---------- 초기화 ---------- */
-/* 새로고침 복원용 — initChrome의 초기 setPage('wire')가 localStorage를 덮기 전에
-   '작성 중이던 화면'을 미리 읽어 둔다(끝에서 이 값으로 복원). */
-var __bootView = (function () { try { return localStorage.getItem('wemb-view'); } catch (e) { return null; } })();
 applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
 /* 한진 템플릿(디지털 트윈)로 열려 있었으면 새로고침 후에도 그 페이지를 재현 */
 try {

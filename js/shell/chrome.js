@@ -22,8 +22,12 @@
     if (b) b.click();
     syncTabUI(tab);
   }
-  /* 상단 중앙 탭 = 페이지 전환(SPA). 'wire'(와이어프레임)=스튜디오, 나머지는 오버레이 페이지 */
-  function setPage(page, opts) {
+  /* ── 작업 페이지 — PRD · 기능명세서 · 유저플로우 · 와이어프레임 · 스튜디오 ──
+     페이지 전환은 곧 주소 이동이다: setPage('spec') → #/spec → 아래 라우트가 showPage 로 그린다.
+     'wire' 는 스튜디오(.app), 나머지는 스튜디오 위를 덮는 오버레이 페이지. */
+  const PAGE_ORDER = ['prd', 'spec', 'flow', 'wireframe', 'wire'];
+  const PAGE_PATH = { prd: '/prd', spec: '/spec', flow: '/flow', wireframe: '/wireframe', wire: '/studio' };
+  function showPage(page) {
     document.querySelectorAll('.tb-tab').forEach((t) => {
       const on = t.dataset.page === page;
       t.classList.toggle('on', on);
@@ -32,18 +36,41 @@
       t.tabIndex = on ? 0 : -1;
     });
     document.querySelectorAll('.page').forEach((p) => { p.hidden = p.dataset.page !== page; });
-    /* 현재 '작성 중인 화면'을 기억 — 새로고침 시 이 화면으로 복원한다(런처로 튕기지 않게) */
-    try { localStorage.setItem('wemb-view', page); } catch (e) {}
     /* 가이드 파이프라인 페이지는 최신 PRD 답변으로 다시 그린다 */
     if (typeof window.__guideOnPage === 'function') window.__guideOnPage(page);
     /* 탭 잠금 상태(스텝) 다시 반영 */
     if (window.__wembStep) window.__wembStep.refresh();
     /* 페이지 위에 떠 있던 레일 플라이아웃은 닫는다 */
     if (typeof closeFly === 'function') closeFly();
-    /* 전역 뒤로가기 기록 (뒤로가기로 복원 중일 땐 noHistory) */
-    if (!(opts && opts.noHistory) && window.__navOnNavigate) window.__navOnNavigate({ t: 'page', p: page });
+  }
+  function setPage(page) {
+    WEMB.router.navigate(PAGE_PATH[page] || PAGE_PATH.wire);
   }
   window.__setPage = setPage;
+  window.__showPage = showPage;
+  PAGE_ORDER.forEach((page, i) => {
+    WEMB.router.add('page:' + page, PAGE_PATH[page], (params, query, prev) => {
+      /* 잠긴 단계 주소로 들어오면(뒤로가기 · 직접 입력) 열려 있는 마지막 단계로 돌린다.
+         스튜디오만 예외 — 저장된 화면을 연 경우(프로젝트 열기 · 템플릿)와 공유 링크(?t=)는 단계와 무관하게 연다. */
+      const lvl = window.__wembStep ? window.__wembStep.level() : PAGE_ORDER.length - 1;
+      let hasScreen = false;
+      try { hasScreen = !!localStorage.getItem('wemb-current-proj'); } catch (e) {}
+      if (i > lvl && !(page === 'wire' && (hasScreen || query.t))) {
+        if (prev && typeof toast === 'function') toast('이전 단계를 먼저 완료해 주세요', { type: 'warn' });
+        return PAGE_PATH[PAGE_ORDER[lvl]];
+      }
+      document.getElementById('flowHome')?.classList.remove('show');
+      showPage(page);
+      /* 스튜디오 주소로 '처음' 열렸을 때(프로젝트 열기 · 새로고침) — 배경 스튜디오는 초기화로 이미 복원돼 있다.
+         enterStudio 를 다시 부르면 레이아웃 프리셋이 수동 편집을 덮으므로 부르지 않고,
+         단계 잠금 해제 · 상단 내비 반영 · 옵션창 '대시보드 편집 → 콘텐츠 추가'만 맞춘다. */
+      if (page === 'wire' && !prev) {
+        try { if (window.__wembStep) window.__wembStep.advance(4); } catch (e) {}
+        try { if (window.__setStudioNav && typeof window.__WEMBFlowMenu === 'function') window.__setStudioNav(window.__WEMBFlowMenu()); } catch (e) {}
+        try { if (window.__showSection) window.__showSection('dash-panels'); } catch (e) {}
+      }
+    });
+  });
   /* ── 상단 탭 조작 ──
      잠긴 탭은 disabled 로 빼지 않고 초점만 받게 두므로(refreshSteps 참고),
      실제 차단은 여기서 aria-disabled 로 한다. 막을 때는 왜 막혔는지 말해 준다. */
@@ -77,70 +104,6 @@
     tabs[j].focus();
   });
 
-  /* ── 전역 뒤로가기 — 브라우저 히스토리(History API)와 연동 ──
-     각 화면 이동 함수가 window.__navOnNavigate(state)를 부르면 history.pushState로 브라우저에 항목을
-     쌓는다. 그래서 상단바/런처의 뒤로 버튼은 물론 '크롬 자체 뒤로가기'도 popstate로 동작한다.
-     popstate에서 window.__navRestore로 그 화면을 복원한다. 항목마다 _i(깊이)를 붙여, _i>0일 때만
-     뒤로 버튼을 활성화한다(루트에선 비활성). 새로고침이 일어나는 이동(프로젝트 열기 등)은 세션이
-     리셋되므로 대상이 아니다. */
-  (function initNavBack() {
-    const backBtn = document.getElementById('tbBack');
-    const lcBack = document.getElementById('lcBack');
-    let cur = null;
-    let restoring = false;
-    let navReady = false; /* 초기 로딩 중의 화면 전환은 히스토리에 쌓지 않는다 */
-    const same = (a, b) => !!a && !!b && a.t === b.t && (a.v || '') === (b.v || '') && (a.p || '') === (b.p || '') && (a.tpl || '') === (b.tpl || '');
-    function update() {
-      const off = !(cur && cur._i > 0);
-      [backBtn, lcBack].forEach((b) => {
-        if (!b) return;
-        b.disabled = off;
-        b.title = off ? '이전 화면이 없어요' : '뒤로 (이전 화면)';
-      });
-    }
-    window.__navOnNavigate = function (state) {
-      if (restoring) return;
-      try {
-        if (!state && window.__navState) state = window.__navState();
-        if (!state) return;
-        if (navReady && cur && !same(cur, state)) {
-          /* 새 화면 — 브라우저 히스토리에 항목 추가(크롬 뒤로가기 대상) */
-          state._i = (cur._i || 0) + 1;
-          history.pushState(state, '');
-        } else {
-          /* 초기/동일 화면 — 현재 항목을 이 상태로 대체 */
-          state._i = cur ? (cur._i || 0) : 0;
-          try { history.replaceState(state, ''); } catch (e) {}
-        }
-        cur = state;
-        update();
-      } catch (e) {}
-    };
-    /* 앱 내부 뒤로 버튼 = 브라우저 뒤로가기와 동일하게 history.back() 사용 → 크롬 버튼과 완전 일치 */
-    window.__navBack = function () { try { history.back(); } catch (e) {} };
-    /* 크롬 뒤로/앞으로 버튼 → popstate. 해당 항목의 화면을 복원한다. */
-    window.addEventListener('popstate', function (e) {
-      try {
-        const target = e.state || { t: 'launcher', v: 'all', _i: 0 };
-        restoring = true;
-        if (window.__navRestore) window.__navRestore(target);
-        restoring = false;
-        cur = target;
-        update();
-      } catch (err) { restoring = false; }
-    });
-    if (backBtn) backBtn.addEventListener('click', () => window.__navBack());
-    if (lcBack) lcBack.addEventListener('click', () => window.__navBack());
-    /* 초기화가 끝난 뒤 현재 상태를 히스토리의 기준(_i=0) 항목으로 심는다. 이후 이동부터 항목이 쌓인다. */
-    setTimeout(() => {
-      try {
-        cur = window.__navState ? window.__navState() : null;
-        if (cur) { cur._i = 0; try { history.replaceState(cur, ''); } catch (e) {} }
-        navReady = true;
-        update();
-      } catch (e) {}
-    }, 0);
-  })();
   /* 상단 좌측 브랜드 클릭 → 로고(tb-mark)만 스튜디오 홈(런처)으로.
      'Studio' 이름 글씨·프로젝트명 클릭은 아무 동작도 하지 않는다(스튜디오로 튀지 않게). */
   document.querySelector('.tb-left')?.addEventListener('click', (e) => {
@@ -329,7 +292,8 @@
   /* 초기 옵션창은 '화면 정하기' 섹션부터 노출 — 이후 rail 메뉴로 섹션을 바꾼다 */
   showStep('screen', 'stepScreen');
 
-  /* 초기 페이지 = 스튜디오. flyEl 등 플라이아웃 상태가 초기화된 뒤(이 위치)에 호출해야
-     setPage 안의 closeFly()가 TDZ 에러를 내지 않는다(레일 메뉴가 죽던 원인). */
-  setPage('wire');
+  /* 초기 표시는 스튜디오 — 실제로 열 화면은 모든 초기화가 끝난 뒤 주소가 정한다(shell/routes.js).
+     flyEl 등 플라이아웃 상태가 초기화된 뒤(이 위치)에 불러야 showPage 안의 closeFly()가
+     TDZ 에러를 내지 않는다(레일 메뉴가 죽던 원인). */
+  showPage('wire');
 })();

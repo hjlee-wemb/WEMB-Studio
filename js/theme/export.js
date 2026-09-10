@@ -172,12 +172,12 @@ function decodeState(str) {
   return JSON.parse(decodeURIComponent(escape(atob(str))));
 }
 function shareURL() {
-  return location.href.split('#')[0] + '#t=' + encodeState(captureTheme());
+  return location.href.split('#')[0] + WEMB.router.href('/studio', { t: encodeState(captureTheme()) });
 }
 async function copyShare() {
   const url = shareURL();
   try {
-    history.replaceState(null, '', '#t=' + encodeState(captureTheme()));
+    history.replaceState(history.state, '', WEMB.router.href('/studio', { t: encodeState(captureTheme()) }));
   } catch (e) {}
   try {
     await navigator.clipboard.writeText(url);
@@ -187,10 +187,14 @@ async function copyShare() {
   }
 }
 function applyShareFromURL() {
-  const m = location.hash.match(/[#&]t=([^&]+)/);
-  if (!m) return false;
+  /* 공유 시안 — 지금 형식 #/studio?t=…(퍼센트 인코딩), 예전 형식 #t=…(원문) 둘 다 읽는다 */
+  const h = location.hash;
+  const qi = h.indexOf('?');
+  let enc = h.charAt(1) === '/' && qi > 0 ? new URLSearchParams(h.slice(qi + 1)).get('t') : null;
+  if (!enc) { const m = h.match(/[#&]t=([^&]+)/); enc = m && m[1]; }
+  if (!enc) return false;
   try {
-    restoreTheme(decodeState(m[1]));
+    restoreTheme(decodeState(enc));
     return true;
   } catch (e) {
     return false;
