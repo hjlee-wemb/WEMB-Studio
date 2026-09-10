@@ -1,5 +1,5 @@
-/* index.html 에 'Dashbord:HANA Bank-H.I.T' 템플릿과 화면 14장을 연결한다.
-   한진(Dashbord: Hanjin main)이 이미 쓰고 있는 길을 그대로 따라간다:
+/* index.html 에 'Dashboard: HANA Bank H.I.T' 템플릿과 화면 14장을 연결한다.
+   한진(Dashboard: Hanjin main)이 이미 쓰고 있는 길을 그대로 따라간다:
      ① 화면 모듈 <script> ② 템플릿 카드(제목·카테고리·날짜·슬라이드)
      ③ applyHanaDT(스테이지에 얹기) ④ 패널편집 대상(DTSEL) ⑤ 화면 테마·색 정하기(TPLTINT)
      ⑥ '스튜디오 열기' 시 화면 14개 만들기 ⑦ 새로고침 후 복원
@@ -74,10 +74,10 @@ if (s.indexOf("data-tpl='hana'") < 0) {
 }
 
 /* ── ③ 템플릿 카드 ── */
-if (s.indexOf("'Dashbord:HANA Bank-H.I.T'") < 0) {
-  const A = "          'Dashbord: wooribank Transaction',\n        ].map((title, i) => {";
+if (s.indexOf("'Dashboard: HANA Bank H.I.T'") < 0) {
+  const A = "          'Dashboard: wooribank Transaction',\n        ].map((title, i) => {";
   must(A);
-  s = s.replace(A, "          'Dashbord: wooribank Transaction',\n          'Dashbord:HANA Bank-H.I.T',\n        ].map((title, i) => {");
+  s = s.replace(A, "          'Dashboard: wooribank Transaction',\n          'Dashboard: HANA Bank H.I.T',\n        ].map((title, i) => {");
   /* 업무 영역 — 서비스·거래 */
   const B = "'종합현황', '서비스·거래'];";
   must(B);
@@ -98,7 +98,7 @@ if (s.indexOf("hn.tpl = 'hana'") < 0) {
     "        /* HANA Bank H.I.T — '스튜디오 열기' 시 Figma(H3S2M7DUCvuJgi75oBqg6W) 화면 14장을",
     '           순수 HTML/CSS DOM 으로 재구축한 것(src/hana-*.js)으로 연다. 상세 미리보기도 그 화면을 그대로 캡처한 것이다. */',
     '        (function () {',
-    "          const hn = TEMPLATES.find((t) => t.title === 'Dashbord:HANA Bank-H.I.T');",
+    "          const hn = TEMPLATES.find((t) => t.title === 'Dashboard: HANA Bank H.I.T');",
     '          if (hn) {',
     "            hn.tpl = 'hana';",
     "            hn.img = 'src/templates/hana-overview-02.jpg';",

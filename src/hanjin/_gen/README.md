@@ -246,7 +246,7 @@ Figma `A11hAZefK5FSuEE9MagOgj` 의 `114:5437`(Logo — 칩 + WEMB Studio 워드�
 
 ## 스튜디오 연결 (`index.html`)
 
-- 템플릿 `Dashbord: Hanjin main` → `tpl:'hanjin'`, 슬라이드 3장이 화면 3개(`tplScene`: main·gate·unload)로 만들어진다.
+- 템플릿 `Dashboard: Hanjin main` → `tpl:'hanjin'`, 슬라이드 3장이 화면 3개(`tplScene`: main·gate·unload)로 만들어진다.
 - `applyHanjinDT(which)` 가 `#dtStage` 에 `.<접두어>-root` 를 얹고 `initHanjin` 을 부른다.
 - 화면 안 헤더 드롭다운(하차현황/입문현황/…)을 누르면 실제로 다른 화면으로 이동한다(`addHanjinSceneLinks`).
 - **화면 테마** 다크/라이트 → `TPLTINT.icheonTint(…, HANJIN_OPT)` 가 `data-theme` 을 바꾼다(`wemb-hanjin-mode`).

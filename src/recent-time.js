@@ -29,11 +29,13 @@
   var DAY = 86400000;
   var p2 = function (n) { return (n < 10 ? '0' : '') + n; };
 
-  /* 읽을 수 있는 시각 모양. 한 표는 한 형식이라는 전제 — 섞여 있어도 칸마다 제 모양으로 되쓴다. */
+  /* 읽을 수 있는 시각 모양. 한 표는 한 형식이라는 전제 — 섞여 있어도 칸마다 제 모양으로 되쓴다.
+     `body` 는 앵커 없는 알맹이다. 여기서 '칸 전체가 시각'인 꼴과 '앞머리만 시각'인 꼴 둘 다 만든다
+     (뒤엣것은 opt.prefix 로 켤 때만 쓴다 — 아래 parse 참고). */
   var PATTERNS = [
     /* 2026-01-12 09:33:00 · 2026.01.12 09:33 */
     {
-      re: /^(\d{4})([-./])(\d{1,2})\2(\d{1,2})([ T])(\d{1,2}):(\d{2})(?::(\d{2}))?$/,
+      body: '(\\d{4})([-./])(\\d{1,2})\\2(\\d{1,2})([ T])(\\d{1,2}):(\\d{2})(?::(\\d{2}))?',
       read: function (m) {
         return {
           t: new Date(+m[1], +m[3] - 1, +m[4], +m[6], +m[7], m[8] ? +m[8] : 0).getTime(),
@@ -43,7 +45,7 @@
     },
     /* 26-12-12 09:00:29 — 두 자리 연도 */
     {
-      re: /^(\d{2})([-./])(\d{1,2})\2(\d{1,2})([ T])(\d{1,2}):(\d{2})(?::(\d{2}))?$/,
+      body: '(\\d{2})([-./])(\\d{1,2})\\2(\\d{1,2})([ T])(\\d{1,2}):(\\d{2})(?::(\\d{2}))?',
       read: function (m) {
         return {
           t: new Date(2000 + +m[1], +m[3] - 1, +m[4], +m[6], +m[7], m[8] ? +m[8] : 0).getTime(),
@@ -53,7 +55,7 @@
     },
     /* 14:32:57 · 16:45 — 날짜가 없다. 같은 날로 읽고, 아래로 내려가다 시각이 되돌아가면 전날로 넘긴다 */
     {
-      re: /^(\d{1,2}):(\d{2})(?::(\d{2}))?$/,
+      body: '(\\d{1,2}):(\\d{2})(?::(\\d{2}))?',
       read: function (m) {
         return {
           sod: (+m[1]) * 3600 + (+m[2]) * 60 + (m[3] ? +m[3] : 0),
@@ -62,6 +64,10 @@
       },
     },
   ];
+  PATTERNS.forEach(function (p) {
+    p.re = new RegExp('^' + p.body + '$');          /* 칸 전체가 시각 */
+    p.lead = new RegExp('^' + p.body + '(?=\\s)');  /* 앞머리만 시각 — 뒤에 공백이 와야 한다 */
+  });
 
   function write(d, f) {
     var hm = p2(d.getHours()) + ':' + p2(d.getMinutes()) + (f.sec ? ':' + p2(d.getSeconds()) : '');
@@ -70,10 +76,22 @@
     return y + f.sep + p2(d.getMonth() + 1) + f.sep + p2(d.getDate()) + f.gap + hm;
   }
 
-  function parse(s) {
-    for (var i = 0; i < PATTERNS.length; i++) {
-      var m = PATTERNS[i].re.exec(s);
+  /* prefix=true 면 '시각 + 내용'이 한 칸에 든 표도 읽는다.
+     보안시스템 이벤트 로그가 그렇다 — `2025-00-00 00:00:00  [Warning] SERVICE ALERT: …`.
+     이때 뒤엣말은 `tail` 로 떼어 두었다가 **한 글자도 건드리지 않고** 그대로 다시 붙인다. */
+  function parse(s, prefix) {
+    var i, m;
+    for (i = 0; i < PATTERNS.length; i++) {
+      m = PATTERNS[i].re.exec(s);
       if (m) return PATTERNS[i].read(m);
+    }
+    if (!prefix) return null;
+    for (i = 0; i < PATTERNS.length; i++) {
+      m = PATTERNS[i].lead.exec(s);
+      if (!m) continue;
+      var r = PATTERNS[i].read(m);
+      r.tail = s.slice(m[0].length);
+      return r;
     }
     return null;
   }
@@ -81,6 +99,7 @@
   /* 시각 칸들을 '위에서 아래로(최신 → 과거)' 순서대로 넘긴다.
      opt.lead  — 맨 윗줄을 몇 초 전에 둘지(기본 25~110초 사이에서 고른다)
      opt.step  — 전부 같은 시각일 때 줄마다 벌릴 간격 [최소, 최대] 초(기본 45~210)
+     opt.prefix— '시각 + 내용'이 한 칸에 든 표도 읽는다(앞머리 시각만 갈아 끼운다). 기본 꺼짐
      opt.now   — 기준 시각(테스트용)
      돌려주는 값은 실제로 고쳐 쓴 칸 수. */
   function restamp(cells, opt) {
@@ -90,8 +109,8 @@
       if (!el || el === document.activeElement) return;   /* 지금 고쳐 쓰는 중인 칸은 건드리지 않는다 */
       var s = String(el.textContent == null ? '' : el.textContent).trim();
       if (!s) return;
-      var r = parse(s);
-      if (r) rows.push({ el: el, t: r.t, sod: r.sod, fmt: r.fmt });
+      var r = parse(s, opt.prefix);
+      if (r) rows.push({ el: el, t: r.t, sod: r.sod, fmt: r.fmt, tail: r.tail || '' });
     });
     if (!rows.length) return 0;
 
@@ -128,7 +147,7 @@
 
     var n = 0;
     rows.forEach(function (r) {
-      var s = write(new Date(r.t), r.fmt);
+      var s = write(new Date(r.t), r.fmt) + r.tail;
       if (r.el.textContent !== s) { r.el.textContent = s; n++; }
     });
     return n;

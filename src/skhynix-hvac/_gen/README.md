@@ -82,7 +82,7 @@ node src/skhynix-hvac/_gen/mk-live-assets.js  # → src/skhynix-hvac-live.js 의
 
 ## 스튜디오 연결
 
-- 템플릿 `Dashbord: Icheon main`(TEMPLATES, `tpl:'skhynix-hub'`)의 **두 번째 슬라이드**.
+- 템플릿 `Dashboard: Icheon main`(TEMPLATES, `tpl:'skhynix-hub'`)의 **두 번째 슬라이드**.
   '스튜디오 열기' 시 같은 프로젝트(폴더)에 화면 2개가 생긴다 — [0] 메인(`Screen/FMS Hub`), [1] 항온항습기 상세(`tplScene:'hvac'`).
 - 지금 보고 있는 장면은 `wemb-hub-screen`('main'|'hvac')에 남기지만, **화면 이름의 정답은 프로젝트 기록의 `tplScene`**
   이다(`__hubSceneOfScreen()`). 전역 키만 믿으면 메인/상세가 어긋난다.

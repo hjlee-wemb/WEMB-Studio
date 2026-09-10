@@ -15,7 +15,7 @@
     <meta property="og:url" content="https://hjlee-wemb.github.io/WEMB-Studio/" />
     <meta property="og:image" content="https://hjlee-wemb.github.io/WEMB-Studio/src/og-image03.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <style>
       :root {
         /* ── 툴 크롬(사이드바·모달) 전용 팔레트 ──
@@ -29,10 +29,48 @@
         --line: #26262f;
         --text-strong: #f4f4f7;
         --text-weak: #9a9aa8;
+        /* 액센트는 역할별로 나눈다. 하나로 쓰면 '어두운 배경 위 글자'와
+           '흰 글자를 얹는 면'이 같은 값을 요구해 둘 중 하나가 반드시 대비를 잃는다.
+           --point-main : 어두운 배경 위의 선·글자용 (#0a0a0e 대비 4.4:1)
+           --point-fill : 흰 글자를 얹는 채움면용 (#fff 대비 5.07:1 — 이전 #7c6cf0 은 3.99:1 로 AA 미달)
+           팔레트 엔진의 --fg-point 보정과 같은 원리로 색상·채도는 두고 명도만 낮췄다. */
         --point-main: #7c6cf0;
+        --point-fill: #6b5bdb;
         --point-sub: #a99bf5;
+        /* ── 겹침 순서(z-index) ──
+           예전에는 27개 숫자가 파일 곳곳에 흩어져 있어, 새 레이어가 생길 때마다
+           '주변보다 큰 수'를 눈대중으로 골라야 했다. 값은 그대로 두고 이름만 붙여
+           순서를 여기 한 곳에서 읽을 수 있게 한다(아래로 갈수록 위에 쌓인다). */
+        --z-popover-1: 80;
+        --z-popover-2: 81;
+        --z-tooltip: 90;
+        --z-sidebar: 100;
+        --z-topbar: 120;
+        --z-page: 150;
+        --z-popup: 180;
+        --z-compare: 200;
+        --z-export: 210;
+        --z-wizard: 260;
+        --z-overlay: 300;
+        --z-coach: 310;
+        --z-flowmodal: 330;
+        --z-float: 400;
+
+        /* ── 최상위 레이어 ──
+           예전에는 9000 · 9100 · 9999 · 100000 · 200000 이 흩어져 있었다. 값을 키워가며
+           그때그때 이긴 흔적이라, 새 모달이 생길 때마다 또 키워야 했다.
+           본문 레이어가 400 이하를 쓰므로 900 대면 언제나 그 위다. */
+        --z-modal: 900;
+        --z-modal-pop: 910;
+        --z-confirm: 920;
+        --z-banner: 930;
+        --z-picker: 940;
         --danger: #ef4444;
+        /* 흰 글자를 얹는 위험 버튼용 — #ef4444 는 #fff 대비 3.8:1 로 AA 미달이다 (이쪽은 6.5:1) */
+        --danger-fill: #b91c1c;
         --warning: #f5a623;
+        /* 아이콘 마스크 — 이모지 대신 쓰는 자물쇠(선 굵기 2, 나머지 아이콘과 동일) */
+        --ic-lock: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="11" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>');
         --font: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
         --sb: 300px;
         /* 상단 바 높이 · 왼쪽 아이콘 레일 폭 (참고 UI 구조) */
@@ -74,6 +112,10 @@
         flex: 1;
         min-width: 0;
         height: 100%;
+        /* 팔레트가 적용되기 전(런처·콜드 스타트)에는 --point-main 이 툴 크롬의 #7c6cf0 을 상속하고
+           --on-point 는 비어 있어 #fff 폴백으로 떨어진다 → 프리뷰 탭 칩이 3.99:1 로 AA 미달이었다.
+           그 한 상태를 위한 안전 기본값. apply() 가 팔레트를 넣으면 인라인 --on-point 가 이 값을 덮는다. */
+        --on-point: #0f1020;
         overflow: hidden;
         display: flex;
         flex-direction: column;
@@ -160,9 +202,6 @@
       #opener:hover {
         border-color: var(--point-main);
       }
-      .app.collapsed #opener {
-        display: flex;
-      }
       /* 접힌 햄버거 버튼은 프리뷰(.main) 위에 뜨므로, 프리뷰가 라이트 모드면
          프리뷰의 실제 배경색(--preview-page, apply()에서 노출)을 따라 자연스럽게 얹힘 */
       .app:has(> .main[data-mode='light']) #opener {
@@ -174,6 +213,10 @@
       .app:has(> .main[data-mode='light']) #opener:hover {
         border-color: var(--point-main);
         color: var(--point-main);
+      }
+      /* 자동 접기(창 크기 변화)일 때는 폭 전환을 끈다 — 리사이즈 중 매 프레임 재배치를 막는다 */
+      .app.no-anim .sidebar {
+        transition: none;
       }
       /* 접으면 아이콘 레일만 남기고 콘텐츠 패널을 감춘다 (참고 UI처럼 레일 상시 노출) */
       .app.collapsed .sidebar {
@@ -207,7 +250,7 @@
         /* 프리뷰(엔터프라이즈 .stage 등 z-index 요소)보다 위에 쌓이도록 —
            그래야 사이드바 밖으로 떠오르는 도움말 툴팁(fixed)이 가려지지 않음.
            본문 밖 모달(180~210)보다는 아래라 모달 흐름은 방해하지 않음. */
-        z-index: 100;
+        z-index: var(--z-sidebar);
         background: var(--bg-surface);
         /* 사이드바 글자색을 모드에 맞춰 — 없으면 body의 흰색을 상속해 라이트에서 제목이 묻힘 */
         color: var(--text-strong);
@@ -264,7 +307,7 @@
       /* 레일 아이콘 오른쪽으로 펼쳐지는 플라이아웃 메뉴 (참고 UI 드롭메뉴 스타일) */
       .railflyout {
         position: fixed;
-        z-index: 400;
+        z-index: var(--z-float);
         min-width: 172px;
         background: var(--bg-surface);
         border: 1px solid var(--line);
@@ -379,6 +422,25 @@
       .railsep {
         flex: 1;
       }
+      /* 옵션 패널 토글 — 레일이 항상 보이므로 이 버튼이 유일한 펼치기 수단이다.
+         떠 있는 햄버거(#opener)는 레일의 홈 버튼과 x 14~45 구간에서 겹쳐 쓸 수 없어
+         예전부터 CSS 로 죽어 있었다(중복 규칙 2개가 서로를 지움). 그 모순을 걷어내고,
+         대신 이 버튼이 상태를 아이콘으로 말하게 한다 — 펼침이면 접기(◀), 접힘이면 펼치기(▶). */
+      .railtoggle .rt-chev {
+        transition: transform 0.18s ease;
+        transform-origin: 15.5px 12px;
+      }
+      .app:not(.collapsed) .railtoggle .rt-chev {
+        transform: scaleX(-1);
+      }
+      /* 접힌 상태에서는 이 버튼이 사실상 유일한 다음 행동이라 눈에 띄게 둔다 */
+      .app.collapsed .railtoggle {
+        color: var(--point-sub);
+        background: color-mix(in srgb, var(--point-main) 14%, transparent);
+      }
+      .app.collapsed .railtoggle:hover {
+        background: color-mix(in srgb, var(--point-main) 26%, transparent);
+      }
       /* ── 사이드바 콘텐츠 패널 (기존 컨트롤 전부) ── */
       .sidepanel {
         flex: 1;
@@ -409,7 +471,7 @@
         background: var(--bg-surface);
         border-bottom: 1px solid var(--line);
         position: relative;
-        z-index: 120;
+        z-index: var(--z-topbar);
         font-family: var(--font);
       }
       .tb-left {
@@ -417,6 +479,8 @@
         align-items: center;
         gap: 9px;
         min-width: 0;
+        flex: 0 1 auto;
+        overflow: hidden;
       }
       /* 전역 뒤로가기 — 상단바 왼쪽. 이전 화면(페이지·런처·템플릿 상세)으로 되돌아간다. */
       .tb-back {
@@ -456,7 +520,7 @@
         border-radius: 8px;
         background: var(--bg-surface);
         color: var(--text-strong);
-        font: 600 12.5px var(--font);
+        font: 600 12px var(--font);
         cursor: pointer;
         transition: border-color 0.14s ease, color 0.14s ease, opacity 0.14s ease;
       }
@@ -496,7 +560,7 @@
       }
       .tb-proj {
         color: var(--text-weak);
-        font-size: 12.5px;
+        font-size: 12px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -508,17 +572,27 @@
         opacity: 0.45;
       }
       /* 페이지 탭 — 참고 이미지2 스타일: 점(···) 구분 + 활성만 외곽선 알약, 나머지는 회색 텍스트 */
+      /* 남는 공간을 흡수해 중앙에 서되, 좁아지면 '자기가' 줄어든다.
+         margin:0 auto 로 밀어내면 폭이 부족할 때 오른쪽 액션(공유 버튼)이 화면 밖으로
+         밀려나고, body 가 overflow:hidden 이라 스크롤로도 닿을 수 없게 된다. */
       .tb-tabs {
-        margin: 0 auto;
+        flex: 1 1 auto;
+        min-width: 0;
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 3px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .tb-tabs::-webkit-scrollbar {
+        display: none;
       }
       .tb-tab {
         border: 1px solid transparent;
         background: transparent;
         color: var(--text-weak);
-        font: 600 13.5px var(--font);
+        font: 600 13px var(--font);
         padding: 6px 13px;
         border-radius: 9px;
         cursor: pointer;
@@ -533,34 +607,43 @@
         border-color: var(--line);
         background: var(--bg-page);
       }
-      /* 스텝 잠금 — 이전 단계를 마쳐야 열린다 */
+      /* 스텝 잠금 — 이전 단계를 마쳐야 열린다.
+         opacity로 흐리면 대비가 1.95:1까지 떨어져 정작 '지금 몇 단계인지'가 안 읽힌다.
+         색은 --text-weak(7.1:1) 그대로 두고, 잠김은 자물쇠 아이콘으로만 말한다. */
       .tb-tab.locked,
-      .tb-tab:disabled {
-        opacity: 0.38;
+      .tb-tab[aria-disabled='true'] {
         cursor: not-allowed;
         color: var(--text-weak);
       }
       .tb-tab.locked:hover {
         color: var(--text-weak);
+        background: transparent;
       }
+      /* 자물쇠 — 나머지 아이콘과 같은 선 굵기의 SVG. OS 컬러 이모지는 쓰지 않는다. */
       .tb-tab.locked::before {
-        content: '🔒';
-        font-size: 10px;
-        margin-right: 4px;
-        opacity: 0.8;
+        content: '';
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        margin-right: 5px;
+        vertical-align: -1px;
+        background: currentColor;
+        -webkit-mask: var(--ic-lock) center / contain no-repeat;
+        mask: var(--ic-lock) center / contain no-repeat;
       }
       .tb-dot {
         color: var(--text-weak);
-        opacity: 0.45;
         font-size: 12px;
         letter-spacing: 1px;
         padding: 0 3px;
         user-select: none;
       }
+      /* 액션은 절대 줄어들지 않는다 — '공유'는 이 화면의 결과물을 내보내는 유일한 길이다 */
       .tb-actions {
         display: flex;
         align-items: center;
         gap: 6px;
+        flex: none;
       }
       .tb-ic {
         width: 32px;
@@ -602,6 +685,32 @@
       .tb-share:hover {
         filter: brightness(1.05);
       }
+      /* 노트북·좁은 창 — 없어도 되는 것부터 걷어 탭과 액션에 폭을 넘긴다.
+         잘라내는 게 아니라 우선순위를 정하는 것이다: 로고 > 탭 > 액션 > 브랜드 라벨 > 점 구분자 */
+      @media (max-width: 1120px) {
+        .tb-proj {
+          max-width: 140px;
+        }
+        .tb-dot {
+          display: none;
+        }
+        .tb-tab {
+          padding: 6px 10px;
+        }
+      }
+      @media (max-width: 900px) {
+        .topbar {
+          gap: 10px;
+          padding: 0 10px;
+        }
+        .tb-name,
+        .tb-proj {
+          display: none;
+        }
+        .tb-share {
+          padding: 7px 12px;
+        }
+      }
 
       /* ============================================================
          페이지 뷰(상단 탭으로 전환) — 스튜디오(.app) 위를 덮는 오버레이
@@ -612,7 +721,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 150;
+        z-index: var(--z-page);
         background: var(--bg-page);
         color: var(--text-strong);
         font-family: var(--font);
@@ -660,7 +769,7 @@
       }
       .prd-meta {
         margin: 0 0 8px;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
       }
       .prd-sec {
@@ -675,7 +784,7 @@
       }
       .prd-sec p {
         margin: 0;
-        font-size: 13.5px;
+        font-size: 13px;
         line-height: 1.65;
         color: color-mix(in srgb, var(--text-strong) 82%, var(--text-weak));
       }
@@ -684,7 +793,7 @@
         padding-left: 18px;
       }
       .prd-sec li {
-        font-size: 13.5px;
+        font-size: 13px;
         line-height: 1.9;
         color: color-mix(in srgb, var(--text-strong) 82%, var(--text-weak));
       }
@@ -706,7 +815,7 @@
         border: 1px solid var(--line);
         background: var(--bg-surface);
         color: var(--text-strong);
-        font: 500 12.5px var(--font);
+        font: 500 12px var(--font);
         padding: 6px 12px;
         border-radius: 8px;
         cursor: pointer;
@@ -716,7 +825,7 @@
       }
       .doc-chip .cv {
         color: var(--text-weak);
-        font-size: 10px;
+        font-size: 11px;
       }
       .doc-chip:hover {
         border-color: var(--point-main);
@@ -754,7 +863,7 @@
         background: transparent;
         cursor: pointer;
         color: var(--text-strong);
-        font: 500 12.5px var(--font);
+        font: 500 12px var(--font);
         padding: 7px 10px;
         border-radius: 7px;
         display: flex;
@@ -821,7 +930,7 @@
       .spec-table th {
         font-weight: 700;
         color: var(--text-weak);
-        font-size: 11.5px;
+        font-size: 11px;
         letter-spacing: 0.3px;
       }
       .spec-table tbody tr:hover {
@@ -882,7 +991,7 @@
         margin-left: 6px;
         padding: 1px 7px;
         border-radius: 999px;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         vertical-align: middle;
       }
@@ -914,7 +1023,7 @@
       /* 상태·중요도 드롭다운 */
       .sf-pick {
         position: fixed;
-        z-index: 9100;
+        z-index: var(--z-modal-pop);
         min-width: 112px;
         padding: 5px;
         background: var(--bg-surface);
@@ -931,7 +1040,7 @@
         background: transparent;
         cursor: pointer;
         color: var(--text-strong);
-        font: 500 12.5px var(--font);
+        font: 500 12px var(--font);
         padding: 7px 10px;
         border-radius: 7px;
       }
@@ -947,7 +1056,7 @@
         border: 1px solid var(--line);
         background: var(--bg-surface);
         color: var(--text-strong);
-        font: 600 12.5px var(--font);
+        font: 600 12px var(--font);
         padding: 6px 12px;
         border-radius: 8px;
         cursor: pointer;
@@ -995,7 +1104,7 @@
       .spec-modal {
         position: fixed;
         inset: 0;
-        z-index: 9000;
+        z-index: var(--z-modal);
         display: grid;
         place-items: center;
         padding: 24px;
@@ -1070,7 +1179,7 @@
         margin-bottom: 16px;
       }
       .sm-tag {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         color: var(--text-weak);
         background: var(--bg-accent);
@@ -1125,7 +1234,7 @@
         background: var(--bg-accent);
       }
       .sm-btn.primary {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -1199,11 +1308,17 @@
       .flow-search input::placeholder {
         color: var(--text-weak);
       }
-      /* 전역 input:focus-visible 아웃라인이 글씨 주변에 생기는 걸 없앤다(테두리는 pill이 대신함) */
+      /* 글씨 주변 아웃라인은 없애되, 포커스 표시를 없애는 게 아니라
+         감싸는 pill 로 옮긴다(아래 :focus-within). 지우기만 하면 키보드 사용자가 길을 잃는다. */
       .flow-search input:focus,
       .flow-search input:focus-visible {
         outline: none;
         box-shadow: none;
+      }
+      .flow-search:focus-within {
+        outline: 2px solid var(--point-sub);
+        outline-offset: 2px;
+        border-radius: 999px;
       }
       /* 즐겨찾기 — 아이콘만 */
       .flow-fav-toggle {
@@ -1336,7 +1451,7 @@
         box-shadow: 0 14px 34px -16px color-mix(in srgb, var(--point-main) 70%, transparent);
       }
       .fnode.start {
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
         border-color: var(--point-main);
         min-width: 0;
@@ -1565,7 +1680,7 @@
       /* 후보 기능 팝오버 */
       .mm-addpop {
         position: fixed;
-        z-index: 400;
+        z-index: var(--z-float);
         width: 344px;
         max-width: calc(100vw - 24px);
         background: var(--bg-surface);
@@ -1586,7 +1701,7 @@
         justify-content: space-between;
       }
       .mm-addpop-h span {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         color: var(--text-weak);
       }
@@ -1599,7 +1714,7 @@
         color: var(--text-strong);
       }
       .mm-addpop-h .mm-addpop-cnt {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         color: var(--text-weak);
       }
@@ -1636,7 +1751,7 @@
         border: 1px solid var(--line);
         background: var(--bg-page);
         color: var(--text-strong);
-        font: 500 12.5px var(--font);
+        font: 500 12px var(--font);
       }
       .mm-addpop-search input:focus {
         outline: none;
@@ -1684,10 +1799,10 @@
         background: color-mix(in srgb, var(--point-main) 10%, var(--bg-surface));
       }
       .mm-addbtn .rb {
-        font-size: 9.5px;
+        font-size: 11px;
         font-weight: 800;
         color: #fff;
-        background: var(--point-main);
+        background: var(--point-fill);
         padding: 1px 6px;
         border-radius: 999px;
       }
@@ -1695,7 +1810,7 @@
         padding: 22px 8px;
         text-align: center;
         color: var(--text-weak);
-        font-size: 12.5px;
+        font-size: 12px;
       }
       .mm-root {
         gap: 10px;
@@ -1841,7 +1956,7 @@
       }
       .prd-lead {
         margin: 0 0 8px;
-        font-size: 13.5px;
+        font-size: 13px;
         line-height: 1.7;
         color: color-mix(in srgb, var(--text-strong) 80%, var(--text-weak));
       }
@@ -1855,7 +1970,7 @@
       }
       .pq-q {
         display: block;
-        font-size: 14.5px;
+        font-size: 14px;
         font-weight: 700;
         margin-bottom: 12px;
       }
@@ -1868,11 +1983,11 @@
         border-radius: 6px;
         background: color-mix(in srgb, var(--point-main) 18%, transparent);
         color: var(--point-main);
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 800;
       }
       .pq-hint {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 500;
         color: var(--text-weak);
       }
@@ -1912,7 +2027,7 @@
         transition: border-color 0.15s ease, background 0.15s ease;
       }
       .pq-opt b {
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 700;
       }
       .pq-opt small {
@@ -1947,9 +2062,9 @@
         border: 0;
         border-radius: 10px;
         padding: 11px 20px;
-        font: 700 13.5px var(--font);
+        font: 700 13px var(--font);
         cursor: pointer;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
         transition: filter 0.15s ease, opacity 0.15s ease;
       }
@@ -2001,7 +2116,7 @@
       .prdwiz {
         position: fixed;
         inset: 0;
-        z-index: 260;
+        z-index: var(--z-wizard);
         display: grid;
         place-items: center;
         padding: 24px;
@@ -2096,7 +2211,7 @@
       }
       .prdwiz-hint {
         margin: 0 0 16px;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
       }
       .prdwiz-hint:empty {
@@ -2121,7 +2236,7 @@
         border-color: var(--line);
       }
       .prdwiz-field .pq-opt .pq-lock {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         color: var(--text-weak);
         margin-top: 2px;
@@ -2141,7 +2256,7 @@
       .pw-btn {
         border-radius: 10px;
         padding: 10px 20px;
-        font: 700 13.5px var(--font);
+        font: 700 13px var(--font);
         cursor: pointer;
         border: 1px solid var(--line);
       }
@@ -2157,7 +2272,7 @@
         cursor: default;
       }
       .pw-btn.primary {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -2183,7 +2298,7 @@
         margin-bottom: 14px;
       }
       .wcat-h b {
-        font-size: 15.5px;
+        font-size: 15px;
         font-weight: 800;
         letter-spacing: -0.2px;
       }
@@ -2224,7 +2339,7 @@
       }
       .wreco-desc {
         margin-top: 3px;
-        font-size: 11.5px;
+        font-size: 11px;
         color: var(--text-weak);
       }
       .wreco-badge {
@@ -2233,9 +2348,9 @@
         right: 12px;
         padding: 3px 9px;
         border-radius: 999px;
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 800;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
       }
       .wreco-screen {
@@ -2243,21 +2358,18 @@
         margin-bottom: 8px;
         padding: 2px 8px;
         border-radius: 999px;
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 700;
         background: var(--bg-accent);
         color: var(--text-weak);
       }
-      .wreco-bar {
-        max-width: 980px;
-        margin: 24px auto 0;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 14px;
+      /* 레이아웃은 .step-foot 이 맡는다(기능명세서·유저플로우와 동일한 고정 푸터).
+         여기서는 카드 그리드와 같은 폭으로 내용만 정렬한다. */
+      .wreco-bar > * {
+        max-width: none;
       }
       .wreco-pick {
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
         margin-right: auto;
       }
@@ -2273,7 +2385,7 @@
         background: var(--bg-surface);
       }
       .step-foot .step-hint {
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
         margin-right: auto;
       }
@@ -2300,11 +2412,15 @@
         align-items: center;
         flex: none;
       }
-      /* 로고가 버튼일 때(홈 이동) — 기본 버튼 스타일 제거 */
+      /* 로고가 버튼일 때(홈 이동) — 기본 버튼 스타일 제거.
+         로고 높이가 16px 이라 클릭 영역도 16px 이었다. 로고 크기는 그대로 두고
+         세로 패딩으로 24px 를 확보한다(홈으로 나가는 버튼이라 오조작도 막는다). */
       .brandhead button.logo {
         border: 0;
         background: transparent;
-        padding: 0;
+        padding: 4px 6px;
+        margin: -4px -6px;
+        border-radius: 6px;
         cursor: pointer;
         transition: opacity 0.15s ease;
       }
@@ -2473,7 +2589,7 @@
       .sbtab .ko {
         display: block;
         white-space: nowrap;
-        font-size: 10.5px;
+        font-size: 11px;
         letter-spacing: -0.3px;
         font-weight: 500;
         margin-top: 3px;
@@ -2483,7 +2599,7 @@
         border-color: var(--point-main);
       }
       .sbtab.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -2516,7 +2632,7 @@
         border-radius: 8px;
         background: color-mix(in srgb, var(--point-main) 15%, transparent);
         color: var(--point-main);
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 800;
         display: grid;
         place-items: center;
@@ -2656,7 +2772,7 @@
         display: flex;
         align-items: center;
         gap: 5px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--text-strong);
       }
@@ -2698,7 +2814,7 @@
       }
       /* 항목 제목 위계 — .fmtlbl·.sublbl·아코디언 제목과 같은 값 */
       .grp > label {
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-strong);
         font-weight: 600;
       }
@@ -2719,7 +2835,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--text-strong);
         margin: 2px 0;
@@ -2766,7 +2882,7 @@
         align-items: center;
         gap: 8px;
         padding: 13px 14px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--text-strong);
         user-select: none;
@@ -2798,7 +2914,7 @@
         letter-spacing: 0;
       }
       .acc > summary .chev {
-        font-size: 10px;
+        font-size: 11px;
         color: var(--text-weak);
         flex: none;
         transition: transform 0.2s;
@@ -2821,12 +2937,12 @@
       /* 활성/비활성(대기) 소스 표시 — 지금 화면에 적용 중인 방식만 또렷하게 */
       .acc .srcbadge {
         display: none;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         letter-spacing: 0.2px;
         text-transform: none;
         color: #fff;
-        background: var(--point-main);
+        background: var(--point-fill);
         padding: 2px 8px;
         border-radius: 999px;
         flex: none;
@@ -2894,7 +3010,7 @@
         border-radius: 12px;
         padding: 12px 14px;
         font-family: Consolas, monospace;
-        font-size: 12.5px;
+        font-size: 12px;
         letter-spacing: 0.5px;
       }
       .hex:focus {
@@ -2912,7 +3028,7 @@
         color: var(--text-weak);
         border-radius: 999px;
         padding: 8px 14px;
-        font-size: 12.5px;
+        font-size: 12px;
         cursor: pointer;
         font-family: var(--font);
         transition: 0.15s;
@@ -2922,7 +3038,7 @@
         color: var(--text-strong);
       }
       .pills button.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
         font-weight: 600;
@@ -2948,7 +3064,7 @@
         position: absolute;
         top: 2px;
         right: 4px;
-        font-size: 8px;
+        font-size: 11px;
         font-weight: 800;
         letter-spacing: 0.3px;
         line-height: 1;
@@ -2960,7 +3076,7 @@
         color: var(--text-weak);
         border-radius: 12px;
         padding: 11px;
-        font-size: 12.5px;
+        font-size: 12px;
         cursor: pointer;
         font-family: var(--font);
         transition: 0.15s;
@@ -2969,7 +3085,7 @@
         border-color: var(--point-main);
       }
       .seg button.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
         font-weight: 600;
@@ -2985,7 +3101,7 @@
         cursor: pointer;
         color: #fff;
         font-family: var(--font);
-        background: var(--point-main);
+        background: var(--point-fill);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -3011,7 +3127,7 @@
         border: 1px dashed var(--line);
         border-radius: 12px;
         padding: 13px;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
         cursor: pointer;
         transition: 0.15s;
@@ -3114,11 +3230,24 @@
         flex: none;
         transition: 0.15s;
       }
-      .info:hover,
+      /* 히트 영역만 24×24 로 넓힌다 — 원의 지름(17px)은 스텝 헤더의 밀도라 그대로 둔다 */
+      .info::after {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+      }
+      .info:hover {
+        border-color: var(--point-main);
+        color: var(--point-main);
+      }
+      /* 호버와 같은 처리로 끝내면 키보드 초점이 '호버인지 포커스인지' 구분되지 않는다.
+         색 변화는 유지하고 링을 따로 남긴다. */
       .info:focus-visible {
         border-color: var(--point-main);
         color: var(--point-main);
-        outline: none;
+        outline: 2px solid var(--point-sub);
+        outline-offset: 3px;
       }
       /* 경고용 배지 — '이 브라우저에만 저장' 같은 주의 사항을 호버 툴팁으로 */
       .info.warn {
@@ -3159,7 +3288,7 @@
           opacity 0.16s ease,
           transform 0.16s ease,
           visibility 0.16s;
-        z-index: 300;
+        z-index: var(--z-overlay);
         pointer-events: none;
       }
       /* 화살표 — 배지 중심에 맞춰 JS가 --arrow-x 를 지정(없으면 왼쪽 기본) */
@@ -3210,7 +3339,7 @@
         border: 1px solid var(--line);
         border-radius: 12px;
         background: var(--bg-page);
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--text-weak);
         user-select: none;
@@ -3237,7 +3366,7 @@
         border-bottom-right-radius: 0;
       }
       .more > summary .chev {
-        font-size: 10px;
+        font-size: 11px;
         margin-left: 2px;
         transition: transform 0.2s;
       }
@@ -3289,7 +3418,7 @@
         color: var(--text-weak);
         border-radius: 8px;
         padding: 6px 12px;
-        font-size: 12.5px;
+        font-size: 12px;
         cursor: pointer;
         font-family: var(--font);
         transition: 0.15s;
@@ -3345,12 +3474,12 @@
         text-overflow: ellipsis;
       }
       .trendchip .yr {
-        font-size: 10px;
+        font-size: 11px;
         color: var(--text-weak);
         flex: none;
       }
       .trendchip .pcode {
-        font-size: 10px;
+        font-size: 11px;
         font-family: Consolas, monospace;
         color: var(--point-main);
         background: color-mix(in srgb, var(--point-main) 16%, transparent);
@@ -3422,7 +3551,7 @@
       }
       .curpal .pname .ko {
         font-weight: 400;
-        font-size: 10px;
+        font-size: 11px;
         color: var(--text-weak);
         margin-left: 4px;
       }
@@ -3474,7 +3603,7 @@
         font-size: 11px;
       }
       .curpal .cptoggle .chev {
-        font-size: 10px;
+        font-size: 11px;
         transition: transform 0.2s;
       }
       .curpal .cptoggle.open .chev {
@@ -3536,7 +3665,7 @@
         border: 1px solid #ff6b6b;
         border-radius: 8px;
         background: color-mix(in srgb, var(--bg-surface) 88%, #ff6b6b);
-        font-size: 11.5px;
+        font-size: 11px;
       }
       .swnote.done {
         border-color: #45d99e;
@@ -3648,7 +3777,7 @@
         display: none;
         margin-left: 4px;
         color: var(--point-main);
-        font-size: 8px;
+        font-size: 11px;
         vertical-align: middle;
       }
       .swhex.ov .rl .ovd {
@@ -3743,7 +3872,7 @@
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         letter-spacing: 0.2px;
         padding: 2px 8px;
@@ -3784,7 +3913,7 @@
         margin-left: 0;
       }
       .pname {
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-strong);
         text-align: left;
       }
@@ -3852,7 +3981,7 @@
         border: 1px solid var(--line);
         border-radius: 12px;
         padding: 12px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
         color: var(--text-strong);
@@ -3869,7 +3998,7 @@
         flex: none;
       }
       .editbtn.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -3903,7 +4032,7 @@
         right: 12px;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 10px;
+        font-size: 11px;
         transition: transform 0.2s;
       }
       .editbtn.on .chev {
@@ -3960,7 +4089,7 @@
         border: 0;
         border-radius: 12px;
         padding: 0 18px;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
         font-weight: 700;
         font-size: 13px;
@@ -4009,7 +4138,7 @@
       .snaprow .nm {
         flex: 1;
         min-width: 0;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-strong);
         white-space: nowrap;
         overflow: hidden;
@@ -4104,7 +4233,7 @@
       }
       .histrow .ht {
         margin-left: auto;
-        font-size: 10px;
+        font-size: 11px;
         opacity: 0.7;
         flex: none;
         font-variant-numeric: tabular-nums;
@@ -4130,7 +4259,7 @@
       }
       .histbtns kbd {
         font-family: var(--font);
-        font-size: 9.5px;
+        font-size: 11px;
         font-weight: 600;
         letter-spacing: 0.4px;
         color: var(--text-weak);
@@ -4147,7 +4276,7 @@
       .abmodal {
         position: fixed;
         inset: 0;
-        z-index: 200;
+        z-index: var(--z-compare);
         display: none;
         flex-direction: column;
         padding: 26px 28px;
@@ -4172,7 +4301,7 @@
         font-weight: 700;
       }
       .abhead .abnote {
-        font-size: 12.5px;
+        font-size: 12px;
         color: rgba(255, 255, 255, 0.6);
       }
       .abhead .sp {
@@ -4218,6 +4347,9 @@
         gap: 9px;
         flex: none;
       }
+      /* A/B 태그 — 파랑=A, 청록=B 라는 색 구분 자체가 정보다.
+         흰 글자로는 각각 2.75:1 / 1.85:1 밖에 안 나오므로, 색을 죽이는 대신
+         글자를 어둡게 해 색 코딩을 그대로 살린다(6.7:1 / 10.1:1). */
       .abtag {
         width: 26px;
         height: 26px;
@@ -4227,7 +4359,7 @@
         justify-content: center;
         font-weight: 800;
         font-size: 13px;
-        color: #fff;
+        color: #0b1220;
         flex: none;
       }
       .abtag-a {
@@ -4316,7 +4448,7 @@
       .abname {
         flex: 1;
         min-width: 0;
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 700;
         white-space: nowrap;
         overflow: hidden;
@@ -4382,7 +4514,7 @@
       .exmodal {
         position: fixed;
         inset: 0;
-        z-index: 210;
+        z-index: var(--z-export);
         display: none;
         align-items: center;
         justify-content: center;
@@ -4444,7 +4576,7 @@
         color: rgba(255, 255, 255, 0.72);
         border-radius: 8px;
         padding: 8px 13px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
         font-family: var(--font);
@@ -4454,10 +4586,11 @@
         border-color: #4a9eff;
         color: #fff;
       }
+      /* 선택된 세그먼트 — 밝은 파랑 면 위 흰 글자는 2.75:1 이라 글자를 어둡게 둔다 */
       .extabs button.on {
         background: #4a9eff;
         border-color: #4a9eff;
-        color: #fff;
+        color: #0b1220;
       }
       .excode {
         position: relative;
@@ -4609,7 +4742,7 @@
         min-width: 34px;
         padding: 4px 9px;
         border-radius: 999px;
-        font: 700 11px/1 Pretendard, system-ui, sans-serif;
+        font: 700 11px/1 'Pretendard Variable', Pretendard, system-ui, sans-serif;
         color: #fff;
         background: var(--point-main, #3f64a8);
         border: 1px solid rgba(255, 255, 255, 0.25);
@@ -4656,13 +4789,13 @@
         top: 16px;
         left: 50%;
         transform: translateX(-50%) translateY(-8px);
-        z-index: 100000;
+        z-index: var(--z-banner);
         display: none;
         align-items: center;
         gap: 10px;
         padding: 9px 12px 9px 14px;
         border-radius: 999px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         color: #fff;
         background: rgba(18, 24, 40, 0.94);
@@ -4692,7 +4825,7 @@
         margin-left: 4px;
         padding: 4px 10px;
         border-radius: 999px;
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 700;
         color: #fff;
         background: rgba(255, 255, 255, 0.14);
@@ -4715,7 +4848,7 @@
         border-radius: 8px;
         padding: 8px 11px;
         font-family: var(--font);
-        font-size: 12.5px;
+        font-size: 12px;
         cursor: pointer;
         max-width: 220px;
       }
@@ -4729,7 +4862,7 @@
       .cttable {
         width: 100%;
         border-collapse: collapse;
-        font-size: 12.5px;
+        font-size: 12px;
         color: #cdd6e6;
       }
       .cttable th {
@@ -4820,7 +4953,7 @@
       .ctfixmsg {
         flex: 1;
         min-width: 0;
-        font-size: 12.5px;
+        font-size: 12px;
         color: #e7ecf5;
       }
       .ctfixmsg b {
@@ -4838,7 +4971,7 @@
         border: 0;
         border-radius: 8px;
         padding: 9px 15px;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
         font-size: 13px;
         font-weight: 700;
@@ -4861,7 +4994,7 @@
       .ctpopup {
         position: fixed;
         inset: 0;
-        z-index: 180;
+        z-index: var(--z-popup);
         display: none;
         align-items: center;
         justify-content: center;
@@ -5465,7 +5598,7 @@
         gap: 9px;
         padding: 10px 12px;
         border-radius: 8px;
-        font-size: 12.5px;
+        font-size: 12px;
       }
       .csalert i {
         width: 8px;
@@ -5563,7 +5696,7 @@
         color: #fff;
         border-radius: 8px;
         padding: 7px 12px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
         font-family: var(--font);
@@ -5667,7 +5800,7 @@
       .cstable {
         width: 100%;
         border-collapse: collapse;
-        font-size: 12.5px;
+        font-size: 12px;
       }
       .cstable th {
         text-align: left;
@@ -5734,6 +5867,34 @@
       .stage[hidden] {
         display: none;
       }
+      /* ── 잘림 대신 스크롤 ──
+         html·body 가 overflow:hidden 이라, 프리뷰가 좁아져 넘친 내용은 스크롤도 팬도 없이
+         그냥 사라졌다(1024px 에서 KPI 숫자가 우측 절단되던 현상). 통짜 축소를 쓰지 않는
+         프리뷰에는 최소 폭을 주고, 그 아래에서는 잘리는 대신 가로로 스크롤되게 한다.
+         canvas1920(한진·래스터 시안)은 스케일로 이미 해결하므로 제외한다. */
+      .main:not(.canvas1920) > .stage,
+      .main:not(.canvas1920) > .dtstage {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+      }
+      .main:not(.canvas1920) > .stage > *,
+      .main:not(.canvas1920) > .dtstage > .dt-ui {
+        min-width: 760px;
+      }
+      /* 프리뷰 안쪽 스크롤바는 툴 크롬이 아니라 프리뷰 팔레트를 따른다 */
+      .main:not(.canvas1920) > .stage::-webkit-scrollbar,
+      .main:not(.canvas1920) > .dtstage::-webkit-scrollbar {
+        height: 8px;
+      }
+      .main:not(.canvas1920) > .stage::-webkit-scrollbar-thumb,
+      .main:not(.canvas1920) > .dtstage::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--text-weak) 45%, transparent);
+        border-radius: 999px;
+      }
+      .main:not(.canvas1920) > .stage::-webkit-scrollbar-track,
+      .main:not(.canvas1920) > .dtstage::-webkit-scrollbar-track {
+        background: transparent;
+      }
       /* ── 1920x1080 고정 캔버스(통짜 축소) ──
          템플릿(시안)은 1920x1080 기준으로 그려졌는데, 예전엔 스테이지가 남는 공간 크기(예: 1568x1032)로
          늘어나 비율이 어긋나고 잘려 보였다. 스테이지를 1920x1080 으로 고정하고 남는 공간에 맞춰
@@ -5792,6 +5953,12 @@
         flex-direction: column;
         overflow: hidden;
         background: var(--bg-page);
+        /* 프리뷰의 반응형 기준은 뷰포트가 아니라 '이 칸의 폭'이다.
+           사이드바(300)+레일(52)이 고정이라 뷰포트 1440 에서도 프리뷰는 이미 1088px 인데,
+           @media (max-width:1180px) 는 발화하지 않아 패널 제목과 KPI 숫자가 잘렸다.
+           already position:relative 이므로 컨테이너 지정이 절대배치 기준을 바꾸지 않는다. */
+        container-type: inline-size;
+        container-name: preview;
         /* 유리 패널 — 3D 배경 위에 얹히는 반투명 표면 */
         /* 유리 불투명도 — 한 곳에서만 정한다(헤더·카드·버튼이 모두 이 값을 쓴다).
            사진이 비쳐 보이는 만큼 표면 밝기가 사진에 끌려가므로, 이 값이 곧 대비의 바닥이다.
@@ -5924,7 +6091,7 @@
       .dt-nav a {
         position: relative;
         padding: 16px 16px;
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 600;
         color: var(--text-weak);
         white-space: nowrap;
@@ -5961,7 +6128,7 @@
         border-radius: 999px;
         border: 1px solid var(--dt-stroke);
         background: var(--dt-hover);
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         color: var(--text-strong);
         white-space: nowrap;
@@ -6014,7 +6181,7 @@
         white-space: nowrap;
       }
       .dt-clock small {
-        font-size: 10.5px;
+        font-size: 11px;
         color: var(--text-weak);
       }
 
@@ -6241,9 +6408,9 @@
       .hr-tablewrap { padding: 0; display: flex; flex-direction: column; overflow: hidden; }
       .hr-phead { padding: 11px 16px; font-size: 14px; font-weight: 700; color: #f8f8f8; border-bottom: 1px solid rgba(179, 211, 234, 0.14); }
       .hr-table { padding: 4px 8px; }
-      .hr-tr { display: grid; grid-template-columns: 52px 82px 88px 108px 108px 56px; gap: 6px; padding: 8px 8px; font-size: 12.5px; color: #cfe0ef; border-bottom: 1px solid rgba(179, 211, 234, 0.08); }
+      .hr-tr { display: grid; grid-template-columns: 52px 82px 88px 108px 108px 56px; gap: 6px; padding: 8px 8px; font-size: 12px; color: #cfe0ef; border-bottom: 1px solid rgba(179, 211, 234, 0.08); }
       .hr-tr span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .hr-trh { color: #8fa3bd; font-size: 11.5px; font-weight: 600; border-bottom: 1px solid rgba(179, 211, 234, 0.2); }
+      .hr-trh { color: #8fa3bd; font-size: 11px; font-weight: 600; border-bottom: 1px solid rgba(179, 211, 234, 0.2); }
       .hr-bottom { padding: 0; }
       .hr-btabs { display: flex; }
       .hr-btabs b { padding: 9px 22px; font-size: 13px; font-weight: 700; color: #8fa3bd; }
@@ -6275,7 +6442,7 @@
       .hr-floors { padding: 8px; display: flex; flex-direction: column; gap: 5px; }
       .hr-floor { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 5px; }
       .hr-floor b { font-size: 13px; color: #6f89ff; min-width: 22px; }
-      .hr-floor span { font-size: 11.5px; color: #9fb2cc; }
+      .hr-floor span { font-size: 11px; color: #9fb2cc; }
       .hr-floor.on { background: rgba(111, 137, 255, 0.16); }
       .hr-floor.on span { color: #e7ebff; }
       /* (구) 테마 토큰형 한진 패널 — 현재는 미사용 */
@@ -6288,7 +6455,7 @@
       .hj-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 11.5px;
+        font-size: 11px;
       }
       .hj-table th {
         position: sticky;
@@ -6921,7 +7088,7 @@
         -webkit-backdrop-filter: blur(14px);
         color: var(--text-weak);
         font-family: var(--font);
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         cursor: pointer;
         transition: 0.15s;
@@ -6956,7 +7123,7 @@
         padding: 0;
         color: var(--text-weak);
         font-family: var(--font);
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 600;
         white-space: nowrap;
         cursor: pointer;
@@ -7080,7 +7247,7 @@
       .dt-ti {
         height: 32px;
         padding-right: 6px;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-strong);
       }
       .dt-l1 {
@@ -7176,7 +7343,7 @@
       .dt-drop {
         height: 32px;
         padding: 0 6px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--text-strong);
       }
@@ -7186,7 +7353,7 @@
       .dt-di {
         height: 26px;
         padding-left: 24px;
-        font-size: 11.5px;
+        font-size: 11px;
         color: var(--text-weak);
       }
       /* 선택된 자산 = 감시 중. 여러 개를 동시에 켜므로 한눈에 세어져야 한다.
@@ -7226,7 +7393,7 @@
       }
       .dt-loghead h3 {
         margin: 0;
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 700;
         color: var(--text-strong);
       }
@@ -7239,7 +7406,7 @@
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        font-size: 11.5px;
+        font-size: 11px;
         color: var(--text-weak);
       }
       .dt-lsound svg {
@@ -7255,7 +7422,7 @@
         border: 1px solid var(--dt-stroke);
       }
       .dt-switch b {
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 700;
         color: var(--text-strong);
         letter-spacing: 0.4px;
@@ -7296,7 +7463,7 @@
         background: var(--dt-hover);
         color: var(--text-strong);
         font-family: var(--font);
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 600;
         cursor: pointer;
         transition: 0.15s;
@@ -7318,7 +7485,7 @@
         border: 1px solid var(--dt-stroke);
         background: var(--dt-hover);
         font-family: var(--font);
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 700;
         color: var(--text-strong);
         font-variant-numeric: tabular-nums;
@@ -7394,7 +7561,7 @@
         gap: 8px;
         height: 30px;
         padding: 0 14px;
-        font-size: 11.5px;
+        font-size: 11px;
         color: var(--text-strong);
         border-bottom: 1px solid var(--dt-hair);
         cursor: pointer;
@@ -7434,7 +7601,7 @@
         /* --dt-hover(7%)를 깔면 다크에서 표면이 밝아져 --text-weak가 4.32까지 떨어진다.
            글자를 올리는 대신 배경 틴트를 3%로 낮춰 dim 위계를 그대로 두고 4.81을 확보. */
         background: color-mix(in srgb, var(--text-strong) 3%, transparent);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         letter-spacing: 0.3px;
         color: var(--text-weak);
@@ -7469,7 +7636,7 @@
       .dt-empty {
         padding: 22px 14px;
         text-align: center;
-        font-size: 11.5px;
+        font-size: 11px;
         color: var(--text-weak);
       }
       .dt-tr[hidden] {
@@ -7480,7 +7647,7 @@
         border-radius: 4px;
         background: var(--point-main);
         color: var(--on-point, #fff);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
       }
       .dt-abtn {
@@ -7493,7 +7660,7 @@
         background: var(--dt-hover);
         color: var(--text-strong);
         font-family: var(--font);
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 600;
         cursor: pointer;
       }
@@ -7742,15 +7909,16 @@
         border-color: var(--ov-divider);
       }
 
-      /* 좁은 화면 — 사이드 패널을 줄이고 로그 열을 접음 */
-      @media (max-width: 1180px) {
+      /* 좁은 화면 — 사이드 패널을 줄이고 로그 열을 접음.
+         기준은 프리뷰 칸의 폭이다(뷰포트 1180px 시절 프리뷰가 받던 폭 = 1180 − 352). */
+      @container preview (max-width: 828px) {
         .dt-ui {
           grid-template-columns: 200px minmax(0, 1fr) 210px;
           padding: 12px;
         }
         .dt-nav a {
           padding: 16px 9px;
-          font-size: 12.5px;
+          font-size: 12px;
         }
         .dt-tr {
           grid-template-columns: 36px 92px 132px 84px minmax(0, 1fr) 0px;
@@ -8315,7 +8483,7 @@
         cursor: grabbing;
         pointer-events: none;
         position: relative;
-        z-index: 9999;
+        z-index: 50; /* 형제 패널(0~8)보다만 위면 된다 — 9999 는 의미 없는 큰 수였다 */
         opacity: 0.92;
         box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
         border-style: solid;
@@ -8393,7 +8561,7 @@
         padding: 5px 14px;
         border: 1px solid var(--point-main);
         border-radius: 7px;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
         font-size: 12px;
         font-weight: 700;
@@ -8488,7 +8656,7 @@
         -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
         color: #dfe6f2;
-        font-size: 12.5px;
+        font-size: 12px;
         line-height: 1.3;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
       }
@@ -8592,13 +8760,13 @@
       }
       .ct-cv {
         color: var(--text-weak);
-        font-size: 10px;
+        font-size: 11px;
       }
       /* 드롭다운 — .main 안에 fixed로 띄워(패널 overflow:hidden 회피) 미리보기 테마를 그대로 사용 */
       .ct-menu {
         display: none;
         position: fixed;
-        z-index: 80;
+        z-index: var(--z-popover-1);
         width: 250px;
         background: var(--bg-surface);
         border: 1px solid var(--line);
@@ -8647,7 +8815,7 @@
       }
       .ct-cat-nm {
         flex: 1;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         white-space: nowrap;
       }
@@ -8657,7 +8825,7 @@
         font-size: 11px;
       }
       .ct-cat-rec {
-        font-size: 9.5px;
+        font-size: 11px;
         font-weight: 700;
         color: var(--point-main);
         background: color-mix(in srgb, var(--point-main) 16%, transparent);
@@ -8668,7 +8836,7 @@
       .ct-sub {
         display: none;
         position: fixed;
-        z-index: 81;
+        z-index: var(--z-popover-2);
         width: 238px;
         background: var(--bg-surface);
         border: 1px solid var(--line);
@@ -8713,7 +8881,7 @@
         flex: 1;
       }
       .ct-tx b {
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
       }
       .ct-tx small {
@@ -8724,10 +8892,10 @@
       }
       .ct-badge {
         flex: none;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         color: #fff;
-        background: var(--point-main);
+        background: var(--point-fill);
         padding: 2px 6px;
         border-radius: 999px;
         align-self: flex-start;
@@ -8900,7 +9068,7 @@
         position: fixed;
         left: 0;
         top: 0;
-        z-index: 90;
+        z-index: var(--z-tooltip);
         pointer-events: none;
         opacity: 0;
         transform: translate(-9999px, -9999px);
@@ -10131,7 +10299,7 @@
         border-radius: 12px;
         color: var(--text-weak);
         font-family: var(--font);
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
         transition: 0.15s;
@@ -10146,7 +10314,7 @@
         color: var(--text-strong);
       }
       .srcseg .srcbtns button.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -10184,7 +10352,7 @@
         color: #1a1206;
       }
       .cwarn.danger .cwico {
-        background: var(--danger);
+        background: var(--danger-fill);
         color: #fff;
       }
       .cwarn .cwbody {
@@ -10192,7 +10360,7 @@
         min-width: 0;
       }
       .cwarn .cwttl {
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 700;
         color: var(--text-strong);
         margin-bottom: 2px;
@@ -10229,7 +10397,7 @@
         color: #1a1206;
       }
       .cwarn.danger .cwacts button.primary {
-        background: var(--danger);
+        background: var(--danger-fill);
         border-color: var(--danger);
         color: #fff;
       }
@@ -10259,7 +10427,7 @@
       .onbd {
         position: fixed;
         inset: 0;
-        z-index: 300;
+        z-index: var(--z-overlay);
         display: none;
         align-items: center;
         justify-content: center;
@@ -10319,11 +10487,11 @@
         font-size: 13px;
         font-weight: 700;
         color: #fff;
-        background: var(--point-main);
+        background: var(--point-fill);
       }
       .onbd .obstep .t b {
         display: block;
-        font-size: 13.5px;
+        font-size: 13px;
         color: var(--text-strong);
         margin-bottom: 1px;
       }
@@ -10338,13 +10506,22 @@
         justify-content: space-between;
         gap: 12px;
       }
+      /* 체크박스 자체는 13×13 이지만 라벨 전체가 클릭 영역이다 —
+         최소 24px 높이를 보장해 실제로 누를 수 있게 한다. 11px 는 판독 한계라 12px 로. */
       .onbd .obfoot label {
         display: flex;
         align-items: center;
-        gap: 6px;
-        font-size: 11px;
+        gap: 7px;
+        min-height: 24px;
+        padding: 3px 6px 3px 2px;
+        font-size: 12px;
         color: var(--text-weak);
         cursor: pointer;
+      }
+      .onbd .obfoot label input {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--point-main);
       }
       .onbd .obstart {
         font-family: inherit;
@@ -10354,7 +10531,7 @@
         border-radius: 8px;
         border: 0;
         cursor: pointer;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
       }
       .onbd .obstart:hover {
@@ -10363,7 +10540,7 @@
 
       /* (3) 프리셋 '여기서 시작' 배지 */
       .startbadge {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         letter-spacing: 0.2px;
         color: #1a1206;
@@ -10407,7 +10584,7 @@
         justify-content: center;
         gap: 7px;
         font-family: inherit;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         padding: 7px 8px;
         border-radius: 8px;
@@ -10431,7 +10608,7 @@
       .snapio .lb .ko {
         display: block;
         margin-top: 2px;
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 500;
         letter-spacing: -0.3px;
         white-space: nowrap;
@@ -10490,6 +10667,14 @@
         font-size: 13px;
         line-height: 1;
         cursor: pointer;
+        /* 원의 지름은 힌트 바의 밀도라 유지하고, 히트 영역만 24×24 로 넓힌다 */
+        position: relative;
+      }
+      .previewhint .phx::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
       }
       .previewhint .phx:hover {
         background: rgba(255, 255, 255, 0.22);
@@ -10506,7 +10691,7 @@
         left: 50%;
         bottom: 26px;
         transform: translateX(-50%);
-        z-index: 400;
+        z-index: var(--z-float);
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -10598,7 +10783,7 @@
       .coach {
         position: fixed;
         inset: 0;
-        z-index: 310;
+        z-index: var(--z-coach);
         display: none;
       }
       .coach.show {
@@ -10637,7 +10822,7 @@
         margin: 4px 0 3px;
       }
       .coach .ctdesc {
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
         line-height: 1.5;
       }
@@ -10655,6 +10840,8 @@
         background: transparent;
         border: 0;
         cursor: pointer;
+        padding: 5px 8px;
+        min-height: 24px;
       }
       .coach .ctskip:hover {
         color: var(--text-strong);
@@ -10665,7 +10852,7 @@
       }
       .coach .ctnav button {
         font-family: inherit;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 700;
         padding: 7px 14px;
         border-radius: 8px;
@@ -10675,7 +10862,7 @@
         cursor: pointer;
       }
       .coach .ctnav button.primary {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -10762,7 +10949,7 @@
         padding: 6px 11px;
         border-radius: 8px;
         border: 0;
-        background: var(--danger);
+        background: var(--danger-fill);
         color: #fff;
         cursor: pointer;
       }
@@ -10784,7 +10971,7 @@
         background: transparent;
         color: var(--text-weak);
         font-family: var(--font);
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
         transition: 0.15s;
@@ -10832,7 +11019,7 @@
         flex: 1;
         min-width: 0;
         font-family: var(--font);
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-strong);
         background: var(--bg-accent);
         border: 1px solid var(--point-main);
@@ -10958,7 +11145,7 @@
       }
       .stepcard > summary .chev {
         flex: none;
-        font-size: 10px;
+        font-size: 11px;
         color: var(--text-weak);
         transition: transform 0.2s;
       }
@@ -10996,7 +11183,7 @@
       .snav-next {
         border-radius: 9px;
         padding: 8px 16px;
-        font: 700 12.5px var(--font);
+        font: 700 12px var(--font);
         cursor: pointer;
         border: 1px solid var(--line);
       }
@@ -11008,7 +11195,7 @@
         background: var(--bg-accent);
       }
       .snav-next {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -11041,11 +11228,29 @@
       }
       .cgate .lockhint {
         display: none;
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--text-weak);
         margin: 2px 0 0;
       }
+      .cgate .lockhint b {
+        color: var(--text-strong);
+        font-weight: 700;
+      }
+      /* 잠금 아이콘 — OS 컬러 이모지(🔒) 대신 나머지와 같은 선 아이콘 */
+      .lockhint::before,
+      .pq-lock::before {
+        content: '';
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        margin-right: 4px;
+        vertical-align: -1px;
+        background: currentColor;
+        -webkit-mask: var(--ic-lock) center / contain no-repeat;
+        mask: var(--ic-lock) center / contain no-repeat;
+      }
+
       .cgate.locked .lockhint {
         display: block;
       }
@@ -11101,7 +11306,7 @@
       .wfmodal {
         position: fixed;
         inset: 0;
-        z-index: 200000;
+        z-index: var(--z-picker);
         display: none;
         align-items: center;
         justify-content: center;
@@ -11161,12 +11366,18 @@
           border-color 0.15s,
           background 0.15s;
       }
-      .wfopt:hover,
+      .wfopt:hover {
+        border-color: #6b8afd;
+        background: rgba(107, 138, 253, 0.12);
+        transform: translateY(-2px);
+      }
+      /* 265×198 카드 9장 중 어디에 초점이 있는지는 링으로만 알 수 있다 */
       .wfopt:focus-visible {
         border-color: #6b8afd;
         background: rgba(107, 138, 253, 0.12);
         transform: translateY(-2px);
-        outline: none;
+        outline: 2px solid var(--point-sub);
+        outline-offset: 3px;
       }
       .wfthumb {
         display: flex;
@@ -11187,7 +11398,7 @@
         color: #fff;
       }
       .wfdesc {
-        font-size: 11.5px;
+        font-size: 11px;
         color: rgba(255, 255, 255, 0.55);
         line-height: 1.4;
       }
@@ -11195,10 +11406,13 @@
         margin-top: 18px;
         background: none;
         border: 0;
-        color: rgba(255, 255, 255, 0.55);
-        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 12px;
         cursor: pointer;
         text-decoration: underline;
+        text-underline-offset: 3px;
+        padding: 5px 8px;
+        min-height: 24px;
       }
       .wfskip:hover {
         color: #fff;
@@ -11248,7 +11462,7 @@
         align-items: center;
         padding: 6px 10px;
         border-radius: 8px;
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 700;
         color: #fff;
         background: var(--point-main, #3f64a8);
@@ -11325,7 +11539,7 @@
       }
       /* '패널편집' 마스터 버튼 — 켜지면 강조(패널 조정·배치·내용 동시 활성 상태) */
       .addpanel .editallbtn.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -11361,7 +11575,7 @@
         border-radius: 8px;
         padding: 8px 10px;
         font-family: inherit;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-strong);
         background: var(--bg-page);
         outline: none;
@@ -11381,7 +11595,7 @@
         font-size: 12px;
         font-weight: 700;
         color: #fff;
-        background: var(--point-main);
+        background: var(--point-fill);
         cursor: pointer;
       }
       .apc-go:hover {
@@ -11395,7 +11609,7 @@
         margin-top: 8px;
       }
       .apc-hint {
-        font-size: 11.5px;
+        font-size: 11px;
         line-height: 1.45;
         color: var(--text-weak);
         margin-bottom: 8px; /* 입력창(apc-row)보다 위에 먼저 보이도록 */
@@ -11529,7 +11743,7 @@
         background: var(--bg-page);
         color: var(--text-strong);
         font-family: var(--font);
-        font-size: 12.5px;
+        font-size: 12px;
         outline: none;
         transition: border-color 0.14s;
       }
@@ -11595,7 +11809,7 @@
         color: var(--text-strong);
       }
       .libtabs button.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
       }
       /* 에셋 썸네일 테마 — 사이드바 크롬은 고정 다크지만, 라이브러리 썸네일만은
@@ -11665,7 +11879,21 @@
          배경도 끄므로 썸네일 바탕은 투명하다 — 컴포넌트 자신의 면색만 보인다. */
       .hj-asset.hjc-root,
       .hj-asset.hjg-root,
-      .hj-asset.hju-root {
+      .hj-asset.hju-root,
+      .hj-asset.hno2-root,
+      .hj-asset.hnc1-root,
+      .hj-asset.hnc2-root,
+      .hj-asset.hnm-root,
+      .hj-asset.hni1-root,
+      .hj-asset.hni2-root,
+      .hj-asset.hne-root,
+      .hj-asset.hnn1-root,
+      .hj-asset.hnn2-root,
+      .hj-asset.hnn3-root,
+      .hj-asset.hnf-root,
+      .hj-asset.hns1-root,
+      .hj-asset.hns2-root,
+      .hj-asset.hnl-root {
         position: relative;
         inset: auto;
         overflow: visible;
@@ -11674,6 +11902,12 @@
         flex: 0 0 auto;
         transform: scale(var(--k, 1));
         transform-origin: center center;
+      }
+      /* 화면 전체를 덮는 배경 층은 썸네일에서 걷어낸다 — 바탕은 무조건 투명해야 한다.
+         (컴포넌트 자신의 면색·테두리는 그대로 남는다) */
+      .hj-asset > [data-name="Background"],
+      .hj-asset > [data-name="Base"] {
+        display: none !important;
       }
       /* 컴포넌트 뿌리는 화면 좌표에 절대배치돼 있다 — 그 자리 지정만 풀고 속은 그대로 둔다 */
       .hj-asset > * {
@@ -11944,7 +12178,7 @@
         height: 74%;
       }
       .libitem .lname {
-        font-size: 9.5px;
+        font-size: 11px;
         line-height: 1;
         color: var(--lib-name);
         text-align: center;
@@ -12158,7 +12392,7 @@
         cursor: pointer;
       }
       .assettools button.on {
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
       }
       /* 크기 조절 슬라이더 — 평소엔 숨기고, '패널편집'(크기 조절 .sizing 포함)을 켠 동안에만 노출.
@@ -12480,7 +12714,7 @@
         letter-spacing: -0.2px;
       }
       .promocard .pc-sub {
-        font-size: 11.5px;
+        font-size: 11px;
         color: var(--text-weak);
         margin-top: 3px;
         line-height: 1.4;
@@ -12667,11 +12901,11 @@
         gap: 9px;
         width: 100%;
         padding: 11px 14px;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
         border: 0;
         border-radius: var(--r-md);
-        font: 600 13.5px/1 var(--font);
+        font: 600 13px/1 var(--font);
         cursor: pointer;
         box-shadow: var(--i2-shadow);
         transition:
@@ -12765,14 +12999,14 @@
         line-height: 1.15;
       }
       .fignav-row .txt .sub {
-        font-size: 10.5px;
+        font-size: 11px;
         line-height: 1.15;
         color: var(--text-weak);
       }
       .fignav-row .badge {
         margin-left: auto;
         flex: none;
-        font-size: 9.5px;
+        font-size: 11px;
         font-weight: 600;
         padding: 2px 7px;
         border-radius: var(--r-pill);
@@ -13147,7 +13381,7 @@
       .flow {
         position: fixed;
         inset: 0;
-        z-index: 300;
+        z-index: var(--z-overlay);
         background: var(--bg-page);
         color: var(--text-strong);
         font-family: var(--font);
@@ -13218,7 +13452,7 @@
         padding: 10px 12px;
         border-radius: var(--r-sm);
         color: var(--text-weak);
-        font-size: 13.5px;
+        font-size: 13px;
         cursor: pointer;
         border: 0;
         background: transparent;
@@ -13257,7 +13491,7 @@
         align-items: center;
         gap: 8px;
         margin-bottom: 8px;
-        font-size: 12.5px;
+        font-size: 12px;
       }
       .lc-crumb[hidden] { display: none; }
       .lc-crumb-root {
@@ -13269,7 +13503,7 @@
         border-radius: 999px;
         background: var(--bg-page);
         color: var(--text-weak);
-        font-size: 12.5px;
+        font-size: 12px;
         cursor: pointer;
         transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
       }
@@ -13305,7 +13539,7 @@
       }
       .lc-sub {
         margin-top: 4px;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
       }
       .lc-tools {
@@ -13325,9 +13559,9 @@
         padding: 10px 18px;
         border: 0;
         border-radius: var(--r-sm);
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
-        font: 600 13.5px/1 var(--font);
+        font: 600 13px/1 var(--font);
         cursor: pointer;
         box-shadow: var(--i2-shadow);
         transition: filter var(--i2-dur-color) ease, transform var(--i2-dur-press) ease-out;
@@ -13443,7 +13677,7 @@
         opacity: 1;
       }
       .lc-del:hover {
-        background: var(--danger);
+        background: var(--danger-fill);
         color: #fff;
       }
       .lc-thumb {
@@ -13460,7 +13694,7 @@
         padding: 12px 14px 14px;
       }
       .lc-cardttl {
-        font-size: 13.5px;
+        font-size: 13px;
         font-weight: 600;
       }
       .lc-cardmeta {
@@ -13556,7 +13790,7 @@
         opacity: 1;
       }
       .lc-restore:hover {
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
       }
       /* 휴지통 카드는 열리지 않고, 클릭하면 선택 토글 */
@@ -13595,7 +13829,7 @@
         stroke: currentColor;
       }
       .lc-card.trashed.sel .lc-check {
-        background: var(--point-main);
+        background: var(--point-fill);
         border-color: var(--point-main);
         color: #fff;
       }
@@ -13706,19 +13940,30 @@
         font-weight: 700;
       }
       .lc-empty p {
-        font-size: 12.5px;
+        font-size: 12px;
         max-width: 380px;
         line-height: 1.55;
         margin: 0;
       }
+      /* 빈 상태의 두 번째 진입로 — 템플릿 갤러리로 보낸다.
+         정적 배지가 아니라 실제 버튼이므로 버튼 기본 스타일을 지우고 상태를 준다. */
       .lc-empty .lc-tplbadge {
-        margin-top: 2px;
-        font-size: 11px;
+        margin-top: 6px;
+        font-family: inherit;
+        font-size: 12px;
         font-weight: 600;
-        padding: 4px 12px;
+        padding: 7px 14px;
+        min-height: 24px;
+        border: 1px solid color-mix(in srgb, var(--point-main) 38%, transparent);
         border-radius: var(--r-pill);
         background: color-mix(in srgb, var(--point-main) 16%, transparent);
         color: var(--point-main);
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .lc-empty .lc-tplbadge:hover {
+        background: color-mix(in srgb, var(--point-main) 26%, transparent);
+        border-color: var(--point-main);
       }
       /* ── 템플릿 갤러리 — Figma Studio(169:150) 재현. 라이트 서피스 위 3열 카드 ── */
       .lc-grid.tplmode {
@@ -13747,7 +13992,7 @@
         background: transparent;
         padding: 0;
         font-family: inherit;
-        font-size: 13.5px;
+        font-size: 13px;
         color: var(--text-weak);
         cursor: pointer;
         transition: color 0.15s ease;
@@ -13785,6 +14030,33 @@
       }
       .tplsubcats .tplcat {
         font-size: 13px;
+      }
+      /* 연도 필터는 분류(카테고리)가 아니라 **추리는 도구**다 — 검색·정렬과 같은 줄에 두고
+         정렬 드롭다운과 똑같은 부품을 쓴다. 새 생김새를 들이지 않아 화면이 조용하다. */
+      .tplbarright {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      /* 메뉴 안의 개수 — 눌러 보기 전에 그 해에 몇 개인지 알 수 있다 */
+      .tplsort-opt .num {
+        margin-left: auto;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+        color: var(--text-weak);
+        opacity: 0.7;
+      }
+      .tplsort-opt.on .num,
+      .tplsort-opt:hover .num {
+        opacity: 1;
+      }
+      /* 연도를 고른 동안에는 단추에 표가 난다 — 목록이 왜 줄었는지 바로 보인다 */
+      .tplsort-btn.filtered {
+        border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+        color: var(--text-strong);
+      }
+      .tplsort-btn.filtered .yico {
+        color: var(--point-sub);
       }
       /* ── 템플릿 정렬 드롭다운 (카테고리 바 아래 행) ── */
       .tplsortbar {
@@ -14013,7 +14285,7 @@
         font-size: 13px;
         font-weight: 600;
         color: #fff;
-        background: var(--point-main);
+        background: var(--point-fill);
         cursor: pointer;
         transition: filter 0.15s ease;
       }
@@ -14065,6 +14337,7 @@
         box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
       }
       .tplthumb {
+        position: relative;
         aspect-ratio: 498 / 318;
         border-radius: 22px;
         background: #1a1a22;
@@ -14075,6 +14348,50 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: filter 0.2s ease;
+      }
+      /* ── 만들어 둔 화면이 있는가 ──────────────────────────────────────────
+         실제 화면(HTML/CSS DOM + SVG)이 붙은 템플릿은 눌러서 바로 열 수 있고,
+         아직 그림 한 장뿐인 것은 열어 봐야 그림만 나온다.
+         **표시는 아직인 쪽에만 붙인다** — 썸네일을 눌러 앉히고 가운데에 '제작중'.
+         준비된 쪽엔 아무것도 얹지 않는다. 흐려진 것들 사이에서 밝은 썸네일 자체가 신호다. */
+      .tplthumb.wip img {
+        filter: saturate(0.55) brightness(0.52);
+      }
+      .tplcard:hover .tplthumb.wip img {
+        filter: saturate(0.65) brightness(0.6);
+      }
+      .tplstate {
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 13px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        line-height: 1;
+        pointer-events: none;
+        -webkit-backdrop-filter: blur(7px);
+        backdrop-filter: blur(7px);
+      }
+      .tplstate::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        flex: none;
+      }
+      /* 열기 가능 — 좌상단 모서리. 그림을 가리지 않는 자리에 두고,
+         '지금 당장 쓸 수 있는 4개'만 눈에 띄게 한다. */
+      .tplstate.ready {
+        top: 10px;
+        left: 10px;
+        color: #7ff0b5;
+        background: rgba(8, 22, 16, 0.72);
+        border: 1px solid color-mix(in srgb, #34d399 52%, transparent);
       }
       .tplbox {
         display: flex;
@@ -14179,7 +14496,7 @@
         background: var(--bg-surface);
         color: var(--text-weak);
         font-family: inherit;
-        font-size: 13.5px;
+        font-size: 13px;
         padding: 8px 15px 8px 12px;
         border-radius: var(--r-pill);
         cursor: pointer;
@@ -14311,7 +14628,7 @@
         left: 14px;
         bottom: 14px;
         z-index: 2;
-        font-size: 12.5px;
+        font-size: 12px;
         color: #fff;
         background: rgba(10, 10, 14, 0.58);
         border: 1px solid rgba(255, 255, 255, 0.16);
@@ -14355,10 +14672,10 @@
         border: 0;
         cursor: pointer;
         font-family: inherit;
-        font-size: 14.5px;
+        font-size: 14px;
         font-weight: 600;
         color: #fff;
-        background: var(--point-main);
+        background: var(--point-fill);
         padding: 12px 24px;
         border-radius: var(--r-pill);
         transition: filter 0.15s ease, transform 0.15s ease;
@@ -14406,7 +14723,7 @@
       .flow-modal {
         position: fixed;
         inset: 0;
-        z-index: 330;
+        z-index: var(--z-flowmodal);
         display: none;
         place-items: center;
         background: rgba(3, 7, 18, 0.66);
@@ -14452,12 +14769,21 @@
         font: 600 16px var(--font);
         margin-bottom: 22px;
       }
+      /* 밑줄이 곧 입력 필드의 테두리라 사각 아웃라인은 어울리지 않는다.
+         대신 마우스 클릭(:focus)에서는 밑줄만 굵히고, 키보드(:focus-visible)에서는
+         반드시 보이는 표시를 남긴다. */
       .np-name:focus {
         outline: none;
+        border-bottom-color: var(--point-sub);
+      }
+      .np-name:focus-visible {
+        outline: 2px solid var(--point-sub);
+        outline-offset: 3px;
+        border-radius: 4px;
       }
       .np-lbl {
         text-align: center;
-        font-size: 13.5px;
+        font-size: 13px;
         color: var(--text-weak);
         margin-bottom: 18px;
       }
@@ -14519,7 +14845,7 @@
         cursor: not-allowed;
       }
       .np-opt .np-badge {
-        font-size: 9.5px;
+        font-size: 11px;
         font-weight: 600;
         padding: 2px 8px;
         border-radius: var(--r-pill);
@@ -14537,9 +14863,9 @@
         padding: 10px 26px;
         border: 0;
         border-radius: var(--r-sm);
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
-        font: 600 13.5px var(--font);
+        font: 600 13px var(--font);
         cursor: pointer;
       }
       .np-ok:disabled {
@@ -14550,8 +14876,11 @@
         border: 0;
         background: transparent;
         color: var(--text-weak);
-        font: 500 13.5px var(--font);
+        font: 500 13px var(--font);
         cursor: pointer;
+        /* 텍스트 버튼은 줄 높이가 그대로 클릭 영역이 된다 — 최소 24px 를 세로 패딩으로 확보 */
+        padding: 5px 8px;
+        min-height: 24px;
       }
       .np-cancel:hover {
         color: var(--text-strong);
@@ -14606,7 +14935,7 @@
       }
       .lp-heads span {
         margin-left: 10px;
-        font-size: 12.5px;
+        font-size: 12px;
         color: var(--text-weak);
       }
       .lp-start {
@@ -14614,9 +14943,9 @@
         padding: 10px 24px;
         border: 0;
         border-radius: var(--r-sm);
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
-        font: 600 13.5px var(--font);
+        font: 600 13px var(--font);
         cursor: pointer;
         box-shadow: var(--i2-shadow);
       }
@@ -14640,11 +14969,11 @@
         margin-bottom: 14px;
       }
       .lp-gh b {
-        font-size: 14.5px;
+        font-size: 14px;
         font-weight: 700;
       }
       .lp-gh span {
-        font-size: 11.5px;
+        font-size: 11px;
         color: var(--text-weak);
       }
       .lp-cards {
@@ -14681,7 +15010,7 @@
         display: grid;
         place-items: center;
         border-radius: 50%;
-        background: var(--point-main);
+        background: var(--point-fill);
         color: #fff;
         font-size: 13px;
         font-weight: 700;
@@ -14749,7 +15078,7 @@
         border: 0;
         background: transparent;
         color: var(--text-strong);
-        font: 600 12.5px var(--font);
+        font: 600 12px var(--font);
         cursor: pointer;
         text-align: left;
         border-radius: var(--r-sm);
@@ -14774,7 +15103,7 @@
       }
       .laygrp-count {
         flex: none;
-        font-size: 10.5px;
+        font-size: 11px;
         font-weight: 500;
         color: var(--text-weak);
       }
@@ -14806,6 +15135,120 @@
           display: none;
         }
       }
+
+      /* ── 확인 대화상자 ── */
+      .askmodal {
+        position: fixed;
+        inset: 0;
+        z-index: var(--z-confirm);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: rgba(6, 6, 10, 0.62);
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+      }
+      .askmodal[hidden] {
+        display: none;
+      }
+      .ask {
+        width: min(430px, 100%);
+        background: var(--bg-surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 22px 22px 18px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+      }
+      .ask-t {
+        margin: 0 0 10px;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-strong);
+        letter-spacing: -0.01em;
+      }
+      .ask-b {
+        font-size: 13px;
+        line-height: 1.65;
+        color: var(--text-weak);
+        white-space: pre-line;
+      }
+      .ask-b b {
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+      /* 되돌릴 수 없다는 사실은 문단이 아니라 표시로 — 훑어봐도 걸리게 */
+      .ask-warn {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 14px;
+        padding: 10px 12px;
+        border-radius: 9px;
+        border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+        background: color-mix(in srgb, var(--danger) 12%, transparent);
+        color: color-mix(in srgb, var(--danger) 30%, var(--text-strong));
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .ask-warn svg {
+        width: 15px;
+        height: 15px;
+        flex: none;
+        margin-top: 1px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .ask-foot {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .ask-btn {
+        font: 600 13px var(--font);
+        padding: 9px 16px;
+        min-height: 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 1px solid var(--line);
+        background: var(--bg-accent);
+        color: var(--text-strong);
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .ask-btn.ghost:hover {
+        border-color: var(--text-weak);
+      }
+      /* 위험한 쪽은 색으로 구분한다 — 네이티브 confirm 으로는 불가능했던 것 */
+      .ask-btn.danger {
+        background: var(--danger-fill);
+        border-color: var(--danger-fill);
+        color: #fff;
+      }
+      .ask-btn.danger:hover {
+        filter: brightness(1.08);
+      }
+
+      /* ── 움직임 최소화 요청의 마지막 그물 ──
+         위쪽 블록들이 선택자별로 모션을 끄지만, 무한 반복(pdot)과 진입 애니메이션(panelIn·rise)이
+         빠져 있었다. 특히 rise 는 차트 코드가 인라인 style 로 걸어서 CSS 만으로는 못 막는다(!important 필요).
+         '끄기'가 아니라 '즉시 완료'로 두는 이유: backwards/forwards 채움을 쓰는 진입 애니메이션을
+         animation:none 으로 지우면 요소가 시작 상태(opacity 0)로 남을 수 있다.
+         전환(transition)은 대부분 사용자가 직접 일으킨 피드백이라 여기서 건드리지 않는다. */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 1ms !important;
+          animation-delay: 0ms !important;
+          animation-iteration-count: 1 !important;
+        }
+        html {
+          scroll-behavior: auto !important;
+        }
+      }
     </style>
     <!-- SK하이닉스 화면 색상 테마 연동(형상 불변, 색만 토큰화 → dark/light·시드색 반영) -->
     <link rel="stylesheet" href="src/skhynix-theme.css?v=10" />
@@ -14821,15 +15264,15 @@
         <span class="tb-proj" id="tbProj"></span>
       </div>
       <nav class="tb-tabs" id="tbTabs" role="tablist" aria-label="페이지">
-        <button class="tb-tab on" data-page="prd" type="button" role="tab" aria-selected="true">PRD</button>
+        <button class="tb-tab on" id="tbTabPrd" data-page="prd" type="button" role="tab" aria-selected="true" aria-controls="pagePrd" tabindex="0">PRD</button>
         <span class="tb-dot" aria-hidden="true">···</span>
-        <button class="tb-tab" data-page="spec" type="button" role="tab">기능명세서</button>
+        <button class="tb-tab" id="tbTabSpec" data-page="spec" type="button" role="tab" aria-selected="false" aria-controls="pageSpec" tabindex="-1">기능명세서</button>
         <span class="tb-dot" aria-hidden="true">···</span>
-        <button class="tb-tab" data-page="flow" type="button" role="tab">유저플로우</button>
+        <button class="tb-tab" id="tbTabFlow" data-page="flow" type="button" role="tab" aria-selected="false" aria-controls="pageFlow" tabindex="-1">유저플로우</button>
         <span class="tb-dot" aria-hidden="true">···</span>
-        <button class="tb-tab" data-page="wireframe" type="button" role="tab">와이어프레임</button>
+        <button class="tb-tab" id="tbTabWireframe" data-page="wireframe" type="button" role="tab" aria-selected="false" aria-controls="pageWire" tabindex="-1">와이어프레임</button>
         <span class="tb-dot" aria-hidden="true">···</span>
-        <button class="tb-tab" data-page="wire" type="button" role="tab">스튜디오</button>
+        <button class="tb-tab" id="tbTabWire" data-page="wire" type="button" role="tab" aria-selected="false" aria-controls="app" tabindex="-1">스튜디오</button>
       </nav>
       <div class="tb-actions">
         <a class="tb-ic" href="https://hjlee-wemb.github.io/WEMB-Studio/%EB%AC%B8%EC%84%9C/%EC%82%AC%EC%9A%A9%EB%A7%A4%EB%89%B4%EC%96%BC.html" target="_blank" rel="noopener noreferrer" title="사용 매뉴얼" aria-label="사용 매뉴얼"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h6v16H6a2 2 0 0 0-2 2z" /><path d="M20 5a2 2 0 0 0-2-2h-6v16h6a2 2 0 0 1 2 2z" /></svg></a>
@@ -14845,7 +15288,7 @@
          나머지는 이 오버레이 페이지들이 스튜디오 위를 덮는다.
          ============================================================ -->
     <!-- PRD — 스텝별 팝업(위저드)으로 요구사항을 묻는다. 이 페이지는 인트로 + 답변 요약. -->
-    <section class="page" id="pagePrd" data-page="prd" hidden aria-label="PRD">
+    <section class="page" id="pagePrd" data-page="prd" hidden role="tabpanel" aria-labelledby="tbTabPrd">
       <div class="page-scroll">
         <div class="prd-intro">
           <div class="prd-kicker">제품 요구사항 문서 (PRD)</div>
@@ -14884,7 +15327,7 @@
     </div>
 
     <!-- 기능명세서 -->
-    <section class="page" id="pageSpec" data-page="spec" hidden aria-label="기능명세서">
+    <section class="page" id="pageSpec" data-page="spec" hidden role="tabpanel" aria-labelledby="tbTabSpec">
       <div class="doc-toolbar">
         <div class="doc-filters" id="specFilters">
           <div class="doc-chipwrap" data-filter="type">
@@ -14943,14 +15386,14 @@
     </div>
 
     <!-- 유저플로우 — PRD 답변에서 생성된 흐름 노드 -->
-    <section class="page page-dots" id="pageFlow" data-page="flow" hidden aria-label="유저플로우">
+    <section class="page page-dots" id="pageFlow" data-page="flow" hidden role="tabpanel" aria-labelledby="tbTabFlow">
       <div class="flow-head">
         <div class="flow-tools">
           <div class="flow-search" id="flowSearchBox">
             <button type="button" class="flow-search-ic" id="flowSearchBtn" title="검색" aria-label="검색">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
             </button>
-            <input type="text" id="flowSearch" placeholder="노드 이름 검색 — 예: 알람, 로그인, KPI 요약" autocomplete="off" />
+            <input type="text" id="flowSearch" aria-label="노드 이름 검색" placeholder="노드 이름 검색 — 예: 알람, 로그인, KPI 요약" autocomplete="off" />
           </div>
           <button type="button" class="flow-fav-toggle" id="flowFavOnly" title="즐겨찾기(★)한 항목만 보기" aria-label="즐겨찾기만 보기">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
@@ -14972,17 +15415,37 @@
     </section>
 
     <!-- 와이어프레임 — 규모·항목에 맞춰 추천된 레이아웃. 고르면 스튜디오에 반영된다. -->
-    <section class="page page-dots" id="pageWire" data-page="wireframe" hidden aria-label="와이어프레임">
+    <section class="page page-dots" id="pageWire" data-page="wireframe" hidden role="tabpanel" aria-labelledby="tbTabWireframe">
       <div class="page-scroll">
         <div class="wreco-wrap" id="wireReco"></div>
-        <div class="wreco-bar">
-          <span class="wreco-pick" id="wirePick">추천 와이어프레임을 골라 주세요</span>
-          <button type="button" class="prd-gen" id="wireStart" disabled>이 구성으로 스튜디오 열기 →</button>
-        </div>
+      </div>
+      <!-- 진행 바는 스크롤 영역 '밖'에 둔다. 안에 있으면 카드 9장 아래로 밀려나
+           앞의 두 단계(.step-foot)에서 학습한 '아래 고정 버튼' 규칙이 여기서만 깨진다. -->
+      <div class="step-foot wreco-bar">
+        <span class="step-hint wreco-pick" id="wirePick">추천 와이어프레임을 골라 주세요</span>
+        <button type="button" class="prd-gen" id="wireStart" disabled>이 구성으로 스튜디오 열기 →</button>
       </div>
     </section>
 
-    <div class="app" id="app">
+    <!-- ============================================================
+         확인 대화상자 — 되돌릴 수 없는 동작 전용.
+         전에는 네이티브 window.confirm() 을 썼다. 카피는 좋았지만 디자인된 모달을
+         갖춘 도구가 가장 위험한 동작만 OS 대화상자로 처리하고 있었고, 그래서
+         '삭제'를 위험색으로 구분하는 것조차 불가능했다.
+         초기 초점은 '취소'에 둔다 — Enter 한 번에 영구 삭제가 일어나면 안 된다.
+         ============================================================ -->
+    <div class="askmodal" id="askModal" hidden>
+      <div class="ask" role="dialog" aria-modal="true" aria-labelledby="askTitle" aria-describedby="askBody">
+        <h2 class="ask-t" id="askTitle"></h2>
+        <div class="ask-b" id="askBody"></div>
+        <div class="ask-foot">
+          <button type="button" class="ask-btn ghost" id="askNo">취소</button>
+          <button type="button" class="ask-btn danger" id="askYes">삭제</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="app" id="app" role="tabpanel" aria-labelledby="tbTabWire">
       <!-- ============================================================
            온보딩 플로우 오버레이 — 런처 → 새 프로젝트 → 레이아웃 선택.
            완료(시작)하면 .show를 떼고 그 아래 스튜디오가 드러난다.
@@ -15079,9 +15542,9 @@
           <button class="railbtn" type="button" data-rail="dash" title="대시보드 편집" aria-label="대시보드 편집"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5" /><rect x="14" y="3" width="7" height="5" rx="1.5" /><rect x="14" y="12" width="7" height="9" rx="1.5" /><rect x="3" y="16" width="7" height="5" rx="1.5" /></svg></button>
           <button class="railbtn" type="button" data-rail="history" title="되돌리기 기록 · 초기화" aria-label="되돌리기 기록 · 초기화"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v6h6" /><path d="M3.5 9A9 9 0 1 1 3 12" /><path d="M12 7v5l3 2" /></svg></button>
           <span class="railsep"></span>
-          <button class="railbtn" type="button" data-rail="collapse" title="패널 접기 / 펼치기" aria-label="패널 접기 / 펼치기"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M9 4v16" /></svg></button>
+          <button class="railbtn railtoggle" type="button" data-rail="collapse" title="옵션 패널 접기" aria-label="옵션 패널 접기" aria-expanded="true" aria-controls="sidePanel"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M9 4v16" /><polyline class="rt-chev" points="14 9 17 12 14 15" /></svg></button>
         </nav>
-        <div class="sidepanel">
+        <div class="sidepanel" id="sidePanel">
         <div class="brandhead">
           <div class="bt">
             <h1>
@@ -15216,7 +15679,7 @@
                     <button data-m="dark" class="on">Dark</button>
                     <button data-m="light">Light</button>
                   </div>
-                  <span class="lockhint">🔒 버전을 먼저 고르면 열려요</span>
+                  <span class="lockhint">버전을 먼저 고르면 열려요</span>
                   <span class="darkhint">🌙 이 시안은 <b>다크 전용</b>이에요</span>
                 </div>
               </div>
@@ -15393,7 +15856,7 @@
                 </button>
               </div>
             </div>
-            <span class="lockhint">🔒 화면 밝기까지 정하면 색 옵션이 열려요</span>
+            <span class="lockhint">위쪽 <b>화면 밝기 테마</b>까지 정하면 색 옵션이 열려요</span>
 
             <details class="acc" data-src="seed">
               <summary>
@@ -17280,7 +17743,7 @@
             <span class="ctdrag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="9" cy="6" r="1.6" /><circle cx="15" cy="6" r="1.6" /><circle cx="9" cy="12" r="1.6" /><circle cx="15" cy="12" r="1.6" /><circle cx="9" cy="18" r="1.6" /><circle cx="15" cy="18" r="1.6" /></svg></span>
             <h2>대비비 검증표</h2>
             <span class="sp"></span>
-            <select class="exsel" id="ctSel"></select>
+            <select class="exsel" id="ctSel" aria-label="검증할 화면 선택"></select>
             <button class="abclose" id="ctClose" title="닫기 (Esc)" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg></button>
           </div>
           <div class="exbody">
@@ -17334,7 +17797,7 @@
               </svg>
               HTML 내보내기
             </button>
-            <select class="exsel" id="csSel"></select>
+            <select class="exsel" id="csSel" aria-label="미리 볼 컴포넌트 시트 선택"></select>
             <button class="abclose" id="csClose" title="닫기 (Esc)" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg></button>
           </div>
           <div class="exbody">
@@ -17426,7 +17889,7 @@
           <span>작업은 자동 저장돼요</span>
         </div>
         <div class="obfoot">
-          <label><input type="checkbox" id="onbdDont" checked /> 다시 보지 않기</label>
+          <label class="obdont"><input type="checkbox" id="onbdDont" checked /> 다시 보지 않기</label>
           <button type="button" class="obstart" id="onbdStart">시작하기</button>
         </div>
       </div>
@@ -17453,7 +17916,7 @@
     <div class="toastwrap" id="toastWrap" aria-live="polite" aria-atomic="false"></div>
 
     <!-- 이벤트 로그·리스트의 발생시각을 열 때마다 최근으로 다시 찍는다(간격·글자 모양은 원본 그대로) -->
-    <script src="src/recent-time.js?v=1"></script>
+    <script src="src/recent-time.js?v=2"></script>
     <!-- SK하이닉스 이천 FMS 화면(HTML/CSS DOM) 모듈 — 메인 스크립트보다 먼저 로드되어 window에 등록됨 -->
     <script src="src/skhynix-screen.js?v=7"></script>
     <script src="src/skhynix-popup.js?v=5"></script>
@@ -17475,6 +17938,10 @@
 
     <!-- HANA Bank H.I.T — Figma H3S2M7DUCvuJgi75oBqg6W 화면 15장을 순수 HTML/CSS DOM 으로 재구축한 것.
          글자는 편집 가능한 실제 텍스트, 아이콘·그래픽만 원본에서 내려받은 개별 에셋(src/hana/). -->
+    <!-- HANA Bank H.I.T 에셋 라이브러리 등록 목록(차트·심볼·아이콘·패널·이벤트 패널).
+         마크업도 CSS 도 담지 않는다 — 아래 화면 빌더의 DOM 에서 노드 id 로 잘라 쓴다.
+         생성기: src/hana-assets/_gen/mk-assets.js -->
+    <script src="src/hana-assets.js?v=1"></script>
     <script src="src/hana-overview-02.js?v=2"></script>
     <script src="src/hana-cloud-01.js?v=2"></script>
     <script src="src/hana-cloud-02.js?v=2"></script>
@@ -18448,7 +18915,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
            Figma 원본(64:1782 · UPS 팝업 64:2504)이 다크 시안 한 벌뿐이라 라이트로 바꿀 기준이 없다.
            → 화면 테마 토글을 잠그고 '다크 전용'임을 적어 둔다. applySkhynixDT() 가 열 때마다
              모드를 dark 로 맞추므로 값 자체는 이미 고정돼 있고, 여기서는 조작만 막는다.
-           (같은 SK하이닉스라도 'Dashbord: Icheon main'(skhynix-hub)은 라이트·다크 시트를 둘 다
+           (같은 SK하이닉스라도 'Dashboard: Icheon main'(skhynix-hub)은 라이트·다크 시트를 둘 다
             갖고 있으므로 해당 없음 — 그래서 skx 가 아니라 skxDarkOnly 로 따로 판정한다.) */
         let skxDarkOnly = false;
         try { skxDarkOnly = (state.screen === 'dt') && localStorage.getItem('wemb-tpl-dt') === 'skhynix'; } catch (e) {}
@@ -19852,7 +20319,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           R('.icheon-navbtn') + '{position:absolute;top:90px;z-index:25;display:flex;align-items:center;gap:6px;',
           'height:32px;padding:0 16px;border-radius:100px;border:1.5px solid rgba(255,255,255,.9);',
           'background:rgba(255,255,255,.72);box-shadow:0 2px 6px rgba(82,76,194,.16);',
-          'font-family:"Pretendard","Pretendard Variable","Malgun Gothic",system-ui,sans-serif;',
+          'font-family:"Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;',
           'font-size:13px;font-weight:600;color:#3a3679;cursor:pointer;white-space:nowrap;',
           'transition:background-color .18s cubic-bezier(.4,0,.2,1),transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s cubic-bezier(.4,0,.2,1);}',
           R('.icheon-navbtn:hover') + '{background:rgba(255,255,255,.95);box-shadow:0 6px 14px rgba(82,76,194,.24);}',
@@ -20292,7 +20759,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
             t.setAttribute('x', bb.x.toFixed(1));
             t.setAttribute('y', (bb.y + bb.height * 0.85).toFixed(1));
             t.setAttribute('fill', fill);
-            t.setAttribute('font-family', "'Tomorrow','Pretendard','Malgun Gothic',system-ui,sans-serif");
+            t.setAttribute('font-family', "'Tomorrow','Pretendard Variable','Pretendard','Malgun Gothic',system-ui,sans-serif");
             t.setAttribute('font-size', (bb.height * 1.08).toFixed(1));
             t.setAttribute('font-weight', '600');
             t.setAttribute('letter-spacing', '0.6');
@@ -20390,7 +20857,7 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           if (!arrow || !ev || !brow) return;
 
           if (!svg.querySelector('[id="skx-event-data"]')) {
-            const F = "'Pretendard','Malgun Gothic',sans-serif";
+            const F = "'Pretendard Variable','Pretendard','Malgun Gothic',sans-serif";
             const mkT = (x, y, s, o) => {
               o = o || {};
               const t = document.createElementNS(SVGNS, 'text');
@@ -21337,8 +21804,45 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         apply();
       };
       const appEl = document.getElementById('app');
-      document.getElementById('closer').onclick = () => appEl.classList.add('collapsed');
-      document.getElementById('opener').onclick = () => appEl.classList.remove('collapsed');
+      /* 옵션 패널 접힘 상태를 한 곳에서 바꾼다 — 레일 토글의 aria-expanded·라벨이 항상 따라오도록.
+         예전엔 세 곳(closer/opener/레일)이 각자 classList 를 만져 상태 표시가 어긋났다. */
+      function setSidebarCollapsed(next) {
+        appEl.classList.toggle('collapsed', !!next);
+        const t = document.querySelector('.railtoggle');
+        if (t) {
+          const open = !next;
+          t.setAttribute('aria-expanded', open ? 'true' : 'false');
+          const lab = open ? '옵션 패널 접기' : '옵션 패널 펼치기';
+          t.setAttribute('aria-label', lab);
+          t.title = lab;
+        }
+      }
+      window.__setSidebarCollapsed = setSidebarCollapsed;
+      document.getElementById('closer').onclick = () => setSidebarCollapsed(true);
+      document.getElementById('opener').onclick = () => setSidebarCollapsed(false);
+
+      /* ── 좁은 폭에서 옵션 패널 자동 접기 ──
+         사이드바(300px) + 레일(52px)이 고정이라 프리뷰가 받는 폭은 '뷰포트 − 352'다.
+         시연 장면인 노트북(1280~1440)에서 KPI 숫자와 패널 제목이 잘리던 원인이 이것이다.
+         접기 자체는 이미 구현돼 있으니(.app.collapsed) 임계폭에서 걸어 주기만 한다.
+         임계폭을 넘는 순간에만 개입하므로, 그 사이의 수동 접기·펼치기는 그대로 유지된다. */
+      (function initAutoCollapse() {
+        const NARROW = 1180;
+        let wasNarrow = null;
+        function sync() {
+          const narrow = window.innerWidth < NARROW;
+          if (narrow === wasNarrow) return; /* 임계폭을 넘는 순간에만 개입 */
+          wasNarrow = narrow;
+          /* 창 크기를 끄는 동안 width 를 애니메이션하면 7천 개 노드가 매 프레임 재배치된다.
+             사용자가 직접 누르는 토글의 전환은 그대로 두고, 자동 전환만 즉시 반영한다. */
+          appEl.classList.add('no-anim');
+          setSidebarCollapsed(narrow);
+          requestAnimationFrame(() => requestAnimationFrame(() => appEl.classList.remove('no-anim')));
+        }
+        sync();
+        let t = null;
+        window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(sync, 120); });
+      })();
 
       /* 사이드바 상단 탭 — 테마(컬러 워크플로우)와 대시보드 편집을 분리해 전환 */
       let selectSidebarTab = () => {};
@@ -24191,6 +24695,40 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
           if (t) t.textContent = wfHm(back);
         }
 
+        /* 대시보드 미리보기(.cols > .panel)에도 같은 치환을 적용하기 위한 통로.
+           예전에는 이 엔진의 소비자가 buildFit(와이어프레임 보드)와 renderDtGrid(디지털 트윈)뿐이라,
+           PRD 를 6단계 채우고 도착한 '대시보드' 경로만 하드코딩된 은행 데모로 남아 있었다 —
+           PRD 인트로가 '고른 구성이 스튜디오에 그대로 반영됩니다'라고 약속한 바로 그 화면이다. */
+        window.__applyPrdToPanels = function (root) {
+          if (typeof window.__prdPanelSpec !== 'function') return 0;
+          const stage = (root && root.closest ? root.closest('.stage') : null) || document.querySelector('.main .stage');
+          let n = 0;
+          /* 상단 KPI 줄(.kpis)은 .cols 밖에 있다 — 여기를 빼면 '거래건수 · 대외계 · C/C' 가 그대로 남는다.
+             applyPrdContent 는 컨테이너 안의 .kpi 를 한꺼번에 처리하므로 줄 단위로 한 번만 부른다. */
+          const kpis = stage && stage.querySelector('.kpis');
+          if (kpis) {
+            let spec = null;
+            try { spec = window.__prdPanelSpec(0); } catch (e) { spec = null; }   /* 0 = '종합 현황' = 여러 대상 묶음 */
+            if (spec) { try { applyPrdContent(kpis, spec); n++; } catch (e) {} }
+          }
+          /* 패널은 보이는 것만 — 다른 화면 템플릿의 숨은 패널까지 건드리면 인덱스가 어긋난다 */
+          const host = (root && root.querySelectorAll ? root : null) || (stage && stage.querySelector('.cols'));
+          if (!host) return n;
+          const panels = [...host.querySelectorAll('.panel, .kpibox')].filter((el) => el.style.display !== 'none');
+          panels.forEach((el, i) => {
+            let spec = null;
+            try { spec = window.__prdPanelSpec(i + 1); } catch (e) { spec = null; }   /* 0 은 KPI 줄이 썼다 */
+            if (!spec) return;
+            try { applyPrdContent(el, spec); n++; } catch (e) {}
+          });
+          /* 라이브 틱은 로드 시점의 숫자를 기준으로 삼는다 — 내용을 갈아끼웠으니 기준값도 다시 읽게 한다.
+             이걸 빼면 라벨은 '발전량·발전기'인데 값은 옛 은행 숫자(5,500만)로 되돌아온다. */
+          /* 순시값 지표임을 라이브 틱에 알린다(누적 금지) */
+          try { const st = document.querySelector('.stage'); if (st) st.dataset.prdKpi = '1'; } catch (e) {}
+          try { if (window.__reseedLiveKPI) window.__reseedLiveKPI(); } catch (e) {}
+          return n;
+        };
+
         function applyPrdContent(fit, spec) {
           if (!fit || !spec) return;
           const rnd = spec.rnd || Math.random;
@@ -25145,7 +25683,12 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         const fmt = (n) => Math.round(n).toLocaleString('en-US');
         /* Overview 전용 — 누적 카운터(거래건수)와 TPS 형태를 전제로 한 로직이라
            퍼센트·비율이 섞인 Production KPI에는 적용하지 않는다(아래 prodKPI가 담당). */
-        const kpis = [...document.querySelectorAll('.dashpage[data-page="overview"] .kpis .kpi')].map((kpi) => {
+        /* 기준값은 '지금 화면에 적힌 숫자'에서 읽는다. PRD 어휘로 내용을 갈아끼우면(__applyPrdToPanels)
+           그 값이 통째로 바뀌므로, 로드 시점에 한 번만 읽어두면 라이브 틱이 옛 은행 숫자를 계속 되살린다.
+           → 다시 읽을 수 있게 함수로 빼고 노출한다. */
+        let kpis = [];
+        function seedKPIs() {
+          kpis = [...document.querySelectorAll('.dashpage[data-page="overview"] .kpis .kpi')].map((kpi) => {
           const valEl = kpi.querySelector('.val');
           const subB = kpi.querySelector('.sub b');
           const val = parseInt((valEl ? valEl.textContent : '').replace(/,/g, '')) || 0;
@@ -25164,12 +25707,20 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
               hasPeak = true;
             }
           }
-          const chg = document.createElement('div');
-          chg.className = 'kchg flat';
-          chg.innerHTML = '—';
-          if (valEl) valEl.insertAdjacentElement('afterend', chg);
-          return { valEl, subB, val, cur, base: cur, peak, hasPeak, chg };
-        });
+            /* 재시드 시 화살표가 중복 생성되지 않게 이미 있으면 그걸 쓴다 */
+            let chg = kpi.querySelector('.kchg');
+            if (!chg) {
+              chg = document.createElement('div');
+              chg.className = 'kchg flat';
+              chg.innerHTML = '—';
+              if (valEl) valEl.insertAdjacentElement('afterend', chg);
+            }
+            return { valEl, subB, val, cur, base: cur, peak, hasPeak, chg };
+          });
+        }
+        seedKPIs();
+        /* 내용이 PRD 어휘로 바뀐 뒤 이 함수를 부르면 기준값이 새 숫자로 다시 잡힌다 */
+        window.__reseedLiveKPI = seedKPIs;
         /* 값이 바뀔 때 옛 값 → 새 값으로 카운트업(이징) 애니메이션 */
         function animateVal(k, from, to) {
           if (k.raf) cancelAnimationFrame(k.raf);
@@ -25199,9 +25750,11 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
             next = Math.max(1, Math.round(next));
             if (k.hasPeak) next = Math.min(next, k.peak);
             k.cur = next;
-            /* 누적 거래량은 3초간 처리량(≈ TPS×3)만큼 증가 → 3초마다 또박또박, 카운트업 애니메이션 */
+            /* 누적 거래량은 3초간 처리량(≈ TPS×3)만큼 증가 → 3초마다 또박또박, 카운트업 애니메이션.
+               단 PRD 어휘로 갈아끼운 지표(kW·%·℃ 같은 순시값)는 누적하면 '기준 1,180 kW' 옆에서
+               값이 무한정 올라가 자기모순이 된다 → 그때는 기준값 근처를 오가게 둔다. */
             const from = k.val;
-            k.val += next * STEP_SEC;
+            k.val = stage.dataset.prdKpi === '1' ? next : k.val + next * STEP_SEC;
             if (k.valEl) animateVal(k, from, k.val);
             if (k.subB) {
               k.subB.textContent = k.hasPeak ? `| ${next}/${k.peak}` : `| ${next}`;
@@ -25451,17 +26004,77 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
         toast(`“${snapshots[0].name}” 스냅샷으로 저장했어요.`, { type: 'ok', kbd: 'Ctrl S' });
       });
 
+      /* ---------- 확인 대화상자 ----------
+         window.confirm() 대체. Promise<boolean> 을 준다.
+         파괴적 동작에서는 초기 초점을 '취소'에 두어, Enter 한 번으로 영구 삭제가 일어나지 않게 한다.
+         (모달 배경 잠금·포커스 트랩·복귀는 initFocusTrap 이 askModal 을 알고 있어 자동으로 처리한다) */
+      function askConfirm(opts) {
+        const o = opts || {};
+        const el = document.getElementById('askModal');
+        if (!el) return Promise.resolve(window.confirm(o.title || '계속할까요?'));
+        const t = document.getElementById('askTitle');
+        const b = document.getElementById('askBody');
+        const yes = document.getElementById('askYes');
+        const no = document.getElementById('askNo');
+        t.textContent = o.title || '계속할까요?';
+        b.innerHTML =
+          (o.body || '') +
+          (o.irreversible
+            ? '<div class="ask-warn"><svg viewBox="0 0 24 24"><path d="M12 9v5"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>되돌릴 수 없어요</span></div>'
+            : '');
+        yes.textContent = o.confirmLabel || '삭제';
+        yes.classList.toggle('danger', o.danger !== false);
+        /* 공용 포커스 트랩의 복귀 경로에 기대지 않고, 이 대화상자는 스스로 트리거를 기억한다.
+           파괴적 동작을 확인하고 돌아왔을 때 초점이 <body> 로 떨어지면 키보드 사용자는
+           방금 무엇을 취소했는지 알 수 없는 자리에서 다시 시작해야 한다. */
+        const opener = document.activeElement && document.activeElement !== document.body ? document.activeElement : null;
+        el.hidden = false;
+        return new Promise((resolve) => {
+          const backToOpener = () => {
+            const ok = opener && !opener.hidden && opener.getClientRects().length > 0;
+            const t = ok ? opener : document.querySelector('.sidepanel, .main, .lc-grid');
+            if (!t) return;
+            if (t !== opener && !t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+            [0, 120].forEach((ms) => setTimeout(() => {
+              if (document.activeElement === t) return;
+              try { t.focus({ preventScroll: true }); } catch (e) {}
+            }, ms));
+          };
+          const done = (v) => {
+            el.hidden = true;
+            backToOpener();
+            yes.onclick = no.onclick = el.onclick = null;
+            document.removeEventListener('keydown', onKey, true);
+            resolve(v);
+          };
+          function onKey(e) {
+            if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); done(false); }
+          }
+          yes.onclick = () => done(true);
+          no.onclick = () => done(false);
+          el.onclick = (e) => { if (e.target === el) done(false); }; /* 배경 클릭 = 취소 */
+          document.addEventListener('keydown', onKey, true);
+          setTimeout(() => no.focus(), 40); /* 안전한 쪽에 초점 */
+        });
+      }
+      window.__askConfirm = askConfirm;
+
       /* ---------- 전체 옵션 초기화 (로고 옆 ↻ 버튼 · 하단 버튼 공용) ---------- */
-      function doResetAll() {
-        const ok = window.confirm(
-          '모든 설정을 처음 상태로 되돌릴까요?\n\n' +
-            '· 색상 · 기준 색 · 배색 방식 · 미세 조정\n' +
-            '· 화면 종류 · 패널 모서리 둥글기\n' +
-            '· 대시보드 배치 · 내용 · 차트 종류\n' +
-            '· 되돌리기 기록\n' +
-            '이 모두 초기화됩니다.\n\n' +
-            '※ 이름 붙여 저장한 테마 스냅샷은 그대로 유지됩니다.'
-        );
+      async function doResetAll() {
+        const ok = await askConfirm({
+          title: '모든 설정을 처음 상태로 되돌릴까요?',
+          /* .ask-b 가 white-space:pre-line 이라 템플릿 리터럴의 줄바꿈이 그대로 살아난다 */
+          body: `<b>초기화되는 것</b>
+· 색상 · 기준 색 · 배색 방식 · 미세 조정
+· 화면 종류 · 패널 모서리 둥글기
+· 대시보드 배치 · 내용 · 차트 종류
+· 되돌리기 기록
+
+<b>그대로 유지되는 것</b>
+· 이름 붙여 저장한 테마 스냅샷`,
+          confirmLabel: '초기화',
+          irreversible: true,
+        });
         if (!ok) return;
         try {
           /* 개별 키를 일일이 적으면 새 옵션이 생길 때마다 빠지기 쉽다(색·페이지 키가 그렇게 누락됐었다).
@@ -25484,14 +26097,18 @@ window.__WEMB_SYMBOLS=[{i:'s1',s:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0
          전체 초기화와 달리 대시보드 배치·내용, 화면 종류, 모서리 둥글기, 되돌리기 기록,
          저장한 스냅샷은 건드리지 않고 '색 정하기' 단계(버전·밝기·기준색·배색·소스·미세조정·
          개별 색 지정)만 기본값으로 되돌린다. */
-      function doResetColor() {
-        const ok = window.confirm(
-          '‘색 정하기’를 처음 상태로 되돌릴까요?\n\n' +
-            '· 기준 색 · 배색 방식 · 색 소스 · 미세 조정\n' +
-            '· 버전(Flat) · 화면 밝기(Dark) · 개별 색 지정\n' +
-            '이 초기화됩니다.\n\n' +
-            '※ 대시보드 배치·내용, 화면 종류, 모서리 둥글기, 저장한 스냅샷은 그대로 유지됩니다.'
-        );
+      async function doResetColor() {
+        const ok = await askConfirm({
+          title: '‘색 정하기’를 처음 상태로 되돌릴까요?',
+          body: `<b>초기화되는 것</b>
+· 기준 색 · 배색 방식 · 색 소스 · 미세 조정
+· 버전(Flat) · 화면 밝기(Dark) · 개별 색 지정
+
+<b>그대로 유지되는 것</b>
+· 대시보드 배치 · 내용 · 화면 종류 · 모서리 둥글기 · 저장한 스냅샷`,
+          confirmLabel: '초기화',
+          irreversible: true,
+        });
         if (!ok) return;
         const def = {
           seed: '#4f6ce0',
@@ -27734,10 +28351,15 @@ ${wembTipRuntime()}
              · 시트는 스튜디오가 시안을 얹을 때 쓰는 것과 같은 style#hjX-style 로 한 번만 붙인다
                (`.hjX-root` 안으로 스코프돼 있어 라이브러리 밖으로 새지 않는다). */
           const HJ = window.__HANJIN_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+          /* ── HANA Bank H.I.T 14화면의 컴포넌트 에셋 ──
+             한진과 같은 장치를 쓴다(화면 DOM 에서 노드 id 로 잘라 쓰기) — 등록 목록만 다르다.
+             화면 registry 를 합쳐 두면 hjScreenHtml/hjDom 이 접두어만 보고 그대로 처리한다. */
+          const HN = window.__HANA_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+          const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {});
           const hjHtmlCache = {};
           function hjScreenHtml(px) {
             if (hjHtmlCache[px]) return hjHtmlCache[px];
-            const S = (HJ.screens || {})[px];
+            const S = DOM_SCREENS[px];
             const build = S && window[S.build];
             if (typeof build !== 'function') return (hjHtmlCache[px] = '');
             /* 시트도 이때 한 번만 — 다크가 먼저, 라이트가 뒤(오버라이드 순서) */
@@ -27748,7 +28370,7 @@ ${wembTipRuntime()}
               st.textContent = p[1];
               document.head.appendChild(st);
             });
-            return (hjHtmlCache[px] = build(HJ.base || 'src/hanjin/'));
+            return (hjHtmlCache[px] = build(S.base || HJ.base || 'src/hanjin/'));
           }
           /* 노드 하나의 서브트리를 잘라 낸다(여는/닫는 태그 짝 세기) */
           const hjSubCache = {};
@@ -27848,16 +28470,19 @@ ${wembTipRuntime()}
             /* 패널 탭은 '카드'만 노출 (보드·바 제외) */
             panel: skxItems((SKX.panels || []).filter((a) => String(a.name).split('/').pop().trim() === 'card'), 'panel')
               .concat(ichItems((ICH.panels || []).filter((a) => !isEventNamed(a)), 'panel'))
-              .concat(hjItems(HJ.panels, 'panel')),
+              .concat(hjItems(HJ.panels, 'panel'))
+              .concat(hjItems(HN.panels, 'panel')),
             /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리들.
                한진 시안의 이벤트 현황(판·머리글·카운트·표·행·등급 배지)과 이천 FMS 의 이벤트 목록이 함께 산다. */
             event: hjItems(HJ.events, 'event')
+              .concat(hjItems(HN.events, 'event'))
               .concat(ichItems((ICH.panels || []).filter(isEventNamed), 'event')),
             symbol: (window.__WEMB_SYMBOLS || [])
               .map((s, i) => ({ cat: 'symbol', id: s.i, name: '심볼 ' + String(i + 1).padStart(2, '0'), src: s.s }))
               .concat(skxItems(SKX.symbols, 'symbol'))
               .concat(ichItems(ICH.symbols, 'symbol'))
-              .concat(hjItems(HJ.symbols, 'symbol')),
+              .concat(hjItems(HJ.symbols, 'symbol'))
+              .concat(hjItems(HN.symbols, 'symbol')),
             /* 아이콘 탭에는 '…아이콘'으로 이름 붙은 등록물만 올린다 — 칩·토글·상태 점·화살표·
                로고처럼 아이콘이 아닌 부품이 섞이지 않게. 이름이 기준이라 내장 라인 아이콘
                세트(홈·차트·알림 …)도 더는 올리지 않는다 — 이름에 '아이콘'이 없다.
@@ -27865,7 +28490,8 @@ ${wembTipRuntime()}
             icon: []
               .concat(skxItems(SKX.icons, 'icon').filter(isIconNamed))
               .concat(ichItems(ICH.icons, 'icon').filter(isIconNamed))
-              .concat(hjIcons(HJ.icons, 'icon').filter(isIconNamed)),
+              .concat(hjIcons(HJ.icons, 'icon').filter(isIconNamed))
+              .concat(hjIcons(HN.icons, 'icon').filter(isIconNamed)),
             /* 검색 결과 임시 버킷 — data-cat="__search" 로 클릭/드래그가 여기서 항목을 찾는다 */
             __search: [],
           };
@@ -28026,6 +28652,8 @@ ${wembTipRuntime()}
             (ICH.charts || []).forEach((a) => items.push({ cat: 'chart', id: a.id, name: a.name, fig: a.fig, src: a.src, light: a.light }));
             /* 한진 통합관제 3화면의 차트 — 화면 DOM 그대로 */
             hjItems(HJ.charts, 'chart').forEach((a) => items.push(a));
+            /* HANA H.I.T 14화면의 차트 — 같은 방식 */
+            hjItems(HN.charts, 'chart').forEach((a) => items.push(a));
             return items;
           }
 
@@ -28989,16 +29617,96 @@ ${wembTipRuntime()}
         inp.addEventListener('blur', () => commit(true));
       }
 
-      /* (6-b) 모달 포커스 트랩 + 닫을 때 원래 포커스로 복귀 */
+      /* (6-b) 모달 포커스 트랩 + 닫을 때 원래 포커스로 복귀
+         ------------------------------------------------------------------
+         모달을 여닫는 방식이 두 가지다 — .show 클래스(온보딩·내보내기 계열)와
+         hidden 속성(PRD 위저드·기능 상세). 어느 쪽이든 '보이면 열린 것'으로 판정해
+         한 구현으로 전부 덮는다. 빠뜨리면 그 모달에서 Tab이 배경으로 새어나간다. */
       (function initFocusTrap() {
-        const MODALS = ['onbd', 'exModal', 'abModal', 'ctModal', 'csModal', 'coach'];
+        const MODALS = [
+          'onbd', 'exModal', 'abModal', 'ctModal', 'csModal', 'coach',
+          /* 아래 다섯은 트랩 밖에 있었다. prdWiz 는 신규 사용자가 반드시 지나는 관문이다. */
+          'prdWiz', 'specModal', 'npModal', 'flowLayout', 'wfModal', 'askModal',
+        ];
         const SEL = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
         const els = MODALS.map((id) => document.getElementById(id)).filter(Boolean);
-        const topOpen = () => els.find((el) => el.classList.contains('show')) || null;
+        const isOpen = (el) => !el.hidden && (el.classList.contains('show') || el.getClientRects().length > 0);
+        /* 뒤에 열린 모달이 우선(배열 뒷쪽이 나중에 뜬 계열) — 겹칠 때 가장 위를 잡는다 */
+        const topOpen = () => {
+          let top = null;
+          for (const el of els) if (isOpen(el)) top = el;
+          return top;
+        };
+        /* 배경 잠금 — 모달의 조상 사슬만 남기고 형제들을 inert 로 만든다.
+           #npModal 처럼 .app 안에 있는 모달도 있어서 '앱 전체 inert'는 쓸 수 없다. */
+        let inerted = [];
+        function lockBg(modal) {
+          unlockBg();
+          for (let n = modal; n && n !== document.body; n = n.parentElement) {
+            for (const sib of n.parentElement ? n.parentElement.children : []) {
+              if (sib === n || sib.inert) continue;
+              if (sib.tagName === 'SCRIPT' || sib.tagName === 'STYLE') continue;
+              sib.inert = true;
+              inerted.push(sib);
+            }
+          }
+        }
+        function unlockBg() {
+          inerted.forEach((el) => { el.inert = false; });
+          inerted = [];
+        }
         const focusables = (el) => [...el.querySelectorAll(SEL)].filter((e) => e.offsetParent !== null || e.getClientRects().length);
         let lastOutside = null,
           returnTo = null,
           wasOpen = false;
+        /* 트리거 요소를 '다시 찾을 수 있는 형태'로 기억한다.
+           요소 참조만 들고 있으면, 모달이 닫히면서 그 목록이 재렌더될 때(런처의 #lcNew 등)
+           참조가 DOM 에서 사라지고 복귀가 조용히 스킵돼 초점이 <body> 로 떨어졌다. */
+        function describe(el) {
+          if (!el) return null;
+          const d = { el };
+          if (el.id) d.sel = '#' + CSS.escape(el.id);
+          else if (el.dataset && el.dataset.act) d.sel = '[data-act="' + el.dataset.act + '"]';
+          else if (el.dataset && el.dataset.rail) d.sel = '[data-rail="' + el.dataset.rail + '"]';
+          else if (el.className && typeof el.className === 'string') {
+            const c = el.className.trim().split(/\s+/).filter(Boolean).map((x) => '.' + CSS.escape(x)).join('');
+            if (c) d.sel = el.tagName.toLowerCase() + c;
+          }
+          return d;
+        }
+        /* 원래 요소가 살아 있으면 그것, 아니면 같은 셀렉터로 다시 찾은 것,
+           그것도 없으면 그 자리를 대신할 컨테이너에 초점을 둔다 — 어떤 경우에도 <body> 로 떨어뜨리지 않는다. */
+        /* 후보가 DOM 에 있어도 '보이지 않으면' focus() 가 조용히 무시된다 —
+           런처의 #lcNew 처럼 모달을 연 뒤 감춰지는 트리거가 그렇다.
+           그때는 초점이 닫힌 모달의 버튼에 남아 다음 Tab 이 어디서 출발할지 알 수 없게 된다. */
+        const visible = (el) => !!el && !el.hidden && el.getClientRects().length > 0;
+        function restoreFocus(d) {
+          if (!d) return;
+          /* 대상은 '초점을 옮기는 순간'에 정한다. 모달을 닫으면 화면이 함께 바뀌는 경우가 있어
+             (런처가 사라지고 스튜디오가 드러남) 닫히는 시점에 고른 요소가 곧바로 사라질 수 있다.
+             그러면 focus() 가 무시되고 초점이 <body> 로 떨어진다. */
+          const pick = () => {
+            if (visible(d.el)) return d.el;
+            if (d.sel) { try { const c = document.querySelector(d.sel); if (visible(c)) return c; } catch (e) {} }
+            /* 트리거가 사라졌으면 그 자리를 대신할 영역으로. 오래 남는 것부터 고른다. */
+            const alt = [...document.querySelectorAll('.sidepanel, .main, .lc-grid')].find(visible);
+            if (alt && !alt.hasAttribute('tabindex')) alt.setAttribute('tabindex', '-1');
+            return alt || null;
+          };
+          /* 모달이 닫히는 데 애니메이션 시간이 걸리고(실측 약 200ms), 그 사이 런처가 사라지며
+             화면이 통째로 바뀐다. 그 전에 고른 대상은 곧 사라져 focus() 가 무시된다.
+             → 전환 전·중·후 세 시점에서 시도하고, 초점이 제자리를 찾으면 나머지는 아무것도 하지 않는다. */
+          let done = false;
+          const go = () => {
+            if (done) return;
+            const t = pick();
+            if (!t) return;                       /* 전환 중이라 아직 아무것도 안 보이면 다음 시도에 맡긴다 */
+            if (document.activeElement === t) { done = true; return; }
+            try { t.focus({ preventScroll: true }); } catch (e) { try { t.focus(); } catch (e2) {} }
+            if (document.activeElement === t) done = true;
+          };
+          [0, 160, 380].forEach((ms) => setTimeout(go, ms));
+        }
         /* 모달 밖에 있을 때 마지막으로 포커스/클릭한 요소 기억 (body·모달 내부 제외).
            클릭으로 여는 경우 focus 이벤트가 누락돼도 pointerdown으로 여는 버튼을 확실히 잡음 */
         document.addEventListener('focusin', (e) => {
@@ -29037,23 +29745,38 @@ ${wembTipRuntime()}
           },
           true
         );
+        let curOpen = null;
         const mo = new MutationObserver(() => {
           const m = topOpen();
+          if (m === curOpen) return;
+          curOpen = m;
           if (m && !wasOpen) {
             /* 방금 열림 — 복귀 대상(연 버튼)을 고정하고 모달 안으로 포커스 이동 */
             wasOpen = true;
-            returnTo = lastOutside;
+            returnTo = describe(lastOutside);
+            lockBg(m);
             if (!m.contains(document.activeElement)) {
               const f = focusables(m);
               if (f.length) setTimeout(() => f[0].focus(), 30);
             }
+          } else if (m && wasOpen) {
+            /* 모달이 겹쳐 있다 — 잠금 대상을 지금 맨 위 모달 기준으로 다시 계산한다. */
+            lockBg(m);
+            /* 위에 있던 모달이 닫혀 아래 모달이 드러난 경우, 초점은 방금 사라진 요소에 남아
+               <body> 로 떨어진다. 드러난 모달 안으로 다시 넣어 준다. */
+            if (!m.contains(document.activeElement)) {
+              const f = focusables(m);
+              if (f.length) setTimeout(() => { if (!m.contains(document.activeElement)) f[0].focus(); }, 30);
+            }
           } else if (!m && wasOpen) {
-            /* 방금 닫힘 — 원래 포커스로 복귀 */
+            /* 방금 닫힘 — 배경 잠금 해제 + 원래 포커스로 복귀 */
             wasOpen = false;
-            if (returnTo && document.body.contains(returnTo)) setTimeout(() => returnTo.focus(), 0);
+            unlockBg();
+            restoreFocus(returnTo);
           }
         });
-        els.forEach((el) => mo.observe(el, { attributes: true, attributeFilter: ['class'] }));
+        /* .show 토글과 hidden 속성 양쪽을 본다. style 은 display 로 여닫는 경우 대비. */
+        els.forEach((el) => mo.observe(el, { attributes: true, attributeFilter: ['class', 'hidden', 'style'] }));
       })();
 
       /* (1) 실시간 대비 경고 — 검증표(contrastRows)와 동일한 기준으로 자동 판정 */
@@ -29335,11 +30058,14 @@ ${wembTipRuntime()}
           const cols = dashCols();
           if (!cols) return;
           const panels = ensurePanels(cols);
+          /* 어느 경로로 빠져나가든 내용은 PRD 어휘로 맞춘다 — 배치만 바꾸고 끝나면 은행 데모가 남는다 */
+          const paintPrd = () => { try { if (window.__applyPrdToPanels) window.__applyPrdToPanels(cols); } catch (e) {} };
           /* 디지털 트윈 전용 레이아웃은 대시보드 미리보기에 적용하지 않는다(3D 씬 유지) */
-          if (typeof layoutId === 'string' && layoutId.startsWith('dt-')) { restoreCols(cols, panels); return; }
+          if (typeof layoutId === 'string' && layoutId.startsWith('dt-')) { restoreCols(cols, panels); paintPrd(); return; }
           const lay = findLayout(layoutId);
           if (!lay) {
             restoreCols(cols, panels);
+            paintPrd();
             return;
           }
           /* 패널을 .cols 직속으로 옮긴 뒤 빈 .col 제거 → grid 배치 */
@@ -29362,6 +30088,10 @@ ${wembTipRuntime()}
             panels[i].style.gridColumn = '';
             panels[i].style.gridRow = '';
           }
+          /* 배치만 바꾸고 내용은 은행 데모 그대로 두면, PRD 6단계를 채운 사용자가
+             발전소를 골라도 '타 기관 지연 TOP5 · 국민은행'을 보게 된다.
+             디지털 트윈 경로가 이미 쓰는 엔진(__prdPanelSpec)을 여기서도 태운다. */
+          paintPrd();
         }
         window.__applyDashLayout = applyDashLayout;
 
@@ -29452,74 +30182,147 @@ ${wembTipRuntime()}
           '2D 대시보드': ['종합현황', '인프라', '서비스·거래', '비즈니스', '이벤트·장애', '안전·보안', '에너지·환경', 'AI·예측', '운영·SOP'],
           '3D 디지털트윈': ['부지·건물·층', '시설·설비', 'IT·데이터센터', '발전·에너지', '안전·소방', '물리보안', '환경·기상', '이벤트', '2D 정보패널', 'SOP·운영'],
         };
-        /* 각 템플릿의 업무 영역 — 제목 기준 수동 매핑(아래 TEMPLATES 순서와 1:1) */
-        const TPL_AREA_MAP = ['부지·건물·층', '종합현황', '인프라', '종합현황', '서비스·거래', '서비스·거래', '종합현황', '에너지·환경', 'IT·데이터센터', '종합현황', '종합현황', '안전·보안', '종합현황', '인프라', '시설·설비', '부지·건물·층', '종합현황', '서비스·거래', '서비스·거래'];
-        const TEMPLATES = [
-          'Digital Twin: SKHynix Icheon 1level',
-          'Dashbord: Icheon main',
-          'Dashbord: NH-DCIM',
-          'Dashboard: KB',
-          'Dashbord: hyundaicapital P01 Service Map',
-          'Dashbord: Hana Card',
-          'Dashbord: SHOneView main',
-          'Dashbord: koen Dashboard01',
-          'Digital Twin: Digicentre DCIM',
-          'Dashbord: Global Status(1)',
-          'Dashbord: Global Status(2)',
-          'Dashbord: SWsecurrity',
-          'Dashbord: Korea status(1)',
-          'Dashbord: KORAIL Concept',
-          'Digital Twin: Facility Status',
-          'Digital Twin: LSE Demo floor',
-          'Dashbord: Hanjin main',
-          'Dashbord: wooribank Transaction',
-          'Dashbord:HANA Bank-H.I.T',
-        ].map((title, i) => {
+        /* ── 템플릿 원본(카탈로그) — UI Library 1.0 썸네일을 프로젝트 단위로 묶은 것 ──
+           한 프로젝트에 화면이 여럿이면 slides 로 묶어 카드 한 장으로 올린다.
+           (상세에서 슬라이드로 넘겨 보고, '스튜디오 열기'를 누르면 그 화면들이 한 폴더 안의 화면들로 만들어진다)
+           썸네일은 src/templates/lib/<이름>.jpg(1200×675), 스튜디오에 얹히는 원본은 <이름>-hi.jpg(1920폭). */
+        const TPL_LIB = 'src/templates/lib/';
+        const TL = (name, label) => ({ img: TPL_LIB + name + '.jpg', label });
+        /* [제목, 업무 영역, 등록일, 화면들] — 제목 접두어(Digital Twin / Dashboard)로 화면 유형이 갈린다 */
+        const TPL_DEFS = [
+          { title: 'Digital Twin: SKHynix Icheon 1level', area: '부지·건물·층', date: 'February 12, 2024', slides: [
+            TL('skhynix-icheon-1level', '1level 전경'), TL('skhynix-icheon-2level', '2level 전경')] },
+          { title: 'Digital Twin: Gammania', area: '부지·건물·층', date: 'April 3, 2024', slides: [
+            TL('gammania-overviewb', '종합 전경'), TL('gammania-floorscreen', '층별 화면')] },
+          { title: 'Dashboard: Icheon main', area: '종합현황', date: 'November 3, 2025', slides: [
+            TL('icheon-main', '메인')] },
+          { title: 'Dashboard: NH-DCIM', area: '인프라', date: 'June 18, 2025', slides: [
+            TL('nh-dcim', 'DCIM 현황')] },
+          { title: 'Dashboard: KB', area: '종합현황', date: 'September 27, 2026', slides: [
+            TL('kb-main', '메인'), TL('kb-main02', '메인 02')] },
+          { title: 'Dashboard: Hyundai Capital', area: '서비스·거래', date: 'March 9, 2025', slides: [
+            TL('hyundaicapital-p01-service-map', '서비스 맵'), TL('hyundaicapital-p03-monitoring', '모니터링'),
+            TL('hyundaicapital-p07-it-kpi', 'IT KPI'), TL('hyundaicapital-p08-it-status', 'IT 현황')] },
+          { title: 'Dashboard: Hana Card', area: '서비스·거래', date: 'December 14, 2025', slides: [
+            TL('hanacard-main', '메인'), TL('hanacard-approval-text', '승인 현황')] },
+          { title: 'Dashboard: Shinhan Card Security', area: '안전·보안', date: 'July 19, 2024', slides: [
+            TL('shinhan-card-security', '보안 현황')] },
+          { title: 'Dashboard: PSIM', area: '안전·보안', date: 'August 30, 2024', slides: [
+            TL('psim-dashboard-ic', 'PSIM 현황')] },
+          { title: 'Dashboard: SHOneView', area: '종합현황', date: 'August 1, 2026', slides: [
+            TL('shoneview-main01', '메인 01'), TL('shoneview-main02', '메인 02'), TL('shoneview-main03', '메인 03'),
+            TL('shoneview-network', '네트워크'), TL('shoneview-p03-was', 'WAS'), TL('shoneview-p05-db', 'DB'),
+            TL('shoneview-p06-01-systemstatus01', '시스템현황 P06-01 · 01'), TL('shoneview-p06-01-systemstatus02', '시스템현황 P06-01 · 02'),
+            TL('shoneview-p06-02-systemstatus01', '시스템현황 P06-02 · 01'), TL('shoneview-p06-02-systemstatus02', '시스템현황 P06-02 · 02'),
+            TL('shoneview-p06-02-systemstatus03', '시스템현황 P06-02 · 03'), TL('shoneview-p06-02-systemstatus04', '시스템현황 P06-02 · 04'),
+            TL('shoneview-login', '로그인')] },
+          { title: 'Dashboard: Hanbit', area: '에너지·환경', date: 'January 22, 2025', slides: [
+            TL('hanbit', '발전소 현황')] },
+          { title: 'Dashboard: HC Approval', area: '서비스·거래', date: 'March 28, 2024', slides: [
+            TL('hc-approval', '승인 현황')] },
+          { title: 'Dashboard: KOEN', area: '에너지·환경', date: 'May 22, 2024', slides: [
+            TL('koen-dashboard01', '발전 현황')] },
+          { title: 'Dashboard: DCMS', area: '에너지·환경', date: 'February 6, 2026', slides: [
+            TL('dcms-energystatus', '에너지 현황'), TL('dcms-electricty', '전력 현황')] },
+          { title: 'Dashboard: Figma LottieFiles', area: '종합현황', date: 'April 25, 2025', slides: [
+            TL('figma-lottiefiles', '모션 컴포넌트')] },
+          { title: 'Dashboard: KISED', area: '비즈니스', date: 'July 11, 2025', slides: [
+            TL('kised01', '현황 01'), TL('kised02', '현황 02')] },
+          { title: 'Digital Twin: Digicentre DCIM', area: 'IT·데이터센터', date: 'October 30, 2025', slides: [
+            TL('digicentre-dcim', '센터 전경')] },
+          { title: 'Dashboard: Global Status', area: '종합현황', date: 'January 16, 2026', slides: [
+            TL('global-status-1', '글로벌 현황 01'), TL('global-status-2', '글로벌 현황 02')] },
+          { title: 'Dashboard: SW Security', area: '안전·보안', date: 'July 5, 2024', slides: [
+            TL('swsecurrity', '통합보안 현황')] },
+          { title: 'Dashboard: Korea Status', area: '종합현황', date: 'April 11, 2026', slides: [
+            TL('korea-status-1', '국내 현황')] },
+          { title: 'Dashboard: KORAIL Concept', area: '인프라', date: 'February 28, 2025', slides: [
+            TL('korail-concept', '노선 현황')] },
+          { title: 'Dashboard: Sewerage System Concept', area: '에너지·환경', date: 'June 9, 2024', slides: [
+            TL('seweragesys-concept', '하수처리 현황')] },
+          { title: 'Dashboard: NRTEC Concept', area: '종합현황', date: 'September 14, 2025', slides: [
+            TL('nrtec-concept-2dmap', '2D 맵'), TL('nrtec-concept-3dmap', '3D 맵')] },
+          { title: 'Digital Twin: Facility Status', area: '시설·설비', date: 'November 24, 2026', slides: [
+            TL('facility-status-1', '설비 현황 01'), TL('facility-status-2', '설비 현황 02')] },
+          { title: 'Dashboard: Port Status', area: '종합현황', date: 'March 2, 2026', slides: [
+            TL('portstatus-overalloperation', '종합 운영'), TL('portstatus-vesselinfo', '선박 정보'), TL('portstatus-login-concept', '로그인')] },
+          { title: 'Digital Twin: Solar Concept (FEMS)', area: '발전·에너지', date: 'August 18, 2025', slides: [
+            TL('solor-concept-fems', '발전 단지')] },
+          { title: 'Digital Twin: LSE Demo', area: '시설·설비', date: 'June 2, 2026', slides: [
+            TL('lse-demo-main', '메인'), TL('lse-demo-floor', '층 현황'), TL('lse-demo-electricroom', '전기실'),
+            TL('lse-demo-detail-vcb', 'VCB 상세'), TL('lse-demo-pop-facilitystatus', '팝업 · 설비 현황'),
+            TL('lse-demo-pop-generator', '팝업 · 발전기'), TL('lse-demo-pop-vcb-safe', '팝업 · VCB 안전')] },
+          { title: 'Digital Twin: Hanjin main', area: '부지·건물·층', date: 'September 8, 2024', slides: [
+            TL('hanjin-main', '메인')] },
+          { title: 'Dashboard: Woori Bank', area: '서비스·거래', date: 'December 1, 2026', slides: [
+            TL('wooribank-transaction', '거래 현황'), TL('wooribank-performance', '성능 현황'), TL('wooribank-event', '이벤트 현황')] },
+          { title: 'Dashboard: Army Prototype', area: '안전·보안', date: 'October 17, 2024', slides: [
+            TL('army-prototype01', '프로토타입 01'), TL('army-prototype02', '프로토타입 02')] },
+          { title: 'Dashboard: NH Biometrics', area: '서비스·거래', date: 'May 6, 2026', slides: [
+            TL('nh-biometrics', '생체인증 현황')] },
+          { title: 'Dashboard: HuaNan Bank', area: '서비스·거래', date: 'July 30, 2026', slides: [
+            TL('huananbank-main', '메인'), TL('huananbank-corebiz01-01', '핵심업무 01-1'), TL('huananbank-corebiz01-02', '핵심업무 01-2'),
+            TL('huananbank-corebiz02', '핵심업무 02'), TL('huananbank-banking', '뱅킹'), TL('huananbank-atm', 'ATM'),
+            TL('huananbank-payment-status', '결제 현황'), TL('huananbank-internet', '인터넷뱅킹'),
+            TL('huananbank-domestic-branch', '국내 지점'), TL('huananbank-overseas-branch', '해외 지점'), TL('huananbank-itinfra', 'IT 인프라')] },
+          { title: 'Digital Twin: Handok GridSol Cube', area: '발전·에너지', date: 'January 9, 2025', slides: [
+            TL('handok-gridsol-cube', '단지 전경')] },
+          { title: 'Dashboard: Incheon Monitoring', area: '인프라', date: 'March 20, 2026', slides: [
+            TL('new-incheon01', '모니터링 01'), TL('new-incheon02', '모니터링 02'), TL('new02-incheon02', '모니터링 03')] },
+          { title: 'Digital Twin: BioTech D-BT', area: '부지·건물·층', date: 'November 12, 2025', slides: [
+            TL('biotech-d-bt-main', '메인'), TL('biotech-d-bt-overview', '전경'), TL('biotech-d-bt-2f', '2층')] },
+          { title: 'Dashboard: SKH Security', area: '안전·보안', date: 'August 7, 2025', slides: [
+            TL('skh-security', '보안 현황')] },
+          { title: 'Dashboard: SHCard Smart Channel', area: '종합현황', date: 'May 15, 2026', slides: [
+            TL('shcard-overall', '종합현황'), TL('shcard-smartchannel-general-board', '종합 보드'),
+            TL('shcard-smartchannel-system-status', '시스템 현황'), TL('shcard-smartchannel-service-homepage', '서비스 · 홈페이지'),
+            TL('shcard-smartchannel-iinfra-dbms', '인프라 · DBMS')] },
+          { title: 'Dashboard: HANA Bank H.I.T', area: '종합현황', date: 'June 30, 2025', slides: [
+            { img: 'src/templates/hana-overview-02.jpg', label: '종합현황02' }] },
+        ];
+        const TEMPLATES = TPL_DEFS.map((d, i) => {
           const n = i + 1;
-          const dt = title.startsWith('Digital Twin');
-          /* 실제로 다양한 등록일(2024~2026) — 최신순 정렬이 뚜렷하게 보이도록 섞어 배치 */
-          const TPL_DATES = [
-            'February 12, 2024', 'November 3, 2025', 'June 18, 2025', 'September 27, 2026',
-            'March 9, 2025', 'December 14, 2025', 'August 1, 2026', 'May 22, 2024',
-            'October 30, 2025', 'January 16, 2026', 'January 17, 2026', 'July 5, 2024',
-            'April 11, 2026', 'February 28, 2025', 'November 24, 2026', 'June 2, 2026',
-            'September 8, 2024', 'December 1, 2026', 'June 30, 2025',
-          ];
-          const date = TPL_DATES[i] || 'July 24, 2026';
+          const dt = d.title.startsWith('Digital Twin');
           const screenType = dt ? '3D 디지털트윈' : '2D 대시보드';
-          const area = TPL_AREA_MAP[i] || (dt ? '부지·건물·층' : '종합현황');
           return {
-            img: 'src/templates/tpl-' + String(n).padStart(2, '0') + '.jpg',
-            title,
-            date,
+            img: d.slides[0].img,
+            title: d.title,
+            date: d.date,
             /* 정렬용 값 — ts(최신순): 표시 날짜에서 직접 파싱, pop(인기순): 안정적 의사 조회수 */
-            ts: Date.parse(date),
+            ts: Date.parse(d.date),
             pop: ((n * 7919) % 900) + 100,
             screen: dt ? 'dt' : 'dash',
             screenType, /* 화면 유형 필터용 */
-            area,       /* 업무 영역 필터용 */
-            badges: [[screenType, 'sol'], [area, 'con']],
+            area: d.area, /* 업무 영역 필터용 */
+            year: String(new Date(Date.parse(d.date)).getFullYear()), /* 연도 필터용 */
+            badges: [[screenType, 'sol'], [d.area, 'con']],
+            /* 화면이 둘 이상일 때만 슬라이드 — 한 장짜리는 상세에서 큰 그림 하나로 보여 준다 */
+            slides: d.slides.length > 1 ? d.slides.slice() : null,
           };
         });
         /* SKHynix Icheon 1level — '스튜디오 열기' 시 Figma(1:139)를 HTML/CSS DOM으로 구현한 화면으로 연다
-           (src/skhynix-screen.js). 갤러리·상세 미리보기 썸네일은 카탈로그용 이미지(tpl-01.jpg) 유지. */
+           (src/skhynix-screen.js). 갤러리·상세 미리보기 썸네일은 그 화면을 캡처한 이미지다. */
         (function () {
           const sk = TEMPLATES.find((t) => t.title === 'Digital Twin: SKHynix Icheon 1level');
           if (sk) {
             sk.tpl = 'skhynix';
-            /* 상세 페이지 이미지 미리보기 — Figma(64:1782 메인 · 64:2658 UPS 전력 상세)를 슬라이드로 보여준다. 메인이 첫 장. */
+            sk.img = 'src/templates/skhynix-1.jpg';
+            /* 앞 두 장은 실제 화면(Figma 64:1782 메인 · 64:2658 UPS 전력 상세),
+               세 번째 2level 은 아직 카탈로그 그림뿐이라 이미지 화면(imageOnly)으로 함께 만든다. */
             sk.slides = [
               { img: 'src/templates/skhynix-1.jpg', label: '메인' },
               { img: 'src/templates/skhynix-2.jpg', label: 'UPS 전력 상세' },
+              { img: TPL_LIB + 'skhynix-icheon-2level.jpg', label: '2level 전경', imageOnly: true },
             ];
           }
         })();
         /* Icheon main — '스튜디오 열기' 시 Figma(64:3367 "Screen/FMS Hub")를 순수 HTML/CSS DOM 으로
            재구축한 화면으로 연다(src/skhynix-hub.js). 상세 미리보기도 그 화면을 그대로 캡처한 이미지다. */
         (function () {
-          const ic = TEMPLATES.find((t) => t.title === 'Dashbord: Icheon main');
+          const ic = TEMPLATES.find((t) => t.title === 'Dashboard: Icheon main');
           if (ic) {
             ic.tpl = 'skhynix-hub';
+            ic.img = 'src/templates/icheon-hub.jpg';
             /* 두 장 — [0] 메인(64:3367 Screen/FMS Hub), [1] 항온항습기 상세(64:4059 Screen/HVAC Detail).
                두 번째 장은 '스튜디오 열기' 시 같은 프로젝트의 두 번째 화면으로 함께 만들어진다. */
             ic.slides = [
@@ -29530,20 +30333,23 @@ ${wembTipRuntime()}
         })();
         /* Hanjin main — 상세 페이지에서 3장(메인·입출문현황·하차현황)을 슬라이드로 보여준다. 메인이 첫 장. */
         (function () {
-          const hj = TEMPLATES.find((t) => t.title === 'Dashbord: Hanjin main');
+          const hj = TEMPLATES.find((t) => t.title === 'Digital Twin: Hanjin main');
           if (hj) {
             hj.tpl = 'hanjin'; /* 스튜디오 열기 시 한진 디지털 트윈 페이지로 재현 */
+            hj.img = 'src/templates/hanjin-1.jpg';
+            /* 앞 세 장은 실제 화면, 상차현황은 아직 카탈로그 그림뿐이라 이미지 화면(imageOnly)으로 함께 만든다 */
             hj.slides = [
               { img: 'src/templates/hanjin-1.jpg', label: '메인' },
               { img: 'src/templates/hanjin-2.jpg', label: '입출문현황' },
               { img: 'src/templates/hanjin-3.jpg', label: '하차현황' },
+              { img: TPL_LIB + 'hanjin-2d-ld.jpg', label: '상차현황', imageOnly: true },
             ];
           }
         })();
         /* HANA Bank H.I.T — '스튜디오 열기' 시 Figma(H3S2M7DUCvuJgi75oBqg6W) 화면 15장을
            순수 HTML/CSS DOM 으로 재구축한 것(src/hana-*.js)으로 연다. 상세 미리보기도 그 화면을 그대로 캡처한 것이다. */
         (function () {
-          const hn = TEMPLATES.find((t) => t.title === 'Dashbord:HANA Bank-H.I.T');
+          const hn = TEMPLATES.find((t) => t.title === 'Dashboard: HANA Bank H.I.T');
           if (hn) {
             hn.tpl = 'hana';
             hn.img = 'src/templates/hana-overview-02.jpg';
@@ -29565,8 +30371,22 @@ ${wembTipRuntime()}
             ];
           }
         })();
+        /* 실제 화면이 붙어 있는 템플릿인지 — Figma를 HTML/CSS DOM(+SVG)으로 재구축해 두어
+           '스튜디오 열기'를 누르면 그 화면이 그대로 열리는 것들이다.
+           나머지는 아직 카탈로그 그림 한 장뿐이라 갤러리에서 '제작중'으로 표시한다.
+           openTemplate() 도 같은 함수를 써서 표시와 실제 동작이 어긋나지 않게 한다. */
+        /* 템플릿 데이터의 날짜는 영문('November 3, 2025')이다. 한국어 UI에 그대로 노출되면
+           제목만 영어인 카드에서 날짜까지 영어가 되어 이질감이 커진다.
+           데이터는 건드리지 않고 표시할 때만 한국어로 바꾼다(파싱 실패 시 원문 유지). */
+        function tplDate(v) {
+          const d = new Date(v);
+          if (isNaN(d)) return v;
+          return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+        }
+        const tplIsLive = (t) => !!t && (t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
         let tplScreen = 'all'; /* 화면 유형 필터(all | 2D 대시보드 | 3D 디지털트윈) */
         let tplArea = 'all';   /* 업무 영역 필터(화면 유형 종속) */
+        let tplYear = 'all';   /* 등록 연도 필터 — 화면 유형·업무 영역과 나란한 별개 축이다 */
         let tplQuery = ''; /* 템플릿 갤러리 검색어(제목·배지 대상) */
         let tplSelected = null; /* 상세 페이지로 열어 둔 템플릿(null이면 갤러리) */
         /* ── 전역 뒤로가기용 — 현재 화면 상태 읽기 / 복원 ──
@@ -29700,6 +30520,19 @@ ${wembTipRuntime()}
             gal.appendChild(areas);
           }
 
+          /* 연도 — 화면 유형·업무 영역과 나란한 별개 축이다.
+             다만 **분류가 아니라 추리는 도구**라, 카테고리 줄이 아니라 아래 검색·정렬 줄에 둔다.
+             고를 수 있는 해는 **지금 고른 유형·영역에 실제로 있는 것만** 뽑는다 —
+             눌렀는데 빈 화면이 나오는 죽은 선택지가 없다. */
+          const inScope = TEMPLATES.filter((t) =>
+            (tplScreen === 'all' || t.screenType === tplScreen) && (tplArea === 'all' || t.area === tplArea));
+          const years = [...new Set(inScope.map((t) => t.year))].sort((a, b) => b.localeCompare(a));
+          const yearCnt = {};
+          inScope.forEach((t) => { yearCnt[t.year] = (yearCnt[t.year] || 0) + 1; });
+          /* 고른 해가 지금 범위에서 사라졌으면(유형을 바꿔서) 조용히 전체로 되돌린다.
+             고를 해가 하나뿐이면 드롭다운을 숨기는데, 그때 걸러 둔 채로 두면 풀 방법이 없으니 같이 푼다. */
+          if (years.length <= 1 || years.indexOf(tplYear) < 0) tplYear = 'all';
+
           /* 정렬 드롭다운 — 카테고리 바 '아래' 행 오른쪽(최신순·이름순·인기순) */
           const sortIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h13"/><path d="M4 12h9"/><path d="M4 18h5"/><path d="M16 9l3-3 3 3"/><path d="M19 6v12"/></svg>';
           const chevIcon = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
@@ -29731,6 +30564,38 @@ ${wembTipRuntime()}
           };
           sortBar.appendChild(searchWrap);
 
+          /* 오른쪽 묶음 — 연도 · 정렬. 둘 다 '목록을 추리고 고르는' 같은 성격이라 나란히 둔다. */
+          const right = document.createElement('div');
+          right.className = 'tplbarright';
+
+          /* 연도 드롭다운 — 정렬과 똑같은 부품을 쓴다(생김새를 새로 들이지 않는다).
+             메뉴에 해마다 개수를 적어 두어, 열어 보면 어느 해에 자료가 있는지 바로 보인다. */
+          if (years.length > 1) {
+            const yIcon = '<svg class="yico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4"/><path d="M16 3v4"/><path d="M3 11h18"/></svg>';
+            const yWrap = document.createElement('div');
+            yWrap.className = 'tplsort';
+            const opt = (key, label, count) =>
+              '<button type="button" class="tplsort-opt' + (key === tplYear ? ' on' : '') + '" role="option" data-y="' + key + '">' +
+              label + '<span class="num">' + count + '</span>' + ckIcon + '</button>';
+            yWrap.innerHTML =
+              '<button type="button" class="tplsort-btn' + (tplYear === 'all' ? '' : ' filtered') + '" aria-haspopup="listbox">' + yIcon +
+                '<span class="tplsort-lbl">' + (tplYear === 'all' ? '전체 연도' : tplYear + '년') + '</span>' + chevIcon + '</button>' +
+              '<div class="tplsort-menu" role="listbox">' +
+                opt('all', '전체 연도', inScope.length) +
+                years.map((y) => opt(y, y + '년', yearCnt[y])).join('') +
+              '</div>';
+            yWrap.querySelector('.tplsort-btn').onclick = (e) => { e.stopPropagation(); yWrap.classList.toggle('open'); };
+            yWrap.querySelectorAll('.tplsort-opt').forEach((op) => {
+              op.onclick = (e) => {
+                e.stopPropagation();
+                if (tplYear === op.dataset.y) { yWrap.classList.remove('open'); return; }
+                tplYear = op.dataset.y;
+                renderProjects();
+              };
+            });
+            right.appendChild(yWrap);
+          }
+
           const sortWrap = document.createElement('div');
           sortWrap.className = 'tplsort';
           sortWrap.innerHTML =
@@ -29743,7 +30608,8 @@ ${wembTipRuntime()}
           sortWrap.querySelectorAll('.tplsort-opt').forEach((op) => {
             op.onclick = (e) => { e.stopPropagation(); tplSort = op.dataset.sort; renderProjects(); };
           });
-          sortBar.appendChild(sortWrap);
+          right.appendChild(sortWrap);
+          sortBar.appendChild(right);
           gal.appendChild(sortBar);
           /* 바깥 클릭 시 정렬 메뉴 닫기(한 번만 등록) */
           if (!window.__tplSortDocClose) {
@@ -29767,6 +30633,7 @@ ${wembTipRuntime()}
             const list = sortTemplates(TEMPLATES.filter((t) => {
               if (tplScreen !== 'all' && t.screenType !== tplScreen) return false;
               if (tplArea !== 'all' && t.area !== tplArea) return false;
+              if (tplYear !== 'all' && t.year !== tplYear) return false;
               if (!q) return true;
               return t.title.toLowerCase().includes(q) || t.badges.some((bd) => bd[0].toLowerCase().includes(q));
             }));
@@ -29775,15 +30642,26 @@ ${wembTipRuntime()}
               e.className = 'tplempty';
               e.textContent = q
                 ? '‘' + tplQuery.trim() + '’ 검색 결과가 없어요.'
-                : '해당 카테고리에 맞는 템플릿이 아직 없어요.';
+                : tplYear !== 'all'
+                  ? tplYear + '년에 등록된 템플릿이 아직 없어요.'
+                  : '해당 카테고리에 맞는 템플릿이 아직 없어요.';
               grid.appendChild(e);
             }
             list.forEach((t) => {
               const card = document.createElement('button');
               card.type = 'button';
               card.className = 'tplcard';
+              /* 아직 화면이 없는 템플릿만 표시한다 — 준비된 쪽은 아무것도 붙이지 않는다.
+                 흐려진 것들 사이에서 **밝은 썸네일 자체가** 준비됐다는 신호다. */
+              const live = tplIsLive(t);
+              /* 배지를 뒤집었다. 38개 중 34개(89%)에 '제작중'을 붙이면 변별력이 0이고,
+                 그 배지가 썸네일 한가운데를 덮어 정작 보여줄 그림을 가렸다.
+                 지금은 실제로 열리는 4개에만 '열기 가능'을 붙이고, 위치도 모서리로 뺀다. */
               card.innerHTML =
-                '<div class="tplthumb"><img loading="lazy" src="' + t.img + '" alt="' + esc(t.title) + '"></div>' +
+                '<div class="tplthumb' + (live ? '' : ' wip') + '">' +
+                  '<img loading="lazy" src="' + t.img + '" alt="' + esc(t.title) + '">' +
+                  (live ? '<span class="tplstate ready">열기 가능</span>' : '') +
+                '</div>' +
                 '<div class="tplbox">' +
                   '<div class="tplsec1">' +
                     '<div class="tplbadges">' +
@@ -29792,8 +30670,8 @@ ${wembTipRuntime()}
                     '<div class="tpltitle">' + esc(t.title) + '</div>' +
                   '</div>' +
                   '<div class="tplsec2">' +
-                    '<span class="tpldate">' + esc(t.date) + '</span>' +
-                    '<span class="tplmore">Read More' + arrow + '</span>' +
+                    '<span class="tpldate">' + esc(tplDate(t.date)) + '</span>' +
+                    '<span class="tplmore">자세히 보기' + arrow + '</span>' +
                   '</div>' +
                 '</div>';
               card.onclick = () => { tplSelected = t; renderProjects(); if (window.__navOnNavigate) window.__navOnNavigate({ t: 'tpl', tpl: t.title }); };
@@ -29846,7 +30724,7 @@ ${wembTipRuntime()}
               '</div>' +
               '<div class="tpld-titlerow">' +
                 '<div class="tpld-title">' + esc(t.title) + '</div>' +
-                '<div class="tpld-date">' + esc(t.date) + '</div>' +
+                '<div class="tpld-date">' + esc(tplDate(t.date)) + '</div>' +
               '</div>' +
             '</div>' +
             heroHTML +
@@ -29888,8 +30766,9 @@ ${wembTipRuntime()}
            tpl이 붙은 템플릿(한진)은 디지털 트윈 페이지로 재현하므로 DT 화면으로 연다. */
         function openTemplate(t, slideIndex) {
           const isDT = t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
-          /* Figma로 구현된 템플릿(한진·SK하이닉스)은 실제 화면으로, 아직 미연결이면 임시 이미지로 연다 */
-          const connected = t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub';
+          /* Figma로 구현된 템플릿(한진·SK하이닉스·HANA)은 실제 화면으로, 아직 미연결이면 임시 이미지로 연다.
+             갤러리의 '제작중' 표시와 같은 판정을 쓴다(tplIsLive) — 표시와 동작이 어긋나면 안 된다. */
+          const connected = tplIsLive(t);
           const useTpl = connected ? t.tpl : 'image';
           pending = {
             name: t.title,
@@ -30381,8 +31260,13 @@ ${wembTipRuntime()}
               renderProjects();
               if (typeof toast === 'function') toast('"' + grp.name + '" 프로젝트를 복원했어요.', { type: 'ok' });
             }));
-            acts.appendChild(iconBtn('lc-del', '"' + grp.name + '" 영구 삭제', SVG_TRASH, () => {
-              if (!window.confirm('"' + grp.name + '" 프로젝트와 그 안의 화면을 영구 삭제할까요? 되돌릴 수 없어요.')) return;
+            acts.appendChild(iconBtn('lc-del', '"' + grp.name + '" 영구 삭제', SVG_TRASH, async () => {
+              if (!(await askConfirm({
+                title: '“' + grp.name + '” 프로젝트를 영구 삭제할까요?',
+                body: '이 프로젝트와 그 안의 화면이 모두 지워져요.',
+                confirmLabel: '영구 삭제',
+                irreversible: true,
+              }))) return;
               trashSel.delete(grp.id);
               saveGroups(loadGroups().filter((x) => x.id !== grp.id));
               saveProjects(loadProjects().filter((s) => s.projectId !== grp.id));
@@ -30453,8 +31337,13 @@ ${wembTipRuntime()}
 
           const acts = document.createElement('div'); acts.className = 'lc-cardacts';
           acts.appendChild(iconBtn('lc-dup', '"' + s.name + '" 화면 복제', SVG_COPY, () => dupScreen(s.id)));
-          acts.appendChild(iconBtn('lc-del', '"' + s.name + '" 화면 삭제', SVG_TRASH, () => {
-            if (!window.confirm('"' + s.name + '" 화면을 삭제할까요?')) return;
+          acts.appendChild(iconBtn('lc-del', '"' + s.name + '" 화면 삭제', SVG_TRASH, async () => {
+            if (!(await askConfirm({
+              title: '“' + s.name + '” 화면을 삭제할까요?',
+              body: '이 화면의 배치와 내용이 지워져요.',
+              confirmLabel: '삭제',
+              irreversible: true,
+            }))) return;
             saveProjects(loadProjects().filter((x) => x.id !== s.id));
             renderProjects();
             if (typeof toast === 'function') toast('화면을 삭제했어요.', { type: 'ok' });
@@ -30474,7 +31363,15 @@ ${wembTipRuntime()}
           if (view === 'trash') return emptyState('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M8 6V4h8v2"/><path d="M6 6l1 15h10l1-15"/></svg><b>휴지통이 비어 있어요</b><p>삭제한 프로젝트가 여기로 옮겨져요. 언제든 다시 복원할 수 있습니다.</p>');
           if (view === 'fav') return emptyState('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.4 4 1.2 6-5.4-3-5.4 3 1.2-6-4.4-4 6-.7z"/></svg><b>즐겨찾기한 프로젝트가 없어요</b><p>카드 왼쪽 위의 ☆ 버튼으로 자주 여는 프로젝트를 모아두세요.</p>');
           if (view === 'recent') return emptyState('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>최근 편집한 프로젝트가 없어요</b><p>‘전체’에서 새 프로젝트를 만들어 시작하세요.</p>');
-          return emptyState('');
+          /* view === 'all' — 첫 사용자가 착지하는 기본 뷰다.
+             여기가 비어 있으면 제품과의 첫 대면이 '문구 없는 점선 상자'가 된다.
+             다른 뷰와 같은 짜임(아이콘 + 헤드라인 + 안내 + 다음 행동)으로 채운다. */
+          return emptyState(
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>' +
+              '<b>아직 프로젝트가 없어요</b>' +
+              '<p>‘새 프로젝트’를 누르면 몇 가지 질문에 답하는 것만으로 관제 대시보드 시안이 만들어져요.</p>' +
+              '<button type="button" class="lc-tplbadge" data-view="tpl">만들어 둔 시안 먼저 둘러보기</button>'
+          );
         }
 
         /* 좌측 메뉴 전환 */
@@ -30499,12 +31396,25 @@ ${wembTipRuntime()}
           setView(b.dataset.view);
           if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: b.dataset.view });
         });
+        /* 빈 상태 안의 '만들어 둔 시안 먼저 둘러보기' — 왼쪽 메뉴를 거치지 않는 두 번째 진입로.
+           빈 상태는 매 렌더마다 다시 만들어지므로 그리드에 위임해 붙인다. */
+        document.querySelector('.lc-grid')?.addEventListener('click', (e) => {
+          const b = e.target.closest('.lc-tplbadge');
+          if (!b || !b.dataset.view) return;
+          setView(b.dataset.view);
+          if (window.__navOnNavigate) window.__navOnNavigate({ t: 'launcher', v: b.dataset.view });
+        });
         document.getElementById('lcSearch')?.addEventListener('input', renderProjects);
         /* 휴지통 전체삭제 — 휴지통의 모든 프로젝트를 영구 삭제 */
-        document.getElementById('lcEmptyTrash')?.addEventListener('click', () => {
+        document.getElementById('lcEmptyTrash')?.addEventListener('click', async () => {
           const trashed = loadGroups().filter((g) => g.deleted);
           if (!trashed.length) return;
-          if (!window.confirm('휴지통의 프로젝트 ' + trashed.length + '개를 전체삭제할까요? 되돌릴 수 없어요.')) return;
+          if (!(await askConfirm({
+            title: '휴지통을 비울까요?',
+            body: '프로젝트 <b>' + trashed.length + '개</b>와 그 안의 화면이 모두 지워져요.',
+            confirmLabel: '전체 삭제',
+            irreversible: true,
+          }))) return;
           trashSel.clear();
           const ids = new Set(trashed.map((g) => g.id));
           saveGroups(loadGroups().filter((g) => !g.deleted));
@@ -30513,10 +31423,15 @@ ${wembTipRuntime()}
           if (typeof toast === 'function') toast('휴지통을 비웠어요.', { type: 'ok' });
         });
         /* 휴지통 선택삭제 — 선택한 프로젝트만 영구 삭제 */
-        document.getElementById('lcSelDel')?.addEventListener('click', () => {
+        document.getElementById('lcSelDel')?.addEventListener('click', async () => {
           if (!trashSel.size) return;
           const n = trashSel.size;
-          if (!window.confirm('선택한 프로젝트 ' + n + '개를 영구 삭제할까요? 되돌릴 수 없어요.')) return;
+          if (!(await askConfirm({
+            title: '선택한 프로젝트를 영구 삭제할까요?',
+            body: '프로젝트 <b>' + n + '개</b>와 그 안의 화면이 모두 지워져요.',
+            confirmLabel: '영구 삭제',
+            irreversible: true,
+          }))) return;
           const ids = new Set(trashSel);
           saveGroups(loadGroups().filter((g) => !ids.has(g.id)));
           saveProjects(loadProjects().filter((s) => !ids.has(s.projectId)));
@@ -30745,21 +31660,27 @@ ${wembTipRuntime()}
           /* 이 템플릿으로 만든 화면들 — [0]=메인, 그다음부터 슬라이드 순서대로 */
           const screens = [proj];
           extra.forEach((sl, i) => {
+            /* 이 장면이 '그림 한 장'인지 — 미연결 템플릿 전체(tpl='image')이거나,
+               실제 화면이 붙은 템플릿에 카탈로그 그림만 있는 장면(imageOnly)이 섞인 경우다.
+               그럴 땐 화면마다 자기 그림을 들고 있어야 한다(안 그러면 전부 첫 장만 보인다). */
+            const asImage = proj.tpl === 'image' || !!(sl && sl.imageOnly);
             const sp = {
               id: newId(),
               name: (sl && sl.label) || ('화면 ' + (i + 2)),
               screen: proj.screen,
               layout: proj.layout,
-              tpl: proj.tpl,
-              img: proj.img,
+              tpl: asImage ? 'image' : proj.tpl,
+              img: asImage ? ((sl && sl.img) || proj.img) : proj.img,
               thumb: (sl && sl.img) || null,
               /* 이 화면이 템플릿의 몇 번째 장면인지 — 열 때 해당 시안을 그린다 */
               /* 한진은 세 장(메인 · 입/출문현황 · 하차현황)이라 슬라이드 순서를 화면 이름에 맞춘다 */
-              tplScene: proj.tpl === 'skhynix' && i === 0 ? 'popup'
-                : proj.tpl === 'skhynix-hub' && i === 0 ? 'hvac'
-                  : proj.tpl === 'hanjin' ? (i === 0 ? 'gate' : 'unload')
-                    : proj.tpl === 'hana' ? ['cloud-01', 'cloud-02', 'middleware', 'infra-main', 'infra-detail', 'event', 'network-01', 'network-02', 'network-03', 'facility', 'security-01', 'security-02', 'login'][i]
-                      : ('scene' + (i + 2)),
+              /* 그림 한 장짜리 장면은 그릴 시안이 없으니 장면 이름을 붙이지 않는다 */
+              tplScene: asImage ? ('scene' + (i + 2))
+                : proj.tpl === 'skhynix' && i === 0 ? 'popup'
+                  : proj.tpl === 'skhynix-hub' && i === 0 ? 'hvac'
+                    : proj.tpl === 'hanjin' ? (i === 0 ? 'gate' : 'unload')
+                      : proj.tpl === 'hana' ? ['cloud-01', 'cloud-02', 'middleware', 'infra-main', 'infra-detail', 'event', 'network-01', 'network-02', 'network-03', 'facility', 'security-01', 'security-02', 'login'][i]
+                        : ('scene' + (i + 2)),
               ts: Date.now() - (i + 1),
               fav: false,
               projectId: proj.projectId,
@@ -31229,7 +32150,13 @@ ${wembTipRuntime()}
           if (window.__paintDtFromPrd) window.__paintDtFromPrd();
         }
 
+        /* screen·scale·ops 는 DEFAULT 에 값이 미리 들어 있고(다운스트림이 항상 유효값을 요구함)
+           아래 마이그레이션이 초기화 뒤에도 되돌려 놓는다. 그래서 이 세 개만 보고 요약을 그리면
+           '아무것도 안 골랐는데 답변이 적혀 있는' 상태가 된다.
+           사용자가 직접 넣지 않으면 절대 채워지지 않는 항목(이름·산업군·대상)으로 착수 여부를 판정한다. */
+        const prdTouched = () => !!(G.site || (G.industries || []).length || (G.targets || []).length);
         function summaryHTML(tail) {
+          if (!prdTouched()) return '<span class="gs-empty">' + tail + '</span>';
           const parts = [];
           if (G.site) parts.push('<b>' + esc(G.site) + '</b>');
           if (SCREEN_LBL[G.screen]) parts.push(SCREEN_LBL[G.screen]);
@@ -31275,7 +32202,10 @@ ${wembTipRuntime()}
           if (G.ops === 'central') add('24/7 대형 화면 고밀도 상황판 레이아웃', 'mid', '요구사항');
           else if (G.ops === 'normal') add('일반 PC 화면 표준 레이아웃', 'mid', '요구사항');
 
-          add('테마 색 토큰 생성·내보내기(CSS/JSON/Figma)', 'mid', '요구사항');
+          /* '색 토큰 생성·내보내기'는 이 스튜디오 자신의 기능이다. 고객에게 전달되는
+             기능명세서에 넣으면 산출물에 도구 내부 사정이 새어 들어간다 — 그래서 뺐다.
+             대신 어느 관제 화면에나 실제로 필요한 요구사항으로 대체한다. */
+          add('화면 배색·상태색 표기 규칙 정의', 'mid', '요구사항');
           return rows;
         }
         const SF_EDIT_IC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
@@ -32217,15 +33147,34 @@ ${wembTipRuntime()}
         /* 탭 잠금 해제는 오직 '다음 단계로' 버튼을 눌러 advanceStep 했을 때만.
            PRD를 다 채워도(=prdComplete) 기능명세서 탭은 열리지 않고, '기능명세서 자동 생성' 버튼만 활성화된다. */
         const unlocked = () => maxStep;
+        /* 잠긴 탭의 라벨 — '이전 단계'가 어느 단계인지 말해 준다.
+           네 탭에 같은 문구를 심으면 접근성 트리에서 서로 구분되지 않는다. */
+        const STEP_LABELS = { prd: 'PRD', spec: '기능명세서', flow: '유저플로우', wireframe: '와이어프레임', wire: '스튜디오' };
+        /* 목적격 조사 — 받침이 있으면 '을', 없으면 '를'.
+           한글이 아니면(예: PRD) 읽는 소리의 끝음절로 판단한다. */
+        const OBJ_PARTICLE = { PRD: '를' };
+        function withObj(word) {
+          if (OBJ_PARTICLE[word]) return word + OBJ_PARTICLE[word];
+          const c = word.charCodeAt(word.length - 1);
+          if (c < 0xac00 || c > 0xd7a3) return word + '를';
+          return word + ((c - 0xac00) % 28 === 0 ? '를' : '을');
+        }
+        function lockReason(idx) {
+          const need = STEP_PAGES[Math.max(0, idx - 1)];
+          return `${withObj(STEP_LABELS[need] || '이전 단계')} 완료하면 열려요`;
+        }
         function refreshSteps() {
           const lvl = unlocked();
           document.querySelectorAll('.tb-tab').forEach((t) => {
             const idx = STEP_PAGES.indexOf(t.dataset.page);
             const locked = idx > lvl;
             t.classList.toggle('locked', locked);
-            t.disabled = locked;
+            /* disabled 를 걸면 탭 순서에서 통째로 빠져, 키보드 사용자는 '다음 단계가
+               잠겨 있다'는 사실 자체를 알 수 없다. 초점은 받게 두고 활성화만 막는다.
+               (실제 차단은 아래 tb-tabs click/keydown 핸들러의 aria-disabled 검사) */
+            t.disabled = false;
             t.setAttribute('aria-disabled', locked ? 'true' : 'false');
-            if (locked) t.title = '이전 단계를 먼저 완료해 주세요'; else t.removeAttribute('title');
+            if (locked) t.title = lockReason(idx); else t.removeAttribute('title');
           });
           const gen = document.getElementById('prdGen');
           if (gen) { gen.disabled = !prdComplete(); gen.title = prdComplete() ? '' : 'PRD를 모두 작성하면 열려요'; }
@@ -32241,6 +33190,8 @@ ${wembTipRuntime()}
           reset: () => { maxStep = 0; saveStep(); refreshSteps(); },
           refresh: refreshSteps,
           allowed: (page) => STEP_PAGES.indexOf(page) <= unlocked(),
+          /* 현재 열려 있는 마지막 단계 index — 부팅 복원이 잠긴 탭을 가리키지 않게 쓴다 */
+          level: unlocked,
         };
         /* 유저플로우의 상위 메뉴(브랜치) 이름 — 스튜디오 상단 내비게이션에 반영 */
         window.__WEMBFlowMenu = () => deriveTree().map((b) => b.n);
@@ -32768,7 +33719,7 @@ ${wembTipRuntime()}
               const on = st.kind === 'multi' ? (G[st.key] || []).includes(v) : G[st.key] === v;
               if (on) b.classList.add('on');
               if (locked) b.classList.add('locked');
-              b.innerHTML = '<b>' + esc(label) + '</b>' + (desc ? '<small>' + esc(desc) + '</small>' : '') + (locked ? '<span class="pq-lock">🔒 잠금</span>' : '');
+              b.innerHTML = '<b>' + esc(label) + '</b>' + (desc ? '<small>' + esc(desc) + '</small>' : '') + (locked ? '<span class="pq-lock">잠금</span>' : '');
               b.addEventListener('click', () => {
                 if (locked) { if (typeof toast === 'function') toast('포탈은 현재 준비 중이에요.', { type: 'info' }); return; }
                 if (st.kind === 'multi') {
@@ -32905,6 +33856,8 @@ ${wembTipRuntime()}
             const on = t.dataset.page === page;
             t.classList.toggle('on', on);
             t.setAttribute('aria-selected', on ? 'true' : 'false');
+            /* roving tabindex — tablist 는 Tab 한 번으로 진입하고 내부는 화살표로 옮긴다 */
+            t.tabIndex = on ? 0 : -1;
           });
           document.querySelectorAll('.page').forEach((p) => { p.hidden = p.dataset.page !== page; });
           /* 현재 '작성 중인 화면'을 기억 — 새로고침 시 이 화면으로 복원한다(런처로 튕기지 않게) */
@@ -32919,9 +33872,37 @@ ${wembTipRuntime()}
           if (!(opts && opts.noHistory) && window.__navOnNavigate) window.__navOnNavigate({ t: 'page', p: page });
         }
         window.__setPage = setPage;
-        document.getElementById('tbTabs')?.addEventListener('click', (e) => {
-          const b = e.target.closest('.tb-tab');
-          if (b) setPage(b.dataset.page);
+        /* ── 상단 탭 조작 ──
+           잠긴 탭은 disabled 로 빼지 않고 초점만 받게 두므로(refreshSteps 참고),
+           실제 차단은 여기서 aria-disabled 로 한다. 막을 때는 왜 막혔는지 말해 준다. */
+        const tbTabsEl = document.getElementById('tbTabs');
+        const tbTabList = () => Array.from(document.querySelectorAll('.tb-tab'));
+        function tryPage(b) {
+          if (!b) return;
+          if (b.getAttribute('aria-disabled') === 'true') {
+            if (typeof toast === 'function') toast(b.title || '이전 단계를 먼저 완료해 주세요', { type: 'warn' });
+            return;
+          }
+          setPage(b.dataset.page);
+        }
+        tbTabsEl?.addEventListener('click', (e) => tryPage(e.target.closest('.tb-tab')));
+        /* 화살표·Home·End 로 탭 사이를 옮긴다(WAI-ARIA tablist 표준 조작).
+           이동은 초점만 옮기고, 실제 전환은 Enter/Space 또는 클릭에서 한다 —
+           잠긴 단계를 지나쳐 볼 수 있어야 '무엇이 남았는지' 파악할 수 있다. */
+        tbTabsEl?.addEventListener('keydown', (e) => {
+          const tabs = tbTabList();
+          const i = tabs.indexOf(document.activeElement);
+          if (i < 0) return;
+          let j = null;
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % tabs.length;
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + tabs.length) % tabs.length;
+          else if (e.key === 'Home') j = 0;
+          else if (e.key === 'End') j = tabs.length - 1;
+          else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tryPage(tabs[i]); return; }
+          if (j === null) return;
+          e.preventDefault();
+          tabs.forEach((t, k) => { t.tabIndex = k === j ? 0 : -1; });
+          tabs[j].focus();
         });
 
         /* ── 전역 뒤로가기 — 브라우저 히스토리(History API)와 연동 ──
@@ -33148,7 +34129,7 @@ ${wembTipRuntime()}
           const b = e.target.closest('.railbtn');
           if (!b) return;
           const key = b.dataset.rail;
-          if (key === 'collapse') { closeFly(); app.classList.toggle('collapsed'); return; }
+          if (key === 'collapse') { closeFly(); if (window.__setSidebarCollapsed) window.__setSidebarCollapsed(!app.classList.contains('collapsed')); else app.classList.toggle('collapsed'); return; }
           /* 홈 버튼은 메뉴 없이 곧바로 스튜디오 홈(런처)으로 이동 */
           if (key === 'home') { closeFly(); document.getElementById('quickHome')?.click(); return; }
           if (flyOpenFor === key) { closeFly(); return; }
@@ -33202,12 +34183,23 @@ ${wembTipRuntime()}
             try { if (window.__showSection) window.__showSection('dash-panels'); } catch (e) {}
           } else {
             if (homeEl) homeEl.classList.remove('show');
-            if (window.__setPage) window.__setPage(__bootView);
+            /* 저장된 화면이 아직 잠긴 단계면(예: 진행 기록이 초기화된 뒤) 그 탭을 복원하면
+               '현재 위치'가 잠긴 탭을 가리켜 버린다. 열려 있는 마지막 단계로 되돌린다. */
+            var lvl = window.__wembStep ? window.__wembStep.level() : 0;
+            var want = WORK.indexOf(__bootView);
+            if (window.__setPage) window.__setPage(WORK[Math.min(want, lvl)]);
           }
         } else if (homeEl && homeEl.classList.contains('show')) {
           /* 런처(스튜디오 홈)에 있던 상태 — 초기 setPage('wire')가 덮어쓴 기록을 'home'으로 되돌려
-             다음 새로고침에도 홈을 유지한다. */
+             다음 새로고침에도 홈을 유지한다.
+             그 setPage('wire')는 상단 탭의 '현재 위치'까지 스튜디오(=대개 잠긴 탭)로 옮겨 놓는다.
+             런처 뒤에 남는 표시가 거짓이 되지 않게 열려 있는 첫 단계로 되돌린다. */
           try { localStorage.setItem('wemb-view', 'home'); } catch (e) {}
+          try {
+            var lv = window.__wembStep ? window.__wembStep.level() : 0;
+            if (window.__setPage) window.__setPage(WORK[Math.min(0, lv)] || 'prd', { noHistory: true });
+            localStorage.setItem('wemb-view', 'home');
+          } catch (e) {}
         }
       })();
     </script>
@@ -33755,14 +34747,10 @@ ${wembTipRuntime()}
         /* Figma에서 추출한 텍스트(문자열·스타일) + 실제 SVG 글리프의 캔버스 좌표(1920×1081). id는 주입 SVG의 안정적 요소 id. */
         const SKX_TEXTS = [{"id":"skx-Text","x":630,"y":973,"w":264,"h":17,"t":"CCTV #1에 장애가 발생했습니다.","fs":20,"col":"#ffffff","al":"left","wt":"Regular"},{"id":"skx-Text_2","x":108,"y":976,"w":122,"h":15,"t":"0000-00-00","fs":20,"col":"#b8b8b8","al":"left","wt":"Regular"},{"id":"skx-Text_3","x":254,"y":976,"w":86,"h":15,"t":"00:00:00","fs":20,"col":"#f8f8f8","al":"left","wt":"Regular"},{"id":"skx-Text_4","x":178,"y":117,"w":25,"h":15,"t":"TC","fs":20,"col":"#ffffff","al":"center","wt":"Bold"},{"id":"skx-Label_3","x":477,"y":103,"w":19,"h":12,"t":"6F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Label_4","x":476,"y":136,"w":18,"h":12,"t":"5F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Label_5","x":476,"y":169,"w":18,"h":12,"t":"3F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Label_6","x":477,"y":202,"w":18,"h":12,"t":"2F","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-WEMB Studio","x":85,"y":23,"w":111,"h":14,"t":"WEMB Studio","fs":17.8,"col":"rgba(255,255,255,0.9)","al":"left","wt":"Bold"},{"id":"skx-Text_5","x":244,"y":21,"w":40,"h":14,"t":"FMS","fs":20,"col":"#ebebeb","al":"left","wt":"Medium"},{"id":"skx-Text_6","x":294,"y":21,"w":105,"h":15,"t":"Dashboard","fs":20,"col":"#bbbbbb","al":"left","wt":"Regular"},{"id":"skx-Text_7","x":456,"y":23,"w":26,"h":14,"t":"이천","fs":16,"col":"#ffffff","al":"center","wt":"SemiBold"},{"id":"skx-Text_10","x":64,"y":159,"w":30,"h":18,"t":"화재","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_11","x":64,"y":254,"w":30,"h":17,"t":"누수","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_12","x":43,"y":349,"w":71,"h":18,"t":"항온항습기","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_13","x":43,"y":444,"w":71,"h":18,"t":"온습도센서","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_14","x":43,"y":539,"w":71,"h":18,"t":"토출온도계","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_15","x":44,"y":634,"w":70,"h":17,"t":"RACK온도","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_16","x":57,"y":729,"w":44,"h":18,"t":"풍속계","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_17","x":63,"y":825,"w":33,"h":16,"t":"UPS","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_18","x":44,"y":919,"w":69,"h":18,"t":"RACK전력","fs":16,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Title","x":68,"y":1045,"w":89,"h":15,"t":"Event List","fs":20,"col":"#d3d3d3","al":"left","wt":"SemiBold"},{"id":"skx-Label","x":418,"y":1052,"w":25,"h":9,"t":"Auto","fs":12,"col":"#98a6c0","al":"left","wt":"Medium"},{"id":"skx-Text_23","x":1304,"y":122,"w":133,"h":18,"t":"이천 UPS 전력량","fs":20,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_19","x":1553,"y":143,"w":35,"h":12,"t":"Total","fs":16,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_20","x":1624,"y":143,"w":50,"h":14,"t":"12,345","fs":16,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_21","x":1766,"y":141,"w":26,"h":14,"t":"금일","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Text_22","x":1836,"y":141,"w":26,"h":14,"t":"전일","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Tick_8","x":1278,"y":187,"w":33,"h":10,"t":"3,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_9","x":1279,"y":209,"w":32,"h":10,"t":"2,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_10","x":1278,"y":231,"w":33,"h":10,"t":"2,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_11","x":1281,"y":253,"w":30,"h":10,"t":"1,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_12","x":1281,"y":275,"w":30,"h":10,"t":"1,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_13","x":1289,"y":297,"w":22,"h":9,"t":"500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_14","x":1305,"y":319,"w":6,"h":9,"t":"0","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Period","x":1344,"y":337,"w":17,"h":9,"t":"AM","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_3","x":1338,"y":352,"w":30,"h":9,"t":"12:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_4","x":1423,"y":352,"w":25,"h":9,"t":"4:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_5","x":1504,"y":352,"w":25,"h":9,"t":"8:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Period_2","x":1592,"y":337,"w":16,"h":9,"t":"PM","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_6","x":1585,"y":352,"w":30,"h":9,"t":"12:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_7","x":1670,"y":352,"w":25,"h":9,"t":"4:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_8","x":1751,"y":352,"w":25,"h":9,"t":"8:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Period_3","x":1845,"y":337,"w":17,"h":9,"t":"AM","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Time_9","x":1832,"y":352,"w":30,"h":9,"t":"12:00","fs":10,"col":"#c9d1e0","al":"left","wt":"Regular"},{"id":"skx-Text_41","x":1304,"y":433,"w":112,"h":18,"t":"이천 센터 온도","fs":20,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_24","x":1739,"y":445,"w":123,"h":14,"t":"정상 온도 20°~25°","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Text_26","x":1285,"y":509,"w":37,"h":18,"t":"22°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_28","x":1386,"y":509,"w":29,"h":18,"t":"21°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_30","x":1434,"y":487,"w":33,"h":18,"t":"18°","fs":24,"col":"#fce380","al":"center","wt":"Regular"},{"id":"skx-Text_32","x":1532,"y":487,"w":37,"h":18,"t":"22°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_34","x":1585,"y":509,"w":30,"h":18,"t":"31°","fs":24,"col":"#fc9126","al":"center","wt":"Regular"},{"id":"skx-Text_36","x":1682,"y":509,"w":35,"h":18,"t":"24°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_38","x":1730,"y":487,"w":38,"h":18,"t":"20°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Text_40","x":1828,"y":487,"w":37,"h":18,"t":"23°","fs":21,"col":"#ffffff","al":"center","wt":"Regular"},{"id":"skx-Name","x":1343,"y":637,"w":19,"h":12,"t":"TC","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Name_2","x":1486,"y":615,"w":29,"h":11,"t":"M14","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Name_3","x":1634,"y":637,"w":29,"h":12,"t":"M16","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Name_4","x":1778,"y":615,"w":35,"h":12,"t":"P&T4","fs":16,"col":"#ffffff","al":"center","wt":"Medium"},{"id":"skx-Text_25","x":1294,"y":656,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_27","x":1391,"y":656,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_29","x":1442,"y":634,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_31","x":1539,"y":634,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_33","x":1590,"y":656,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_35","x":1687,"y":656,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_37","x":1738,"y":634,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_39","x":1835,"y":634,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"center","wt":"Medium"},{"id":"skx-Text_46","x":1304,"y":744,"w":129,"h":18,"t":"이천 상면 포화도","fs":20,"col":"#ffffff","al":"left","wt":"Medium"},{"id":"skx-Text_45","x":1325,"y":804,"w":117,"h":14,"t":"이천 상면 사용현황","fs":16,"col":"#ffffff","al":"left","wt":"Regular"},{"id":"skx-Text_42","x":1559,"y":756,"w":120,"h":14,"t":"이천 상면 사용 추이","fs":16,"col":"#ffffff","al":"left","wt":"Regular"},{"id":"skx-Text_43","x":1751,"y":756,"w":27,"h":14,"t":"사용","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Text_44","x":1822,"y":756,"w":40,"h":14,"t":"미사용","fs":16,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Period_5","x":1475,"y":848,"w":19,"h":10,"t":"금일","fs":12,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Number_2","x":1475,"y":868,"w":41,"h":15,"t":"50.0","fs":20,"col":"#c2db56","al":"left","wt":"Regular"},{"id":"skx-Unit_2","x":1523,"y":871,"w":9,"h":9,"t":"%","fs":12,"col":"#b4b4b4","al":"left","wt":"Regular"},{"id":"skx-Period_4","x":1475,"y":897,"w":19,"h":10,"t":"전일","fs":12,"col":"#cccccc","al":"left","wt":"Regular"},{"id":"skx-Number","x":1475,"y":915,"w":41,"h":15,"t":"40.0","fs":20,"col":"#57a6dc","al":"left","wt":"Regular"},{"id":"skx-Unit","x":1523,"y":918,"w":9,"h":9,"t":"%","fs":12,"col":"#b4b4b4","al":"left","wt":"Regular"},{"id":"skx-Tick_15","x":1574,"y":817,"w":32,"h":10,"t":"2,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_16","x":1574,"y":843,"w":33,"h":10,"t":"2,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_17","x":1576,"y":869,"w":30,"h":10,"t":"1,500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_18","x":1576,"y":895,"w":30,"h":10,"t":"1,000","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_19","x":1584,"y":921,"w":22,"h":9,"t":"500","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Tick_20","x":1600,"y":947,"w":6,"h":9,"t":"0","fs":11,"col":"#c9d1e0","al":"right","wt":"Regular"},{"id":"skx-Value_14","x":1650,"y":792,"w":34,"h":15,"t":"870","fs":20,"col":"#b199ff","al":"center","wt":"Regular"},{"id":"skx-Value_13","x":1730,"y":792,"w":34,"h":15,"t":"870","fs":20,"col":"#b199ff","al":"center","wt":"Regular"},{"id":"skx-Value_12","x":1802,"y":792,"w":37,"h":15,"t":"682","fs":20,"col":"#b199ff","al":"center","wt":"Regular"},{"id":"skx-Label_31","x":1634,"y":968,"w":65,"h":14,"t":"25년 12월","fs":16,"col":"#cccccc","al":"center","wt":"Regular"},{"id":"skx-Label_30","x":1718,"y":968,"w":55,"h":14,"t":"26년 1월","fs":16,"col":"#cccccc","al":"center","wt":"Regular"},{"id":"skx-Label_29","x":1790,"y":968,"w":58,"h":14,"t":"26년 2월","fs":16,"col":"#cccccc","al":"center","wt":"Regular"}];
 
-        /* Pretendard 웹폰트 1회 로드(CDN) */
-        (function loadFont() {
-          if (document.getElementById('skx-pretendard')) return;
-          const l = document.createElement('link');
-          l.id = 'skx-pretendard'; l.rel = 'stylesheet';
-          l.href = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css';
-          document.head.appendChild(l);
-        })();
+        /* 폰트는 문서 최상단에서 이미 한 번 로드된다(Pretendard Variable).
+           예전에는 여기서 static Pretendard(v1.3.9)를 한 번 더 받아 같은 서체를 두 벌 내려받았다 —
+           가변 폰트가 Regular·Medium·SemiBold·Bold(400/500/600/700)를 모두 덮으므로 필요 없다.
+           이 시안의 텍스트 스택도 'Pretendard Variable' 을 먼저 부르도록 맞춰 두었다. */
 
         const SVGNS = 'http://www.w3.org/2000/svg', XHTML = 'http://www.w3.org/1999/xhtml';
         let svg = null, fos = [], building = false;

@@ -905,11 +905,17 @@ function buildScreen(S) {
     if (isoPlateScale(decls)) isoFixes++;
     if (decls.length) {
       rules.push(ROOT + ' .' + uc + '{' + decls.map(([p, v]) => p + ':' + v).join(';') + '}');
-      /* 트림은 상속되지 않는다 — 글자를 담은 자식에도 같이 건다(자식이 없으면 아무 일도 없다) */
-      const trimPropagate = decls.filter(([p]) => p === 'text-box-trim' || p === 'text-box-edge');
-      if (trimPropagate.length && node.tag !== 'p') {
-        rules.push(ROOT + ' .' + uc + '>p,' + ROOT + ' .' + uc + '>span{'
-          + trimPropagate.map(([p, v]) => p + ':' + v).join(';') + '}');
+      /* 트림은 상속되지 않는다 — 글자를 담은 자식에도 같이 걸어 준다.
+         단 **줄이 하나일 때만** 건다. trim-both 는 덩어리의 첫 줄 위와 마지막 줄 아래만 깎는데,
+         Figma 는 두 줄짜리 글자를 <p> 두 개로 쪼개 내므로 줄마다 걸면 줄 사이 여백이 사라져
+         글자가 서로 붙어 버린다(네트워크현황 CD-AOC-/APML01 이 그랬다).
+         여러 줄짜리는 손대지 않는 게 원본과 같다 — 줄 간격이 그대로 12px 로 유지된다. */
+      const trimV = decls.filter(([p]) => p === 'text-box-trim')[0];
+      const edgeV = decls.filter(([p]) => p === 'text-box-edge')[0];
+      if (trimV && String(trimV[1]).indexOf('trim-') === 0 && node.tag !== 'p') {
+        const only = ':first-of-type:last-of-type';                 /* 그 종류의 자식이 하나뿐일 때 */
+        const body = 'text-box-trim:' + trimV[1] + (edgeV ? ';text-box-edge:' + edgeV[1] : '');
+        rules.push(ROOT + ' .' + uc + '>p' + only + ',' + ROOT + ' .' + uc + '>span' + only + '{' + body + '}');
         trimFixes++;
       }
     }
@@ -1105,6 +1111,7 @@ for (const r of results) {
     '</style></head><body><div class="' + PX + '-fit"><div class="' + PX + '-stage"><div class="' + PX + '-root">',
     r.html.split('{{B}}').join('./'),
     '</div></div></div>',
+    '<script src="../recent-time.js?v=1"></script>',
     '<script src="../hana-live.js?v=1"></script>',
     '<script>window.initHana && window.initHana(document.querySelector(".' + PX + '-root"));</script>',
     /* 미리보기 전용 — 테마 토글. ?t=light 로 열면 라이트로 시작하고 버튼은 숨긴다(픽셀 대조용). */

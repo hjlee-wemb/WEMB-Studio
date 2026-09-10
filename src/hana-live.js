@@ -130,6 +130,32 @@
     /* 툴팁 — 커서를 따라올 때만 살짝 미끄러진다(평소에는 아예 움직이지 않는다) */
     /* 성능 순위표 — 막대 칸은 색이 스미듯 차고 빠지고, 줄은 자리를 옮길 때만 미끄러진다 */
     '.hn-root .hn-bar-live{transition:background-color .5s cubic-bezier(.4,.1,.3,1);}',
+    /* 이벤트 리스트 — 걸러 낸 줄은 지우지 않고 흐린다(0줄이어도 표가 비지 않는다) */
+    '.hn-root .hn-ev-row{transition:opacity .2s ease,filter .2s ease,background-color .16s ease;}',
+    '.hn-root .hn-ev-row.hn-ev-off{opacity:.22;filter:saturate(.35);}',
+    '.hn-root .hn-ev-row.hn-ev-gone{opacity:0;pointer-events:none;}',
+    '.hn-root .hn-ev-pick{cursor:pointer;}',
+    /* 시안이 hover·active 본보기를 안 넣어 둔 리스트를 위한 대비책(있으면 시안 클래스를 쓴다) */
+    '.hn-root .hn-ev-row.hn-ev-hover{background-color:color-mix(in srgb,var(--hn-accent,#5bdcc6) 9%,transparent);}',
+    '.hn-root .hn-ev-row.hn-ev-sel{background-color:color-mix(in srgb,var(--hn-accent,#5bdcc6) 20%,transparent);}',
+    /* 등급 칩 · 단추 */
+    '.hn-root .hn-ev-chip{cursor:pointer;transition:opacity .18s ease,scale .18s ease;}',
+    '.hn-root .hn-ev-chip:hover{scale:1.04;}',
+    '.hn-root .hn-ev-chip.hn-ev-dim{opacity:.4;}',
+    '.hn-root .hn-ev-btn{cursor:pointer;transition:opacity .16s ease,scale .16s ease;}',
+    '.hn-root .hn-ev-btn:hover{scale:1.05;}',
+    '.hn-root .hn-ev-btn:active{scale:.97;}',
+    '.hn-root .hn-ev-input{cursor:text;outline:none;}',
+    '.hn-root .hn-ev-input.hn-ev-ph{opacity:.55;}',
+    /* 팝업 — transform 은 원본(가운데 정렬)이 쓰므로 건드리지 않고 scale·opacity 로만 여닫는다 */
+    '.hn-root .hn-popup{transition:opacity .2s ease,scale .22s cubic-bezier(.32,.72,.36,1);'
+    + 'will-change:opacity,scale;transform-origin:center;}',
+    '.hn-root .hn-popup.hn-popup-out{opacity:0;scale:.975;pointer-events:none;}',
+    '.hn-root .hn-popup.hn-popup-gone{display:none!important;}',
+    /* 닫기 단추는 올리면 또렷해진다(자리·크기는 원본 그대로) */
+    '.hn-root .hn-close{cursor:pointer;transition:opacity .16s ease,scale .16s ease;}',
+    '.hn-root .hn-close:hover{opacity:1;scale:1.12;}',
+    '.hn-root .hn-popup-open{cursor:pointer;}',
     /* 자리 옮김은 WAAPI 로만 그린다(요소 스타일은 그대로) — 여기선 준비만 알려 준다 */
     '.hn-root .hn-rank-row{will-change:transform;}',
     '.hn-root .hn-chart{cursor:crosshair;}',
@@ -2225,6 +2251,324 @@
     });
   }
 
+  /* ══════════════════ 6-w. 팝업 닫기 — 닫기 단추·Esc, 위치 트리로 다시 열기 ══════════════════ */
+  function installPopupClose(root, st) {
+    all(root, '[data-name^="Popup"]').forEach(function (pop) {
+      var btn = one(pop, '[data-name="Button/Close"]')
+        || one(pop, '[data-name^="Icon/Action/Close"]');
+      if (!btn) return;
+      pop.classList.add('hn-popup');
+      btn.classList.add('hn-close');
+      var timer = null;
+
+      var close = function () {
+        if (editing()) return;
+        if (timer) { clearTimeout(timer); timer = null; }
+        pop.classList.add('hn-popup-out');
+        timer = setTimeout(function () { pop.classList.add('hn-popup-gone'); timer = null; }, 260);
+      };
+      var open = function () {
+        if (editing()) return;
+        if (!pop.classList.contains('hn-popup-gone') && !pop.classList.contains('hn-popup-out')) return;
+        if (timer) { clearTimeout(timer); timer = null; }
+        pop.classList.remove('hn-popup-gone');
+        void pop.getBoundingClientRect();                 /* 자리를 잡은 뒤에 스며들게 한다 */
+        pop.classList.remove('hn-popup-out');
+      };
+
+      var onBtn = function (e) { e.stopPropagation(); close(); };
+      btn.addEventListener('click', onBtn);
+      var onKey = function (e) {
+        if (e.key !== 'Escape') return;
+        if (pop.classList.contains('hn-popup-gone')) return;
+        close();
+      };
+      document.addEventListener('keydown', onKey);
+
+      /* 다시 열기 — 위치 트리의 층·방을 누르면 그 자산 상세가 돌아온다 */
+      var openers = all(root, '[data-name^="Node/Level"]');
+      openers.forEach(function (o) {
+        o.classList.add('hn-popup-open');
+        o.addEventListener('click', open);
+      });
+
+      st.cleanup.push(function () {
+        if (timer) clearTimeout(timer);
+        btn.removeEventListener('click', onBtn);
+        document.removeEventListener('keydown', onKey);
+        openers.forEach(function (o) {
+          o.classList.remove('hn-popup-open');
+          o.removeEventListener('click', open);
+        });
+        btn.classList.remove('hn-close');
+        pop.classList.remove('hn-popup', 'hn-popup-out', 'hn-popup-gone');
+      });
+    });
+  }
+
+  /* ══════════════════ 6-v. 발생시각 — 열 때마다 최근으로 다시 찍는다 ══════════════════ */
+  function installRestamp(root) {
+    if (typeof window.wembRestampTimes !== 'function') return;
+    /* 변형으로 펼쳐 둔 숨은 행은 건너뛴다 — 세어 두면 보이는 줄의 간격이 그만큼 벌어진다.
+       **자리로 재면 안 된다**(offsetParent). 스튜디오는 런처가 덮고 있는 동안 화면을 그려서,
+       그때는 멀쩡한 줄까지 전부 '안 보임'으로 잡혀 한 줄도 안 고쳐진다.
+       그래서 칸에서 판까지만 거슬러 올라가며 hidden 인지 본다(자리와 무관하다). */
+    var skip = function (el, box) {
+      for (var e = el; e && e !== box; e = e.parentElement) {
+        if (e.hasAttribute && e.hasAttribute('hidden')) return true;
+        if (e.style && e.style.display === 'none') return true;
+      }
+      return false;
+    };
+    all(root, '[data-name="Event Log"],[data-name^="Widget/Event Log"]').forEach(function (box) {
+      var cells = all(box, 'p').filter(function (p) { return !skip(p, box); });
+      if (!cells.length) return;
+      try { window.wembRestampTimes(cells, { prefix: true }); } catch (e) { }
+    });
+  }
+
+  /* ══════════════════ 6-u. 이벤트 리스트 — 칩·조회·초기화·삭제·줄 고르기 ══════════════════ */
+  var HN_GRADES = ['심각', '경계', '주의', '정상'];
+
+  /* 시안이 만든 클래스(첫 토큰)만 갈아 끼운다 — 뒤에 붙인 우리 클래스는 그대로 둔다 */
+  function hnGenCls(el) { return String(el.className || '').split(/\s+/)[0] || ''; }
+  /* 바탕색의 채도 — 강조색(active)은 높고, 은은한 청록(hover)은 낮다 */
+  function hnSat(bg) {
+    var m = /rgba?\(([^)]+)\)/.exec(bg || '');
+    if (!m) return 0;
+    var v = m[1].split(',').map(parseFloat);
+    var mx = Math.max(v[0], v[1], v[2]), mn = Math.min(v[0], v[1], v[2]);
+    return mx ? (mx - mn) / mx : 0;
+  }
+
+  function installEventList(root, st) {
+    all(root, '[data-name="Event Log"],[data-name^="Widget/Event Log"]').forEach(function (box) {
+      /* 줄 담는 상자를 먼저 찾는다. 이름 붙은 줄이 기준이고, **이름 없는 형제도 칸 수가 같으면**
+         줄로 친다 — 상면관리의 active 본보기(`.n1_2539`)에는 `data-name` 이 없다.
+         칸 수로 재는 이유: 보안 로그는 한 줄이 칸 하나(긴 글 한 덩이)라 "칸이 여럿"으로 가르면 놓친다. */
+      var isNamedRow = function (c) { return /^(row|Row|status=)/.test((c.dataset && c.dataset.name) || ''); };
+      var seed = one(box, '[data-name="row"],[data-name="Row"],[data-name^="status="]');
+      if (!seed) return;
+      var host = seed.parentElement;
+      var named = [].filter.call(host.children, isNamedRow);
+      var want = named.length ? named[0].children.length : -1;
+      var rows = [].filter.call(host.children, function (c) {
+        if (isNamedRow(c)) return true;
+        return want >= 0 && c.children.length === want && !!(c.textContent || '').trim();
+      });
+      if (rows.length < 2) return;
+
+      /* ── 상태 본보기 가려내기 ── */
+      var bgOf = function (el) { return getComputedStyle(el).backgroundColor; };
+      var tally = {};
+      rows.forEach(function (r) { var b = bgOf(r); tally[b] = (tally[b] || 0) + 1; });
+      var plainBg = Object.keys(tally).sort(function (a, b) { return tally[b] - tally[a]; })[0];
+      var plainRow = rows.filter(function (r) { return bgOf(r) === plainBg; })[0];
+      var plainCls = plainRow ? hnGenCls(plainRow) : '';
+      var hoverCls = '', activeCls = '';
+      /* 상태는 줄 바탕만이 아니라 **글자색까지** 바뀐다
+         (보통 rgb(228,228,228) · hover 청록 · active 더 밝은 흰색).
+         글자색은 칸이 아니라 그 안의 <p> 에 걸려 있어서, 줄 속을 **차례대로 훑어** 통째로 갈아 끼운다.
+         본보기 줄과 보통 줄은 구조가 같으므로 자리끼리 짝이 맞는다(개수가 다르면 건드리지 않는다). */
+      var cellCls = function (r) {
+        var out = [];
+        (function walk(e) { [].forEach.call(e.children, function (c) { out.push(hnGenCls(c)); walk(c); }); })(r);
+        return out;
+      };
+      var applyCls = function (r, list) {
+        if (!list || list.length !== cellCls(r).length) return;
+        var i = 0;
+        (function walk(e) {
+          [].forEach.call(e.children, function (c) {
+            var want = list[i++];
+            var cur = hnGenCls(c);
+            if (cur && want && cur !== want) c.classList.replace(cur, want);
+            walk(c);
+          });
+        })(r);
+      };
+      var plainCells = plainRow ? cellCls(plainRow) : null;
+      var hoverCells = null, activeCells = null;
+      rows.forEach(function (r) {
+        var b = bgOf(r);
+        if (b === plainBg) return;
+        var nm = r.dataset.name || '';
+        var isActive = /active/i.test(nm) || (!/hover/i.test(nm) && hnSat(b) >= 0.75);
+        if (isActive) { if (!activeCls) { activeCls = hnGenCls(r); activeCells = cellCls(r); } }
+        else if (!hoverCls) { hoverCls = hnGenCls(r); hoverCells = cellCls(r); }
+        /* 본보기 줄은 쉴 때 보통 줄처럼 — 안 그러면 가만히 있는데 한 줄이 눌린 듯 보인다 */
+        if (plainCls && hnGenCls(r) !== plainCls) r.classList.replace(hnGenCls(r), plainCls);
+        applyCls(r, plainCells);
+      });
+
+      var recs = rows.map(function (r) {
+        var grade = '';
+        all(r, '*').some(function (e) {
+          if (e.children.length) return false;
+          var t = (e.textContent || '').trim();
+          if (HN_GRADES.indexOf(t) >= 0) { grade = t; return true; }
+          return false;
+        });
+        r.classList.add('hn-ev-row', 'hn-ev-pick');
+        /* 이 줄이 쉴 때의 칸 클래스 — 줄마다 이름이 달라서(같은 뜻, 다른 이름) 각자 기억해 둔다 */
+        return { el: r, grade: grade, sel: false, rest: cellCls(r), text: (r.textContent || '').replace(/\s+/g, ' ').trim() };
+      });
+
+      /* 줄의 겉모습을 상태에 맞춘다 — 시안 클래스가 있으면 그것을, 없으면 대비책 클래스를 쓴다 */
+      var swapCells = function (rec, list) { applyCls(rec.el, list || rec.rest); };
+      var paintRow = function (rec, hovering) {
+        var want = rec.sel ? 'active' : (hovering ? 'hover' : 'plain');
+        var cls = want === 'active' ? activeCls : want === 'hover' ? hoverCls : plainCls;
+        if (cls && plainCls) {
+          var cur = hnGenCls(rec.el);
+          if (cur !== cls) rec.el.classList.replace(cur, cls);
+          rec.el.classList.remove('hn-ev-sel', 'hn-ev-hover');
+        } else {
+          rec.el.classList.toggle('hn-ev-sel', want === 'active');
+          rec.el.classList.toggle('hn-ev-hover', want === 'hover');
+        }
+        swapCells(rec, want === 'active' ? activeCells : want === 'hover' ? hoverCells : rec.rest);
+      };
+
+      var stateGrade = null;                     /* 고른 등급(없으면 전부) */
+      var q1 = '', q2 = '';                      /* 업무그룹 · 호스트 검색어 */
+      var apply = function () {
+        recs.forEach(function (r) {
+          if (r.el.classList.contains('hn-ev-gone')) return;
+          var ok = (!stateGrade || r.grade === stateGrade)
+            && (!q1 || r.text.indexOf(q1) >= 0)
+            && (!q2 || r.text.indexOf(q2) >= 0);
+          r.el.classList.toggle('hn-ev-off', !ok);
+        });
+      };
+
+      /* ── 줄 — 올리면 hover, 누르면 고름(둘 다 시안이 준 색) ── */
+      recs.forEach(function (rec) {
+        var enter = function () { if (!editing() && !rec.sel) paintRow(rec, true); };
+        var leave = function () { if (!editing()) paintRow(rec, false); };
+        var pick = function (e) {
+          if (editing()) return;
+          if (e.target.closest && e.target.closest('.hn-ev-chip,.hn-ev-btn,.hn-ev-input')) return;
+          rec.sel = !rec.sel;
+          paintRow(rec, false);
+        };
+        rec.el.addEventListener('pointerenter', enter);
+        rec.el.addEventListener('pointerleave', leave);
+        rec.el.addEventListener('click', pick);
+        st.cleanup.push(function () {
+          rec.el.removeEventListener('pointerenter', enter);
+          rec.el.removeEventListener('pointerleave', leave);
+          rec.el.removeEventListener('click', pick);
+          rec.el.classList.remove('hn-ev-row', 'hn-ev-pick', 'hn-ev-off', 'hn-ev-sel', 'hn-ev-hover', 'hn-ev-gone');
+        });
+      });
+
+      /* ── 등급 칩 ── */
+      var chips = all(box, '[data-name="block"]').filter(function (c) {
+        return HN_GRADES.some(function (g) { return (c.textContent || '').indexOf(g) >= 0; });
+      });
+      var paintChips = function () {
+        chips.forEach(function (c) { c.classList.toggle('hn-ev-dim', !!stateGrade && c.__hnGrade !== stateGrade); });
+      };
+      chips.forEach(function (c) {
+        c.__hnGrade = HN_GRADES.filter(function (g) { return (c.textContent || '').indexOf(g) >= 0; })[0] || '';
+        c.classList.add('hn-ev-chip');
+        var on = function () {
+          if (editing()) return;
+          stateGrade = (stateGrade === c.__hnGrade) ? null : c.__hnGrade;
+          paintChips(); apply();
+        };
+        c.addEventListener('click', on);
+        st.cleanup.push(function () {
+          c.removeEventListener('click', on);
+          c.classList.remove('hn-ev-chip', 'hn-ev-dim');
+        });
+      });
+
+      /* ── 검색칸 ── */
+      var inputs = [];
+      all(box, '[data-name^="Field/"]').forEach(function (f) {
+        var ps = all(f, 'p');
+        var el = ps[ps.length - 1];
+        if (!el) return;
+        var ph = (el.textContent || '').trim();
+        el.classList.add('hn-ev-input', 'hn-ev-ph');
+        var focus = function () {
+          if (editing()) return;
+          if ((el.textContent || '').trim() === ph) { el.textContent = ''; el.classList.remove('hn-ev-ph'); }
+        };
+        var blur = function () { if (!(el.textContent || '').trim()) { el.textContent = ph; el.classList.add('hn-ev-ph'); } };
+        var key = function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); el.blur(); runQuery(); }
+          if (e.key === 'Escape') el.blur();
+        };
+        var down = function () { if (!editing()) el.setAttribute('contenteditable', 'true'); };
+        el.addEventListener('pointerdown', down);
+        el.addEventListener('focus', focus);
+        el.addEventListener('blur', blur);
+        el.addEventListener('keydown', key);
+        inputs.push({ el: el, ph: ph });
+        st.cleanup.push(function () {
+          el.removeEventListener('pointerdown', down);
+          el.removeEventListener('focus', focus);
+          el.removeEventListener('blur', blur);
+          el.removeEventListener('keydown', key);
+          el.removeAttribute('contenteditable');
+          el.classList.remove('hn-ev-input', 'hn-ev-ph');
+          el.textContent = ph;
+        });
+      });
+      var runQuery = function () {
+        if (editing()) return;
+        q1 = ''; q2 = '';
+        inputs.forEach(function (f, i) {
+          var v = (f.el.textContent || '').trim();
+          if (!v || v === f.ph) v = '';
+          if (i === 0) q1 = v; else if (i === 1) q2 = v;
+        });
+        apply();
+      };
+
+      /* ── 단추 — 원본에 data-name 이 없어 글자로 찾는다 ── */
+      var wire = function (re, fn) {
+        all(box, '[data-name="btn"],[data-name="Actions"] > *').filter(function (b) {
+          return re.test((b.textContent || '').trim());
+        }).forEach(function (b) {
+          b.classList.add('hn-ev-btn');
+          var on = function (e) { e.stopPropagation(); if (!editing()) fn(); };
+          b.addEventListener('click', on);
+          st.cleanup.push(function () {
+            b.removeEventListener('click', on);
+            b.classList.remove('hn-ev-btn');
+          });
+        });
+      };
+      wire(/^조회$/, runQuery);
+      wire(/^초기화$/, function () {
+        stateGrade = null;
+        q1 = ''; q2 = '';
+        inputs.forEach(function (f) { f.el.textContent = f.ph; f.el.classList.add('hn-ev-ph'); });
+        recs.forEach(function (r) {
+          r.sel = false;
+          r.el.classList.remove('hn-ev-gone', 'hn-ev-off');
+          r.el.style.display = '';
+          paintRow(r, false);
+        });
+        paintChips();
+      });
+      wire(/^삭제$/, function () {
+        var picked = recs.filter(function (r) { return r.sel; });
+        if (!picked.length) return;              /* 고른 줄이 없으면 아무 일도 하지 않는다 */
+        picked.forEach(function (r) {
+          r.sel = false;
+          paintRow(r, false);
+          r.el.classList.add('hn-ev-gone');
+          setTimeout(function () { if (r.el.classList.contains('hn-ev-gone')) r.el.style.display = 'none'; }, 220);
+        });
+      });
+    });
+  }
+
   /* ══════════════════ 7. 설치 ══════════════════ */
   function initHana(root) {
     if (!root) return;
@@ -2235,6 +2579,7 @@
     root.__hnLive = st;
     try { installFit(root, st); } catch (e) { }
     try { markHot(root); } catch (e) { }
+    try { installRestamp(root); } catch (e) { }
     try { installClock(root, st); } catch (e) { }
     try { installSelect(root, st); } catch (e) { }
     try { installVariants(root, st); } catch (e) { }
@@ -2254,6 +2599,8 @@
     try { installHanaMenu(root, st); } catch (e) { }
     try { installChartHover(root, st); } catch (e) { }
     try { installRankList(root, st); } catch (e) { }
+    try { installPopupClose(root, st); } catch (e) { }
+    try { installEventList(root, st); } catch (e) { }
     try { installRiskEditGuard(root, st); } catch (e) { }
     return st;
   }
