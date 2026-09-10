@@ -422,100 +422,6 @@
  *  (5)디자인 사양서 (6)온보딩 스포트라이트
  * ============================================================ */
 
-/* (2) 토스트 — 액션 결과 피드백 (여러 기능에서 재사용) */
-.toastwrap {
-  position: fixed;
-  left: 50%;
-  bottom: 26px;
-  transform: translateX(-50%);
-  z-index: var(--z-float);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-  pointer-events: none;
-}
-.toast {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: max-content;
-  max-width: 92vw;
-  padding: 11px 14px;
-  border-radius: 12px;
-  background: #1b2130;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
-  color: #eef1f7;
-  font-size: 13px;
-  pointer-events: auto;
-  animation: toastIn 0.22s ease;
-}
-.toast.out {
-  animation: toastOut 0.2s ease forwards;
-}
-.toast .tico {
-  flex: none;
-  width: 18px;
-  height: 18px;
-}
-.toast.ok .tico {
-  color: #4ade80;
-}
-.toast.warn .tico {
-  color: var(--warning);
-}
-.toast.err .tico {
-  color: var(--danger);
-}
-.toast .tmsg b {
-  font-weight: 700;
-}
-.toast .tkbd {
-  margin-left: 2px;
-  font-size: 11px;
-  color: #aab2c4;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 4px;
-  padding: 1px 6px;
-  white-space: nowrap;
-}
-.toast .tundo {
-  margin-left: 4px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  color: #9fb4ff;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-}
-.toast .tundo:hover {
-  text-decoration: underline;
-}
-@keyframes toastIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes toastOut {
-  to {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .toast,
-  .toast.out {
-    animation: none;
-  }
-}
-
 /* (6) 온보딩 스포트라이트(코치마크) */
 .coach {
   position: fixed;
@@ -843,11 +749,6 @@
   border: 0;
 }
 
-/* 키보드 포커스 링 — 무채색 크롬·생성 테마 양쪽에서 보이도록 point-sub 사용 */
-:focus-visible {
-  outline: 2px solid var(--point-sub);
-  outline-offset: 2px;
-}
 input.hex:focus-visible,
 .swhex .hx:focus-visible {
   outline: 2px solid var(--point-sub);
