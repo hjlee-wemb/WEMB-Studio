@@ -1,0 +1,101 @@
+/* ── SK하이닉스 에셋 라이브러리 모션 ──
+   ==========================================================================
+   에셋 라이브러리 — 등록된 SK하이닉스 에셋의 "모션까지" 함께 등록.
+   원본 시안(.skx-svg)에 걸린 것과 같은 키프레임을, 라이브러리 썸네일·삽입된
+   패널 어디서든 돌도록 에셋 SVG 자체(.fx-*)에 걸어 준다. Figma 레이어명이
+   data-fig 로 보존돼 있어 원본과 동일한 요소를 그대로 겨냥한다.
+   reduce-motion이면 전부 정지.  */
+
+/* 심볼·아이콘 — 원본 좌측 내비와 동일한 호버 활성(밝기+글로우+살짝 부양). 모션 설정과 무관하게 항상 */
+.fighost .fx-live { transition: filter .25s ease, transform .25s ease; }
+.fighost:hover .fx-live { transform: translateY(-1px) scale(1.03); filter: brightness(1.18) drop-shadow(0 0 7px rgba(96, 156, 255, .7)); }
+@media (prefers-reduced-motion: no-preference) {
+  /* 화재 — 원본 "화재(선택)" 내비와 동일한 호흡 글로우 */
+  .fx-alarm { animation: skxBreathe 2.8s ease-in-out infinite; }
+
+  /* ── UPS 전력량 차트 — 두 데이터 선 그려지기(전일 파랑·금일 초록) + 포커스 마커 맥동 ── */
+  .fx-ups path[stroke="#57A6DC"], .fx-ups path[stroke="#C2DB56"] { stroke-dasharray: 2400; animation: skxDraw 5.5s ease-in-out infinite; }
+  .fx-ups path[stroke="#C2DB56"] { animation-delay: .35s; }
+  .fx-ups [data-fig="focus"] { animation: skxFocus 1.8s ease-in-out infinite; }
+
+  /* ── 센터 온도 차트 — 큐브 속 기포 상승 ── */
+  .fx-temp [data-fig^="bubble"] > * { transform-box: fill-box; transform-origin: center; animation: skxBubbleRise 3.4s ease-in-out infinite; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(1) { animation-delay: 0s; animation-duration: 3.2s; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(2) { animation-delay: 0.42s; animation-duration: 3.7s; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(3) { animation-delay: 0.84s; animation-duration: 3.4s; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(4) { animation-delay: 1.26s; animation-duration: 3.9s; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(5) { animation-delay: 1.68s; animation-duration: 3.3s; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(6) { animation-delay: 2.1s; animation-duration: 3.6s; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(7) { animation-delay: 2.52s; animation-duration: 3.5s; }
+  .fx-temp [data-fig^="bubble"] > *:nth-child(8) { animation-delay: 2.94s; animation-duration: 3.8s; }
+  /* 경보 큐브 M14(노랑)·M16(주황) — 경보색 깜빡임 */
+  .fx-temp [data-fig="Union"]   { animation: skxBlinkY 2s ease-in-out infinite; }
+  .fx-temp [data-fig="Union_2"] { animation: skxBlinkO 2.3s ease-in-out infinite; }
+  /* 온도 게이지 8개 — 레벨이 한 단계 위로 올라가는 스텝(점 색 + 핀 이동), 큐브마다 속도·위상 제각각 */
+  .fx-temp [data-fig^="Pin"] { transform-box: fill-box; transform-origin: center; }
+  .fx-temp [data-fig="Dots"] > *:nth-child(5) { animation: skxLvlG1 3s ease-in-out infinite; }
+  .fx-temp [data-fig="Dots"] > *:nth-child(6) { animation: skxLvlG2 3s ease-in-out infinite; }
+  .fx-temp [data-fig="Dots"] > *:nth-child(7) { animation: skxLvlG3 3s ease-in-out infinite; }
+  .fx-temp [data-fig="Dots"] > *:nth-child(8) { animation: skxLvlG4 3s ease-in-out infinite; }
+  .fx-temp [data-fig="Dots"] > *:nth-child(9) { animation: skxLvlG5 3s ease-in-out infinite; }
+  .fx-temp [data-fig="Pin"] { animation: skxPinStep 3s ease-in-out infinite; }
+  .fx-temp [data-fig="Dots_2"] > *:nth-child(5) { animation: skxLvlG1 3.7s ease-in-out 0.8s infinite; }
+  .fx-temp [data-fig="Dots_2"] > *:nth-child(6) { animation: skxLvlG2 3.7s ease-in-out 0.8s infinite; }
+  .fx-temp [data-fig="Dots_2"] > *:nth-child(7) { animation: skxLvlG3 3.7s ease-in-out 0.8s infinite; }
+  .fx-temp [data-fig="Dots_2"] > *:nth-child(8) { animation: skxLvlG4 3.7s ease-in-out 0.8s infinite; }
+  .fx-temp [data-fig="Dots_2"] > *:nth-child(9) { animation: skxLvlG5 3.7s ease-in-out 0.8s infinite; }
+  .fx-temp [data-fig="Pin_2"] { animation: skxPinStep 3.7s ease-in-out 0.8s infinite; }
+  .fx-temp [data-fig="Dots_3"] > *:nth-child(6) { animation: skxLvlY1 4.4s ease-in-out 1.6s infinite; }
+  .fx-temp [data-fig="Dots_3"] > *:nth-child(7) { animation: skxLvlY2 4.4s ease-in-out 1.6s infinite; }
+  .fx-temp [data-fig="Dots_3"] > *:nth-child(8) { animation: skxLvlY3 4.4s ease-in-out 1.6s infinite; }
+  .fx-temp [data-fig="Dots_3"] > *:nth-child(9) { animation: skxLvlY4 4.4s ease-in-out 1.6s infinite; }
+  .fx-temp [data-fig="Pin_3"] { animation: skxPinStep 4.4s ease-in-out 1.6s infinite; }
+  .fx-temp [data-fig="Dots_4"] > *:nth-child(5) { animation: skxLvlG1 3.3s ease-in-out 0.35s infinite; }
+  .fx-temp [data-fig="Dots_4"] > *:nth-child(6) { animation: skxLvlG2 3.3s ease-in-out 0.35s infinite; }
+  .fx-temp [data-fig="Dots_4"] > *:nth-child(7) { animation: skxLvlG3 3.3s ease-in-out 0.35s infinite; }
+  .fx-temp [data-fig="Dots_4"] > *:nth-child(8) { animation: skxLvlG4 3.3s ease-in-out 0.35s infinite; }
+  .fx-temp [data-fig="Dots_4"] > *:nth-child(9) { animation: skxLvlG5 3.3s ease-in-out 0.35s infinite; }
+  .fx-temp [data-fig="Pin_4"] { animation: skxPinStep 3.3s ease-in-out 0.35s infinite; }
+  .fx-temp [data-fig="Dots_5"] > *:nth-child(3) { animation: skxLvlO1 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Dots_5"] > *:nth-child(4) { animation: skxLvlO2 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Dots_5"] > *:nth-child(5) { animation: skxLvlO3 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Dots_5"] > *:nth-child(6) { animation: skxLvlO4 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Dots_5"] > *:nth-child(7) { animation: skxLvlO5 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Dots_5"] > *:nth-child(8) { animation: skxLvlO6 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Dots_5"] > *:nth-child(9) { animation: skxLvlO7 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Pin_5"] { animation: skxPinStep 3.9s ease-in-out 1s infinite; }
+  .fx-temp [data-fig="Dots_6"] > *:nth-child(5) { animation: skxLvlG1 3.1s ease-in-out 0.5s infinite; }
+  .fx-temp [data-fig="Dots_6"] > *:nth-child(6) { animation: skxLvlG2 3.1s ease-in-out 0.5s infinite; }
+  .fx-temp [data-fig="Dots_6"] > *:nth-child(7) { animation: skxLvlG3 3.1s ease-in-out 0.5s infinite; }
+  .fx-temp [data-fig="Dots_6"] > *:nth-child(8) { animation: skxLvlG4 3.1s ease-in-out 0.5s infinite; }
+  .fx-temp [data-fig="Dots_6"] > *:nth-child(9) { animation: skxLvlG5 3.1s ease-in-out 0.5s infinite; }
+  .fx-temp [data-fig="Pin_6"] { animation: skxPinStep 3.1s ease-in-out 0.5s infinite; }
+  .fx-temp [data-fig="Dots_7"] > *:nth-child(5) { animation: skxLvlG1 4.6s ease-in-out 2s infinite; }
+  .fx-temp [data-fig="Dots_7"] > *:nth-child(6) { animation: skxLvlG2 4.6s ease-in-out 2s infinite; }
+  .fx-temp [data-fig="Dots_7"] > *:nth-child(7) { animation: skxLvlG3 4.6s ease-in-out 2s infinite; }
+  .fx-temp [data-fig="Dots_7"] > *:nth-child(8) { animation: skxLvlG4 4.6s ease-in-out 2s infinite; }
+  .fx-temp [data-fig="Dots_7"] > *:nth-child(9) { animation: skxLvlG5 4.6s ease-in-out 2s infinite; }
+  .fx-temp [data-fig="Pin_7"] { animation: skxPinStep 4.6s ease-in-out 2s infinite; }
+  .fx-temp [data-fig="Dots_8"] > *:nth-child(5) { animation: skxLvlG1 3.5s ease-in-out 1.3s infinite; }
+  .fx-temp [data-fig="Dots_8"] > *:nth-child(6) { animation: skxLvlG2 3.5s ease-in-out 1.3s infinite; }
+  .fx-temp [data-fig="Dots_8"] > *:nth-child(7) { animation: skxLvlG3 3.5s ease-in-out 1.3s infinite; }
+  .fx-temp [data-fig="Dots_8"] > *:nth-child(8) { animation: skxLvlG4 3.5s ease-in-out 1.3s infinite; }
+  .fx-temp [data-fig="Dots_8"] > *:nth-child(9) { animation: skxLvlG5 3.5s ease-in-out 1.3s infinite; }
+  .fx-temp [data-fig="Pin_8"] { animation: skxPinStep 3.5s ease-in-out 1.3s infinite; }
+
+  /* ── 상면 포화도 차트 — 실린더 디스크가 아래→위로 착착 쌓이고, 도넛 링은 호흡 ── */
+  .fx-sat [data-fig="3D Bar Chart"] [data-fig^="item"] { transform-box: fill-box; transform-origin: center;
+    animation-name: skxDiscStack; animation-duration: 3.8s; animation-timing-function: ease-out; animation-iteration-count: infinite; }
+  .fx-sat [data-fig="item_5"] { animation-delay: 0s; }
+  .fx-sat [data-fig="item_6"] { animation-delay: 0.26s; }
+  .fx-sat [data-fig="item_7"] { animation-delay: 0.52s; }
+  .fx-sat [data-fig="item_8"] { animation-delay: 0.95s; }
+  .fx-sat [data-fig="item_9"] { animation-delay: 1.21s; }
+  .fx-sat [data-fig="item_10"] { animation-delay: 1.47s; }
+  .fx-sat [data-fig="item_11"] { animation-delay: 1.9s; }
+  .fx-sat [data-fig="item_12"] { animation-delay: 2.16s; }
+  .fx-sat [data-fig="item_13"] { animation-delay: 2.42s; }
+  .fx-sat [data-fig="Radial Meter"] [data-fig="item"], .fx-sat [data-fig="Radial Meter"] [data-fig="item_3"] {
+    transform-box: fill-box; transform-origin: center; animation: skxRingGrow 2.9s ease-in-out infinite; }
+  .fx-sat [data-fig="Radial Meter"] [data-fig="item_3"] { animation-delay: .6s; }
+}

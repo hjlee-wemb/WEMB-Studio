@@ -1,0 +1,247 @@
+/* ── 대시보드 Enterprise ── */
+
+/* ============================================================
+ *  Enterprise 버전 (≤50색) — Figma 'system' Enterprise 기준 시각 강화
+ *  표면 4단계·텍스트 계층·강조 알파·그라데이션을 대시보드(.main)에 적용
+ * ============================================================ */
+.main[data-version='enterprise'] .panel {
+  background: var(--surface-1);
+  border-color: var(--ov-divider);
+}
+.main[data-version='enterprise'] .panel:hover {
+  border-color: var(--accent-40);
+}
+/* 제목·텍스트 계층 */
+.main[data-version='enterprise'] .ph h3 {
+  color: var(--text-heading-alt);
+}
+.main[data-version='enterprise'] .kpi .lab,
+.main[data-version='enterprise'] .kpi .sub,
+.main[data-version='enterprise'] .hint,
+.main[data-version='enterprise'] .clegend {
+  color: var(--text-tertiary);
+}
+.main[data-version='enterprise'] .kpi .val {
+  color: var(--text-primary);
+}
+.main[data-version='enterprise'] .brand .sub {
+  color: var(--text-label);
+}
+.main[data-version='enterprise'] .nav a {
+  color: var(--text-label);
+}
+.main[data-version='enterprise'] .nav a.active {
+  color: var(--text-primary);
+}
+/* 차트 축 라벨 */
+.main[data-version='enterprise'] .xax span,
+.main[data-version='enterprise'] .yax span {
+  color: var(--text-axis);
+}
+/* 표: 헤더/밴드 = surface-2, 구분선 = divider, hover = surface-2 */
+.main[data-version='enterprise'] th,
+.main[data-version='enterprise'] .bandh td {
+  /* background(단축)는 background-clip을 border-box로 되돌려 셀 배경이 붙어버림 —
+     background-color만 바꿔 기본값(padding-box)을 유지해 Flat처럼 칸 사이 간격 확보 */
+  background-color: var(--surface-2);
+  color: var(--text-label-bright);
+}
+/* 밴드 헤더 첫 칸은 Flat처럼 배경 없이 — 위 규칙이 first-child까지 덮어써서 색이 나왔음 */
+.main[data-version='enterprise'] .bandh td:first-child {
+  background: none;
+}
+/* 행 구분선(아래쪽)만 색을 입힘 — 예전엔 border-color(모든 변)로 지정돼
+   .bandh td 의 좌우 투명 여백 보더까지 칠해져(1Q·상품처리 칸에 상자처럼 세로선)
+   Flat과 달라 보였음. bottom만 지정해 Flat과 동일한 알약형으로 통일. */
+.main[data-version='enterprise'] td,
+.main[data-version='enterprise'] th {
+  border-bottom-color: var(--ov-divider);
+}
+.main[data-version='enterprise'] .rowline {
+  border-bottom-color: var(--ov-divider);
+}
+.main[data-version='enterprise'] tbody tr:not(.bandh):not(.bandgap):hover td {
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+}
+/* 탭: 활성 강조색, 비활성 hover는 강조 알파 */
+.main[data-version='enterprise'] .ph .tabs b {
+  color: var(--text-label);
+}
+.main[data-version='enterprise'] .ph .tabs b.on {
+  background: var(--accent);
+  color: var(--on-accent, #fff);
+}
+.main[data-version='enterprise'] .ph .tabs b:hover:not(.on) {
+  background: var(--accent-15);
+  color: var(--text-primary);
+}
+/* KPI 구분선 */
+.main[data-version='enterprise'] .kpi + .kpi::before {
+  background: var(--ov-divider);
+}
+/* 진행률 막대 — 세그먼트(눈금) 그라데이션, 값이 높으면 레드 그라데이션 */
+.main[data-version='enterprise'] .track {
+  background: var(--surface-2);
+}
+.main[data-version='enterprise'] .fill {
+  background: linear-gradient(90deg, var(--grad-chart-start), var(--grad-chart-end));
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0 3px, transparent 3px 5px);
+  mask: repeating-linear-gradient(90deg, #000 0 3px, transparent 3px 5px);
+}
+.main[data-version='enterprise'] .fill.hot {
+  background: linear-gradient(90deg, var(--grad-prog-start), var(--grad-prog-end));
+}
+/* 도넛 범례 */
+/* 차트 툴팁 — Enterprise는 자체 토큰 세트를 쓰므로 표면·글자색을 맞춰준다 */
+.main[data-version='enterprise'] .chart-tip {
+  background: color-mix(in srgb, var(--surface-2) 94%, transparent);
+  border-color: var(--ov-divider);
+  color: var(--text-primary);
+}
+.main[data-version='enterprise'] .chart-tip .tt-h {
+  border-bottom-color: var(--ov-divider);
+  color: var(--text-tertiary);
+}
+.main[data-version='enterprise'] .cx-dot {
+  box-shadow: 0 0 0 2px var(--surface-1);
+}
+.main[data-version='enterprise'] .dleg .row {
+  background: var(--surface-2);
+  color: var(--text-tertiary);
+}
+.main[data-version='enterprise'] .dleg .row b {
+  color: var(--text-primary);
+}
+/* 미니 게이지 라벨 */
+.main[data-version='enterprise'] .mini {
+  color: var(--text-tertiary);
+}
+/* 스크롤바 */
+.main[data-version='enterprise'] .pbody::-webkit-scrollbar-thumb {
+  background: var(--ov-divider);
+}
+
+/* ---- Enterprise 확연한 차이: 입체감(그림자)·그라데이션·글로우 (Flat엔 없음) ---- */
+/* 페이지 배경: 강조색 은은한 글로우 (Flat은 단색) */
+.main[data-version='enterprise'] {
+  background:
+    radial-gradient(1100px 560px at 12% -12%, var(--accent-15), transparent 60%), radial-gradient(900px 480px at 102% -6%, var(--teal-20), transparent 55%), var(--surface-base) !important;
+  position: relative;
+}
+/* 배경 그라데이션 애니메이션 — 강조/보조색 블롭이 천천히 흐르며 고급스러운 깊이감 */
+.main[data-version='enterprise']::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(50% 50% at 26% 26%, var(--accent-20), transparent 72%), radial-gradient(52% 52% at 78% 32%, var(--teal-20), transparent 74%);
+  filter: blur(72px);
+  opacity: 0.55;
+  will-change: transform;
+  animation: entBgDrift 40s ease-in-out infinite alternate;
+}
+/* 아주 느리고 은은한 흐름 — 회전 없이 미세한 이동·확대만 */
+@keyframes entBgDrift {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1.02);
+  }
+  to {
+    transform: translate3d(2%, 2%, 0) scale(1.08);
+  }
+}
+/* 대시보드 콘텐츠는 배경 애니메이션 위에 */
+.main[data-version='enterprise'] > .stage {
+  position: relative;
+  z-index: 1;
+}
+/* 라이트 모드에선 더 은은하게 */
+.main[data-version='enterprise'][data-mode='light']::before {
+  opacity: 0.35;
+  filter: blur(80px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .main[data-version='enterprise']::before {
+    animation: none;
+  }
+}
+/* 패널: 표면 그라데이션 + 그림자 입체 + 상단 하이라이트 + 강조 상단 라인 */
+.main[data-version='enterprise'] .panel {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface-1) 46%) !important;
+  border: 1px solid var(--ov-divider);
+  box-shadow:
+    0 10px 26px -6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 var(--ov-glow-15);
+  position: relative;
+  isolation: isolate;
+}
+.main[data-version='enterprise'] .panel::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--teal));
+  opacity: 0.85;
+  pointer-events: none;
+}
+.main[data-version='enterprise'] .panel:hover {
+  border-color: var(--accent-40);
+  box-shadow:
+    0 14px 32px -6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 var(--ov-glow-15);
+}
+/* 제목 강조 점 — 글로우 */
+.main[data-version='enterprise'] .ph h3::before {
+  box-shadow: 0 0 8px 1px var(--accent);
+}
+/* KPI 숫자 — 강조→teal 그라데이션 텍스트 (아주 눈에 띄는 차이) */
+.main[data-version='enterprise'] .kpi .val {
+  background: linear-gradient(92deg, var(--text-primary), var(--accent) 55%, var(--teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+/* 콘텐츠(차트·도넛·게이지·막대)에는 그림자/글로우 없음 — 데이터 가독성 우선 */
+.main[data-version='enterprise'] .chart svg path,
+.main[data-version='enterprise'] .chart svg .pulse-dot,
+.main[data-version='enterprise'] .donut-svg circle,
+.main[data-version='enterprise'] .fill,
+.main[data-version='enterprise'] .fill.hot,
+.main[data-version='enterprise'] .mini .d {
+  filter: none;
+}
+/* 진행률 트랙 얇은 안쪽 테두리(그림자 아님) */
+.main[data-version='enterprise'] .track {
+  box-shadow: inset 0 0 0 1px var(--ov-subtle);
+}
+
+/* ---- 라이트 모드: 그림자·그라데이션·글로우가 과하므로 대폭 완화 ---- */
+.main[data-version='enterprise'][data-mode='light'] {
+  background: radial-gradient(900px 460px at 12% -16%, var(--accent-15), transparent 62%), var(--surface-base) !important;
+}
+.main[data-version='enterprise'][data-mode='light'] .panel {
+  background: var(--surface-1) !important; /* 표면 그라데이션 제거 → 평평 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border-color: var(--line);
+}
+.main[data-version='enterprise'][data-mode='light'] .panel:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.main[data-version='enterprise'][data-mode='light'] .panel::after {
+  opacity: 0.55;
+}
+/* 글로우(drop-shadow) 제거 */
+.main[data-version='enterprise'][data-mode='light'] .chart svg path,
+.main[data-version='enterprise'][data-mode='light'] .chart svg .pulse-dot,
+.main[data-version='enterprise'][data-mode='light'] .fill,
+.main[data-version='enterprise'][data-mode='light'] .fill.hot,
+.main[data-version='enterprise'][data-mode='light'] .mini .d {
+  filter: none;
+}
+.main[data-version='enterprise'][data-mode='light'] .ph .tabs b.on,
+.main[data-version='enterprise'][data-mode='light'] .ph h3::before,
+.main[data-version='enterprise'][data-mode='light'] .badge.b-crit,
+.main[data-version='enterprise'][data-mode='light'] .tag {
+  box-shadow: none;
+}

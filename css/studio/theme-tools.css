@@ -1,0 +1,1075 @@
+/* ── 테마 도구 — 저장 · A/B · 내보내기 · 대비 검증표 ── */
+
+/* ===== 테마 저장·비교 ===== */
+.snapsave {
+  display: flex;
+  gap: 7px;
+}
+.snapsave .hex {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  font-family: var(--font);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.snapsave .savebtn {
+  flex: none;
+  border: 0;
+  border-radius: 12px;
+  padding: 0 18px;
+  background: var(--point-fill);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: background 0.15s;
+}
+.snapsave .savebtn:hover {
+  background: color-mix(in srgb, var(--point-main) 86%, #000);
+}
+.snaplist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.snaplist:empty {
+  display: none;
+}
+.snaprow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 10px;
+  transition: border-color 0.15s;
+}
+.snaprow:hover {
+  border-color: color-mix(in srgb, var(--point-main) 35%, var(--line));
+}
+.snaprow .sws {
+  display: flex;
+  flex: none;
+}
+.snaprow .sws i {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px var(--line);
+  margin-left: -3px;
+}
+.snaprow .sws i:first-child {
+  margin-left: 0;
+}
+.snaprow .nm {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--text-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.snaprow .acts {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+.snaprow .acts button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-weak);
+  border-radius: 8px;
+  padding: 4px 9px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.snaprow .acts button:hover {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+}
+.snaprow .acts .del:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.histbtns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.histlist {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 184px;
+  overflow: auto;
+}
+.histlist:empty {
+  display: none;
+}
+.histlist::-webkit-scrollbar {
+  width: 6px;
+}
+.histlist::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+.histrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--bg-page);
+  font-size: 12px;
+  color: var(--text-weak);
+  cursor: pointer;
+  transition: 0.15s;
+}
+.histrow:hover {
+  border-color: color-mix(in srgb, var(--point-main) 40%, var(--line));
+  color: var(--text-strong);
+}
+.histrow.cur {
+  border-color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 14%, var(--bg-page));
+  color: var(--text-strong);
+  font-weight: 600;
+}
+.histrow .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--point-main);
+  flex: none;
+  opacity: 0.45;
+}
+.histrow.cur .dot {
+  opacity: 1;
+}
+.histrow .hl {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.histrow .ht {
+  margin-left: auto;
+  font-size: 11px;
+  opacity: 0.7;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+/* 현재 위치 표시 (예: 3 / 12) */
+.histpos {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-weak);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3px;
+  flex: none;
+}
+/* 되돌리기/다시실행 버튼 안의 단축키 힌트 */
+.histbtns .ghostbtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding-top: 7px;
+  padding-bottom: 6px;
+  line-height: 1.2;
+}
+.histbtns kbd {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--text-weak);
+  background: var(--bg-accent);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+.histbtns .ghostbtn:disabled kbd {
+  opacity: 0.5;
+}
+
+/* ===== A/B 비교 오버레이 ===== */
+.abmodal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-compare);
+  display: none;
+  flex-direction: column;
+  padding: 26px 28px;
+  background: rgba(5, 8, 15, 0.66);
+  backdrop-filter: blur(4px);
+}
+.abmodal.show {
+  display: flex;
+  animation: panelIn 0.22s ease;
+}
+.abhead {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  color: #fff;
+  flex: none;
+}
+.abhead h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+.abhead .abnote {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.abhead .sp {
+  flex: 1;
+}
+.abclose {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  flex: none;
+  transition: 0.15s;
+}
+.abclose:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.abgrid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 16px;
+}
+.abcol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 16px;
+  padding: 12px;
+}
+.abpick {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: none;
+}
+/* A/B 태그 — 파랑=A, 청록=B 라는 색 구분 자체가 정보다.
+   흰 글자로는 각각 2.75:1 / 1.85:1 밖에 안 나오므로, 색을 죽이는 대신
+   글자를 어둡게 해 색 코딩을 그대로 살린다(6.7:1 / 10.1:1). */
+.abtag {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  color: #0b1220;
+  flex: none;
+}
+.abtag-a {
+  background: #4a9eff;
+}
+.abtag-b {
+  background: #5ccfd8;
+}
+.abpick select {
+  flex: 1;
+  min-width: 0;
+  background: #0f1320;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+}
+.abprev {
+  flex: 1;
+  min-height: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* A/B 미리보기: 실제 대시보드를 그대로 복제해 칸에 맞춰 축소 */
+.abscaler {
+  position: relative;
+  flex: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.4);
+}
+.abstage {
+  width: 1440px;
+  height: 900px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform-origin: top left;
+}
+.abstage .stage,
+.abstage .dtstage {
+  flex: 1;
+  min-height: 0;
+}
+/* 복제본 헤더 로고 — 다크 테마면 흰색으로 */
+.abstage[data-mode='dark'] .wlogo {
+  filter: brightness(0) invert(1);
+}
+/* 하단: 썸네일 + 테마 색상 목록 */
+.abmeta {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+}
+.abthumb {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #fff;
+}
+.abthumb .circles {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+.abthumb .circles i {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(20, 24, 34, 0.9);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+  margin-left: -8px;
+}
+.abthumb .circles i:first-child {
+  margin-left: 0;
+}
+.abname {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.abradius {
+  flex: none;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.abcolors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-height: 86px;
+  overflow: auto;
+}
+.abcolors::-webkit-scrollbar {
+  width: 6px;
+}
+.abcolors::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+.abchip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+.abchip i {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  flex: none;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+.abchip b {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+.abchip code {
+  font-size: 11px;
+  font-family: Consolas, monospace;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.2px;
+}
+@media (max-width: 760px) {
+  .abgrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* ===== 내보내기(Export) 모달 ===== */
+.exmodal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-export);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(5, 8, 15, 0.66);
+  backdrop-filter: blur(4px);
+}
+.exmodal.show {
+  display: flex;
+  animation: panelIn 0.2s ease;
+}
+.excard {
+  width: min(760px, 100%);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f1320;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
+}
+.exhead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  flex: none;
+}
+.exhead h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+.exhead .exnote {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.exhead .sp {
+  flex: 1;
+}
+.exbody {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  overflow: auto;
+}
+.extabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.extabs button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+  border-radius: 8px;
+  padding: 8px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.extabs button:hover {
+  border-color: #4a9eff;
+  color: #fff;
+}
+/* 선택된 세그먼트 — 밝은 파랑 면 위 흰 글자는 2.75:1 이라 글자를 어둡게 둔다 */
+.extabs button.on {
+  background: #4a9eff;
+  border-color: #4a9eff;
+  color: #0b1220;
+}
+.excode {
+  position: relative;
+}
+.excode pre {
+  margin: 0;
+  background: #0a0d16;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 14px;
+  max-height: 300px;
+  overflow: auto;
+}
+.excode pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.excode pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+.excode code {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.65;
+  color: #cdd6e6;
+  white-space: pre;
+  display: block;
+}
+.excopy {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.excopy:hover {
+  background: rgba(74, 158, 255, 0.85);
+  border-color: #4a9eff;
+}
+.excopy.done {
+  background: #22b07d;
+  border-color: #22b07d;
+}
+.exsec {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+.exseclbl {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+.exsec::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.exactions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.exactions button {
+  flex: 1;
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.exactions button:hover {
+  border-color: #4a9eff;
+  background: rgba(74, 158, 255, 0.16);
+}
+.exactions button svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.exhint {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  min-height: 16px;
+  transition: color 0.15s;
+}
+.exhint.ok {
+  color: #5ccfd8;
+}
+.exhint.err {
+  color: #ffb4a8;
+}
+/* ── 컴포넌트 복사 모드 ── 내보내기 모달의 '컴포넌트별 코드 복사'를 누르면 켜진다.
+   평소엔 프리뷰에 아무것도 안 뜨고, 모드일 때만 카드 호버 시 '복사'가 나타난다. */
+.main .panel,
+.main .dt-card {
+  position: relative;
+}
+/* .compcopy는 복사 모드에서만 카드에 주입되므로 '항상' 보이게 둔다.
+   (예전엔 카드 호버 시에만 나타나서 '버튼이 안 뜬다'고 느껴졌고,
+    .stage 안의 카드만 대상이라 데이터테이블(.dtstage의 .dt-card)에선 아예 안 보였다.
+    이제 컨테이너에 의존하지 않고 항상 표시 + 높은 z-index로 확실히 위로 올린다.) */
+.compcopy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 40;
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  opacity: 1;
+  pointer-events: auto;
+  transition: filter 0.14s;
+}
+/* 호버한 카드의 버튼은 살짝 더 도드라지게 — '지금 이 카드' 신호 */
+.panel:hover > .compcopy,
+.dt-card:hover > .compcopy {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+}
+.compcopy button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font: 700 11px/1 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+  color: #fff;
+  background: var(--point-main, #3f64a8);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition:
+    filter 0.14s,
+    background 0.14s;
+}
+.compcopy button:hover {
+  filter: brightness(1.14);
+}
+.compcopy button.done {
+  background: #1f8f4d;
+}
+/* '전체' 버튼은 개별(HTML/CSS/JS)과 살짝 구분 */
+.compcopy button.cpall {
+  background: rgba(18, 24, 40, 0.92);
+}
+.compcopy button.cpall:hover {
+  filter: none;
+  background: rgba(30, 40, 66, 0.96);
+}
+/* 복사 모드일 때 대상 카드에 옅은 강조 — '이건 복사할 수 있어요' 신호.
+   (stage/dtstage 어디에 copymode가 붙든 동작하도록 .copymode 기준으로만 건다) */
+.copymode .panel,
+.copymode .dt-card {
+  outline: 1px dashed color-mix(in srgb, var(--point-main) 55%, transparent);
+  outline-offset: -1px;
+}
+/* 복사에만 집중하도록, 복사 모드 중엔 카드 내부 요소(탭·버튼·토글 등)의 동작을 막는다.
+   복사 버튼(.compcopy)만 예외 — pointer-events는 상속되므로 직계 자식만 꺼도 내부까지 전파된다. */
+.copymode .panel > *:not(.compcopy),
+.copymode .dt-card > *:not(.compcopy) {
+  pointer-events: none;
+}
+.copymode .panel,
+.copymode .dt-card {
+  cursor: default;
+}
+/* 상단 안내 배너 — '컴포넌트 복사 중' */
+.copybar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  z-index: var(--z-banner);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px 9px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(18, 24, 40, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition:
+    opacity 0.18s,
+    transform 0.18s;
+}
+.copybar.show {
+  display: flex;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.copybar.done {
+  background: #1f8f4d;
+  border-color: #1f8f4d;
+}
+.copybar svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+.copybar .cbcancel {
+  margin-left: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 0;
+  cursor: pointer;
+}
+.copybar .cbcancel:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+.copybar.done .cbcancel {
+  display: none;
+}
+.excard.wide {
+  width: min(1080px, 100%);
+}
+.exsel {
+  background: #0a0d16;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-family: var(--font);
+  font-size: 12px;
+  cursor: pointer;
+  max-width: 220px;
+}
+
+/* ===== 대비비 검증표 ===== */
+.cttablewrap {
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+}
+.cttable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  color: #cdd6e6;
+}
+.cttable th {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  font-size: 11px;
+  padding: 9px 11px;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+}
+.cttable td {
+  padding: 9px 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  white-space: nowrap;
+}
+.cttable tr:last-child td {
+  border-bottom: 0;
+}
+.ctpair {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.ctsw {
+  width: 34px;
+  height: 22px;
+  border-radius: 4px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+.ctlabel {
+  color: #e7ecf5;
+}
+.ctlabel small {
+  display: block;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 11px;
+  font-family: Consolas, monospace;
+}
+.ctratio {
+  font-family: Consolas, monospace;
+  font-weight: 700;
+  color: #fff;
+  font-size: 13px;
+}
+.ctbadge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.ctpass {
+  background: rgba(34, 176, 125, 0.2);
+  color: #45d99e;
+}
+.ctfail {
+  background: rgba(239, 68, 68, 0.18);
+  color: #ff8f8f;
+}
+/* 미달 수정 바 */
+.ctfixbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+}
+.ctfixbar.has-fail {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.1);
+}
+.ctfixbar.all-ok {
+  border-color: rgba(34, 176, 125, 0.45);
+  background: rgba(34, 176, 125, 0.1);
+}
+.ctfixmsg {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  color: #e7ecf5;
+}
+.ctfixmsg b {
+  color: #ff8f8f;
+  font-weight: 700;
+}
+.ctfixbar.all-ok .ctfixmsg {
+  color: #8fe6c4;
+}
+.ctfixbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 15px;
+  background: var(--point-fill);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+}
+.ctfixbtn:hover {
+  background: color-mix(in srgb, var(--point-main) 86%, #000);
+}
+.ctfixbtn svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+.ctfixbar.all-ok .ctfixbtn {
+  display: none;
+}
+/* ===== 대비비 검증표: 비차단 플로팅 팝업 ===== */
+.ctpopup {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-popup);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(5, 8, 15, 0.66);
+  backdrop-filter: blur(4px);
+}
+.ctpopup.show {
+  display: flex;
+  animation: panelIn 0.2s ease;
+}
+.ctcard {
+  width: 440px;
+  max-width: 100%;
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  background: #0f1320;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+}
+.ctpopup .exhead {
+  padding: 12px 14px;
+}
+.ctpopup .exhead h2 {
+  font-size: 15px;
+}
+.ctpopup .ctdrag {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 15px;
+  letter-spacing: -2px;
+  flex: none;
+}
+.ctpopup .exsel {
+  max-width: 150px;
+  font-size: 12px;
+  padding: 6px 8px;
+}
+.ctpopup .exbody {
+  padding: 13px 14px 15px;
+  gap: 11px;
+}
+.ctpopup .cttable th,
+.ctpopup .cttable td {
+  padding: 7px 8px;
+  white-space: normal;
+}
+.ctpopup .ctsw {
+  width: 30px;
+  height: 20px;
+}
+/* 수정으로 바뀐 행을 잠깐 반짝이게 */
+@keyframes ctFlash {
+  0% {
+    background: rgba(34, 176, 125, 0.45);
+  }
+  100% {
+    background: transparent;
+  }
+}
+.cttable tr.ctflash td {
+  animation: ctFlash 1.6s ease;
+}
+/* 미달 행 = 클릭하면 그 색을 고치는 자리로 데려가는 이동 수단 */
+.cttable tr.ctjump {
+  cursor: pointer;
+}
+.cttable tr.ctjump:hover td,
+.cttable tr.ctjump:focus-visible td {
+  background: rgba(255, 255, 255, 0.07);
+}
+.cttable tr.ctjump:focus-visible {
+  outline: 2px solid #7f95ff;
+  outline-offset: -2px;
+}
+/* 미달 뱃지 옆 화살표 — '눌러서 이동' 힌트. 통과 행엔 없다 */
+.ctbadge.ctfail::after {
+  content: ' →';
+  font-weight: 400;
+}
+/* 수정 내역 카드 */
+.ctchanges {
+  display: none;
+  flex-direction: column;
+  gap: 7px;
+  padding: 11px 12px;
+  border: 1px solid rgba(34, 176, 125, 0.4);
+  background: rgba(34, 176, 125, 0.08);
+  border-radius: 12px;
+}
+.ctchanges.show {
+  display: flex;
+}
+.ctchanges .cchead {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8fe6c4;
+}
+.ctchanges .cchead span {
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+}
+.ctchange {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #e7ecf5;
+  flex-wrap: wrap;
+}
+.ctchange .ccrole {
+  font-weight: 700;
+  min-width: 58px;
+  flex: none;
+}
+.ctchange .ccsw {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  flex: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+.ctchange code {
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+}
+.ctchange .ccarrow {
+  color: rgba(255, 255, 255, 0.45);
+}
+.ctchange .ccratio {
+  margin-left: auto;
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.ctchange .ccratio b {
+  color: #ff8f8f;
+  font-weight: 700;
+}
+.ctchange .ccratio b.ok {
+  color: #45d99e;
+}

@@ -1,0 +1,25 @@
+/* ── 레이아웃 미니 와이어프레임 — 홈 화면 카드 · 와이어프레임 추천 카드가 함께 쓴다 ── */
+
+/* ── 와이어프레임 미니(레이아웃 썸네일) ── */
+.wf {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  aspect-ratio: 466 / 230;
+  padding: 9px;
+  border-radius: var(--r-sm);
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+}
+.wf-c {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--point-main) 22%, var(--bg-accent)), var(--bg-accent));
+  border: 1px solid color-mix(in srgb, var(--point-main) 25%, var(--line));
+  border-radius: 5px;
+  min-width: 0;
+  min-height: 0;
+}
+/* 레이아웃 선택을 미리보기에 반영할 때 — 패널이 .cols의 직속 grid 아이템이 된다 */
+.cols.gridmode > .panel {
+  min-width: 0;
+  min-height: 0;
+}

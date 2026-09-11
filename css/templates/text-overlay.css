@@ -1,0 +1,27 @@
+/* ── 템플릿 시안 위 편집 텍스트 오버레이 ── */
+
+.tpl-textlayer { position: absolute; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
+.tpl-textstage { position: absolute; pointer-events: none; }
+.tpl-textlayer.editing .tpl-textstage { pointer-events: auto; cursor: crosshair; }
+.tpl-tbox {
+  position: absolute; pointer-events: none; white-space: nowrap;
+  color: #fff; font-family: var(--font, "Pretendard", system-ui, sans-serif);
+  font-weight: 600; line-height: 1.15; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  font-size: calc(var(--tpl-fs, 28) * var(--tpl-scale, 1) * 1px);
+  padding: 1px 3px; border-radius: 4px;
+}
+.tpl-textlayer.editing .tpl-tbox { pointer-events: auto; cursor: move; outline: 1px dashed rgba(255, 255, 255, 0.4); }
+.tpl-textlayer.editing .tpl-tbox.sel { outline: 1px solid #4c8dff; background: rgba(76, 141, 255, 0.14); }
+.tpl-tbox .tpl-t { outline: none; pointer-events: inherit; min-width: 6px; display: inline-block; }
+.tpl-tbox .tpl-del {
+  position: absolute; top: -9px; right: -9px; width: 18px; height: 18px; border-radius: 50%;
+  border: none; background: #e5484d; color: #fff; font: 700 12px/18px sans-serif; text-align: center;
+  cursor: pointer; display: none; padding: 0; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+.tpl-textlayer.editing .tpl-tbox.sel .tpl-del { display: block; }
+.tpl-hint {
+  position: absolute; left: 50%; top: 12px; transform: translateX(-50%); z-index: 7; pointer-events: none;
+  background: rgba(15, 20, 30, 0.86); color: #e8edf5; font: 600 12px/1 var(--font, system-ui, sans-serif);
+  padding: 8px 13px; border-radius: 999px; white-space: nowrap; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4); display: none;
+}
+.tpl-textlayer.editing .tpl-hint { display: block; }

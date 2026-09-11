@@ -1,0 +1,96 @@
+/* ── 자연어 시안 생성 입력창 ── */
+
+/* ── 자연어 시안 생성 오미박스(스튜디오 하단 중앙) ── */
+.nlgen {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: min(680px, calc(100vw - 40px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none; /* 자식만 클릭 받게 */
+}
+/* A/B 비교 중엔 숨긴다 */
+body:has(.abmodal.show) .nlgen {
+  display: none;
+}
+.nlgen-inner {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 8px 8px 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+.nlgen-ico {
+  display: inline-flex;
+  color: var(--point-main);
+  flex: none;
+}
+.nlgen-ico svg {
+  width: 18px;
+  height: 18px;
+}
+.nlgen-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-strong);
+  outline: none;
+}
+.nlgen-input::placeholder {
+  color: var(--text-weak);
+}
+.nlgen-go {
+  flex: none;
+  border: 0;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--point-fill);
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.nlgen-go:hover {
+  filter: brightness(1.08);
+}
+.nlgen-hint {
+  pointer-events: auto;
+  max-width: 100%;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-weak);
+  background: color-mix(in srgb, var(--bg-surface) 92%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px 12px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+.nlgen-hint.show {
+  opacity: 1;
+  transform: none;
+}
+.nlgen-hint.ok b {
+  color: var(--point-main);
+}
+.nlgen-hint.warn {
+  color: var(--text-strong);
+  border-color: color-mix(in srgb, var(--warning, #d08700) 55%, var(--line));
+}

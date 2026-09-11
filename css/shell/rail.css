@@ -1,0 +1,202 @@
+/* ── 왼쪽 아이콘 레일 · 옵션 패널 ── */
+
+/* ── 왼쪽 아이콘 레일 (참고 UI) ── */
+.siderail {
+  width: var(--rail-w);
+  flex: none;
+  height: 100%;
+  background: var(--bg-page);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 0 12px;
+}
+.railbtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text-weak);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.railbtn svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+}
+.railbtn:hover {
+  background: var(--bg-accent);
+  color: var(--text-strong);
+}
+.railbtn.on {
+  background: color-mix(in srgb, var(--point-main) 22%, transparent);
+  color: #fff;
+}
+/* 메뉴가 열려 있는 동안 아이콘 강조 */
+.railbtn.menuon {
+  background: var(--bg-accent);
+  color: var(--text-strong);
+}
+/* 레일 아이콘 오른쪽으로 펼쳐지는 플라이아웃 메뉴 (참고 UI 드롭메뉴 스타일) */
+.railflyout {
+  position: fixed;
+  z-index: var(--z-float);
+  min-width: 172px;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 16px 42px -14px rgba(0, 0, 0, 0.65);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 1px;
+  font-family: var(--font);
+}
+.railflyout.show {
+  display: flex;
+  animation: railflyIn 0.13s ease;
+}
+@keyframes railflyIn {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.railfly-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font: 500 13px var(--font);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  transition: background 0.12s ease;
+}
+.railfly-item svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  stroke: var(--text-weak);
+  transition: stroke 0.12s ease;
+}
+.railfly-item:hover {
+  background: var(--bg-accent);
+}
+.railfly-item:hover svg {
+  stroke: var(--text-strong);
+}
+.railfly-sep {
+  height: 1px;
+  margin: 5px 6px;
+  background: var(--line);
+}
+
+/* ── 옵션창 섹션 포커스 — rail 메뉴에서 고른 항목에 해당하는 옵션만 노출 ──
+   data-section이 지정되면 나머지 스텝/영역을 감추고 선택한 것만 보여준다. */
+.sidepanel[data-section] > .fignav,
+.sidepanel[data-section] > .tabbody > [data-pane] {
+  display: none;
+}
+.sidepanel[data-section='layout'] > .fignav {
+  display: flex;
+}
+.sidepanel[data-section='layout'] > .fignav > .fignav-new {
+  display: none;
+}
+.sidepanel[data-section='layout'] > .tabbody {
+  display: none;
+}
+.sidepanel[data-section='screen'] > .tabbody > #stepScreen,
+.sidepanel[data-section='color'] > .tabbody > #stepColor,
+.sidepanel[data-section='verify'] > .tabbody > #stepVerify,
+.sidepanel[data-section='save'] > .tabbody > #stepSave,
+.sidepanel[data-section='export'] > .tabbody > #stepExport {
+  display: block;
+}
+/* 대시보드 편집 — .grp가 flex(column,gap12)라 flex로 보여야 간격 유지 */
+.sidepanel[data-section^='dash'] > .tabbody > [data-pane='dash'] {
+  display: flex;
+}
+/* 대시보드 편집 하위 섹션 — 평소엔 그대로 흐르고(contents), 하위 섹션 선택 시 해당 것만 */
+.grp[data-pane='dash'] > .dsec {
+  display: contents;
+}
+.sidepanel[data-section^='dash-'] .grp[data-pane='dash'] > .dsec {
+  display: none;
+}
+/* 화면 구성(열 수)은 '레이아웃'으로 대체 — 메뉴·기본 노출에서 숨긴다(열 수 버튼은 레이아웃 프리셋이 재사용) */
+.grp[data-pane='dash'] > [data-dsec='compose'] {
+  display: none !important;
+}
+.sidepanel[data-section='dash-panels'] .grp[data-pane='dash'] > [data-dsec='panels'],
+.sidepanel[data-section='dash-design'] .grp[data-pane='dash'] > [data-dsec='design'] {
+  display: contents;
+}
+/* 디자인 편집 — 토글(드롭메뉴) 없이 모든 항목을 인라인으로 펼쳐 둔다 */
+.grp[data-pane='dash'] > [data-dsec='design'] > #designToggle {
+  display: none;
+}
+.grp[data-pane='dash'] > [data-dsec='design'] > #designPanel {
+  display: flex;
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.railsep {
+  flex: 1;
+}
+/* 옵션 패널 토글 — 레일이 항상 보이므로 이 버튼이 유일한 펼치기 수단이다.
+   떠 있는 햄버거(#opener)는 레일의 홈 버튼과 x 14~45 구간에서 겹쳐 쓸 수 없어
+   예전부터 CSS 로 죽어 있었다(중복 규칙 2개가 서로를 지움). 그 모순을 걷어내고,
+   대신 이 버튼이 상태를 아이콘으로 말하게 한다 — 펼침이면 접기(◀), 접힘이면 펼치기(▶). */
+.railtoggle .rt-chev {
+  transition: transform 0.18s ease;
+  transform-origin: 15.5px 12px;
+}
+.app:not(.collapsed) .railtoggle .rt-chev {
+  transform: scaleX(-1);
+}
+/* 접힌 상태에서는 이 버튼이 사실상 유일한 다음 행동이라 눈에 띄게 둔다 */
+.app.collapsed .railtoggle {
+  color: var(--point-sub);
+  background: color-mix(in srgb, var(--point-main) 14%, transparent);
+}
+.app.collapsed .railtoggle:hover {
+  background: color-mix(in srgb, var(--point-main) 26%, transparent);
+}
+/* ── 사이드바 콘텐츠 패널 (기존 컨트롤 전부) ── */
+.sidepanel {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.sidepanel::-webkit-scrollbar {
+  width: 7px;
+}
+.sidepanel::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}

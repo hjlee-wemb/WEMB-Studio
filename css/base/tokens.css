@@ -1,0 +1,276 @@
+/* ── 토큰 — 크롬 팔레트 · 겹침 순서 · 역할색 ── */
+
+:root {
+  /* ── 툴 크롬(사이드바·모달) 전용 팔레트 ──
+     생성된 테마와 시각적으로 분리하기 위해 고정값. 오른쪽 프리뷰(.main)만
+     생성 팔레트를 인라인으로 덮어써서 실제 테마 색을 보여준다. */
+  /* index5 — 첨부 참고 UI(near-black + 바이올렛 액센트)로 재도장한 툴 크롬.
+     오른쪽 프리뷰(.main)는 인라인 오버라이드라 영향 없음. */
+  --bg-page: #0a0a0e;
+  --bg-surface: #131318;
+  --bg-accent: #212129;
+  --line: #26262f;
+  --text-strong: #f4f4f7;
+  --text-weak: #9a9aa8;
+  /* 액센트는 역할별로 나눈다. 하나로 쓰면 '어두운 배경 위 글자'와
+     '흰 글자를 얹는 면'이 같은 값을 요구해 둘 중 하나가 반드시 대비를 잃는다.
+     --point-main : 어두운 배경 위의 선·글자용 (#0a0a0e 대비 4.4:1)
+     --point-fill : 흰 글자를 얹는 채움면용 (#fff 대비 5.07:1 — 이전 #7c6cf0 은 3.99:1 로 AA 미달)
+     팔레트 엔진의 --fg-point 보정과 같은 원리로 색상·채도는 두고 명도만 낮췄다. */
+  --point-main: #7c6cf0;
+  --point-fill: #6b5bdb;
+  --point-sub: #a99bf5;
+  /* ── 겹침 순서(z-index) ──
+     예전에는 27개 숫자가 파일 곳곳에 흩어져 있어, 새 레이어가 생길 때마다
+     '주변보다 큰 수'를 눈대중으로 골라야 했다. 값은 그대로 두고 이름만 붙여
+     순서를 여기 한 곳에서 읽을 수 있게 한다(아래로 갈수록 위에 쌓인다). */
+  --z-popover-1: 80;
+  --z-popover-2: 81;
+  --z-tooltip: 90;
+  --z-sidebar: 100;
+  --z-topbar: 120;
+  --z-page: 150;
+  --z-popup: 180;
+  --z-compare: 200;
+  --z-export: 210;
+  --z-wizard: 260;
+  --z-overlay: 300;
+  --z-coach: 310;
+  --z-flowmodal: 330;
+  --z-float: 400;
+
+  /* ── 최상위 레이어 ──
+     예전에는 9000 · 9100 · 9999 · 100000 · 200000 이 흩어져 있었다. 값을 키워가며
+     그때그때 이긴 흔적이라, 새 모달이 생길 때마다 또 키워야 했다.
+     본문 레이어가 400 이하를 쓰므로 900 대면 언제나 그 위다. */
+  --z-modal: 900;
+  --z-modal-pop: 910;
+  --z-confirm: 920;
+  --z-banner: 930;
+  --z-picker: 940;
+  --danger: #ef4444;
+  /* 흰 글자를 얹는 위험 버튼용 — #ef4444 는 #fff 대비 3.8:1 로 AA 미달이다 (이쪽은 6.5:1) */
+  --danger-fill: #b91c1c;
+  --warning: #f5a623;
+  /* 아이콘 마스크 — 이모지 대신 쓰는 자물쇠(선 굵기 2, 나머지 아이콘과 동일) */
+  --ic-lock: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="11" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>');
+  --font: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
+  --sb: 300px;
+  /* 상단 바 높이 · 왼쪽 아이콘 레일 폭 (참고 UI 구조) */
+  --topbar-h: 48px;
+  --rail-w: 52px;
+  /* 오른쪽 대시보드 패널의 모서리 둥글기 (왼쪽 설정창에서 조절) */
+  --radius-panel: 8px;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-page);
+  color: var(--text-strong);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.45;
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2px;
+}
+
+.app {
+  display: flex;
+  align-items: flex-start;
+  height: calc(100vh - var(--topbar-h));
+  overflow: hidden;
+}
+.main {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  /* 팔레트가 적용되기 전(런처·콜드 스타트)에는 --point-main 이 툴 크롬의 #7c6cf0 을 상속하고
+     --on-point 는 비어 있어 #fff 폴백으로 떨어진다 → 프리뷰 탭 칩이 3.99:1 로 AA 미달이었다.
+     그 한 상태를 위한 안전 기본값. apply() 가 팔레트를 넣으면 인라인 --on-point 가 이 값을 덮는다. */
+  --on-point: #0f1020;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* 생성된 팔레트는 이 영역(오른쪽 콘텐츠)에만 적용됨 — 왼쪽 사이드바는 고정 */
+  background: var(--bg-page);
+  /* 스코프된 글자색을 실제로 적용 — 없으면 body의 흰색을 상속해 라이트 모드에서 글씨가 흰색이 됨 */
+  color: var(--text-strong);
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
+}
+
+/* ── 패널 표면색(디자인 편집의 '표면 밝기') ──
+   **반드시 프리뷰 컨테이너에서 계산해야 한다.** 커스텀 속성 안의 var()는
+   '선언된 요소'에서 치환되므로, :root에 --panel-bg를 색으로 만들어 두면
+   그 안의 var(--bg-surface)가 :root 값(툴 크롬 = 항상 다크 고정)으로 굳어져
+   내려온다 → 라이트 모드로 바꿔도 .panel/.dt-card만 어두운 채로 남았음.
+   JS는 퍼센트(--panel-lift / --panel-dim)만 :root에 얹고, 실제 색은 팔레트
+   변수를 가진 .main·.abstage에서 이 규칙이 만든다. */
+.main,
+.abstage {
+  --panel-bg: color-mix(in srgb, color-mix(in srgb, var(--bg-surface), var(--bg-page) var(--panel-dim, 0%)), #ffffff var(--panel-lift, 0%));
+}
+
+/* ── 역할색을 '전경(글자·아이콘)'으로 쓸 때의 안전값 ──
+   배경으로 쓸 땐 --on-point/--on-danger가 글자색을 대비 높은 쪽으로 골라 주지만,
+   색 자신이 글자일 땐 그런 보호막이 없다. 게다가 뱃지·태그는 **같은 색을 16~18%로
+   옅게 깐 배경** 위에 얹히므로, enforceContrast가 표면 기준으로 맞춰 둔 4.5:1이
+   실제로는 3.2~3.7까지 깎인다(실측: b-crit 3.51 · t-elec 3.76 · b-warn 1.94).
+   → 색상(hue)·채도(chroma)는 그대로 두고 **명도만** 잘라 대비를 되찾는다.
+   DT가 --dt-accent-fg에서 쓰던 방법을 팔레트 전역으로 넓힌 것.
+   min()/max()라서 이미 조건을 만족하는 팔레트는 손대지 않고 통과한다. */
+/* :root에도 얹어 두는 이유 — 툴 크롬(모달·컴포넌트 시트)에도 var(--fg-*)를 쓰는
+   마크업이 있어서, 프리뷰 밖에서 값이 비면 글자색이 통째로 상속돼 버린다.
+   여기 값은 보정 없는 원본이고, 실제 보정은 아래 @supports가 .main/.abstage에만 건다. */
+:root,
+.main,
+.abstage {
+  --fg-point: var(--point-main);
+  --fg-sub: var(--point-sub);
+  --fg-danger: var(--danger);
+  --fg-warning: var(--warning);
+  /* 상승 추세 초록 — 코어 10색에 '성공' 역할이 없어 여기만 고정색을 쓴다.
+     (하락은 --danger, 보합은 --text-weak라 나머지는 팔레트를 따름) */
+  --ok-raw: #22b07d;
+  --fg-ok: var(--ok-raw);
+}
+@supports (color: oklch(from red l c h)) {
+  .main[data-mode='light'],
+  .abstage[data-mode='light'] {
+    --fg-point: oklch(from var(--point-main) min(l, 0.45) c h);
+    --fg-sub: oklch(from var(--point-sub) min(l, 0.45) c h);
+    --fg-danger: oklch(from var(--danger) min(l, 0.45) c h);
+    --fg-warning: oklch(from var(--warning) min(l, 0.45) c h);
+    --fg-ok: oklch(from var(--ok-raw) min(l, 0.45) c h);
+  }
+  .main[data-mode='dark'],
+  .abstage[data-mode='dark'] {
+    --fg-point: oklch(from var(--point-main) max(l, 0.72) c h);
+    --fg-sub: oklch(from var(--point-sub) max(l, 0.72) c h);
+    --fg-danger: oklch(from var(--danger) max(l, 0.72) c h);
+    --fg-warning: oklch(from var(--warning) max(l, 0.72) c h);
+    --fg-ok: oklch(from var(--ok-raw) max(l, 0.72) c h);
+  }
+}
+
+#opener {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 60;
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--bg-surface);
+  color: var(--text-strong);
+  font-size: 16px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+#opener:hover {
+  border-color: var(--point-main);
+}
+/* 접힌 햄버거 버튼은 프리뷰(.main) 위에 뜨므로, 프리뷰가 라이트 모드면
+   프리뷰의 실제 배경색(--preview-page, apply()에서 노출)을 따라 자연스럽게 얹힘 */
+.app:has(> .main[data-mode='light']) #opener {
+  background: var(--preview-page, #f3f5f9);
+  border-color: color-mix(in srgb, var(--preview-text, #35405a) 16%, var(--preview-page, #f3f5f9));
+  color: color-mix(in srgb, var(--preview-text, #35405a) 78%, var(--preview-page, #f3f5f9));
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+}
+.app:has(> .main[data-mode='light']) #opener:hover {
+  border-color: var(--point-main);
+  color: var(--point-main);
+}
+/* 자동 접기(창 크기 변화)일 때는 폭 전환을 끈다 — 리사이즈 중 매 프레임 재배치를 막는다 */
+.app.no-anim .sidebar {
+  transition: none;
+}
+/* 접으면 아이콘 레일만 남기고 콘텐츠 패널을 감춘다 (참고 UI처럼 레일 상시 노출) */
+.app.collapsed .sidebar {
+  width: var(--rail-w);
+  min-width: 0;
+  overflow: hidden;
+}
+.app.collapsed .sidepanel {
+  display: none;
+}
+.app.collapsed #opener {
+  display: none;
+}
+.app.collapsed .hdr {
+  padding-left: 46px;
+}
+/* 사이드바를 접으면 좌상단 고정 햄버거(#opener: left 14 + 폭 40 = 우측 54px)가 뜨므로
+   DT 헤더도 대시보드 헤더(.hdr)처럼 왼쪽을 비켜, 로고와 겹치지 않게 한다 */
+.app.collapsed .dt-hdr {
+  padding-left: 62px;
+}
+
+/* sidebar */
+.sidebar {
+  width: calc(var(--sb) + var(--rail-w));
+  flex: none;
+  position: sticky;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  /* 프리뷰(엔터프라이즈 .stage 등 z-index 요소)보다 위에 쌓이도록 —
+     그래야 사이드바 밖으로 떠오르는 도움말 툴팁(fixed)이 가려지지 않음.
+     본문 밖 모달(180~210)보다는 아래라 모달 흐름은 방해하지 않음. */
+  z-index: var(--z-sidebar);
+  background: var(--bg-surface);
+  /* 사이드바 글자색을 모드에 맞춰 — 없으면 body의 흰색을 상속해 라이트에서 제목이 묻힘 */
+  color: var(--text-strong);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: row;
+  transition: width 0.25s ease;
+}
+
+/* ── 라운드 · 모션 토큰 — 사이드바 리스킨에서 시작해 런처 · 대화상자까지 함께 쓴다 ── */
+:root {
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-pill: 999px;
+  --i2-shadow: 0 6px 14px -7px rgba(0, 0, 0, 0.6);
+  /* 모션 토큰 —
+     ease-out은 '등장/퇴장'용. 슬라이딩 필은 이미 화면에 있는 물체가
+     '이동'하는 것이므로 가속·감속이 다 있는 ease-in-out이 맞다.
+     색 변화는 ease, 누름 피드백은 즉각 반응하도록 ease-out.
+
+     곡선은 완만한 ease-in-out(easeInOutQuad). 흔히 쓰는 강한
+     cubic-bezier(.77,0,.175,1)은 중반이 너무 빨라, 아래 두-모서리
+     방식에서 앞뒤 모서리가 과하게 벌어져 필이 64%나 부풀어 버린다
+     (트랙을 거의 다 덮음). 완만한 곡선이라야 변형이 적정선에 들어온다. */
+  --i2-ease-move: cubic-bezier(0.45, 0, 0.55, 1);
+  --i2-dur-color: 200ms;
+  --i2-dur-press: 140ms;
+  /* 스쿼시&스트레치 —
+     필의 두 모서리를 다른 속도로 보낸다. 진행 방향의 '앞 모서리'가
+     먼저 도착(lead)하고 '뒤 모서리'가 늦게 따라붙으면(trail), 그 시간차
+     만큼 필이 늘어났다가(길쭉해져 덜 둥글어짐) 다시 오므라든다
+     = 공이 튕길 때의 변형. 이동거리가 길수록 더 늘어나 물리적으로 맞다.
+     두 값의 **차이가 곧 변형의 크기**다. 40ms 차이(200/240)는 +18.5%로
+     240ms 안에 스쳐 지나가 눈에 안 잡혔음 → 100ms 차이로 벌려 +40%대로.
+     체감 도착은 lead(200ms)라 느려 보이지 않고, 뒤 모서리가 남아서
+     따라붙는 300ms가 '늘어났다 오므라드는' 탄성으로 읽힌다. */
+  --i2-dur-lead: 200ms;
+  --i2-dur-trail: 300ms;
+  --i2-dur-flat: 240ms; /* 변형 없이 평범하게 이동할 때 */
+}

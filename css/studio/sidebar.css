@@ -1,0 +1,363 @@
+/* ── 스튜디오 사이드바 — 헤더 · 탭 · 스텝 · 화면 만들기 ── */
+
+/* ── 항상 보이는 되돌리기/다시실행 (브랜드 헤더) ── */
+.quickhist {
+  display: flex;
+  gap: 4px;
+  flex: none;
+  margin-left: auto;
+}
+.qh {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-page);
+  color: var(--text-weak);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.15s;
+}
+.qh:hover:not(:disabled) {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+  background: var(--bg-accent);
+}
+.qh:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+/* 전체 초기화 버튼 — 파괴적 동작이라 hover 시 위험색으로 구분 */
+.qh-reset {
+  font-size: 16px;
+}
+.qh-reset:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 10%, var(--bg-page));
+}
+/* Color Hunt 연동 링크 · 더 추천하기 버튼 */
+.chlink {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--point-main);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.chlink:hover {
+  text-decoration: underline;
+}
+/* 팔레트 페이지네이션 */
+.galpager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+.galnav {
+  flex: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-page);
+  color: var(--text-weak);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.galnav:hover:not(:disabled) {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+  background: var(--bg-accent);
+}
+.galnav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.galpos {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-weak);
+  font-variant-numeric: tabular-nums;
+}
+/* ===== 사이드바 상단 탭 — 테마(컬러 워크플로우) / 대시보드 편집 분리 ===== */
+.sbtabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+.sbtab {
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  color: var(--text-weak);
+  border-radius: 12px;
+  padding: 10px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: 0.15s;
+  text-align: center;
+}
+.sbtab .ko {
+  display: block;
+  white-space: nowrap;
+  font-size: 11px;
+  letter-spacing: -0.3px;
+  font-weight: 500;
+  margin-top: 3px;
+  color: color-mix(in srgb, var(--text-weak) 80%, transparent);
+}
+.sbtab:hover {
+  border-color: var(--point-main);
+}
+.sbtab.on {
+  background: var(--point-fill);
+  border-color: var(--point-main);
+  color: #fff;
+}
+.sbtab.on .ko {
+  color: rgba(255, 255, 255, 0.82);
+}
+/* 탭 본문 — data-pane과 data-tab으로 표시/순서를 제어 */
+.tabbody {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.tabbody[data-tab='theme'] > [data-pane='dash'] {
+  display: none;
+}
+.tabbody[data-tab='dash'] > [data-pane='theme'] {
+  display: none;
+}
+/* ===== 단계(스텝) 헤더 — 번호·굵은 제목·한 줄 설명으로 섹션을 한눈에 구별 ===== */
+.stephdr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 4px;
+}
+.stephdr .stepno {
+  flex: none;
+  width: 23px;
+  height: 23px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--point-main) 15%, transparent);
+  color: var(--point-main);
+  font-size: 12px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+.stephdr .steptx {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+}
+.stephdr .steptx b {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-strong);
+  letter-spacing: -0.2px;
+}
+.stephdr .steptx small {
+  font-size: 12px;
+  color: var(--text-weak);
+  margin-top: 1px;
+}
+.stephdr > .info {
+  margin-left: auto;
+  flex: none;
+}
+/* 도움말(?) + 경고(!) 배지를 한 묶음으로 오른쪽에 가깝게 배치 */
+.stephdr .stepbadges {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+}
+.stephdr .stepbadges .info {
+  margin-left: 0;
+}
+/* 한 스텝 안의 하위 구분 라벨(예: 화면 형식 / 색 고르기) */
+.substep {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-weak);
+  margin: 4px 2px 0;
+}
+.substep span {
+  font-weight: 500;
+  font-size: 12px;
+  color: color-mix(in srgb, var(--text-weak) 80%, transparent);
+}
+
+/* ── 화면 만들기 3단계: 그리드 행 + 와이어프레임 갤러리 ──
+   그리드/와이어프레임은 화면 종류를 고른 뒤에만 나타난다(hidden 토글). */
+.gridrow[hidden],
+.wirepick[hidden] {
+  display: none;
+}
+.wirepick {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.wiregal {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.wcard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 7px 7px 6px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.15s;
+  text-align: center;
+}
+.wcard:hover {
+  border-color: var(--point-main);
+}
+.wcard.on {
+  border-color: var(--point-main);
+  background: color-mix(in srgb, var(--point-main) 12%, var(--bg-page));
+  box-shadow: 0 0 0 1px var(--point-main) inset;
+}
+.wcard:active {
+  transform: translateY(1px);
+}
+/* 썸네일 = 배치를 그대로 축소한 미니 그리드. 칸 수·span은 JS가 인라인으로 준다. */
+.wthumb {
+  display: grid;
+  gap: 3px;
+  aspect-ratio: 4 / 3;
+  padding: 5px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--text-weak) 9%, transparent);
+}
+.wthumb i {
+  display: block;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--text-weak) 32%, transparent);
+}
+.wcard:hover .wthumb i {
+  background: color-mix(in srgb, var(--point-main) 45%, var(--text-weak));
+}
+.wcard.on .wthumb i {
+  background: color-mix(in srgb, var(--point-main) 70%, transparent);
+}
+.wcard.on .wthumb {
+  background: color-mix(in srgb, var(--point-main) 14%, transparent);
+}
+.wcap {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-weak);
+  line-height: 1.25;
+}
+.wcard.on .wcap {
+  color: var(--text-strong);
+}
+/* 화면 형식(버전·밝기) — 아코디언 없이 항상 보이는 세그먼트 */
+.fmtgrid {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.fmtrow {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.fmtlbl {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.fmtlbl .info {
+  margin-left: 2px;
+}
+/* 아코디언 접힘 상태에서 현재 값 요약(예: 기준 색 ● #4A9EFF) */
+.acc > summary .accval {
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--text-strong);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  max-width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.acc > summary .accval i {
+  width: 11px;
+  height: 11px;
+  border-radius: 4px;
+  flex: none;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.acc > summary .accval:empty {
+  display: none;
+}
+/* 펼쳐지면 본문에서 값이 보이므로 요약값은 숨김 */
+.acc[open] > summary .accval {
+  display: none;
+}
+.grp {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* 항목 제목 위계 — .fmtlbl·.sublbl·아코디언 제목과 같은 값 */
+.grp > label {
+  font-size: 12px;
+  color: var(--text-strong);
+  font-weight: 600;
+}
+/* 보조 설명 — 제목 옆에 붙는 한 줄. 어디에 있든 같은 크기·색이어야 위계가 읽힌다.
+   (예전엔 .fmtlbl 안에서만 12px이라 같은 역할인데 혼자 커 보였다) */
+.grp > label .ko,
+.acc > summary .acttl .ko,
+.fmtlbl .ko,
+.sublbl .ko {
+  font-weight: 500;
+  color: color-mix(in srgb, var(--text-weak) 85%, transparent);
+  font-size: 11px;
+  margin-left: 5px;
+}
+/* 한 그룹 안의 소제목(추천 테마 → 트렌드/컬러모음) */
+.sublbl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin: 2px 0;
+}

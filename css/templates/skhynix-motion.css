@@ -1,0 +1,154 @@
+/* ── SK하이닉스 시안 생명주기 모션 ──
+   ==========================================================================
+   SK하이닉스 이천 FMS 시안 — 템플릿 생명주기 애니메이션(차트/위젯을 '살아있게')
+   센터 온도(기포·경보 큐브·상태 점·핀)와 상면 포화도(실린더·도넛 링)에 상시 모션.
+   reduce-motion이면 전부 정지. (거대 <style> 블록 파싱 이슈를 피해 전용 블록으로 분리)  */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 1) 큐브 속 기포(#skx-Bubble ~ _4, 큐브 4개 전부) — 비눗방울처럼 아래→위로 떠올라 사라지고 반복(스태거 연속 스트림) */
+  .skx-svg [id^="skx-Bubble"] > * {
+    transform-box: fill-box; transform-origin: center;
+    animation: skxBubbleRise 3.4s ease-in-out infinite;
+  }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(1) { animation-delay: 0s;    animation-duration: 3.2s; }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(2) { animation-delay: 0.42s; animation-duration: 3.7s; }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(3) { animation-delay: 0.84s; animation-duration: 3.4s; }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(4) { animation-delay: 1.26s; animation-duration: 3.9s; }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(5) { animation-delay: 1.68s; animation-duration: 3.3s; }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(6) { animation-delay: 2.1s;  animation-duration: 3.6s; }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(7) { animation-delay: 2.52s; animation-duration: 3.5s; }
+  .skx-svg [id^="skx-Bubble"] > *:nth-child(8) { animation-delay: 2.94s; animation-duration: 3.8s; }
+  @keyframes skxBubbleRise {
+    0%   { transform: translateY(6px) scale(0.55); opacity: 0; }
+    24%  { opacity: 0.9; }
+    76%  { opacity: 0.9; }
+    100% { transform: translateY(-17px) scale(1.05); opacity: 0; }
+  }
+
+  /* 2) 경보 큐브 M14(노랑 #skx-Union_2)·M16(주황 #skx-Union_3) — 상태 변화 표시: 경보색이 부드럽게 깜빡 */
+  .skx-svg [id="skx-Union_2"] { animation: skxBlinkY 2s ease-in-out infinite; }
+  .skx-svg [id="skx-Union_3"] { animation: skxBlinkO 2.3s ease-in-out infinite; }
+  @keyframes skxBlinkY {
+    0%, 100% { opacity: 0.55; filter: brightness(0.88); }
+    50%      { opacity: 1;    filter: brightness(1.32) drop-shadow(0 0 5px rgba(246, 222, 6, 0.9)); }
+  }
+  @keyframes skxBlinkO {
+    0%, 100% { opacity: 0.55; filter: brightness(0.88); }
+    50%      { opacity: 1;    filter: brightness(1.32) drop-shadow(0 0 5px rgba(246, 126, 6, 0.95)); }
+  }
+
+  /* 3) 온도 상태 점(#skx-Dots ~ _4) + 핀(#skx-Pin ~ _4) — 레벨이 '한 단계 위'로 올라가는 스텝.
+        활성 점 색이 한 칸 위로 이동하고 핀이 한 칸(9px) 위로 동기 이동. 큐브마다 속도·위상을 다르게(제각각). */
+  /* 공통 색 스텝 키프레임(부드러운 스텝) */
+  @keyframes skxLvlG1 { 0%,30% { fill: #414B69; } 46%,80% { fill: #43D28C; } 96%,100% { fill: #414B69; } }
+  @keyframes skxLvlG2 { 0%,30% { fill: #43D28C; } 46%,80% { fill: #26684C; } 96%,100% { fill: #43D28C; } }
+  @keyframes skxLvlG3 { 0%,30% { fill: #26684C; } 46%,80% { fill: #24664A; } 96%,100% { fill: #26684C; } }
+  @keyframes skxLvlG4 { 0%,30% { fill: #24664A; } 46%,80% { fill: #226447; } 96%,100% { fill: #24664A; } }
+  @keyframes skxLvlG5 { 0%,30% { fill: #226447; } 46%,80% { fill: #216345; } 96%,100% { fill: #226447; } }
+  @keyframes skxLvlY1 { 0%,30% { fill: #414B69; } 46%,80% { fill: #FAD01E; } 96%,100% { fill: #414B69; } }
+  @keyframes skxLvlY2 { 0%,30% { fill: #FAD01E; } 46%,80% { fill: #78661A; } 96%,100% { fill: #FAD01E; } }
+  @keyframes skxLvlY3 { 0%,30% { fill: #78661A; } 46%,80% { fill: #756316; } 96%,100% { fill: #78661A; } }
+  @keyframes skxLvlY4 { 0%,30% { fill: #756316; } 46%,80% { fill: #746214; } 96%,100% { fill: #756316; } }
+  @keyframes skxPinStep { 0%,30% { transform: translateY(0); } 46%,80% { transform: translateY(-9px); } 96%,100% { transform: translateY(0); } }
+  .skx-svg [id^="skx-Pin"] { transform-box: fill-box; transform-origin: center; }
+
+  /* 큐브1 (Dots · Pin) — 3.0s, 위상 0s */
+  .skx-svg [id="skx-Dot_7"]  { animation: skxLvlG1 3.0s ease-in-out infinite; }
+  .skx-svg [id="skx-Dot_8"]  { animation: skxLvlG2 3.0s ease-in-out infinite; }
+  .skx-svg [id="skx-Dot_9"]  { animation: skxLvlG3 3.0s ease-in-out infinite; }
+  .skx-svg [id="skx-Dot_10"] { animation: skxLvlG4 3.0s ease-in-out infinite; }
+  .skx-svg [id="skx-Dot_11"] { animation: skxLvlG5 3.0s ease-in-out infinite; }
+  .skx-svg [id="skx-Pin"]    { animation: skxPinStep 3.0s ease-in-out infinite; }
+  /* 큐브2 (Dots_2 · Pin_2) — 3.7s, 위상 0.8s */
+  .skx-svg [id="skx-Dot_17"] { animation: skxLvlG1 3.7s ease-in-out 0.8s infinite; }
+  .skx-svg [id="skx-Dot_18"] { animation: skxLvlG2 3.7s ease-in-out 0.8s infinite; }
+  .skx-svg [id="skx-Dot_19"] { animation: skxLvlG3 3.7s ease-in-out 0.8s infinite; }
+  .skx-svg [id="skx-Dot_20"] { animation: skxLvlG4 3.7s ease-in-out 0.8s infinite; }
+  .skx-svg [id="skx-Dot_21"] { animation: skxLvlG5 3.7s ease-in-out 0.8s infinite; }
+  .skx-svg [id="skx-Pin_2"]  { animation: skxPinStep 3.7s ease-in-out 0.8s infinite; }
+  /* 큐브3 노랑 (Dots_3 · Pin_3) — 4.4s, 위상 1.6s */
+  .skx-svg [id="skx-Dot_28"] { animation: skxLvlY1 4.4s ease-in-out 1.6s infinite; }
+  .skx-svg [id="skx-Dot_29"] { animation: skxLvlY2 4.4s ease-in-out 1.6s infinite; }
+  .skx-svg [id="skx-Dot_30"] { animation: skxLvlY3 4.4s ease-in-out 1.6s infinite; }
+  .skx-svg [id="skx-Dot_31"] { animation: skxLvlY4 4.4s ease-in-out 1.6s infinite; }
+  .skx-svg [id="skx-Pin_3"]  { animation: skxPinStep 4.4s ease-in-out 1.6s infinite; }
+  /* 큐브4 (Dots_4 · Pin_4) — 3.3s, 위상 0.35s */
+  .skx-svg [id="skx-Dot_37"] { animation: skxLvlG1 3.3s ease-in-out 0.35s infinite; }
+  .skx-svg [id="skx-Dot_38"] { animation: skxLvlG2 3.3s ease-in-out 0.35s infinite; }
+  .skx-svg [id="skx-Dot_39"] { animation: skxLvlG3 3.3s ease-in-out 0.35s infinite; }
+  .skx-svg [id="skx-Dot_40"] { animation: skxLvlG4 3.3s ease-in-out 0.35s infinite; }
+  .skx-svg [id="skx-Dot_41"] { animation: skxLvlG5 3.3s ease-in-out 0.35s infinite; }
+  .skx-svg [id="skx-Pin_4"]  { animation: skxPinStep 3.3s ease-in-out 0.35s infinite; }
+  /* 큐브5 주황 (Dots_5 · Pin_5) — 3.9s, 위상 1.0s. 활성이 한 칸 위(Dot_46)라 아래 점이 더 많음 */
+  .skx-svg [id="skx-Dot_45"] { animation: skxLvlO1 3.9s ease-in-out 1s infinite; }
+  .skx-svg [id="skx-Dot_46"] { animation: skxLvlO2 3.9s ease-in-out 1s infinite; }
+  .skx-svg [id="skx-Dot_47"] { animation: skxLvlO3 3.9s ease-in-out 1s infinite; }
+  .skx-svg [id="skx-Dot_48"] { animation: skxLvlO4 3.9s ease-in-out 1s infinite; }
+  .skx-svg [id="skx-Dot_49"] { animation: skxLvlO5 3.9s ease-in-out 1s infinite; }
+  .skx-svg [id="skx-Dot_50"] { animation: skxLvlO6 3.9s ease-in-out 1s infinite; }
+  .skx-svg [id="skx-Dot_51"] { animation: skxLvlO7 3.9s ease-in-out 1s infinite; }
+  .skx-svg [id="skx-Pin_5"]  { animation: skxPinStep 3.9s ease-in-out 1s infinite; }
+  @keyframes skxLvlO1 { 0%,30% { fill: #414B69; } 46%,80% { fill: #F28847; } 96%,100% { fill: #414B69; } }
+  @keyframes skxLvlO2 { 0%,30% { fill: #F28847; } 46%,80% { fill: #774932; } 96%,100% { fill: #F28847; } }
+  @keyframes skxLvlO3 { 0%,30% { fill: #774932; } 46%,80% { fill: #865841; } 96%,100% { fill: #774932; } }
+  @keyframes skxLvlO4 { 0%,30% { fill: #865841; } 46%,80% { fill: #75452D; } 96%,100% { fill: #865841; } }
+  @keyframes skxLvlO5 { 0%,30% { fill: #75452D; } 46%,80% { fill: #74442B; } 96%,100% { fill: #75452D; } }
+  @keyframes skxLvlO6 { 0%,30% { fill: #74442B; } 46%,80% { fill: #724228; } 96%,100% { fill: #74442B; } }
+  @keyframes skxLvlO7 { 0%,30% { fill: #724228; } 46%,80% { fill: #704125; } 96%,100% { fill: #724228; } }
+  /* 큐브6 (Dots_6 · Pin_6) — 3.1s, 위상 0.5s */
+  .skx-svg [id="skx-Dot_57"] { animation: skxLvlG1 3.1s ease-in-out 0.5s infinite; }
+  .skx-svg [id="skx-Dot_58"] { animation: skxLvlG2 3.1s ease-in-out 0.5s infinite; }
+  .skx-svg [id="skx-Dot_59"] { animation: skxLvlG3 3.1s ease-in-out 0.5s infinite; }
+  .skx-svg [id="skx-Dot_60"] { animation: skxLvlG4 3.1s ease-in-out 0.5s infinite; }
+  .skx-svg [id="skx-Dot_61"] { animation: skxLvlG5 3.1s ease-in-out 0.5s infinite; }
+  .skx-svg [id="skx-Pin_6"]  { animation: skxPinStep 3.1s ease-in-out 0.5s infinite; }
+  /* 큐브7 (Dots_7 · Pin_7) — 4.6s, 위상 2.0s */
+  .skx-svg [id="skx-Dot_67"] { animation: skxLvlG1 4.6s ease-in-out 2s infinite; }
+  .skx-svg [id="skx-Dot_68"] { animation: skxLvlG2 4.6s ease-in-out 2s infinite; }
+  .skx-svg [id="skx-Dot_69"] { animation: skxLvlG3 4.6s ease-in-out 2s infinite; }
+  .skx-svg [id="skx-Dot_70"] { animation: skxLvlG4 4.6s ease-in-out 2s infinite; }
+  .skx-svg [id="skx-Dot_71"] { animation: skxLvlG5 4.6s ease-in-out 2s infinite; }
+  .skx-svg [id="skx-Pin_7"]  { animation: skxPinStep 4.6s ease-in-out 2s infinite; }
+  /* 큐브8 (Dots_8 · Pin_8) — 3.5s, 위상 1.3s */
+  .skx-svg [id="skx-Dot_77"] { animation: skxLvlG1 3.5s ease-in-out 1.3s infinite; }
+  .skx-svg [id="skx-Dot_78"] { animation: skxLvlG2 3.5s ease-in-out 1.3s infinite; }
+  .skx-svg [id="skx-Dot_79"] { animation: skxLvlG3 3.5s ease-in-out 1.3s infinite; }
+  .skx-svg [id="skx-Dot_80"] { animation: skxLvlG4 3.5s ease-in-out 1.3s infinite; }
+  .skx-svg [id="skx-Dot_81"] { animation: skxLvlG5 3.5s ease-in-out 1.3s infinite; }
+  .skx-svg [id="skx-Pin_8"]  { animation: skxPinStep 3.5s ease-in-out 1.3s infinite; }
+
+  /* 4) 상면 포화도 실린더(#skx-Column ~ _3, 3개 전부) — 디스크가 아래→위로 착착착 쌓이듯 스냅 인.
+        각 컬럼 내부는 아래→위 순서, 컬럼끼리는 위상을 달리해 물결처럼 이어짐. */
+  .skx-svg [id^="skx-Column"] [id^="skx-item"] {
+    transform-box: fill-box; transform-origin: center;
+    animation-name: skxDiscStack; animation-duration: 3.8s;
+    animation-timing-function: ease-out; animation-iteration-count: infinite;
+  }
+  .skx-svg [id="skx-item"]   { animation-delay: 0s; }
+  .skx-svg [id="skx-item_2"] { animation-delay: 0.26s; }
+  .skx-svg [id="skx-item_3"] { animation-delay: 0.52s; }
+  .skx-svg [id="skx-item_4"] { animation-delay: 0.95s; }
+  .skx-svg [id="skx-item_5"] { animation-delay: 1.21s; }
+  .skx-svg [id="skx-item_6"] { animation-delay: 1.47s; }
+  .skx-svg [id="skx-item_7"] { animation-delay: 1.9s; }
+  .skx-svg [id="skx-item_8"] { animation-delay: 2.16s; }
+  .skx-svg [id="skx-item_9"] { animation-delay: 2.42s; }
+  @keyframes skxDiscStack {
+    0%, 10% { transform: translateY(-12px); opacity: 0; }
+    18%     { transform: translateY(2px);   opacity: 1; }   /* 살짝 지나쳤다가 */
+    25%     { transform: translateY(0);      opacity: 1; }   /* 착! 안착 */
+    88%     { transform: translateY(0);      opacity: 1; }   /* 유지 */
+    100%    { transform: translateY(-12px);  opacity: 0; }   /* 들려서 다음 사이클 대기 */
+  }
+
+  /* 5) 도넛 링(#skx-Ring 금일 · #skx-Ring_2 전일) — 커졌다 작아지는 호흡형 그로우 */
+  .skx-svg [id="skx-Ring"], .skx-svg [id="skx-Ring_2"] {
+    transform-box: fill-box; transform-origin: center;
+    animation: skxRingGrow 2.9s ease-in-out infinite;
+  }
+  .skx-svg [id="skx-Ring_2"] { animation-delay: 0.6s; }
+  @keyframes skxRingGrow {
+    0%, 100% { transform: scale(0.87); opacity: 0.72; }
+    50%      { transform: scale(1);    opacity: 1; }
+  }
+}

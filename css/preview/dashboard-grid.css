@@ -1,0 +1,49 @@
+/* ── 대시보드 그리드 ── */
+
+/* ── 대시보드 그리드 — 그리드 종류를 data-grid로 구동한다 ──
+   2단/3단(g2·g3)은 세로로 쌓인 .col 기둥, 모듈(mod)은 .panel이 .cols 직속으로
+   놓이는 벤토(모자이크) 배치. 기둥 개수·타일 span은 화면 만들기의 그리드/와이어
+   프레임 선택이 정한다(기본은 3단). */
+.cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--panel-gap, 8px);
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--panel-gap, 8px);
+  min-width: 0;
+  min-height: 0;
+}
+.col .panel {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.cols > .col:nth-child(2) .panel:nth-child(1) {
+  flex-grow: 1.5;
+}
+.cols > .col:nth-child(2) .panel:nth-child(3) {
+  flex-grow: 0.85;
+}
+.cols > .col:nth-child(3) .panel:nth-child(1) {
+  flex-grow: 1.2;
+}
+.cols > .col:nth-child(3) .panel:nth-child(2) {
+  flex-grow: 1.7;
+}
+.panel {
+  background: var(--panel-bg, var(--bg-surface));
+  border: var(--panel-border-w, 1px) solid var(--line);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--panel-shadow, none);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition:
+    background 0.35s,
+    border-color 0.2s;
+}
