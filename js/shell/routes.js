@@ -1,21 +1,20 @@
 /* ── 주소 라우팅 시작 ── */
 
-/* 모든 모듈이 자기 라우트를 등록한 뒤(런처: launcher/flow.js · 작업 페이지: shell/chrome.js)
-   맨 마지막에 시작한다. 주소가 없거나 모르는 주소면 아래 순서로 정한다.
-   · 예전 공유 링크(#t=…)             → 스튜디오에서 그 시안을 연다
-   · 예전 새로고침 복원 기록(wemb-view) → 그 작업 화면. 한 번 쓰고 지운다 — 이제 주소가 기록이다
-   · 그 밖                            → 프로젝트 목록 */
+/* 작업공간(studio.html)의 페이지 라우트는 shell/chrome.js 가 등록한다. 여기서는 맨 마지막에 시작만 한다.
+   · 홈 쪽 주소(#/projects · #/templates …)로 오면 홈 문서로 넘긴다
+   · 주소가 없거나 모르는 주소면 — 예전 공유 링크(#t=…)는 그 시안으로, 열린 화면이 있으면 스튜디오, 없으면 PRD
+   · 예전 새로고침 복원 기록(wemb-view)은 이제 주소가 대신하므로 지운다 */
 (function startRouting() {
-  const PAGE_PATH = { prd: '/prd', spec: '/spec', flow: '/flow', wireframe: '/wireframe', wire: '/studio' };
-  WEMB.router.setFallback((hash) => {
+  const R = WEMB.router;
+  const toHome = () => { location.replace('index.html' + location.hash); };
+  ['/projects', '/projects/:gid', '/recent', '/favorites', '/trash', '/templates', '/templates/:slug'].forEach((p) => R.add('home' + p, p, toHome));
+  R.setFallback((hash) => {
+    try { localStorage.removeItem('wemb-view'); } catch (e) {}
     const share = /^#(?:.*&)?t=([^&]+)/.exec(hash || '');
-    if (share) return WEMB.router.href('/studio', { t: share[1] });
-    let legacy = null;
-    try {
-      legacy = localStorage.getItem('wemb-view');
-      localStorage.removeItem('wemb-view');
-    } catch (e) {}
-    return PAGE_PATH[legacy] || '/projects';
+    if (share) return R.href('/studio', { t: share[1] });
+    let cur = null;
+    try { cur = localStorage.getItem('wemb-current-proj'); } catch (e) {}
+    return cur ? '/studio' : '/prd';
   });
-  WEMB.router.start();
+  R.start();
 })();

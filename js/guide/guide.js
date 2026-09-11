@@ -1726,9 +1726,8 @@
   window.__guideOnPage = (page) => {
     if (page === 'prd') {
       paintForm();
-      /* PRD 진입 시 아직 미완성이고 런처가 덮여 있지 않으면 스텝 위저드를 자동으로 연다 */
-      const homeShown = !!document.getElementById('flowHome')?.classList.contains('show');
-      if (!prdComplete() && !homeShown && window.__prdWizOpen && !(window.__prdWizIsOpen && window.__prdWizIsOpen())) window.__prdWizOpen();
+      /* PRD 진입 시 아직 미완성이면 스텝 위저드를 자동으로 연다 */
+      if (!prdComplete() && window.__prdWizOpen && !(window.__prdWizIsOpen && window.__prdWizIsOpen())) window.__prdWizOpen();
     }
     else if (page === 'spec') renderSpec();
     else if (page === 'flow') renderFlow();
@@ -1736,11 +1735,13 @@
   };
   paintForm();
   /* 기존 프로젝트를 열어 이미 스튜디오로 바로 들어온 상태(새로고침 복원 포함)라면
-     initFlow의 enterStudio가 __wembStep·__WEMBFlowMenu보다 먼저 실행됐을 수 있으므로 여기서 보정한다. */
+     studio/project.js 의 enterStudio 가 __wembStep·__WEMBFlowMenu 보다 먼저 실행됐을 수 있으므로 여기서 보정한다.
+     기준은 주소 — 저장된 화면을 스튜디오 주소(#/studio)로 연 경우다. */
   (function syncIfInStudio() {
-    const homeEl = document.getElementById('flowHome');
-    const anyPageOpen = [...document.querySelectorAll('.page')].some((p) => !p.hidden);
-    if ((!homeEl || !homeEl.classList.contains('show')) && !anyPageOpen) {
+    let hasScreen = false;
+    try { hasScreen = !!localStorage.getItem('wemb-current-proj'); } catch (e) {}
+    const atStudio = location.hash === '#/studio' || location.hash.indexOf('#/studio?') === 0;
+    if (atStudio && hasScreen) {
       advanceStep(4);
       if (window.__setStudioNav) window.__setStudioNav(window.__WEMBFlowMenu());
     }

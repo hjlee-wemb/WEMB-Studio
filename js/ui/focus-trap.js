@@ -9,7 +9,7 @@
   const MODALS = [
     'onbd', 'exModal', 'abModal', 'ctModal', 'csModal', 'coach',
     /* 아래 다섯은 트랩 밖에 있었다. prdWiz 는 신규 사용자가 반드시 지나는 관문이다. */
-    'prdWiz', 'specModal', 'npModal', 'flowLayout', 'wfModal', 'askModal',
+    'prdWiz', 'specModal', 'wfModal', 'askModal',
   ];
   const SEL = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
   const els = MODALS.map((id) => document.getElementById(id)).filter(Boolean);

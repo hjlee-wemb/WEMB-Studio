@@ -19,14 +19,10 @@ function tickClocks() {
   if (dd) dd.textContent = `${d.getFullYear()}. ${p(d.getMonth() + 1)}. ${p(d.getDate())}.`;
 }
 /* ── 스튜디오가 아무에게도 안 보이는 상태인가 ──
-   런처(스튜디오 홈)가 화면을 통째로 덮고 있거나 탭이 뒤로 가 있으면, 뒤 스튜디오의 주기
-   갱신(시계·KPI·차트·라이브 표)은 전부 헛일이다. 보이지도 않는 화면을 1초·3초·5초마다
-   다시 그리느라 홈이 버벅였다 — 갱신마다 스타일 무효화가 6,100여 노드로 번졌다.
-   (CSS 의 content-visibility 와 짝이다: 저쪽은 그리는 비용을, 이쪽은 만드는 비용을 없앤다) */
+   탭이 뒤로 가 있으면 주기 갱신(시계·KPI·차트·라이브 표)은 전부 헛일이다.
+   (예전엔 같은 문서의 런처가 스튜디오를 덮고 있을 때도 멈췄다 — 홈이 별도 문서가 되며 그 경우는 사라졌다) */
 window.__wembIdle = function () {
-  if (document.hidden) return true;
-  const h = document.getElementById('flowHome');
-  return !!(h && h.classList.contains('show'));
+  return document.hidden;
 };
 tickClocks();
 setInterval(() => { if (!window.__wembIdle()) tickClocks(); }, 1000);

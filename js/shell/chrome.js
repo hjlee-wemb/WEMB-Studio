@@ -59,7 +59,6 @@
         if (prev && typeof toast === 'function') toast('이전 단계를 먼저 완료해 주세요', { type: 'warn' });
         return PAGE_PATH[PAGE_ORDER[lvl]];
       }
-      document.getElementById('flowHome')?.classList.remove('show');
       showPage(page);
       /* 스튜디오 주소로 '처음' 열렸을 때(프로젝트 열기 · 새로고침) — 배경 스튜디오는 초기화로 이미 복원돼 있다.
          enterStudio 를 다시 부르면 레이아웃 프리셋이 수동 편집을 덮으므로 부르지 않고,

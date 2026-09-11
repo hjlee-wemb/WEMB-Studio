@@ -19,23 +19,6 @@
 .flow[hidden] {
   display: none !important;
 }
-/* ── 런처가 화면을 덮는 동안엔 뒤 스튜디오를 렌더 트리에서 뺀다 ──
-   런처는 position:fixed · z-index:300 으로 화면 전체를 가리는데, 그 아래에서 사이드바와
-   스튜디오(합쳐 6,100여 노드 · SVG 100여 개)가 그대로 살아 레이아웃·페인트를 계속 치렀다.
-   그래서 홈에서는 마우스를 움직이거나 색을 하나 바꾸기만 해도 스타일 재계산이 판마다
-   ~9ms 씩 들어 버벅였다(재계산 20회 177ms → 14.8ms 로 줄었다).
-   content-visibility:hidden 은 **자기 상자는 남기고 속만 건너뛴다** — display:none 과 달리
-   되돌릴 때 안쪽 상태를 복원해 주고, 해제되면 ResizeObserver 가 알아서 다시 맞춘다.
-   (썸네일 캡처는 홈으로 나가기 *전에* 끝나므로 여기에 걸리지 않는다) */
-body:has(#flowHome.show) > #app > .sidebar,
-body:has(#flowHome.show) > #app > .main {
-  content-visibility: hidden;
-}
-/* 썸네일을 찍는 동안만 예외 — 레이아웃이 없으면 html2canvas 가 빈 그림을 찍는다 */
-body.wemb-capturing > #app > .sidebar,
-body.wemb-capturing > #app > .main {
-  content-visibility: visible;
-}
 
 /* ── 런처 홈 (Mockplus식 프로젝트 목록) ── */
 .lc {

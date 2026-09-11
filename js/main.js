@@ -98,5 +98,3 @@ try {
 } catch (e) {}
 commitHistory();
 renderHistory();
-/* 마지막에 — 진입점 플로우(런처 → 새 프로젝트 → 레이아웃 선택)를 띄운다 */
-initFlow();
