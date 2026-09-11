@@ -11,6 +11,30 @@ WEMB Studio의 버전별 변경 사항을 기록합니다.
 
 ---
 
+#### [Unreleased] — 2026-09-11 (refactor/pages)
+
+### 추가
+
+- 화면마다 주소 — 홈 `#/projects` · `#/projects/:gid` · `#/templates/:slug` …, 작업공간 `#/prd` ~ `#/studio`. 새로고침 · 뒤로가기 · 링크 공유가 같은 화면으로 돌아온다(`js/core/router.js`)
+- 작업공간 문서 `studio.html` — `?screen=<id>` 로 화면을 연다. 앱이 뜨기 전에 그 화면의 상태 묶음으로 맞춘다(`js/app/session.js`)
+
+### 개선
+
+- 단일 `index.html`(2.5MB · 34k줄)을 홈 `index.html`(약 9KB)과 작업공간 `studio.html`, 그리고 `css/` · `js/` 기능별 파일로 분리
+- 홈은 스튜디오 DOM · 템플릿 화면 스크립트(약 12MB)를 받지 않는다
+- 런처 코드(`flow.js` 2천 줄)를 공용 저장소(`js/core/projects.js`) · 레이아웃(`js/core/layouts.js`) · 템플릿 카탈로그 · 홈 화면 · 작업공간 화면 진입으로 분리
+- 흩어져 있던 런처 · 토스트 · 포커스 링 스타일을 제자리 파일로(`css/launcher` · `css/base`)
+- 공유 링크 형식 `#/studio?t=…` (예전 `#t=…` 링크도 그대로 열린다)
+
+### 수정
+
+- 파일 분리 직후 디지털 트윈 배경 사진과 Tomorrow 폰트가 404 — CSS 상대 경로를 스타일시트 위치 기준으로
+- 런처 뒤로 버튼에 핸들러가 두 벌 붙어 한 번 누르면 둘 다 돌던 문제
+
+### 제거
+
+- 들어갈 경로가 없던 새 프로젝트 모달 · 레이아웃 선택 UI(새 프로젝트는 PRD 로 시작한다)
+
 #### [0.10.0] — 2026-08-21
 
 ### 추가
