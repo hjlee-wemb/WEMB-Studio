@@ -1,0 +1,93 @@
+const imgProgress = "https://www.figma.com/api/mcp/asset/e9d40c5c-c1db-40d2-be5c-864ccb6fdd83.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/20595685-fa72-45ae-85e0-6eb98ef7e4fb.svg";
+const imgIndicator = "https://www.figma.com/api/mcp/asset/3ab97f2f-bc0c-4643-8623-79581ab228ef.svg";
+const imgProgress1 = "https://www.figma.com/api/mcp/asset/e20aa507-d097-49ea-8a85-f46c6f749b3a.svg";
+const imgBackground1 = "https://www.figma.com/api/mcp/asset/1627cc6c-819f-4701-a3a2-ff070171496a.svg";
+const imgProgress2 = "https://www.figma.com/api/mcp/asset/9293922d-6c0d-4bed-8dc1-8f6bfefc34d2.svg";
+const imgStep3 = "https://www.figma.com/api/mcp/asset/d264163c-9a89-497e-9b8c-a5321291adc1.svg";
+const imgStepGroup = "https://www.figma.com/api/mcp/asset/406c5862-9e7f-47f7-afbe-7d00e7c1b0c6.svg";
+const imgBackground2 = "https://www.figma.com/api/mcp/asset/488a4197-9928-41d3-aa84-9e07cf85dfab.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/792f0b63-e420-42a7-993b-0df859304f4e.svg";
+
+type SopStatusProps = {
+  className?: string;
+  property1?: "01" | "02" | "03" | "end";
+};
+
+export default function SopStatus({ className, property1 = "01" }: SopStatusProps) {
+  const is01Or02Or03 = ["01", "02", "03"].includes(property1);
+  const is02 = property1 === "02";
+  const is03 = property1 === "03";
+  const isEnd = property1 === "end";
+  return (
+    <div className={className || `content-stretch flex flex-col gap-[9px] items-end relative w-[120.001px] ${isEnd ? "leading-[0]" : ""}`} id={isEnd ? "node-1_10084" : is03 ? "node-1_10060" : is02 ? "node-1_10036" : "node-1_10012"}>
+      <div className={`relative shrink-0 ${isEnd ? "grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start" : is03 ? "h-[12.864px] w-[64.136px]" : "h-[12.865px] w-[64.136px]"}`} id={isEnd ? "node-1_10085" : is03 ? "node-1_10061" : is02 ? "node-1_10037" : "node-1_10013"} data-name="Progress">
+        {is01Or02Or03 && (
+          <div className={`absolute ${is03 ? "inset-[-83.64%_-15.67%_-83.63%_-0.25%]" : is02 ? "inset-[-83.64%_-0.25%_-83.63%_-0.25%]" : "inset-[-83.64%_-0.25%_-83.63%_-15.67%]"}`}>
+            <img alt="" className="block max-w-none size-full" src={is03 ? imgProgress2 : is02 ? imgProgress1 : imgProgress} />
+          </div>
+        )}
+        {isEnd && (
+          <>
+            <div className="col-1 h-[12.864px] ml-[49.06px] mt-0 relative row-1 w-[15.073px]" data-node-id="1:10086" data-name="Step/3">
+              <div className="absolute inset-[-83.64%_-66.66%_-83.63%_-66.67%]">
+                <img alt="" className="block max-w-none size-full" src={imgStep3} />
+              </div>
+            </div>
+            <div className="col-1 h-[12.864px] ml-0 mt-0 relative row-1 w-[47.391px]" data-node-id="1:10089" data-name="Step Group">
+              <div className="absolute inset-[-5.52%_-1.05%_-5.52%_-0.34%]">
+                <img alt="" className="block max-w-none size-full" src={imgStepGroup} />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      <div className={`grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0 ${isEnd ? "" : "leading-[0]"}`} id={isEnd ? "node-1_10098" : is03 ? "node-1_10073" : is02 ? "node-1_10049" : "node-1_10025"} data-name="Badge">
+        {is01Or02Or03 && (
+          <>
+            <div className="col-1 flex h-[30.799px] items-center justify-center ml-0 mt-0 relative row-1 w-[120.001px]" id={is03 ? "node-1_10074" : is02 ? "node-1_10050" : "node-1_10026"}>
+              <div className="-scale-y-100 flex-none rotate-180">
+                <div className="h-[30.799px] relative w-[120.001px]" data-name="Background">
+                  <div className="absolute inset-[-0.89%_-0.46%_-1.79%_0]">
+                    <img alt="" className="block max-w-none size-full" src={["02", "03"].includes(property1) ? imgBackground1 : imgBackground} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-1 content-stretch flex gap-[7px] items-center ml-[12.73px] mt-[7.7px] relative row-1" id={is03 ? "node-1_10077" : is02 ? "node-1_10053" : "node-1_10029"} data-name="Content">
+              <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[16.5px] not-italic relative shrink-0 text-[14px] text-white whitespace-nowrap" id={is03 ? "node-1_10078" : is02 ? "node-1_10054" : "node-1_10030"}>
+                SOP 가동중
+              </p>
+              <div className="flex items-center justify-center relative shrink-0" id={is03 ? "node-1_10079" : is02 ? "node-1_10055" : "node-1_10031"}>
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="h-[5.288px] relative w-[19.236px]" data-name="Indicator">
+                    <div className="absolute inset-[-41.59%_-11.44%_-41.6%_0]">
+                      <img alt="" className="block max-w-none size-full" src={imgIndicator} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {isEnd && (
+          <>
+            <div className="col-1 h-[30.8px] ml-0 mt-0 relative row-1 w-[120.001px]" data-node-id="1:10099" data-name="Background">
+              <div className="absolute inset-[-0.89%_0_-1.79%_-0.46%]">
+                <img alt="" className="block max-w-none size-full" src={imgBackground2} />
+              </div>
+            </div>
+            <div className="col-1 content-stretch flex gap-[6px] items-center ml-[26.97px] mt-[6.9px] relative row-1" data-node-id="1:10102" data-name="Content">
+              <div className="relative shrink-0 size-[12.168px]" data-node-id="1:10103" data-name="Icon">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[16.5px] not-italic relative shrink-0 text-[14px] text-white whitespace-nowrap" data-node-id="1:10105">
+                상황종료
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

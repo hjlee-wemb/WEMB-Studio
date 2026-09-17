@@ -1,0 +1,19 @@
+const imgProperty1Default = "https://www.figma.com/api/mcp/asset/98badc6f-e85e-4fdd-9ef4-6efcf3ca820b.svg";
+const imgProperty1Hover = "https://www.figma.com/api/mcp/asset/776e10b1-5c75-4b58-8ee4-b2b3597abf6e.svg";
+
+type ButtonEndSituationProps = {
+  className?: string;
+  property1?: "default" | "hover";
+};
+
+export default function ButtonEndSituation({ className, property1 = "default" }: ButtonEndSituationProps) {
+  const isHover = property1 === "hover";
+  return (
+    <div className={className || "h-[34.2px] relative w-[109.37px]"} id={isHover ? "node-1_10443" : "node-1_10440"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isHover ? imgProperty1Hover : imgProperty1Default} />
+      <p className="[word-break:break-word] absolute font-['Pretendard:Medium'] inset-[22.22%_24.4%] leading-[18.81px] not-italic text-[16px] text-white whitespace-nowrap" id={isHover ? "node-1_10445" : "node-1_10442"}>
+        상황종료
+      </p>
+    </div>
+  );
+}
