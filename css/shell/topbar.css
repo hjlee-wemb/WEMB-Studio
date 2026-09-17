@@ -198,6 +198,12 @@
 .tb-share:hover {
   filter: brightness(1.05);
 }
+/* 되돌리기 · 내보내기 · 공유는 스튜디오 작업(색 테마 · 화면)의 동작이다.
+   PRD ~ 와이어프레임 문서 단계에서 누르면 뒤에 숨은 스튜디오의 대화상자가 열리거나 아무 일도 없어서, 그 단계에선 걷는다.
+   (data-page 는 js/shell/chrome.js 의 showPage 가 단다) */
+.topbar:not([data-page='wire']) .tb-actions [data-act] {
+  display: none;
+}
 /* 노트북·좁은 창 — 없어도 되는 것부터 걷어 탭과 액션에 폭을 넘긴다.
    잘라내는 게 아니라 우선순위를 정하는 것이다: 로고 > 탭 > 액션 > 브랜드 라벨 > 점 구분자 */
 @media (max-width: 1120px) {

@@ -6,7 +6,10 @@ applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
 try {
   const __tdt = localStorage.getItem('wemb-tpl-dt');
   if (state.screen === 'dt') {
-    if (__tdt === 'hana' && typeof applyHanaDT === 'function') {
+    if (__tdt === 'posco' && typeof applyPoscoDT === 'function') {
+      applyPoscoDT(window.__poscoSceneOf ? window.__poscoSceneOf() : localStorage.getItem('wemb-posco-screen'));
+    }
+    else if (__tdt === 'hana' && typeof applyHanaDT === 'function') {
       /* 이 화면이 15장 중 어느 것인지는 열려 있는 프로젝트의 tplScene 이 정답 */
       applyHanaDT(window.__hanaSceneOf ? window.__hanaSceneOf() : localStorage.getItem('wemb-hana-screen'));
     }
@@ -80,6 +83,14 @@ try {
   }
   /* 한진 시안은 Dark 가 원본(Figma "Dark-시안01"). 라이트 시트를 함께 만들어 두었으므로
      '화면 테마'로 자유롭게 바꿀 수 있고, 고른 값(wemb-hanjin-mode)은 그대로 되살아난다. */
+  /* POSCO 시안도 Dark 가 원본 — 고른 밝기(wemb-posco-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'posco') {
+    const want = localStorage.getItem('wemb-posco-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'hana') {
     const want = localStorage.getItem('wemb-hana-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {

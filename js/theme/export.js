@@ -135,7 +135,13 @@ async function exportPNG() {
     );
     exHintMsg((isDT ? 'Digital Twin' : '대시보드') + ' PNG를 저장했어요.', 'ok');
   } catch (e) {
-    exHintMsg('PNG 생성에 실패했어요(오프라인이면 인터넷 연결이 필요). 대신 팔레트 SVG를 이용하세요.', 'err');
+    /* 캡처 라이브러리는 로컬 파일을 먼저 쓰므로 실패 원인을 '오프라인'으로 단정하지 않는다 — 실제로 끊겼을 때만 그렇게 말한다 */
+    exHintMsg(
+      navigator.onLine === false
+        ? 'PNG를 만들지 못했어요 — 인터넷 연결이 끊겨 있어요. 연결한 뒤 다시 시도하거나, 대신 팔레트 SVG를 이용하세요.'
+        : 'PNG를 만들지 못했어요. 잠시 뒤 다시 시도하거나, 대신 팔레트 SVG를 이용하세요.',
+      'err'
+    );
   }
 }
 /* 팔레트 SVG — 색상표(스와치+코드)를 벡터로 직접 생성 */
@@ -194,9 +200,16 @@ function applyShareFromURL() {
   if (!enc) { const m = h.match(/[#&]t=([^&]+)/); enc = m && m[1]; }
   if (!enc) return false;
   try {
-    restoreTheme(decodeState(enc));
+    const t = decodeState(enc);
+    if (!t || typeof t !== 'object' || typeof t.seed !== 'string') throw new Error('not a theme');
+    restoreTheme(t);
     return true;
   } catch (e) {
+    /* 깨진 링크(일부만 복사됐거나 메신저가 잘라 먹음) — 예전엔 조용히 마지막 작업을 띄워, 받은 시안으로 오해하게 했다.
+       알리고, 주소에서 깨진 t 를 걷어 새로고침해도 같은 경고가 되풀이되지 않게 한다. */
+    try { history.replaceState(history.state, '', location.pathname + location.search + '#/studio'); } catch (e2) {}
+    if (typeof toast === 'function')
+      toast('공유 링크가 손상돼 시안을 불러오지 못했어요. 링크가 끝까지 복사됐는지 확인하고 다시 받아 주세요. 지금 보이는 건 이 브라우저의 마지막 작업이에요.', { type: 'err', dur: 10000 });
     return false;
   }
 }

@@ -85,10 +85,22 @@
   background: color-mix(in srgb, var(--point-main) 18%, transparent);
   color: #fff;
 }
+/* 구분선 위 메뉴(템플릿) — 선과 간격은 버튼 '바깥'에 둔다.
+   버튼에 padding-top · border-top 을 주면 활성 배경 안에서 글자가 아래로 치우치고(위 16 · 아래 10)
+   선이 강조 배경 안쪽에 걸린다. 버튼 여백은 다른 메뉴와 같게, 늘어났던 6px 는 바깥 여백으로 옮겨
+   글자 위치와 메뉴 전체 높이는 그대로 둔다. */
 .lc-navsep {
-  margin-top: 10px;
-  padding-top: 16px;
+  position: relative;
+  margin-top: 17px;
+}
+.lc-navsep::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10px; /* 윗 메뉴와 이 버튼 사이 간격(3 + 17)의 가운데 */
   border-top: 1px solid var(--line);
+  pointer-events: none;
 }
 .lc-main {
   padding: 30px 34px;
@@ -1206,8 +1218,36 @@
 }
 .tpld-cta {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   padding-top: 4px;
+}
+/* 그림 시안 안내 — 실제 화면이 없는 템플릿의 CTA 바로 위. 누르기 전에 무엇을 할 수 있는지 먼저 말한다 */
+.tpld-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 560px;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  color: var(--text-weak);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.tpld-note svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--point-main);
+}
+.tpld-note b {
+  color: var(--text-strong);
+  font-weight: 600;
 }
 .tpld-start {
   display: inline-flex;

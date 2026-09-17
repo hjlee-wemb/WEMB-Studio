@@ -130,6 +130,9 @@ function renderHistory() {
     qr = document.getElementById('quickRedo');
   if (qu) qu.disabled = !canUndo;
   if (qr) qr.disabled = !canRedo;
+  /* 상단 바 되돌리기/다시 실행도 — 빠져 있어서 되돌릴 게 없어도 늘 눌리는 모양이었다 */
+  document.querySelectorAll('.tb-actions [data-act="undo"]').forEach((b) => (b.disabled = !canUndo));
+  document.querySelectorAll('.tb-actions [data-act="redo"]').forEach((b) => (b.disabled = !canRedo));
   /* 현재 단계 위치 표시 (예: 3 / 12) */
   const pos = document.getElementById('histPos');
   if (pos) pos.textContent = themeHistory.length ? hIndex + 1 + ' / ' + themeHistory.length : '–';
@@ -180,5 +183,5 @@ document.addEventListener('keydown', (e) => {
   const inp = document.getElementById('snapName');
   addSnapshot(inp ? inp.value : '');
   if (inp) inp.value = '';
-  toast(`“${snapshots[0].name}” 스냅샷으로 저장했어요.`, { type: 'ok', kbd: 'Ctrl S' });
+  toast(`“${escHTML(snapshots[0].name)}” 스냅샷으로 저장했어요.`, { type: 'ok', kbd: 'Ctrl S' });
 });

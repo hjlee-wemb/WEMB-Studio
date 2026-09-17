@@ -177,7 +177,10 @@
     } catch (e) {}
     return cv;
   }
-  async function captureScreenThumb() {
+  /* opts.fastOnly — 빠른 길(시안 SVG · 통짜 이미지 · 이천 FMS 캡처본)만 쓴다. 홈으로 나갈 때 쓴다(goHome).
+     일반 대시보드의 html2canvas 는 수 초 동안 메인 스레드를 붙잡아 로고 클릭이 버벅였다. */
+  async function captureScreenThumb(opts) {
+    const fastOnly = !!(opts && opts.fastOnly);
     if (__capturing || __captureBlocked) return;
     let id = null; try { id = localStorage.getItem(CUR_PROJ); } catch (e) {}
     if (!id) return;
@@ -246,7 +249,7 @@
            · 시안(인라인 SVG·통짜 이미지·이천 FMS)은 위쪽 빠른 길이 밀리초에 끝내므로 매번 갱신된다.
            · 썸네일이 없는 화면은 scheduleThumbCapture 가 **스튜디오에 있는 동안 유휴 시점에**
              한 번 찍어 두므로, 홈으로 나갈 때는 대개 여기까지 오지도 않는다. */
-        if (hasThumb) return;
+        if (hasThumb || fastOnly) return;
         /* 런처가 떠 있는 동안에도 가지 않는다 — 목록이 뜬 채로 몇 초씩 얼어붙는다.
            썸네일이 없는 화면은 다음에 그 화면을 열 때 enterStudio 가 걸어 둔 유휴 캡처
            (scheduleThumbCapture)가 스튜디오 안에서 조용히 찍는다. */
@@ -302,9 +305,11 @@
   function scheduleThumbCapture(delay) {
     preloadThumbLib();
     if (__thumbCleanup) __thumbCleanup(); /* 이전 예약 취소(중복 방지) */
-    const IDLE = Math.max(1600, delay || 1600);
+    /* 손을 뗀 뒤 3초 — 마우스를 움직이는 것도 조작으로 본다(pointermove).
+       예전엔 누르기 · 키 · 휠만 봐서, 로고 쪽으로 마우스를 옮기는 사이에 캡처가 시작돼 클릭이 몇 초씩 밀렸다. */
+    const IDLE = Math.max(3000, delay || 3000);
     let timer = null;
-    const events = ['pointerdown', 'keydown', 'wheel'];
+    const events = ['pointerdown', 'pointermove', 'keydown', 'wheel'];
     const cleanup = () => { clearTimeout(timer); events.forEach((t) => window.removeEventListener(t, arm, true)); __thumbCleanup = null; };
     function run() {
       cleanup();
@@ -362,20 +367,42 @@
   /* 사이드바 '새 프로젝트' → 완전히 새 프로젝트로 시작(현재 프로젝트는 저장) */
   const sideNew = document.getElementById('newProject');
   if (sideNew)
-    sideNew.onclick = () => { location.href = 'studio.html?new=1#/prd'; };
+    sideNew.onclick = () => {
+      /* 홈의 '새 프로젝트'와 같은 장면 — 누른 순간 PRD 스플래시를 띄우고 떠난다(css/base/splash.css).
+         안 그러면 새 문서가 뜨는 동안 지금 스튜디오가 멈춰 있다가 화면들이 훑듯 켜진다. */
+      /* _=시각 — 매번 다른 주소라 브라우저가 스플래시 없는 옛 studio.html 캐시를 꺼내 쓰지 못한다(js/app/session.js 가 지운다) */
+      const url = 'studio.html?new=1&_=' + Date.now().toString(36) + '#/prd';
+      const sp = document.getElementById('prdSplash');
+      if (sp) { sp.classList.remove('out'); sp.classList.add('show', 'enter'); }
+      let gone = false;
+      const go = () => { if (gone) return; gone = true; location.href = url; };
+      requestAnimationFrame(() => requestAnimationFrame(go));
+      setTimeout(go, 120);
+    };
+  /* 뒤로가기로 이 문서가 bfcache 에서 되살아나면 떠나며 띄운 스플래시를 걷는다 */
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) document.getElementById('prdSplash')?.classList.remove('show', 'enter', 'out');
+  });
   /* 사이드바 홈 버튼 · 브랜드 로고 → 홈(index.html). 홈은 다른 문서라 떠나기 전에 저장과 썸네일을 끝낸다.
-     썸네일은 빠른 길(SVG · 이미지 시안, 0.3초 안팎)이면 기다리고, 오래 걸리면 기다리지 않고 떠난다 —
+     썸네일은 빠른 길(SVG · 이미지 시안, 수 ms)만 잠깐 기다리고 곧바로 떠난다 —
      썸네일이 없는 화면은 스튜디오에 있는 동안 유휴 캡처(scheduleThumbCapture)가 이미 찍어 둔다. */
   let leavingHome = false;
   const goHome = async () => {
     if (leavingHome) return;
     leavingHome = true;
+    document.body.style.cursor = 'progress';
     persistCurrentProjectData();
-    try { await Promise.race([captureScreenThumb(), new Promise((r) => setTimeout(r, 1500))]); } catch (e) {}
+    /* 나갈 때는 빠른 캡처(수 ms)만 최대 0.4초 기다린다. 무거운 html2canvas 는 여기서 절대 돌리지 않는다 —
+       메인 스레드를 수 초 붙잡아 로고를 눌러도 한참 뒤에야 홈으로 넘어갔다(실측: 썸네일 없는 대시보드 첫 캡처 10초+).
+       썸네일이 없는 일반 대시보드는 스튜디오에 머무는 동안 유휴 캡처(scheduleThumbCapture)가 찍는다.
+       이미 유휴 캡처가 돌고 있으면 기다리지 않고 바로 떠난다. */
+    if (!__capturing) {
+      try { await Promise.race([captureScreenThumb({ fastOnly: true }), new Promise((r) => setTimeout(r, 400))]); } catch (e) {}
+    }
     location.href = 'index.html#/projects';
   };
   /* 브라우저 뒤로가기로 이 문서가 bfcache 에서 그대로 되살아나면 '떠나는 중' 표시를 풀어 준다 — 안 그러면 홈 버튼이 먹지 않는다 */
-  window.addEventListener('pageshow', (e) => { if (e.persisted) leavingHome = false; });
+  window.addEventListener('pageshow', (e) => { if (e.persisted) { leavingHome = false; document.body.style.cursor = ''; } });
   const quickHome = document.getElementById('quickHome');
   if (quickHome) quickHome.onclick = goHome;
   const brandHome = document.getElementById('brandHome');
@@ -522,7 +549,15 @@
       /* 템플릿 재현 — 한진/SK하이닉스는 실제 화면, 미연결 템플릿은 임시 이미지.
          (새로고침 후에도 유지되게 플래그를 localStorage에 저장) */
       try {
-        if (f.tpl === 'hana') {
+        if (f.tpl === 'posco') {
+          localStorage.setItem('wemb-tpl-dt', 'posco'); localStorage.removeItem('wemb-tpl-img');
+          /* 템플릿 상세에서 고른 장면(화면 6장 중 하나)을 그대로 연다 */
+          const wantPk = (typeof PK_SCREENS !== 'undefined' && PK_SCREENS[f.scene]) ? f.scene
+            : (localStorage.getItem('wemb-posco-screen') || 'main');
+          try { localStorage.setItem('wemb-posco-screen', wantPk); } catch (e3) {}
+          if (typeof applyPoscoDT === 'function') applyPoscoDT(wantPk);
+        }
+        else if (f.tpl === 'hana') {
           localStorage.setItem('wemb-tpl-dt', 'hana'); localStorage.removeItem('wemb-tpl-img');
           /* 템플릿 상세에서 고른 장면(화면 15장 중 하나)을 그대로 연다 */
           const wantHn = (typeof HN_SCREENS !== 'undefined' && HN_SCREENS[f.scene]) ? f.scene

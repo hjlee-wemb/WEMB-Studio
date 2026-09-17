@@ -17,14 +17,47 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <!-- 홈 스타일 — 작업공간과 같은 토큰 위에 런처 · 대화상자만 싣는다(스튜디오 스타일시트는 받지 않는다) -->
-    <link rel="stylesheet" href="css/base/tokens.css?v=2" data-app-css />
+    <link rel="stylesheet" href="css/base/tokens.css?v=3" data-app-css />
     <link rel="stylesheet" href="css/base/focus.css?v=1" data-app-css />
-    <link rel="stylesheet" href="css/base/toast.css?v=1" data-app-css />
-    <link rel="stylesheet" href="css/launcher/launcher.css?v=3" data-app-css />
+    <link rel="stylesheet" href="css/base/toast.css?v=3" data-app-css />
+    <link rel="stylesheet" href="css/launcher/launcher.css?v=5" data-app-css />
     <link rel="stylesheet" href="css/base/wireframe-mini.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/base/dialog.css?v=1" data-app-css />
+    <link rel="stylesheet" href="css/base/splash.css?v=2" data-app-css />
+    <link rel="stylesheet" href="css/base/motion.css?v=1" data-app-css />
   </head>
   <body>
+    <!-- PRD 스플래시 — '새 프로젝트'를 누른 순간부터 질문지가 준비될 때까지 보이는 한 장면.
+         index.html(누른 순간) · studio.html(첫 페인트)이 같은 마크업을 가져, 문서가 바뀌는 동안 끊기지 않는다.
+         두 문서의 마크업을 함께 고칠 것. 스타일 css/base/splash.css -->
+    <div class="prdsplash" id="prdSplash" role="status" aria-live="polite">
+      <div class="ps-card">
+        <img class="ps-logo" src="src/logo.svg" alt="WEMB Studio" />
+        <div class="ps-kicker">새 프로젝트 · 제품 요구사항(PRD)</div>
+        <div class="ps-title">무엇을 만들지 알려주세요</div>
+        <p class="ps-lead">몇 가지 질문에 답하면 기능명세서 · 유저플로우 · 와이어프레임이 자동으로 만들어져요.</p>
+        <ol class="ps-steps" aria-hidden="true">
+          <li class="on">PRD</li>
+          <li>기능명세서</li>
+          <li>유저플로우</li>
+          <li>와이어프레임</li>
+          <li>스튜디오</li>
+        </ol>
+        <div class="ps-load"><span class="ps-bar" aria-hidden="true"></span><span class="ps-msg">질문지를 준비하는 중…</span></div>
+      </div>
+    </div>
+    <!-- 프로젝트 열기 막 — 저장된 화면 · 템플릿을 열 때 누른 순간(index.html)부터 작업공간이 다 그려질 때(studio.html)까지 덮는다.
+         없으면 기본 대시보드 · 기본 색이 먼저 그려졌다가 저장된 화면으로 바뀌어 '다른 화면이 나타났다 사라졌다'.
+         두 문서의 마크업을 함께 고칠 것. 제목은 --boot-name 이 채운다. 스타일 css/base/splash.css -->
+    <div class="prdsplash opensplash" id="openSplash" role="status" aria-live="polite">
+      <div class="ps-card">
+        <img class="ps-logo" src="src/logo.svg" alt="WEMB Studio" />
+        <div class="ps-kicker">프로젝트 열기</div>
+        <div class="ps-title ps-name"></div>
+        <div class="ps-load"><span class="ps-bar" aria-hidden="true"></span><span class="ps-msg">작업 화면을 불러오는 중…</span></div>
+      </div>
+    </div>
+
     <!-- 홈 — 프로젝트 · 폴더 · 휴지통 · 템플릿. 주소 #/projects … #/templates/:slug 는 js/launcher/home.js 가 그린다.
          화면을 열면 작업공간(studio.html?screen=…#/studio)으로 간다. -->
     <div class="flow show" id="flowHome">
@@ -88,12 +121,12 @@
 
     <!-- 홈 스크립트 — 전역(classic) 스크립트라 아래 순서가 곧 의존 순서다 -->
     <script src="js/core/router.js?v=1"></script>
-    <script src="js/core/projects.js?v=1"></script>
+    <script src="js/core/projects.js?v=3"></script>
     <script src="js/core/layouts.js?v=1"></script>
-    <script src="js/launcher/templates.js?v=1"></script>
-    <script src="js/ui/toast.js?v=1"></script>
+    <script src="js/launcher/templates.js?v=3"></script>
+    <script src="js/ui/toast.js?v=3"></script>
     <script src="js/ui/confirm.js?v=1"></script>
     <script src="js/ui/focus-trap.js?v=2"></script>
-    <script src="js/launcher/home.js?v=1"></script>
+    <script src="js/launcher/home.js?v=7"></script>
   </body>
 </html>

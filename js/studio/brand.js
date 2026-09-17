@@ -3,10 +3,17 @@
 /* ── 브랜드 — 로고 업로드 · 브랜드명 · 화면명 → 프리뷰 머리말에 반영, 로고에서 기준색 추출 ── */
 function initBrand() {
   const LS = { logo: 'wemb-brand-logo', name: 'wemb-brand-name', screen: 'wemb-brand-screen' };
+  /* 저장 성공 여부를 돌려준다 — 로고(dataURL)는 커서 저장 공간을 넘기기 쉽고, 실패하면 새로고침에 사라진다 */
   const store = (k, v) => {
     try {
       v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v);
-    } catch (e) {}
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+  const say = (msg, type, dur) => {
+    if (typeof toast === 'function') toast(msg, { type, dur });
   };
   const setLogo = (src) => {
     const url = src || 'src/logo.svg';
@@ -34,15 +41,29 @@ function initBrand() {
       } else if (el) el.remove();
     });
   };
+  /* 로고 파일 한도 — 로고는 보통 수십 KB 다. 1MB 를 넘는 사진을 로고로 올리면 dataURL 이 1.3MB 넘게 불어나
+     프로젝트 상태 묶음과 함께 브라우저 저장 공간을 금방 채운다. */
+  const LOGO_MAX = 1024 * 1024;
   const fileEl = document.getElementById('brandLogoFile');
   if (fileEl)
     fileEl.onchange = (e) => {
       const f = e.target.files && e.target.files[0];
       if (!f) return;
+      /* 같은 파일을 다시 골라도 change 가 오도록 바로 비운다 */
+      fileEl.value = '';
+      if (!/^image\//.test(f.type)) {
+        say('이미지 파일(PNG · JPG · SVG)만 로고로 올릴 수 있어요.', 'err');
+        return;
+      }
+      if (f.size > LOGO_MAX) {
+        say('로고 파일이 너무 커요(' + (f.size / 1048576).toFixed(1) + 'MB). 1MB 이하로 줄여서 다시 올려 주세요.', 'err');
+        return;
+      }
       const rd = new FileReader();
+      rd.onerror = () => say('로고 파일을 읽지 못했어요. 다른 파일로 시도해 주세요.', 'err');
       rd.onload = () => {
         setLogo(rd.result);
-        store(LS.logo, rd.result);
+        if (!store(LS.logo, rd.result)) say('로고는 바꿨지만 브라우저에 저장하지 못해 새로고침하면 사라져요. 더 작은 파일로 다시 올려 주세요.', 'warn', 7000);
         /* 이미 시안 로고를 바꿔 쓰는 중이면 새 로고로 곧바로 교체 */
         try { if (TPLLOGO.isOn()) TPLLOGO.apply(); } catch (e2) {}
       };
@@ -61,7 +82,12 @@ function initBrand() {
     im.onload = () => {
       try {
         const t = extractTheme(im);
-        if (!t || !t.seed) return;
+        /* 색을 하나도 못 찾으면(흑백 · 거의 투명한 로고) extractTheme 은 기본색만 돌려준다(cols 없음).
+           그대로 적용하면 '로고 색'이라며 엉뚱한 기본 파랑이 들어가므로 알리고 멈춘다. */
+        if (!t || !t.seed || !t.cols) {
+          say('로고에서 대표색을 찾지 못했어요 — 흑백이거나 색이 거의 없는 로고예요. 기준 색을 직접 골라 주세요.', 'warn');
+          return;
+        }
         state.seed = t.seed;
         const s = document.getElementById('seed'),
           h = document.getElementById('hex');
@@ -76,13 +102,12 @@ function initBrand() {
           TPLLOGO.apply();
           swapped = !!document.querySelector('.skx-screen, .hj-repro, .tplimg-repro');
         } catch (e2) {}
-        if (typeof toast === 'function')
-          toast(swapped ? '로고 대표색을 기준 색으로 적용하고, 시안 로고도 바꿨어요.' : '로고 대표색을 기준 색으로 적용했어요.', { type: 'ok' });
-      } catch (err) {}
+        say(swapped ? '로고 대표색을 기준 색으로 적용하고, 시안 로고도 바꿨어요.' : '로고 대표색을 기준 색으로 적용했어요.', 'ok');
+      } catch (err) {
+        say('로고 색을 읽지 못했어요. 다른 로고 파일로 시도해 주세요.', 'err');
+      }
     };
-    im.onerror = () => {
-      if (typeof toast === 'function') toast('로고 색을 읽지 못했어요.', { type: 'err' });
-    };
+    im.onerror = () => say('로고 색을 읽지 못했어요. 다른 로고 파일로 시도해 주세요.', 'err');
     im.src = cur.src;
   });
   const bn = document.getElementById('brandName'),

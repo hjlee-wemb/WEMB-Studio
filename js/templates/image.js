@@ -692,6 +692,15 @@ const TPLTINT = {
     keep: /(icon-widget-[\w-]+|icon-stage-[\w-]+|icon-flow-[\w-]+|icon-trend-[\w-]+|icon-action-[\w-]+|icon-field-[\w-]+|icon-nav-[\w-]+|status-[\w-]+|marker[-\d]*|badge|logo[-\w]*|divider[-\d]*|series[-\w]*|area[-\d]*|grid-line[-\d]*|axis-line[-\d]*|meter[-\w]*|track[-\d]*|arc[-\d]*|segment[-\d]*|btn-arrow-\w+)(-lt)?\.svg(\?|$)/i,
     raster: /(background|floor-plan|grid)[-\w]*\.(png|jpg)(\?|$)/i,
   },
+  /* ── POSCO KDB CCTV 관제 시안 ──
+     주조색은 브랜드 파랑(#004BFF, 색상각 222°). 색을 그대로 둘 것:
+       · 상태·등급 색이 곧 의미인 것(전구·등급 배지·상태 칩)
+       · 3D 건물 렌더와 밤하늘 배경(사진이라 색상만 돌리면 어색하다 → 픽셀을 다시 칠한다) */
+  POSCO_OPT: {
+    seed: '#004BFF', seededKey: 'wemb-posco-seeded', refHue: 222,
+    keep: /(bulb[-\w]*|status-(critical|major|minor|warning|normal)-bg|btn-event-status-bg[-\d]*|logo-mark|icon-system-clock)(-lt)?\.svg(\?|$)/i,
+    raster: /(background[-\w]*|building-image|body|click)\.(png|jpg)(\?|$)/i,
+  },
   HANJIN_OPT: {
     seed: '#2861FF', seededKey: 'wemb-hanjin-seeded', refHue: 222,
     keep: /(icon-stage-[\w-]+|icon-dock-[\w-]+|icon-map-[\w-]+|icon-system-[\w-]+|icon-action-[\w-]+|marker[-\d]*|badge|radio|divider[-\d]*|bullet|data[-\d]*|bar[-\w]*|meter[-\w]*|guide-ring|logo|track[-\d]*|average-line|axis-line|grid-line[-\d]*|part[-\d]*|ramp)(-lt)?\.svg(\?|$)/i,
@@ -793,6 +802,12 @@ const TPLTINT = {
     ['hno2', 'hnc1', 'hnc2', 'hnm', 'hni1', 'hni2', 'hne', 'hnn1', 'hnn2', 'hnn3', 'hnf', 'hns1', 'hns2', 'hnl'].forEach((px) => {
       this.icheonTint(t, mode, '.' + px + '-root',
         [px + '-style', px + '-light-style', 'hana-live-style'], 'wemb-hana-mode', this.HANA_OPT);
+    });
+    /* POSCO KDB CCTV 관제 화면 6장 — 같은 방식(시안 원본 색이면 그대로, 색을 바꾸면 팔레트를 따라 칠한다).
+       여섯 장이 같은 밝기·같은 색을 공유하므로 modeKey(wemb-posco-mode)도 하나로 쓴다. */
+    ['pkm', 'pka', 'pko', 'pkr', 'pkf', 'pkd', 'pks1', 'pks2', 'pks3', 'pks4'].forEach((px) => {   /* pks1~3 = SOP STEP 1~3 · pks4 = SOP 체계도 */
+      this.icheonTint(t, mode, '.' + px + '-root',
+        [px + '-style', px + '-light-style', 'posco-live-style'], 'wemb-posco-mode', this.POSCO_OPT);
     });
     ['hjc', 'hjg', 'hju'].forEach((px) => {
       this.icheonTint(t, mode, '.' + px + '-root',

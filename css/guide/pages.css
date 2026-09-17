@@ -20,6 +20,15 @@
 .page[hidden] {
   display: none;
 }
+/* 부팅 덮개 — 라우터(본문 맨 끝 스크립트)가 돌기 전 첫 페인트에서, 주소가 가리키는 문서 페이지를 먼저 보인다.
+   없으면 기본으로 보이는 스튜디오 작업공간이 잠깐 비친 뒤 PRD 로 바뀌었다('새 프로젝트' 깜빡임).
+   data-boot 는 js/app/session.js 가 <head> 에서 달고, js/shell/chrome.js showPage 가 걷는다. */
+html[data-boot='prd'] #pagePrd,
+html[data-boot='spec'] #pageSpec,
+html[data-boot='flow'] #pageFlow,
+html[data-boot='wireframe'] #pageWire {
+  display: flex;
+}
 /* 점 그리드 배경(참고 UI) */
 .page-dots {
   background-image: radial-gradient(color-mix(in srgb, var(--text-weak) 26%, transparent) 1px, transparent 1px);
@@ -1514,6 +1523,10 @@ button.pri:hover {
 }
 .prdwiz-field .pq-opts {
   grid-template-columns: repeat(2, 1fr);
+}
+/* 여러 개 고르는 스텝(산업군 17개 · 모니터링 대상)은 3열 — 2열이면 9줄이 넘어 카드 안에서 한참 스크롤해야 했다 */
+.prdwiz-field .pq-opts.pq-multi {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .prdwiz-field .pq-opt.locked {
   opacity: 0.5;

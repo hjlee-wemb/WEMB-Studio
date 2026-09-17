@@ -36,6 +36,11 @@
       t.tabIndex = on ? 0 : -1;
     });
     document.querySelectorAll('.page').forEach((p) => { p.hidden = p.dataset.page !== page; });
+    /* 부팅 덮개(data-boot · PRD 스플래시)는 여기서 걷지 않는다 — js/shell/routes.js 가 첫 화면을 그린 뒤에만 걷는다.
+       이 파일은 로드되자마자 showPage('wire') 로 기본 화면을 깔아 두는데, 여기서 걷으면 routes.js 가 돌기 전
+       스크립트 사이 페인트에 스튜디오가 한 프레임 비쳤다(사용자 녹화로 확인). */
+    /* 상단 바 우측 액션(되돌리기 · 내보내기 · 공유)은 스튜디오 작업의 동작이다 — 문서 단계에선 CSS 가 걷는다(topbar.css) */
+    document.getElementById('topbar')?.setAttribute('data-page', page);
     /* 가이드 파이프라인 페이지는 최신 PRD 답변으로 다시 그린다 */
     if (typeof window.__guideOnPage === 'function') window.__guideOnPage(page);
     /* 탭 잠금 상태(스텝) 다시 반영 */
@@ -149,6 +154,8 @@
   }
   /* 스튜디오 진입 시 옵션창 섹션을 밖에서 지정할 수 있게 노출 (새 화면 진입 → 대시보드 편집 바로 열기용) */
   window.__showSection = showSection;
+  /* 테마 만들기의 특정 단계를 열어 보인다 — PRD 를 끝내고 스튜디오에 들어올 때 '화면 정하기'부터 보이게 쓴다(js/guide/guide.js) */
+  window.__showStep = (sec, id) => showStep(sec, id);
   function showStep(sec, id) {
     showSection(sec);
     const s = document.getElementById(id);

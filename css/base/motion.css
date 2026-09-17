@@ -1,0 +1,348 @@
+/* ── 마이크로 인터랙션 — 누름 · 호버 · 팝오버 · 대화상자 ──
+   앱 크롬(홈 · 가이드 페이지 · 스튜디오 사이드바 · 상단 바)의 모션을 한곳에서 맞춘다.
+   · 누름 = 피드백: transform 만, --i2-dur-press(140ms) 강한 ease-out. 버튼 0.97 · 넓은 카드 0.985 · 작은 아이콘 0.94.
+   · 호버로 '움직이는' 것(카드 들림)은 마우스 환경에서만 — 터치에선 탭이 hover 로 남아 떠 있게 된다.
+   · 드롭다운 · 플라이아웃 180ms, 대화상자 200ms. transform · opacity 만 쓴다.
+   · 건드리지 않는 것: 미리보기 화면(.main — 내보내기에 그대로 실린다), 차트 · 표 · 유저플로우 노드처럼 읽는 데이터,
+     키보드 단축키로 일어나는 동작.
+   · 기존 규칙의 transition 목록을 덮어쓰므로 원래 속성을 빠짐없이 다시 적는다(색 전환이 사라지지 않게).
+   · 움직임 최소화: 이동 · 크기 변화는 빼고 투명도 · 색만 남긴다.
+   이 파일은 각 컴포넌트 스타일시트 뒤에 실려야 한다 — 같은 명시도에서 뒤에 오는 쪽이 이긴다. */
+
+/* ============================================================
+   1. 전환 목록 — 원래 속성 + transform
+   ============================================================ */
+.lc-navi {
+  transition:
+    background var(--i2-dur-color) ease,
+    color var(--i2-dur-color) ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.lc-new {
+  transition:
+    filter var(--i2-dur-color) ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.lc-card {
+  transition:
+    border-color var(--i2-dur-color) ease,
+    transform 160ms var(--i2-ease-out);
+}
+.tplcard {
+  transition:
+    transform 160ms var(--i2-ease-out),
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+.tplsort-btn {
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.tpld-start {
+  transition:
+    filter 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.tpld-nav {
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.prd-gen {
+  transition:
+    filter 0.15s ease,
+    opacity 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.pw-btn {
+  transition:
+    background-color 0.15s ease,
+    filter 0.15s ease,
+    opacity 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.pq-opt {
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.wreco {
+  transition:
+    border-color 0.15s ease,
+    transform 160ms var(--i2-ease-out);
+}
+.mm-addbtn {
+  transition:
+    border-color 0.12s ease,
+    background 0.12s ease,
+    color 0.12s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.ask-btn {
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    filter 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.tb-tab {
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.tb-ic,
+.railbtn {
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.tb-share {
+  transition:
+    filter 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+.fignav-new {
+  transition:
+    transform var(--i2-dur-press) var(--i2-ease-out),
+    filter var(--i2-dur-color) ease;
+}
+/* 스튜디오 사이드바 · 내보내기 · 비교 창의 단추들 — 원래 `transition: 0.15s`(= all)였다.
+   all 은 레이아웃 속성까지 보간해 비싸고 의도가 안 보이므로, 실제로 바뀌는 속성만 적는다. */
+.genbtn,
+.savebtn,
+.snapsave .savebtn,
+.imgbtn,
+.ghostbtn,
+.galnav,
+.editbtn,
+.qh,
+.helpbtn,
+.trendchip,
+.pcard,
+.wcard,
+.curpal .cptoggle,
+.swhex .cpy,
+.csbtn,
+.csexport,
+.snaprow .acts button,
+.histrow,
+.abclose,
+.extabs button,
+.excopy,
+.exactions button,
+.ctfixbtn {
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease,
+    filter 0.15s ease,
+    transform var(--i2-dur-press) var(--i2-ease-out);
+}
+
+/* ============================================================
+   2. 호버로 움직이는 것 — 기본은 제자리, 마우스 환경에서만 들린다
+   (아래 누름 규칙보다 앞에 둬야 :active 가 이긴다)
+   ============================================================ */
+.lc-card:hover,
+.tplcard:hover,
+.tpld-start:hover,
+.wreco:hover,
+.promocard:hover,
+.libitem:hover {
+  transform: none;
+}
+
+/* ============================================================
+   3. 누름 피드백 — '눌렸다'를 손끝에 바로 돌려준다
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .lc-navi:active,
+  .lc-new:active,
+  .tplsort-btn:active,
+  .tpld-start:active,
+  .prd-gen:active:not(:disabled),
+  .pw-btn:active:not(:disabled),
+  .mm-addbtn:active,
+  .ask-btn:active,
+  .tb-tab:active,
+  .tb-share:active,
+  .genbtn:active,
+  .savebtn:active,
+  .snapsave .savebtn:active,
+  .ghostbtn:active,
+  .galnav:active,
+  .csbtn:active,
+  .csexport:active,
+  .snaprow .acts button:active,
+  .abclose:active,
+  .extabs button:active,
+  .excopy:active,
+  .ctfixbtn:active {
+    transform: scale(0.97);
+  }
+  /* 넓은 카드 · 전폭 단추는 같은 비율이면 과하게 줄어 보인다 */
+  .lc-card:active,
+  .tplcard:active,
+  .wreco:active,
+  .pq-opt:active:not(.locked),
+  .fignav-new:active,
+  .imgbtn:active,
+  .editbtn:active,
+  .helpbtn:active,
+  .trendchip:active,
+  .pcard:active,
+  .wcard:active,
+  .histrow:active,
+  .curpal .cptoggle:active,
+  .exactions button:active {
+    transform: scale(0.985);
+  }
+  /* 작은 아이콘 단추는 조금 더 눌러야 느껴진다 */
+  .tb-ic:active:not(:disabled),
+  .railbtn:active,
+  .qh:active,
+  .swhex .cpy:active {
+    transform: scale(0.94);
+  }
+  .tpld-nav:active {
+    transform: translateY(-50%) scale(0.94);
+  }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .lc-card:hover,
+  .wreco:hover {
+    transform: translateY(-2px);
+  }
+  .tplcard:hover {
+    transform: translateY(-3px);
+  }
+  .tpld-start:hover,
+  .promocard:hover,
+  .libitem:hover {
+    transform: translateY(-1px);
+  }
+  /* 들린 채로 누르면 들림을 풀고 눌린다 */
+  .lc-card:hover:active,
+  .tplcard:hover:active,
+  .wreco:hover:active {
+    transform: scale(0.985);
+  }
+  .tpld-start:hover:active {
+    transform: scale(0.97);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* 다른 파일에 원래 있던 누름 이동도 함께 뺀다 */
+  .lc-new:active,
+  .fignav-new:active,
+  .genbtn:active,
+  .wcard:active {
+    transform: none;
+  }
+  .tpld-nav:active {
+    transform: translateY(-50%);
+  }
+}
+
+/* ============================================================
+   4. 드롭다운 · 플라이아웃 — 누른 자리에서 펼쳐진다
+   ============================================================ */
+.tplsort-menu,
+.doc-menu,
+.railflyout {
+  transition:
+    opacity var(--i2-dur-pop) var(--i2-ease-out),
+    transform var(--i2-dur-pop) var(--i2-ease-out);
+}
+.tplsort-menu {
+  transform-origin: top right; /* 단추 오른쪽 아래에 붙는다 */
+}
+.doc-menu {
+  transform-origin: top left;
+}
+.railflyout {
+  transform-origin: left top; /* 레일 아이콘 오른쪽으로 나온다 */
+}
+/* 예전 키프레임은 열 때마다 처음부터 다시 돌았다 — 전환으로 바꿔 빠르게 여닫아도 끊기지 않게 */
+.railflyout.show {
+  animation: none;
+}
+@starting-style {
+  .tplsort.open .tplsort-menu,
+  .doc-menu:not([hidden]),
+  .railflyout.show {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @starting-style {
+    .tplsort.open .tplsort-menu,
+    .doc-menu:not([hidden]) {
+      transform: translateY(-4px) scale(0.97);
+    }
+    .railflyout.show {
+      transform: translateX(-5px);
+    }
+  }
+}
+
+/* ============================================================
+   5. 대화상자 — 가운데에서 살짝 커지며 뜬다(트리거에 붙지 않으니 원점은 가운데)
+   ============================================================ */
+.askmodal {
+  transition: opacity var(--i2-dur-modal) var(--i2-ease-out);
+}
+.ask {
+  transition:
+    opacity var(--i2-dur-modal) var(--i2-ease-out),
+    transform var(--i2-dur-modal) var(--i2-ease-out);
+}
+@starting-style {
+  .askmodal:not([hidden]),
+  .askmodal:not([hidden]) .ask {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @starting-style {
+    .askmodal:not([hidden]) .ask {
+      transform: scale(0.96);
+    }
+  }
+}
+/* PRD 위저드 — 배경과 카드를 같은 곡선 · 시간으로 묶어 한 면으로 읽히게. 닫힐 때도 같은 길로 돌아간다. */
+.prdwiz {
+  transition: opacity var(--i2-dur-modal) var(--i2-ease-out);
+}
+.prdwiz-card {
+  transform: translateY(8px) scale(0.97);
+  transition: transform var(--i2-dur-modal) var(--i2-ease-out);
+}
+.spec-modal,
+.spec-modal-bd {
+  transition-timing-function: var(--i2-ease-out);
+}
+.exmodal.show,
+.abmodal.show,
+.onbd.show,
+.designpanel.show {
+  animation-timing-function: var(--i2-ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .prdwiz-card,
+  .prdwiz.show .prdwiz-card {
+    transform: none;
+  }
+}

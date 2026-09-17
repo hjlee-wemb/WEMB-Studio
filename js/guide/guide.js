@@ -9,7 +9,7 @@
   const prdPage = document.getElementById('pagePrd');
   if (!prdPage) return;
   const LS = 'wemb-prd';
-  const DEFAULT = { site: '', screen: 'dash', scale: 'multi', industries: [], targets: [], ops: 'central' };
+  const DEFAULT = { site: '', screen: 'dash', scale: 'multi', industries: [], targets: [] };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   /* ── 모니터링 유형(산업군, 다중 선택) → 모니터링 대상(라이브러리 태그) 매핑 ──
@@ -25,6 +25,17 @@
     datacenter:    { label: '데이터센터', targets: ['데이터센터관리 (DCIM)', '랙·서버', '스토리지', '네트워크 (NMS)', '공조 (HVAC)', '항온항습', '전력', '상면관리', 'UPS', '누수탐지기', '온습도계', 'CCTV'] },
     building:      { label: '건물·시설', targets: ['건물관리 (BMS)', '시설물관리 (FMS)', '공조', '전력', '엘리베이터', '출입통제', '조명·환경', '주차관제(LPR)', '화재감지기', 'CCTV'] },
     security:      { label: '보안·환경', targets: ['물리보안 (PSIM)', 'CCTV', 'AI CCTV', '열화상카메라', '출입통제', '지문인식기', '얼굴인식', '화재 감지', '환경 감시 (지진·기상·재난)', '누수·가스 탐지', 'X-ray 검색대'] },
+    /* 추천 추가(2026-09-11) — 국내 통합관제 수요가 큰 도메인 중 위 10개와 겹치지 않는 것.
+       라벨을 바꾸면 아래 SYN(자연어 규칙)의 targets 도 같이 바꿀 것 — 정확히 일치해야 그룹핑에 실린다. */
+    transport:     { label: '교통·도로', targets: ['교통관리 (ITS)', '교통량·소통 현황', '돌발상황 감지', '터널 관제', '차량검지기 (VDS)', '신호제어', '도로전광판 (VMS)', '기상·노면 상태', 'CCTV', '알람·이벤트'] },
+    semiconductor: { label: '반도체·디스플레이', targets: ['팹 설비관리 (FMS)', '클린룸 파티클', '온습도계', '초순수 (UPW)', '케미컬 공급 (CCSS)', '특수가스 (Gas Cabinet)', '배기·스크러버', '공정장비 가동률', '반송 시스템 (AMHS)', '무정전 전원장치(UPS)', '화재감지기', 'CCTV'] },
+    airport:       { label: '공항·항공', targets: ['항공기 운항 현황', '탑승교 (PBB)', '수하물 처리 (BHS)', '여객 흐름·혼잡도', '보안검색대', '활주로·계류장', '출입통제', '공조', 'CCTV'] },
+    water:         { label: '수처리·환경', targets: ['정수·취수장', '하수처리장', '수질 자동측정 (TMS)', '펌프장', '관로 누수', '수위감지기', '대기질·미세먼지', '악취 감시', '전력', 'CCTV'] },
+    telecom:       { label: '통신·방송', targets: ['통신망 관제 (NMS)', '기지국·중계기', '전송·교환 장비', '회선 트래픽', '장애·알람 이력', '서비스 품질 (QoS)', '광케이블 선로', '국사 전력·UPS', '국사 항온항습', '방송 송출', 'CCTV'] },
+    plant:         { label: '석유화학·플랜트', targets: ['공정 운전 현황', '압력', '탱크 레벨', '가스탐지기', '플레어스택', '배관 부식·누출', '방폭 설비', '작업자', '화재감지기', 'CCTV'] },
+    smartcity:     { label: '스마트시티', targets: ['도시통합운영 (U-City)', '방범 비상벨', '불법 주정차', '어린이 보호구역', '스마트 가로등', '공공 Wi-Fi', '주차관제(LPR)', '재난 경보', 'CCTV'] },
+    /* AI — GPU 클러스터 같은 AI 인프라와, 그 위에서 도는 학습 · 추론 서비스 운영을 함께 본다 */
+    ai:            { label: 'AI 인프라·서비스', targets: ['AI 데이터센터 (GPU 클러스터)', 'GPU 가동률·온도', '학습 작업 대기열', '추론 응답시간·처리량', 'API 호출량', '모델 성능·드리프트', '토큰 사용량·비용', '스토리지 I/O', '고속 네트워크 (InfiniBand)', '액체냉각 (수냉)', '전력 사용량', '장애·알람 이력'] },
   };
   const industryLabels = () => (G.industries || []).map((k) => INDUSTRIES[k] && INDUSTRIES[k].label).filter(Boolean);
   /* 선택한 산업군들의 모니터링 대상(라벨) 합집합 — 중복 제거 */
@@ -45,7 +56,7 @@
   let G = load();
   /* 구버전 저장값 정리 + 산업군 단일(string)→다중(array) 마이그레이션 */
   if (G.screen !== 'dash' && G.screen !== 'dt') G.screen = 'dash';
-  if (G.ops !== 'central' && G.ops !== 'normal') G.ops = 'central';
+  delete G.ops; /* 마지막 문항(운영 환경 · 반응형 대응)은 없앴다 — 옛 저장값에 남은 답을 지운다 */
   if (!Array.isArray(G.industries)) G.industries = (typeof G.industry === 'string' && INDUSTRIES[G.industry]) ? [G.industry] : [];
   G.industries = G.industries.filter((k) => INDUSTRIES[k]);
   delete G.industry;
@@ -54,7 +65,6 @@
 
   const SCREEN_LBL = { dash: '관제 대시보드', dt: '디지털 트윈', portal: '포탈' };
   const SCALE_LBL = { single: '단일 설비', multi: '다중 설비·구역', enterprise: '전사·다중 사이트' };
-  const OPS_LBL = { central: '대형 화면 상시 관제', normal: 'PC 화면 모니터링' };
   const PRI_LBL = { hi: '높음', mid: '보통', low: '낮음' };
   const siteName = () => G.site || '이 프로젝트';
 
@@ -69,8 +79,8 @@
     if (window.__paintDtFromPrd) window.__paintDtFromPrd();
   }
 
-  /* screen·scale·ops 는 DEFAULT 에 값이 미리 들어 있고(다운스트림이 항상 유효값을 요구함)
-     아래 마이그레이션이 초기화 뒤에도 되돌려 놓는다. 그래서 이 세 개만 보고 요약을 그리면
+  /* screen·scale 은 DEFAULT 에 값이 미리 들어 있고(다운스트림이 항상 유효값을 요구함)
+     아래 마이그레이션이 초기화 뒤에도 되돌려 놓는다. 그래서 이 둘만 보고 요약을 그리면
      '아무것도 안 골랐는데 답변이 적혀 있는' 상태가 된다.
      사용자가 직접 넣지 않으면 절대 채워지지 않는 항목(이름·산업군·대상)으로 착수 여부를 판정한다. */
   const prdTouched = () => !!(G.site || (G.industries || []).length || (G.targets || []).length);
@@ -80,7 +90,6 @@
     if (G.site) parts.push('<b>' + esc(G.site) + '</b>');
     if (SCREEN_LBL[G.screen]) parts.push(SCREEN_LBL[G.screen]);
     if (SCALE_LBL[G.scale]) parts.push(SCALE_LBL[G.scale]);
-    if (OPS_LBL[G.ops]) parts.push(OPS_LBL[G.ops]);
     const inds = industryLabels();
     if (inds.length) parts.push(inds.join(', '));
     const tg = targetLabels().join(' · ');
@@ -95,7 +104,7 @@
   const saveSpec = () => { try { localStorage.setItem(SPEC_LS, JSON.stringify(SPEC_STORE)); } catch (e) {} };
   const specOv = (id) => (SPEC_STORE[id] || (SPEC_STORE[id] = {}));
 
-  /* ── 1) 기능명세서 파생 — PRD 5개 문항(화면·규모·산업군·모니터링 대상·운영 + 이름)을 반영해 추출 ── */
+  /* ── 1) 기능명세서 파생 — PRD 4개 문항(화면·규모·산업군·모니터링 대상 + 이름)을 반영해 추출 ── */
   function deriveSpec() {
     const rows = [];
     /* type: '기능' = 구체적 화면·기능, '요구사항' = 규모·운영 등 비기능/제약 요구사항 */
@@ -116,10 +125,6 @@
     if (G.scale === 'single') add('단일 설비 집중 모니터링 뷰', 'mid', '요구사항');
     else if (G.scale === 'multi') add('구역·설비 그룹 전환 네비게이션', 'mid', '요구사항');
     else if (G.scale === 'enterprise') add('다중 사이트 통합·전환 네비게이션', 'hi', '요구사항');
-
-    /* 5번 — 운영 환경 (요구사항) */
-    if (G.ops === 'central') add('24/7 대형 화면 고밀도 상황판 레이아웃', 'mid', '요구사항');
-    else if (G.ops === 'normal') add('일반 PC 화면 표준 레이아웃', 'mid', '요구사항');
 
     /* '색 토큰 생성·내보내기'는 이 스튜디오 자신의 기능이다. 고객에게 전달되는
        기능명세서에 넣으면 산출물에 도구 내부 사정이 새어 들어간다 — 그래서 뺐다.
@@ -388,23 +393,24 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal && !modal.hidden) closeModal(); });
   })();
 
-  /* ── 기능명세서 스크롤 게이트 ──
-     항목을 끝까지(맨 아래) 스크롤해 다 읽은 뒤에만 '유저플로우로 넘어가기' 버튼이 나타난다.
-     표가 짧아 스크롤이 필요 없으면 바로 노출한다. */
+  /* ── 기능명세서 읽음 안내 ──
+     예전엔 표를 맨 아래까지 스크롤해야 '유저플로우로 넘어가기' 버튼이 나타났다(스크롤 게이트).
+     내용을 이미 아는 PM 에게는 강제 스크롤이었고, 버튼이 없다가 생기니 다음 길이 보이지 않았다.
+     이제 버튼은 늘 보이고, 아래에 안 본 항목이 남았는지만 안내한다. */
   (function initSpecScrollGate() {
     const page = document.getElementById('pageSpec'); if (!page) return;
     const scroller = page.querySelector('.page-scroll');
     const btn = document.getElementById('specNext');
     const hint = page.querySelector('.step-foot .step-hint');
     if (!scroller || !btn) return;
-    const MORE = '항목을 끝까지 확인하면 다음 단계로 넘어갈 수 있어요. ↓';
+    btn.hidden = false;
+    const MORE = '아래에 확인할 항목이 더 있어요 ↓';
     const DONE = '모두 확인했어요. 유저플로우로 넘어가세요.';
     function update() {
       if (page.hidden) return;
       const noScroll = scroller.scrollHeight <= scroller.clientHeight + 4;
       const atBottom = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 6;
       const done = noScroll || atBottom;
-      btn.hidden = !done;
       if (hint) hint.textContent = done ? DONE : MORE;
     }
     scroller.addEventListener('scroll', update, { passive: true });
@@ -1061,8 +1067,7 @@
     !!(G.site && G.site.trim()) &&
     !!G.screen && !!G.scale &&
     Array.isArray(G.industries) && G.industries.length > 0 &&
-    Array.isArray(G.targets) && G.targets.length > 0 &&
-    !!G.ops;
+    Array.isArray(G.targets) && G.targets.length > 0;
   /* 탭 잠금 해제는 오직 '다음 단계로' 버튼을 눌러 advanceStep 했을 때만.
      PRD를 다 채워도(=prdComplete) 기능명세서 탭은 열리지 않고, '기능명세서 자동 생성' 버튼만 활성화된다. */
   const unlocked = () => maxStep;
@@ -1102,7 +1107,7 @@
   }
   function advanceStep(i) { if (i > maxStep) { maxStep = i; saveStep(); } refreshSteps(); }
   /* 새 프로젝트 시작 시 PRD를 '아무것도 선택 안 된' 빈 상태로 초기화한다 */
-  const EMPTY_PRD = { site: '', screen: '', scale: '', industries: [], targets: [], ops: '' };
+  const EMPTY_PRD = { site: '', screen: '', scale: '', industries: [], targets: [] };
   window.__wembPrdReset = () => { G = Object.assign({}, EMPTY_PRD, { industries: [], targets: [] }); save(); try { localStorage.removeItem('wemb-current-proj'); } catch (e) {} paintForm(); };
   window.__wembStep = {
     advance: advanceStep,
@@ -1152,16 +1157,16 @@
     function catOf(lbl) {
       const s = String(lbl);
       if (/CCTV|카메라|영상|열화상|녹화/i.test(s)) return 'cctv';
-      if (/화재|소방|소화|제연|화염|연기/.test(s)) return 'fire';
+      if (/화재|소방|소화|제연|화염|연기|플레어/.test(s)) return 'fire';
       if (/지진|기상|재난|관측|경보/.test(s)) return 'quake';
-      if (/누수|가스|수위|상.?하수|배관/.test(s)) return 'drop';
-      if (/온습도|항온|공조|HVAC|압력|환경/i.test(s)) return 'thermo';
-      if (/출입|지문|얼굴|작업자|카운트|보안|PSIM/i.test(s)) return 'user';
-      if (/랙|서버|스토리지|네트워크|데이터센터|상면|DCIM|NMS/i.test(s)) return 'server';
+      if (/누수|누출|가스|수위|상.?하수|하수|정수|취수|펌프|관로|배관|탱크|초순수|케미컬/.test(s)) return 'drop';
+      if (/온습도|항온|공조|HVAC|압력|환경|수질|대기질|미세먼지|악취|클린룸|파티클|배기|스크러버|냉각|수냉/i.test(s)) return 'thermo';
+      if (/출입|지문|얼굴|작업자|카운트|보안|PSIM|여객|혼잡/i.test(s)) return 'user';
+      if (/랙|서버|스토리지|네트워크|데이터센터|상면|DCIM|NMS|Wi-?Fi|트래픽|회선|GPU|학습|추론|모델|API|토큰/i.test(s)) return 'server';
       if (/발전|터빈|보일러|ESS|태양광|인버터|배터리|풍력|송전|PCS|리튬/i.test(s)) return 'bolt';
-      if (/변압|배전|차단|고압|저압|초고압|수전|UPS|한전|VCB|전력|전기/i.test(s)) return 'power';
-      if (/방재|물품|대피/.test(s)) return 'shield';
-      if (/알람|이벤트/.test(s)) return 'alert';
+      if (/변압|배전|차단|고압|저압|초고압|수전|UPS|한전|VCB|전력|전기|가로등/i.test(s)) return 'power';
+      if (/방재|물품|대피|방폭/.test(s)) return 'shield';
+      if (/알람|이벤트|돌발|비상벨/.test(s)) return 'alert';
       return 'box';
     }
     const SYM_LBL = { cctv: 'CCTV', fire: '소방', quake: '지진감지', drop: '누수·가스', thermo: '환경감시', user: '출입통제', server: '전산실', bolt: '발전설비', power: '전력계통', shield: '방재물품', alert: '경보', box: '설비' };
@@ -1178,6 +1183,14 @@
       finance:       { title: '금융 IT 통합관제', region: '시스템 구역', nav: ['종합상황', '거래현황', '채널', '인프라', '이력관리'] },
       building:      { title: '시설 통합관제', region: '건물 구역', nav: ['시설현황', '설비감시', '에너지', '출입·주차', '이력관리'] },
       distribution:  { title: '유통 통합관제', region: '매장 구역', nav: ['매장현황', '재고·물류', '출입관제', '에너지', '이력관리'] },
+      transport:     { title: '교통 통합관제', region: '관할 도로', nav: ['교통현황', '돌발관제', '터널관제', '신호제어', '이력관리'] },
+      semiconductor: { title: '팹 통합관제', region: '팹 구역', nav: ['팹현황', '클린룸', '유틸리티', '설비가동', '이력관리'] },
+      airport:       { title: '공항 통합관제', region: '터미널 구역', nav: ['운항현황', '여객흐름', '수하물', '보안검색', '이력관리'] },
+      water:         { title: '수처리 통합관제', region: '처리 시설', nav: ['처리현황', '수질감시', '펌프·관로', '대기환경', '이력관리'] },
+      telecom:       { title: '통신망 통합관제', region: '국사·권역', nav: ['망현황', '장애관제', '트래픽', '국사설비', '이력관리'] },
+      plant:         { title: '플랜트 안전관제', region: '공정 구역', nav: ['공정현황', '설비감시', '가스·누출', '안전관리', '이력관리'] },
+      smartcity:     { title: '스마트시티 통합관제', region: '관할 구역', nav: ['도시현황', '방범·CCTV', '교통·주차', '생활안전', '이력관리'] },
+      ai:            { title: 'AI 인프라 통합관제', region: 'GPU 클러스터', nav: ['AI현황', 'GPU자원', '학습·추론', '모델품질', '이력관리'] },
     };
     const EV = {
       power:  '전압 불균형 감지 (Phase A 210V / Phase B 230V) — 즉시 점검 요망',
@@ -1517,6 +1530,14 @@
       { re: /금융|은행|뱅킹|계정계|거래|tps|트랜잭션|카드/i, ind: ['finance'], targets: ['계정계 (Core Banking)', '거래량', '거래 추이', '트랜잭션', '초당 처리건수(TPS)', '시스템 현황'] },
       { re: /건물|시설|bms|fms|엘리베이터|주차|공조/i, ind: ['building'], targets: ['건물관리 (BMS)', '시설물관리 (FMS)', '엘리베이터', '주차관제(LPR)', '전력', 'CCTV'] },
       { re: /유통|매장|리테일|재고/, ind: ['distribution'], targets: ['매장 현황', '재고·물류', '출입 카운트', '주차관제(LPR)', 'CCTV'] },
+      { re: /교통|도로|터널|고속도로|its|vms|신호\s*제어/i, ind: ['transport'], targets: ['교통관리 (ITS)', '교통량·소통 현황', '돌발상황 감지', '터널 관제', '도로전광판 (VMS)', 'CCTV'] },
+      { re: /반도체|디스플레이|팹|fab|클린룸|초순수|스크러버|웨이퍼/i, ind: ['semiconductor'], targets: ['팹 설비관리 (FMS)', '클린룸 파티클', '초순수 (UPW)', '특수가스 (Gas Cabinet)', '배기·스크러버', 'CCTV'] },
+      { re: /공항|항공|탑승교|수하물|활주로|여객/, ind: ['airport'], targets: ['항공기 운항 현황', '탑승교 (PBB)', '수하물 처리 (BHS)', '여객 흐름·혼잡도', '보안검색대', 'CCTV'] },
+      { re: /수처리|정수|취수|하수처리|수질|펌프장|미세먼지|대기질|악취/, ind: ['water'], targets: ['정수·취수장', '하수처리장', '수질 자동측정 (TMS)', '펌프장', '대기질·미세먼지', 'CCTV'] },
+      { re: /통신|방송|기지국|중계기|회선|트래픽|noc|광케이블/i, ind: ['telecom'], targets: ['통신망 관제 (NMS)', '기지국·중계기', '회선 트래픽', '장애·알람 이력', '국사 전력·UPS', 'CCTV'] },
+      { re: /석유|화학|플랜트|정유|탱크|방폭|플레어/, ind: ['plant'], targets: ['공정 운전 현황', '압력', '탱크 레벨', '가스탐지기', '배관 부식·누출', 'CCTV'] },
+      { re: /스마트\s*시티|u-?city|방범|불법\s*주정차|어린이\s*보호|가로등/i, ind: ['smartcity'], targets: ['도시통합운영 (U-City)', '방범 비상벨', '불법 주정차', '어린이 보호구역', '스마트 가로등', 'CCTV'] },
+      { re: /(?<![a-z])ai(?![a-z])(?!\s*(?:cctv|영상|카메라))|인공지능|gpu|머신\s*러닝|딥\s*러닝|mlops|llm|생성형|추론|학습\s*작업|모델\s*서빙/i, ind: ['ai'], targets: ['AI 데이터센터 (GPU 클러스터)', 'GPU 가동률·온도', '학습 작업 대기열', '추론 응답시간·처리량', '모델 성능·드리프트', '전력 사용량'] },
     ];
 
     function parseIntent(text) {
@@ -1525,17 +1546,16 @@
       let screen = /트윈|3d|digital\s*twin|현장|플로어|floor|3차원/.test(s) ? 'dt'
         : (/대시보드|상황판|dashboard|보드|현황판/.test(s) ? 'dash' : null);
       const inds = [], targets = [];
-      let ops = null, scale = null;
+      let scale = null;
       SYN.forEach((rule) => {
         if (!rule.re.test(s)) return;
         (rule.ind || []).forEach((k) => { if (!inds.includes(k)) inds.push(k); });
         (rule.targets || []).forEach((t) => { if (!targets.includes(t)) targets.push(t); });
       });
-      if (/관제|모니터링|통합|상시|대형\s*화면/.test(s)) ops = 'central';
       if (/전사|다중\s*사이트|여러\s*사이트|통합\s*관제|본사/.test(s)) scale = 'enterprise';
       else if (/다중|여러|구역|복수/.test(s)) scale = 'multi';
       else if (/단일|한\s*대|하나|개별/.test(s)) scale = 'single';
-      return { screen, industries: inds, targets, ops, scale, matched: !!(inds.length || screen) };
+      return { screen, industries: inds, targets, scale, matched: !!(inds.length || screen) };
     }
 
     function applyIntent(intent) {
@@ -1544,7 +1564,6 @@
       if (intent.industries.length) G.industries = intent.industries.filter((k) => INDUSTRIES[k]);
       if (intent.targets.length) G.targets = intent.targets.slice();
       if (intent.scale) G.scale = intent.scale;
-      if (intent.ops) G.ops = intent.ops;
       save();
       /* 새 시안이므로 이전 임시 이미지 오버레이는 걷어낸다 */
       try { if (window.__clearImageTemplate) window.__clearImageTemplate(); localStorage.removeItem('wemb-tpl-img'); localStorage.removeItem('wemb-tpl-dt'); } catch (e) {}
@@ -1571,7 +1590,7 @@
   })();
 
   /* ── PRD 스텝 위저드(모달 팝업) ──
-     프로젝트명 → 화면 → 관제 대상 → 모니터링 유형(산업군) → 모니터링 대상(연동) → 운영 환경.
+     프로젝트명 → 화면 → 관제 대상 → 모니터링 유형(산업군) → 모니터링 대상(연동).
      한 스텝씩 진행하며 마지막에 기능명세서를 생성한다. */
   const WIZ_STEPS = [
     { key: 'site', kind: 'text', title: '프로젝트 이름을 알려주세요', hint: '기능명세서·화면 제목에 사용돼요.', placeholder: '예: 당진화력 통합관제' },
@@ -1587,10 +1606,6 @@
     ] },
     { key: 'industries', kind: 'multi', title: '어떤 산업군을 관제하나요?', hint: '모니터링 유형 (여러 개 선택 가능)', opts: Object.keys(INDUSTRIES).map((k) => [k, INDUSTRIES[k].label]) },
     { key: 'targets', kind: 'multi', title: '무엇을 모니터링하나요?', hint: '여러 개 선택', dynamic: true },
-    { key: 'ops', kind: 'single', title: '어떤 환경에서 운영하나요?', hint: '', opts: [
-      ['central', '대형 화면 상시 관제'],
-      ['normal', 'PC 화면 모니터링'],
-    ] },
   ];
   (function initPrdWiz() {
     const modal = document.getElementById('prdWiz'); if (!modal) return;
@@ -1662,12 +1677,25 @@
       btnNext.disabled = !stepAnswered(idx);
       elCount.textContent = (idx + 1) + ' / ' + WIZ_STEPS.length;
     }
-    function paintStep() {
+    /* 스텝이 바뀔 때 본문이 진행 방향에서 들어온다 — 다음은 오른쪽에서, 이전은 왼쪽에서(공간 연속성).
+       dir 0 이면 움직이지 않는다: 처음 열 때, 그리고 Enter 같은 키보드로 넘길 때(키보드 조작엔 모션을 붙이지 않는다).
+       본문 전체를 WAAPI 로 한 번 — renderField 는 선택할 때마다 다시 그려서 CSS 등장 규칙을 걸면 클릭마다 깜빡인다. */
+    const elBody = modal.querySelector('.prdwiz-body');
+    const reduceMotion = () => !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    function paintStep(dir) {
       const st = WIZ_STEPS[idx];
       elStepNo.textContent = 'STEP ' + (idx + 1);
       elTitle.textContent = st.title;
       elHint.textContent = st.hint || '';
       renderField(); renderDots(); syncFoot();
+      if (dir && elBody && typeof elBody.animate === 'function') {
+        elBody.animate(
+          reduceMotion()
+            ? [{ opacity: 0.4 }, { opacity: 1 }]
+            : [{ opacity: 0, transform: 'translateX(' + (dir > 0 ? 12 : -12) + 'px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 200, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
+        );
+      }
     }
     function firstUnanswered() { for (let i = 0; i < WIZ_STEPS.length; i++) if (!stepAnswered(i)) return i; return 0; }
     function openWiz(start) {
@@ -1676,17 +1704,20 @@
       requestAnimationFrame(() => modal.classList.add('show'));
       paintStep();
     }
-    function closeWiz() { open = false; modal.classList.remove('show'); setTimeout(() => { modal.hidden = true; }, 180); }
-    function goNext() {
+    /* 퇴장 전환(css/base/motion.css 의 --i2-dur-modal 200ms)이 끝난 뒤에 숨긴다 */
+    function closeWiz() { open = false; modal.classList.remove('show'); setTimeout(() => { modal.hidden = true; }, 200); }
+    /* viaPointer — 마우스 · 터치로 누른 경우에만 본문이 움직인다. Enter 키로 넘기면(goNext()) 곧바로 바뀐다. */
+    function goNext(viaPointer) {
       if (!stepAnswered(idx)) return;
-      if (idx < WIZ_STEPS.length - 1) { idx++; paintStep(); return; }
+      if (idx < WIZ_STEPS.length - 1) { idx++; paintStep(viaPointer === true ? 1 : 0); return; }
       /* 마지막 스텝 → 기능명세서 생성 */
       closeWiz();
       if (prdComplete()) { advanceStep(1); if (window.__setPage) window.__setPage('spec'); }
     }
-    function goPrev() { if (idx > 0) { idx--; paintStep(); } }
-    btnNext.addEventListener('click', goNext);
-    btnPrev.addEventListener('click', goPrev);
+    function goPrev(viaPointer) { if (idx > 0) { idx--; paintStep(viaPointer === true ? -1 : 0); } }
+    /* click 의 detail 은 실제 누름 횟수 — 키보드(Enter · Space)로 누른 단추는 0 이다 */
+    btnNext.addEventListener('click', (e) => goNext(e.detail > 0));
+    btnPrev.addEventListener('click', (e) => goPrev(e.detail > 0));
     document.getElementById('pwClose')?.addEventListener('click', closeWiz);
     modal.addEventListener('click', (e) => { if (e.target === modal) closeWiz(); });
     document.addEventListener('keydown', (e) => { if (open && e.key === 'Escape') closeWiz(); });
@@ -1719,6 +1750,9 @@
     try { if (L.saveGuideProject) L.saveGuideProject({ name: G.site || '새 프로젝트', screen: selected.screen, layout: selected.layoutId }); } catch (e) {}
     L.enterStudio(selected.screen, selected.layoutId);
     if (window.__setPage) window.__setPage('wire');
+    /* PRD 를 끝내고 들어온 스튜디오는 '테마 만들기 → 화면 정하기'부터 연다.
+       enterStudio 가 기본으로 여는 '콘텐츠 추가'는 템플릿 · 저장된 화면을 열 때만 쓴다. */
+    if (window.__showStep) window.__showStep('screen', 'stepScreen');
     if (typeof toast === 'function') toast('추천 구성(' + SCREEN_LBL[selected.screen] + ' · ' + selected.name + ')을 스튜디오에 반영했어요.', { type: 'info' });
   });
 

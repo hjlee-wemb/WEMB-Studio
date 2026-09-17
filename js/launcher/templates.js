@@ -17,6 +17,8 @@
   const TL = (name, label) => ({ img: TPL_LIB + name + '.jpg', label });
   /* [제목, 업무 영역, 등록일, 화면들] — 제목 접두어(Digital Twin / Dashboard)로 화면 유형이 갈린다 */
   const TPL_DEFS = [
+    { title: 'Digital Twin: POSCO KDB CCTV 관제', area: '물리보안', date: 'January 20, 2025', slides: [
+      { img: 'src/templates/posco-main.jpg', label: '메인' }] },
     { title: 'Digital Twin: SKHynix Icheon 1level', area: '부지·건물·층', date: 'February 12, 2024', slides: [
       TL('skhynix-icheon-1level', '1level 전경'), TL('skhynix-icheon-2level', '2level 전경')] },
     { title: 'Digital Twin: Gammania', area: '부지·건물·층', date: 'April 3, 2024', slides: [
@@ -200,6 +202,25 @@
       ];
     }
   })();
+  /* POSCO KDB CCTV 관제 — '스튜디오 열기' 시 Figma(dj0SONcO5BySCm7yDdZrNc) Screen/Control Main 을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/posco-main.js)으로 연다. 상세 미리보기도 그 화면을 그대로 캡처한 것이다. */
+  (function () {
+    const pk = TEMPLATES.find((t) => t.title === 'Digital Twin: POSCO KDB CCTV 관제');
+    if (pk) {
+      pk.tpl = 'posco';
+      pk.img = 'src/templates/posco-main.jpg';
+      /* 화면 7장 — 슬라이드 순서가 곧 프로젝트 안의 화면 순서다(home.js 의 tplScene 표와 짝이 맞아야 한다) */
+      pk.slides = [
+        { img: 'src/templates/posco-main.jpg', label: '메인' },
+        { img: 'src/templates/posco-sop.jpg', label: 'SOP 대응 절차' },
+        { img: 'src/templates/posco-ack.jpg', label: '메인(Ack 알림)' },
+        { img: 'src/templates/posco-overview.jpg', label: '종합현황' },
+        { img: 'src/templates/posco-route.jpg', label: '출입동선' },
+        { img: 'src/templates/posco-floors.jpg', label: '전체층' },
+        { img: 'src/templates/posco-detail.jpg', label: '단층' },
+      ];
+    }
+  })();
   /* 실제 화면이 붙어 있는 템플릿인지 — Figma를 HTML/CSS DOM(+SVG)으로 재구축해 두어
      '스튜디오 열기'를 누르면 그 화면이 그대로 열리는 것들이다.
      나머지는 아직 카탈로그 그림 한 장뿐이라 갤러리에서 '제작중'으로 표시한다.
@@ -212,7 +233,7 @@
     if (isNaN(d)) return v;
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

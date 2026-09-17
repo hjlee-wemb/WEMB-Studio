@@ -72,7 +72,23 @@ function initLayoutEditor() {
     if (!del) return;
     e.preventDefault();
     e.stopPropagation();
-    del.closest('.panel')?.remove();
+    const panel = del.closest('.panel');
+    if (!panel) return;
+    /* 확인도 되돌리기도 없이 바로 사라지던 동작 — 상단 되돌리기는 색 테마만 기록하므로 여기서 직접 되살릴 길을 준다.
+       같은 노드를 원래 자리(다음 형제 앞)에 다시 끼우므로 차트 · 편집 내용이 그대로 돌아온다. */
+    const parent = panel.parentElement;
+    const next = panel.nextSibling;
+    const name = panel.querySelector('.ph h3')?.textContent.trim();
+    panel.remove();
+    if (typeof toast === 'function')
+      toast((name ? '“' + escHTML(name) + '” ' : '') + '패널을 삭제했어요.', {
+        type: 'ok',
+        dur: 6000,
+        undo: () => {
+          if (!parent || !parent.isConnected) return;
+          parent.insertBefore(panel, next && next.parentNode === parent ? next : null);
+        },
+      });
   });
   const setColumns = (n) => {
     const cols = activeCols();
@@ -321,7 +337,7 @@ function initLayoutEditor() {
       ctxHint.innerHTML = '<b>' + PANEL.esc(spec.title) + '</b> — ' + (VIZ_LBL[spec.type] || '패널') + ' 패널을 추가했어요.';
       ctxInput.value = '';
       ctxInput.focus();
-      if (typeof toast === 'function') toast('“' + spec.title + '” ' + (VIZ_LBL[spec.type] || '패널') + ' 패널을 추가했어요.', { type: 'ok' });
+      if (typeof toast === 'function') toast('“' + escHTML(spec.title) + '” ' + (VIZ_LBL[spec.type] || '패널') + ' 패널을 추가했어요.', { type: 'ok' });
     };
     ctx.querySelector('.apc-go').onclick = runCtx;
     ctxInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); runCtx(); } else if (e.key === 'Escape') { closeCtx(); } });
@@ -516,6 +532,29 @@ function initLayoutEditor() {
     const grid = document.getElementById('libGrid');
     const tabs = document.getElementById('libTabs');
     if (!grid || !tabs) return;
+
+    /* 접기/펼치기 — 처음엔 접혀 있다(studio.html 의 .libbody[hidden]).
+       새 화면으로 들어오면 '콘텐츠 추가' 섹션이 먼저 열리는데, 샘플 수십 개가 한꺼번에 펼쳐져 사이드바가 화면의 1.7배로 늘었다.
+       한 번 펼치면 이 화면의 상태로 기억한다(wemb-* 키라 화면마다 따로 저장된다). */
+    (function initLibFold() {
+      const btn = document.getElementById('libFold');
+      const body = document.getElementById('libBody');
+      if (!btn || !body) return;
+      const KEY = 'wemb-lib-open';
+      const set = (open, remember) => {
+        body.hidden = !open;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.textContent = open ? '접기' : '펼치기';
+        if (remember) {
+          try { open ? localStorage.setItem(KEY, '1') : localStorage.removeItem(KEY); } catch (e) {}
+        }
+      };
+      let saved = false;
+      try { saved = localStorage.getItem(KEY) === '1'; } catch (e) {}
+      set(saved, false);
+      btn.addEventListener('click', () => set(body.hidden, true));
+      window.__openAssetLibrary = () => set(true, true);
+    })();
 
     /* 라인 아이콘 세트 (stroke=currentColor, 24x24) */
     const ICONS = {

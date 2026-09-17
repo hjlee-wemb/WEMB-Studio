@@ -459,7 +459,8 @@
       /* 결과를 눈으로 알 수 있게 알림 — 교환됐는지, 대상이 없어 제자리로 돌아왔는지 */
       try {
         if (typeof toast === 'function') {
-          const nm = (el) => (el && el.querySelector('.ph h3') ? el.querySelector('.ph h3').textContent.trim() : '위젯');
+          /* 패널 제목은 사용자가 고친 글자라 토스트(HTML)에 넣기 전에 이스케이프한다 */
+          const nm = (el) => escHTML(el && el.querySelector('.ph h3') ? el.querySelector('.ph h3').textContent.trim() : '위젯');
           if (swapped) toast('“' + nm(p) + '” ↔ “' + nm(tgt) + '” 자리를 바꿨어요.', { type: 'ok' });
           else toast('바꿀 위젯 위에 놓아야 자리가 바뀝니다. (제자리로 돌아감)', { type: 'info' });
         }

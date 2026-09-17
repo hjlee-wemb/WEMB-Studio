@@ -261,6 +261,11 @@ body {
   --i2-ease-move: cubic-bezier(0.45, 0, 0.55, 1);
   --i2-dur-color: 200ms;
   --i2-dur-press: 140ms;
+  /* 등장 · 퇴장 · 누름용 강한 ease-out — 브라우저 기본 ease-out 은 너무 약해 반응이 늦게 느껴진다.
+     (이동하는 슬라이딩 필은 위 --i2-ease-move 를 그대로 쓴다.) 쓰는 곳: css/base/motion.css */
+  --i2-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --i2-dur-pop: 180ms; /* 드롭다운 · 플라이아웃 */
+  --i2-dur-modal: 200ms; /* 대화상자 · 위저드 */
   /* 스쿼시&스트레치 —
      필의 두 모서리를 다른 속도로 보낸다. 진행 방향의 '앞 모서리'가
      먼저 도착(lead)하고 '뒤 모서리'가 늦게 따라붙으면(trail), 그 시간차

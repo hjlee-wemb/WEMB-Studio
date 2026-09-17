@@ -27,10 +27,21 @@
   color: #eef1f7;
   font-size: 13px;
   pointer-events: auto;
-  animation: toastIn 0.22s ease;
+  /* 연달아 뜨는 알림이라 키프레임이 아니라 전환 — 키프레임은 매번 처음부터 다시 돌지만 전환은 지금 값에서 이어진다.
+     아래에서 떠오르고(@starting-style), 나갈 때도 같은 길로 내려간다(.out). 제거 시각은 js/ui/toast.js 와 맞춘다. */
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
+}
+@starting-style {
+  .toast {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 .toast.out {
-  animation: toastOut 0.2s ease forwards;
+  opacity: 0;
+  transform: translateY(8px);
 }
 .toast .tico {
   flex: none;
@@ -71,25 +82,34 @@
 .toast .tundo:hover {
   text-decoration: underline;
 }
-@keyframes toastIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* 닫기 — 오류 안내를 다 읽었으면 직접 치운다(자동으로 사라지기 전에도) */
+.toast .tclose {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin: 0 -4px 0 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #aab2c4;
+  cursor: pointer;
 }
-@keyframes toastOut {
-  to {
-    opacity: 0;
-    transform: translateY(8px);
-  }
+.toast .tclose:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #eef1f7;
+}
+.toast .tclose svg {
+  width: 14px;
+  height: 14px;
 }
 @media (prefers-reduced-motion: reduce) {
+  /* 떠오르고 내려가는 이동은 빼고 나타남 · 사라짐(투명도)만 남긴다 */
   .toast,
   .toast.out {
-    animation: none;
+    transform: none;
+    transition: opacity 300ms ease;
   }
 }

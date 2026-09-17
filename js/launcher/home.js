@@ -62,7 +62,15 @@
   });
   router.add('launcher:folder', '/projects/:gid', (params, query, prev) => {
     const grp = groupById(params.gid);
-    if (!grp || grp.deleted) return VIEW_PATH.all; /* 없어졌거나 휴지통으로 간 프로젝트 */
+    /* 없어졌거나 휴지통으로 간 프로젝트 — 예전엔 조용히 목록으로 돌려, 링크가 왜 안 열렸는지 알 수 없었다 */
+    if (!grp) {
+      toast('찾는 프로젝트가 없어요 — 영구 삭제됐거나 다른 브라우저에서 만든 주소예요. 프로젝트 목록을 보여 드릴게요.', { type: 'warn' });
+      return VIEW_PATH.all;
+    }
+    if (grp.deleted) {
+      toast('“' + escHTML(grp.name) + '” 프로젝트는 휴지통에 있어요. 복원하면 다시 열 수 있어요.', { type: 'info' });
+      return VIEW_PATH.trash;
+    }
     tplSelected = null;
     if (view === 'trash' || view === 'tpl') view = 'all'; /* 폴더는 살아 있는 프로젝트 뷰에서만 연다 */
     curGroup = grp.id;
@@ -73,7 +81,10 @@
   });
   router.add('launcher:template', '/templates/:slug', (params, query, prev) => {
     const t = TEMPLATES.find((x) => x.slug === params.slug);
-    if (!t) return VIEW_PATH.tpl;
+    if (!t) {
+      toast('찾는 템플릿이 없어요 — 이름이 바뀌었거나 내려간 템플릿이에요. 템플릿 목록을 보여 드릴게요.', { type: 'warn' });
+      return VIEW_PATH.tpl;
+    }
     view = 'tpl';
     curGroup = null;
     trashSel.clear();
@@ -352,6 +363,11 @@
     const goIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
     const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
     const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+    /* 실제 화면이 붙은 템플릿인지 — 갤러리 카드의 흐림 표시 · openTemplate 과 같은 판정(tplIsLive).
+       예전엔 상세 페이지에서 구분이 없어, 그림 한 장짜리를 열고 나서야 고칠 수 없다는 걸 알았다. */
+    const live = tplIsLive(t);
+    const noteIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>';
+    const ctaLabel = live ? '시안으로 스튜디오 열기' : '그림 시안으로 열어 보기';
 
     /* 프리뷰 영역 — 슬라이드가 여러 장이면 캐러셀, 아니면 단일 이미지 */
     const heroHTML = t.slides
@@ -384,7 +400,10 @@
         '</div>' +
       '</div>' +
       heroHTML +
-      '<div class="tpld-cta"><button type="button" class="tpld-start">이 구성으로 스튜디오 열기' + goIcon + '</button></div>';
+      '<div class="tpld-cta">' +
+        (live ? '' : '<p class="tpld-note">' + noteIcon + '<span><b>그림 시안</b>이에요. 아직 실제 화면으로 만들어지지 않아, 스튜디오에선 그림 위에 색조 · 로고를 입히고 패널을 얹어 보는 것까지만 할 수 있어요. 시안 안의 배치 · 글자는 고칠 수 없어요.</span></p>') +
+        '<button type="button" class="tpld-start">' + (live ? '이 구성으로 스튜디오 열기' : ctaLabel) + goIcon + '</button>' +
+      '</div>';
     g.appendChild(det);
     /* 지금 보고 있는 슬라이드 번호(0=메인). CTA는 '보고 있는 그 시안'으로 스튜디오를 연다 */
     let curSlide = 0;
@@ -406,7 +425,7 @@
         dots.forEach((d, k) => d.classList.toggle('on', k === idx));
         cap.textContent = (idx + 1) + ' / ' + n + '  ·  ' + t.slides[idx].label;
         /* 버튼도 지금 장면을 말해 준다 — '메인 시안으로 스튜디오 열기' */
-        startBtn.innerHTML = '‘' + esc(t.slides[idx].label) + '’ 시안으로 스튜디오 열기' + goIcon;
+        startBtn.innerHTML = '‘' + esc(t.slides[idx].label) + '’ ' + ctaLabel + goIcon;
       };
       det.querySelector('.tpld-nav.prev').onclick = () => go(idx - 1);
       det.querySelector('.tpld-nav.next').onclick = () => go(idx + 1);
@@ -421,7 +440,7 @@
   /* 상세 페이지 CTA / 스튜디오 진입 → 그 화면 종류로 새 프로젝트를 만들고 스튜디오로 진입.
      tpl이 붙은 템플릿(한진)은 디지털 트윈 페이지로 재현하므로 DT 화면으로 연다. */
   function openTemplate(t, slideIndex) {
-    const isDT = t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
+    const isDT = t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
     /* Figma로 구현된 템플릿(한진·SK하이닉스·HANA)은 실제 화면으로, 아직 미연결이면 임시 이미지로 연다.
        갤러리의 '제작중' 표시와 같은 판정을 쓴다(tplIsLive) — 표시와 동작이 어긋나면 안 된다. */
     const connected = tplIsLive(t);
@@ -476,7 +495,8 @@
     /* 폴더 계층: 폴더(프로젝트) 목록 ↔ 폴더 내부(화면 목록). 휴지통은 폴더 단위. */
     const inGroup = !!curGroup && view !== 'trash';
     const backBtn = document.getElementById('lcBack');
-    if (backBtn) { backBtn.hidden = !inGroup; backBtn.disabled = !inGroup; }
+    /* 프로젝트 안에서는 경로 표시('‹ 프로젝트 목록 / 이름')가 같은 일을 하므로 '뒤로' 단추를 겹쳐 두지 않는다 */
+    if (backBtn) { backBtn.hidden = true; backBtn.disabled = !inGroup; }
     if (newBtn) {
       newBtn.hidden = !(view === 'all' || view === 'recent' || inGroup);
       newBtn.querySelector('svg')?.nextSibling && (newBtn.lastChild.textContent = inGroup ? '새 화면' : '새 프로젝트');
@@ -600,7 +620,7 @@
     arr.unshift(c); saveProjects(arr);
     if (c.projectId) touchGroup(c.projectId);
     renderProjects();
-    if (typeof toast === 'function') toast('"' + src.name + '" 화면을 복제했어요.', { type: 'ok' });
+    if (typeof toast === 'function') toast('"' + escHTML(src.name) + '" 화면을 복제했어요.', { type: 'ok' });
   }
   function dupGroup(gid) {
     const groups = loadGroups();
@@ -613,7 +633,7 @@
     });
     saveProjects(screens);
     renderProjects();
-    if (typeof toast === 'function') toast('"' + src.name + '" 프로젝트를 복제했어요.', { type: 'ok' });
+    if (typeof toast === 'function') toast('"' + escHTML(src.name) + '" 프로젝트를 복제했어요.', { type: 'ok' });
   }
 
   /* ── 폴더(프로젝트) 목록 ── */
@@ -668,7 +688,7 @@
         const gs = loadGroups(); const t = gs.find((x) => x.id === grp.id);
         if (t) { delete t.deleted; delete t.deletedTs; saveGroups(gs); }
         renderProjects();
-        if (typeof toast === 'function') toast('"' + grp.name + '" 프로젝트를 복원했어요.', { type: 'ok' });
+        if (typeof toast === 'function') toast('"' + escHTML(grp.name) + '" 프로젝트를 복원했어요.', { type: 'ok' });
       }));
       acts.appendChild(iconBtn('lc-del', '"' + grp.name + '" 영구 삭제', SVG_TRASH, async () => {
         if (!(await askConfirm({
@@ -697,7 +717,17 @@
         const gs = loadGroups(); const t = gs.find((x) => x.id === grp.id);
         if (t) { t.deleted = true; t.deletedTs = Date.now(); saveGroups(gs); }
         renderProjects();
-        if (typeof toast === 'function') toast('"' + grp.name + '" 프로젝트를 휴지통으로 옮겼어요.', { type: 'ok' });
+        /* 휴지통 이동은 되돌리기를 바로 준다 — 잘못 눌렀을 때 휴지통 메뉴까지 찾아가지 않아도 되게 */
+        if (typeof toast === 'function') toast('"' + escHTML(grp.name) + '" 프로젝트를 휴지통으로 옮겼어요.', {
+          type: 'ok',
+          dur: 6000,
+          undo: () => {
+            const gs2 = loadGroups();
+            const t2 = gs2.find((x) => x.id === grp.id);
+            if (t2) { delete t2.deleted; delete t2.deletedTs; saveGroups(gs2); }
+            renderProjects();
+          },
+        });
       }));
       card.appendChild(fav); card.appendChild(acts);
       card.setAttribute('role', 'button'); card.tabIndex = 0;
@@ -742,16 +772,27 @@
 
     const acts = document.createElement('div'); acts.className = 'lc-cardacts';
     acts.appendChild(iconBtn('lc-dup', '"' + s.name + '" 화면 복제', SVG_COPY, () => dupScreen(s.id)));
-    acts.appendChild(iconBtn('lc-del', '"' + s.name + '" 화면 삭제', SVG_TRASH, async () => {
-      if (!(await askConfirm({
-        title: '“' + s.name + '” 화면을 삭제할까요?',
-        body: '이 화면의 배치와 내용이 지워져요.',
-        confirmLabel: '삭제',
-        irreversible: true,
-      }))) return;
-      saveProjects(loadProjects().filter((x) => x.id !== s.id));
+    /* 화면 삭제 — 예전엔 곧바로 영구 삭제(확인 대화상자)였다. 프로젝트는 휴지통 · 화면은 영구 · 패널은 확인 없이 삭제로
+       대상마다 규칙이 달라 헷갈렸다. 이제 '지우면 되돌리기를 준다, 영구 삭제만 확인한다'로 맞춘다. */
+    acts.appendChild(iconBtn('lc-del', '"' + s.name + '" 화면 삭제', SVG_TRASH, () => {
+      const list = loadProjects();
+      const at = list.findIndex((x) => x.id === s.id);
+      if (at < 0) return;
+      const removed = list[at];
+      list.splice(at, 1);
+      if (!saveProjects(list)) return;
       renderProjects();
-      if (typeof toast === 'function') toast('화면을 삭제했어요.', { type: 'ok' });
+      if (typeof toast === 'function') toast('"' + escHTML(s.name) + '" 화면을 삭제했어요.', {
+        type: 'ok',
+        dur: 7000,
+        undo: () => {
+          const arr = loadProjects();
+          if (arr.some((x) => x.id === removed.id)) return;
+          arr.splice(Math.min(at, arr.length), 0, removed);
+          saveProjects(arr);
+          renderProjects();
+        },
+      });
     }));
     card.appendChild(acts);
     card.setAttribute('role', 'button'); card.tabIndex = 0;
@@ -845,9 +886,31 @@
   });
   /* 새 화면 만들기 — gid 폴더에 넣을 예약(gid 가 없으면 새 프로젝트 = 새 폴더).
      지금 화면 저장 · 상태 비우기는 작업공간이 열리면서 한다(js/app/session.js) — 주소로 바로 열어도 같은 결과. */
-  function beginNewScreen(gid) {
-    location.href = studioURL({ new: 1, group: gid }, '/prd');
+  /* 누른 순간 PRD 스플래시를 띄우고 떠난다 — 작업공간 문서를 받는 동안 홈이 멈춰 있거나
+     스튜디오 · PRD 화면이 훑듯 켜지지 않게. studio.html 이 첫 페인트부터 같은 장면을 이어 받는다(css/base/splash.css). */
+  /* 떠나기 전에 부팅 막을 먼저 띄운다 — 작업공간 문서를 받는 동안 홈이 멈춰 있거나 다른 화면이 비치지 않게.
+     studio.html 이 첫 페인트부터 같은 막을 이어 받는다(css/base/splash.css · js/app/session.js).
+     name 을 주면 '프로젝트 열기' 막의 제목이 된다(--boot-name). 막이 한 번 그려진 뒤(두 프레임) 떠나고,
+     탭이 가려져 rAF 가 멈춰도 떠나도록 시간 폴백을 둔다. */
+  function leaveWithSplash(id, url, name) {
+    const sp = document.getElementById(id);
+    if (!sp) { location.href = url; return; }
+    if (name) document.documentElement.style.setProperty('--boot-name', JSON.stringify(String(name)));
+    sp.classList.remove('out');
+    sp.classList.add('show', 'enter');
+    let gone = false;
+    const go = () => { if (gone) return; gone = true; location.href = url; };
+    requestAnimationFrame(() => requestAnimationFrame(go));
+    setTimeout(go, 120);
   }
+  function beginNewScreen(gid) {
+    /* _=시각 — 매번 다른 주소라 브라우저가 스플래시 없는 옛 studio.html 캐시를 꺼내 쓰지 못한다(js/app/session.js 가 지운다) */
+    leaveWithSplash('prdSplash', studioURL({ new: 1, group: gid, _: Date.now().toString(36) }, '/prd'));
+  }
+  /* 브라우저 뒤로가기로 홈이 bfcache 에서 그대로 되살아나면 스플래시를 걷는다 */
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) ['prdSplash', 'openSplash'].forEach((id) => document.getElementById(id)?.classList.remove('show', 'enter', 'out'));
+  });
   const startNewProject = () => beginNewScreen(null);
   function startNewScreen(gid) { beginNewScreen(gid || null); }
   document.getElementById('lcNew').onclick = startNewProject;
@@ -858,7 +921,8 @@
       : pending.tpl === 'skhynix' ? 'src/templates/skhynix-1.jpg'
       : pending.tpl === 'skhynix-hub' ? 'src/templates/icheon-hub.jpg'
       : pending.tpl === 'hanjin' ? 'src/templates/hanjin-studio.jpg'
-      : pending.tpl === 'hana' ? 'src/templates/hana-overview-02.jpg' : null;
+      : pending.tpl === 'hana' ? 'src/templates/hana-overview-02.jpg'
+      : pending.tpl === 'posco' ? 'src/templates/posco-main.jpg' : null;
     const proj = { id: newId(), name: pending.name, screen: pending.screen, layout: pending.layout, tpl: pending.tpl || null, img: pending.img || null, thumb: tplThumb, ts: Date.now(), fav: false, projectId: resolvePendingGroup(pending.name) };
     projs.unshift(proj);
     /* 템플릿 미리보기가 여러 장이면, 2번째 장부터 같은 프로젝트(폴더)의 화면으로 함께 만든다.
@@ -887,7 +951,8 @@
             : proj.tpl === 'skhynix-hub' && i === 0 ? 'hvac'
               : proj.tpl === 'hanjin' ? (i === 0 ? 'gate' : 'unload')
                 : proj.tpl === 'hana' ? ['cloud-01', 'cloud-02', 'middleware', 'infra-main', 'infra-detail', 'event', 'network-01', 'network-02', 'network-03', 'facility', 'security-01', 'security-02', 'login'][i]
-                  : ('scene' + (i + 2)),
+                  : proj.tpl === 'posco' ? ['sop', 'ack', 'overview', 'route', 'floors', 'detail'][i]
+                    : ('scene' + (i + 2)),
         ts: Date.now() - (i + 1),
         fav: false,
         projectId: proj.projectId,
@@ -895,13 +960,15 @@
       projs.push(sp);
       screens.push(sp);
     });
-    if (projs.length > 48) projs.length = 48;
-    saveProjects(projs);
+    /* 예전엔 48개를 넘으면 목록 끝을 잘라 냈다 — 오래된 화면이나 방금 만든 템플릿의 뒤쪽 화면이 작업 내용째 경고 없이 사라졌다.
+       이제 자르지 않는다. 저장 공간이 모자라 저장이 실패하면(경고 토스트) 떠나지 않고 홈에 머문다. */
+    if (!saveProjects(projs)) return;
     /* 상세에서 보고 있던 장면을 그대로 연다 — 메인이면 [0], 팝업 슬라이드였으면 그 화면 */
     const openProj = screens[Math.min(pending.slideIndex || 0, screens.length - 1)] || proj;
     /* 열 장면 — skhynix 는 'popup', Icheon main 은 'hvac'(항온항습기 상세), 그 외는 메인 */
     const openScene = openProj.tpl === 'hana' ? (openProj.tplScene || 'overview-02')
-      : openProj.tplScene === 'popup' ? 'popup' : openProj.tplScene === 'hvac' ? 'hvac' : 'main';
+      : openProj.tpl === 'posco' ? (openProj.tplScene || 'main')
+        : openProj.tplScene === 'popup' ? 'popup' : openProj.tplScene === 'hvac' ? 'hvac' : 'main';
     try { localStorage.setItem(CUR_PROJ, openProj.id); } catch (e) {}
     /* 새 프로젝트는 '처음 상태'에서 시작해야 한다(이전 프로젝트의 색·대시보드 편집이 남지 않게).
        색/대시보드 설정은 프로젝트별 저장이 아니라 하나의 전역 상태를 공유하므로,
@@ -917,12 +984,13 @@
       if (openProj.tpl === 'skhynix') localStorage.setItem('wemb-skx-screen', openScene);
       if (openProj.tpl === 'skhynix-hub') localStorage.setItem('wemb-hub-screen', openScene === 'hvac' ? 'hvac' : 'main');
       if (openProj.tpl === 'hana') localStorage.setItem('wemb-hana-screen', openScene);
+      if (openProj.tpl === 'posco') localStorage.setItem('wemb-posco-screen', openScene);
     } catch (e) {}
-    location.href = studioURL({ screen: openProj.id }, '/studio');
+    leaveWithSplash('openSplash', studioURL({ screen: openProj.id }, '/studio'), openProj.name);
   }
   /* 저장된 화면 열기 — 작업공간 주소로 간다. 상태 교체는 작업공간이 부팅하며 한다(js/app/session.js). */
   function openProject(p) {
-    location.href = studioURL({ screen: p.id }, '/studio');
+    leaveWithSplash('openSplash', studioURL({ screen: p.id }, '/studio'), p.name);
   }
 
   setView('all');

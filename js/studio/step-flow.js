@@ -18,15 +18,18 @@ function initStepFlow() {
     once[key] = true;
     openStep(nextId);
   };
-  /* 1 → 2 : 화면 종류를 고르면 (기본값 재선택 포함) */
-  document.getElementById('screen')?.addEventListener('click', (e) => {
+  /* 1 → 2 : 화면 테마(카드의 마지막 선택)를 고르면 (기본값 재선택 포함).
+     예전엔 '구성 화면' 목록(#screen) 클릭이 신호였는데, 그 목록이 사이드바에서 빠지면서 이 유도가 멈춰 있었다. */
+  document.getElementById('mode')?.addEventListener('click', (e) => {
     if (!e.isTrusted) return; /* 실제 클릭만 — 초기 복원 등 프로그램적 동작엔 반응 안 함 */
-    const b = e.target.closest('button[data-s]');
+    const b = e.target.closest('button');
     if (!b || b.disabled) return;
     advance('s1', 'stepColor');
   });
-  /* 색 정하기 내부 유도: 버전 → 밝기 → 색 고르기 순으로 옵션을 잠금 해제한다.
-     메뉴 이름·구성은 처음부터 보이고(.cgate.locked), 순서대로 옵션만 열린다. */
+  /* 버전 → 밝기 → 색 고르기 옵션 잠금(.cgate.locked)은 이제 마크업에서 걷었다.
+     기본값(Flat · Dark)이 이미 켜져 보이는데 '먼저 고르면 열려요'라며 같은 버튼을 다시 누르게 해,
+     색 옵션 앞에서 막히는 사람이 많았다. 단계적 노출은 접힌 스텝 카드가 맡는다.
+     아래 reveal 은 코치 투어 · 예전 저장 상태에서 locked 가 남아 있을 때만 의미가 있다. */
   const reveal = (id) => {
     const el = document.getElementById(id);
     if (el && el.classList.contains('locked')) {

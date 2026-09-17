@@ -11,10 +11,28 @@
       return [];
     }
   };
+  /* 저장 실패(용량 초과 · 시크릿 모드)는 알린다. 예전엔 조용히 삼켜서, 만든 화면이 목록에 남지 않은 걸 다음에야 알았다.
+     이 파일은 작업공간 <head> 에서 토스트보다 먼저 실리므로, 알림 함수가 아직 없으면 문서가 뜬 뒤에 띄운다. 세션당 한 번. */
+  let storageWarned = false;
+  const warnStorage = () => {
+    if (storageWarned) return;
+    storageWarned = true;
+    const say = () => {
+      if (typeof toast === 'function')
+        toast('프로젝트를 브라우저에 저장하지 못했어요 — 저장 공간이 부족하거나 시크릿 모드예요. 휴지통을 비우거나 쓰지 않는 화면을 지운 뒤 다시 시도하세요.', { type: 'err', dur: 12000 });
+    };
+    if (typeof toast === 'function') say();
+    else window.addEventListener('load', say, { once: true });
+  };
+  /* 성공 여부를 돌려준다 — 저장이 안 됐는데 화면을 열러 떠나면 그 화면을 영영 찾을 수 없다 */
   const saveProjects = (a) => {
     try {
       localStorage.setItem(LS_PROJ, JSON.stringify(a));
-    } catch (e) {}
+      return true;
+    } catch (e) {
+      warnStorage();
+      return false;
+    }
   };
   /* 프로젝트에 안정적인 id·즐겨찾기 필드 보강 (구버전 데이터 마이그레이션) */
   const newId = () => 'p' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
@@ -36,7 +54,7 @@
   const PENDING_GROUP = 'wemb-pending-group';
   const newGid = () => 'g' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
   const loadGroups = () => { try { return JSON.parse(localStorage.getItem(LS_GROUP) || '[]'); } catch (e) { return []; } };
-  const saveGroups = (a) => { try { localStorage.setItem(LS_GROUP, JSON.stringify(a)); } catch (e) {} };
+  const saveGroups = (a) => { try { localStorage.setItem(LS_GROUP, JSON.stringify(a)); return true; } catch (e) { warnStorage(); return false; } };
   /* 마이그레이션 — projectId 없는 기존 화면은 각자 새 프로젝트(폴더)로 감싼다(폴더=화면 1개).
      휴지통/즐겨찾기 상태는 폴더로 옮기고 화면에서는 제거(트래시·즐겨찾기는 폴더 단위). */
   (function migrateGroups() {
@@ -71,7 +89,7 @@
   function clearProjectState() { projStateKeys().forEach((k) => { try { localStorage.removeItem(k); } catch (e) {} }); }
   function applyProjectData(p) {
     clearProjectState();
-    if (p && p.data) { Object.keys(p.data).forEach((k) => { try { localStorage.setItem(k, p.data[k]); } catch (e) {} }); }
+    if (p && p.data) { Object.keys(p.data).forEach((k) => { try { localStorage.setItem(k, p.data[k]); } catch (e) { warnStorage(); } }); }
   }
   function persistCurrentProjectData() {
     let id = null; try { id = localStorage.getItem(CUR_PROJ); } catch (e) {}
@@ -111,8 +129,7 @@
       if (p.projectId) touchGroup(p.projectId);
     } else {
       p = { id: newId(), name: data.name || '새 프로젝트', screen: data.screen || 'dash', layout: data.layout || '', tpl: null, ts: Date.now(), fav: false, projectId: resolvePendingGroup(data.name) };
-      projs.unshift(p);
-      if (projs.length > 48) projs.length = 48;
+      projs.unshift(p); /* 개수로 잘라 내지 않는다 — 넘치면 저장 실패 경고가 뜬다(warnStorage) */
       try { localStorage.setItem(CUR_PROJ, p.id); } catch (e) {}
     }
     saveProjects(projs);
@@ -136,19 +153,20 @@
     try { localStorage.setItem('wemb-hub-screen', t.tplScene === 'hvac' ? 'hvac' : 'main'); } catch (e) {}
     try { localStorage.setItem('wemb-hanjin-screen', (t.tplScene === 'gate' || t.tplScene === 'unload') ? t.tplScene : 'main'); } catch (e) {}
     try { if (t.tpl === 'hana') localStorage.setItem('wemb-hana-screen', t.tplScene || 'overview-02'); } catch (e) {}
+    try { if (t.tpl === 'posco') localStorage.setItem('wemb-posco-screen', t.tplScene || 'main'); } catch (e) {}
     /* 저장된 상태가 없던(구버전) 화면은 화면 종류 · 레이아웃만이라도 반영 */
     if (!t.data) {
       try { localStorage.setItem('wemb-layout', t.layout || ''); } catch (e) {}
       try { if (t.screen === 'dash' || t.screen === 'dt') localStorage.setItem('wemb-screen', t.screen); } catch (e) {}
       try {
-        if (t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') localStorage.setItem('wemb-tpl-dt', t.tpl);
+        if (t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') localStorage.setItem('wemb-tpl-dt', t.tpl);
         else localStorage.removeItem('wemb-tpl-dt');
       } catch (e) {}
     }
     /* 템플릿 표시 동기화 — 미연결 이미지 템플릿이면 이미지 오버레이가, 아니면 이전 화면에서 남은 오버레이가 걷히도록 */
     try {
       if (t.tpl === 'image' && t.img) { localStorage.setItem('wemb-tpl-img', t.img); localStorage.removeItem('wemb-tpl-dt'); }
-      else if (t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
+      else if (t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
       else { localStorage.removeItem('wemb-tpl-img'); localStorage.removeItem('wemb-tpl-dt'); }
     } catch (e) {}
     return true;

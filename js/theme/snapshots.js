@@ -46,7 +46,8 @@ function renderSnapshots() {
     const sw = ['bg/page', 'bg/surface', 'point/main', 'point/sub', 'text/strong'].map((k) => `<i style="background:${hex[k]}"></i>`).join('');
     const row = document.createElement('div');
     row.className = 'snaprow';
-    row.innerHTML = `<span class="sws">${sw}</span><span class="nm" title="더블클릭해 이름 변경">${s.name}</span><span class="acts"><button class="ap" title="이 테마를 화면에 적용">적용</button><button class="ovw" title="현재 테마로 이 스냅샷 덮어쓰기(갱신)">갱신</button><button class="del" title="이 스냅샷 삭제">삭제</button></span>`;
+    /* 스냅샷 이름은 사용자가 입력한 글자 — HTML 로 넣기 전에 이스케이프 */
+    row.innerHTML = `<span class="sws">${sw}</span><span class="nm" title="더블클릭해 이름 변경">${escHTML(s.name)}</span><span class="acts"><button class="ap" title="이 테마를 화면에 적용">적용</button><button class="ovw" title="현재 테마로 이 스냅샷 덮어쓰기(갱신)">갱신</button><button class="del" title="이 스냅샷 삭제">삭제</button></span>`;
     row.querySelector('.ap').onclick = () => {
       restoreTheme(s.theme);
       commitHistory();
@@ -62,7 +63,7 @@ document.getElementById('snapSave').onclick = () => {
   const inp = document.getElementById('snapName');
   addSnapshot(inp.value);
   inp.value = '';
-  toast(`“${snapshots[0].name}” 스냅샷으로 저장했어요.`, { type: 'ok', kbd: 'Ctrl S' });
+  toast(`“${escHTML(snapshots[0].name)}” 스냅샷으로 저장했어요.`, { type: 'ok', kbd: 'Ctrl S' });
 };
 document.getElementById('snapName').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') document.getElementById('snapSave').click();
@@ -76,7 +77,7 @@ function overwriteSnapshot(id) {
   saveSnapshots();
   renderSnapshots();
   refreshABOptions();
-  toast(`“${s.name}”을(를) 현재 테마로 갱신했어요.`, { type: 'ok' });
+  toast(`“${escHTML(s.name)}”을(를) 현재 테마로 갱신했어요.`, { type: 'ok' });
 }
 function renameSnapshot(id, name) {
   const s = snapshots.find((x) => x.id === id);
