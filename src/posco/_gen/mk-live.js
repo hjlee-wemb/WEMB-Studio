@@ -1506,7 +1506,7 @@ const SCREEN = `  /* ══════════════════ 이 
     try { installSelect(root, st); } catch (e) { }
     try { installFloorPick(root, st); } catch (e) { }
     try { installPick(root, st); } catch (e) { }
-    try { installMenuPick(root, st); } catch (e) { }
+    try { installHeaderMenu(root, st); } catch (e) { }   /* 헤더 메뉴 — Figma btn-menu(17:13398) default / active(=마우스오버) */
     try { installRowSelect(root, st); } catch (e) { }
     try { installRadio(root, st); } catch (e) { }
     try { installTree(root, st); } catch (e) { }

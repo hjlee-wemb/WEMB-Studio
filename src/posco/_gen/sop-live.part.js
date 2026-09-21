@@ -627,13 +627,28 @@
     var alertBg = one(dlg, '[data-name="Header"] > [data-name="Background"] > *');
     var alertBadge = one(dlg, '[data-name="Header"] [data-name="Title Row"] > [data-name="Title"] > [data-name="Badge"]');
     var alertTitle = one(dlg, '[data-name="Header"] [data-name="Title Row"] > [data-name="Title"] > p');
+    var alertFx = [];
     var setAlert = function (on) {
       if (alertBg) {
-        var im = one(alertBg, 'img');
-        var src = im && (im.getAttribute('src') || im.getAttribute('data-pk-src'));
-        /* 판 모양 그대로 번지게 — 판 그림 자체를 마스크로 쓴다(주소는 페이지 기준으로 풀어 둔다) */
-        if (src) { try { alertBg.style.setProperty('--pk-alert-mask', 'url("' + new URL(src, document.baseURI).href + '")'); } catch (e) {} }
         alertBg.classList.toggle('pk-sopalert', on);
+        /* 판 모양대로 번지는 붉은 막 · 스캔 빛 — 판 그림을 그대로 복사해 붉게 물들인 두 겹(CSS 마스크는 file:// 에서 막힌다) */
+        if (on && !alertFx.length) {
+          var im = one(alertBg, 'img');
+          if (im) {
+            ['pk-alertwash', 'pk-alertscan'].forEach(function (cls) {
+              var box = document.createElement('span');
+              box.className = cls;
+              box.setAttribute('aria-hidden', 'true');
+              var copy = im.cloneNode(false);
+              copy.removeAttribute('id');
+              copy.className = '';
+              box.appendChild(copy);
+              alertBg.appendChild(box);
+              alertFx.push(box);
+            });
+          }
+        }
+        if (!on) { alertFx.forEach(function (el) { if (el.parentNode) el.parentNode.removeChild(el); }); alertFx = []; }
       }
       if (alertBadge) alertBadge.classList.toggle('pk-sopbadge', on);
       if (alertTitle) alertTitle.classList.toggle('pk-soptitle', on);
@@ -725,6 +740,54 @@
       dlgParts().forEach(function (el) { el.classList.remove('pk-sopclosing'); });
       [hostBody, hostTabs].forEach(function (el) { if (el) el.classList.remove('pk-sopoff'); });
       if (viewWrap && viewWrap.parentNode) viewWrap.parentNode.removeChild(viewWrap);
+    });
+  }
+
+  /* ══════════════════ 헤더 메뉴 — 기본 / 마우스오버 · 활성 ══════════════════
+     Figma btn-menu(17:13398)에는 default · active 두 상태만 있다 → 마우스오버와 활성화는 active 값, 나머지는 default 값.
+     모양은 스타일(SOP_CSS '헤더 메뉴')이 정하고 여기서는 ① 켜진 메뉴 표시(pk-menu-on) ② 아이콘 마스크 주소만 건다.
+     처음 켜진 메뉴는 원본 그대로(판 색이 가장 선명한 것 = SOP). 누르면 그 메뉴로 옮겨 간다. */
+  function installHeaderMenu(root, st) {
+    var items = all(root, '[data-name^="Menu Item/"]');
+    if (items.length < 2) return;
+    var onIdx = 0, best = -1;
+    items.forEach(function (el, i) { var s = sat(getComputedStyle(el).backgroundColor); if (s > best) { best = s; onIdx = i; } });
+    var cur = null;
+    var setOn = function (el) {
+      if (cur) { cur.classList.remove('pk-menu-on'); cur.setAttribute('aria-current', 'false'); }
+      cur = el;
+      if (cur) { cur.classList.add('pk-menu-on'); cur.setAttribute('aria-current', 'page'); }
+    };
+    var binds = [];
+    items.forEach(function (el, i) {
+      el.classList.add('pk-menu');
+      var img = one(el, 'img');
+      var box = img && img.parentElement;
+      var src = img && (img.getAttribute('src') || img.getAttribute('data-pk-src'));
+      if (box && src && box !== el) {
+        /* 상태별 사본은 원본 옆 menu/ 폴더에 있다(mk-menu-icons.js) — 이름: icon-nav-<이름>-{off,on,off-lt,on-lt}.svg */
+        var dot = src.lastIndexOf('.'), slash = src.lastIndexOf('/');
+        var dir = src.slice(0, slash + 1), stem = src.slice(slash + 1, dot);
+        ['off', 'on', 'off-lt', 'on-lt'].forEach(function (s) {
+          try { box.style.setProperty('--pk-ico-' + s, 'url("' + new URL(dir + 'menu/' + stem + '-' + s + '.svg', document.baseURI).href + '")'); } catch (e) {}
+        });
+        box.classList.add('pk-menu-ico');
+      }
+      clickable(el);
+      el.classList.remove('pk-lit');
+      var h = function (e) { if (e) e.preventDefault(); if (editing()) return; setOn(el); };
+      var key = function (e) { if (e.key === 'Enter' || e.key === ' ') h(e); };
+      el.addEventListener('click', h);
+      el.addEventListener('keydown', key);
+      binds.push([el, h, key, box]);
+    });
+    setOn(items[onIdx]);
+    st.cleanup.push(function () {
+      binds.forEach(function (b) {
+        b[0].removeEventListener('click', b[1]); b[0].removeEventListener('keydown', b[2]);
+        b[0].classList.remove('pk-menu', 'pk-menu-on'); b[0].removeAttribute('aria-current'); unclickable(b[0]);
+        if (b[3]) { b[3].classList.remove('pk-menu-ico'); ['off', 'on', 'off-lt', 'on-lt'].forEach(function (s) { b[3].style.removeProperty('--pk-ico-' + s); }); }
+      });
     });
   }
 

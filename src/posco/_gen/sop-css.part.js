@@ -68,12 +68,15 @@
        색은 시안의 위험색 rgb(244,48,80)(알림 티커 경보등과 같은 값). 상황종료를 누르면 모두 가라앉는다. */
     '@keyframes pkSopAlert{0%,100%{filter:drop-shadow(0 0 2px rgba(244,48,80,.35)) brightness(1);}50%{filter:drop-shadow(0 0 16px rgba(244,48,80,.9)) brightness(1.14);}}',
     '.pk-root .pk-sopalert{animation:pkSopAlert 1.6s ease-in-out infinite;}',
-    '.pk-root .pk-sopalert::before,.pk-root .pk-sopalert::after{content:"";position:absolute;inset:0;pointer-events:none;',
-    '-webkit-mask-image:var(--pk-alert-mask);mask-image:var(--pk-alert-mask);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;}',
-    '@keyframes pkSopWash{0%,100%{opacity:0;}50%{opacity:1;}}',
-    '.pk-root .pk-sopalert::before{background:radial-gradient(120% 140% at 50% 50%,rgba(244,48,80,.05) 30%,rgba(244,48,80,.32) 100%);animation:pkSopWash 1.6s ease-in-out infinite;}',
-    '@keyframes pkSopScan{0%{background-position:160% 0;}100%{background-position:-60% 0;}}',
-    '.pk-root .pk-sopalert::after{background:linear-gradient(100deg,rgba(255,70,100,0) 35%,rgba(255,90,115,.30) 50%,rgba(255,70,100,0) 65%);background-size:250% 100%;background-repeat:no-repeat;animation:pkSopScan 2.6s linear infinite;}',
+    /* 붉은 막 · 스캔 빛은 **판 그림의 사본**을 붉게 물들여 겹친다 — 판 모양을 그대로 따르면서 CSS 마스크를 안 쓴다.
+       (마스크 그림은 CORS 요청이라 파일로 열면(file://) 막혀 효과가 통째로 사라졌다 — 헤더 아이콘과 같은 함정) */
+    '.pk-root .pk-alertwash,.pk-root .pk-alertscan{position:absolute;inset:0;pointer-events:none;overflow:hidden;}',
+    '.pk-root .pk-alertwash img,.pk-root .pk-alertscan img{position:absolute;inset:0;width:100%;height:100%;',
+    'filter:brightness(.55) sepia(1) saturate(14) hue-rotate(-18deg);}',
+    '@keyframes pkSopWash{0%,100%{opacity:0;}50%{opacity:.5;}}',
+    '.pk-root .pk-alertwash{animation:pkSopWash 1.6s ease-in-out infinite;}',
+    '@keyframes pkSopScan{0%{clip-path:inset(0 100% 0 -25%);}100%{clip-path:inset(0 -25% 0 100%);}}',
+    '.pk-root .pk-alertscan{opacity:.55;animation:pkSopScan 2.6s linear infinite;}',
     '@keyframes pkSopBadge{0%,100%{scale:1;}50%{scale:1.08;}}',
     '@keyframes pkSopBadgeRing{0%{transform:scale(.9);opacity:.85;}75%{transform:scale(1.7);opacity:0;}100%{opacity:0;}}',
     '.pk-root .pk-sopbadge{position:relative;animation:pkSopBadge 1.6s ease-in-out infinite;}',
@@ -84,9 +87,9 @@
     '@keyframes pkSopAlertLt{0%,100%{filter:drop-shadow(0 0 2px rgba(210,30,60,.25));}50%{filter:drop-shadow(0 0 14px rgba(210,30,60,.6));}}',
     '.pk-root[data-theme="light"] .pk-soptitle{animation-name:pkSopTitleLt;}',
     '@keyframes pkSopTitleLt{0%,100%{text-shadow:0 0 0 rgba(210,30,60,0);}50%{text-shadow:0 0 8px rgba(210,30,60,.45);}}',
-    '.dt-content-editing .pk-root .pk-sopalert,.dt-content-editing .pk-root .pk-sopalert::before,.dt-content-editing .pk-root .pk-sopalert::after,',
+    '.dt-content-editing .pk-root .pk-sopalert,.dt-content-editing .pk-root .pk-alertwash,.dt-content-editing .pk-root .pk-alertscan,',
     '.dt-content-editing .pk-root .pk-sopbadge,.dt-content-editing .pk-root .pk-sopbadge::after,.dt-content-editing .pk-root .pk-soptitle{animation-play-state:paused;}',
-    '@media (prefers-reduced-motion:reduce){.pk-root .pk-sopalert::after{animation:none;opacity:0;}}',
+    '@media (prefers-reduced-motion:reduce){.pk-root .pk-alertscan{animation:none;opacity:0;}}',
 
     /* ── 지금 단계의 카드 ── 들어올 때 한 번 빛이 훑고 지나간다(원본 카드 위, 레이아웃 영향 없음) */
     '@keyframes pkSopSweep{0%{transform:translateX(-120%);opacity:0;}15%{opacity:1;}100%{transform:translateX(120%);opacity:0;}}',
@@ -199,6 +202,30 @@
        img 에 거는 hue-rotate 인라인 필터를 덮어 버린다(상자 필터는 그 위에 겹쳐진다). */
     '.pk-root[data-theme="light"] [data-name="Step List"] [data-name="Badge"] > div:last-child{filter:brightness(.42) saturate(1.8);}',
     '.pk-root[data-theme="light"] [data-name="Step List"] [data-name="Button/Info"]{filter:brightness(.6) saturate(1.5);}',
+
+    /* ── 헤더 메뉴(SOP · 운영현황 · 에디터 · 관리자 · 로그아웃) — Figma btn-menu(17:13398) ──
+       기본값 = Property 1=default : 바탕 #CFD1D4 10% · 글자·아이콘 #CFD1D4
+       마우스오버 · 활성화 = Property 1=active : 바탕 #5C9DFF 20% · 글자·아이콘 #5C9DFF
+       아이콘은 원본 SVG 의 채움색만 바꾼 사본(menu/*-off|on|off-lt|on-lt.svg, mk-menu-icons.js)을 상태마다 갈아 끼운다.
+       (CSS 마스크로 칠했더니 파일로 열 때 CORS 로 막혀 아이콘이 사라졌다 — img content 는 그 제약이 없다)
+       라이트는 라이트 시트가 대비를 맞춰 옮겨 둔 값 그대로(기본 #33353A · #3c4846 아이콘, 활성 #0446A9). */
+    '.pk-root .pk-menu{transition:background-color .18s ease;}',
+    '.pk-root .pk-menu p{transition:color .18s ease;}',
+    '.pk-root .pk-menu.pk-hot::before{display:none;}',
+    '.pk-root .pk-menu .pk-menu-ico img{content:var(--pk-ico-off);}',
+    '.pk-root .pk-menu.pk-menu-on .pk-menu-ico img,.pk-root .pk-menu:hover .pk-menu-ico img{content:var(--pk-ico-on);}',
+    '.pk-root[data-theme="light"] .pk-menu .pk-menu-ico img{content:var(--pk-ico-off-lt);}',
+    '.pk-root[data-theme="light"] .pk-menu.pk-menu-on .pk-menu-ico img,.pk-root[data-theme="light"] .pk-menu:hover .pk-menu-ico img{content:var(--pk-ico-on-lt);}',
+    '.pk-root .pk-menu:not(.pk-menu-on):not(:hover){background-color:rgba(207,209,212,.1);}',
+    '.pk-root .pk-menu:not(.pk-menu-on):not(:hover) p{color:#cfd1d4;}',
+    '.pk-root .pk-menu.pk-menu-on,.pk-root .pk-menu:hover{background-color:rgba(92,157,255,.2);}',
+    '.pk-root .pk-menu.pk-menu-on p,.pk-root .pk-menu:hover p{color:#5c9dff;}',
+    '.pk-root .pk-menu:active{filter:brightness(.9);}',
+    '.pk-root .pk-menu:focus-visible{outline:2px solid #5c9dff;outline-offset:2px;}',
+    '.pk-root[data-theme="light"] .pk-menu:not(.pk-menu-on):not(:hover){background-color:rgba(116,123,134,.1);}',
+    '.pk-root[data-theme="light"] .pk-menu:not(.pk-menu-on):not(:hover) p{color:#33353a;}',
+    '.pk-root[data-theme="light"] .pk-menu.pk-menu-on p,.pk-root[data-theme="light"] .pk-menu:hover p{color:#0446a9;}',
+    '.dt-content-editing .pk-root .pk-menu:hover:not(.pk-menu-on){background-color:rgba(207,209,212,.1);}',
 
     /* ── 패널 이동(패널편집 · 배치) ── 옮길 수 있는 판에 점선 테두리와 손 커서 */
     '.dt-editing .pk-root .pk-movable{cursor:move;}',

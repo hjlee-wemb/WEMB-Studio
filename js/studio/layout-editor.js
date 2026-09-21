@@ -674,7 +674,11 @@ function initLayoutEditor() {
        한진과 같은 장치를 쓴다(화면 DOM 에서 노드 id 로 잘라 쓰기) — 등록 목록만 다르다.
        화면 registry 를 합쳐 두면 hjScreenHtml/hjDom 이 접두어만 보고 그대로 처리한다. */
     const HN = window.__HANA_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
-    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {});
+    /* ── POSCO KDB CCTV 관제 화면의 컴포넌트 에셋 ──
+       한진·HANA 와 같은 장치(화면 DOM 에서 노드 id 로 잘라 쓰기) — 등록 목록만 다르다.
+       이 시안은 관제 화면이라 그래프가 없다(charts 는 비어 있다) — 표·도면·상태 타일이 본체다. */
+    const PK = window.__POSCO_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {});
     const hjHtmlCache = {};
     function hjScreenHtml(px) {
       if (hjHtmlCache[px]) return hjHtmlCache[px];
@@ -790,18 +794,21 @@ function initLayoutEditor() {
       panel: skxItems((SKX.panels || []).filter((a) => String(a.name).split('/').pop().trim() === 'card'), 'panel')
         .concat(ichItems((ICH.panels || []).filter((a) => !isEventNamed(a)), 'panel'))
         .concat(hjItems(HJ.panels, 'panel'))
-        .concat(hjItems(HN.panels, 'panel')),
+        .concat(hjItems(HN.panels, 'panel'))
+        .concat(hjItems(PK.panels, 'panel')),
       /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리들.
          한진 시안의 이벤트 현황(판·머리글·카운트·표·행·등급 배지)과 이천 FMS 의 이벤트 목록이 함께 산다. */
       event: hjItems(HJ.events, 'event')
         .concat(hjItems(HN.events, 'event'))
+        .concat(hjItems(PK.events, 'event'))
         .concat(ichItems((ICH.panels || []).filter(isEventNamed), 'event')),
       symbol: (window.__WEMB_SYMBOLS || [])
         .map((s, i) => ({ cat: 'symbol', id: s.i, name: '심볼 ' + String(i + 1).padStart(2, '0'), src: s.s }))
         .concat(skxItems(SKX.symbols, 'symbol'))
         .concat(ichItems(ICH.symbols, 'symbol'))
         .concat(hjItems(HJ.symbols, 'symbol'))
-        .concat(hjItems(HN.symbols, 'symbol')),
+        .concat(hjItems(HN.symbols, 'symbol'))
+        .concat(hjItems(PK.symbols, 'symbol')),
       /* 아이콘 탭에는 '…아이콘'으로 이름 붙은 등록물만 올린다 — 칩·토글·상태 점·화살표·
          로고처럼 아이콘이 아닌 부품이 섞이지 않게. 이름이 기준이라 내장 라인 아이콘
          세트(홈·차트·알림 …)도 더는 올리지 않는다 — 이름에 '아이콘'이 없다.
@@ -810,7 +817,8 @@ function initLayoutEditor() {
         .concat(skxItems(SKX.icons, 'icon').filter(isIconNamed))
         .concat(ichItems(ICH.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(HJ.icons, 'icon').filter(isIconNamed))
-        .concat(hjIcons(HN.icons, 'icon').filter(isIconNamed)),
+        .concat(hjIcons(HN.icons, 'icon').filter(isIconNamed))
+        .concat(hjIcons(PK.icons, 'icon').filter(isIconNamed)),
       /* 검색 결과 임시 버킷 — data-cat="__search" 로 클릭/드래그가 여기서 항목을 찾는다 */
       __search: [],
     };
@@ -973,6 +981,8 @@ function initLayoutEditor() {
       hjItems(HJ.charts, 'chart').forEach((a) => items.push(a));
       /* HANA H.I.T 14화면의 차트 — 같은 방식 */
       hjItems(HN.charts, 'chart').forEach((a) => items.push(a));
+      /* POSCO KDB — 이 시안에는 그래프가 없어 보통 비어 있다(표·도면·상태 타일이 본체) */
+      hjItems(PK.charts, 'chart').forEach((a) => items.push(a));
       return items;
     }
 
