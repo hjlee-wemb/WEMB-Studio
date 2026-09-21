@@ -6,7 +6,11 @@ applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
 try {
   const __tdt = localStorage.getItem('wemb-tpl-dt');
   if (state.screen === 'dt') {
-    if (__tdt === 'posco' && typeof applyPoscoDT === 'function') {
+    if (__tdt === 'lselectric' && typeof applyLsElectricDT === 'function') {
+      /* 두 장 중 어느 화면인지는 열려 있는 프로젝트의 tplScene 이 정답 */
+      applyLsElectricDT(window.__lsElectricSceneOf ? window.__lsElectricSceneOf() : localStorage.getItem('wemb-lselectric-screen'));
+    }
+    else if (__tdt === 'posco' && typeof applyPoscoDT === 'function') {
       applyPoscoDT(window.__poscoSceneOf ? window.__poscoSceneOf() : localStorage.getItem('wemb-posco-screen'));
     }
     else if (__tdt === 'hana' && typeof applyHanaDT === 'function') {
@@ -86,6 +90,14 @@ try {
   /* POSCO 시안도 Dark 가 원본 — 고른 밝기(wemb-posco-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'posco') {
     const want = localStorage.getItem('wemb-posco-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* LS Electric STATCOM 도 Dark 가 원본 — 고른 밝기(wemb-lselectric-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'lselectric') {
+    const want = localStorage.getItem('wemb-lselectric-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));

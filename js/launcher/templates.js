@@ -19,6 +19,8 @@
   const TPL_DEFS = [
     { title: 'Digital Twin: POSCO KDB CCTV 관제', area: '물리보안', date: 'January 20, 2025', slides: [
       { img: 'src/templates/posco-main.jpg', label: '메인' }] },
+    { title: 'Digital Twin: LS Electric STATCOM', area: '발전·에너지', date: 'February 26, 2024', slides: [
+      { img: 'src/templates/lselectric-statcom.jpg', label: 'STATCOM' }] },
     { title: 'Digital Twin: SKHynix Icheon 1level', area: '부지·건물·층', date: 'February 12, 2024', slides: [
       TL('skhynix-icheon-1level', '1level 전경'), TL('skhynix-icheon-2level', '2level 전경')] },
     { title: 'Digital Twin: Gammania', area: '부지·건물·층', date: 'April 3, 2024', slides: [
@@ -221,6 +223,23 @@
       ];
     }
   })();
+  /* LS Electric STATCOM — '스튜디오 열기' 시 Figma(KkmCQi05F7eSb3tHO7ZW0Q) 화면 2장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/lselectric-*.js)으로 연다. 상세 미리보기도 그 화면을 그대로 캡처한 것이다. */
+  (function () {
+    const ls = TEMPLATES.find((t) => t.title === 'Digital Twin: LS Electric STATCOM');
+    if (ls) {
+      ls.tpl = 'lselectric';
+      ls.img = 'src/templates/lselectric-statcom.jpg';
+      /* 화면 2장 — 슬라이드 순서가 곧 프로젝트 안의 화면 순서다(home.js 의 tplScene 표와 짝) */
+      ls.slides = [
+        { img: 'src/templates/lselectric-statcom.jpg', label: 'STATCOM' },
+        { img: 'src/templates/lselectric-datacenter.jpg', label: 'Data Center' },
+        { img: 'src/templates/lselectric-acb.jpg', label: 'ACB 진단' },
+        { img: 'src/templates/lselectric-system.jpg', label: '계통 진단' },
+        { img: 'src/templates/lselectric-energy.jpg', label: '에너지 진단' },
+      ];
+    }
+  })();
   /* 실제 화면이 붙어 있는 템플릿인지 — Figma를 HTML/CSS DOM(+SVG)으로 재구축해 두어
      '스튜디오 열기'를 누르면 그 화면이 그대로 열리는 것들이다.
      나머지는 아직 카탈로그 그림 한 장뿐이라 갤러리에서 '제작중'으로 표시한다.
@@ -233,7 +252,7 @@
     if (isNaN(d)) return v;
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

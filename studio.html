@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="css/templates/skhynix-motion.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/templates/skhynix-asset-motion.css?v=1" data-app-css />
     <!-- 작업 세션 — 앱 스크립트가 저장 상태를 읽기 전에, 주소(?screen · ?new)가 가리키는 화면으로 맞춘다 -->
-    <script src="js/core/projects.js?v=3"></script>
+    <script src="js/core/projects.js?v=4"></script>
     <script src="js/app/session.js?v=5"></script>
   </head>
   <body>
@@ -2723,6 +2723,18 @@
     <script src="src/posco-sop4.js?v=1"></script>
     <script src="src/posco-live.js?v=51"></script>
 
+    <!-- LS Electric STATCOM — Figma KkmCQi05F7eSb3tHO7ZW0Q 의 화면 2장(STATCOM 3:5 · Data Center 33:748)을
+         순수 HTML/CSS DOM 으로 재구축한 것. 글자는 편집 가능한 실제 텍스트,
+         아이콘·그래픽만 원본에서 내려받은 개별 에셋(src/lselectric/). 생성기: src/lselectric/_gen/. -->
+    <script src="src/lselectric-statcom.js?v=2"></script>
+    <script src="src/lselectric-datacenter.js?v=2"></script>
+    <!-- ACB 진단(1단) — STATCOM 화면 위에 얹는 팝업(Figma 76:597). build_lsm_acb 가 둘을 합친다. -->
+    <script src="src/lselectric-acb.js?v=2"></script>
+    <!-- 계통 진단(89:2000 · 팝업 76:875) · 에너지 진단(89:2927 · 팝업 94:5015) — 같은 꼴로 STATCOM 위에 얹는다 -->
+    <script src="src/lselectric-system.js?v=1"></script>
+    <script src="src/lselectric-energy.js?v=1"></script>
+    <script src="src/lselectric-live.js?v=5"></script>
+
     <script src="js/data/symbols.js?v=1"></script>
     <!-- 앱 스크립트 — 전역(classic) 스크립트라 아래 순서가 곧 의존 순서다.
          js/main.js 가 초기화를 돌리고 studio/project.js · 가이드 · 상단 크롬이 붙은 뒤, shell/routes.js 가 마지막에 주소로 화면을 연다. -->
@@ -2737,8 +2749,9 @@
     <script src="js/preview/screens.js?v=1"></script>
     <script src="js/templates/hana.js?v=1"></script>
     <script src="js/templates/posco.js?v=6"></script>
+    <script src="js/templates/lselectric.js?v=3"></script>
     <script src="js/templates/hanjin.js?v=1"></script>
-    <script src="js/templates/image.js?v=5"></script>
+    <script src="js/templates/image.js?v=9"></script>
     <script src="js/templates/skhynix.js?v=1"></script>
     <script src="js/preview/digital-twin.js?v=1"></script>
     <script src="js/theme/sources.js?v=1"></script>
@@ -2749,7 +2762,7 @@
     <script src="js/preview/realtime.js?v=2"></script>
     <script src="js/studio/dash-edit.js?v=2"></script>
     <script src="js/studio/screen-builder.js?v=1"></script>
-    <script src="js/studio/dt-edit.js?v=4"></script>
+    <script src="js/studio/dt-edit.js?v=5"></script>
     <script src="js/preview/live-kpi.js?v=1"></script>
     <script src="js/theme/history.js?v=2"></script>
     <script src="js/ui/confirm.js?v=1"></script>
@@ -2776,8 +2789,8 @@
     <script src="js/ui/onboarding.js?v=1"></script>
     <script src="js/theme/snapshot-backup.js?v=1"></script>
     <script src="js/studio/preview-hint.js?v=1"></script>
-    <script src="js/main.js?v=4"></script>
-    <script src="js/studio/project.js?v=6"></script>
+    <script src="js/main.js?v=5"></script>
+    <script src="js/studio/project.js?v=7"></script>
     <script src="js/guide/guide.js?v=10"></script>
     <script src="js/shell/chrome.js?v=7"></script>
     <script src="js/shell/routes.js?v=6"></script>

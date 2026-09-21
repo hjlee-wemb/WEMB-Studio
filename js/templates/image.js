@@ -701,6 +701,16 @@ const TPLTINT = {
     keep: /(bulb[-\w]*|status-(critical|major|minor|warning|normal)-bg|btn-event-status-bg[-\d]*|logo-mark|icon-system-clock)(-lt)?\.svg(\?|$)/i,
     raster: /(background[-\w]*|building-image|body|click)\.(png|jpg)(\?|$)/i,
   },
+  /* ── LS Electric STATCOM 시안 ──
+     주조색은 브랜드 파랑(#2861FF, 색상각 224°). 색을 그대로 둘 것:
+       · 상태·등급 색이 곧 의미인 것(상태 표지 marker · 등급 점 ellipse · 토글 손잡이 knob · 로고)
+       · 바탕 사진과 3D 미니맵 렌더(사진이라 색상만 돌리면 어색하다 → 픽셀을 다시 칠한다) */
+  LSELECTRIC_OPT: {
+    seed: '#2861FF', seededKey: 'wemb-lselectric-seeded', refHue: 224,
+    keep: /(marker[-\d]*|ellipse[-\d]*|knob[-\d]*|logo-mark[-\d]*|battery|plug)(-lt)?\.svg(\?|$)|(visual[-\d]*|thermal-image|chart-image[-\d]*)\.png(\?|$)/i,
+    /* ↑ ACB 진단 팝업의 장비 사진(visual*) · 열화상(thermal-image) · PD 차트(chart-image*)는 색이 곧 데이터라 칠하지 않는다 */
+    raster: /(background|map-image)\.(png|jpg)(\?|$)/i,
+  },
   HANJIN_OPT: {
     seed: '#2861FF', seededKey: 'wemb-hanjin-seeded', refHue: 222,
     keep: /(icon-stage-[\w-]+|icon-dock-[\w-]+|icon-map-[\w-]+|icon-system-[\w-]+|icon-action-[\w-]+|marker[-\d]*|badge|radio|divider[-\d]*|bullet|data[-\d]*|bar[-\w]*|meter[-\w]*|guide-ring|logo|track[-\d]*|average-line|axis-line|grid-line[-\d]*|part[-\d]*|ramp)(-lt)?\.svg(\?|$)/i,
@@ -785,6 +795,12 @@ const TPLTINT = {
         if (KEEP.test(src)) { im.style.filter = ''; return; }
         im.style.filter = Math.abs(deg) > 1 ? 'hue-rotate(' + deg.toFixed(1) + 'deg)' : '';
       });
+      /* 라이브가 움직이려고 <img> 를 인라인 <svg class="ls-inl"> 로 바꿔 넣은 원본 벡터(LS 계통·에너지 차트) —
+         그림은 같으니 같은 규칙으로 색상만 돌린다(원래 파일 이름은 data-src 에 있다) */
+      r.querySelectorAll('svg.ls-inl').forEach((sv) => {
+        const src = sv.getAttribute('data-src') || '';
+        sv.style.filter = (!P || KEEP.test(src) || Math.abs(deg) <= 1) ? '' : 'hue-rotate(' + deg.toFixed(1) + 'deg)';
+      });
     });
   },
   apply() {
@@ -808,6 +824,11 @@ const TPLTINT = {
     ['pkm', 'pka', 'pko', 'pkr', 'pkf', 'pkd', 'pks1', 'pks2', 'pks3', 'pks4'].forEach((px) => {   /* pks1~3 = SOP STEP 1~3 · pks4 = SOP 체계도 */
       this.icheonTint(t, mode, '.' + px + '-root',
         [px + '-style', px + '-light-style', 'posco-live-style'], 'wemb-posco-mode', this.POSCO_OPT);
+    });
+    /* LS Electric STATCOM 화면 2장 — 같은 방식. 두 장이 같은 밝기를 공유한다(wemb-lselectric-mode) */
+    ['lsm', 'lsd', 'lsa', 'lsy', 'lse'].forEach((px) => {      /* lsa·lsy·lse = ACB·계통·에너지 진단 팝업(.lsm-root 안에 겹쳐 있다) */
+      this.icheonTint(t, mode, '.' + px + '-root',
+        [px + '-style', px + '-light-style', 'lselectric-live-style'], 'wemb-lselectric-mode', this.LSELECTRIC_OPT);
     });
     ['hjc', 'hjg', 'hju'].forEach((px) => {
       this.icheonTint(t, mode, '.' + px + '-root',

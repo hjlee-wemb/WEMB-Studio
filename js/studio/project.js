@@ -557,6 +557,14 @@
           try { localStorage.setItem('wemb-posco-screen', wantPk); } catch (e3) {}
           if (typeof applyPoscoDT === 'function') applyPoscoDT(wantPk);
         }
+        else if (f.tpl === 'lselectric') {
+          localStorage.setItem('wemb-tpl-dt', 'lselectric'); localStorage.removeItem('wemb-tpl-img');
+          /* 템플릿 상세에서 고른 장면(STATCOM · Data Center)을 그대로 연다 */
+          const wantLs = (typeof LS_SCREENS !== 'undefined' && LS_SCREENS[f.scene]) ? f.scene
+            : (localStorage.getItem('wemb-lselectric-screen') || 'statcom');
+          try { localStorage.setItem('wemb-lselectric-screen', wantLs); } catch (e3) {}
+          if (typeof applyLsElectricDT === 'function') applyLsElectricDT(wantLs);
+        }
         else if (f.tpl === 'hana') {
           localStorage.setItem('wemb-tpl-dt', 'hana'); localStorage.removeItem('wemb-tpl-img');
           /* 템플릿 상세에서 고른 장면(화면 15장 중 하나)을 그대로 연다 */
