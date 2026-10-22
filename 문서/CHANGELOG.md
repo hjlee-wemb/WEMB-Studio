@@ -11,6 +11,14 @@ WEMB Studio의 버전별 변경 사항을 기록합니다.
 
 ---
 
+#### [Unreleased] — 2026-10-22 GitHub Pages 분자 라이브러리
+
+### 추가
+
+- 분자 라이브러리 · 원자 변경이 서버 없이도 열린다(GitHub Pages · 켜기.cmd 의 PowerShell 서버). wemb-atomic 서버의 응답을 그대로 뽑아 둔 `src/atomic/`(wemb-atomic `npm run export`)을 읽는다
+  - 원자 · 분자 · 유기체 · 템플릿 · 페이지 보기, 검색, 분자 상세, 조립 화면, PNG 저장, 원자 변경 모두 서버 있을 때와 같은 자료로
+  - 버전 저장 · 이름 확정 · 조립 화면은 그 브라우저에만 저장된다(서버로 열면 예전처럼 `wemb-atomic/data` 파일). 부제에 '고친 내용은 이 브라우저에 저장돼요'
+
 #### [Unreleased] — 2026-10-12 고객사 현장용(P0)
 
 ### 추가
