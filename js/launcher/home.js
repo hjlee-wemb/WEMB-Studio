@@ -36,6 +36,13 @@
   let tplYear = 'all';   /* 등록 연도 필터 — 화면 유형·업무 영역과 나란한 별개 축이다 */
   let tplQuery = ''; /* 템플릿 갤러리 검색어(제목·배지 대상) */
   let tplSelected = null; /* 상세 페이지로 열어 둔 템플릿(null이면 갤러리) */
+  /* ── 회의 모드(js/core/meeting.js) — 고객사 앞에서 다른 고객사 정보가 보이지 않게 ──
+     켜면 화면의 고객사 이름을 '고객사'로 가리고, 템플릿 갤러리는 고른 것만 '화면 유형 · 업무 영역' 이름으로 보인다.
+     tplPicking = 갤러리에서 회의에 보여 줄 템플릿을 고르는 중 */
+  const MEET = WEMB.meeting;
+  let tplPicking = false;
+  const meetOn = () => MEET.on();
+  const tplLabel = (t) => (meetOn() ? t.screenType + ' · ' + t.area : t.title);
   /* ── 주소 ↔ 런처 화면 ──
      좌측 메뉴: /projects · /recent · /favorites · /trash · /templates
      프로젝트(폴더) 안: /projects/:gid   템플릿 상세: /templates/:slug
@@ -276,8 +283,33 @@
       op.onclick = (e) => { e.stopPropagation(); tplSort = op.dataset.sort; renderProjects(); };
     });
     right.appendChild(sortWrap);
+    /* 회의 모드 — 고르기(회의에 보여 줄 템플릿) · 켜기/끄기. 정렬과 같은 부품을 쓴다 */
+    const meetIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 20 20 4"/></svg>';
+    const pickIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>';
+    const picks = MEET.get().picks;
+    const pickBtn = document.createElement('button');
+    pickBtn.type = 'button';
+    pickBtn.className = 'tplsort-btn tplmeet-pick' + (tplPicking ? ' filtered' : '');
+    pickBtn.title = '회의에서 보여 줄 템플릿을 고릅니다 — 회의 모드에서는 고른 것만 보여요';
+    pickBtn.innerHTML = pickIcon + '<span>' + (tplPicking ? '고르기 끝' : '회의용 고르기') + (picks.length ? ' <b class="num">' + picks.length + '</b>' : '') + '</span>';
+    pickBtn.onclick = () => { tplPicking = !tplPicking; renderProjects(); };
+    right.appendChild(pickBtn);
+    const meetBtn = document.createElement('button');
+    meetBtn.type = 'button';
+    meetBtn.className = 'tplsort-btn tplmeet-toggle' + (meetOn() ? ' filtered on' : '');
+    meetBtn.setAttribute('aria-pressed', meetOn() ? 'true' : 'false');
+    meetBtn.title = '회의 모드 — 고객사 이름을 가리고, 템플릿은 고른 것만 보여요';
+    meetBtn.innerHTML = meetIcon + '<span>회의 모드 ' + (meetOn() ? '켬' : '끔') + '</span>';
+    meetBtn.onclick = () => { tplPicking = false; MEET.set({ on: !meetOn() }); };
+    right.appendChild(meetBtn);
     sortBar.appendChild(right);
     gal.appendChild(sortBar);
+    if (tplPicking) {
+      const tip = document.createElement('div');
+      tip.className = 'tplmeet-tip';
+      tip.innerHTML = '<b>회의에서 보여 줄 템플릿을 고르세요.</b> 카드를 누르면 골라지고, 다시 누르면 빠져요. 회의 모드를 켜면 고른 것만 보이고 고객사 이름은 가려져요.';
+      gal.appendChild(tip);
+    }
     /* 바깥 클릭 시 정렬 메뉴 닫기(한 번만 등록) */
     if (!window.__tplSortDocClose) {
       window.__tplSortDocClose = true;
@@ -297,12 +329,15 @@
     function renderGrid() {
       grid.innerHTML = '';
       const q = tplQuery.trim().toLowerCase();
+      const picked = new Set(MEET.get().picks);
+      const meetOnly = meetOn() && !tplPicking && picked.size > 0;
       const list = sortTemplates(TEMPLATES.filter((t) => {
+        if (meetOnly && !picked.has(t.slug)) return false;
         if (tplScreen !== 'all' && t.screenType !== tplScreen) return false;
         if (tplArea !== 'all' && t.area !== tplArea) return false;
         if (tplYear !== 'all' && t.year !== tplYear) return false;
         if (!q) return true;
-        return t.title.toLowerCase().includes(q) || t.badges.some((bd) => bd[0].toLowerCase().includes(q));
+        return tplLabel(t).toLowerCase().includes(q) || t.badges.some((bd) => bd[0].toLowerCase().includes(q));
       }));
       if (!list.length) {
         const e = document.createElement('div');
@@ -317,7 +352,7 @@
       list.forEach((t) => {
         const card = document.createElement('button');
         card.type = 'button';
-        card.className = 'tplcard';
+        card.className = 'tplcard' + (tplPicking ? ' picking' + (picked.has(t.slug) ? ' picked' : '') : '');
         /* 아직 화면이 없는 템플릿만 표시한다 — 준비된 쪽은 아무것도 붙이지 않는다.
            흐려진 것들 사이에서 **밝은 썸네일 자체가** 준비됐다는 신호다. */
         const live = tplIsLive(t);
@@ -326,28 +361,38 @@
            지금은 실제로 열리는 4개에만 '열기 가능'을 붙이고, 위치도 모서리로 뺀다. */
         card.innerHTML =
           '<div class="tplthumb' + (live ? '' : ' wip') + '">' +
-            '<img loading="lazy" src="' + t.img + '" alt="' + esc(t.title) + '">' +
+            '<img loading="lazy" src="' + t.img + '" alt="' + esc(tplLabel(t)) + '">' +
             (live ? '<span class="tplstate ready">열기 가능</span>' : '') +
+            (tplPicking ? '<span class="tplpick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>' : '') +
           '</div>' +
           '<div class="tplbox">' +
             '<div class="tplsec1">' +
               '<div class="tplbadges">' +
                 t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
               '</div>' +
-              '<div class="tpltitle">' + esc(t.title) + '</div>' +
+              '<div class="tpltitle">' + esc(tplLabel(t)) + '</div>' +
             '</div>' +
             '<div class="tplsec2">' +
               '<span class="tpldate">' + esc(tplDate(t.date)) + '</span>' +
               '<span class="tplmore">자세히 보기' + arrow + '</span>' +
             '</div>' +
           '</div>';
-        card.onclick = () => router.navigate('/templates/' + t.slug);
+        if (tplPicking) {
+          card.setAttribute('aria-pressed', picked.has(t.slug) ? 'true' : 'false');
+          card.onclick = () => {
+            const cur = new Set(MEET.get().picks);
+            if (cur.has(t.slug)) cur.delete(t.slug); else cur.add(t.slug);
+            MEET.set({ picks: [...cur] });
+          };
+        } else card.onclick = () => router.navigate('/templates/' + t.slug);
         grid.appendChild(card);
       });
 
       const cnt = document.getElementById('lcCount');
       if (cnt) {
-        if (q) cnt.textContent = list.length + '개 · ‘' + tplQuery.trim() + '’ 검색';
+        if (tplPicking) cnt.textContent = '회의용으로 ' + picked.size + '개 골랐어요';
+        else if (meetOnly) cnt.textContent = '회의용 ' + list.length + '개';
+        else if (q) cnt.textContent = list.length + '개 · ‘' + tplQuery.trim() + '’ 검색';
         else if (tplScreen === 'all' && tplArea === 'all') cnt.textContent = VIEW_META.tpl.count();
         else cnt.textContent = list.length + '개 · ' + [tplScreen !== 'all' ? tplScreen : null, tplArea !== 'all' ? tplArea : null].filter(Boolean).join(' · ');
       }
@@ -374,7 +419,7 @@
       ? '<div class="tpld-sliderwrap">' +
           '<div class="tpld-hero tpld-slider">' +
             '<div class="tpld-track">' +
-              t.slides.map((s) => '<img class="tpld-slide" src="' + s.img + '" alt="' + esc(t.title + ' · ' + s.label) + '">').join('') +
+              t.slides.map((s) => '<img class="tpld-slide" src="' + s.img + '" alt="' + esc(tplLabel(t) + ' · ' + s.label) + '">').join('') +
             '</div>' +
             '<span class="tpld-caption"></span>' +
           '</div>' +
@@ -384,7 +429,7 @@
         '<div class="tpld-dots">' +
           t.slides.map((s, i) => '<button type="button" class="tpld-dot" data-i="' + i + '" aria-label="' + esc(s.label) + '"></button>').join('') +
         '</div>'
-      : '<div class="tpld-hero"><img src="' + t.img + '" alt="' + esc(t.title) + '"></div>';
+      : '<div class="tpld-hero"><img src="' + t.img + '" alt="' + esc(tplLabel(t)) + '"></div>';
 
     const det = document.createElement('div');
     det.className = 'tpldetail';
@@ -395,7 +440,7 @@
           t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
         '</div>' +
         '<div class="tpld-titlerow">' +
-          '<div class="tpld-title">' + esc(t.title) + '</div>' +
+          '<div class="tpld-title">' + esc(tplLabel(t)) + '</div>' +
           '<div class="tpld-date">' + esc(tplDate(t.date)) + '</div>' +
         '</div>' +
       '</div>' +
@@ -434,7 +479,7 @@
     }
 
     const cnt = document.getElementById('lcCount');
-    if (cnt) cnt.textContent = t.title;
+    if (cnt) cnt.textContent = tplLabel(t);
   }
 
   /* 상세 페이지 CTA / 스튜디오 진입 → 그 화면 종류로 새 프로젝트를 만들고 스튜디오로 진입.
@@ -476,6 +521,11 @@
     if (newBtn) newBtn.hidden = !(view === 'all' || view === 'recent');
     const searchWrap = document.getElementById('lcSearchWrap');
     if (searchWrap) searchWrap.hidden = !(view === 'all' || view === 'recent' || view === 'fav');
+    const inFolder = !!curGroup && view !== 'trash' && view !== 'tpl';
+    const openFile = document.getElementById('lcOpenFile');
+    if (openFile) openFile.hidden = !(view === 'all' || view === 'recent') || inFolder;
+    toolBtn('lcPresent', '이 프로젝트 발표', '도구를 숨기고 화면만 크게 — ←/→ 로 화면을 넘기고 Esc 로 끝내요', SVG_PLAY, () => presentGroup(curGroup)).hidden = !inFolder;
+    toolBtn('lcSaveFile', '파일로 저장', '이 프로젝트를 화면 · 작업 상태째 파일(.wemb.json) 하나로 — 다른 PC 에서 ‘파일 열기’로 이어서 작업해요', SVG_SAVE, () => saveGroupFile(curGroup)).hidden = !inFolder;
     const delAll = document.getElementById('lcEmptyTrash');
     if (delAll) {
       delAll.hidden = view !== 'trash';
@@ -487,6 +537,12 @@
 
     /* 템플릿 — 선택한 카드가 있으면 상세 페이지, 없으면 갤러리(169:150) */
     if (view === 'tpl') {
+      /* 프로젝트 안에서 템플릿으로 넘어와도 폴더 제목 · 경로 표시 · 점선 테두리가 남지 않게 */
+      const ttl = document.getElementById('lcTitle');
+      if (ttl) ttl.textContent = VIEW_META.tpl.title;
+      const cr = document.getElementById('lcCrumb');
+      if (cr) cr.hidden = true;
+      g.classList.remove('inproject');
       if (tplSelected) renderTemplateDetail(g, tplSelected);
       else renderTemplates(g);
       return;
@@ -611,6 +667,86 @@
   const SVG_TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M8 6V4h8v2"/><path d="M6 6l1 15h10l1-15"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
   const SVG_RESTORE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>';
 
+  const SVG_PLAY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="7 4 20 12 7 20 7 4"/></svg>';
+  const SVG_SAVE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M5 19h14"/></svg>';
+  /* 도구 줄의 단추 — 처음 한 번 만들어 '파일 열기' 뒤에 둔다 */
+  function toolBtn(id, label, title, svg, onClick) {
+    let b = document.getElementById(id);
+    if (!b) {
+      b = document.createElement('button');
+      b.type = 'button';
+      b.id = id;
+      b.className = 'lc-ghost';
+      b.title = title;
+      b.innerHTML = svg + label;
+      const anchor = document.getElementById('lcSearchWrap');
+      anchor.parentNode.insertBefore(b, anchor);
+    }
+    b.onclick = onClick;
+    return b;
+  }
+
+  /* ── 발표 · 프로젝트 파일 ── */
+  /* 발표 — 도구 없이 화면만 크게(present.html). 프로젝트의 화면을 ←/→ 로 넘긴다 */
+  function presentGroup(gid) {
+    if (!gid || !screensOfGroup(gid).length) {
+      if (typeof toast === 'function') toast('발표할 화면이 없어요 — 먼저 화면을 만들어 주세요.', { type: 'warn' });
+      return;
+    }
+    location.href = 'present.html?group=' + encodeURIComponent(gid);
+  }
+  function saveGroupFile(gid) {
+    const r = gid && WEMB.projectFile.save(gid);
+    if (!r) return;
+    if (typeof toast === 'function') toast('“' + escHTML(MEET.text(r.name)) + '” 프로젝트를 파일로 저장했어요(화면 ' + r.count + '개 · ' + r.size + '). 다른 PC 에서는 홈의 <b>파일 열기</b>로 이어서 작업해요.', { type: 'ok', dur: 7000 });
+  }
+  function openProjectFile(file) {
+    if (!file) return;
+    WEMB.projectFile.read(file).then((r) => {
+      if (typeof toast === 'function') toast('“' + escHTML(MEET.text(r.name)) + '” 프로젝트를 열었어요 — 화면 ' + r.count + '개.', { type: 'ok' });
+      router.navigate('/projects/' + encodeURIComponent(r.gid));
+    }).catch((e) => { if (typeof toast === 'function') toast(escHTML(e.message || '프로젝트 파일을 열지 못했어요.'), { type: 'err', dur: 9000 }); });
+  }
+  const fileInput = document.getElementById('lcFileInput');
+  document.getElementById('lcOpenFile')?.addEventListener('click', () => fileInput && fileInput.click());
+  fileInput?.addEventListener('change', () => { const f = fileInput.files && fileInput.files[0]; fileInput.value = ''; openProjectFile(f); });
+  /* 목록에 파일을 끌어 놓아도 연다 */
+  const hasFiles = (e) => !!e.dataTransfer && [...(e.dataTransfer.types || [])].includes('Files');
+  const lcMain = home.querySelector('.lc-main');
+  home.addEventListener('dragover', (e) => { if (!hasFiles(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; lcMain && lcMain.classList.add('lc-dropping'); });
+  home.addEventListener('dragleave', (e) => { if (e.target === home || !home.contains(e.relatedTarget)) lcMain && lcMain.classList.remove('lc-dropping'); });
+  home.addEventListener('drop', (e) => {
+    if (!hasFiles(e)) return;
+    e.preventDefault();
+    lcMain && lcMain.classList.remove('lc-dropping');
+    const f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f && WEMB.projectFile.isProjectFile(f)) openProjectFile(f);
+    else if (typeof toast === 'function') toast('프로젝트 파일(.wemb.json)만 열 수 있어요.', { type: 'warn' });
+  });
+
+  /* ── 회의 모드 띠 · 이름 가리기 ── */
+  const meetBar = document.getElementById('lcMeetBar');
+  function renderMeetBar() {
+    if (!meetBar) return;
+    const m = MEET.get();
+    meetBar.hidden = !m.on;
+    if (!m.on) return;
+    meetBar.innerHTML =
+      '<span class="lc-meetdot" aria-hidden="true"></span>' +
+      '<b>회의 모드</b><span>고객사 이름을 가리고 있어요 · ' + (m.picks.length ? '템플릿은 고른 ' + m.picks.length + '개만 보여요' : '템플릿을 아직 고르지 않아 전부 보여요') + '</span>' +
+      '<button type="button" class="lc-meetbtn" data-meet="pick">템플릿 고르기</button>' +
+      '<button type="button" class="lc-meetbtn" data-meet="off">회의 모드 끄기</button>';
+  }
+  meetBar?.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-meet]');
+    if (!b) return;
+    if (b.dataset.meet === 'off') { tplPicking = false; MEET.set({ on: false }); }
+    else { tplPicking = true; if (view === 'tpl' && !tplSelected) renderProjects(); else goView('tpl'); }
+  });
+  MEET.onChange(() => { renderMeetBar(); renderProjects(); });
+  renderMeetBar();
+  MEET.watch(home);
+
   /* ── 복제 ── */
   function dupScreen(sid) {
     const arr = loadProjects();
@@ -712,6 +848,8 @@
           const gs = loadGroups(); const t = gs.find((x) => x.id === grp.id); if (t) { t.fav = !t.fav; saveGroups(gs); } renderProjects();
         });
       const acts = document.createElement('div'); acts.className = 'lc-cardacts';
+      acts.appendChild(iconBtn('lc-dup lc-play', '"' + grp.name + '" 발표 — 화면만 크게', SVG_PLAY, () => presentGroup(grp.id)));
+      acts.appendChild(iconBtn('lc-dup lc-save', '"' + grp.name + '" 파일로 저장(.wemb.json)', SVG_SAVE, () => saveGroupFile(grp.id)));
       acts.appendChild(iconBtn('lc-dup', '"' + grp.name + '" 프로젝트 복제', SVG_COPY, () => dupGroup(grp.id)));
       acts.appendChild(iconBtn('lc-del', '"' + grp.name + '" 휴지통으로 이동', SVG_TRASH, () => {
         const gs = loadGroups(); const t = gs.find((x) => x.id === grp.id);
@@ -953,7 +1091,7 @@
               : proj.tpl === 'hanjin' ? (i === 0 ? 'gate' : 'unload')
                 : proj.tpl === 'hana' ? ['cloud-01', 'cloud-02', 'middleware', 'infra-main', 'infra-detail', 'event', 'network-01', 'network-02', 'network-03', 'facility', 'security-01', 'security-02', 'login'][i]
                   : proj.tpl === 'posco' ? ['sop', 'ack', 'overview', 'route', 'floors', 'detail'][i]
-                  : proj.tpl === 'lselectric' ? ['datacenter', 'acb', 'system', 'energy'][i]
+                  : proj.tpl === 'lselectric' ? ['datacenter', 'acb', 'system', 'energy', 'transformer', 'acroom', 'charger', 'cooling', 'alarm'][i]
                     : ('scene' + (i + 2)),
         ts: Date.now() - (i + 1),
         fav: false,
@@ -979,7 +1117,7 @@
        (프로젝트 목록·저장 스냅샷·둘러보기 여부는 유지) */
     try {
       sessionStorage.setItem('wemb-fresh-open', JSON.stringify({ screen: openProj.screen, layout: openProj.layout, name: proj.name, tpl: openProj.tpl, img: openProj.img, scene: openScene }));
-      const KEEP = new Set([LS_PROJ, LS_GROUP, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted']);
+      const KEEP = new Set([LS_PROJ, LS_GROUP, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-meeting']);
       Object.keys(localStorage)
         .filter((k) => k.startsWith('wemb-') && !KEEP.has(k))
         .forEach((k) => localStorage.removeItem(k));

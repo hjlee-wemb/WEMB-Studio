@@ -20,6 +20,15 @@ function askConfirm(opts) {
       : '');
   yes.textContent = o.confirmLabel || '삭제';
   yes.classList.toggle('danger', o.danger !== false);
+  /* 세 번째 선택(예: '저장 안 하고 나가기') — altLabel 을 주면 취소와 확인 사이에 생기고 'alt' 로 끝난다 */
+  let alt = null;
+  if (o.altLabel) {
+    alt = document.createElement('button');
+    alt.type = 'button';
+    alt.className = 'ask-btn ghost';
+    alt.textContent = o.altLabel;
+    yes.before(alt);
+  }
   /* 공용 포커스 트랩의 복귀 경로에 기대지 않고, 이 대화상자는 스스로 트리거를 기억한다.
      파괴적 동작을 확인하고 돌아왔을 때 초점이 <body> 로 떨어지면 키보드 사용자는
      방금 무엇을 취소했는지 알 수 없는 자리에서 다시 시작해야 한다. */
@@ -40,6 +49,7 @@ function askConfirm(opts) {
       el.hidden = true;
       backToOpener();
       yes.onclick = no.onclick = el.onclick = null;
+      if (alt) alt.remove();
       document.removeEventListener('keydown', onKey, true);
       resolve(v);
     };
@@ -47,6 +57,7 @@ function askConfirm(opts) {
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); done(false); }
     }
     yes.onclick = () => done(true);
+    if (alt) alt.onclick = () => done('alt');
     no.onclick = () => done(false);
     el.onclick = (e) => { if (e.target === el) done(false); }; /* 배경 클릭 = 취소 */
     document.addEventListener('keydown', onKey, true);

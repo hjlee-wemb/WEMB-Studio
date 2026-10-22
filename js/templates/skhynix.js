@@ -50,6 +50,8 @@ function skxpWatchResize(scr) {
   run();
 }
 function applySkhynixPopup() {
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다 */
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait(['buildSkhynixPopup'], applySkhynixPopup)) return;
   const stage = document.getElementById('dtStage');
   if (!stage || typeof window.buildSkhynixPopup !== 'function') return;
   /* 고정 캔버스는 끈다 — 아래 skxpFitResponsive 가 여백 없이 채운다 */
@@ -101,6 +103,8 @@ window.__applySkhynixPopup = applySkhynixPopup;
    글자는 전부 편집 가능한 실제 텍스트(Pretendard CDN), 아이콘·그래픽만 Figma 가 내보낸
    개별 svg/png(src/skhynix-hub/)를 그대로 쓴다. 좌표·크기·색은 Figma 값 그대로. ── */
 function applySkhynixHub() {
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다 */
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait(['buildSkhynixHub'], applySkhynixHub)) return;
   const stage = document.getElementById('dtStage');
   if (!stage || typeof window.buildSkhynixHub !== 'function') return;
   /* 고정 캔버스는 끈다 — 이 시안은 스스로 여백 없이 채운다(src/skhynix-hub-live.js 의 relayout).
@@ -190,6 +194,8 @@ window.__clearSkhynixHub = clearSkhynixHub;
    src/skhynix-hvac.js 를 스테이지에 얹는다(글자는 편집 가능한 실제 텍스트, 아이콘·이미지만 원본 에셋).
    라이트가 원본이지만 다크 시트(SKHYNIX_HVAC_DARK_CSS)를 함께 깔아 '화면 테마'로 자유롭게 전환된다. */
 function applySkhynixHvac() {
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다 */
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait(['buildSkhynixHvac'], applySkhynixHvac)) return;
   const stage = document.getElementById('dtStage');
   if (!stage || typeof window.buildSkhynixHvac !== 'function') return;
   /* 메인(FMS Hub)과 같이 고정 캔버스를 끄고 시안이 스스로 채우게 둔다(src/skhynix-hvac-live.js) */
@@ -589,6 +595,8 @@ function skxWatchResize(scr) {
    절대배치 div로 만든 1920×1080 화면(src/skhynix-screen.js)을 얹는다.
    고정 색(테마 비연동)이며 이미지가 아니다. */
 function applySkhynixDT() {
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다 */
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait(['buildSkhynixScreen'], applySkhynixDT)) return;
   const stage = document.getElementById('dtStage');
   if (!stage) return;
   /* 1920x1080 고정 캔버스는 쓰지 않는다 — 통짜 축소는 위아래에 여백을 남긴다.

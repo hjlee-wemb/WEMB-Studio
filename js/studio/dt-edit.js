@@ -61,7 +61,8 @@
      새 콘텐츠를 기본값으로 삼는다. reset=false면 저장된 글자 편집을 그대로 다시 입힌다. */
   function captureDefaults(reset) {
     if (reset) { try { localStorage.removeItem(CK); } catch (e) {} }
-    textEls = [...dt.querySelectorAll(DTSEL)];
+    /* 원자 변경으로 얹은 조각(.atm-rep)의 글자는 원래 라벨을 비춘 것이라 편집 대상이 아니다 — 원래 라벨을 고친다 */
+    textEls = [...dt.querySelectorAll(DTSEL)].filter((el) => !el.closest('.atm-rep'));
     /* 편집 기록의 열쇠 — 요소에 고유 id 가 있으면 그걸 쓴다.
        순번('x3')만 쓰면 한 프로젝트 안에서 화면을 바꿨을 때(한진 3장처럼 구조가 다른 화면)
        같은 순번의 '엉뚱한 글자'에 이전 수정이 들어간다. 재구축 시안은 모든 글자에

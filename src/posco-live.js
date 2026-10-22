@@ -1118,11 +1118,16 @@
   var TOGGLE_ITEMS = [];
 
   function markHot(root) {
-    all(root, HOT).forEach(function (el) {
-      if (el.classList.contains('pk-hot')) return;
+    /* 크기 · 위치를 먼저 다 재고 나서 표시한다 — 하나씩 재고 고치면 그때마다 레이아웃을 다시 한다.
+       pk-hot 은 커서와 ::before 덧칠만 바꿔 상자 크기가 그대로라 결과는 같다 */
+    var cand = all(root, HOT).filter(function (el) { return !el.classList.contains('pk-hot'); });
+    var seen = cand.map(function (el) {
       var r = el.getBoundingClientRect();
-      if (r.width < 8 || r.height < 8) return;
-      if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+      return { ok: r.width >= 8 && r.height >= 8, stat: getComputedStyle(el).position === 'static' };
+    });
+    cand.forEach(function (el, i) {
+      if (!seen[i].ok) return;
+      if (seen[i].stat) el.style.position = 'relative';
       el.classList.add('pk-hot');
     });
     all(root, SOFT).forEach(function (el) { el.classList.add('pk-hot', 'pk-soft'); });

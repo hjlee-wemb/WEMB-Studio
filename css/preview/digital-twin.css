@@ -279,6 +279,67 @@
 .dt-scene-img {
   background: url('../../src/dt-bg.jpg') center / cover no-repeat;
 }
+/* 3D 발전소(js/preview/dt-3d.js) — 준비되면 사진 위로 서서히 나타난다.
+   사진 칸(.dt-scene-img)에는 멈출 때마다 3D 정지 그림이 들어가, 캔버스를 못 옮기는 복제본에서도 같은 모습이다. */
+.dt-scene > canvas.dt3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  cursor: grab;
+  touch-action: none;
+}
+.dt-scene.is-3d > canvas.dt3d {
+  opacity: 1;
+}
+.dt-scene > canvas.dt3d.is-hot {
+  cursor: pointer;
+}
+.dt-scene > canvas.dt3d:active {
+  cursor: grabbing;
+}
+/* 템플릿 그림 자리의 3D(js/preview/tpl-3d.js) — 그림 자리(쌓임 순서)에 화면 전체(LS 는 미니맵 카드) 크기로, 준비되면 그림 대신 나타난다 */
+canvas.tpl3d {
+  display: block;
+  opacity: 0;
+  /* 그림 칸 크기 그대로라 확대하면 가장자리에서 잘린다 — 끝을 부드럽게 흐린다 */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent), linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent), linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+  mask-composite: intersect;
+  transition: opacity 0.4s ease;
+  cursor: grab;
+  touch-action: none;
+  pointer-events: auto;
+}
+canvas.tpl3d.is-on {
+  opacity: 1;
+}
+/* 사진 맞춤 모형 — 처음 시점이 그림과 같아야 하므로 가장자리를 흐리지 않는다(돌려 볼 때는 모형 전체가 칸 안으로 물러서고, 땅 가장자리는 엔진이 흐린다) */
+canvas.tpl3d.is-photo {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+canvas.tpl3d.is-hot {
+  cursor: pointer;
+}
+canvas.tpl3d:active {
+  cursor: grabbing;
+}
+/* 3D 를 마우스로 움직이려면 위 층의 빈 곳이 누르기를 통과시켜야 한다 — 패널 · 단추만 받는다 */
+.dtstage .dt-body,
+.dtstage .dt-ui,
+.dtstage .wfcanvas.dt {
+  pointer-events: none;
+}
+.dtstage .dt-ui > *,
+.dtstage .wfcanvas.dt .wfpanel,
+.dtstage .dt-body > :not(.dt-ui):not(.wfcanvas):not(:empty) {
+  pointer-events: auto;
+}
 
 /* ── HANA Bank H.I.T — Figma 그대로 재현: 기본 DT 크롬을 숨기고 재현 캔버스만 보인다 ── */
 .dtstage[data-tpl='hana'] .dt-hdr,
@@ -370,22 +431,77 @@
   background: #05050a;
   z-index: 3;
 }
-/* 업로드한 브랜드 로고로 갈아 끼운 시안 로고 자리 — 통짜 래스터 시안(한진·미연결 이미지)용.
-   원래 로고를 시안에서 뽑은 헤더 배경색으로 덮고 그 위에 업로드 로고를 얹는다. */
+/* ── 템플릿 헤더 로고 → WEMB Studio 로고 (js/templates/image.js TPLLOGO) ── */
+/* 그림 템플릿 — 원래 로고 자리를 둘레 배경으로 메운 덮개(배경 그림은 JS 가 그린다) 위에 로고를 얹는다.
+   로고는 원래 로고 상자에 비율 그대로 맞춘다(헤더 가운데 로고는 .mid, 심볼만 있던 자리는 .mark 로 심볼만) */
 .tpl-logoswap {
   position: absolute;
   z-index: 3;
-  display: flex;
-  align-items: center; /* 로고가 원래 자리보다 낮으면 위아래 가운데로 */
-  justify-content: flex-start;
   overflow: hidden;
   pointer-events: none;
+  background-size: 100% 100%;
 }
 .tpl-logoswap img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  position: absolute;
   display: block;
+  max-width: none;
+  object-fit: contain;
+  object-position: left center;
+}
+.tpl-logoswap.mid img {
+  object-position: center;
+}
+.tpl-logoswap.mark img {
+  object-fit: cover;
+  object-position: left center;
+}
+/* DOM 템플릿 — 헤더의 로고 묶음(심볼 + 글자, 고객사 BI 그림)을 감추고 로고 그림 하나만 보인다.
+   폭은 로고 비율대로(묶음 높이 = 로고 높이) */
+[data-studio-logo] {
+  display: flex !important;
+  align-items: center;
+  width: auto !important;
+}
+[data-studio-logo] > :not(.tpl-studio-logo) {
+  display: none !important;
+}
+.tpl-studio-logo {
+  display: block;
+  flex: none;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  pointer-events: none;
+}
+/* 로고 높이 = 원래 심볼 높이 — 묶음 높이가 글자 줄로 정해지는 템플릿이 있어(100% 가 안 먹는다) 템플릿마다 px 로 둔다.
+   Icheon main 의 SK하이닉스 BI 자리(높이 41)는 'FMS Dashboard' 글자보다 높아, 같은 헤더 구성인
+   SK하이닉스 1level 의 로고 높이(29)에 맞춘다 */
+.pk-root .tpl-studio-logo {
+  height: 23px;
+}
+.hj-root .tpl-studio-logo {
+  height: 24px;
+}
+.hn-root .tpl-studio-logo {
+  height: 27px;
+}
+.hnl-root .tpl-studio-logo {
+  height: 31px;
+}
+.ls-root .tpl-studio-logo,
+.skxp-root .tpl-studio-logo,
+.skh-root .tpl-studio-logo,
+.skv-root .tpl-studio-logo {
+  height: 29px;
+}
+/* 라이트 테마 — 헤더가 밝아지는 템플릿만 같은 로고의 짙은 판으로(원래 로고에도 -lt 판이 있던 곳).
+   Icheon main 은 라이트에서도 헤더 띠가 어둡고, SK하이닉스 1level 은 다크 전용이라 흰 로고 그대로다.
+   업로드한 로고(파일 이름이 다르다)는 그대로 둔다 */
+.pk-root[data-theme='light'] .tpl-studio-logo[src$='studio-logo.svg'],
+.hn-root[data-theme='light'] .tpl-studio-logo[src$='studio-logo.svg'],
+.hj-root[data-theme='light'] .tpl-studio-logo[src$='studio-logo.svg'],
+.ls-root[data-theme='light'] .tpl-studio-logo[src$='studio-logo.svg'] {
+  content: url('../../src/studio-logo-lt.svg');
 }
 .hj-canvas {
   position: absolute;

@@ -69,10 +69,13 @@ function wembTipRuntime() {
 })();
 <\/script>`;
 }
-/* 페이지 전체 <style>을 모아 넣고, 테마 변수를 html/.main에 얹은 자립형 문서 골격 */
-function wembStandaloneDoc(bodyHTML, extraCSS) {
+/* 페이지 전체 <style>을 모아 넣고, 테마 변수를 html/.main에 얹은 자립형 문서 골격
+   opts.css  — 모은 스타일을 바꿔 넣을 때(그림 주소를 파일 안 데이터로 바꾼 것)
+   opts.font — 글꼴 <style>(파일 안에 담은 Pretendard). 없으면 로컬 사본 + CDN 링크 */
+function wembStandaloneDoc(bodyHTML, extraCSS, opts) {
+  opts = opts || {};
   const t = wembThemeInline();
-  const css = collectAppCss();
+  const css = opts.css != null ? opts.css : collectAppCss();
   let pageBg = '#0f1320';
   try {
     pageBg = themeCoreMap(captureTheme())['bg/page'] || pageBg;
@@ -83,7 +86,7 @@ function wembStandaloneDoc(bodyHTML, extraCSS) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WEMB 화면 시안</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
+    ${opts.font ? '<style>' + opts.font + '</style>' : wembFontLinks()}
     <style>${css}</style>
     <style>
       html, body { margin: 0; padding: 0; background: ${pageBg}; }
@@ -94,22 +97,130 @@ ${extraCSS || ''}
   <body>
 ${bodyHTML}
 ${wembTipRuntime()}
+${opts.tail || ''}
   </body>
 </html>`;
 }
-/* (전체) 오른쪽 프리뷰 .main을 통째로 — 편집 UI·복사 버튼은 걷어냄 */
+/* ── 자립화 — 화면에 쓰인 그림 · 글꼴을 파일 안(data URI)에 담는다 ──
+   예전엔 그림 주소(src/…)가 상대 경로로 남아, 내려받은 파일을 다른 PC 에서 열면 템플릿 그림 · 배경이 다 빠졌고
+   글꼴은 CDN 이라 인터넷이 없으면 바뀌었다. 지금은 화면에 실제로 보이는 것만 골라 담는다
+   (스타일시트에 있지만 이 화면에 안 쓰인 그림은 담지 않는다 — 파일이 터무니없이 커지지 않게). */
+const SA_URL_RE = /url\(\s*(['"]?)([^'")]+?)\1\s*\)/g;
+const saInline = (u) => /^(data:|blob:|#|about:|javascript:)/i.test(String(u).trim());
+const saAbs = (u) => { try { return new URL(String(u).trim(), document.baseURI).href; } catch (e) { return u; } };
+const saSameOrigin = (u) => { try { return new URL(u).origin === location.origin; } catch (e) { return false; } };
+/* 살아 있는 화면에서 실제로 그려지는 그림 주소 — 계산된 스타일(배경 · 마스크 · 앞뒤 가상 요소) + 그림 요소 */
+function saUsedUrls(liveRoot) {
+  const used = new Set();
+  const take = (v) => { if (!v || v === 'none') return; String(v).replace(SA_URL_RE, (m, q, u) => { if (!saInline(u)) used.add(saAbs(u)); return m; }); };
+  const PROPS = ['backgroundImage', 'maskImage', 'webkitMaskImage', 'borderImageSource', 'listStyleImage'];
+  liveRoot.querySelectorAll('*').forEach((el) => {
+    if (el.tagName === 'IMG') {
+      if (el.currentSrc && !saInline(el.currentSrc)) used.add(saAbs(el.currentSrc));
+      take(getComputedStyle(el).content); // content:url() 로 바꿔 끼운 그림
+    }
+    if (el.tagName === 'image' || el.tagName === 'IMAGE') { const h = el.getAttribute('href') || el.getAttribute('xlink:href'); if (h && !saInline(h)) used.add(saAbs(h)); }
+    const cs = getComputedStyle(el);
+    if (cs.display === 'none') return;
+    PROPS.forEach((p) => take(cs[p]));
+    ['::before', '::after'].forEach((ps) => { const c = getComputedStyle(el, ps); if (c.content && c.content !== 'none' && c.content !== 'normal') { take(c.backgroundImage); take(c.maskImage || c.webkitMaskImage); take(c.content); } });
+  });
+  return used;
+}
+const saBlobToData = (blob) => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(blob); });
+/* 주소 목록을 받아(같은 출처만) data URI 로 — 6개씩 나눠 받는다 */
+async function saFetchAll(urls, onProgress) {
+  const out = new Map(), list = [...urls].filter(saSameOrigin);
+  let i = 0, done = 0;
+  const worker = async () => {
+    while (i < list.length) {
+      const u = list[i++];
+      try {
+        const r = await fetch(u);
+        if (r.ok) { const b = await r.blob(); if (b.size < 30 * 1048576) out.set(u, await saBlobToData(b)); }
+      } catch (e) { /* 못 받은 그림은 주소 그대로 둔다 */ }
+      done++;
+      if (onProgress) onProgress(done, list.length);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(6, list.length) }, worker));
+  return out;
+}
+/* 스타일 문자열의 url(…) 을 data URI 로(담은 것만) */
+const saSwapCss = (css, map) => css.replace(SA_URL_RE, (m, q, u) => { if (saInline(u)) return m; const d = map.get(saAbs(u)); return d ? 'url("' + d + '")' : m; });
+/* 글꼴 — 앱 기본 글꼴(Pretendard 가변) + 스타일에 선언된 같은 출처 글꼴을 파일 안에 */
+let saFontCache = null;
+async function saFontCss() {
+  if (saFontCache) return saFontCache;
+  const r = await fetch('src/vendor/pretendard/PretendardVariable.woff2');
+  if (!r.ok) throw new Error('font');
+  const d = await saBlobToData(await r.blob());
+  const face = (fam) => "@font-face{font-family:'" + fam + "';font-weight:45 920;font-style:normal;font-display:swap;src:url(\"" + d + "\") format('woff2-variations'),url(\"" + d + "\") format('woff2');}";
+  saFontCache = face('Pretendard Variable') + face('Pretendard');
+  return saFontCache;
+}
+function saFontUrls(css) {
+  const used = new Set();
+  (css.match(/@font-face\s*{[^}]*}/g) || []).forEach((block) => block.replace(SA_URL_RE, (m, q, u) => { if (!saInline(u)) used.add(saAbs(u)); return m; }));
+  return used;
+}
+
+/* (전체) 오른쪽 프리뷰 .main을 통째로 — 편집 UI·복사 버튼은 걷어내고, 그림 · 글꼴까지 담아 인터넷 없이도 열린다.
+   고객에게 보기 전용으로 보내거나 개발자에게 넘기는 파일이다(실시간 움직임 · 3D 조작은 빠지고 지금 모습 그대로). */
 async function exportPreviewHTML() {
   exHintMsg('화면 시안 HTML을 만드는 중…');
   try {
     const main = document.querySelector('.main');
+    /* 그림을 CSS content:url() 로 바꿔 끼운 <img>(템플릿의 라이트 테마 그림 — img[src$=…] 규칙)는 src 를 data 로 바꾸면
+       그 규칙이 더는 맞지 않는다 → 지금 보이는 그림을 복제본의 인라인 스타일로 박아 둔다. 짝을 찾으려고 잠깐 번호를 단다 */
+    const liveImgs = [...main.querySelectorAll('img')];
+    liveImgs.forEach((im, i) => im.setAttribute('data-sa-i', i));
     const clone = main.cloneNode(true);
+    liveImgs.forEach((im) => im.removeAttribute('data-sa-i'));
+    clone.querySelectorAll('img[data-sa-i]').forEach((im) => {
+      const live = liveImgs[+im.getAttribute('data-sa-i')];
+      im.removeAttribute('data-sa-i');
+      const c = live && getComputedStyle(live).content;
+      if (c && c.indexOf('url(') >= 0) im.setAttribute('style', (im.getAttribute('style') || '') + ';content:' + c);
+    });
+    if (window.WEMB3D) WEMB3D.bakeClone(clone); /* 3D 캔버스 → 지금 모습 그림 */
     clone.querySelectorAll('.editbanner, .previewhint, .compcopy, .pdel').forEach((el) => el.remove());
     clone.classList.remove('editing', 'content-editing');
     clone.querySelectorAll('.editing, .content-editing').forEach((el) => el.classList.remove('editing', 'content-editing'));
     await inlineLogo(clone);
-    const doc = wembStandaloneDoc('    ' + clone.outerHTML);
+
+    /* 1) 그림 · 글꼴 고르기 — 화면에 실제로 그려지는 것 + 스타일에 선언된 글꼴 */
+    const css = collectAppCss();
+    const used = saUsedUrls(main);
+    clone.querySelectorAll('img[src]').forEach((im) => { const s = im.getAttribute('src'); if (!saInline(s)) used.add(saAbs(s)); });
+    clone.querySelectorAll('[style*="url("]').forEach((el) => el.getAttribute('style').replace(SA_URL_RE, (m, q, u) => { if (!saInline(u)) used.add(saAbs(u)); return m; }));
+    saFontUrls(css).forEach((u) => used.add(u));
+
+    /* 2) 받아서 data URI 로 */
+    const map = await saFetchAll(used, (d, n) => { if (n > 4 && (d % 4 === 0 || d === n)) exHintMsg('그림 · 글꼴을 파일에 담는 중… ' + d + ' / ' + n); });
+    let font = '';
+    try { font = await saFontCss(); } catch (e) { /* 글꼴을 못 담으면 링크로 */ }
+
+    /* 3) 바꿔 끼우기 — 그림 요소 · 인라인 스타일 · 스타일시트 */
+    clone.querySelectorAll('img[src]').forEach((im) => { const d = map.get(saAbs(im.getAttribute('src'))); if (d) im.setAttribute('src', d); im.removeAttribute('srcset'); im.removeAttribute('loading'); });
+    clone.querySelectorAll('image').forEach((im) => {
+      ['href', 'xlink:href'].forEach((a) => { const h = im.getAttribute(a); if (h && !saInline(h)) { const d = map.get(saAbs(h)); if (d) im.setAttribute(a, d); } });
+    });
+    clone.querySelectorAll('[style*="url("]').forEach((el) => el.setAttribute('style', saSwapCss(el.getAttribute('style'), map)));
+
+    /* 4) 크기 — 화면은 스튜디오에서 보던 크기 그대로 두고, 여는 창에 맞춰 통째로 줄이고 늘린다(가운데 정렬).
+       템플릿 시안은 칸에 맞추는 스크립트가 빠지므로, 그대로 두면 창 크기가 다를 때 아래 기본 화면이 비쳤다 */
+    const box = main.getBoundingClientRect();
+    const W = Math.max(1, Math.round(box.width)), H = Math.max(1, Math.round(box.height));
+    const fitCss = 'html, body { width: 100%; height: 100%; overflow: hidden; }\n' +
+      '      .main { position: absolute !important; left: 0; top: 0; width: ' + W + 'px !important; height: ' + H + 'px !important; flex: none !important; transform-origin: 0 0; }';
+    const fitJs = '<script>(function(){var m=document.querySelector(".main");if(!m)return;var W=' + W + ',H=' + H + ';' +
+      'function fit(){var s=Math.min(innerWidth/W,innerHeight/H);m.style.transform="translate("+(innerWidth-W*s)/2+"px,"+(innerHeight-H*s)/2+"px) scale("+s+")";}' +
+      'addEventListener("resize",fit);fit();})();<\/script>';
+    const doc = wembStandaloneDoc('    ' + clone.outerHTML, fitCss, { css: saSwapCss(css, map), font, tail: fitJs });
     downloadBlob(new Blob([doc], { type: 'text/html;charset=utf-8' }), 'wemb-screen.html');
-    exHintMsg('화면 전체를 자립형 HTML로 저장했어요 — 열면 시안 그대로 재현됩니다.', 'ok');
+    const mb = (doc.length / 1048576).toFixed(1);
+    exHintMsg('화면 전체를 HTML 한 파일로 저장했어요(' + mb + 'MB · 그림 ' + map.size + '개 담음) — 인터넷 없이도 열려, 고객에게 보기 전용으로 보낼 수 있어요.', 'ok');
   } catch (e) {
     exHintMsg('내보내기에 실패했어요. 다시 시도해 주세요.', 'err');
   }
@@ -170,7 +281,7 @@ function componentFullDoc(node) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WEMB 컴포넌트</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
+    ${wembFontLinks()}
     <style>
 ${parts.css}
     </style>

@@ -164,7 +164,8 @@
       ];
     }
   })();
-  /* Hanjin main — 상세 페이지에서 3장(메인·입출문현황·하차현황)을 슬라이드로 보여준다. 메인이 첫 장. */
+  /* Hanjin main — 상세 페이지에서 3장(메인·입출문현황·하차현황)을 슬라이드로 보여준다. 메인이 첫 장.
+     미리보기 그림은 스튜디오에 연결된 실제 화면(src/hanjin-*.js)을 발표 모드로 찍은 것이다(src/hanjin/_gen/README.md). */
   (function () {
     const hj = TEMPLATES.find((t) => t.title === 'Digital Twin: Hanjin main');
     if (hj) {
@@ -237,6 +238,11 @@
         { img: 'src/templates/lselectric-acb.jpg', label: 'ACB 진단' },
         { img: 'src/templates/lselectric-system.jpg', label: '계통 진단' },
         { img: 'src/templates/lselectric-energy.jpg', label: '에너지 진단' },
+        { img: 'src/templates/lselectric-transformer.jpg', label: '상태정보' },
+        { img: 'src/templates/lselectric-acroom.jpg', label: 'AC전원실 전압/전류' },
+        { img: 'src/templates/lselectric-charger.jpg', label: '충전기/배터리 운영상태' },
+        { img: 'src/templates/lselectric-cooling.jpg', label: '냉각설비 상태 정보' },
+        { img: 'src/templates/lselectric-alarm.jpg', label: '알림' },
       ];
     }
   })();

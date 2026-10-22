@@ -173,3 +173,107 @@ POSCO(`src/posco/_gen/`)의 conv.js · light.js · dl.js · dedupe · mk-light-a
 | 에너지 진단 89:2927 | **5.10%** |
 차이는 막대 그라디언트 끝 · 격자선 반 픽셀 · 글자 가장자리. 대비 3:1 미만: 라이트 0(계통 168 · 에너지 209 글자), 다크는 원본 색.
 스튜디오: 템플릿 상세 4/5 '계통 진단' · 5/5 '에너지 진단' → 스튜디오 열기(여백 0), 패널편집(글자 168 · 차트 7 · 옮기기 7), 다크/라이트, 색 정하기.
+
+## 여섯 ~ 열 번째 화면 — 단독 팝업 다섯 장 (2026-10-02)
+
+Figma 페이지 y=2324 줄에 **화면 프레임 없이** 놓인 팝업 다섯 장(popup-3 ~ 7). 레이어명은 먼저 62:1493 기준으로 통일했다
+(메모리 `lselectric-statcom-figma-layer-naming` '단독 팝업 popup-3~7'). 놓을 자리는 원본에 없어 ACB 와 같은 규칙 —
+STATCOM(3:5) 위 **1920x1080 한가운데**(보이는 상자 기준 · 정수 픽셀)에 얹는다.
+
+| 화면 | Figma node | 생성물 | 접두어(층) | 장면 키 | 자리 |
+|---|---|---|---|---|---|
+| Popup/Transformer - Status (상태정보) | `118:568` | `src/lselectric-transformer.js` · `transformer.html` | `lst` (4) | `transformer` | 145,282 · 1630x516 |
+| Popup/AC Power Room - Electrical Readings | `124:1703` | `src/lselectric-acroom.js` · `acroom.html` | `lsp` (5) | `acroom` | 809,446 · 302x187 |
+| Popup/Charger Battery - Status | `124:1942` | `src/lselectric-charger.js` · `charger.html` | `lsb` (6) | `charger` | 539,402 · 842x276 |
+| Popup/Cooling System - Status | `124:3340` | `src/lselectric-cooling.js` · `cooling.html` | `lsc` (7) | `cooling` | 205,198 · 1509x684 |
+| Popup/Rooms - Alarm | `138:1433` | `src/lselectric-alarm.js` · `alarm.html` | `lsr` (8) | `alarm` | 755,381 · 410x276(바탕 판 318) |
+
+- 순서: get_design_context(forceCode) · get_metadata 는 응답이 대화로 와서 **세션 jsonl 에서 꺼낸다** —
+  `extract-dc.js <jsonl> <node> <key>` · `extract-meta.js <jsonl> <node> <key>`(새로 만듦, meta-<key>.xml) →
+  `patch-popups.js` → `node dl.js 118-568 124-1703 124-1942 124-3340 138-1433` → strip-gama → dedupe → mk-light-assets → `node conv.js`
+  → `patch-studio-popups.js` → 캡처(thumb-<장면>.png, `?live=0&t=dark`) → `mk-thumb-popups.ps1`.
+- 픽셀 대조는 Figma 단독 렌더가 **흰 바탕 합성**이라, 미리보기에서 팝업 밖을 감추고 흰 바탕으로 찍어(dom-<key>.png) figma-<key>.png 와 견준다.
+  눈으로 볼 땐 `pair.js`(같은 자리를 위아래로 붙여 확대).
+
+### 밟은 함정
+⑯ **design context 가 그라디언트 선을 단색으로 뭉갰다** — 라벨 칩(124:1922 · 124:1931 오른쪽 #5468C0 → 왼쪽 투명),
+   표 · 목록 판(137:1081 · 137:1218 · 138:1265 = #4F5880 위에 #9AD8FF 1→0 이 왼쪽 위에서 번짐)을 `#5468c0` · `#9ad8ff` 한 색으로 냈다.
+   use_figma 로 stroke 두 겹 · gradientTransform 을 읽어 `patch-popups.js` 의 `cssGrad()` 가 각도 · 정지점을 **계산**하고
+   (CSS 그라디언트 0%/100% 선이 모서리를 지나므로 정지점 = (u − u_min)/(u_max − u_min)), 테두리는 투명으로 둔 채 같은 두께 링을 ::after + mask 로 그린다
+   (둥근 칩 모서리를 따라간다). conv.js 의 새 표 `SCREEN_CSS`.
+⑰ **점선 dash [2,3]** — PUMP 머리칸 구분선. CSS dashed 는 길이가 달라 배경 무늬(2px 칠 · 5px 주기)로 그렸다.
+⑱ `border-5`(바탕 판 5px 안쪽 테두리) 번역이 없어 UNKNOWN 이 났다 → conv.js 에 더함.
+⑲ **바탕 사진 판이 반 화면 밀려 있었다(이 시안 전체, 09-21 부터)** — ⑭ 의 margin 변환이 바탕 판(left/top 50% + translate(-50%))에도 걸려
+   margin -960/-540 이 붙었는데, live 의 installFit 은 left/top 만 0 으로 붙여 사진이 왼쪽 위로 반 화면 밀렸다(스튜디오에서 오른쪽 · 아래 절반이 비어 보임).
+   installFit 이 margin 도 0 으로. 미리보기 `?live=0` 은 원래 자리라 픽셀 대조로는 안 잡혔다 — **라이브 켠 화면도 꼭 본다.**
+⑳ 같은 이름의 위젯이 바탕 화면과 팝업에 하나씩 있다(Electrical Readings · Charger Battery) — 바탕 화면 라이브가 팝업 글자를 잡고(`one()` 은 첫 것),
+   차트 단추 · 옮기기 기억이 하나로 섞였다. measureP 는 팝업 밖만, 차트는 같은 이름 둘째부터 키에 `#2`, 옮기기는 `이름@pop`.
+㉑ 팝업 라이트 규칙 '`.ls-pop [Field/] Value` 는 짙은 남색' 이 뜻 있는 값 색(알림발생 빨강 · 안전 하늘 · 질소탱크 빨강)까지 지웠다 → 팝업별로 짙은 짝을 되돌렸다.
+㉒ dedupe 가 `card-bg-3-2.svg` 를 새 `card-bg-8.svg`(같은 그림)로 합쳐 지웠다 — 원자 라이브러리(wemb-atomic) 소스 사본이 옛 이름을 가리켜 **파일은 되살려 둔다**(참조는 새 이름).
+
+### 라이브 (installSoloPopup · installPopCharts)
+- **냉각팬** — 원본 팬 그림을 인라인으로 바꿔 날개(`Blades`)만 Housing 중심으로 돌린다. 동작 1.6초 · 과부하 0.7초/바퀴 + 주황 빛 · 고장 = 멈춘 채 빨간 빛 · 중지 = 멈춤.
+  라이트는 -lt 사본(라이트 시트에 적힌 것만 받는다 — 없는 파일 404 를 안 낸다)으로 다시 그리고 테마가 바뀌면 따라간다(MutationObserver).
+- **트렌드** — 상태정보는 Plot 통째 그림(격자 · 기준선 · 선)을 인라인으로 받아 `Line/…` 만 흐르게 한다(격자 · 점선 기준선 고정, 선은 그림 상자 밖으로 안 나간다).
+  냉각설비 입력 · 전도도는 Data 그림.
+- 절연유 레벨 채움이 바닥을 붙인 채 오르내림 · 펌프 운전 표지 초록 빛 · 알림 난 실 값 글자 빛(색은 그대로) ·
+  수치 흔들림(AC전원실 전압/전류 · 모듈 전압/전류/온도 — 배터리는 원본 '128.' + '0V' 모양 유지 · 냉각설비 온도/압력/습도/유량/레벨, 0 · 날짜 · 글자 상태는 그대로).
+- 호버: 파란 닫기 단추(빛 + X 회전) · 표 줄 · 펌프 칸 · 그룹 말풍선 · 모듈 카드(들림) · 팬(확대) · 범례.
+- 차트 바꾸기 추천: Oil Temperature Trend · Cooling Fan Status(팬 상태 구성 — 원본 범례색) · Oil Temperature Level · System Overview · PLC Status ·
+  Input/Conductivity Trend · Pump Status · Temp Humidity · Ion Tank · Nitrogen Tank · Room Alarm Status (Voltage Trend · Electrical Readings · Charger Battery 는 기존 목록).
+- 색 정하기: 팬(fan-*) · Plot(기준선 색 = 범례) · 펌프 표지는 색을 지킨다(image.js keep).
+
+### 검증 (2026-10-02 · Playwright 1920x1080)
+| 화면 | 픽셀차(tol 24, 흰 바탕 단독) |
+|---|---|
+| 상태정보 118:568 | 4.03% |
+| AC전원실 124:1703 | 5.95% |
+| 충전기/배터리 124:1942 | 4.54% |
+| 냉각설비 124:3340 | 4.78% |
+| 알림 138:1433 | 2.99% |
+차이는 거의 전부 글자 가장자리(헤드리스 캡처의 서브픽셀 색 번짐) — pair.js 로 자리 · 크기 일치를 눈으로 확인.
+대비 3:1 미만: 다섯 장 206 글자 × 다크/라이트 **0**. 스튜디오: 템플릿 상세 10장 → '상태정보' 스튜디오 열기 → 장면 transformer,
+열 장면 모두 바탕 · 뿌리 여백 `[0,0,0,0]`, 팝업 정확히 가운데, 패널편집(팝업 글자 7~114 전부 편집 · 차트 단추 · 옮기기 4px 격자 저장), 다크/라이트, 색 정하기.
+열기 시간은 새 모듈 다섯을 뺀 것과 같다(캐시 끈 검증 서버에서 둘 다 2.3~2.6초 — 이 수치 자체는 1.5초 규칙을 넘는다, 기존 상태).
+→ 같은 날 아래 '여는 시간' 절에서 고쳤다.
+
+## 페이지 연결 · 팝업 열기 (2026-10-02, live `installPopupLinks`)
+
+- **페이지끼리** — 사이트 선택(STATCOM ↔ Data Center) · 헤더 홈 아이콘(→ STATCOM) · 팝업 페이지의 닫기(→ STATCOM)는 프로젝트의 형제 페이지로 간다(기존 `__gotoLsScene`).
+- **팝업** — 지금 보고 있는 페이지 위에 그 자리에서 겹쳐 띄운다(`.ls-overlay`, 페이지 이동 없음 · 바탕은 지금 페이지 · 닫으면 그대로 · Esc 로도 닫힘).
+  마크업 · 시트는 생성기 모듈(`window.build_<px>` · `<PX>_CSS`)을 그대로 쓰고, 처음 열 때 시트를 `<px>-style` id 로 붙인 뒤 색 바꾸기를 다시 건다.
+  반응형 자리는 installFit 의 블록 목록에 더해 한가운데. 팝업 페이지에서 다른 팝업을 열면 그 페이지의 팝업은 잠시 걷혔다가 닫으면 돌아온다.
+  패널편집을 켜면 겹친 팝업은 닫힌다(편집 기록은 글자 id 로 페이지마다 저장되므로 — 팝업 글자 편집은 그 팝업의 페이지에서).
+  모듈이 없는 낱장 미리보기에서는 그 팝업의 미리보기 페이지(`./<장면>.html`)로 넘어간다.
+- **여는 자리**
+  | 팝업 | 여는 자리 | 근거 |
+  |---|---|---|
+  | 충전기/배터리 운영상태 | Data Center `Widget/Charger Battery` | 위젯 제목 '충전기 / 배터리 운영상태' = 팝업 제목, 같은 모듈 카드 |
+  | AC전원실 전압/전류 | STATCOM `Widget/Electrical Readings` | 같은 측정 카드(Metric/Voltage · Current) · 같은 값(154 KV · 250 A) |
+  | ACB 진단 · 계통 진단 · 에너지 진단 · 상태정보 · 냉각설비 상태 정보 · 알림 | 헤더 Brand 옆 '팝업' 단추 목록 | 시안에 여는 자리가 없다 — Figma 제목 그대로(줄이지 않음) |
+- '팝업' 단추는 이 화면의 다른 메뉴(차트 바꾸기 · 열화상 구간)와 같은 판으로 그렸다(짙은 남색 · #2E61F9 선 · 호버 #45C5FF), 아이콘은 Figma 의
+  `Icon/Popup/Diagnostics` · `Icon/Action/Expand` 그대로. 라이트 짝 · 색 정하기(라이브 시트라 같이 칠해진다) · 키보드(Enter/Space · Esc · 초점 테두리).
+  템플릿 썸네일(`?live=0`)에는 없다 — 원본 시안 그대로.
+
+## 여는 시간 (2026-10-02 — 페이지 이동 1.5초 규칙)
+
+- **원인** — `studio.html` 이 다섯 템플릿의 화면 모듈을 전부 `<script>` 로 실었다(115개 중 60여 개, 약 17MB). LS 화면 하나를 여는데도
+  HANA(9MB) · POSCO · 한진 · SK하이닉스 화면까지 받아 파싱했다. 같은 조건 번갈아 재기(중앙값) LS STATCOM 1.61초 → 1.06초,
+  SK하이닉스 1.40 → 1.01, POSCO SOP 2.06 → 1.53.
+- **고친 것** — `js/core/tpl-modules.js`(새 파일)가 본문의 그 자리에서 **여는 화면의 모듈만** `document.write` 로 싣는다.
+  HANA · POSCO · 한진은 장면마다, LS · SK하이닉스 · Icheon main 은 템플릿 통째로(LS 는 헤더 '팝업' 단추가 다른 장면 팝업을 그 자리에서 띄운다).
+  나머지는 필요할 때 — 화면 얹는 함수(`applyXxxDT`)는 `WEMB.tplModules.wait`, 에셋 라이브러리 썸네일 · '원자 변경' 창 썸네일은
+  `later`(페이지 로드 뒤), '원자 변경'에 저장된 교체는 `need`(막이 걷히기 전). **모듈을 더하거나 `?v=` 를 올릴 때는 `studio.html` 이 아니라
+  `tpl-modules.js` 의 표를 고친다** — 예전 `patch-studio*.js` 는 studio.html 에 `<script>` 를 넣으므로 다시 돌리지 말 것.
+- **에셋 라이브러리** — 접혀 있으면(display:none) 썸네일을 그리지 않는다(예전엔 부팅마다 한진 · HANA 화면을 통째로 만들어 그림까지 받았다).
+  보이는지는 ResizeObserver 가 알려 준 크기로 판단(getClientRects 로 물으면 부팅 중 레이아웃을 한 번 더 돌린다).
+- **막 상한** — `js/shell/routes.js` 의 '로드가 늦어도 걷는' 상한을 2.5초 → 문서 시작부터 1.4초.
+- **라이브 레이아웃 몰아 읽기** — 읽기(offsetTop · getComputedStyle · getBBox · offsetWidth)와 쓰기를 번갈아 하던 반복문 넷을
+  '다 읽고 → 다 쓰기'로(installFit 블록 표시 · installCharts 단추 · 삼상전압 트렌드 물결 선 · 수치 폭 묶기). ACB 진단 화면 얹기 0.44 → 0.11초.
+  POSCO `markHot` 도 같은 식으로(src/posco-live.js).
+- **재는 법** — Playwright 의 `locator.click()` 은 버튼이 멈출 때까지 기다려 2초가 덧붙는다 → `element.click()` 을 직접 부르고 그 시각부터 잰다.
+  막 감시는 문서 시작부터(DOMContentLoaded 뒤에 붙이면 부하 때 놓친다). 저장소가 빈 새 컨텍스트에서 잰다(테스트로 쌓인 화면 수천 개 · 오래 돈
+  자동화 브라우저는 느려진다). PC 에 다른 무거운 작업(Premiere 등)이 돌면 전부 2~3배로 부푼다 — 같은 조건 번갈아 재기로만 비교.
+- **결과**(빈 저장소 · 클릭 → 막 걷힘, 3회 중앙값) — LS STATCOM 0.91 · Data Center 0.91 · 계통 진단 1.03 · 상태정보 1.11 · ACB 진단 1.20
+  (다시 열기 1.62) · POSCO 메인 0.92 · SOP 1.53(다시 열기 1.49) · HANA 1.16 · SK하이닉스 0.91 · 한진 1.22 · Icheon main 1.08초.
+  ACB 진단 · POSCO SOP 는 화면 두 장을 겹쳐 그리는 첫 렌더(스타일 · 레이아웃 · 글자 모양)가 대부분이라 1.5초 언저리에 남아 있다.

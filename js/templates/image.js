@@ -36,22 +36,102 @@ function clearImageTemplate() {
 }
 window.__applyImageTemplate = applyImageTemplate;
 
-/* ── 템플릿 시안의 로고를 업로드한 브랜드 로고로 교체 ────────────────────────────
-   '색 정하기 → 로고 업로드 → 로고에서 기준색'을 누르면 기준색만 바꾸는 게 아니라
-   시안 좌상단 로고도 업로드 로고로 바꾼다(모든 템플릿 공통).
-     · SK하이닉스: 인라인 SVG라 #skx-Logo 그룹을 숨기고 같은 자리(bbox)에 <image>를 얹는다.
-     · 한진·미연결 이미지 템플릿: 시안이 통짜 래스터라 로고 자리(1920×1080 기준 좌표)에
-       업로드 로고를 얹고, 원래 로고는 시안에서 뽑은 헤더 배경색으로 덮는다.
-   적용 여부(FLAG)는 저장돼 새로고침·시안 재생성 후에도 유지된다. */
+/* ── 템플릿 시안의 헤더 로고 → WEMB Studio 로고 ────────────────────────────────
+   템플릿 헤더의 로고 · BI(RENOBIT · 고객사 BI · 예전 'WEMB Studio' 표시)를 모두 src/studio-logo.svg 로 보여 준다.
+   '색 정하기 → 로고 업로드 → 로고에서 기준색'으로 로고를 올렸으면 그 로고가 대신 들어간다
+   (FLAG — '기본값'을 누르면 다시 WEMB Studio 로고). 원래 시안 파일은 그대로 두고 화면에서만 바꾼다.
+     · DOM 으로 다시 만든 템플릿(POSCO · LS Electric · HANA · 한진 · SK하이닉스 팝업 · Icheon main):
+       헤더의 로고 묶음(심볼 + 글자, Icheon 은 BI 그림)을 감추고 로고 그림 하나를 넣는다.
+       라이트 테마에선 CSS 가 짙은 판(studio-logo-lt.svg)으로 바꾼다(css/preview/digital-twin.css).
+     · SK하이닉스 1level: 인라인 SVG 라 #skx-Logo 그룹을 숨기고 같은 자리에 <image> 를 얹는다.
+     · 그림 템플릿(통짜 래스터): 그림마다 재 둔 로고 자리(BOX)를 둘레 배경으로 메우고 그 위에 얹는다.
+       표에 없는 그림(헤더에 로고가 없는 것)은 손대지 않는다 — 자동으로 찾게 했더니 날짜 · 제목을 로고로 잡았다. */
 const TPLLOGO = {
   FLAG: 'wemb-brand-logo-tpl',
   SRCK: 'wemb-brand-logo',
   SVGNS: 'http://www.w3.org/2000/svg',
-  /* 로고 자리를 못 찾았을 때 쓰는 기본 자리 — 1920×1080 기준 좌상단 헤더 */
-  FALLBACK: { x: 14, y: 12, w: 170, h: 36 },
-  boxCache: {},
+  DEF: 'src/studio-logo.svg',
+  DEF_LT: 'src/studio-logo-lt.svg', /* 밝은 바탕용 — 같은 로고의 짙은 판 */
+  /* 그림 템플릿의 로고 자리 — 그림 이름(-hi · 확장자 뺀 것) → [x, y, w, h(, 'mark')], 1920×1080 기준.
+     원래 로고(심볼 + 글자)를 꼭 맞게 감싼 상자다. 'mark' 는 심볼만 있는 자리라 로고의 심볼만 보인다.
+     그림 템플릿 88장을 하나씩 재서 넣었다(2026-10-12). 빠진 것은 shoneview-login 하나 — 로고가 헤더가 아니라 로그인 칸에 있다. */
+  BOX: (() => {
+    const B = {};
+    const put = (names, box) => names.split(' ').forEach((n) => (B[n] = box));
+    /* 헤더 왼쪽 */
+    put('skhynix-icheon-2level', [17, 17, 141, 31]);
+    put('gammania-overviewb', [63, 25, 185, 39]);
+    put('gammania-floorscreen', [52, 18, 157, 36]);
+    put('nh-dcim', [27, 18, 157, 36]);
+    put('kb-main kb-main02', [32, 21, 157, 36]);
+    put('hyundaicapital-p01-service-map hyundaicapital-p03-monitoring hyundaicapital-p07-it-kpi hyundaicapital-p08-it-status', [29, 15, 122, 28]);
+    put('shinhan-card-security', [23, 16, 149, 32]);
+    put('psim-dashboard-ic', [24, 9, 157, 36]);
+    put('shoneview-main01 shoneview-main02 shoneview-main03 shoneview-network shoneview-p03-was shoneview-p05-db ' +
+      'shoneview-p06-01-systemstatus01 shoneview-p06-01-systemstatus02 shoneview-p06-02-systemstatus01 ' +
+      'shoneview-p06-02-systemstatus02 shoneview-p06-02-systemstatus03 shoneview-p06-02-systemstatus04', [36, 16, 138, 31]);
+    put('koen-dashboard01', [37, 17, 137, 31]);
+    put('dcms-energystatus dcms-electricty', [46, 24, 137, 31]);
+    put('figma-lottiefiles', [36, 7, 138, 38]);
+    put('kised01 kised02', [48, 30, 157, 36]);
+    put('digicentre-dcim', [29, 22, 158, 36]);
+    put('global-status-1', [17, 12, 157, 36]);
+    put('global-status-2', [44, 27, 157, 36]);
+    put('swsecurrity', [31, 16, 158, 36]);
+    put('korea-status-1', [67, 16, 117, 25]);
+    put('korail-concept', [40, 26, 158, 36]);
+    put('seweragesys-concept', [28, 32, 67, 25]);
+    put('nrtec-concept-2dmap', [97, 10, 164, 37]);
+    put('nrtec-concept-3dmap', [17, 16, 28, 32, 'mark']);
+    put('facility-status-2', [153, 12, 158, 36]);
+    put('portstatus-overalloperation', [29, 18, 158, 37]);
+    put('portstatus-vesselinfo', [16, 8, 158, 37]);
+    put('portstatus-login-concept', [32, 36, 158, 36]);
+    put('solor-concept-fems', [23, 12, 158, 37]);
+    put('hanjin-2d-ld', [54, 25, 139, 31]);
+    put('wooribank-transaction wooribank-performance', [29, 18, 143, 32]);
+    put('wooribank-event', [26, 14, 214, 33]);
+    put('army-prototype01 army-prototype02', [90, 14, 144, 32]);
+    put('nh-biometrics', [216, 12, 143, 32]);
+    put('huananbank-banking', [19, 7, 99, 27]);
+    put('handok-gridsol-cube', [39, 19, 157, 36]);
+    put('new-incheon01', [64, 43, 157, 36]);
+    put('new-incheon02', [48, 29, 157, 36]);
+    put('new02-incheon02', [53, 33, 157, 36]);
+    put('biotech-d-bt-main', [11, 20, 106, 28]);
+    put('biotech-d-bt-overview', [7, 15, 108, 26]);
+    put('biotech-d-bt-2f', [16, 25, 100, 23]);
+    put('skh-security', [28, 11, 134, 30]);
+    put('shcard-overall', [26, 13, 144, 32]);
+    put('shcard-smartchannel-general-board shcard-smartchannel-system-status shcard-smartchannel-service-homepage shcard-smartchannel-iinfra-dbms', [21, 8, 144, 32]);
+    /* 헤더 가운데 */
+    put('hanacard-main hc-approval', [893, 3, 142, 30]);
+    put('hanacard-approval-text', [898, 8, 142, 30]);
+    put('hanbit', [858, 13, 190, 43]);
+    put('facility-status-1', [883, 14, 157, 40]);
+    put('lse-demo-main', [884, 11, 142, 31]);
+    put('lse-demo-floor', [889, 13, 155, 33]);
+    put('lse-demo-electricroom', [884, 12, 143, 30]);
+    put('lse-demo-detail-vcb', [885, 12, 143, 31]);
+    put('lse-demo-pop-facilitystatus', [811, 11, 248, 50]);
+    put('lse-demo-pop-generator', [809, 5, 236, 43]);
+    put('lse-demo-pop-vcb-safe', [812, 8, 160, 40]);
+    put('huananbank-main', [934, 51, 52, 32]);
+    put('huananbank-corebiz01-01', [888, 21, 157, 33]);
+    put('huananbank-corebiz01-02', [893, 26, 156, 34]);
+    put('huananbank-corebiz02 huananbank-itinfra', [883, 16, 156, 33]);
+    put('huananbank-atm', [913, 46, 156, 34]);
+    put('huananbank-payment-status', [918, 52, 156, 33]);
+    put('huananbank-internet', [923, 21, 156, 33]);
+    put('huananbank-domestic-branch', [880, 11, 156, 33]);
+    put('huananbank-overseas-branch', [934, 19, 156, 33]);
+    return B;
+  })(),
+  /* DOM 템플릿 헤더의 로고 묶음 — 생성기가 붙인 레이어 이름, 템플릿마다 한 화면에 하나 */
+  DOM: '.pk-root [data-name="Logo"], .hn-root [data-name="Logo"], .hj-root [data-name="Logo"], .skxp-root [data-name="Logo"], ' +
+    '.ls-root [data-name="Brand"], .skh-root [data-name="logo"], .skv-root [data-name="logo"]',
   arCache: {},
-  /* 업로드 로고의 가로세로비 — 로고 자리 높이에 맞춘 '실제 이미지 폭'을 계산하는 데 쓴다.
+  /* 로고의 가로세로비 — SVG 시안(<image>)의 폭을 정하는 데 쓴다.
      아직 못 읽었으면 0을 주고, 로드가 끝나면 콜백으로 다시 적용한다. */
   aspect(src, again) {
     if (this.arCache[src]) return this.arCache[src];
@@ -62,83 +142,88 @@ const TPLLOGO = {
   },
   isOn() { try { return localStorage.getItem(this.FLAG) === '1'; } catch (e) { return false; } },
   setOn(v) { try { v ? localStorage.setItem(this.FLAG, '1') : localStorage.removeItem(this.FLAG); } catch (e) {} },
-  logoSrc() { try { return (this.isOn() && localStorage.getItem(this.SRCK)) || ''; } catch (e) { return ''; } },
+  /* 업로드한 로고를 시안에 쓰기로 했으면 그 로고, 아니면 '' (WEMB Studio 로고) */
+  custom() { try { return (this.isOn() && localStorage.getItem(this.SRCK)) || ''; } catch (e) { return ''; } },
 
-  /* 원래 로고를 덮을 색 — 로고 오른쪽 헤더 띠를 작게 그려 최빈색을 고른다.
-     (file:// 로 열어 캔버스가 막히면 테마 배경색으로 대체) */
-  patch(imgEl, box) {
+  /* ── DOM 템플릿 ── */
+  dom(custom) {
+    document.querySelectorAll(this.DOM).forEach((box) => {
+      let im = box.querySelector(':scope > img.tpl-studio-logo');
+      if (!im) {
+        im = document.createElement('img');
+        im.className = 'tpl-studio-logo';
+        im.draggable = false;
+        box.appendChild(im);
+        box.setAttribute('data-studio-logo', '');
+      }
+      const src = custom || this.DEF;
+      if (im.getAttribute('src') !== src) im.setAttribute('src', src);
+      im.alt = custom ? '브랜드 로고' : 'WEMB Studio';
+    });
+  },
+
+  /* ── 그림 템플릿 ── */
+  boxOf(imgEl) {
+    const src = imgEl.__origSrc || imgEl.getAttribute('src') || '';
+    const name = src.split('/').pop().split('?')[0].replace(/-hi(?=\.)/i, '').replace(/\.[a-z0-9]+$/i, '');
+    const b = this.BOX[name];
+    return b ? { x: b[0], y: b[1], w: b[2], h: b[3], mark: b[4] === 'mark' } : null;
+  },
+  /* 원래 로고 자리를 둘레 배경으로 메운 그림 — 상자 바로 바깥 네 변을 이어 그린 면(Coons)이라
+     세로 그라데이션 · 가로줄 · 빛 번짐이 끊기지 않는다. 변은 5픽셀씩 평균해 잡티가 줄무늬로 번지지 않게 한다.
+     시안 픽셀을 그대로 읽으므로(테마 색으로 다시 칠한 그림이면 그 그림) 색 보정이 따로 필요 없다.
+     → { url, light: 짙은 로고를 쓸지 }. 원래 로고가 바탕보다 밝았으면 흰 로고, 어두웠으면 짙은 로고 —
+     밝은 빛 번짐 위의 흰 로고(LSE Demo)와 흰 바탕 위의 짙은 로고(한빛)를 둘 다 그대로 따른다.
+     차이가 거의 없으면 바탕 밝기로 정한다. 캔버스가 막히면(file:// 로 연 경우) null */
+  fill(imgEl, r) {
     try {
       const nw = imgEl.naturalWidth, nh = imgEl.naturalHeight;
-      if (!nw || !nh) throw 0;
+      if (!nw || !nh) return null;
       const sx = nw / 1920, sy = nh / 1080;
-      const cv = document.createElement('canvas');
-      cv.width = 24; cv.height = 8;
-      const cx = cv.getContext('2d', { willReadFrequently: true });
-      cx.drawImage(imgEl, (box.x + box.w + 8) * sx, box.y * sy, 120 * sx, box.h * sy, 0, 0, 24, 8);
-      const d = cx.getImageData(0, 0, 24, 8).data, cnt = {};
-      for (let i = 0; i < d.length; i += 4) {
-        const k = ((d[i] >> 3) << 10) | ((d[i + 1] >> 3) << 5) | (d[i + 2] >> 3);
-        cnt[k] = (cnt[k] || 0) + 1;
-      }
-      let best = -1, n = -1;
-      for (const k in cnt) if (cnt[k] > n) { n = cnt[k]; best = +k; }
-      if (best < 0) throw 0;
-      /* 시안 픽셀을 그대로 읽으므로(테마 색으로 이미 다시 칠해진 그림) 보정이 따로 필요 없다 */
-      return 'rgb(' + (((best >> 10) & 31) << 3) + ',' + (((best >> 5) & 31) << 3) + ',' + ((best & 31) << 3) + ')';
-    } catch (e) {
-      const cs = getComputedStyle(document.documentElement);
-      return (cs.getPropertyValue('--bg-header') || cs.getPropertyValue('--bg-surface') || '').trim() || '#0b1220';
-    }
-  },
-  /* 시안 좌상단 헤더에서 '로고 덩어리'를 찾아 그 자리를 돌려준다 — 시안마다 로고 위치·크기가
-     달라 좌표를 박아 둘 수 없다. 헤더 좌측 600×80(1920 기준) 을 축소해 배경색과 다른 픽셀을
-     모으고, 가로줄(헤더 밑선)은 빼고, 8단위 이상 떨어진 덩어리로 나눈 뒤 왼쪽에서 시작하는
-     가장 진한 덩어리를 로고로 본다(햄버거 버튼 같은 작은 덩어리는 자연히 밀린다). */
-  detect(imgEl) {
-    const key = imgEl.__origSrc || imgEl.currentSrc || imgEl.src; /* 다시 칠한 그림도 원본 기준으로 캐시 */
-    if (this.boxCache[key]) return this.boxCache[key];
-    let box = null;
-    try {
-      const cw = imgEl.naturalWidth, chh = imgEl.naturalHeight;
-      if (!cw || !chh) return this.FALLBACK;
-      const W = 300, H = 40, U = 2; /* 1px = 2단위 */
+      const x0 = Math.max(0, Math.floor(r.x * sx)), y0 = Math.max(0, Math.floor(r.y * sy));
+      const W = Math.min(nw - x0, Math.ceil(r.w * sx)), H = Math.min(nh - y0, Math.ceil(r.h * sy));
+      if (W < 3 || H < 3) return null;
       const cv = document.createElement('canvas');
       cv.width = W; cv.height = H;
       const cx = cv.getContext('2d', { willReadFrequently: true });
-      cx.drawImage(imgEl, 0, 0, (600 / 1920) * cw, (80 / 1080) * chh, 0, 0, W, H);
-      const d = cx.getImageData(0, 0, W, H).data, cnt = {};
-      for (let i = 0; i < d.length; i += 4) { const k = ((d[i] >> 3) << 10) | ((d[i + 1] >> 3) << 5) | (d[i + 2] >> 3); cnt[k] = (cnt[k] || 0) + 1; }
-      let bg = -1, n = -1;
-      for (const k in cnt) if (cnt[k] > n) { n = cnt[k]; bg = +k; }
-      const br = ((bg >> 10) & 31) << 3, bgg = ((bg >> 5) & 31) << 3, bb = (bg & 31) << 3;
-      const ink = (x, y) => { const i = (y * W + x) * 4; return Math.abs(d[i] - br) + Math.abs(d[i + 1] - bgg) + Math.abs(d[i + 2] - bb) > 100; };
-      const rowOK = [];
-      for (let y = 0; y < H; y++) { let c = 0; for (let x = 0; x < W; x++) if (ink(x, y)) c++; rowOK[y] = c < W * 0.7; }
-      const col = [];
-      for (let x = 0; x < W; x++) { let c = 0; for (let y = 0; y < H; y++) if (rowOK[y] && ink(x, y)) c++; col[x] = c; }
-      const groups = []; let g = null, gap = 0;
-      for (let x = 0; x < W; x++) {
-        if (col[x] > 0) { if (!g) { g = { x0: x, x1: x, area: 0 }; groups.push(g); } g.x1 = x; g.area += col[x]; gap = 0; }
-        else if (g && ++gap >= 4) g = null;
-      }
-      const cand = groups.filter((t) => t.x0 < 75 && t.x1 - t.x0 >= 3).sort((a, b) => b.area - a.area)[0];
-      if (cand) {
-        let y0 = -1, y1 = -1;
-        for (let y = 0; y < H; y++) {
-          if (!rowOK[y]) continue;
-          let c = 0; for (let x = cand.x0; x <= cand.x1; x++) if (ink(x, y)) c++;
-          if (c > 0) { if (y0 < 0) y0 = y; y1 = y; }
+      cx.drawImage(imgEl, x0, y0, W, H, 0, 0, W, H);
+      const id = cx.getImageData(0, 0, W, H), d = id.data;
+      const edge = (n, at) => {
+        const out = new Float32Array(n * 3);
+        for (let i = 0; i < n; i++) {
+          const a = Math.max(0, i - 2), z = Math.min(n - 1, i + 2);
+          for (let c = 0; c < 3; c++) { let s = 0; for (let j = a; j <= z; j++) s += d[at(j) + c]; out[i * 3 + c] = s / (z - a + 1); }
         }
-        if (y0 >= 0) {
-          /* 여유 2단위를 두되, 헤더를 넘어서지 않게 크기를 제한한다(잘못 잡아도 피해가 없도록) */
-          let x = Math.max(0, cand.x0 * U - 2), y = Math.max(4, y0 * U - 2);
-          let w = Math.min(210, (cand.x1 - cand.x0 + 1) * U + 4), h = Math.min(42, (y1 - y0 + 1) * U + 4);
-          if (y + h > 68) h = 68 - y;
-          box = { x, y, w, h };
+        return out;
+      };
+      const T = edge(W, (i) => i * 4), B = edge(W, (i) => ((H - 1) * W + i) * 4);
+      const L = edge(H, (i) => i * W * 4), R = edge(H, (i) => (i * W + W - 1) * 4);
+      const k = (W - 1) * 3;
+      const lum = (o) => 0.299 * d[o] + 0.587 * d[o + 1] + 0.114 * d[o + 2];
+      let orig = 0;
+      for (let o = 0; o < d.length; o += 4) orig += lum(o);
+      let sum = 0;
+      for (let y = 0; y < H; y++) {
+        const v = y / (H - 1);
+        for (let x = 0; x < W; x++) {
+          const u = x / (W - 1), o = (y * W + x) * 4;
+          for (let c = 0; c < 3; c++) {
+            d[o + c] = (1 - v) * T[x * 3 + c] + v * B[x * 3 + c] + (1 - u) * L[y * 3 + c] + u * R[y * 3 + c]
+              - ((1 - u) * (1 - v) * T[c] + u * (1 - v) * T[k + c] + (1 - u) * v * B[c] + u * v * B[k + c]);
+          }
+          d[o + 3] = 255;
+          sum += lum(o);
         }
       }
-    } catch (e) {}
-    return (this.boxCache[key] = box || this.FALLBACK);
+      cx.putImageData(id, 0, 0);
+      const bg = sum / (W * H), diff = orig / (W * H) - bg;
+      return { url: cv.toDataURL('image/png'), light: diff < -6 || (diff <= 6 && bg > 150) };
+    } catch (e) { return null; }
+  },
+  /* 픽셀을 못 읽을 때 덮는 색 — 테마 헤더 배경 */
+  flat() {
+    const cs = getComputedStyle(document.documentElement);
+    return (cs.getPropertyValue('--bg-header') || cs.getPropertyValue('--bg-surface') || '').trim() || '#0b1220';
   },
   /* 시안 이미지는 object-fit:contain — 실제로 그려진 사각형에 맞춰 로고 자리를 잡는다.
      크기는 레이어의 레이아웃 크기(clientWidth/Height)로 잰다 — getBoundingClientRect 는
@@ -152,48 +237,53 @@ const TPLLOGO = {
     if (!cw || !chh) return;
     const sc = Math.min(cw / nw, chh / nh), dw = nw * sc, dh = nh * sc;
     const ox = (cw - dw) / 2, oy = (chh - dh) / 2, b = el.__box;
-    /* 상자 = 원래 로고를 덮을 자리 */
     el.style.left = (ox + (b.x / 1920) * dw) + 'px';
     el.style.top = (oy + (b.y / 1080) * dh) + 'px';
     el.style.width = ((b.w / 1920) * dw) + 'px';
     el.style.height = ((b.h / 1080) * dh) + 'px';
-    /* 이미지 = 원본 비율 그대로의 실제 크기(늘이거나 남는 여백 없이) */
-    const im = el.querySelector('img');
-    if (im && el.__logoW) {
-      im.style.width = ((el.__logoW / 1920) * dw) + 'px';
-      im.style.height = ((el.__logoH / 1080) * dh) + 'px';
-    } else if (im) { im.style.width = ''; im.style.height = ''; }
   },
-  raster(layer, src) {
-    let el = layer.querySelector(':scope > .tpl-logoswap');
-    if (!src) { if (el) { if (el.__ro) el.__ro.disconnect(); el.remove(); } return; }
+  raster(layer, custom) {
     const imgEl = layer.querySelector(':scope > img');
-    if (!imgEl) return;
+    let el = layer.querySelector(':scope > .tpl-logoswap');
+    const b = imgEl && this.boxOf(imgEl);
+    if (!b) { if (el) { if (el.__ro) el.__ro.disconnect(); el.remove(); } return; }
     if (!imgEl.complete || !imgEl.naturalWidth) {
-      imgEl.addEventListener('load', () => this.raster(layer, src), { once: true });
+      imgEl.addEventListener('load', () => this.raster(layer, this.custom()), { once: true });
       return;
     }
     if (!el) {
       el = document.createElement('div');
       el.className = 'tpl-logoswap';
-      el.innerHTML = '<img alt="브랜드 로고">';
+      el.innerHTML = '<img alt="">';
       layer.appendChild(el);
       if (window.ResizeObserver) { el.__ro = new ResizeObserver(() => this.fit(layer)); el.__ro.observe(layer); }
     }
-    el.__box = this.detect(imgEl);
-    const ar = this.aspect(src, () => this.raster(layer, src));
-    /* 로고 크기(1920 단위) — 높이는 원래 로고 높이에 맞추고 폭은 원본 비율 그대로.
-       다만 통짜 그림 시안은 오른쪽 타이틀을 밀 수 없으므로 원래 로고 자리 폭을 넘지 않게
-       하고(넘으면 비율 유지한 채 축소), 남는 높이는 위아래 가운데로 놓는다. */
-    const bx = el.__box;
-    let lw = ar ? bx.h * ar : bx.w, lh = bx.h;
-    if (ar && lw > bx.w) { lw = bx.w; lh = lw / ar; }
-    el.__logoW = ar ? lw : 0;
-    el.__logoH = ar ? lh : 0;
-    el.style.background = this.patch(imgEl, el.__box);
-    el.querySelector('img').src = src;
+    /* 덮개 = 로고 상자 + 둘레 3(1920 기준) — 둘레의 바깥 줄이 메울 색의 기준이다 */
+    const P = 3, r = { x: b.x - P, y: b.y - P, w: b.w + 2 * P, h: b.h + 2 * P };
+    el.__box = r;
+    const key = (imgEl.__origSrc || imgEl.getAttribute('src')) + '|' + (imgEl.__tintKey || '') + '|' + (imgEl.style.filter || '') + '|' + imgEl.naturalWidth;
+    if (el.__key !== key) {
+      el.__key = key;
+      const f = this.fill(imgEl, r);
+      el.__light = !!(f && f.light);
+      el.style.backgroundImage = f ? 'url("' + f.url + '")' : '';
+      el.style.backgroundColor = f ? '' : this.flat();
+    }
+    /* 로고 그림은 원래 로고 상자에 비율 그대로 맞춘다 — 헤더 가운데 로고는 가운데, 나머지는 왼쪽 맞춤 */
+    const im = el.querySelector('img');
+    const src = custom || (el.__light ? this.DEF_LT : this.DEF);
+    if (im.getAttribute('src') !== src) im.setAttribute('src', src);
+    im.alt = custom ? '브랜드 로고' : 'WEMB Studio';
+    im.style.left = ((P / r.w) * 100) + '%';
+    im.style.top = ((P / r.h) * 100) + '%';
+    im.style.width = ((b.w / r.w) * 100) + '%';
+    im.style.height = ((b.h / r.h) * 100) + '%';
+    el.classList.toggle('mark', b.mark);
+    el.classList.toggle('mid', Math.abs(b.x + b.w / 2 - 960) < 160);
     this.fit(layer);
   },
+
+  /* ── SK하이닉스 1level(인라인 SVG) ── */
   /* 그래픽 '잉크'만의 상자 — 스튜디오가 글자 편집용으로 주입한 foreignObject(폭 400+)는
      빼고, 실제로 그려지는 요소만 모아 감싼다. */
   inkBox(node) {
@@ -243,30 +333,19 @@ const TPLLOGO = {
       c.setAttribute('transform', tf);
     });
   },
-  /* 원래 로고로 되돌릴 때 — 옮겨 뒀던 형제들을 제자리로 */
-  resetBrand(g) {
-    const brand = g && g.parentNode;
-    if (!brand) return;
-    [...brand.children].forEach((c) => {
-      if (c.__baseTf == null) return;
-      c.__baseTf ? c.setAttribute('transform', c.__baseTf) : c.removeAttribute('transform');
-    });
-  },
-  /* 인라인 SVG 시안(SK하이닉스) — #skx-Logo 그룹 자리에 <image>로 얹는다 */
-  svgLogo(scr, src, tries) {
+  /* #skx-Logo 그룹 자리에 <image> 를 얹는다(이 시안은 다크 전용이라 흰 로고 하나) */
+  svgLogo(scr, custom, tries) {
     const svg = scr.querySelector('svg');
     if (!svg) return;
     const g = svg.querySelector('[id="skx-Logo"]');
     if (!g) return;
-    let img = svg.querySelector('[id="skx-logoswap"]');
-    if (!src) { if (img) img.remove(); g.style.display = ''; this.resetBrand(g); return; }
     let b = g.__logoBox;
     if (!b) {
       /* 로고 '잉크'(심볼+워드마크)만의 합집합 상자를 쓴다 — 그룹 전체 getBBox 는 스튜디오가
          글자 편집용으로 주입한 foreignObject(폭 400+) 때문에 4배 가까이 넓게 잡힌다. */
       let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
       [...g.children].forEach((c) => {
-        if (c.tagName === 'foreignObject' || c.getAttribute('id') === 'skx-logoswap') return;
+        if (c.tagName === 'foreignObject') return;
         try {
           const r = c.getBBox();
           if (!r || !r.width) return;
@@ -277,8 +356,9 @@ const TPLLOGO = {
       if (x1 > x0) b = g.__logoBox = { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
     }
     /* 레이아웃 전에는 getBBox 가 0 이라 잠시 뒤 다시 시도한다(핫스팟 표시와 같은 방식) */
-    if (!b) { if ((tries || 0) < 20) setTimeout(() => this.svgLogo(scr, src, (tries || 0) + 1), 150); return; }
+    if (!b) { if ((tries || 0) < 20) setTimeout(() => this.svgLogo(scr, this.custom(), (tries || 0) + 1), 150); return; }
     g.style.display = 'none';
+    let img = svg.querySelector('[id="skx-logoswap"]');
     if (!img) {
       img = document.createElementNS(this.SVGNS, 'image');
       img.setAttribute('id', 'skx-logoswap');
@@ -286,7 +366,8 @@ const TPLLOGO = {
       g.parentNode.insertBefore(img, g.nextSibling);
     }
     /* 폭은 로고 자리 높이에 맞춘 이미지 실제 폭 — 남는 여백 없이 원본 비율 그대로 들어간다 */
-    const ar = this.aspect(src, () => this.svgLogo(scr, src));
+    const src = custom || this.DEF;
+    const ar = this.aspect(src, () => this.svgLogo(scr, this.custom()));
     const w = ar ? b.h * ar : b.w;
     img.setAttribute('x', b.x); img.setAttribute('y', b.y);
     img.setAttribute('width', w); img.setAttribute('height', b.h);
@@ -295,9 +376,10 @@ const TPLLOGO = {
     img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', src);
   },
   apply() {
-    const src = this.logoSrc();
-    document.querySelectorAll('.skx-screen').forEach((scr) => this.svgLogo(scr, src));
-    document.querySelectorAll('.hj-repro, .tplimg-repro').forEach((l) => this.raster(l, src));
+    const custom = this.custom();
+    this.dom(custom);
+    document.querySelectorAll('.skx-screen').forEach((scr) => this.svgLogo(scr, custom));
+    document.querySelectorAll('.hj-repro, .tplimg-repro').forEach((l) => this.raster(l, custom));
   },
 };
 window.__applyTplLogo = () => { try { TPLLOGO.apply(); } catch (e) {} };
@@ -707,7 +789,9 @@ const TPLTINT = {
        · 바탕 사진과 3D 미니맵 렌더(사진이라 색상만 돌리면 어색하다 → 픽셀을 다시 칠한다) */
   LSELECTRIC_OPT: {
     seed: '#2861FF', seededKey: 'wemb-lselectric-seeded', refHue: 224,
-    keep: /(marker[-\d]*|ellipse[-\d]*|knob[-\d]*|logo-mark[-\d]*|battery|plug)(-lt)?\.svg(\?|$)|(visual[-\d]*|thermal-image|chart-image[-\d]*)\.png(\?|$)/i,
+    keep: /(marker[-\w]*|ellipse[-\d]*|knob[-\d]*|logo-mark[-\d]*|battery[-\d]*|plug|fan-[\w-]+|plot[-\d]*)(-lt)?\.svg(\?|$)|(visual[-\d]*|thermal-image|chart-image[-\d]*)\.png(\?|$)/i,
+    /* ↑ 냉각팬(fan-*)은 상태색(동작 초록 · 중지 회색 · 과부하 주황 · 고장 빨강)이 곧 뜻 · 상태정보 Plot 은 4단계/3단계 기준선 색이 범례와 짝 ·
+         펌프 표지(marker-running/stopped)도 운전 색을 지킨다 */
     /* ↑ ACB 진단 팝업의 장비 사진(visual*) · 열화상(thermal-image) · PD 차트(chart-image*)는 색이 곧 데이터라 칠하지 않는다 */
     raster: /(background|map-image)\.(png|jpg)(\?|$)/i,
   },
@@ -826,7 +910,7 @@ const TPLTINT = {
         [px + '-style', px + '-light-style', 'posco-live-style'], 'wemb-posco-mode', this.POSCO_OPT);
     });
     /* LS Electric STATCOM 화면 2장 — 같은 방식. 두 장이 같은 밝기를 공유한다(wemb-lselectric-mode) */
-    ['lsm', 'lsd', 'lsa', 'lsy', 'lse'].forEach((px) => {      /* lsa·lsy·lse = ACB·계통·에너지 진단 팝업(.lsm-root 안에 겹쳐 있다) */
+    ['lsm', 'lsd', 'lsa', 'lsy', 'lse', 'lst', 'lsp', 'lsb', 'lsc', 'lsr'].forEach((px) => {      /* lsa~lsr = STATCOM 위에 겹친 팝업(ACB·계통·에너지·상태정보·AC전원실·충전기·냉각설비·알림) */
       this.icheonTint(t, mode, '.' + px + '-root',
         [px + '-style', px + '-light-style', 'lselectric-live-style'], 'wemb-lselectric-mode', this.LSELECTRIC_OPT);
     });

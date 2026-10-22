@@ -242,6 +242,9 @@ Sidebar 15)과 오른쪽에 붙은 것(자산정보현황 · 출입동선 판 13
   그 자리에서 고칠 수 있다(메인 115 · Ack 118 · 종합현황 139 · 출입동선 132 · 전체층 223 · 단층 149).
 - **콘텐츠 추가**(빈 패널 · 에셋 라이브러리) → `.pk*-root > .dt-added > .cols` 로 들어간다.
 - ⚠ 스크립트를 고치면 `studio.html`/`index.html` 의 **`?v=` 를 반드시 올릴 것**(함정 ⑦ 참고).
+  2026-10-02 부터 화면 모듈(`src/posco-*.js` · `posco-live.js`)의 `<script>` 와 `?v=` 는 `studio.html` 이 아니라
+  `js/core/tpl-modules.js` 의 표에 있다(여는 화면 것만 싣는다 — `src/lselectric/_gen/README.md` '여는 시간').
+  `patch-studio.js` 는 studio.html 에 `<script>` 를 넣으므로 다시 돌리지 말 것.
   어제 `js/main.js`·`js/core/projects.js` 를 고치면서 안 올려서, 브라우저가 옛 파일을 물고 있는 바람에
   '템플릿이 새로고침하면 안 열린다'를 한참 뒤에야 알아챘다. 브라우저에서 이렇게 확인할 수 있다:
   `fetch(u).then(r=>r.text())` 와 `fetch(u,{cache:'no-store'})` 의 결과를 견주면 캐시가 낡았는지 나온다.

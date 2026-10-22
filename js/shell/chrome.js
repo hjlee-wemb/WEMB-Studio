@@ -119,9 +119,24 @@
   document.querySelector('.tb-actions')?.addEventListener('click', (e) => {
     const b = e.target.closest('[data-act]');
     if (!b) return;
+    if (b.dataset.act === 'present') return startPresent();
     const map = { undo: 'histUndo', redo: 'histRedo', export: 'exportOpen' };
     document.getElementById(map[b.dataset.act])?.click();
   });
+  /* 발표 — 이 프로젝트의 화면들을 도구 없이 크게(present.html). 지금 화면부터 시작하고, 끝내면 이 화면으로 돌아온다.
+     떠나기 전에 지금 화면의 작업 상태를 프로젝트에 저장한다(발표 화면은 저장을 잠그고 보여 주기만 한다). */
+  function startPresent() {
+    const P = WEMB.projects;
+    let cur = null;
+    try { cur = localStorage.getItem(P.CUR_PROJ); } catch (e) {}
+    const s = cur && P.loadProjects().find((x) => x.id === cur);
+    if (!s || !s.projectId) {
+      if (typeof toast === 'function') toast('이 화면은 아직 프로젝트에 저장되지 않아 발표할 수 없어요 — 스튜디오에서 화면을 만든 뒤 다시 눌러 주세요.', { type: 'warn' });
+      return;
+    }
+    P.persistCurrentProjectData();
+    location.href = 'present.html?group=' + encodeURIComponent(s.projectId) + '&screen=' + encodeURIComponent(s.id);
+  }
   /* ── 왼쪽 아이콘 레일 → 오른쪽 옆으로 펼쳐지는 플라이아웃 메뉴 ── */
   const ic = (p) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
   const IC = {
@@ -142,6 +157,7 @@
     redo: ic('<polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/>'),
     reset: ic('<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>'),
     trash: ic('<polyline points="3 6 5 6 21 6"/><path d="M8 6V4h8v2"/><path d="M6 6l1 15h10l1-15"/>'),
+    atom: ic('<circle cx="11" cy="13" r="7.5"/><circle cx="11" cy="13" r="3" fill="currentColor" stroke="none"/><circle cx="18.6" cy="5.4" r="2.4" fill="currentColor" stroke="none"/>'),
   };
   /* 옵션창을 선택한 섹션만 보이게 필터 (data-section) */
   function showSection(sec) {
@@ -209,6 +225,7 @@
       { label: '레이아웃', icon: IC.layout, run: () => showSection('layout') },
       { label: '콘텐츠 추가', icon: IC.addpanel, run: () => showSection('dash-panels') },
       { label: '디자인 편집', icon: IC.sliders, run: () => showSection('dash-design') },
+      { label: '원자 변경', icon: IC.atom, run: () => window.__atomSwap && window.__atomSwap.open() },
     ],
     layout: [
       { label: '2단', icon: IC.layout, run: () => openLayoutGroup('2단') },
@@ -273,6 +290,8 @@
     if (key === 'collapse') { closeFly(); if (window.__setSidebarCollapsed) window.__setSidebarCollapsed(!app.classList.contains('collapsed')); else app.classList.toggle('collapsed'); return; }
     /* 홈 버튼은 메뉴 없이 곧바로 스튜디오 홈(런처)으로 이동 */
     if (key === 'home') { closeFly(); document.getElementById('quickHome')?.click(); return; }
+    /* 원자 변경 — 메뉴 없이 화면 옆에 원자 변경 창을 열고 닫는다(js/studio/atom-swap.js) */
+    if (key === 'atoms') { closeFly(); window.__atomSwap && window.__atomSwap.toggle(); return; }
     if (flyOpenFor === key) { closeFly(); return; }
     openFly(b, key);
   });

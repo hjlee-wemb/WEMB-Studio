@@ -190,11 +190,25 @@ function renderSheet() {
 /* 앱 스타일 전체를 문서 순서대로 모은다 — 자립형 HTML 내보내기가 이 문자열을 통째로 박아 넣는다.
    인라인 <style> 과 파일로 분리한 앱 스타일시트(<link data-app-css>)를 함께 읽는다.
    링크 쪽은 CSSOM 에서 읽으므로 http(s) 로 열었을 때만 채워진다(file:// 은 브라우저가 막는다). */
+/* 새 창 · 내려받은 문서의 글꼴 — 이 스튜디오의 로컬 사본(인터넷 없이 새 창에서) + CDN(파일을 다른 곳에서 열 때) */
+function wembFontLinks() {
+  let local = '';
+  try { local = new URL('src/vendor/pretendard/pretendard.css', document.baseURI).href; } catch (e) {}
+  return (local ? '<link rel="stylesheet" href="' + local + '" />' : '') +
+    '<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />';
+}
 function collectAppCss() {
+  /* 그림 · 글꼴 주소(url())는 그 스타일시트 기준 상대 경로라, 한 문서로 모으면 기준이 바뀌어 깨진다 →
+     모을 때 절대 주소로 바꿔 둔다(파일 링크는 그 CSS 파일 기준, <style> 은 이 문서 기준). 자립 HTML 은 이 주소의 파일을 다시 안에 담는다. */
+  const abs = (css, base) =>
+    css.replace(/url\(\s*(['"]?)([^'")]+?)\1\s*\)/g, (m, q, u) => {
+      if (/^(data:|blob:|#|about:)/i.test(u.trim())) return m;
+      try { return 'url("' + new URL(u.trim(), base).href + '")'; } catch (e) { return m; }
+    });
   return [...document.querySelectorAll('style, link[rel="stylesheet"][data-app-css]')]
     .map((el) => {
-      if (el.tagName === 'STYLE') return el.textContent;
-      try { return [...el.sheet.cssRules].map((r) => r.cssText).join('\n'); } catch (e) { return ''; }
+      if (el.tagName === 'STYLE') return abs(el.textContent, document.baseURI);
+      try { return abs([...el.sheet.cssRules].map((r) => r.cssText).join('\n'), el.href); } catch (e) { return ''; }
     })
     .join('\n');
 }
@@ -213,7 +227,7 @@ function componentSheetExportHTML() {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WEMB 컴포넌트 시트 — ${themeName}</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css" />
+    ${wembFontLinks()}
     <style>${css}</style>
     <style>
       html, body { height: auto; overflow: auto; background: #0f1320; color: #e7ecf5; margin: 0; padding: 26px; }

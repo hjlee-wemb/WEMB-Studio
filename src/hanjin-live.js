@@ -1212,14 +1212,16 @@
       if (needle) needle.style.rotate = (a - base).toFixed(2) + 'deg';
     };
     if (needle) needle.style.transition = 'rotate 1.4s cubic-bezier(.32,.72,.28,1)';
+    /* 3D 물류센터(js/preview/tpl-3d.js)가 켜지면 카메라 방향을 받아 돈다 — 그동안 무작위 흔들기는 쉰다 */
+    box.__setHeading = function (a) { cur = a; if (needle) needle.style.transition = 'none'; setA(a); };
     var step = function () {
-      if (editing()) return;
+      if (editing() || box.dataset.w3d) return;
       var to = base + rnd(-14, 14);
       var from = cur; cur = to;
       tween(1400, from, to, setA);
     };
     var id = every(6000, step);
-    st.cleanup.push(function () { clearInterval(id); if (needle) needle.style.rotate = ''; });
+    st.cleanup.push(function () { clearInterval(id); if (needle) needle.style.rotate = ''; delete box.__setHeading; });
   }
 
   /* 6-f. 이벤트 피드 — Auto 가 켜져 있을 때만 표에 새 줄이 흘러든다 */
@@ -1436,8 +1438,10 @@
       if (!af) af = requestAnimationFrame(paint);
     };
 
+    /* 3D 물류센터(js/preview/tpl-3d.js)가 그림 자리에 떠 있으면 끌기 · 휠 · 더블클릭은 3D 가 받는다 — 여기서는 비켜 준다 */
+    var from3d = function (e) { return !!(e.target && e.target.closest && e.target.closest('canvas[data-w3d]')); };
     var down = function (e) {
-      if (editing() || e.button !== 0) return;           /* 왼쪽 버튼만 */
+      if (editing() || e.button !== 0 || from3d(e)) return; /* 왼쪽 버튼만 */
       drag = { id: e.pointerId, x: e.clientX, y: e.clientY, tx: tx, ty: ty, k: stageScale() };
       box.style.cursor = 'grabbing';
       try { box.setPointerCapture(e.pointerId); } catch (err) { }
@@ -1457,7 +1461,7 @@
       box.style.cursor = 'grab';
     };
     var wheel = function (e) {
-      if (editing()) return;
+      if (editing() || from3d(e)) return;
       e.preventDefault();                                /* 화면이 같이 스크롤되지 않게 */
       /* deltaMode 가 줄(1)·쪽(2)인 브라우저도 있어 픽셀로 환산한 뒤 배율에 곱한다 */
       var d = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1);
@@ -1475,7 +1479,7 @@
       draw(true);
     };
     var reset = function (e) {
-      if (editing()) return;
+      if (editing() || from3d(e)) return;
       tx = 0; ty = 0; zoom = 1;
       draw(true);
       e.preventDefault();

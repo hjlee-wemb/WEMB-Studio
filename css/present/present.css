@@ -1,0 +1,337 @@
+/* ── 발표 화면(present.html) — 시안만 화면 가득, 조작은 아래 띠 하나 ── */
+:root {
+  --pv-bg: #05070c;
+  --pv-surface: rgba(16, 20, 30, 0.86);
+  --pv-line: rgba(255, 255, 255, 0.12);
+  --pv-text: #eef2f8;
+  --pv-weak: rgba(238, 242, 248, 0.62);
+  --pv-point: #7c6cf0;
+  --pv-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--pv-bg);
+  color: var(--pv-text);
+  font: 14px/1.45 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif;
+}
+button {
+  font: inherit;
+}
+
+/* 화면 — iframe 두 장을 겹쳐 두고 보이는 것만 불투명 */
+.pv-stage {
+  position: fixed;
+  inset: 0;
+}
+.pv-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--pv-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s var(--pv-ease);
+}
+.pv-frame.on {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+/* 다음 화면을 여는 중 — 위쪽 가는 막대 */
+.pv-loading {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  z-index: 3;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.pv-loading.on {
+  opacity: 1;
+}
+.pv-loading span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30%;
+  background: var(--pv-point);
+  animation: pv-load 1.1s ease-in-out infinite;
+}
+@keyframes pv-load {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(340%); }
+}
+
+/* 시작 카드 */
+.pv-start {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(5, 7, 12, 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition: opacity 0.24s var(--pv-ease);
+}
+.pv-start.out {
+  opacity: 0;
+  pointer-events: none;
+}
+.pv-start[hidden] {
+  display: none;
+}
+.pv-card {
+  width: min(520px, 100%);
+  padding: 30px 30px 26px;
+  border: 1px solid var(--pv-line);
+  border-radius: 18px;
+  background: var(--pv-surface);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.pv-logo {
+  height: 26px;
+  display: block;
+  margin-bottom: 18px;
+}
+.pv-kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--pv-point);
+}
+.pv-title {
+  margin: 4px 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+.pv-lead {
+  margin: 0 0 16px;
+  color: var(--pv-weak);
+  word-break: keep-all;
+}
+.pv-keys {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 14px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  list-style: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12.5px;
+  color: var(--pv-weak);
+}
+.pv-keys[hidden] {
+  display: none;
+}
+kbd {
+  display: inline-block;
+  min-width: 20px;
+  margin-right: 4px;
+  padding: 1px 5px;
+  border: 1px solid var(--pv-line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font: 600 11px/1.5 inherit;
+  text-align: center;
+  color: var(--pv-text);
+}
+.pv-meet {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--pv-weak);
+  cursor: pointer;
+}
+.pv-meet[hidden] {
+  display: none;
+}
+.pv-meet input {
+  margin: 2px 0 0;
+  accent-color: var(--pv-point);
+}
+.pv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pv-btn {
+  padding: 10px 16px;
+  border: 1px solid var(--pv-line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--pv-text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.14s ease-out;
+}
+.pv-btn[hidden] {
+  display: none;
+}
+.pv-btn:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.pv-btn:active {
+  transform: scale(0.97);
+}
+.pv-btn.primary {
+  border-color: transparent;
+  background: var(--pv-point);
+  color: #fff;
+}
+.pv-btn.primary:hover {
+  filter: brightness(1.08);
+}
+.pv-btn.ghost {
+  margin-left: auto;
+  background: none;
+  color: var(--pv-weak);
+}
+.pv-btn:focus-visible,
+.pv-ic:focus-visible,
+.pv-chip:focus-visible {
+  outline: 2px solid var(--pv-point);
+  outline-offset: 2px;
+}
+
+/* 조작 띠 — 아래 가운데. 마우스가 멈추면 사라진다 */
+.pv-hud {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--pv-line);
+  border-radius: 14px;
+  background: var(--pv-surface);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+  transform: translate(-50%, 12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s var(--pv-ease), transform 0.22s var(--pv-ease);
+}
+.pv-hud[hidden] {
+  display: none;
+}
+.pv-hud.on {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.pv-ic {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: var(--pv-text);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.14s ease-out;
+}
+.pv-ic svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pv-ic:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+.pv-ic:active:not(:disabled) {
+  transform: scale(0.94);
+}
+.pv-ic:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.pv-ic.on {
+  color: var(--pv-point);
+}
+.pv-where {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 150px;
+  max-width: 40vw;
+  padding: 0 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.pv-where b {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.pv-where span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--pv-weak);
+}
+.pv-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: var(--pv-line);
+}
+.pv-chip {
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--pv-line);
+  border-radius: 9px;
+  background: none;
+  color: var(--pv-weak);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.pv-chip:hover {
+  color: var(--pv-text);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.pv-chip.on {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--pv-point) 26%, transparent);
+  color: var(--pv-text);
+}
+.pv-chip.end {
+  color: var(--pv-text);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pv-frame,
+  .pv-hud,
+  .pv-start {
+    transition: none;
+  }
+  .pv-loading span {
+    animation-duration: 2.4s;
+  }
+}

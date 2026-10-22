@@ -29,6 +29,32 @@ const LS_SCREENS = {
     css: ['LSM_CSS', 'LSE_CSS'], light: ['LSM_LIGHT_CSS', 'LSE_LIGHT_CSS'],
     title: 'LS Electric STATCOM — 에너지 진단',
   },
+  /* 단독 팝업 다섯 장(Figma popup-3 ~ 7) — 화면 프레임 없이 그려진 팝업이라 STATCOM 화면 한가운데에 얹는다(같은 꼴) */
+  'transformer': {
+    px: 'lsm', build: 'build_lsm_transformer',
+    css: ['LSM_CSS', 'LST_CSS'], light: ['LSM_LIGHT_CSS', 'LST_LIGHT_CSS'],
+    title: 'LS Electric STATCOM — 상태정보(변압기)',
+  },
+  'acroom': {
+    px: 'lsm', build: 'build_lsm_acroom',
+    css: ['LSM_CSS', 'LSP_CSS'], light: ['LSM_LIGHT_CSS', 'LSP_LIGHT_CSS'],
+    title: 'LS Electric STATCOM — AC전원실 전압/전류',
+  },
+  'charger': {
+    px: 'lsm', build: 'build_lsm_charger',
+    css: ['LSM_CSS', 'LSB_CSS'], light: ['LSM_LIGHT_CSS', 'LSB_LIGHT_CSS'],
+    title: 'LS Electric STATCOM — 충전기/배터리 운영상태',
+  },
+  'cooling': {
+    px: 'lsm', build: 'build_lsm_cooling',
+    css: ['LSM_CSS', 'LSC_CSS'], light: ['LSM_LIGHT_CSS', 'LSC_LIGHT_CSS'],
+    title: 'LS Electric STATCOM — 냉각설비 상태 정보',
+  },
+  'alarm': {
+    px: 'lsm', build: 'build_lsm_alarm',
+    css: ['LSM_CSS', 'LSR_CSS'], light: ['LSM_LIGHT_CSS', 'LSR_LIGHT_CSS'],
+    title: 'LS Electric STATCOM — 알림',
+  },
 };
 /* 'LSM_CSS' → 'lsm-style' · 'LSA_LIGHT_CSS' → 'lsa-light-style' (색 바꾸기가 이 id 로 시트를 찾는다) */
 function lsSheetId(globalName) {
@@ -43,6 +69,8 @@ function applyLsElectricDT(which) {
   if (!stage) return;
   const key = LS_SCREENS[which] ? which : (localStorage.getItem('wemb-lselectric-screen') || 'statcom');
   const S = LS_SCREENS[key] || LS_SCREENS['statcom'];
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다 */
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait([S.build], () => applyLsElectricDT(key))) return;
   if (typeof window[S.build] !== 'function') return;
   try { localStorage.setItem('wemb-lselectric-screen', key); } catch (e) {}
   /* 고정 캔버스는 끈다 — 이 시안은 스스로 여백 없이 채운다(src/lselectric-live.js 의 installFit) */

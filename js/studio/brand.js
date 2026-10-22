@@ -72,7 +72,7 @@ function initBrand() {
   document.getElementById('brandLogoClear')?.addEventListener('click', () => {
     setLogo(null);
     store(LS.logo, null);
-    /* 시안에 얹었던 로고도 걷어내 원래 템플릿 로고로 되돌린다 */
+    /* 시안에 얹었던 로고도 걷어내 WEMB Studio 로고로 되돌린다 */
     try { TPLLOGO.setOn(false); TPLLOGO.apply(); } catch (e) {}
   });
   document.getElementById('brandLogoSeed')?.addEventListener('click', () => {
@@ -95,12 +95,12 @@ function initBrand() {
         if (h) h.value = t.seed.toUpperCase();
         if (typeof setSource === 'function') setSource('seed');
         apply();
-        /* 템플릿 시안(SK하이닉스 SVG·한진·이미지)의 로고도 업로드한 로고로 바꾼다 */
+        /* 템플릿 시안의 헤더 로고(기본은 WEMB Studio 로고)도 업로드한 로고로 바꾼다 */
         let swapped = false;
         try {
           TPLLOGO.setOn(true);
           TPLLOGO.apply();
-          swapped = !!document.querySelector('.skx-screen, .hj-repro, .tplimg-repro');
+          swapped = !!document.querySelector('[data-studio-logo], #skx-logoswap, .tpl-logoswap');
         } catch (e2) {}
         say(swapped ? '로고 대표색을 기준 색으로 적용하고, 시안 로고도 바꿨어요.' : '로고 대표색을 기준 색으로 적용했어요.', 'ok');
       } catch (err) {

@@ -1,0 +1,739 @@
+/* ── 원자 변경 — 바꾼 원자 그리기 · 원자 변경 창 (js/studio/atom-swap.js) ── */
+
+/* ============================================================
+   바꾼 원자 그리기 — 원래 요소는 그대로 두고 속성(data-atm)과 CSS 변수로만 바꾼다.
+   템플릿 화면의 규칙(라이트 테마 짝 content · 색 칠하기 filter)보다 이겨야 하므로 !important.
+   ============================================================ */
+/* 그림(img) — 보이는 그림만 새 원자로. src 는 원래 파일 그대로라 템플릿 색 칠하기 규칙이 그대로 산다 */
+img[data-atm='file'] {
+  content: var(--atm-src) !important;
+  object-fit: contain !important;
+}
+[data-theme='light'] img[data-atm='file'] {
+  content: var(--atm-src-lt, var(--atm-src)) !important;
+}
+/* 한 가지 색 아이콘끼리 — 원래 그림은 상자 밖으로 밀어 두고, 새 모양을 이 자리의 색으로 칠한다 */
+img[data-atm='mask'] {
+  object-position: -99999px -99999px !important;
+  background: var(--atm-c, currentColor) !important;
+  -webkit-mask: var(--atm-m) center / contain no-repeat !important;
+  mask: var(--atm-m) center / contain no-repeat !important;
+}
+[data-theme='light'] img[data-atm='mask'] {
+  background: var(--atm-c-lt, var(--atm-c, currentColor)) !important;
+}
+/* 스튜디오가 그린 선 아이콘(svg) — 안쪽 그림은 숨기고 같은 상자에 새 모양을 칠한다 */
+svg[data-atm] > * {
+  visibility: hidden !important;
+}
+svg[data-atm='mask'] {
+  background: var(--atm-c, currentColor) !important;
+  -webkit-mask: var(--atm-m) center / contain no-repeat !important;
+  mask: var(--atm-m) center / contain no-repeat !important;
+}
+[data-theme='light'] svg[data-atm='mask'] {
+  background: var(--atm-c-lt, var(--atm-c, currentColor)) !important;
+}
+svg[data-atm='file'] {
+  background: var(--atm-src) center / contain no-repeat !important;
+}
+[data-theme='light'] svg[data-atm='file'] {
+  background-image: var(--atm-src-lt, var(--atm-src)) !important;
+}
+/* 심볼 · 라벨 — 원래 조각은 자리만 남기고 숨긴다(투명도까지 — 안쪽에 visibility:visible 을 둔 레이어도 숨게).
+   상태 깜박임(애니메이션)도 !important 를 넘지 못한다 */
+[data-atm-hide] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+/* 그 자리에 얹은 바꾼 원자 */
+.atm-rep {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+.atm-rep-hold {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+/* 그림 원자를 판에 얹을 때 — 판을 채운다(비율 유지) */
+.atm-rep-hold.atm-rep-fill {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.atm-rep-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* 다른 화면에서 온 조각의 감싸개 — 그 화면 루트 이름만 빌린다(화면 전체를 덮는 루트 규칙은 끈다) */
+.atm-rep-root {
+  position: relative !important;
+  inset: auto !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  background: transparent !important;
+  z-index: auto !important;
+}
+/* 템플릿 색 칠하기가 다른 화면 시트도 칠하게 두는 빈 루트 — 보이지 않는다 */
+.atm-anchor {
+  display: none !important;
+}
+/* 내용 수정 중에는 원래 라벨 · 분자를 보여 글자를 고칠 수 있게 — 고친 글자는 바꾼 라벨 · 분자에 옮겨진다 */
+#dtStage.dt-content-editing .atm-rep[data-atm-part='label'],
+#dtStage.dt-content-editing .atm-rep[data-atm-part='mol'] {
+  visibility: hidden !important;
+}
+#dtStage.dt-content-editing [data-atm-hide='label'],
+#dtStage.dt-content-editing [data-atm-hide='mol'] {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ============================================================
+   화면에서 고르기 · 자리 표시
+   ============================================================ */
+.main.atx-picking,
+.main.atx-picking * {
+  cursor: crosshair !important;
+}
+/* 바꾼 심볼 · 라벨도 눌러 고를 수 있게 */
+.main.atx-picking .atm-rep {
+  pointer-events: auto;
+}
+.atx-hl {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: calc(var(--z-page) + 9);
+}
+.atx-hlb {
+  position: fixed;
+  border: 1.5px solid var(--point-sub);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--point-main) 14%, transparent);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55);
+}
+.atx-hlb.on {
+  border: 2px solid #fff;
+  background: color-mix(in srgb, var(--point-main) 26%, transparent);
+  box-shadow: 0 0 0 2px var(--point-fill), 0 0 18px color-mix(in srgb, var(--point-main) 60%, transparent);
+}
+/* 분자(오브젝트) 자리는 점선 — 원자 자리와 구분한다 */
+.atx-hlb.mol {
+  border-style: dashed;
+  background: color-mix(in srgb, var(--point-main) 9%, transparent);
+}
+
+/* ============================================================
+   원자 변경 창 — 화면을 가리지 않게 옆에 떠 있는 창(끌어서 옮긴다)
+   ============================================================ */
+.atx {
+  position: fixed;
+  z-index: calc(var(--z-page) + 10);
+  top: calc(var(--topbar-h) + 12px);
+  right: 16px;
+  width: 360px;
+  max-height: calc(100vh - var(--topbar-h) - 24px);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  color: var(--text-strong);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 22px 54px -16px rgba(0, 0, 0, 0.75);
+  font-family: var(--font);
+  font-size: 12.5px;
+  overflow: hidden;
+  animation: atxIn 0.16s ease;
+}
+.atx[hidden] {
+  display: none;
+}
+@keyframes atxIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.atx button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.atx button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+.atx :focus-visible {
+  outline: 2px solid var(--point-sub);
+  outline-offset: 1px;
+}
+.atx-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 10px 12px;
+  border-bottom: 1px solid var(--line);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+.atx-head:active {
+  cursor: grabbing;
+}
+.atx-mark {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--point-sub);
+}
+.atx-mark svg {
+  width: 100%;
+  height: 100%;
+}
+.atx-ttl {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.atx-ttl b {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.atx-sub {
+  color: var(--text-weak);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.atx-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-accent);
+  font-size: 11.5px !important;
+  white-space: nowrap;
+}
+.atx-pick svg {
+  width: 14px;
+  height: 14px;
+}
+.atx-pick[aria-pressed='true'] {
+  background: var(--point-fill);
+  border-color: var(--point-fill);
+  color: #fff;
+}
+.atx-x {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-weak) !important;
+}
+.atx-x svg {
+  width: 15px;
+  height: 15px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .atx-x:hover {
+    background: var(--bg-accent);
+    color: var(--text-strong) !important;
+  }
+  .atx-pick:not([aria-pressed='true']):hover {
+    border-color: color-mix(in srgb, var(--point-main) 60%, var(--line));
+  }
+}
+.atx-body {
+  flex: 1;
+  min-height: 120px;
+  overflow: auto;
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  overscroll-behavior: contain;
+}
+.atx-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 8px 12px;
+  border-top: 1px solid var(--line);
+  color: var(--text-weak);
+  font-size: 11.5px;
+}
+.atx-count {
+  flex: 1;
+}
+.atx-resetall {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 11.5px !important;
+}
+/* 탭 — 분자에서 옮긴 원자 · 아이콘 · 그림 (분자 라이브러리 원자 화면과 같은 이름) */
+.atx-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+}
+.atx-tabs button {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-weak) !important;
+  font-size: 11.5px !important;
+  white-space: nowrap;
+}
+.atx-tabs button em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+.atx-tabs button[aria-selected='true'] {
+  background: var(--bg-accent);
+  color: var(--text-strong) !important;
+  font-weight: 600;
+}
+.atx-hint,
+.atx-note {
+  margin: 0;
+  color: var(--text-weak);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+/* 이 화면의 원자 */
+.atx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+  gap: 6px;
+}
+.atx-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-page);
+  text-align: left;
+  min-width: 0;
+}
+.atx-tile.is-local {
+  border-style: dashed;
+}
+.atx-tile.is-changed {
+  border-color: color-mix(in srgb, var(--point-main) 70%, var(--line));
+}
+@media (hover: hover) and (pointer: fine) {
+  .atx-tile:hover,
+  .atx-cand:hover {
+    border-color: var(--point-sub);
+  }
+}
+.atx-cap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+.atx-cap b {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.atx-cap em {
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--text-weak);
+  font-variant-numeric: tabular-nums;
+}
+.atx-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--point-fill);
+  color: #fff;
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.atx-badge-orig {
+  background: var(--bg-accent);
+  color: var(--text-strong);
+  border: 1px solid var(--line);
+}
+/* 썸네일 칸 — 지금 화면의 밝기를 따른다 */
+.atx-th {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 52px;
+  border-radius: 7px;
+  background: #07080c;
+  overflow: hidden;
+  color: #e9ebf2;
+}
+.atx[data-shot='light'] .atx-th {
+  background: #eef1f5;
+  color: #1c2230;
+}
+.atx-th img {
+  max-width: calc(100% - 10px);
+  max-height: calc(100% - 10px);
+  object-fit: contain;
+}
+.atx-th-svg svg {
+  width: 26px;
+  height: 26px;
+}
+.atx-th.atx-miss::after {
+  content: '그리지 못함';
+  font-size: 10px;
+  color: var(--text-weak);
+}
+.atx-same {
+  color: var(--text-weak) !important;
+  font-size: 11px;
+}
+/* 심볼 · 라벨 썸네일 — 원래 화면 루트 이름을 빌린 작은 판 */
+.atx-mini {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  z-index: auto !important;
+}
+.atx-mini-hold {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+/* 고른 원자 */
+.atx-dhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.atx-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 26px;
+  padding: 0 8px 0 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 11.5px !important;
+  flex: none;
+}
+.atx-back svg {
+  width: 15px;
+  height: 15px;
+}
+.atx-dname {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.atx-dkind {
+  margin-left: auto;
+  flex: none;
+  color: var(--text-weak);
+  font-size: 11px;
+}
+.atx-now {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.atx-now figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.atx-now .atx-th {
+  height: 72px;
+}
+.atx-now figcaption {
+  color: var(--text-weak);
+  font-size: 11px;
+  text-align: center;
+}
+.atx-arrow {
+  color: var(--text-weak);
+  font-size: 15px;
+}
+.atx-seg {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--bg-page);
+  border: 1px solid var(--line);
+}
+.atx-seg button {
+  flex: 1;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-weak) !important;
+  font-size: 11.5px !important;
+  white-space: nowrap;
+}
+.atx-seg button[aria-pressed='true'] {
+  background: var(--bg-accent);
+  color: var(--text-strong) !important;
+  font-weight: 600;
+}
+.atx-undo {
+  align-self: flex-start;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 11.5px !important;
+}
+.atx-chead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.atx-chead b {
+  font-size: 12px;
+}
+.atx-chead em {
+  font-style: normal;
+  color: var(--text-weak);
+  font-size: 11px;
+  margin-right: auto;
+  font-variant-numeric: tabular-nums;
+}
+.atx-fam,
+.atx-q {
+  height: 26px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--bg-page);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: 11.5px;
+  padding: 0 6px;
+}
+.atx-fam {
+  max-width: 120px;
+}
+.atx-q {
+  width: 96px;
+}
+.atx-cands {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(58px, 1fr));
+  gap: 5px;
+}
+.atx-cand {
+  position: relative;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--bg-page);
+}
+.atx-cand .atx-th {
+  height: 48px;
+}
+.atx-cand[aria-pressed='true'] {
+  border-color: var(--point-sub);
+  box-shadow: 0 0 0 1px var(--point-sub);
+}
+.atx-none {
+  grid-column: 1 / -1;
+  margin: 8px 0;
+  color: var(--text-weak);
+}
+.atx-empty {
+  padding: 18px 6px;
+  color: var(--text-weak);
+  text-align: center;
+  line-height: 1.55;
+}
+.atx-empty b {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-strong);
+  font-size: 13px;
+}
+.atx-empty p {
+  margin: 4px 0 0;
+}
+.atx-err b {
+  color: var(--fg-warning, #f5a623);
+}
+
+/* 단계 — 원자 · 분자 (목록은 개수, 고른 것은 그 분류 · 분자 이름을 작게) */
+.atx-lvl button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+}
+.atx-lvl button em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+}
+.atx-lvl button small {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-weak);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.atx-lvl button[aria-selected='true'] {
+  background: var(--bg-accent);
+  color: var(--text-strong) !important;
+  font-weight: 600;
+}
+/* 분류 칩 — 라이브러리와 같은 표준 이름. 고른 것의 분류(is-cur)가 맨 앞 */
+.atx-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.atx-chips button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-weak) !important;
+  font-size: 11px !important;
+  white-space: nowrap;
+}
+.atx-chips button em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+.atx-chips button.is-cur {
+  border-color: color-mix(in srgb, var(--point-main) 55%, var(--line));
+}
+.atx-chips button[aria-pressed='true'] {
+  background: var(--point-fill);
+  border-color: var(--point-fill);
+  color: #fff !important;
+}
+/* 분류 더 보기 · 접기 */
+.atx-chips .atx-more {
+  border-style: dashed;
+  color: var(--text-strong) !important;
+}
+/* 목록의 분류 제목 */
+.atx-sec {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin: 4px 0 -2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.atx-sec em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--text-weak);
+  font-variant-numeric: tabular-nums;
+}
+/* 바꿀 분자 — 분자는 생김새가 커서 칸을 넓게, 이름을 아래에 */
+.atx-cands-mol {
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+}
+.atx-cands-mol .atx-cand {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+}
+.atx-cands-mol .atx-th {
+  height: 54px;
+}
+.atx-cname {
+  font-size: 10.5px;
+  color: var(--text-weak);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 2px 1px;
+}
+.atx-cand:disabled,
+.atx-lvl button:disabled {
+  opacity: 0.4;
+}
+
+/* 레일의 원자 변경 버튼 — 창이 열려 있는 동안 */
+.siderail .railbtn.atx-on {
+  background: color-mix(in srgb, var(--point-main) 22%, transparent);
+  color: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .atx {
+    animation: none;
+  }
+}

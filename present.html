@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEMB Studio · 발표</title>
+    <link rel="icon" type="image/svg+xml" href="src/logo.svg" />
+    <link rel="stylesheet" href="src/vendor/pretendard/pretendard.css" />
+    <link rel="stylesheet" href="css/present/present.css?v=1" />
+    <!-- 발표 — 프로젝트의 화면들을 도구 없이 크게 보여 준다(js/present/present.js).
+         화면 하나 = 작업공간(studio.html?screen=…&present=1)을 담은 iframe. 다음 화면은 뒤에서 미리 열어 두었다가 바꿔 끼운다.
+         주소: present.html?group=<프로젝트 id>[&screen=<처음 화면 id>] — 작업공간 상단 바 · 홈 프로젝트 카드의 '발표'가 연다. -->
+    <script src="js/core/projects.js?v=5"></script>
+    <script src="js/core/meeting.js?v=3"></script>
+  </head>
+  <body>
+    <div class="pv-stage" id="pvStage">
+      <iframe class="pv-frame" id="pvA" title="발표 화면" tabindex="-1"></iframe>
+      <iframe class="pv-frame" id="pvB" title="발표 화면" tabindex="-1"></iframe>
+      <div class="pv-loading" id="pvLoading" aria-hidden="true"><span></span></div>
+    </div>
+
+    <!-- 시작 — 전체 화면은 누르는 순간에만 켤 수 있어 한 번 묻는다. 그동안 첫 화면을 뒤에서 연다 -->
+    <div class="pv-start" id="pvStart" role="dialog" aria-modal="true" aria-labelledby="pvStartTitle">
+      <div class="pv-card">
+        <img class="pv-logo" src="src/logo.svg" alt="WEMB Studio" />
+        <div class="pv-kicker">발표</div>
+        <h1 class="pv-title" id="pvStartTitle"></h1>
+        <p class="pv-lead" id="pvStartLead"></p>
+        <ul class="pv-keys" aria-label="조작">
+          <li><kbd>←</kbd><kbd>→</kbd> 화면 넘기기</li>
+          <li><kbd>F</kbd> 전체 화면</li>
+          <li><kbd>M</kbd> 회의 모드(고객사 이름 가리기)</li>
+          <li><kbd>Esc</kbd> 끝내기</li>
+        </ul>
+        <label class="pv-meet"><input type="checkbox" id="pvMeetStart" /> 회의 모드로 시작 — 화면의 고객사 이름을 ‘고객사’로 가려요</label>
+        <div class="pv-actions">
+          <button type="button" class="pv-btn primary" id="pvGoFull">전체 화면으로 시작</button>
+          <button type="button" class="pv-btn" id="pvGoWin">창에서 시작</button>
+          <button type="button" class="pv-btn ghost" id="pvCancel">돌아가기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 조작 띠 — 마우스를 움직이면 잠깐 나타났다 사라진다 -->
+    <div class="pv-hud" id="pvHud" hidden>
+      <button type="button" class="pv-ic" id="pvPrev" title="이전 화면 (←)" aria-label="이전 화면"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" /></svg></button>
+      <div class="pv-where" id="pvWhere" aria-live="polite"></div>
+      <button type="button" class="pv-ic" id="pvNext" title="다음 화면 (→)" aria-label="다음 화면"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" /></svg></button>
+      <span class="pv-sep" aria-hidden="true"></span>
+      <button type="button" class="pv-chip" id="pvMeet" title="회의 모드 — 고객사 이름 가리기 (M)" aria-pressed="false"></button>
+      <button type="button" class="pv-ic" id="pvFull" title="전체 화면 (F)" aria-label="전체 화면"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg></button>
+      <button type="button" class="pv-chip end" id="pvEnd" title="발표 끝내기 (Esc)">끝내기</button>
+    </div>
+
+    <script src="js/present/present.js?v=1"></script>
+  </body>
+</html>

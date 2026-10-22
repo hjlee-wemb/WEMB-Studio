@@ -125,7 +125,9 @@ async function exportPNG() {
     const render = h2c();
     if (!render) throw new Error('no lib');
     const el = document.querySelector('.main'); /* 지금 보이는 화면만 잡힘 — 숨은 화면은 display:none */
-    const canvas = await render(el, { backgroundColor: themeCoreMap(captureTheme())['bg/page'], scale: 2, logging: false, useCORS: true });
+    /* 원자 변경으로 바꾼 원자는 CSS(content · mask)로 그린 것이라 복제본에서 실제 그림으로 굳힌다 (js/studio/atom-swap.js) */
+    const canvas = await render(el, { backgroundColor: themeCoreMap(captureTheme())['bg/page'], scale: 2, logging: false, useCORS: true,
+      onclone: (doc) => (window.__atomSwap ? window.__atomSwap.bakeClone(doc) : null) });
     const isDT = state.screen === 'dt';
     await new Promise((res) =>
       canvas.toBlob((b) => {
@@ -180,6 +182,19 @@ function decodeState(str) {
 function shareURL() {
   return location.href.split('#')[0] + WEMB.router.href('/studio', { t: encodeState(captureTheme()) });
 }
+/* 프로젝트 파일 — 이 프로젝트(화면 전부 · 작업 상태)를 파일 하나로(js/core/project-file.js). 다른 PC 에서 홈 → 파일 열기 */
+function saveProjectFile() {
+  const P = WEMB.projects;
+  let cur = null;
+  try { cur = localStorage.getItem(P.CUR_PROJ); } catch (e) {}
+  const s = cur && P.loadProjects().find((x) => x.id === cur);
+  if (!s || !s.projectId || !WEMB.projectFile) {
+    exHintMsg('이 화면은 아직 프로젝트에 저장되지 않았어요 — 스튜디오에서 화면을 만든 뒤 저장할 수 있어요.', 'err');
+    return;
+  }
+  const r = WEMB.projectFile.save(s.projectId);
+  if (r) exHintMsg('“' + (WEMB.meeting ? WEMB.meeting.text(r.name) : r.name) + '” 프로젝트를 파일로 저장했어요(화면 ' + r.count + '개 · ' + r.size + '). 다른 PC 에서는 홈의 ‘파일 열기’로 이어서 작업해요.', 'ok');
+}
 async function copyShare() {
   const url = shareURL();
   try {
@@ -187,7 +202,8 @@ async function copyShare() {
   } catch (e) {}
   try {
     await navigator.clipboard.writeText(url);
-    exHintMsg('공유 링크를 복사했어요. 이 링크를 열면 같은 시안이 그대로 적용돼요.', 'ok');
+    /* 링크에는 색 테마만 담긴다(화면 구성 · 패널 · 고친 글자는 안 담긴다) — 받는 사람이 같은 화면을 볼 거라 기대하지 않게 */
+    exHintMsg('색 테마 링크를 복사했어요. 받는 사람의 화면에 이 색 테마(기준 색 · 배색 · 모드 · 버전)가 입혀져요. 화면 구성까지 넘기려면 ‘프로젝트 파일 저장’을 쓰세요.', 'ok');
   } catch (e) {
     exHintMsg('복사 권한이 없어요. 주소창의 링크를 직접 복사하세요.', 'err');
   }
@@ -256,5 +272,6 @@ function initExport() {
   document.getElementById('exPng').onclick = exportPNG;
   document.getElementById('exSvg').onclick = exportSVG;
   document.getElementById('exShare').onclick = copyShare;
+  document.getElementById('exProjFile').onclick = saveProjectFile;
   document.getElementById('exScreen').onclick = exportPreviewHTML;
 }

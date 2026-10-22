@@ -23,7 +23,7 @@ function exportSpecSheet() {
     .join('');
   const html =
     `<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>WEMB 테마 디자인 사양서</title>` +
-    `<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.min.css">` +
+    wembFontLinks() +
     `<style>` +
     `*{box-sizing:border-box}body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Segoe UI','Malgun Gothic',sans-serif;color:#15151a;margin:0;padding:32px 34px;background:#fff;font-size:13px;line-height:1.5}` +
     `h1{font-size:22px;margin:0 0 2px}.meta{color:#6b7280;font-size:12.5px;margin-bottom:22px}` +

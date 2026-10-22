@@ -271,6 +271,10 @@
                 + '.kpi,.col .panel,.panel,.dashpage{opacity:1 !important;transform:none !important;}';
               (doc.head || doc.documentElement).appendChild(s);
             } catch (e) {}
+            /* 원자 변경으로 바꾼 원자 — CSS 로 그린 것을 복제본에서 실제 그림으로 굳힌다 (js/studio/atom-swap.js) */
+            /* 3D 캔버스(디지털 트윈 · 템플릿 그림 자리)는 복제하면 비어 있다 → 지금 모습 그림으로 (js/preview/3d/engine.js) */
+            if (window.WEMB3D) WEMB3D.bakeClone(doc);
+            return window.__atomSwap ? window.__atomSwap.bakeClone(doc) : null;
           },
         });
         if (tSlow && performance.now() - tSlow > SLOW_MS) {

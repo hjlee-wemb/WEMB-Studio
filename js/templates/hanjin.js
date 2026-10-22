@@ -20,6 +20,8 @@ function applyHanjinDT(which) {
   if (!stage) return;
   const key = HJ_SCREENS[which] ? which : (localStorage.getItem('wemb-hanjin-screen') || 'main');
   const S = HJ_SCREENS[key] || HJ_SCREENS.main;
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다 */
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait([S.build], () => applyHanjinDT(key))) return;
   if (typeof window[S.build] !== 'function') return;
   try { localStorage.setItem('wemb-hanjin-screen', key); } catch (e) {}
   /* 고정 캔버스는 끈다 — 이 시안은 스스로 여백 없이 채운다(src/hanjin-live.js 의 fitStage).

@@ -9,6 +9,7 @@ async function doResetAll() {
 · 색상 · 기준 색 · 배색 방식 · 미세 조정
 · 화면 종류 · 패널 모서리 둥글기
 · 대시보드 배치 · 내용 · 차트 종류
+· 원자 변경으로 바꾼 원자
 · 되돌리기 기록
 
 <b>그대로 유지되는 것</b>
@@ -23,7 +24,7 @@ async function doResetAll() {
          · wemb-theme-snapshots  이름 붙여 저장한 테마(사용자 자산)
          · wemb-onboarded        둘러보기 완료 여부(리셋마다 다시 뜨면 성가심)
          · wemb-previewhint       편집 가능 힌트 닫음 여부 */
-    const KEEP = new Set(['wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted']);
+    const KEEP = new Set(['wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-meeting']);
     Object.keys(localStorage)
       .filter((k) => k.startsWith('wemb-') && !KEEP.has(k))
       .forEach((k) => localStorage.removeItem(k));

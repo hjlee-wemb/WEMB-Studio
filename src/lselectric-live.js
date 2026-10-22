@@ -249,6 +249,83 @@
     '.ls-root .ls-pop [data-name^="Widget/"] > [data-name="Card"],.ls-root .ls-pop [data-name^="Widget/"] > [data-name="Body"]{transition:filter .25s ease;}',
     '.ls-root .ls-pop [data-name="Charts"] [data-name^="Widget/"]:hover > [data-name="Card"]{filter:brightness(1.08);}',
 
+    /* ── 단독 팝업 다섯 장(상태정보 · AC전원실 · 충전기 · 냉각설비 · 알림) ── */
+    /* 파란 닫기 단추 — 단추가 밝아지며 빛이 번지고 X 가 돈다(안쪽 아이콘에는 판을 깔지 않는다) */
+    '.ls-root .ls-pop [data-name="Close Button"]{transition:filter .2s ease,box-shadow .2s ease;}',
+    '.ls-root .ls-pop [data-name="Close Button"]:hover{filter:brightness(1.2);box-shadow:0 0 12px rgba(69,140,255,.8);}',
+    '.ls-root .ls-pop [data-name="Close Button"]:active{filter:brightness(.9);}',
+    '.ls-root .ls-pop [data-name="Close Button"] [data-name="Icon/Action/Close"]{transition:rotate .3s cubic-bezier(.22,.8,.24,1);}',
+    '.ls-root .ls-pop [data-name="Close Button"] [data-name="Icon/Action/Close"]:hover{background-color:transparent;scale:1;}',
+    '.ls-root .ls-pop [data-name="Close Button"]:hover [data-name="Icon/Action/Close"]{rotate:90deg;}',
+    /* 차트 판 · 측정 카드 · 모듈 카드 */
+    '.ls-root .ls-pop [data-name="Content"] [data-name^="Widget/"]:hover > [data-name="Card"]{filter:brightness(1.08);}',
+    '.ls-root .ls-pop [data-name^="Card/"]{transition:filter .25s ease,translate .25s cubic-bezier(.22,.8,.24,1);}',
+    '.ls-root .ls-pop [data-name^="Card/"]:hover{translate:0 -3px;filter:brightness(1.12) drop-shadow(0 6px 14px rgba(69,197,255,.28));}',
+    /* 펌프 칸 · 그룹 말풍선 */
+    '.ls-root .ls-pop [data-name="Cells"] > [data-name^="Td/"]{transition:filter .2s ease;}',
+    '.ls-root .ls-pop [data-name="Cells"] > [data-name^="Td/"]:hover{filter:brightness(1.45);}',
+    '.ls-root .ls-pop [data-name^="Callout/"]{transition:translate .22s cubic-bezier(.22,.8,.24,1),filter .22s ease;}',
+    '.ls-root .ls-pop [data-name^="Callout/"]:hover{translate:3px 0;filter:brightness(1.35) drop-shadow(0 0 6px rgba(124,204,255,.55));}',
+    /* 냉각팬 — 날개만 돈다(원본 Blades). 동작 1.6초 · 과부하 0.7초에 한 바퀴, 고장은 멈춘 채 빨간 빛, 중지는 그대로 */
+    '@keyframes lsSpin{to{transform:rotate(360deg)}}',
+    '@keyframes lsFanOver{0%,100%{filter:none}50%{filter:drop-shadow(0 0 7px rgba(253,128,4,.9))}}',
+    '@keyframes lsFanFault{0%,100%{filter:none}50%{filter:drop-shadow(0 0 9px rgba(244,49,48,.95))}}',
+    '.ls-root .ls-pop .ls-fan{transition:scale .22s cubic-bezier(.22,.8,.24,1);}',
+    '.ls-root .ls-pop .ls-fan:hover{scale:1.08;}',
+    '.ls-root .ls-pop .ls-blades{transform-box:view-box;}',
+    '.ls-root.ls-live .ls-pop .ls-fan-run .ls-blades{animation:lsSpin 1.6s linear infinite;}',
+    '.ls-root.ls-live .ls-pop .ls-fan-over .ls-blades{animation:lsSpin .7s linear infinite;}',
+    '.ls-root.ls-live .ls-pop .ls-fan-over{animation:lsFanOver 1.4s ease-in-out infinite;}',
+    '.ls-root.ls-live .ls-pop .ls-fan-fault{animation:lsFanFault 1.1s ease-in-out infinite;}',
+    /* 펌프 운전 표지 · 알림 난 실 */
+    '@keyframes lsRunGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 5px rgba(67,209,141,.95))}}',
+    '.ls-root.ls-live .ls-pop .ls-run{animation:lsRunGlow 1.8s ease-in-out infinite;}',
+    '@keyframes lsAlarmTxt{0%,100%{text-shadow:0 0 0 rgba(255,75,75,0)}50%{text-shadow:0 0 9px rgba(255,75,75,.95)}}',
+    '.ls-root.ls-live .ls-pop .ls-alarmrow [data-name="Td"] p{animation:lsAlarmTxt 1.6s ease-in-out infinite;}',
+    /* ── 팝업 열기(페이지 연결) ──
+       헤더 Brand 옆 '팝업' 단추 — 이 화면의 다른 메뉴(차트 바꾸기 · 열화상 구간)와 같은 판: 짙은 남색 판 · #2E61F9 선 · 안쪽 하늘 빛,
+       호버/열림은 알림 칩과 같은 #45C5FF 테두리 + 안쪽 빛, 개수 표지는 접기 단추의 파란 그라디언트 */
+    '.ls-root .ls-launch{position:absolute;top:50%;translate:0 -50%;z-index:2;font-family:Pretendard,"Pretendard Variable",system-ui,sans-serif;}',
+    '.ls-root [data-name="Header Bar"].ls-launch-open{z-index:90;}',
+    '.ls-root .ls-launch-btn{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 9px 0 8px;border:1px solid rgba(46,97,249,.9);border-radius:4px;'
+      + 'background:linear-gradient(180deg,rgba(10,28,62,.9),rgba(6,21,46,.94));box-shadow:inset 0 0 3px rgba(106,242,244,.5);'
+      + 'color:#c6d4fa;font:600 13px/1 Pretendard,"Pretendard Variable",system-ui,sans-serif;white-space:nowrap;cursor:pointer;'
+      + 'transition:border-color .2s ease,box-shadow .2s ease,color .2s ease,translate .2s ease;}',
+    '.ls-root .ls-launch-btn:hover,.ls-root .ls-launch.open .ls-launch-btn{border-color:#45c5ff;color:#fff;box-shadow:inset 0 0 8px rgba(69,197,255,.6),0 0 10px rgba(69,197,255,.28);}',
+    '.ls-root .ls-launch-btn:active{translate:0 1px;}',
+    '.ls-root .ls-launch-btn:focus-visible,.ls-root .ls-launch-menu button:focus-visible{outline:2px solid #45c5ff;outline-offset:2px;}',
+    /* 팝업 제목 바 아이콘(Icon/Popup/Diagnostics) 그대로 — 17x28 판의 위쪽에 그려진 모서리라 10x10 창으로 잘라 보인다 */
+    '.ls-root .ls-launch .ic{position:relative;display:inline-block;width:10px;height:10px;overflow:hidden;flex:none;}',
+    '.ls-root .ls-launch .ic img{position:absolute;left:0;top:0;width:10.2px;height:16.8px;max-width:none;}',
+    '.ls-root .ls-launch-btn b{min-width:18px;height:16px;padding:0 5px;border-radius:8px;background:linear-gradient(90deg,#2861ff,#455ddb);'
+      + 'color:#fff;font-size:10px;font-weight:700;line-height:16px;text-align:center;}',
+    '.ls-root .ls-launch-btn .chev{width:8px;height:8px;transition:rotate .3s cubic-bezier(.22,.8,.24,1);}',
+    '.ls-root .ls-launch.open .ls-launch-btn .chev{rotate:180deg;}',
+    '.ls-root .ls-launch-menu{position:absolute;left:0;top:calc(100% + 6px);min-width:212px;padding:6px;border:1px solid #2e61f9;border-radius:6px;'
+      + 'background:rgba(6,21,46,.97);box-shadow:inset 0 0 3px rgba(106,242,244,.5),0 12px 28px rgba(0,0,0,.55);'
+      + 'opacity:0;translate:0 -6px;pointer-events:none;transition:opacity .18s ease,translate .18s ease;}',
+    '.ls-root .ls-launch.open .ls-launch-menu{opacity:1;translate:0 0;pointer-events:auto;}',
+    '.ls-root .ls-launch-menu .hd{padding:4px 8px 6px;font-size:11px;font-weight:600;color:#8ea3d6;}',
+    '.ls-root .ls-launch-menu .sep{height:1px;margin:4px 2px;background:rgba(198,212,250,.16);}',
+    '.ls-root .ls-launch-menu button{display:flex;align-items:center;gap:8px;width:100%;padding:8px;border:0;border-radius:4px;background:none;'
+      + 'color:#c6d4fa;font:500 13px/1.2 Pretendard,"Pretendard Variable",system-ui,sans-serif;text-align:left;white-space:nowrap;cursor:pointer;transition:background-color .15s ease,color .15s ease;}',
+    '.ls-root .ls-launch-menu button:hover{background:rgba(69,197,255,.14);color:#fff;}',
+    '.ls-root .ls-launch-menu button.cur{background:rgba(40,97,255,.32);color:#fff;}',
+    '.ls-root .ls-launch-menu button.cur::after{content:"";margin-left:auto;width:6px;height:6px;border-radius:50%;background:#45c5ff;box-shadow:0 0 6px #45c5ff;}',
+    '.dt-editing .ls-root .ls-launch,.dt-content-editing .ls-root .ls-launch{opacity:.45;pointer-events:none;}',
+    /* 화면 안의 '여는 자리'(측정 카드 · 충전기 카드) — 누를 수 있음을 알린다 */
+    '.ls-root .ls-poptrig{transition:filter .22s ease;}',
+    '.ls-root .ls-poptrig:hover,.ls-root .ls-poptrig.ls-on{filter:brightness(1.14) drop-shadow(0 0 10px rgba(69,197,255,.35));}',
+    '.dt-editing .ls-root .ls-poptrig:hover,.dt-content-editing .ls-root .ls-poptrig:hover{filter:none;}',
+    /* 이 페이지 자체의 팝업 — 다른 팝업을 겹쳐 띄우는 동안 잠시 걷어 두고, 닫으면 다시 떠오른다 */
+    '.ls-root .ls-popmount.ls-pop-hide{opacity:0;scale:.99;visibility:hidden;pointer-events:none;transition:opacity .22s ease,scale .22s ease,visibility 0s linear .22s;}',
+    '.ls-root .ls-popmount.ls-pop-back{animation:lsPopIn .42s cubic-bezier(.22,.8,.24,1);}',
+    /* 패널편집 중에는 움직임을 멈춘다 */
+    '.dt-editing .ls-root .ls-pop .ls-blades,.dt-content-editing .ls-root .ls-pop .ls-blades,.ls-root.ls-edit-layout .ls-pop .ls-blades,'
+      + '.dt-editing .ls-root .ls-pop .ls-fan,.dt-content-editing .ls-root .ls-pop .ls-fan,.ls-root.ls-edit-layout .ls-pop .ls-fan,'
+      + '.dt-editing .ls-root .ls-pop .ls-run,.dt-content-editing .ls-root .ls-pop .ls-run,'
+      + '.dt-editing .ls-root .ls-pop .ls-alarmrow p,.dt-content-editing .ls-root .ls-pop .ls-alarmrow p{animation-play-state:paused;}',
+
     /* ══════════ 라이트 테마 ══════════
        원본은 다크. 형상·자리는 그대로 두고 판과 글자만 밝은 판에 맞게 다시 적는다.
        · 바탕 사진은 색을 뒤집어 옅게(밤 → 새벽빛) · 판 그림은 생성기가 만든 -lt 사본(밝은 판 · 짙은 선)
@@ -381,6 +458,37 @@
     '.ls-root[data-theme="light"] .ls-pop [data-name^="Metric/"] [data-name="Unit"]{color:#4a5a78!important;}',
     /* 계통 · 에너지 막대 — 인라인으로 바꾼 원본 막대 그림도 라이트 사본(data-2-lt.svg)과 같은 색으로(바닥 #035B7F → #a0cddf) */
     '.ls-root[data-theme="light"] .ls-pop .ls-datasvg stop[stop-color="#035B7F"]{stop-color:#a0cddf;}',
+    /* ── 라이트: 단독 팝업 다섯 장 ──
+       위의 '팝업 Field 값은 짙은 남색' 규칙이 뜻이 있는 값 색까지 지웠다(알림발생 빨강 · 안전 하늘 · 질소탱크 빨강 · 이온탱크 하늘).
+       같은 색의 짙은 짝으로 되돌린다(밝은 판 위 4.5:1 이상). */
+    '.ls-root[data-theme="light"] .lsr-root [data-name$="(Safe)"] [data-name="Value"],'
+      + '.ls-root[data-theme="light"] .lsc-root [data-name="Widget/Ion Tank"] [data-name="Value"]{color:#0a6f8a!important;}',
+    '.ls-root[data-theme="light"] .lsr-root [data-name$="(Alarm)"] [data-name="Value"],'
+      + '.ls-root[data-theme="light"] .lsc-root [data-name="Widget/Nitrogen Tank"] [data-name="Value"]{color:#c62828!important;}',
+    /* 모듈 칩(모듈 A · B · 배터리) — 원본의 짙은 파란 칩과 흰 글자를 지킨다(밝게 뒤집히면 파란 글자가 파란 판에 묻힌다) */
+    '.ls-root[data-theme="light"] .ls-pop [data-name^="Card/"] > [data-name="Chip"]{background-color:transparent!important;border-color:transparent!important;'
+      + 'background-image:linear-gradient(180deg,#204ac2,#151b39 51%,#204ac2)!important;}',
+    '.ls-root[data-theme="light"] .ls-pop [data-name^="Card/"] > [data-name="Chip"] p{color:#fff!important;}',
+    '.ls-root[data-theme="light"] .ls-pop [data-name^="Card/"] > [data-name="Chip"] [data-name="Marker"]{background-image:linear-gradient(0deg,rgba(255,255,255,0),#fff 52%,rgba(255,255,255,0))!important;}',
+    /* 파란 닫기 단추 — 원본 그대로(파란 판 + 흰 X). 팝업 제목 바 아이콘 규칙(어둡게)과 아이콘 판 규칙을 끊는다 */
+    '.ls-root[data-theme="light"] .ls-pop [data-name="Close Button"] img{filter:none!important;content:normal!important;}',
+    '.ls-root[data-theme="light"] .ls-pop [data-name="Close Button"] [data-name="Icon/Action/Close"]{background:none!important;border-color:transparent!important;}',
+    /* 상태정보 · 냉각설비 차트 선 — 원본 #52B4FF 는 밝은 판에서 옅다. 같은 파랑의 짙은 짝으로 */
+    '.ls-root[data-theme="light"] .lst-root .ls-datasvg [id^="Line/"],.ls-root[data-theme="light"] .lsc-root .ls-datasvg [id^="Line/"]{stroke:#1f6fd6;}',
+    /* '팝업' 단추 · 목록(라이트) — 이 화면 라이트 판(#f7faff → #eaf0fb, 선 #7fa3e6)과 짙은 남색 글자 */
+    '.ls-root[data-theme="light"] .ls-launch-btn{background:linear-gradient(180deg,#f7faff,#eaf0fb);border-color:#7fa3e6;box-shadow:inset 0 0 3px rgba(40,97,255,.22);color:#26375a;}',
+    '.ls-root[data-theme="light"] .ls-launch-btn:hover,.ls-root[data-theme="light"] .ls-launch.open .ls-launch-btn{border-color:#2861ff;color:#16233b;box-shadow:inset 0 0 6px rgba(40,97,255,.35),0 0 8px rgba(40,97,255,.18);}',
+    '.ls-root[data-theme="light"] .ls-launch-menu{border-color:#7fa3e6;background:linear-gradient(180deg,#f7faff,#eaf0fb);box-shadow:0 10px 24px rgba(22,35,59,.18);}',
+    '.ls-root[data-theme="light"] .ls-launch-menu .hd{color:#4a5a78;}',
+    '.ls-root[data-theme="light"] .ls-launch-menu .sep{background:rgba(22,35,59,.14);}',
+    '.ls-root[data-theme="light"] .ls-launch-menu button{color:#26375a;}',
+    '.ls-root[data-theme="light"] .ls-launch-menu button:hover{background:rgba(40,97,255,.12);color:#16233b;}',
+    '.ls-root[data-theme="light"] .ls-launch-menu button.cur{background:rgba(40,97,255,.18);color:#16233b;}',
+    '.ls-root[data-theme="light"] .ls-launch-menu button.cur::after{background:#2861ff;box-shadow:none;}',
+    '.ls-root[data-theme="light"] .ls-poptrig:hover,.ls-root[data-theme="light"] .ls-poptrig.ls-on{filter:brightness(1.03) drop-shadow(0 0 8px rgba(40,97,255,.3));}',
+    /* 펌프 · 알림 빛(라이트에서는 조금 짙게) */
+    '.ls-root[data-theme="light"].ls-live .ls-pop .ls-alarmrow [data-name="Td"] p{animation-name:lsAlarmTxtLt;}',
+    '@keyframes lsAlarmTxtLt{0%,100%{text-shadow:0 0 0 rgba(198,40,40,0)}50%{text-shadow:0 0 8px rgba(198,40,40,.55)}}',
     /* 드롭다운 메뉴(라이트) */
     '.ls-root[data-theme="light"] .ls-ddmenu{border-color:#7fa3e6;background:linear-gradient(180deg,#f7faff,#eaf0fb);box-shadow:0 8px 20px rgba(22,35,59,.18);}',
     '.ls-root[data-theme="light"] .ls-ddmenu button{color:#26375a;}',
@@ -450,12 +558,23 @@
 
   /* 장면 이름 — ACB·계통·에너지 진단 화면은 STATCOM 화면(.lsm-root) **위에** 팝업을 얹은 것이라 뿌리 클래스가 같다.
      겹친 팝업(공통 클래스 .ls-pop)의 종류로 장면을 가른다(접기·차트·배치 기억이 섞이지 않게). */
+  var POP_SCENE = {
+    lsa: 'acb', lsy: 'system', lse: 'energy',
+    /* 단독 팝업 다섯 장(Figma popup-3 ~ 7) — 상태정보 · AC전원실 · 충전기/배터리 · 냉각설비 · 알림 */
+    lst: 'transformer', lsp: 'acroom', lsb: 'charger', lsc: 'cooling', lsr: 'alarm',
+  };
+  /* 이 화면(페이지) 자체의 팝업 — 런처로 겹쳐 띄운 팝업(.ls-overlay)은 빼고 본다(장면 이름 · 기억이 섞이지 않게) */
+  function pagePop(root) {
+    return Array.prototype.filter.call(root.querySelectorAll('.ls-pop'), function (p) { return !p.closest('.ls-overlay'); })[0] || null;
+  }
   function sceneOf(root) {
-    if (root.querySelector('.lsa-root')) return 'acb';
-    if (root.querySelector('.lsy-root')) return 'system';
-    if (root.querySelector('.lse-root')) return 'energy';
+    var pop = pagePop(root);
+    if (pop) for (var px in POP_SCENE) if (pop.classList.contains(px + '-root')) return POP_SCENE[px];
     return root.classList.contains('lsd-root') ? 'datacenter' : 'statcom';
   }
+  /* 바탕 화면(팝업 밖) 노드만 — 팝업에 같은 이름의 위젯(Electrical Readings · Charger Battery)이 있어
+     바탕 화면용 라이브가 팝업 글자를 잡지 않게 한다 */
+  function outsidePop(el) { return !el.closest('.ls-pop'); }
   function frameOf(root) { return root.querySelector(':scope > [data-name^="Screen/"]'); }
 
   /* ══════════════════ 1. 반응형 ══════════════════ */
@@ -491,9 +610,13 @@
     frame.style.height = BASE_H + 'px';
     frame.style.transformOrigin = '0 0';
     var blocks = collectBlocks(frame);
+    /* 표시(쓰기)를 다 붙인 뒤에 자리(offsetTop)를 읽는다 — 블록마다 붙이고 읽으면 그때마다 레이아웃을 다시 한다.
+       블록은 모두 절대 위치라 다른 블록의 표시가 제 자리를 바꾸지 않는다(결과는 같다) */
     blocks.forEach(function (b) {
       b.el.classList.add('ls-blk');
       b.el.setAttribute('data-ls-grp', b.grp);
+    });
+    blocks.forEach(function (b) {
       b.top = b.el.offsetTop;
       b.name = nameOf(b.el);
       if (b.el.querySelector('[data-name="Fold Button"]') || b.name === 'Fold Button') b.el.classList.add('ls-foldbtn');
@@ -526,7 +649,10 @@
       blocks.forEach(function (b) {
         var s = b.el.style, n = b.name, tx = 0, ty = 0;
         if (b.grp === 'B') {
-          s.left = '0px'; s.top = '0px'; s.width = VW + 'px'; s.height = VH + 'px'; s.transform = 'none';
+          /* 바탕 사진 판은 원본이 가운데 정렬(left/top 50% + translate(-50%))이고, 생성기가 그 이동을 반 픽셀 방지용
+             margin(-960/-540)으로 바꿨다(README ⑭). 여기서 left/top 을 0 으로 붙일 때 margin 도 함께 걷어야 한다 —
+             안 그러면 판이 왼쪽 위로 반 화면 밀려 오른쪽 · 아래 절반에 사진이 비었다(2026-10-02 발견, 모든 LS 장면). */
+          s.left = '0px'; s.top = '0px'; s.margin = '0'; s.width = VW + 'px'; s.height = VH + 'px'; s.transform = 'none';
           return;
         }
         if (b.grp === 'H') {
@@ -825,7 +951,7 @@
   }
 
   /* ══════════════════ 7. 라이브 수치 ══════════════════ */
-  function measureP(root, sel) { var m = one(root, sel); return m ? all(m, ':scope > p') : []; }
+  function measureP(root, sel) { var m = all(root, sel).filter(outsidePop)[0]; return m ? all(m, ':scope > p') : []; }
   function installLive(root, st) {
     var jobs = [];
     /* 전압 · 전류(STATCOM) — 원본 154 KV · 250 A 언저리 */
@@ -996,6 +1122,64 @@
       { k: 'bar', t: '시간대별 탄소 배출량', unit: 'tCO₂', cats: ['00', '04', '08', '12', '16', '20'], v: [2.4, 1.2], max: 5, c: C.green, dec: 1 },
       { k: 'area', t: '탄소 배출 누적', unit: 'tCO₂', series: [['배출량', C.green, 2.7, 0.3]], lo: 0, hi: 5 },
       { k: 'gauge', t: '감축 목표 달성률', unit: '%', v: [82, 3], max: 100, c: C.green },
+    ],
+    /* ── 상태정보 팝업(118:568) — 절연유 온도(축 0~100 · 기준선 85) · 냉각팬 8대(동작 1 · 중지 5 · 과부하 1 · 고장 1) ──
+       팬 상태 색은 원본 범례색(#34d28d · #e2e3e5 · #fd8004 · #f43130) 그대로. 삼상전원전압 트렌드는 위 'Widget/Voltage Trend' 를 같이 쓴다. */
+    'Widget/Oil Temperature Trend': [
+      { k: 'line', t: '절연유 온도 추이', unit: '°C', series: [['절연유', '#52b4ff', 72, 6], ['기준선', C.red, 85, 0.1]], lo: 0, hi: 100 },
+      { k: 'gauge', t: '현재 절연유 온도', unit: '°C', v: [72, 4], max: 100, c: C.orange },
+      { k: 'bar', t: '일별 최고 유온', unit: '°C', cats: ['02/27', '02/28', '02/29', '03/01', '03/02', '03/03', '03/04'], v: [74, 14], max: 100, c: C.orange },
+    ],
+    'Widget/Cooling Fan Status': [
+      { k: 'donut', t: '냉각팬 상태 구성', parts: [['동작', '#34d28d', 1], ['중지', '#e2e3e5', 5], ['과부하', '#fd8004', 1], ['고장', '#f43130', 1]] },
+      { k: 'hbar', t: '그룹별 가동률', unit: '%', cats: ['GROUP1', 'GROUP2', 'GROUP3', 'GROUP4'], v: [46, 30], max: 100, c: C.cyan },
+      { k: 'bar', t: '그룹별 팬 회전수', unit: 'rpm', cats: ['GROUP1', 'GROUP2', 'GROUP3', 'GROUP4'], v: [900, 420], max: 1800, c: '#34d28d' },
+    ],
+    'Widget/Oil Temperature Level': [
+      { k: 'gauge', t: '절연유 온도 레벨', unit: '%', v: [76, 4], max: 100, c: C.cyan },
+      { k: 'area', t: '레벨 추이', unit: '%', series: [['레벨', C.cyan, 76, 3]], lo: 0, hi: 100 },
+    ],
+    /* ── 냉각설비 팝업(124:3340) — 입력 · 전도도(축 0~250, 01~24시) · 펌프 3대 · 온습도 · 이온/질소 탱크 ── */
+    'Widget/System Overview': [
+      { k: 'gauge', t: '냉각 계통 효율', unit: '%', v: [94, 1.5], max: 100, min: 70, c: C.green },
+      { k: 'line', t: 'Inlet · Outlet 온도', unit: '℃', series: [['Inlet', C.cyan, 20, 0.6], ['Outlet', C.orange, 26, 0.7]], lo: 10, hi: 35 },
+    ],
+    'Widget/PLC Status': [
+      { k: 'hbar', t: 'PLC CPU 부하율', unit: '%', cats: ['PLC1', 'PLC2'], v: [42, 18], max: 100, c: C.cyan },
+      { k: 'line', t: 'PLC 스캔 타임', unit: 'ms', series: [['PLC1', C.cyan, 12, 1.2], ['PLC2', C.orange, 14, 1.2]], lo: 0, hi: 25 },
+    ],
+    'Widget/Input Trend': [
+      { k: 'line', t: '입력 실시간', unit: '', series: [['입력', '#52b4ff', 120, 26]], lo: 0, hi: 250 },
+      { k: 'area', t: '입력 누적 추이', unit: '', series: [['입력', C.cyan, 120, 22]], lo: 0, hi: 250 },
+      { k: 'bar', t: '시간대별 입력', unit: '', cats: ['00', '04', '08', '12', '16', '20'], v: [120, 80], max: 250, c: C.blue },
+    ],
+    'Widget/Conductivity Trend': [
+      { k: 'line', t: '전도도 실시간', unit: 'μS/cm', series: [['전도도', '#52b4ff', 120, 26]], lo: 0, hi: 250 },
+      { k: 'gauge', t: '현재 전도도', unit: 'μS/cm', v: [118, 14], max: 250, c: C.cyan },
+      { k: 'bar', t: '시간대별 전도도', unit: 'μS/cm', cats: ['00', '04', '08', '12', '16', '20'], v: [120, 70], max: 250, c: C.cyan },
+    ],
+    'Widget/Pump Status': [
+      { k: 'hbar', t: '펌프별 속도', unit: '%', cats: ['PUMP1', 'PUMP2', 'PUMP3'], v: [56, 24], max: 100, c: C.green },
+      { k: 'line', t: 'Inlet · Outlet 압력', unit: 'barg', series: [['Inlet', C.cyan, 30, 0.8], ['Outlet', C.orange, 30, 0.8]], lo: 20, hi: 40 },
+      { k: 'bar', t: '펌프별 운전 시간', unit: 'h', cats: ['PUMP1', 'PUMP2', 'PUMP3'], v: [16, 6], max: 24, c: C.blue },
+    ],
+    'Widget/Temp Humidity': [
+      { k: 'line', t: '온 · 습도 추이', unit: '', series: [['온도(℃)', C.orange, 20, 0.6], ['습도(%RH)', C.cyan, 10, 0.9]], lo: 0, hi: 35 },
+      { k: 'gauge', t: '습도', unit: '%RH', v: [10, 1.5], max: 100, c: C.cyan },
+    ],
+    'Widget/Ion Tank': [
+      { k: 'line', t: '이온탱크 Inlet 압력', unit: 'barg', series: [['Inlet 압력', C.cyan, 30, 0.8]], lo: 20, hi: 40 },
+      { k: 'gauge', t: '이온탱크 유량', unit: 'L/min', v: [70, 4], max: 120, c: C.cyan },
+    ],
+    'Widget/Nitrogen Tank': [
+      { k: 'hbar', t: 'Vessel 레벨', unit: 'mm', cats: ['Vessel#1', 'Vessel#2', 'Vessel#3'], v: [50, 8], max: 100, c: C.red },
+      { k: 'line', t: '질소탱크 압력', unit: 'barg', series: [['압력', C.red, 30, 0.8]], lo: 20, hi: 40 },
+      { k: 'area', t: 'Total Flow', unit: 'L/min', series: [['Flow', C.cyan, 70, 4]], lo: 40, hi: 100 },
+    ],
+    /* ── 알림 팝업(138:1433) — 실 여섯 곳(안전 5 · 알림발생 1) ── */
+    'Widget/Room Alarm Status': [
+      { k: 'donut', t: '실별 알림 현황', parts: [['안전', '#28e3ff', 5], ['알림발생', '#ff4b4b', 1]] },
+      { k: 'bar', t: '실별 알림 건수', unit: '건', cats: ['밸브실', '냉각실', '소내변압기실', 'AC전원실', 'DC전원실', 'C&P'], v: [1, 1], max: 5, c: C.red },
     ],
   };
   var KIND_ICON = {
@@ -1174,12 +1358,19 @@
     var sc = sceneOf(root);
     var saved = load(LS_CHART)[sc] || {};
     st.charts = {};
+    /* 같은 이름의 위젯이 바탕 화면과 팝업에 하나씩 있을 수 있다(AC전원실 팝업의 Electrical Readings ·
+       충전기 팝업의 Charger Battery). 둘 다 단추를 달고, 두 번째부터는 키에 '#2' 를 붙여 따로 기억한다. */
+    var targets = [];
     Object.keys(CHARTS).forEach(function (wn) {
-      var w0 = one(root, '[data-name="' + wn + '"]');
-      if (!w0) return;
-      /* 그룹 위젯은 그림이 있는 자리(.ls-chost)에 단추·차트를 건다(installPopup) */
+      all(root, '[data-name="' + wn + '"]').forEach(function (el, i) { targets.push([wn, el, i ? wn + '#' + (i + 1) : wn]); });
+    });
+    /* 그룹 위젯은 그림이 있는 자리(.ls-chost)에 단추·차트를 건다(installPopup).
+       위치(position)는 단추를 붙이기 전에 한꺼번에 읽는다 — 붙이면서 하나씩 읽으면 매번 스타일을 다시 계산한다 */
+    var statics = targets.map(function (tg) { return getComputedStyle(tg[1].__lsChartHost || tg[1]).position === 'static'; });
+    targets.forEach(function (tg, ti) {
+      var wn = tg[0], w0 = tg[1], key = tg[2];
       var w = w0.__lsChartHost || w0;
-      if (getComputedStyle(w).position === 'static') w.style.position = 'relative';
+      if (statics[ti]) w.style.position = 'relative';
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'ls-chartbtn ct-btn';
@@ -1189,7 +1380,7 @@
       menu.className = 'ls-chartmenu ct-btn';
       w.appendChild(btn);
       w.appendChild(menu);
-      var cur = saved[wn] != null ? saved[wn] : -1;
+      var cur = saved[key] != null ? saved[key] : -1;
       function render() {
         var list = CHARTS[wn];
         menu.innerHTML = '<div class="hd">' + esc(wn.replace('Widget/', '')) + ' — 추천 차트</div>'
@@ -1201,15 +1392,15 @@
       }
       function apply(i) {
         cur = i;
-        if (st.charts[wn]) { st.charts[wn].dispose(); delete st.charts[wn]; }
+        if (st.charts[key]) { st.charts[key].dispose(); delete st.charts[key]; }
         w0.classList.toggle('ls-swapped', i >= 0);
         if (i >= 0 && CHARTS[wn][i]) {
           var spec = Object.assign({ uid: ++chartUid }, CHARTS[wn][i]);
-          st.charts[wn] = makeChart(w, spec);
+          st.charts[key] = makeChart(w, spec);
           w.appendChild(btn); w.appendChild(menu);           /* 단추·메뉴는 차트 위에 */
         }
         var m = load(LS_CHART); m[sc] = m[sc] || {};
-        if (i >= 0) m[sc][wn] = i; else delete m[sc][wn];
+        if (i >= 0) m[sc][key] = i; else delete m[sc][key];
         save(LS_CHART, m);
         render();
       }
@@ -1231,7 +1422,7 @@
         menu.classList.remove('open');
       });
       st.chartApply = st.chartApply || {};
-      st.chartApply[wn] = apply;
+      st.chartApply[key] = apply;
       if (cur >= 0) apply(cur);
     });
     st.onDocDown = function (e) {
@@ -1259,6 +1450,9 @@
       }));
     leftW.forEach(function (w) { w.classList.add('ls-mv'); w.setAttribute('data-ls-mv', 'L'); });
     rightU.forEach(function (w) { w.classList.add('ls-mv'); w.setAttribute('data-ls-mv', 'R'); });
+    /* 저장 키 — 팝업 위젯이 바탕 화면 위젯과 이름이 같으면(Electrical Readings 등) 따로 기억한다 */
+    var baseNames = rightU.filter(outsidePop).map(nameOf);
+    function mvKey(w) { var n = nameOf(w); return !outsidePop(w) && baseNames.indexOf(n) >= 0 ? n + '@pop' : n; }
 
     /* 저장된 순서 · 이동 되살리기 */
     function restore() {
@@ -1268,7 +1462,7 @@
       }
       var mv = load(LS_MOVE)[sc] || {};
       rightU.forEach(function (w) {
-        var o = mv[nameOf(w)] || [0, 0];
+        var o = mv[mvKey(w)] || [0, 0];
         setMove(w, o[0], o[1]);
       });
     }
@@ -1370,7 +1564,7 @@
           { duration: 380, easing: 'cubic-bezier(.22,.8,.24,1)' });
       } else {
         var m = load(LS_MOVE); m[sc] = m[sc] || {};
-        m[sc][nameOf(d.w)] = d.w.__lsMove;
+        m[sc][mvKey(d.w)] = d.w.__lsMove;
         save(LS_MOVE, m);
       }
     };
@@ -1428,7 +1622,9 @@
   }
   function installPopCharts(pop, st) {
     if (!window.fetch || !window.DOMParser) return;
-    all(pop, '[data-name="Data"] img').forEach(function (im) {
+    /* 상태정보 팝업은 Figma 가 Plot 통째(격자선 · 기준선 · 데이터 선)를 한 그림으로 냈다 — 그것도 받는다.
+       격자선 · 점선 기준선은 그대로 두고 데이터 선(id 'Line/…')만 흐르게 한다(아래 skip). */
+    all(pop, '[data-name="Data"] img, [data-name="Plot"] > div:not([data-name]) > img').forEach(function (im) {
       var src = im.getAttribute('src');
       fetchSvg(src).then(function (txt) {
         if (!txt || !im.parentNode) return;
@@ -1455,6 +1651,8 @@
         var bars = [], lines = [];
         all(svg, 'path').forEach(function (p) {
           var d = p.getAttribute('d') || '';
+          /* 격자선 · 기준선(점선)은 화면의 자 — 움직이지 않는다 */
+          if (/^(Grid|Threshold)/.test(p.getAttribute('id') || '') || p.hasAttribute('stroke-dasharray')) return;
           if (p.getAttribute('stroke') && !p.getAttribute('fill')) {
             /* 곡선 — 점 좌표를 숫자 배열로(x,y 짝). 절대 좌표 M/C/L 만 다룬다 */
             if (/[a-z]/.test(d.replace(/e[-+]?\d/gi, ''))) return;
@@ -1524,6 +1722,8 @@
                 if (xy % 2 === 0) { x = v; out.push(tk); }
                 else {
                   var y = v + A * (Math.sin(K * x - W * t + ln.ph) - Math.sin(K * x + ln.ph));
+                  /* 그림 상자(축 0 ~ 최댓값) 밖으로는 나가지 않는다 — 꼭대기에 닿으면 거기서 머문다 */
+                  y = clamp(y, 0.5, vb[3] - 0.5);
                   out.push(y.toFixed(3));
                 }
                 xy++;
@@ -1556,8 +1756,10 @@
   /* ══════════════════ 10. ACB 진단 팝업 ══════════════════
      STATCOM 화면(3:5) 위에 ACB 진단 팝업(76:597)이 떠 있는 화면(Figma 62:1493).
      팝업은 생성기가 만든 DOM 그대로이고 여기서는 닫기 · 드롭다운 · 호버 · 라이브 수치만 얹는다. */
-  function installPopup(root, st) {
-    var pop = one(root, '.ls-pop');
+  /* pop · onClose 를 주면 런처가 겹쳐 띄운 팝업(.ls-overlay)이다 — 닫기는 그 자리에서 걷기만 한다(페이지 이동 없음).
+     안 주면 이 페이지 자체의 팝업이고 닫기는 STATCOM 페이지로 간다(페이지 연결). */
+  function installPopup(root, st, popArg, onClose) {
+    var pop = popArg || pagePop(root);
     if (!pop) return;
     var mount = pop.parentElement;
 
@@ -1590,8 +1792,10 @@
     });
 
     /* 닫기 — 팝업이 사라지고 바탕의 STATCOM 화면으로 간다(형제 화면이 있으면 그 화면을 연다) */
-    var cl = one(pop, '[data-name="Icon/Action/Close"]');
+    /* 단독 팝업(AC전원실 · 충전기 · 알림)은 파란 단추(Close Button) 안에 X 아이콘이 있다 — 단추 전체가 눌리게 */
+    var cl = one(pop, '[data-name="Close Button"]') || one(pop, '[data-name="Icon/Action/Close"]');
     clickable(cl, '닫기', function () {
+      if (onClose) { onClose(); return; }
       mount.classList.add('ls-pop-out');
       st.timers.push(setTimeout(function () { goScene('statcom'); }, 270));
     });
@@ -1662,16 +1866,16 @@
         svg.setAttribute('id', dimg.getAttribute('id') || '');
         if (dimg.getAttribute('data-name')) svg.setAttribute('data-name', dimg.getAttribute('data-name'));
         dimg.parentNode.replaceChild(svg, dimg);
-        all(svg, 'path').forEach(function (p) {
-          var h = 0;
-          try { h = p.getBBox().height; } catch (e) { h = 99; }
-          if (h > 4) p.classList.add('ls-wave');        /* 평평한 선(높이 ≈ 0)은 그대로 둔다 */
-        });
+        /* 높이를 먼저 다 재고 나서 표시한다 — 표시하며 재면 선마다 레이아웃을 다시 한다 */
+        var paths = all(svg, 'path');
+        var hs = paths.map(function (p) { try { return p.getBBox().height; } catch (e) { return 99; } });
+        paths.forEach(function (p, i) { if (hs[i] > 4) p.classList.add('ls-wave'); });   /* 평평한 선(높이 ≈ 0)은 그대로 둔다 */
       }).catch(function () { });
     }
 
     /* 라이브 수치 — 원본 값 언저리에서 흔들린다(사람이 고친 글자는 덮지 않는다) */
     var jobs = [];
+    var fixW = [];   /* 폭을 원본으로 묶을 글자 — 다 모은 뒤 한꺼번에 재고 묶는다(아래 jobs 앞) */
     var R0 = function (x) { return String(Math.round(x)); };
     var R1 = function (x) { return x.toFixed(1); };
     var DEG = function (x) { return Math.round(x) + '°'; };
@@ -1681,8 +1885,9 @@
       var b = base != null ? base : parseFloat(String(p.textContent).replace(/[^\d.-]/g, ''));
       if (!isFinite(b)) return;
       /* 글자 상자는 원본 글자 폭으로 고정돼 있다(Figma 메타) — 숫자 폭이 달라지면(5,851 → 5,838) 단위에 붙는다.
-         원본 폭은 최소로 지키고 넓어질 때만 자란다(첫 그림은 그대로) */
-      if (p.offsetWidth) { p.style.minWidth = p.offsetWidth + 'px'; p.style.width = 'auto'; }
+         원본 폭은 최소로 지키고 넓어질 때만 자란다(첫 그림은 그대로). 재고 묶는 일은 아래에서 한꺼번에 —
+         글자마다 재고(offsetWidth) 바로 고치면 그때마다 레이아웃을 다시 한다 */
+      fixW.push(p);
       jobs.push({ p: p, base: b, dev: dev, fmt: fmt, ms: ms });
     }
     /* 게이지 두 짝 */
@@ -1777,6 +1982,11 @@
       });
     });
 
+    installSoloPopup(root, pop, st, num);
+
+    var fixWs = fixW.map(function (p) { return p.offsetWidth; });
+    fixW.forEach(function (p, i) { if (fixWs[i]) { p.style.minWidth = fixWs[i] + 'px'; p.style.width = 'auto'; } });
+
     jobs.forEach(function (j) {
       var cur2 = j.base;
       j.p.__lsLast = j.p.textContent;
@@ -1787,6 +1997,312 @@
         cur2 = nx;
       }, j.ms + Math.random() * 400));
     });
+  }
+
+  /* ══════════════════ 10-2. 단독 팝업 다섯 장(Figma popup-3 ~ 7) ══════════════════
+     상태정보(변압기) · AC전원실 전압/전류 · 충전기/배터리 운영상태 · 냉각설비 상태 정보 · 알림.
+     STATCOM 화면 한가운데에 얹힌다. 형상은 생성기 그대로 두고 '살아 있는 것'만 얹는다. */
+  function liveFmt(s) {
+    /* '20 ℃' · '30 barg' · '10% RH' · '70 L/min' · '154' — 숫자 자릿수와 앞뒤 글자를 그대로 지킨다 */
+    var m = /^(\D*?)(-?\d+(?:\.\d+)?)(.*)$/.exec(String(s).trim());
+    if (!m) return null;
+    var d = (m[2].split('.')[1] || '').length;
+    return { base: +m[2], fmt: function (x) { return m[1] + x.toFixed(d) + m[3]; } };
+  }
+  function popKey(pop) {
+    for (var px in POP_SCENE) if (pop && pop.classList.contains(px + '-root')) return POP_SCENE[px];
+    return '';
+  }
+  function installSoloPopup(root, pop, st, num) {
+    var sc = popKey(pop);          /* 겹쳐 띄운 팝업도 같은 장치를 쓴다 — 장면이 아니라 팝업 종류로 가른다 */
+    if (['transformer', 'acroom', 'charger', 'cooling', 'alarm'].indexOf(sc) < 0) return;
+    var txt = function (el, sel) { var x = el && one(el, sel); return x ? x.textContent.trim() : ''; };
+
+    /* 눌리는 자리 — 표 줄(설비 · 실별 상태) · 펌프 칸 · 그룹 말풍선 · 모듈 카드 · 측정 카드 */
+    all(pop, '[data-name^="Field/"]').forEach(function (r) {
+      r.classList.add('ls-rowhi');
+      clickable(r, txt(r, '[data-name="Th"]') + ' 상세');
+    });
+    all(pop, '[data-name="Cells"] > [data-name^="Td/"]').forEach(function (c) { clickable(c, nameOf(c).replace('Td/', '') + ' 운전 상태'); });
+    all(pop, '[data-name^="Callout/"]').forEach(function (c) { clickable(c, txt(c, '[data-name="Label"]') + ' 냉각팬'); });
+    all(pop, '[data-name^="Card/"]').forEach(function (c) { clickable(c, txt(c, '[data-name="Chip"]') + ' 상세'); });
+    all(pop, '[data-name^="Metric/"]').forEach(function (c) { clickable(c, txt(c, '[data-name="Label"]') + ' 추이'); });
+
+    /* 알림 난 실 — 값 글자에 빛이 숨쉰다(글자색은 원본 그대로 · 헤드리스 캡처에서도 색이 안 바뀐다) */
+    all(pop, '[data-name$="(Alarm)"]').forEach(function (r) { r.classList.add('ls-alarmrow'); });
+    /* 펌프 운전 표지 — 운전 중인 것만 초록 빛이 돈다 */
+    all(pop, '[data-name="Marker (Running)"]').forEach(function (m) { m.classList.add('ls-run'); });
+
+    /* 냉각팬 — 원본 팬 그림(Housing · Blades · Hub)을 인라인으로 바꿔 날개(Blades)만 돌린다. 새로 그리지 않는다.
+       상태는 레이어 이름 그대로: 동작 = 돈다 · 과부하 = 빨리 돌며 주황 빛 · 고장 = 멈춘 채 빨간 빛 · 중지 = 멈춤.
+       라이트 테마는 생성기가 만든 -lt 그림(짙은 회색 팬)으로 다시 그린다 — 테마가 바뀌면 따라간다. */
+    var themeOf = function () { return (pop.dataset.theme || root.dataset.theme) === 'light' ? 'light' : 'dark'; };
+    all(pop, '[data-name^="Fan/"]').forEach(function (f) {
+      var n = nameOf(f);
+      var state = /\(Running\)/.test(n) ? 'run' : /\(Overload\)/.test(n) ? 'over' : /\(Fault\)/.test(n) ? 'fault' : 'stop';
+      f.classList.add('ls-fan', 'ls-fan-' + state);
+      clickable(f, n.replace('Fan/', '').replace(/\s*\(.*\)$/, '') + ' 냉각팬 · ' + { run: '동작', over: '과부하', fault: '고장', stop: '중지' }[state]);
+      var im = one(f, 'img');
+      if (!im || !window.fetch || !window.DOMParser) return;
+      var src = im.getAttribute('src');
+      /* 라이트 사본은 생성기가 색을 바꿀 게 있던 그림에만 만든다(중지 팬) — 라이트 시트에 적힌 것만 받는다(없는 파일 404 를 내지 않게) */
+      var ltName = src.split('/').pop().replace(/\.svg$/, '-lt.svg');
+      var hasLt = Array.prototype.some.call(document.querySelectorAll('style'), function (x) { return x.textContent.indexOf(ltName) >= 0; });
+      Promise.all([fetchSvg(src), hasLt ? fetchSvg(src.replace(/\.svg$/, '-lt.svg')) : Promise.resolve('')]).then(function (tx) {
+        var cur = im, u = '-lsf' + (++inlUid), shown = '';
+        var paint = function () {
+          var want = themeOf();
+          var t = want === 'light' && /<svg/.test(tx[1] || '') ? tx[1] : tx[0];
+          if (!t || shown === want || !cur.parentNode) return;
+          var s = new DOMParser().parseFromString(t, 'image/svg+xml').documentElement;
+          if (!s || s.nodeName.toLowerCase() !== 'svg') return;
+          s = document.importNode(s, true);
+          all(s, '[id]').forEach(function (e) { e.setAttribute('id', e.getAttribute('id') + u); });
+          all(s, '[fill^="url(#"],[stroke^="url(#"]').forEach(function (e) {
+            ['fill', 'stroke'].forEach(function (a) { var v = e.getAttribute(a); if (v && v.indexOf('url(#') === 0) e.setAttribute(a, v.replace(/\)$/, u + ')')); });
+          });
+          var hs = one(s, 'ellipse'), bl = one(s, '[id^="Blades"]');      /* Housing 의 중심 = 날개 축 */
+          if (bl && hs) { bl.classList.add('ls-blades'); bl.style.transformOrigin = hs.getAttribute('cx') + 'px ' + hs.getAttribute('cy') + 'px'; }
+          s.setAttribute('class', (im.getAttribute('class') || '') + ' ls-inl ls-fansvg');
+          s.setAttribute('data-src', src);       /* 색 정하기(image.js)가 원래 파일 이름으로 '색 유지' 여부를 가른다 */
+          if (im.id) s.id = im.id;
+          cur.parentNode.replaceChild(s, cur);
+          cur = s; shown = want;
+        };
+        paint();
+        var mo = new MutationObserver(paint);
+        mo.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+        mo.observe(pop, { attributes: true, attributeFilter: ['data-theme'] });
+        (st.observers = st.observers || []).push(mo);
+      });
+    });
+
+    /* 절연유 온도 레벨 — 채움(Fill)이 바닥을 붙인 채 오르내린다(원본 높이 245 언저리) */
+    var fill = one(pop, '[data-name="Level Bar"] [data-name="Fill"]'), track = one(pop, '[data-name="Level Bar"] [data-name="Track"]');
+    if (fill && track && fill.offsetHeight) {
+      var bottom = track.offsetTop + track.offsetHeight, h0 = fill.offsetHeight, lv = h0;
+      fill.style.transition = 'top 1.2s cubic-bezier(.22,.8,.24,1),height 1.2s cubic-bezier(.22,.8,.24,1)';
+      st.timers.push(setInterval(function () {
+        if (editing() || idle()) return;
+        lv = clamp(lv + rnd(-16, 16), h0 - 44, Math.min(h0 + 44, track.offsetHeight - 6));
+        fill.style.height = lv.toFixed(1) + 'px';
+        fill.style.top = (bottom - lv).toFixed(1) + 'px';
+      }, 2800 + Math.random() * 400));
+    }
+
+    /* 수치 — 원본 값 언저리에서 흔들린다(자릿수 · 단위 그대로). 0 · 날짜 · 글자 상태(정상 · Healthy …)는 그대로 둔다 */
+    var liveP = function (p, rel, ms, min) {
+      if (!p) return;
+      var t = p.textContent.trim();
+      if (/^\d{4}\.\d{1,2}\.\d{1,2}$/.test(t)) return;
+      var f = liveFmt(t);
+      if (!f || !f.base) return;
+      num(p, Math.max(Math.abs(f.base) * rel, min || 0), f.fmt, ms, f.base);
+    };
+    /* AC전원실 전압 · 전류 */
+    liveP(one(pop, '[data-name="Metric/Voltage"] [data-name="Measurement"] > [data-name="Value"]'), 0.0104, 2200);
+    liveP(one(pop, '[data-name="Metric/Current"] [data-name="Measurement"] > [data-name="Value"]'), 0.024, 1800);
+    /* 충전기 · 배터리 — 전압은 카드마다 원본 글자 모양을 지킨다(모듈 A·B '128' + 'V', 배터리 '128.' + '0V') */
+    all(pop, '[data-name="Row/Voltage"] [data-name="Measurement"]').forEach(function (m, i) {
+      var mp = all(m, ':scope > p');
+      if (mp.length !== 2) return;
+      if (!/\.$/.test(mp[0].textContent.trim())) { liveP(mp[0], 0.0063, 2600 + i * 300, 0.8); return; }
+      var ut = mp[1].textContent.trim(), dig = /^\d+/.exec(ut), unit = ut.replace(/^\d+/, '');
+      var b = parseFloat(mp[0].textContent.trim() + (dig ? dig[0] : '0')), dd = dig ? dig[0].length : 1, curB = b;
+      mp.forEach(function (p) { p.__lsLast = p.textContent; if (p.offsetWidth) { p.style.minWidth = p.offsetWidth + 'px'; p.style.width = 'auto'; } });
+      st.timers.push(setInterval(function () {
+        if (editing() || idle() || mp.some(claimed)) return;
+        curB = clamp(curB + rnd(-0.8, 0.8) * 0.6, b - 0.8, b + 0.8);
+        var s = curB.toFixed(dd).split('.');
+        write(mp[0], s[0] + '.', true);
+        write(mp[1], s[1] + unit, true);
+      }, 2600 + Math.random() * 400));
+    });
+    all(pop, '[data-name="Row/Current"] [data-name="Measurement"] > [data-name="Value"]').forEach(function (p, i) { liveP(p, 0.0375, 2000 + i * 260); });
+    all(pop, '[data-name="Row/Temp"] [data-name="Measurement"] > [data-name="Value"]').forEach(function (p, i) { liveP(p, 0.018, 3400 + i * 300); });
+    /* 냉각설비 — 온도 · 압력 · 습도 · 유량 · 레벨(값 칸 Td 의 글자) */
+    /* 원본 값이 정수라(20 ℃ · 30 barg · 50 mm) 흔들림이 1 이상이어야 눈에 띈다 */
+    all(pop, '[data-name^="Field/"] [data-name="Td"] [data-name="Value"]').forEach(function (p, i) { liveP(p, 0.04, 3000 + (i % 7) * 370, 1); });
+  }
+
+  /* ══════════════════ 11. 팝업 열기 — 페이지 연결 ══════════════════
+     이 프로젝트의 팝업 여덟 장을 지금 보고 있는 페이지 위에 그대로 겹쳐 띄운다(바탕은 지금 페이지 · 닫으면 그 페이지로).
+     · 화면에 '여는 자리'가 분명한 것 — 같은 부품 · 같은 문구가 화면에 있다:
+         충전기/배터리 운영상태 ← Data Center 의 Widget/Charger Battery(제목 '충전기 / 배터리 운영상태' 가 팝업 제목과 같고 같은 카드다)
+         AC전원실 전압/전류   ← STATCOM 의 Widget/Electrical Readings(전압 154 KV · 전류 250 A 같은 측정 카드 — 팝업이 이 카드를 키운 것)
+     · 여는 자리를 시안에서 알 수 없는 것 — 헤더 Brand 옆 '팝업' 단추의 목록에 Figma 제목 그대로 둔다
+         ACB 진단 · 계통 진단 · 에너지 진단(ACB 진단 1단 팝업 세 장) · 상태정보 · 냉각설비 상태 정보 · 알림
+     팝업 마크업 · 시트는 생성기 모듈(window.build_<접두어> · <접두어>_CSS)을 그대로 쓴다. 모듈이 없는 낱장 미리보기에서는
+     그 팝업의 미리보기 페이지로 넘어간다. 패널편집 중에는 열리지 않고, 편집을 켜면 겹친 팝업은 닫힌다(편집은 그 팝업의 페이지에서). */
+  var POPUPS = [
+    { key: 'acb', px: 'lsa', label: 'ACB 진단', group: 'ACB' },
+    { key: 'system', px: 'lsy', label: '계통 진단', group: 'ACB' },
+    { key: 'energy', px: 'lse', label: '에너지 진단', group: 'ACB' },
+    { key: 'transformer', px: 'lst', label: '상태정보' },
+    { key: 'acroom', px: 'lsp', label: 'AC전원실 전압/전류', trigger: { base: 'lsm', sel: '[data-name="Widget/Electrical Readings"]' } },
+    { key: 'charger', px: 'lsb', label: '충전기/배터리 운영상태', trigger: { base: 'lsd', sel: '[data-name="Widget/Charger Battery"]' } },
+    { key: 'cooling', px: 'lsc', label: '냉각설비 상태 정보' },
+    { key: 'alarm', px: 'lsr', label: '알림' },
+  ];
+  function popupOf(key) { return POPUPS.filter(function (p) { return p.key === key; })[0]; }
+  function ensurePopSheets(px) {
+    var G = px.toUpperCase();
+    [[G + '_CSS', px + '-style'], [G + '_LIGHT_CSS', px + '-light-style']].forEach(function (x) {
+      if (document.getElementById(x[1]) || typeof window[x[0]] !== 'string') return;
+      var s = document.createElement('style');
+      s.id = x[1];                                   /* 스튜디오(js/templates/lselectric.js)와 같은 id — 색 바꾸기가 이 id 로 찾는다 */
+      s.textContent = window[x[0]];
+      document.head.appendChild(s);
+    });
+  }
+  function installPopupLinks(root, st) {
+    var frame = st.frame || frameOf(root);
+    if (!frame) return;
+    var base = root.classList.contains('lsd-root') ? 'lsd' : 'lsm';
+    var anyImg = one(root, '[data-name="Logo Mark"] img') || one(root, 'img[src]');
+    var A = anyImg ? anyImg.getAttribute('src').replace(/[^\/]*$/, '') : 'src/lselectric/';
+    var page = pagePop(root), pageKey = page ? popKey(page) : '';
+    var ov = null;                                   /* 지금 겹쳐 띄운 팝업 { key, mount, st } */
+
+    function visibleKey() { return ov ? ov.key : (page && !page.parentElement.classList.contains('ls-pop-hide') ? pageKey : ''); }
+    function sync() {
+      var k = visibleKey();
+      if (st.launch) all(st.launch, '.ls-launch-menu button[data-k]').forEach(function (b) {
+        var on = b.getAttribute('data-k') === k;
+        b.classList.toggle('cur', on);
+        b.setAttribute('aria-checked', on ? 'true' : 'false');
+      });
+      all(root, '.ls-poptrig').forEach(function (t) { t.classList.toggle('ls-on', t.getAttribute('data-ls-pop') === k); });
+    }
+    function showPage(on) {
+      if (!page) return;
+      var m = page.parentElement;
+      if (on && m.classList.contains('ls-pop-hide')) {
+        m.classList.remove('ls-pop-hide');
+        m.classList.remove('ls-pop-back'); void m.offsetWidth; m.classList.add('ls-pop-back');
+      } else if (!on) m.classList.add('ls-pop-hide');
+    }
+    function disposeOv(o) {
+      o.st.timers.forEach(function (t) { clearInterval(t); clearTimeout(t); });
+      (o.st.observers || []).forEach(function (x) { x.disconnect(); });
+      if (o.st.onPopDown) document.removeEventListener('pointerdown', o.st.onPopDown, true);
+      if (st.blocks) st.blocks = st.blocks.filter(function (b) { return b.el !== o.mount; });
+    }
+    function closeOverlay(instant) {
+      if (!ov) return;
+      var o = ov; ov = null;
+      disposeOv(o);
+      if (instant) o.mount.remove();
+      else {
+        o.mount.classList.add('ls-pop-out');
+        setTimeout(function () { o.mount.remove(); }, 270);
+      }
+      showPage(true);
+      sync();
+    }
+    function open(key) {
+      var P = popupOf(key);
+      if (!P || editing()) return;
+      if (key === pageKey) { closeOverlay(); showPage(true); sync(); return; }   /* 이 페이지 자체의 팝업 — 다시 보이게 */
+      if (ov && ov.key === key) return;
+      if (typeof window['build_' + P.px] !== 'function') { goScene(key); return; }   /* 낱장 미리보기 — 그 팝업의 페이지로 */
+      closeOverlay(true);
+      showPage(false);
+      ensurePopSheets(P.px);
+      var holder = document.createElement('div');
+      holder.innerHTML = window['build_' + P.px](A);
+      var name = (holder.firstElementChild && holder.firstElementChild.getAttribute('data-name')) || ('Popup/' + key);
+      var m = document.createElement('div');
+      m.className = P.px + '-mount ls-popmount ls-overlay ls-blk';
+      m.setAttribute('data-name', name);
+      m.setAttribute('data-ls-grp', 'X');
+      m.setAttribute('role', 'dialog');
+      m.setAttribute('aria-label', P.label);
+      var pop = document.createElement('div');
+      pop.className = P.px + '-root ls-pop';
+      pop.dataset.theme = root.dataset.theme || 'dark';
+      while (holder.firstChild) pop.appendChild(holder.firstChild);
+      m.appendChild(pop);
+      /* 반응형 자리(한가운데) — 붙이기 전에 이동값을 먼저 넣어 미끄러져 들어오지 않게 */
+      m.style.setProperty('--ls-tx', ((st.exW || 0) / 2).toFixed(2) + 'px');
+      m.style.setProperty('--ls-ty', ((st.exH || 0) / 2).toFixed(2) + 'px');
+      frame.appendChild(m);
+      if (st.blocks) st.blocks.push({ el: m, grp: 'X', name: name, top: 0 });
+      var pst = { timers: [], S: st.S };
+      ov = { key: key, mount: m, st: pst };
+      try { installPopup(root, pst, pop, function () { closeOverlay(); }); } catch (e) { console.warn('[ls] overlay', e); }
+      /* 바탕과 같은 색(테마 · 색 정하기)으로 — 새로 붙인 팝업 시트에도 색 바꾸기를 다시 건다 */
+      try { window.__applyTplTint && window.__applyTplTint(); } catch (e) { }
+      sync();
+    }
+    st.openPopup = open;
+    st.closePopup = function () { closeOverlay(); };
+
+    /* 화면에 여는 자리가 있는 팝업 — 그 부품을 누르면 열린다 */
+    POPUPS.forEach(function (P) {
+      if (!P.trigger || P.trigger.base !== base) return;
+      all(root, P.trigger.sel).filter(outsidePop).forEach(function (t) {
+        t.classList.add('ls-poptrig');
+        t.setAttribute('data-ls-pop', P.key);
+        t.setAttribute('aria-haspopup', 'dialog');
+        clickable(t, P.label + ' 열기', function () { open(P.key); });
+      });
+    });
+
+    /* 헤더 Brand 옆 '팝업' 단추 — 여는 자리를 시안에서 알 수 없는 팝업들(Figma 제목 그대로) */
+    var brand = one(root, '[data-name="Header Bar"] > [data-name="Brand"]');
+    var bar = brand && brand.parentElement;
+    var list = POPUPS.filter(function (P) { return !P.trigger; });
+    if (bar && list.length) {
+      var L = document.createElement('div');
+      L.className = 'ls-launch';
+      L.setAttribute('data-name', 'Popup Launcher');
+      L.style.left = (brand.offsetLeft + brand.offsetWidth + 22) + 'px';
+      var item = function (P) {
+        return '<button type="button" role="menuitemradio" aria-checked="false" data-k="' + P.key + '">'
+          + '<span class="ic"><img src="' + A + 'icon-popup-diagnostics.svg" alt=""></span>' + esc(P.label) + '</button>';
+      };
+      var acb = list.filter(function (P) { return P.group === 'ACB'; }), etc = list.filter(function (P) { return P.group !== 'ACB'; });
+      L.innerHTML = '<button type="button" class="ls-launch-btn" aria-haspopup="menu" aria-expanded="false" title="팝업 열기">'
+        + '<span class="ic"><img src="' + A + 'icon-popup-diagnostics.svg" alt=""></span><span class="tx">팝업</span><b>' + list.length + '</b>'
+        + '<img class="chev" src="' + A + 'icon-action-expand.svg" alt=""></button>'
+        + '<div class="ls-launch-menu" role="menu" aria-label="팝업 열기">'
+        + (acb.length ? '<div class="hd">ACB 진단(1단)</div>' + acb.map(item).join('') : '')
+        + (acb.length && etc.length ? '<div class="sep"></div>' : '')
+        + etc.map(item).join('')
+        + '</div>';
+      bar.appendChild(L);
+      st.launch = L;
+      var btn = one(L, '.ls-launch-btn');
+      var setOpen = function (o) {
+        L.classList.toggle('open', o);
+        bar.classList.toggle('ls-launch-open', o);
+        btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+      };
+      btn.addEventListener('click', function (e) { e.stopPropagation(); if (editing()) return; setOpen(!L.classList.contains('open')); });
+      all(L, '.ls-launch-menu button[data-k]').forEach(function (b) {
+        b.addEventListener('click', function (e) {
+          e.stopPropagation();
+          setOpen(false);
+          var k = b.getAttribute('data-k');
+          if (k === visibleKey() && ov) { closeOverlay(); return; }   /* 열려 있는 것을 다시 누르면 닫는다 */
+          open(k);
+        });
+      });
+      st.onLaunchDown = function (e) { if (!L.contains(e.target)) setOpen(false); };
+      document.addEventListener('pointerdown', st.onLaunchDown, true);
+    }
+    /* Esc — 목록이 열려 있으면 목록을, 아니면 겹친 팝업을 닫는다 */
+    st.onPopKey = function (e) {
+      if (e.key !== 'Escape' || !root.isConnected) return;
+      if (st.launch && st.launch.classList.contains('open')) { st.launch.classList.remove('open'); if (bar) bar.classList.remove('ls-launch-open'); return; }
+      if (ov) closeOverlay();
+    };
+    document.addEventListener('keydown', st.onPopKey);
+    /* 패널편집을 켜면 겹친 팝업은 닫는다 — 편집 기록이 이 페이지 글자에 섞이지 않게(팝업 편집은 그 팝업의 페이지에서) */
+    st.timers.push(setInterval(function () { if (ov && editing()) closeOverlay(true); }, 400));
+    st.disposePopups = function () { if (ov) { disposeOv(ov); ov = null; } };
+    sync();
   }
 
   /* ══════════════════ 살리기 ══════════════════ */
@@ -1804,6 +2320,7 @@
     try { installToggles(root, st); } catch (e) { console.warn('[ls] toggles', e); }
     try { installLive(root, st); } catch (e) { console.warn('[ls] live', e); }
     try { installPopup(root, st); } catch (e) { console.warn('[ls] popup', e); }
+    try { installPopupLinks(root, st); } catch (e) { console.warn('[ls] popup links', e); }
     try { installCharts(root, st); } catch (e) { console.warn('[ls] charts', e); }
     try { installPanelMove(root, st); } catch (e) { console.warn('[ls] move', e); }
   }
@@ -1812,12 +2329,16 @@
     if (!st) return;
     st.timers.forEach(function (t) { clearInterval(t); clearTimeout(t); });
     if (st.ro) st.ro.disconnect();
+    (st.observers || []).forEach(function (o) { o.disconnect(); });
     if (st.onResize) window.removeEventListener('resize', st.onResize);
     Object.keys(st.charts || {}).forEach(function (k) { st.charts[k].dispose(); });
     if (st.onDocDown) document.removeEventListener('pointerdown', st.onDocDown, true);
     if (st.onPopDown) document.removeEventListener('pointerdown', st.onPopDown, true);
     if (st.onMove) { window.removeEventListener('pointermove', st.onMove); window.removeEventListener('pointerup', st.onUp); window.removeEventListener('pointercancel', st.onUp); }
     if (st.onReset) document.removeEventListener('click', st.onReset, true);
+    if (st.onLaunchDown) document.removeEventListener('pointerdown', st.onLaunchDown, true);
+    if (st.onPopKey) document.removeEventListener('keydown', st.onPopKey);
+    if (st.disposePopups) st.disposePopups();
     root.__ls = null;
   }
   window.initLsElectric = initLsElectric;

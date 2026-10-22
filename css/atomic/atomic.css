@@ -1,0 +1,410 @@
+/* ── 분자 라이브러리 (홈 안의 한 페이지) — 홈 크롬 토큰(tokens.css) 위에 얹는다 ──
+   분자 · 템플릿 자체는 섀도 DOM 이라 이 파일의 영향을 받지 않는다. 모든 규칙은 .atm 안으로 한정한다. */
+
+/* 분자 라이브러리가 열려 있으면 홈 본문의 다른 내용(제목 · 도구 · 프로젝트 그리드)을 가린다 */
+.lc.atm-on .lc-main > :not(#lcAtomic) { display: none !important; }
+.lc.atm-on .lc-main:has(.atm-frame.is-editor) { padding: 0; overflow: hidden; }
+.atm[hidden] { display: none !important; }
+.atm [hidden] { display: none !important; }
+
+.atm { color: var(--text-strong); font-family: var(--font); height: 100%; }
+.atm h3 { font-size: 13px; color: var(--text-strong); margin: 26px 0 10px; font-weight: 600; }
+.atm h4 { font-size: 12px; color: var(--text-weak); margin: 16px 0 6px; font-weight: 600; }
+.atm h3 small, .atm h4 small, .atm label small { color: var(--text-weak); font-weight: 400; margin-left: 6px; font-size: 11px; opacity: 0.85; }
+.atm code { font: 11px/1.4 ui-monospace, Consolas, monospace; color: var(--text-weak); }
+.atm a { color: inherit; }
+.atm input[type='text'], .atm input[type='search'], .atm input[type='number'], .atm select {
+  width: 100%; background: var(--bg-page); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; color: var(--text-strong); font: inherit; font-size: 13px;
+}
+.atm input:focus-visible, .atm select:focus-visible { outline: 2px solid var(--point-main); outline-offset: 1px; }
+.atm-hint { color: var(--text-weak); font-size: 12px; margin: 6px 0; }
+.atm-hint.warn { color: var(--warning); }
+.atm-empty { color: var(--text-weak); padding: 36px; text-align: center; grid-column: 1 / -1; }
+.atm-offline { max-width: 620px; margin: 40px auto; padding: 24px 28px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--bg-surface); line-height: 1.7; }
+.atm-offline a { color: var(--point-sub); }
+
+/* 머리 — 홈 제목 스타일(.lc-title · .lc-sub)을 그대로 쓰고 탭 · 테마를 오른쪽에 둔다 */
+.atm-frame { display: flex; flex-direction: column; min-height: 100%; }
+.atm-top { display: flex; align-items: flex-end; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
+.atm-frame.is-editor { height: 100%; }
+.atm-frame.is-editor .atm-top { padding: 16px 20px 0; margin-bottom: 12px; }
+.atm-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-left: 12px; }
+.atm-tabs a { text-decoration: none; padding: 7px 14px; border-radius: 999px; color: var(--text-weak); font-size: 13px; border: 1px solid var(--line); white-space: nowrap; }
+.atm-tabs a:hover { color: var(--text-strong); background: var(--bg-accent); }
+.atm-tabs a.on { color: #fff; background: color-mix(in srgb, var(--point-main) 22%, transparent); border-color: color-mix(in srgb, var(--point-main) 55%, var(--line)); }
+/* 관리(이름 정리 · 검증) — 작업자 탭 뒤에 접어 둔다 */
+.atm-admin { position: relative; }
+.atm-admin summary { list-style: none; cursor: pointer; padding: 7px 12px; border-radius: 999px; color: var(--text-weak); font-size: 12px; border: 1px dashed var(--line); white-space: nowrap; }
+.atm-admin summary::-webkit-details-marker { display: none; }
+.atm-admin summary::after { content: ' ▾'; font-size: 10px; }
+.atm-admin summary:hover, .atm-admin[open] summary { color: var(--text-strong); background: var(--bg-accent); }
+.atm-admin.on summary { color: #fff; border-style: solid; border-color: color-mix(in srgb, var(--point-main) 55%, var(--line)); background: color-mix(in srgb, var(--point-main) 22%, transparent); }
+.atm-admin-menu { position: absolute; top: calc(100% + 6px); left: 0; z-index: 50; display: grid; gap: 2px; min-width: 220px; padding: 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-surface); box-shadow: 0 12px 32px rgba(0, 0, 0, .35); }
+.atm-tabs .atm-admin-menu a { border: 0; border-radius: 8px; display: grid; gap: 1px; padding: 7px 10px; }
+.atm-admin-menu a small { font-size: 11px; color: var(--text-weak); }
+.atm-theme { margin-left: auto; display: flex; gap: 8px; }
+.atm-seg { display: inline-flex; background: var(--bg-page); border: 1px solid var(--line); border-radius: 9px; padding: 2px; gap: 2px; }
+.atm-seg button, .atm-seedpick { border: 0; background: none; padding: 5px 11px; border-radius: 7px; color: var(--text-weak); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font: inherit; font-size: 12px; }
+.atm-seg button:hover, .atm-seedpick:hover { color: var(--text-strong); }
+.atm-seg button[aria-pressed='true'], .atm-seedpick.on { background: var(--point-fill); color: #fff; }
+.atm-seedpick input { width: 16px; height: 16px; padding: 0; border: 0; background: none; cursor: pointer; }
+.atm-seedpick input::-webkit-color-swatch-wrapper { padding: 0; }
+.atm-seedpick input::-webkit-color-swatch { border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 4px; }
+.atm-view { flex: 1; min-height: 0; outline: none; }
+
+.atm-btn { font: inherit; font-size: 13px; cursor: pointer; border-radius: 9px; padding: 7px 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.atm-btn.primary { background: var(--point-fill); color: #fff; border: 0; font-weight: 600; }
+.atm-btn.primary:hover { filter: brightness(1.12); }
+.atm-btn.ghost { background: none; border: 1px solid var(--line); color: var(--text-weak); }
+.atm-btn.ghost:hover { color: var(--text-strong); background: var(--bg-accent); }
+.atm-btn.ghost.danger:hover { color: var(--danger); border-color: var(--danger); }
+.atm-link { background: none; border: 0; padding: 0; color: var(--point-sub); text-decoration: none; font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
+.atm-link:hover { text-decoration: underline; }
+.atm-role { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px; background: color-mix(in srgb, var(--point-main) 20%, transparent); color: var(--point-sub); font-weight: 500; vertical-align: 2px; }
+.atm-stats { display: flex; flex-wrap: wrap; gap: 3px 10px; color: var(--text-weak); font-size: 12px; }
+.atm-ver, .atm-pin { color: #4ade80; }
+.atm-pin.old { color: var(--warning); }
+
+/* 섀도 DOM 썸네일 */
+.atm-thumb { position: relative; height: 150px; overflow: hidden; display: grid; place-items: center; color: var(--text-weak); font-size: 12px;
+  background: repeating-conic-gradient(color-mix(in srgb, var(--text-strong) 4%, transparent) 0 25%, transparent 0 50%) 0 0 / 16px 16px, var(--bg-page); }
+.atm-thumb .mhost { transform-origin: top left; position: absolute; left: calc(50% - var(--tw, 0px) / 2); top: calc(50% - var(--th, 0px) / 2); }
+.atm-thumb[data-crop] .mhost { left: 12px; } /* 아주 넓고 얇은 것은 왼쪽부터 (thumbMount minScale) */
+/* 미리보기 테마가 라이트면 바탕도 밝게 — 라이트 분자는 바탕이 투명하고 글자가 어두워, 어두운 바탕 위에서는 안 보인다.
+   조립 화면은 화면마다 테마가 따로라 편집기(.atm-editor[data-mode])가 정한다 */
+.atm-frame[data-mode='light'] .atm-thumb, .atm-editor[data-mode='light'] .atm-thumb {
+  background: repeating-conic-gradient(rgba(20, 24, 40, .05) 0 25%, transparent 0 50%) 0 0 / 16px 16px, #eef0f5; color: #5b6070; }
+.atm-editor[data-mode='dark'] .atm-thumb {
+  background: repeating-conic-gradient(color-mix(in srgb, var(--text-strong) 4%, transparent) 0 25%, transparent 0 50%) 0 0 / 16px 16px, var(--bg-page); color: var(--text-weak); }
+.atm-frame[data-mode='light'] .atm-card .atm-thumb[data-px]::after, .atm-editor[data-mode='light'] .atm-card .atm-thumb[data-px]::after { color: #5b6070; background: rgba(255, 255, 255, .8); }
+
+/* 1. 라이브러리 */
+.atm-lib { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 24px; align-items: start; }
+.atm-filters { position: sticky; top: 0; display: grid; gap: 4px; }
+.atm-filters .lc-searchwrap { width: 100%; margin: 0; }
+.atm .lc-searchwrap input { width: 100%; padding: 9px 12px 9px 33px; background: var(--bg-accent); border-radius: var(--r-sm); }
+.atm-filters h3 { margin: 18px 0 6px; font-size: 12px; color: var(--text-weak); }
+.atm-facet { list-style: none; margin: 0; padding: 0; }
+.atm-facet button { width: 100%; display: flex; justify-content: space-between; background: none; border: 0; padding: 6px 10px; border-radius: 8px; color: var(--text-weak); font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+.atm-facet button:hover { background: var(--bg-accent); color: var(--text-strong); }
+.atm-facet button em { font-style: normal; font-size: 12px; font-variant-numeric: tabular-nums; opacity: 0.8; }
+.atm-facet button small { margin: 0 auto 0 6px; font-size: 11px; opacity: .7; white-space: nowrap; } /* 분류 옆 한글 표시 */
+.atm-facet button[aria-pressed='true'] { background: color-mix(in srgb, var(--point-main) 18%, transparent); color: #fff; }
+.atm-progress { font-size: 12px; color: var(--text-weak); position: relative; padding-bottom: 8px; margin-bottom: 12px; max-width: 360px; }
+.atm-progress i { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--point-main); border-radius: 2px; transition: width 0.2s; }
+.atm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+/* 목록 위 줄 — 개수 · [크게 보기 | 실제 크기] */
+.atm-gridbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.atm-count { font-size: 12px; color: var(--text-weak); }
+/* 분류별 묶음 머리 — 누르면 그 분류만 */
+.atm-ghead { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 8px; margin: 14px 0 -2px; font-size: 15px; }
+.atm-ghead:first-child { margin-top: 0; }
+.atm-ghead button { font: inherit; font-weight: 700; color: var(--text-strong); background: none; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: baseline; gap: 6px; }
+.atm-ghead button:hover { color: var(--point-main); }
+.atm-ghead em { font-style: normal; font-size: 12px; color: var(--text-weak); font-weight: 400; }
+.atm-name.atm-lead { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.atm-ico figcaption b.atm-noname { color: var(--text-weak); font-weight: 400; }
+.atm-capbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--line); }
+.atm-capbar .atm-cap { border-top: 0; }
+.atm-capbar .atm-sizeseg { margin: 6px 10px 6px 0; }
+/* 카드 썸네일 구석의 원래 크기(px) — 크게 보기에서도 실제 크기를 알 수 있게 */
+.atm-card .atm-thumb[data-px]::after { content: attr(data-px) ' px'; position: absolute; right: 8px; bottom: 6px; font-size: 10px; line-height: 1.5; color: var(--text-weak); background: color-mix(in srgb, var(--bg-page) 80%, transparent); padding: 0 5px; border-radius: 4px; pointer-events: none; }
+/* 넓고 낮은 유기체(머리줄 · 이벤트 로그 · 표)는 두 칸 · 한 줄 전체 — 한 칸이면 글자를 못 읽을 만큼 줄어든다 */
+.atm-libmain { container-type: inline-size; }
+.atm-ogrid { grid-auto-flow: dense; }
+.atm-ogrid > .atm-card.spanall { grid-column: 1 / -1; }
+@container (min-width: 540px) { .atm-ogrid > .atm-card.span2 { grid-column: span 2; } }
+.atm-card { display: flex; flex-direction: column; text-decoration: none; background: var(--bg-surface); border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; transition: border-color 0.15s, transform 0.15s; }
+.atm-card:hover { border-color: color-mix(in srgb, var(--point-main) 70%, var(--line)); transform: translateY(-1px); }
+.atm-meta { padding: 10px 12px 12px; display: grid; gap: 4px; }
+.atm-name { font-weight: 600; font-size: 13px; }
+.atm-sample { color: var(--text-weak); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 검색이 카드에 안 보이는 곳(화면 문구 · 원본 레이어 이름)에서 맞았을 때 — 왜 나왔는지 */
+.atm-hit { font-size: 11px; color: var(--point-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 2. 분자 정의 */
+.atm-molhead { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; margin: 6px 0 18px; }
+.atm-molhead h2 { font-size: 19px; margin: 0; }
+.atm-mid { margin-left: auto; font: inherit; font-size: 11px; color: var(--text-weak); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; cursor: pointer; } /* id 는 개발용 — 눌러서 복사 */
+.atm-mid:hover { color: var(--text-strong); }
+/* 가져다 쓰기 — 상세 화면의 [조립 화면에 넣기] · [PNG 저장] */
+.atm-actions { flex-basis: 100%; display: flex; gap: 8px; }
+.atm-btn[disabled] { opacity: .55; cursor: progress; }
+.atm-menu { position: fixed; z-index: 900; min-width: 240px; max-width: 340px; max-height: 60vh; overflow: auto; padding: 6px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-surface); box-shadow: 0 12px 32px rgba(0, 0, 0, .35); display: grid; gap: 2px; }
+.atm-menu button { display: grid; gap: 1px; text-align: left; font: inherit; color: var(--text-strong); background: none; border: 0; border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+.atm-menu button:hover, .atm-menu button:focus-visible { background: var(--bg-accent); outline: none; }
+.atm-menu button b { font-size: 13px; font-weight: 600; }
+.atm-menu button span { font-size: 11px; color: var(--text-weak); }
+.atm-menu-sep { font-size: 11px; color: var(--text-weak); padding: 8px 10px 2px; border-top: 1px solid var(--line); margin-top: 4px; }
+.atm-molbody { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start; }
+.atm-stagebox { background: var(--bg-surface); border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+.atm-preview { height: 340px; }
+.atm-cap { padding: 8px 12px; font-size: 12px; color: var(--text-weak); border-top: 1px solid var(--line); }
+.atm-variants { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.atm-vcard { background: var(--bg-surface); border: 1px solid var(--line); border-radius: 10px; padding: 0; overflow: hidden; text-align: left; color: var(--text-weak); font: inherit; font-size: 12px; cursor: pointer; }
+.atm-vcard .atm-thumb { height: 96px; }
+.atm-vcard span { display: block; padding: 6px 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.atm-vcard[aria-pressed='true'] { border-color: var(--point-main); color: var(--text-strong); }
+.atm-side { position: sticky; top: 0; }
+.atm-tabs2 { display: flex; gap: 4px; margin-bottom: 10px; }
+.atm-tabs2 button { flex: 1; background: var(--bg-surface); border: 1px solid var(--line); border-radius: 9px; padding: 8px; color: var(--text-weak); font: inherit; font-size: 13px; cursor: pointer; }
+.atm-tabs2 button[aria-selected='true'] { border-color: var(--point-main); color: var(--text-strong); }
+.atm-panel { background: var(--bg-surface); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 14px; }
+.atm-panel fieldset { border: 1px solid var(--line); border-radius: 10px; margin: 0 0 10px; padding: 10px 12px 12px; display: grid; gap: 8px; }
+.atm-panel legend { padding: 0 4px; font-weight: 600; font-size: 13px; }
+.atm-panel legend code { margin-left: 4px; }
+.atm-sel, .atm-txt, .atm-num { display: grid; gap: 4px; font-size: 12px; color: var(--text-weak); }
+.atm-nums { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+.atm-saverow { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; margin-top: 8px; position: sticky; bottom: -14px; background: var(--bg-surface); padding: 10px 0 0; }
+.atm-versions { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.atm-versions li { display: grid; grid-template-columns: auto 1fr; gap: 0 8px; font-size: 13px; }
+.atm-versions time { grid-column: 2; font-size: 11px; color: var(--text-weak); }
+.atm-pick { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 6px; }
+.atm-pick li { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.atm-pick a { color: var(--point-sub); font-size: 12px; }
+.atm-applyrow { display: grid; grid-template-columns: 110px 1fr; gap: 8px; }
+.atm-links { padding-left: 18px; margin: 0; display: grid; gap: 4px; }
+
+/* 3. 조립 화면 목록 */
+.atm-screens .lc-tools { margin-top: 0; }
+.atm-slist { display: grid; gap: 6px; }
+.atm-srow { display: flex; align-items: center; gap: 8px; background: var(--bg-surface); border: 1px solid var(--line); border-radius: 10px; padding: 4px 6px 4px 14px; }
+.atm-srow a { flex: 1; display: flex; gap: 14px; align-items: baseline; text-decoration: none; padding: 7px 0; }
+.atm-srow a span, .atm-srow time { color: var(--text-weak); font-size: 12px; }
+.atm-tlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.atm-tcard { background: var(--bg-surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; text-align: left; display: grid; gap: 2px; color: var(--text-strong); font: inherit; font-size: 13px; cursor: pointer; }
+.atm-tcard span { color: var(--text-weak); font-size: 12px; }
+.atm-tcard:hover { border-color: color-mix(in srgb, var(--point-main) 70%, var(--line)); }
+
+/* 4. 조립 화면 편집 — 홈 본문을 꽉 채운다 */
+.atm-editor { display: flex; flex-direction: column; height: 100%; border-top: 1px solid var(--line); }
+.atm-etool { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--line); background: var(--bg-surface); flex-wrap: wrap; }
+.atm-etool .atm-ename { width: 220px; }
+.atm-spacer { flex: 1; }
+.atm-dirty { color: var(--warning); font-size: 12px; }
+.atm-ebody { flex: 1; min-height: 0; display: grid; grid-template-columns: 230px minmax(0, 1fr) 290px; }
+.atm-drawer, .atm-insp { background: var(--bg-surface); overflow: auto; padding: 12px; }
+.atm-drawer { border-right: 1px solid var(--line); }
+.atm-insp { border-left: 1px solid var(--line); display: grid; align-content: start; gap: 10px; }
+.atm-ihead { font-size: 15px; }
+.atm-row { display: flex; gap: 8px; }
+.atm-dlist { display: grid; gap: 8px; margin-top: 10px; }
+.atm-dtabs { display: flex; margin-bottom: 8px; }
+.atm-dtabs button { flex: 1; justify-content: center; }
+.atm-dcard { cursor: pointer; }
+.atm-item.is-org .mhost { overflow: hidden; }
+.atm-dcard { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; cursor: grab; background: var(--bg-page); }
+.atm-dcard .atm-thumb { height: 80px; }
+.atm-dcard span { display: block; padding: 4px 8px; font-size: 12px; color: var(--text-weak); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.atm-canvas { position: relative; overflow: hidden; background: repeating-conic-gradient(color-mix(in srgb, var(--text-strong) 3%, transparent) 0 25%, transparent 0 50%) 0 0 / 20px 20px, var(--bg-page); }
+.atm-stage { position: absolute; width: 1920px; height: 1080px; transform-origin: 0 0; box-shadow: 0 0 0 1px var(--line); }
+.atm-base { position: absolute; inset: 0; }
+.atm-base.blank { background: #0b0d14; }
+.atm-base.blank[data-mode='light'] { background: #eef0f5; }
+.atm-items { position: absolute; inset: 0; }
+.atm-item { position: absolute; cursor: move; }
+.atm-item .mhost { transform-origin: top left; }
+.atm-selbox { position: absolute; pointer-events: none; outline: 2px solid var(--point-main); outline-offset: 2px; border-radius: 2px; box-shadow: 0 0 0 9999px color-mix(in srgb, #000 14%, transparent); }
+/* 조립 화면 편집 — 캔버스를 넓게(위 머리는 숨기고 편집 도구 막대만), 확대하면 스크롤 */
+.atm-frame.is-editor .atm-top { display: none; }
+.atm-ebody { grid-template-columns: 210px minmax(0, 1fr) 260px; }
+.atm-canvas { overflow: auto; }
+.atm-zsize { position: absolute; left: 0; top: 0; pointer-events: none; }
+.atm-etool .atm-ename { background: var(--bg-page); color: var(--text-strong); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 13px; }
+.atm-etool .atm-ename:focus { outline: 2px solid color-mix(in srgb, var(--point-main) 60%, transparent); outline-offset: 0; }
+.atm-etool .atm-seg button[disabled] { opacity: .35; cursor: default; }
+.atm-etool #zlabel { min-width: 74px; justify-content: center; font-variant-numeric: tabular-nums; }
+/* 크기 손잡이 — 오른쪽 아래. 화면에서 늘 같은 크기(--hs = 12px ÷ 배율) */
+.atm-selh { position: absolute; right: calc(var(--hs, 12px) / -2 - 2px); bottom: calc(var(--hs, 12px) / -2 - 2px); width: var(--hs, 12px); height: var(--hs, 12px); background: #fff; border: max(1px, calc(var(--hs, 12px) / 6)) solid var(--point-main); border-radius: 2px; pointer-events: auto; cursor: nwse-resize; }
+.atm-selbox[data-kind='inst'] .atm-selh { display: none; }
+/* 정렬 안내선 — 끌 때 가장자리 · 가운데에 붙으면 보인다 */
+.atm-guide { position: absolute; z-index: 5; pointer-events: none; background: #ff3d8b; }
+.atm-guide.v { top: 0; bottom: 0; width: var(--gw, 2px); transform: translateX(-50%); }
+.atm-guide.h { left: 0; right: 0; height: var(--gw, 2px); transform: translateY(-50%); }
+
+@media (prefers-reduced-motion: reduce) { .atm-card, .atm-progress i { transition: none; } }
+@media (max-width: 1100px) {
+  .atm-lib, .atm-molbody { grid-template-columns: 1fr; }
+  .atm-filters, .atm-side { position: static; }
+  .atm-ebody { grid-template-columns: 1fr; }
+  .atm-drawer, .atm-insp { max-height: 220px; }
+}
+
+/* 문구 자동 맞춤 표시 (인스펙터) */
+.atm-fit { font-size: 11px; margin-left: 6px; padding: 0 6px; border-radius: 999px; opacity: 1 !important; }
+.atm-fit.grow { color: #4ade80; background: color-mix(in srgb, #4ade80 14%, transparent); }
+.atm-fit.shrink { color: var(--warning); background: color-mix(in srgb, var(--warning) 14%, transparent); }
+.atm-fit.clip { color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, transparent); }
+
+/* 합쳐진 분자 — 형태 카드 · 색 상태 · 원본 이름 */
+.atm-vcard em { display: block; padding: 0 9px 7px; font-style: normal; font-size: 11px; color: var(--text-weak); opacity: 0.85; }
+.atm-looks { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 10px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-surface); }
+.atm-looks-t { width: 100%; font-size: 12px; color: var(--text-weak); margin-bottom: 2px; }
+.atm-lcard { padding: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: none; cursor: pointer; width: 132px; }
+.atm-lcard .atm-thumb { height: 52px; }
+.atm-lcard[aria-pressed='true'] { border-color: var(--point-main); }
+.atm-names { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+.atm-names span { font-size: 11px; color: var(--text-weak); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; }
+
+/* 구성도 노드 ↔ 심볼 · 라벨 조각 링크 */
+.atm-parts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; width: 100%; font-size: 12px; color: var(--text-weak); }
+.atm-parts b { font-weight: 600; color: var(--text-strong); margin-right: 4px; }
+.atm-parts a { text-decoration: none; color: var(--point-sub); border: 1px solid color-mix(in srgb, var(--point-main) 45%, var(--line)); border-radius: 999px; padding: 2px 10px; }
+.atm-parts a:hover { background: color-mix(in srgb, var(--point-main) 16%, transparent); }
+
+/* 검증 */
+.atm-verify .lc-tools { margin-top: 0; }
+.atm-vlist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.atm-vlist li { background: var(--bg-surface); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.atm-vlist a { color: var(--point-sub); text-decoration: none; font-weight: 600; }
+.atm-vkind { font-size: 11px; padding: 1px 8px; border-radius: 999px; background: color-mix(in srgb, var(--warning) 16%, transparent); color: var(--warning); margin-right: 4px; }
+.atm-vok { padding: 16px 18px; border-radius: 12px; border: 1px solid color-mix(in srgb, #4ade80 40%, var(--line)); background: color-mix(in srgb, #4ade80 8%, transparent); color: #4ade80; }
+
+/* 상태 — 심볼 · 배지 색은 상태값을 따른다 */
+.atm .atm-stdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 40%, transparent); margin-right: 6px; vertical-align: 1px; flex: none; }
+.atm .atm-stpick { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.atm .atm-stpick button { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-surface); color: var(--text-weak); font: inherit; font-size: 12px; cursor: pointer; }
+.atm .atm-stpick button[aria-pressed="true"] { border-color: var(--point-main); color: var(--text-strong); background: color-mix(in srgb, var(--point-main) 14%, var(--bg-surface)); }
+.atm .atm-stcolors { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+.atm .atm-stcolors .atm-sel span { display: inline-flex; align-items: center; }
+.atm .atm-lcard { position: relative; }
+.atm .atm-lstate { position: absolute; left: 6px; bottom: 4px; display: inline-flex; align-items: center; font-size: 11px; color: var(--text-weak); }
+
+/* 이름 정리 — 네이밍 규칙 제안 확인 · 확정 */
+.atm-facet + h3 small, .atm-filters h3 small { font-weight: 400; color: var(--text-weak); font-size: 11px; margin-left: 4px; }
+.atm-nhint { font-size: 11px; color: var(--text-weak); margin-top: 2px; }
+.atm-namehint { font-size: 12px; color: var(--text-weak); margin: 4px 0 2px; }
+.atm-namehint b { color: var(--text-strong); font-weight: 600; }
+.atm-namehint a { color: var(--point-sub); }
+.atm-names code { font-size: 11.5px; padding: 1px 5px; border-radius: 5px; background: var(--bg-accent); color: var(--text-strong); }
+.atm-nstats { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.atm-nstats span { font-size: 12px; color: var(--text-weak); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-surface); }
+.atm-nstats b { color: var(--text-strong); font-weight: 600; margin-left: 2px; }
+.atm-nstats .s-done b { color: #4ade80; }
+.atm-nstats .s-review b { color: var(--warning, #f5b841); }
+.atm-ntools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.atm-ntools select { width: auto; min-width: 150px; }
+.atm-ntools .lc-searchwrap { flex: 1 1 200px; max-width: 320px; }
+.atm-ntools .atm-btn.primary { margin-left: auto; }
+.atm-ntools .atm-btn[disabled] { opacity: .45; cursor: default; filter: none; }
+.atm-nlist { display: grid; gap: 8px; }
+.atm-nrow { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-surface); }
+.atm-nrow.is-done { border-color: color-mix(in srgb, #4ade80 30%, var(--line)); }
+.atm-nrow > .atm-thumb { display: block; height: 84px; border-radius: 8px; overflow: hidden; }
+.atm-nmain { min-width: 0; display: grid; gap: 4px; }
+.atm-nhead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.atm-nfam { font-size: 11px; color: var(--text-weak); padding: 1px 7px; border-radius: 6px; border: 1px solid var(--line); }
+.atm-nold { color: var(--text-weak); font-size: 12.5px; }
+.atm-nhead > i { color: var(--text-weak); font-style: normal; font-size: 12px; }
+.atm .atm-nname { width: auto; min-width: 140px; max-width: 320px; flex: 0 1 240px; font-weight: 600; font-size: 13.5px; padding: 5px 9px; }
+.atm-nbasis { font-size: 11px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.atm-nbasis.b-src { background: color-mix(in srgb, var(--point-main) 18%, transparent); color: var(--point-sub); }
+.atm-nbasis.b-rule { background: color-mix(in srgb, var(--warning, #f5b841) 18%, transparent); color: var(--warning, #f5b841); }
+.atm-nbasis.b-none { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
+.atm-nbasis.b-done { background: color-mix(in srgb, #4ade80 16%, transparent); color: #4ade80; }
+.atm-ndup { font-size: 11px; color: var(--text-weak); border: 1px dashed var(--line); padding: 1px 7px; border-radius: 999px; }
+.atm-nwhy, .atm-nctx { font-size: 12px; color: var(--text-weak); overflow-wrap: anywhere; }
+.atm-nfields { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.atm-nf { display: inline-flex; align-items: center; gap: 5px; padding: 3px 4px 3px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-page); font-size: 12px; }
+.atm-nf .atm-nfrom { color: var(--text-weak); white-space: nowrap; }
+.atm-nf i { font-style: normal; color: var(--text-weak); }
+.atm .atm-nf input { width: 118px; padding: 3px 6px; font-size: 12px; border-radius: 6px; }
+.atm-nf small { font-size: 10.5px; color: var(--text-weak); padding-right: 4px; white-space: nowrap; }
+.atm-nf.changed { border-color: color-mix(in srgb, var(--point-main) 45%, var(--line)); }
+.atm-nf.f-check, .atm-nf.f-none { border-color: color-mix(in srgb, var(--warning, #f5b841) 60%, var(--line)); }
+.atm-nf.f-check small, .atm-nf.f-none small { color: var(--warning, #f5b841); }
+.atm-nact { display: flex; flex-direction: column; gap: 6px; align-items: stretch; }
+@media (max-width: 760px) {
+  .atm-nrow { grid-template-columns: 1fr; }
+  .atm-nrow > .atm-thumb { height: 96px; }
+  .atm-nact { flex-direction: row; }
+}
+
+/* ── 아토믹 5단계 — 추상(원자) → 구체(페이지) ── */
+.atm-levels { margin: 0 0 18px; }
+.atm-lvaxis { display: flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .08em; color: var(--text-weak); margin: 0 4px 8px; }
+.atm-lvaxis i { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), color-mix(in srgb, var(--text-weak) 60%, transparent)); }
+.atm-levels ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.atm-levels li { position: relative; }
+.atm-levels li + li::before { content: ''; position: absolute; left: -9px; top: 50%; width: 8px; height: 8px; border-top: 2px solid var(--text-weak); border-right: 2px solid var(--text-weak); transform: translate(-1px, -50%) rotate(45deg); opacity: .55; }
+.atm-lv { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-surface); text-decoration: none; color: var(--text-weak); transition: border-color .15s, background .15s; min-width: 0; }
+.atm-lv svg { width: 28px; height: 28px; flex: none; color: color-mix(in srgb, var(--point-main) 75%, var(--text-weak)); }
+.atm-lv b { font-size: 14px; font-weight: 600; color: var(--text-strong); white-space: nowrap; }
+.atm-lv em { margin-left: auto; font-style: normal; font-size: 12px; font-variant-numeric: tabular-nums; }
+.atm-lvhit { position: absolute; top: -9px; right: 10px; font-style: normal; font-size: 11px; line-height: 1.6; padding: 0 8px; border-radius: 999px; background: var(--point-fill); color: #fff; white-space: nowrap; pointer-events: none; } /* 검색어가 이 단계에서 맞은 개수 */
+.atm-lvhit.zero { background: var(--bg-accent); color: var(--text-weak); border: 1px solid var(--line); }
+/* 단계 설명은 접어 둔다 — 필요할 때만 펼친다 */
+.atm-about { margin: 0 0 10px; }
+.atm-about summary { cursor: pointer; width: fit-content; font-size: 12px; color: var(--text-weak); list-style: none; }
+.atm-about summary::-webkit-details-marker { display: none; }
+.atm-about summary::before { content: "ⓘ "; }
+.atm-about summary:hover { color: var(--text-strong); }
+.atm-about[open] summary { margin-bottom: 4px; }
+.atm-else { margin-top: 8px; font-size: 13px; color: var(--text-weak); }
+.atm-else a { color: var(--point-main); font-weight: 600; }
+.atm-lv:hover { border-color: color-mix(in srgb, var(--point-main) 60%, var(--line)); }
+.atm-lv.on { border-color: var(--point-main); background: color-mix(in srgb, var(--point-main) 16%, var(--bg-surface)); color: var(--text-strong); }
+.atm-lv.on svg { color: var(--point-sub); }
+.atm-lvchip { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--point-main) 55%, var(--line)); color: var(--point-sub); font-weight: 500; vertical-align: 2px; }
+@media (max-width: 900px) {
+  .atm-levels ol { grid-template-columns: repeat(5, minmax(84px, 1fr)); overflow-x: auto; padding-bottom: 4px; }
+  .atm-lv { flex-direction: column; gap: 4px; padding: 8px; text-align: center; }
+  .atm-lv em { margin: 0; }
+}
+
+/* 단계 목록 공통 */
+.atm-seg button { white-space: nowrap; }
+#atabs { flex-wrap: wrap; max-width: 100%; }
+.atm-seg button em, .atm-chips button em { font-style: normal; font-size: 11px; opacity: .75; margin-left: 2px; }
+.atm-grid.wide { grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); }
+.atm-thumb.wire, .atm-thumb.pg { height: auto; aspect-ratio: 16 / 9; }
+.atm-preview.wire, .atm-preview.pgview { height: auto; aspect-ratio: 16 / 9; max-height: 560px; }
+.atm-variants.wide { grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); }
+.atm-vcard .atm-thumb.pg { height: auto; }
+.atm-tpls h3, .atm-pages h3, .atm-atoms h3 { margin-top: 22px; }
+.atm-wtools { margin: 10px 0 0; }
+.atm-check { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-weak); cursor: pointer; }
+.atm .atm-check input { width: auto; }
+.atm-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+.atm-chips button { border: 1px solid var(--line); background: var(--bg-surface); color: var(--text-weak); border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+.atm-chips button[aria-pressed='true'] { border-color: var(--point-main); color: var(--text-strong); background: color-mix(in srgb, var(--point-main) 14%, var(--bg-surface)); }
+.atm-links small { color: var(--text-weak); font-size: 11px; }
+.atm-links a { color: var(--point-sub); text-decoration: none; }
+.atm-links a:hover { text-decoration: underline; }
+.atm-orglist ul { padding-left: 16px; margin: 2px 0 4px; display: grid; gap: 2px; }
+.atm-orglist li[data-k] { border-radius: 6px; padding: 1px 4px; }
+.atm-orglist li[data-k]:hover { background: color-mix(in srgb, #ffd166 14%, transparent); }
+.atm-wirelink { display: grid; gap: 4px; text-decoration: none; margin-bottom: 6px; }
+.atm-wirelink .atm-thumb { border-radius: 8px; border: 1px solid var(--line); }
+.atm-wirelink span { font-size: 13px; color: var(--text-strong); }
+.atm-wirelink small { font-size: 11px; color: var(--text-weak); }
+
+/* 원자 — 아이콘 · 그림 */
+.atm-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 8px; }
+.atm-icons.big { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.atm-ico { margin: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg-surface); }
+.atm-ico > div { height: 72px; display: grid; place-items: center; padding: 8px;
+  background: repeating-conic-gradient(color-mix(in srgb, var(--text-strong) 5%, transparent) 0 25%, transparent 0 50%) 0 0 / 12px 12px, var(--bg-page); }
+.atm-icons.big .atm-ico > div { height: 96px; }
+.atm-ico img { max-width: 100%; max-height: 100%; min-width: 12px; min-height: 12px; object-fit: contain; }
+.atm-icons:not(.big) .atm-ico img { height: 32px; width: auto; } /* 16~24px 아이콘은 키워서 본다 (SVG 라 흐려지지 않는다) */
+.atm-ico figcaption { padding: 5px 7px; display: grid; gap: 1px; font-size: 11px; color: var(--text-weak); }
+.atm-ico figcaption b { font-weight: 500; color: var(--text-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 템플릿 — 잰 구역 상자로 그린 와이어프레임 (1920×1080 을 줄여 보여 준다) */
+.atm-wire { position: relative; width: 1920px; height: 1080px; background: #0d1018; overflow: hidden; }
+.atm-wire[data-mode='light'] { background: #eef0f5; }
+.atm-wire > div { position: absolute; box-sizing: border-box; border-radius: 10px; }
+.atm-wire .w-region { border: 4px dashed rgba(255, 255, 255, .34); background: rgba(255, 255, 255, .035); }
+.atm-wire[data-mode='light'] .w-region { border-color: rgba(20, 24, 40, .32); background: rgba(20, 24, 40, .03); }
+.atm-wire .w-region.w-organism { border-color: rgba(152, 128, 255, .8); background: rgba(124, 92, 255, .10); }
+.atm-wire .w-region.w-molecule { border-style: dotted; border-color: rgba(78, 205, 196, .8); background: rgba(78, 205, 196, .08); }
+.atm-wire .w-region.w-overlay { border-style: dotted; border-color: rgba(255, 209, 102, .75); background: rgba(255, 209, 102, .06); }
+.atm-wire .w-org { border: 3px solid rgba(152, 128, 255, .75); background: rgba(124, 92, 255, .14); }
+.atm-wire .focus { border-color: #ffd166 !important; background: rgba(255, 209, 102, .16) !important; }
+.atm-wire b { position: absolute; left: 14px; top: 10px; font: 600 30px/1.2 var(--font, sans-serif); color: rgba(255, 255, 255, .78); white-space: nowrap; max-width: calc(100% - 28px); overflow: hidden; text-overflow: ellipsis; }
+.atm-wire[data-mode='light'] b { color: rgba(20, 24, 40, .72); }
+.atm-wire .w-org b { font-size: 24px; color: rgba(205, 192, 255, .95); }
+.atm-card .atm-wire b, .atm-vcard .atm-wire b { font-size: 46px; }
+
+.atm-thumb[data-empty]::after { content: '원본 화면에서 접혀 있는 구역'; color: var(--text-weak); font-size: 12px; } /* 펼침 · 탭 · 호버 상태라 크기가 없다 */

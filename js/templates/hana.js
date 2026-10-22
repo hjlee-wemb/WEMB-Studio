@@ -29,6 +29,8 @@ function applyHanaDT(which) {
   if (!stage) return;
   const key = HN_SCREENS[which] ? which : (localStorage.getItem('wemb-hana-screen') || 'overview-02');
   const S = HN_SCREENS[key] || HN_SCREENS['overview-02'];
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다 */
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait([S.build], () => applyHanaDT(key))) return;
   if (typeof window[S.build] !== 'function') return;
   try { localStorage.setItem('wemb-hana-screen', key); } catch (e) {}
   /* 고정 캔버스는 끈다 — 이 시안은 스스로 여백 없이 채운다(src/hana-live.js 의 fitStage). */

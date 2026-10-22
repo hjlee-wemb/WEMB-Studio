@@ -69,14 +69,25 @@ async function loadWeather(lat, lon) {
     const j = await r.json();
     const c = j.current;
     const [icon, desc] = WMO[c.weather_code] || ['☁', '—'];
-    document.getElementById('wicon').textContent = icon;
-    document.getElementById('wdesc').textContent = desc;
-    document.getElementById('wtemp').textContent = Math.round(c.temperature_2m) + '℃';
+    const temp = Math.round(c.temperature_2m) + '℃';
+    showWeather(icon, desc, temp);
+    /* 마지막으로 받은 날씨 — 인터넷이 없는 곳(망분리 고객사)에서 경고 대신 보여 준다.
+       'wemb-' 로 시작하지 않는 키라 화면별 작업 상태 묶음에 섞이지 않는다 */
+    try { localStorage.setItem('wembx-weather', JSON.stringify([icon, desc, temp])); } catch (e) {}
   } catch (e) {
-    document.getElementById('wicon').textContent = '⚠';
-    document.getElementById('wdesc').textContent = '날씨 정보 없음';
-    document.getElementById('wtemp').textContent = '';
+    /* 인터넷이 없으면 — 고객 앞에서 '⚠ 날씨 정보 없음'이 뜨지 않게 마지막 날씨, 그것도 없으면 예시 값(대시보드의 다른 수치처럼 예시) */
+    let last = null;
+    try { last = JSON.parse(localStorage.getItem('wembx-weather') || 'null'); } catch (e2) {}
+    if (Array.isArray(last) && last.length === 3) showWeather(last[0], last[1], last[2]);
+    else showWeather('⛅', '구름 조금', '18℃');
+    const w = document.getElementById('weather');
+    if (w) w.title = '인터넷에 연결되지 않아 예시 날씨를 보여 줘요';
   }
+}
+function showWeather(icon, desc, temp) {
+  document.getElementById('wicon').textContent = icon;
+  document.getElementById('wdesc').textContent = desc;
+  document.getElementById('wtemp').textContent = temp;
 }
 /* 위치 권한은 '처음 한 번만' 요청하고, 이후 갱신은 저장된 좌표로 날씨만 다시 불러옴
    (예전엔 10분마다 getCurrentPosition을 다시 호출해 권한 팝업이 계속 떴음) */

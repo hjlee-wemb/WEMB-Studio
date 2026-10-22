@@ -684,7 +684,11 @@ function initLayoutEditor() {
       if (hjHtmlCache[px]) return hjHtmlCache[px];
       const S = DOM_SCREENS[px];
       const build = S && window[S.build];
-      if (typeof build !== 'function') return (hjHtmlCache[px] = '');
+      if (typeof build !== 'function') {
+        /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 실리면 라이브러리를 다시 그린다(그때까지 빈 칸) */
+        if (S && hjLoadLater(S.build)) return '';
+        return (hjHtmlCache[px] = '');
+      }
       /* 시트도 이때 한 번만 — 다크가 먼저, 라이트가 뒤(오버라이드 순서) */
       [[px + '-style', window[S.css]], [px + '-light-style', window[S.light]]].forEach((p) => {
         if (!p[1] || document.getElementById(p[0])) return;
@@ -695,12 +699,28 @@ function initLayoutEditor() {
       });
       return (hjHtmlCache[px] = build(S.base || HJ.base || 'src/hanjin/'));
     }
+    /* 썸네일이 쓰는 화면 모듈을 한 번에 모아 싣는다(페이지 로드가 끝난 뒤 — WEMB.tplModules.later) — 다 실리면 지금 보이는 목록을 다시 그린다 */
+    const hjWant = new Set();
+    let hjWantT = 0;
+    function hjLoadLater(name) {
+      const M = window.WEMB && WEMB.tplModules;
+      if (!M || !M.known(name)) return false;
+      hjWant.add(name);
+      if (!hjWantT) hjWantT = setTimeout(() => {
+        const names = [...hjWant];
+        hjWant.clear();
+        hjWantT = 0;
+        M.later(names).then(() => { if (libShown) applyView(); else libDirty = true; }, () => {});
+      }, 0);
+      return true;
+    }
     /* 노드 하나의 서브트리를 잘라 낸다(여는/닫는 태그 짝 세기) */
     const hjSubCache = {};
     function hjSub(px, nid) {
       const key = px + '|' + nid;
       if (hjSubCache[key] != null) return hjSubCache[key];
       const html = hjScreenHtml(px);
+      if (!html) return '';   /* 화면 모듈이 아직 — 실린 뒤 다시 자른다 */
       const at = html.indexOf('data-node-id="' + nid + '"');
       if (at < 0) return (hjSubCache[key] = '');
       const start = html.lastIndexOf('<', at);
@@ -779,11 +799,21 @@ function initLayoutEditor() {
     window.addEventListener('resize', () => { hjFit(); hjEmbedFit(); });
     /* 라이브러리가 접혀 있을 때 그린 썸네일은 상자 크기가 0이라 배율을 못 잡는다 —
        펼쳐져 크기가 잡히는 순간 다시 맞춘다(사이드바 폭이 바뀔 때도 같이). */
+    /* 라이브러리가 보이는지 — ResizeObserver 가 레이아웃 뒤에 알려 주는 크기로 판단한다.
+       getClientRects 로 그때그때 물으면 스튜디오를 여는 중에(시안을 막 얹은 참) 레이아웃을 강제로 한 번 더 돌린다. */
+    let libShown = !window.ResizeObserver;
     if (window.ResizeObserver) {
       let pending = 0;
-      new ResizeObserver(() => {
+      new ResizeObserver((entries) => {
+        const r = entries[entries.length - 1].contentRect;
+        libShown = r.width > 0 || r.height > 0;
         if (pending) return;
-        pending = requestAnimationFrame(() => { pending = 0; hjFit(grid); });
+        pending = requestAnimationFrame(() => {
+          pending = 0;
+          /* 접혀 있어 미뤄 둔 목록은 펼쳐지는 이때 그린다(render 참고) */
+          if (libDirty && libShown) applyView();
+          else hjFit(grid);
+        });
       }).observe(grid);
     }
 
@@ -1256,8 +1286,13 @@ function initLayoutEditor() {
 
     /* 렌더 */
     let curCat = 'chart';
+    let libDirty = false;
     function render(cat) {
       curCat = cat;
+      /* 라이브러리가 접혀 있으면(display:none) 그리지 않는다 — 예전엔 스튜디오를 열 때마다 숨은 썸네일을 그리느라
+         다른 템플릿 화면(한진 · HANA)을 통째로 만들고 그림까지 받았다. 펼쳐져 크기가 잡히면 위 ResizeObserver 가 그린다. */
+      if (!libShown) { libDirty = true; return; }
+      libDirty = false;
       if (cat === 'chart') CATS.chart = buildChartItems();
       grid.innerHTML = CATS[cat].map((it, i) => thumbHtml(it, i)).join('');
       themeThumbs();

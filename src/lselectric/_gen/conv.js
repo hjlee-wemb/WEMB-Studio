@@ -30,6 +30,22 @@ const SCREENS = [
   /* 다섯 번째 = STATCOM + 에너지 진단 팝업(Figma 89:2927 · 팝업 94:5015). */
   { key: '94-5015', node: '94:5015', px: 'lse', name: 'Popup/ACB - Energy (Stage 1)', out: 'lselectric-energy', page: 'energy', meta: ['meta-89-2927.xml'], layer: 3,
     overlay: { base: 'lsm', baseOut: 'lselectric-statcom', build: 'build_lsm_energy', left: 33, top: 117, w: 1855, h: 846 } },
+  /* ── 단독 팝업 다섯 장(popup-3 ~ 7) — 화면 프레임이 없어 STATCOM 위 한가운데(보이는 상자 기준, 정수 픽셀)에 얹는다(patch-popups.js) ── */
+  /* 여섯 번째 = 상태정보(변압기) 1630x516 */
+  { key: '118-568', node: '118:568', px: 'lst', name: "Popup/Transformer - Status", out: 'lselectric-transformer', page: 'transformer', meta: ['meta-118-568.xml'], layer: 4,
+    overlay: { base: 'lsm', baseOut: 'lselectric-statcom', build: 'build_lsm_transformer', left: 145, top: 282, w: 1630, h: 516 } },
+  /* 일곱 번째 = AC전원실 전압/전류 302x187 */
+  { key: '124-1703', node: '124:1703', px: 'lsp', name: "Popup/AC Power Room - Electrical Readings", out: 'lselectric-acroom', page: 'acroom', meta: ['meta-124-1703.xml'], layer: 5,
+    overlay: { base: 'lsm', baseOut: 'lselectric-statcom', build: 'build_lsm_acroom', left: 809, top: 446, w: 302, h: 187 } },
+  /* 여덟 번째 = 충전기/배터리 운영상태 842x276 */
+  { key: '124-1942', node: '124:1942', px: 'lsb', name: "Popup/Charger Battery - Status", out: 'lselectric-charger', page: 'charger', meta: ['meta-124-1942.xml'], layer: 6,
+    overlay: { base: 'lsm', baseOut: 'lselectric-statcom', build: 'build_lsm_charger', left: 539, top: 402, w: 842, h: 276 } },
+  /* 아홉 번째 = 냉각설비 상태 정보 1509x684 */
+  { key: '124-3340', node: '124:3340', px: 'lsc', name: "Popup/Cooling System - Status", out: 'lselectric-cooling', page: 'cooling', meta: ['meta-124-3340.xml'], layer: 7,
+    overlay: { base: 'lsm', baseOut: 'lselectric-statcom', build: 'build_lsm_cooling', left: 205, top: 198, w: 1509, h: 684 } },
+  /* 열 번째 = 알림 410x276(바탕 판은 318 까지 — 보이는 높이로 가운데) */
+  { key: '138-1433', node: '138:1433', px: 'lsr', name: "Popup/Rooms - Alarm", out: 'lselectric-alarm', page: 'alarm', meta: ['meta-138-1433.xml'], layer: 8,
+    overlay: { base: 'lsm', baseOut: 'lselectric-statcom', build: 'build_lsm_alarm', left: 755, top: 381, w: 410, h: 276 } },
 ];
 
 /* ══════════════════ 1. JSX 파서 ══════════════════
@@ -500,6 +516,7 @@ function styleFor(classes) {
       case 'border-0': bAll = '0px'; continue;
       case 'border-2': bAll = '2px'; continue;
       case 'border-4': bAll = '4px'; continue;
+      case 'border-5': bAll = '5px'; continue;   /* 단독 팝업 바탕 판(124:1711 · 124:1943 · 138:1434) */
       case 'border-8': bAll = '8px'; continue;
       case 'border-10': bAll = '10px'; continue;   /* 단선도 카드 판(65:2105)의 두꺼운 안쪽 테두리 */
       case 'border-b': bSides.bottom = '1px'; continue;
@@ -1221,6 +1238,10 @@ const CENTER_STROKE = {
     { id: '94:5445', w: 1, c: '#273458' }, { id: '94:5176', w: 1, c: '#273458' }, { id: '94:5282', w: 1, c: '#273458' },
     { id: '94:5336', w: 1, c: '#273458' }, { id: '94:5229', w: 1, c: '#273458' },
   ],
+  /* 상태정보 팝업 — 범례 판 세 개(use_figma 로 읽음: CENTER 1px #273458) */
+  '118-568': [
+    { id: '122:1076', w: 1, c: '#273458' }, { id: '124:1190', w: 1, c: '#273458' }, { id: '124:1235', w: 1, c: '#273458' },
+  ],
 };
 function centerStrokeCss(S) {
   const list = CENTER_STROKE[S.key] || [];
@@ -1234,6 +1255,25 @@ function centerStrokeCss(S) {
   return out.join('\n');
 }
 
+/* 화면별 노드 CSS — design context 가 뭉갠 선(그라디언트 선 · 점선)을 use_figma 로 읽은 값으로 되살린다(patch-popups.js 가 계산해 적었다). */
+const SCREEN_CSS = {
+ "124-1703": [
+  ".{{PX}}-root [data-node-id=\"124:1922\"]{border-color:transparent!important;}",
+  ".{{PX}}-root [data-node-id=\"124:1922\"]::after{content:\"\";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;background:linear-gradient(270deg,rgba(84,104,192,1) 0%,rgba(22,56,151,0) 100%);}",
+  ".{{PX}}-root [data-node-id=\"124:1931\"]{border-color:transparent!important;}",
+  ".{{PX}}-root [data-node-id=\"124:1931\"]::after{content:\"\";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;background:linear-gradient(270deg,rgba(84,104,192,1) 0%,rgba(22,56,151,0) 100%);}"
+ ],
+ "124-3340": [
+  ".{{PX}}-root [data-node-id=\"137:1081\"]{border-color:#4f5880!important;}",
+  ".{{PX}}-root [data-node-id=\"137:1081\"]::after{content:\"\";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;background:linear-gradient(156.62deg,rgba(154,216,255,1) 2.12%,rgba(154,216,255,0) 27.71%);}",
+  ".{{PX}}-root [data-node-id=\"137:1218\"]{border-color:#4f5880!important;}",
+  ".{{PX}}-root [data-node-id=\"137:1218\"]::after{content:\"\";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;background:linear-gradient(130.96deg,rgba(154,216,255,1) 2.12%,rgba(154,216,255,0) 27.71%);}",
+  ".{{PX}}-root [data-node-id=\"138:1265\"]{border-color:#4f5880!important;}",
+  ".{{PX}}-root [data-node-id=\"138:1265\"]::after{content:\"\";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;background:linear-gradient(117.61deg,rgba(154,216,255,1) 2.12%,rgba(154,216,255,0) 27.71%);}",
+  ".{{PX}}-root [data-node-id=\"137:1084\"]{border-right-color:transparent!important;background-image:linear-gradient(to bottom,#3889ff 2px,transparent 2px);background-size:1px 5px;background-repeat:repeat-y;background-position:right top;background-origin:border-box;}",
+  ".{{PX}}-root [data-node-id=\"137:1087\"]{border-right-color:transparent!important;background-image:linear-gradient(to bottom,#3889ff 2px,transparent 2px);background-size:1px 5px;background-repeat:repeat-y;background-position:right top;background-origin:border-box;}"
+ ]
+};
 const BG_URL_PROPS = /^(mask|background|border-image|list-style-image)/;
 /* src/posco-live.js 의 '판 번호' — 내용이 바뀌면 값도 바뀐다(미리보기 주소의 ?v=). */
 function liveStamp() {
@@ -1260,7 +1300,8 @@ for (const r of results) {
   const PX = r.S.px;
   const CSS0 = BASE_CSS(PX) + '\n' + r.rules.join('\n');
   const NODE_RULES = NODE_CSS.map(function (x) { return x.split('{{PX}}').join(PX); }).join('\n');
-  const CSS = CSS0 + '\n' + NODE_RULES + '\n' + centerStrokeCss(r.S) + (r.S.overlay ? '\n' + OVERLAY_CSS(r.S) : '');
+  const SCR_RULES = (SCREEN_CSS[r.S.key] || []).map(function (x) { return x.split('{{PX}}').join(PX); }).join('\n');
+  const CSS = CSS0 + '\n' + NODE_RULES + '\n' + centerStrokeCss(r.S) + (SCR_RULES ? '\n' + SCR_RULES : '') + (r.S.overlay ? '\n' + OVERLAY_CSS(r.S) : '');
   const LIGHT_CSS = ['/* ' + r.S.name + ' — 라이트 테마(형상 동일, 색만 반전). 생성기: _gen/light.js */']
     .concat(LIGHT.lightExtra(PX, r.textured)).concat(r.darkRules).join('\n');
   const G = PX.toUpperCase();

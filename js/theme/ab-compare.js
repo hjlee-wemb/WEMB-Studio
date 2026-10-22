@@ -82,6 +82,7 @@ function renderThemeInto(slotEl, theme, side) {
   /* 지금 화면을 복제 — 숨김 속성은 떼야 복제본이 보인다 */
   const src = SCREENS[state.screen] || SCREENS.dash;
   const clone = src.cloneNode(true); /* 이미 그려진 차트 SVG까지 그대로 복제 */
+  if (window.WEMB3D) WEMB3D.bakeClone(clone); /* 3D 캔버스는 복제하면 비어 있다 → 지금 모습 그림으로 */
   clone.hidden = false;
   clone.removeAttribute('hidden');
   clone.classList.remove('content-editing');

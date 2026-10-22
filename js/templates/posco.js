@@ -25,6 +25,9 @@ function applyPoscoDT(which) {
   if (!stage) return;
   const key = PK_SCREENS[which] ? which : (localStorage.getItem('wemb-posco-screen') || 'main');
   const S = PK_SCREENS[key] || PK_SCREENS['main'];
+  /* 화면 모듈은 필요할 때 싣는다(js/core/tpl-modules.js) — 아직이면 싣고 나서 다시 그린다(SOP 는 겹칠 STEP 2·3·4 까지) */
+  const need = [S.build].concat((S.extra || []).map((px) => 'build_' + px));
+  if (window.WEMB && WEMB.tplModules && WEMB.tplModules.wait(need, () => applyPoscoDT(key))) return;
   if (typeof window[S.build] !== 'function') return;
   try { localStorage.setItem('wemb-posco-screen', key); } catch (e) {}
   /* 고정 캔버스는 끈다 — 이 시안은 스스로 여백 없이 채운다(src/posco-live.js 의 applyFit). */

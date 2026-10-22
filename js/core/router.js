@@ -12,7 +12,10 @@
    popstate / hashchange 로 들어온다(두 이벤트가 겹쳐 와도 같은 주소는 한 번만 그린다).
 
    라우트의 enter(params, query, prev) 가 문자열을 돌려주면 그 주소로 '대체' 이동한다
-   (잠긴 단계 · 없어진 항목 → 뒤로가기 기록에 남지 않는다). prev 가 null 이면 처음 여는 것이다. */
+   (잠긴 단계 · 없어진 항목 → 뒤로가기 기록에 남지 않는다). prev 가 null 이면 처음 여는 것이다.
+
+   나가기 막기 — setGuard(fn) 를 걸면 지금 화면을 떠나는 모든 이동(navigate · 링크 · 뒤로가기 · 주소 입력)이
+   fn(목표 해시) 를 먼저 거친다. false 면 이동하지 않고 주소를 되돌린다(저장 안 한 편집 화면이 묻고 나서 다시 navigate 한다). */
 window.WEMB = window.WEMB || {};
 WEMB.router = (function () {
   const routes = [];
@@ -22,6 +25,8 @@ WEMB.router = (function () {
   let resolvedHash = null;
   let depth = 0; /* 이 문서 안에서 쌓인 이동 수 — 0 이면 앱 안으로 돌아갈 이전 화면이 없다 */
   let started = false;
+  let guard = null;
+  const blocked = (target) => !!guard && target !== resolvedHash && guard(target) === false;
 
   function compile(pattern) {
     const keys = [];
@@ -76,6 +81,7 @@ WEMB.router = (function () {
   }
   function navigate(to, opts) {
     const target = opts && opts.query ? href(String(to), opts.query) : toHash(to);
+    if (blocked(target)) return;
     if (opts && opts.replace) return replaceWith(target, 0);
     if (target === location.hash) return resolve(0); /* 같은 주소를 다시 누름 → 다시 그린다 */
     depth += 1;
@@ -85,12 +91,28 @@ WEMB.router = (function () {
   function onExternal() {
     if (!started || location.hash === resolvedHash) return;
     const st = history.state;
+    if (blocked(location.hash)) {
+      /* 뒤로 · 앞으로는 기록 한 칸을 옮긴 것이라 지금 화면을 다시 쌓고, 주소 입력은 그 칸을 되돌린다 */
+      try {
+        if (st && typeof st.wembDepth === 'number') history.pushState({ wembDepth: depth }, '', resolvedHash);
+        else history.replaceState({ wembDepth: depth }, '', resolvedHash);
+      } catch (e) {}
+      return;
+    }
     if (st && typeof st.wembDepth === 'number') depth = st.wembDepth;
     else { depth += 1; try { history.replaceState({ wembDepth: depth }, ''); } catch (e) {} } /* 주소창에 직접 친 주소 */
     resolve(0);
   }
   window.addEventListener('popstate', onExternal);
   window.addEventListener('hashchange', onExternal);
+  /* 막기가 걸려 있으면 앱 안 링크(#/…)도 navigate 로 보낸다 — 브라우저가 기록을 먼저 쌓지 않게 */
+  document.addEventListener('click', (e) => {
+    if (!guard || e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest && e.target.closest('a[href^="#/"]');
+    if (!a || (a.target && a.target !== '_self')) return;
+    e.preventDefault();
+    navigate(a.getAttribute('href'));
+  }, true);
 
   return {
     add(name, pattern, enter) { routes.push(Object.assign({ name, pattern, enter }, compile(pattern))); },
@@ -108,6 +130,7 @@ WEMB.router = (function () {
     /* 앱 안에서 온 이전 화면이 있으면 브라우저 뒤로가기, 주소로 바로 들어왔으면 부모 화면으로 대체 이동 */
     back(parent) { if (depth > 0) history.back(); else replaceWith(parent, 0); },
     href,
+    setGuard(fn) { guard = typeof fn === 'function' ? fn : null; },
     current: () => current,
     onChange(fn) { listeners.push(fn); },
   };
