@@ -5,9 +5,10 @@
 #
 # Two ways to serve, at the same address:
 #  1. wemb-atomic server (Node.js 18+), when Node.js and the wemb-atomic folder are found.
-#     The molecule library (home menu) and the atom swap panel (studio) need it: their data comes from /api/...
+#     The molecule library (home menu) and the atom swap panel (studio) get their data from /api/...
 #     and their saved work (versions, names, screens) is written to files in wemb-atomic\data.
-#  2. This script (built-in HttpListener) otherwise. Everything except those two features works.
+#  2. This script (built-in HttpListener) otherwise. Everything works; the molecule library and atom swap
+#     read the exported copy in src\atomic (wemb-atomic: npm run export) and keep edits in this browser only.
 # Where it looks:
 #  wemb-atomic : $env:WEMB_ATOMIC_DIR, .\wemb-atomic, ..\WEMB-02\wemb-atomic, ..\wemb-atomic
 #  Node.js     : .\node\node.exe (a portable copy, no install), then node on PATH
@@ -113,7 +114,7 @@ if ($StaticOnly) {
   }
 }
 
-# 2. Built-in server - everything but the molecule library and atom swap
+# 2. Built-in server - the molecule library and atom swap read src\atomic, edits stay in the browser
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add($base)
 try { $listener.Start() } catch { Stop-PortInUse }
@@ -130,7 +131,7 @@ $mime = @{
 }
 $rootFull = [System.IO.Path]::GetFullPath($root).TrimEnd('\') + '\'
 
-Open-Studio "Molecule library and atom swap are off: $why."
+Open-Studio "Molecule library and atom swap use the bundled copy; their edits stay in this browser ($why)."
 
 while ($listener.IsListening) {
   try { $ctx = $listener.GetContext() } catch { break }

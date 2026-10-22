@@ -1,9 +1,10 @@
 /* ── 분자 라이브러리 — 홈 안의 한 페이지 ──
    주소: #/molecules (분자) · #/molecules/m/:id (분자 정의) · #/molecules/screens (조립 화면) · #/molecules/s/:id (화면 편집)
    아토믹 5단계: #/molecules/atoms (원자) · /organisms · /o/:id (유기체) · /templates · /t/:id (템플릿 = 화면 틀) · /pages · /p/:id (페이지 = 원본 화면)
-   데이터는 wemb-atomic 로컬 서버(/api)가 준다. 서버 없이 열린 경우(GitHub Pages 등)에는 안내만 보여 준다.
+   데이터는 wemb-atomic 로컬 서버(/api)가 준다. 서버 없이 열린 경우(GitHub Pages 등)에는 미리 뽑아 둔 파일(src/atomic/)로 보고,
+   저장은 이 브라우저에만 남는다(static-api.js).
    분자 · 페이지는 섀도 DOM 으로 그려 홈 스타일과 섞이지 않는다. */
-import { api } from './api.js';
+import { api, apiMode, globalsCssUrl } from './api.js';
 import { ROLE_TOKENS, TOKEN_LABELS } from './theme.js';
 import { loadVariants, variant, mountMolecule, mountTemplate, mountSection, mountPage, measureTemplate, registerMolecules } from './render.js';
 import { STATES, STATE_LABELS, STATE_COLORS } from './states.js';
@@ -78,7 +79,7 @@ function boot() {
       // 분자 · 템플릿이 쓰는 폰트(@font-face · @import)는 섀도 DOM 안에서 먹지 않아 문서에 한 번 싣는다
       if (!document.getElementById('atmGlobals')) {
         const link = document.createElement('link');
-        link.id = 'atmGlobals'; link.rel = 'stylesheet'; link.href = 'api/globals.css';
+        link.id = 'atmGlobals'; link.rel = 'stylesheet'; link.href = await globalsCssUrl();
         document.head.append(link);
       }
     })().catch((e) => { S.ready = null; throw e; });
@@ -254,16 +255,15 @@ export async function show(root, page, id) {
   try { await boot(); }
   catch (e) {
     view.innerHTML = `<div class="atm-offline">
-      <b>분자 라이브러리 서버에 연결하지 못했어요.</b>
-      <p>분자 라이브러리는 저장 · 버전 관리를 위해 로컬 서버(<code>wemb-atomic</code>, Node.js)가 필요합니다.
-      WEMB Studio 폴더의 <code>WEMB Studio 켜기.cmd</code> 로 열면 함께 켜져요 — 이 PC 에 Node.js 18 이상과 <code>wemb-atomic</code> 폴더가 있어야 하고, 없으면 켜기 창에 이유가 나옵니다.</p>
-      <p>개발할 때는 <code>wemb-atomic</code> 폴더에서 <code>npm.cmd start</code> 를 실행한 뒤
-      <a href="http://127.0.0.1:4190/#/molecules">http://127.0.0.1:4190</a> 으로 열어도 됩니다.</p>
+      <b>분자 라이브러리 자료를 불러오지 못했어요.</b>
+      <p>서버 없이 열면 WEMB Studio 의 <code>src/atomic/</code> 자료로 보여 줍니다. 자료가 없으면 <code>wemb-atomic</code> 폴더에서 <code>npm.cmd run export</code> 로 만들어 주세요.</p>
+      <p>WEMB Studio 폴더의 <code>WEMB Studio 켜기.cmd</code> 로 열면 Node.js 18 이상과 <code>wemb-atomic</code> 폴더가 있는 PC 에서 서버가 함께 켜져, 저장이 <code>wemb-atomic/data</code> 파일에 남아요.</p>
       <p class="atm-hint">${esc(e.message)}</p></div>`;
     return;
   }
   const s = S.lib.summary;
-  fr.querySelector('#atmSub').textContent = `원본 페이지 ${s.templates}장을 아토믹 5단계(원자 → 분자 → 유기체 → 템플릿 → 페이지)로 쪼갰습니다 · 원본 조각 ${s.fragments.toLocaleString()}개`;
+  fr.querySelector('#atmSub').textContent = `원본 페이지 ${s.templates}장을 아토믹 5단계(원자 → 분자 → 유기체 → 템플릿 → 페이지)로 쪼갰습니다 · 원본 조각 ${s.fragments.toLocaleString()}개`
+    + ((await apiMode()) === 'static' ? ' · 고친 내용은 이 브라우저에 저장돼요' : '');
   view.innerHTML = '';
   try {
     // 단계 목록 화면은 위에 5단계 막대를 둔다 (추상 → 구체)

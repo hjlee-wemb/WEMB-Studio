@@ -15,7 +15,7 @@
 
   let mod = null;
   let active = false;
-  const load = () => mod || (mod = import('../atomic/app.js?v=48'));
+  const load = () => mod || (mod = import('../atomic/app.js?v=49'));
 
   function enter(page, id) {
     active = true;

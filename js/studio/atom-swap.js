@@ -20,7 +20,8 @@
      { v:1, pages: { <화면>: { atoms, places, mols, molPlaces } } }  — 원자 · 원자 자리 · 분자 · 분자 자리 → 바꿀 것
      화면 = 템플릿 페이지 접두어(hno2 · pkm …) 또는 'studio:dash' · 'studio:dt'. 자리 기록이 '같은 것 모두' 기록보다 먼저다.
      기록에는 서버 없이도 다시 입힐 수 있는 정보(파일 · 노드 요소 · 글자 칸)를 같이 적는다 — 화면이 열릴 때 바로 입힌다.
-   원자 · 분자 목록은 분자 라이브러리 서버(wemb-atomic)의 api/atoms 에서 받는다. */
+   원자 · 분자 목록은 분자 라이브러리 서버(wemb-atomic)의 api/atoms 에서 받는다. 서버가 없으면(GitHub Pages 등)
+   미리 뽑아 둔 같은 색인(src/atomic/atoms.json, wemb-atomic npm run export)을 읽는다. */
 (function initAtomSwap() {
   const main = document.querySelector('.main');
   const dt = document.getElementById('dtStage');
@@ -133,8 +134,10 @@
   function loadIndex() {
     if (IDX) return Promise.resolve(IDX);
     if (!idxLoading) {
-      idxLoading = fetch('api/atoms', { cache: 'no-store' })
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(r.status === 404 ? '분자 라이브러리 서버가 아니에요 (api/atoms 없음)' : 'HTTP ' + r.status))))
+      const server = /\.github\.io$/.test(location.hostname) ? Promise.resolve(null) : fetch('api/atoms', { cache: 'no-store' }).catch(() => null);
+      idxLoading = server
+        .then((r) => (r && r.ok ? r : fetch('src/atomic/atoms.json')))
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(r.status === 404 ? '원자 색인이 없어요 (api/atoms · src/atomic/atoms.json)' : 'HTTP ' + r.status))))
         .then((d) => (IDX = makeIndex(d)))
         .catch((e) => { idxLoading = null; throw e; });
     }
@@ -947,7 +950,7 @@
     if (sig === ui.sigList) return;
     ui.sigList = sig;
     if (page.kind === 'flat') return show('<div class="atx-empty"><b>이 화면은 원자로 나뉘어 있지 않아요</b><p>그림 한 장(또는 SVG 한 덩어리)으로 된 시안이라, 화면 안에서 원자를 찾을 수 없어요.</p></div>');
-    if (ui.err && !IDX) return show('<div class="atx-empty atx-err"><b>분자 라이브러리 서버에 연결하지 못했어요</b><p>' + esc(ui.err.message) + '</p><p>원자 · 분자 목록과 바꿀 것은 wemb-atomic 서버로 스튜디오를 열었을 때 볼 수 있어요 — 폴더의 WEMB Studio 켜기.cmd 로 열면 Node.js 가 있는 PC 에서 함께 켜져요. 이미 바꾼 것은 서버 없이도 화면에 그대로 보여요.</p></div>');
+    if (ui.err && !IDX) return show('<div class="atx-empty atx-err"><b>원자 목록을 불러오지 못했어요</b><p>' + esc(ui.err.message) + '</p><p>원자 · 분자 목록은 wemb-atomic 서버나 WEMB Studio 의 src/atomic 자료(wemb-atomic 폴더에서 npm.cmd run export)에서 받아요. 이미 바꾼 것은 목록 없이도 화면에 그대로 보여요.</p></div>');
     if (!IDX) return show('<div class="atx-empty"><p>분자 라이브러리에서 원자 목록을 불러오는 중…</p></div>');
     if (ui.view === 'detail') {
       const S = selection(res); /* 원자를 품은 분자는 고른 원자의 자리에서 구한다 */
