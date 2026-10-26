@@ -10,7 +10,7 @@
 #  2. This script (built-in HttpListener) otherwise. Everything works; the molecule library and atom swap
 #     read the exported copy in src\atomic (wemb-atomic: npm run export) and keep edits in this browser only.
 # Where it looks:
-#  wemb-atomic : $env:WEMB_ATOMIC_DIR, .\wemb-atomic, ..\WEMB-02\wemb-atomic, ..\wemb-atomic
+#  wemb-atomic : $env:WEMB_ATOMIC_DIR, .\wemb-atomic (its usual place), ..\wemb-atomic
 #  Node.js     : .\node\node.exe (a portable copy, no install), then node on PATH
 # -StaticOnly always uses 2. -NoBrowser does not open the browser (for tests).
 param([int]$Port = 5510, [switch]$NoBrowser, [switch]$StaticOnly)
@@ -53,7 +53,7 @@ function Stop-PortInUse {
 }
 
 function Find-Atomic {
-  foreach ($d in @($env:WEMB_ATOMIC_DIR, (Join-Path $root 'wemb-atomic'), (Join-Path $root '..\WEMB-02\wemb-atomic'), (Join-Path $root '..\wemb-atomic'))) {
+  foreach ($d in @($env:WEMB_ATOMIC_DIR, (Join-Path $root 'wemb-atomic'), (Join-Path $root '..\wemb-atomic'))) {
     if ($d -and (Test-Path -LiteralPath (Join-Path $d 'server.mjs')) -and (Test-Path -LiteralPath (Join-Path $d 'library\library.json'))) {
       return [System.IO.Path]::GetFullPath($d)
     }
