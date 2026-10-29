@@ -8,5 +8,23 @@
   const stage = document.getElementById('dtStage');
   const editing = () =>
     !!((main && (main.classList.contains('editing') || main.classList.contains('content-editing'))) || (stage && stage.classList.contains('dt-content-editing')));
+  /* 지금 열어 둔 프로젝트가 곧 만나는 고객사다 — PRD 프로젝트명 · 화면 이름 · 폴더 이름은 가리지 않는다.
+     PRD 를 새로 저장하면 brand.js 가 이 함수를 다시 부른다. */
+  function syncCustomer() {
+    const names = [];
+    try { const r = JSON.parse(localStorage.getItem('wemb-prd') || 'null'); if (r && r.site) names.push(r.site); } catch (e) {}
+    try {
+      const id = localStorage.getItem('wemb-current-proj');
+      const p = WEMB.projects.loadProjects().find((x) => x.id === id);
+      if (p && !p.tpl) {
+        names.push(p.name);
+        const g = p.projectId && WEMB.projects.loadGroups().find((x) => x.id === p.projectId);
+        if (g) names.push(g.name);
+      }
+    } catch (e) {}
+    if (names.length) M.setCustomer(names);
+  }
+  window.__meetingSyncCustomer = syncCustomer;
+  syncCustomer();
   M.watch(document.body, editing);
 })();

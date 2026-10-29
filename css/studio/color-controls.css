@@ -1229,3 +1229,55 @@
   display: flex;
   animation: panelIn 0.25s ease;
 }
+
+/* 디자인 편집 — 상태색(위험 · 주의) */
+.dstatus {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-bottom: 4px;
+}
+.dst {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.dst input[type='color'] {
+  width: 34px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+.dst-note {
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--text-weak);
+}
+
+/* 작업공간 아래쪽 — 현장 모드 · 회의 모드 켜기 */
+.sbmodes {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.sbmode {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-weak);
+  font: 600 11.5px var(--font);
+  cursor: pointer;
+}
+.sbmode.on {
+  border-color: var(--point-main);
+  color: var(--text-strong);
+  background: color-mix(in srgb, var(--point-main) 16%, transparent);
+}

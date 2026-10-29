@@ -136,12 +136,35 @@ function refitAB() {
     if (scaler && virt) fitScale(slot, scaler, virt);
   });
 }
+/* 처음 열면 저장한 안이 없어 A · B 가 모두 '현재 테마'였다 — 비교할 게 없으면 무엇을 하면 되는지 띠에 말해 준다.
+   기본 짝: A = 가장 최근에 저장한 안, B = 지금 화면(저장 → 색 바꾸기 → 비교 순서에 맞게) */
+function abSyncNote() {
+  const n = document.getElementById('abNote');
+  if (!n) return;
+  n.textContent = snapshots.length
+    ? 'A = 저장한 안 · B = 지금 화면. 다른 안은 위 목록에서 고르세요.'
+    : '비교할 안이 아직 없어요 — ‘지금 안 저장’을 누르고 닫은 뒤 색을 바꿔 다시 열면 A(저장한 안) · B(지금 화면)로 비교돼요.';
+}
 function openAB() {
   refreshABOptions();
-  document.getElementById('abSelA').value = '__current__';
-  document.getElementById('abSelB').value = snapshots.length ? snapshots[0].id : '__current__';
+  document.getElementById('abSelA').value = snapshots.length ? snapshots[0].id : '__current__';
+  document.getElementById('abSelB').value = '__current__';
+  abSyncNote();
   document.getElementById('abModal').classList.add('show');
   renderAB(); /* 모달이 보인 뒤 렌더해야 칸 크기를 기준으로 정확히 축소됨 */
+}
+/* '지금 안 저장' — A안, B안 … 순서로 이름을 붙여 스냅샷으로 남긴다 */
+function abKeepCurrent() {
+  const used = new Set(snapshots.map((s) => s.name));
+  let i = 0;
+  while (used.has(String.fromCharCode(65 + i) + '안') && i < 25) i++;
+  const name = String.fromCharCode(65 + i) + '안';
+  addSnapshot(name);
+  document.getElementById('abSelA').value = snapshots[0].id;
+  document.getElementById('abSelB').value = '__current__';
+  abSyncNote();
+  renderAB();
+  if (typeof toast === 'function') toast('지금 테마를 “' + name + '”으로 저장했어요. 닫고 색을 바꾸면 B(지금 화면)와 비교돼요.', { type: 'ok' });
 }
 function closeAB() {
   document.getElementById('abModal').classList.remove('show');
@@ -149,6 +172,8 @@ function closeAB() {
 function initAB() {
   document.getElementById('abOpen').onclick = openAB;
   document.getElementById('abClose').onclick = closeAB;
+  const keep = document.getElementById('abKeep');
+  if (keep) keep.onclick = abKeepCurrent;
   document.getElementById('abSelA').onchange = renderAB;
   document.getElementById('abSelB').onchange = renderAB;
   document.getElementById('abModal').addEventListener('click', (e) => {

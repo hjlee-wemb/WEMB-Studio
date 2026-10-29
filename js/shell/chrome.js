@@ -185,20 +185,35 @@
      테마가 둘 다 잠겨 있어 카드 안에 누를 것이 없다). 단계 이동은 옵션을 골랐는지와
      무관한 동작이라 감출 이유가 없다. */
   const THEME_STEPS = [['screen', 'stepScreen'], ['color', 'stepColor'], ['verify', 'stepVerify'], ['save', 'stepSave'], ['export', 'stepExport']];
+  /* 현장 모드(js/core/ui-mode.js)에서는 3단계 검증(대비비 · 컴포넌트 시트)이 숨는다 — 번호와 이전/다음을 보이는 단계로만 센다 */
+  const fieldMode = () => !!(window.WEMB && WEMB.uiMode && WEMB.uiMode.field());
+  const liveSteps = () => THEME_STEPS.filter(([, id]) => !(fieldMode() && id === 'stepVerify'));
+  function syncThemeNav() {
+    const live = liveSteps();
+    THEME_STEPS.forEach(([, id]) => {
+      const card = document.getElementById(id); if (!card) return;
+      const k = live.findIndex((s) => s[1] === id);
+      const no = card.querySelector('.stepno');
+      if (no && k >= 0) no.textContent = String(k + 1);
+      const nav = card.querySelector(':scope > .stepnav'); if (!nav) return;
+      nav.querySelector('.snav-prev').style.visibility = k <= 0 ? 'hidden' : '';
+      nav.querySelector('.snav-next').style.display = k === live.length - 1 ? 'none' : '';
+    });
+  }
   (function initThemeNav() {
-    THEME_STEPS.forEach(([sec, id], i) => {
+    THEME_STEPS.forEach(([sec, id]) => {
       const card = document.getElementById(id); if (!card) return;
       if (card.querySelector(':scope > .stepnav')) return;
       const nav = document.createElement('div');
       nav.className = 'stepnav';
       nav.innerHTML = '<button type="button" class="snav-prev">← 이전</button><button type="button" class="snav-next">다음 →</button>';
       card.appendChild(nav);
-      const prev = nav.querySelector('.snav-prev'), next = nav.querySelector('.snav-next');
-      if (i === 0) prev.style.visibility = 'hidden';
-      if (i === THEME_STEPS.length - 1) next.style.display = 'none';
-      prev.addEventListener('click', (e) => { e.preventDefault(); const p = THEME_STEPS[i - 1]; if (p) showStep(p[0], p[1]); });
-      next.addEventListener('click', (e) => { e.preventDefault(); const n = THEME_STEPS[i + 1]; if (n) showStep(n[0], n[1]); });
+      const go = (d) => { const live = liveSteps(); const k = live.findIndex((s) => s[1] === id); const t = live[k + d]; if (t) showStep(t[0], t[1]); };
+      nav.querySelector('.snav-prev').addEventListener('click', (e) => { e.preventDefault(); go(-1); });
+      nav.querySelector('.snav-next').addEventListener('click', (e) => { e.preventDefault(); go(1); });
     });
+    syncThemeNav();
+    if (window.WEMB && WEMB.uiMode) WEMB.uiMode.onChange(syncThemeNav);
   })();
   function openLayoutGroup(label) {
     showSection('layout');
@@ -217,7 +232,7 @@
     theme: [
       { label: '화면 정하기', icon: IC.screen, run: () => showStep('screen', 'stepScreen') },
       { label: '색 정하기', icon: IC.palette, run: () => showStep('color', 'stepColor') },
-      { label: '접근성 검증', icon: IC.check, run: () => showStep('verify', 'stepVerify') },
+      { label: '접근성 검증', icon: IC.check, run: () => showStep('verify', 'stepVerify'), designer: true },
       { label: '저장 · 스냅샷', icon: IC.save, run: () => showStep('save', 'stepSave') },
       { label: '내보내기', icon: IC.upload, run: () => showStep('export', 'stepExport') },
     ],
@@ -225,7 +240,7 @@
       { label: '레이아웃', icon: IC.layout, run: () => showSection('layout') },
       { label: '콘텐츠 추가', icon: IC.addpanel, run: () => showSection('dash-panels') },
       { label: '디자인 편집', icon: IC.sliders, run: () => showSection('dash-design') },
-      { label: '원자 변경', icon: IC.atom, run: () => window.__atomSwap && window.__atomSwap.open() },
+      { label: '원자 변경', icon: IC.atom, run: () => window.__atomSwap && window.__atomSwap.open(), designer: true },
     ],
     layout: [
       { label: '2단', icon: IC.layout, run: () => openLayoutGroup('2단') },
@@ -260,6 +275,7 @@
     const el = ensureFly();
     el.innerHTML = '';
     items.forEach((it) => {
+      if (it.designer && fieldMode()) return; /* 현장 모드 — 디자이너 도구는 메뉴에서도 뺀다 */
       if (it.sep) {
         const s = document.createElement('div');
         s.className = 'railfly-sep';

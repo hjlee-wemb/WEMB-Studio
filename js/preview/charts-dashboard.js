@@ -105,7 +105,7 @@ const DashCharts = (function () {
       body: true,
       find: () => panelBodyByTitle('타 기관 지연 TOP5'),
       data: {
-        labels: ['국민은행', '카카오뱅크', '지역농협', '농협은행', '우리은행'],
+        labels: ['A은행', 'B은행', 'C조합', 'D은행', 'E은행'],
         series: [{ name: 'time_out', color: C_MAIN, values: [1009, 834, 819, 677, 623] }],
       },
     },
@@ -138,7 +138,7 @@ const DashCharts = (function () {
       body: true,
       find: () => panelBodyByTitle('보안시스템 자원 사용 현황'),
       data: {
-        labels: ['하나쉴드 AP#13', 'Any 로그관리', '디지털캠퍼스 #1', '디지털캠퍼스 #2', 'SO VDIDCOM25'],
+        labels: ['보안관제 AP#13', 'Any 로그관리', '교육센터 #1', '교육센터 #2', 'SO VDIDCOM25'],
         series: [{ name: 'CPU %', color: C_MAIN, values: [81, 70, 60, 53, 36] }],
       },
     },

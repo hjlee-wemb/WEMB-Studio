@@ -116,22 +116,66 @@ function loadH2C() {
   return loadScript('src/vendor/html2canvas-pro.min.js')
     .catch(() => loadScript('https://cdn.jsdelivr.net/npm/html2canvas-pro@1.5.8/dist/html2canvas-pro.min.js'));
 }
+/* PNG 복제본 보정 — 복제 문서에서는 애니메이션 · 전환이 처음부터 다시 돈다.
+   KPI 칸은 'panelIn … backwards'(투명에서 시작)라 통째로 빈 칸으로 찍혔고, 게이지(--v 전환)는 0% 였다.
+   게이지는 conic-gradient 라 캡처 라이브러리가 아예 못 그린다 → 원본에서 값 · 색을 읽어 그림으로 바꿔 넣는다. */
+function fixPngClone(doc) {
+  const st = doc.createElement('style');
+  st.textContent = '*,*::before,*::after{animation:none!important;transition:none!important}';
+  doc.head.appendChild(st);
+  const src = [...document.querySelectorAll('.main .mini .d')];
+  const dst = [...doc.querySelectorAll('.main .mini .d')];
+  src.forEach((o, i) => {
+    const c = dst[i];
+    if (!c || !o.offsetWidth) return;
+    const cs = getComputedStyle(o);
+    const v = Math.max(0, Math.min(100, parseFloat(cs.getPropertyValue('--v')) || 0));
+    const w = o.offsetWidth * 2, h = o.offsetHeight * 2, r = Math.min(w, h) / 2;
+    const cv = document.createElement('canvas');
+    cv.width = w; cv.height = h;
+    const g = cv.getContext('2d');
+    g.fillStyle = cs.getPropertyValue('--bg-accent').trim() || '#333';
+    g.beginPath(); g.arc(w / 2, h / 2, r, 0, Math.PI * 2); g.fill();
+    if (v > 0) {
+      g.fillStyle = cs.getPropertyValue('--point-main').trim() || '#6c7cff';
+      g.beginPath(); g.moveTo(w / 2, h / 2);
+      g.arc(w / 2, h / 2, r, -Math.PI / 2, -Math.PI / 2 + (Math.PI * 2 * v) / 100);
+      g.closePath(); g.fill();
+    }
+    c.style.background = 'url(' + cv.toDataURL('image/png') + ') center / 100% 100% no-repeat';
+  });
+}
+/* 내려받는 파일 이름 — '프로젝트명_YYYY-MM-DD.png'. 예전엔 어느 프로젝트든 wemb-dashboard.png 였다 */
+function pngFileName(isDT) {
+  const bn = document.getElementById('brandName');
+  let name = ((bn && bn.value) || '').trim();
+  if (name && window.WEMB && WEMB.meeting) name = WEMB.meeting.text(name);
+  name = name.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60);
+  const d = new Date(), p = (n) => String(n).padStart(2, '0');
+  const day = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  return (name || (isDT ? 'wemb-digital-twin' : 'wemb-dashboard')) + '_' + day + '.png';
+}
+/* 지금 보이는 화면(.main)을 캔버스로 — PNG 내보내기와 협의 결과서(meeting-record.js)가 함께 쓴다 */
+async function captureMain(scale) {
+  const h2c = () => window.html2canvas || window.html2canvasPro;
+  if (!h2c()) await loadH2C();
+  const render = h2c();
+  if (!render) throw new Error('no lib');
+  const el = document.querySelector('.main'); /* 지금 보이는 화면만 잡힘 — 숨은 화면은 display:none */
+  /* 원자 변경으로 바꾼 원자는 CSS(content · mask)로 그린 것이라 복제본에서 실제 그림으로 굳힌다 (js/studio/atom-swap.js) */
+  return render(el, { backgroundColor: themeCoreMap(captureTheme())['bg/page'], scale: scale || 2, logging: false, useCORS: true,
+    onclone: (doc) => { try { fixPngClone(doc); } catch (e) {} return window.__atomSwap ? window.__atomSwap.bakeClone(doc) : null; } });
+}
 /* 대시보드 PNG — html2canvas-pro(최신 color-mix/색함수 지원)를 필요할 때 CDN에서 불러와 캡처 */
 async function exportPNG() {
   exHintMsg('이미지를 만드는 중… (처음엔 라이브러리 다운로드로 잠시 걸려요)');
   try {
-    const h2c = () => window.html2canvas || window.html2canvasPro;
-    if (!h2c()) await loadH2C();
-    const render = h2c();
-    if (!render) throw new Error('no lib');
-    const el = document.querySelector('.main'); /* 지금 보이는 화면만 잡힘 — 숨은 화면은 display:none */
-    /* 원자 변경으로 바꾼 원자는 CSS(content · mask)로 그린 것이라 복제본에서 실제 그림으로 굳힌다 (js/studio/atom-swap.js) */
-    const canvas = await render(el, { backgroundColor: themeCoreMap(captureTheme())['bg/page'], scale: 2, logging: false, useCORS: true,
-      onclone: (doc) => (window.__atomSwap ? window.__atomSwap.bakeClone(doc) : null) });
+    const canvas = await captureMain(2);
+    try { if (window.__wembThumbFrom) window.__wembThumbFrom(canvas); } catch (e) {}
     const isDT = state.screen === 'dt';
     await new Promise((res) =>
       canvas.toBlob((b) => {
-        downloadBlob(b, isDT ? 'wemb-digital-twin.png' : 'wemb-dashboard.png');
+        downloadBlob(b, pngFileName(isDT));
         res();
       }, 'image/png')
     );
@@ -231,7 +275,7 @@ function applyShareFromURL() {
 }
 function openExport() {
   renderExport();
-  exHintMsg('탭을 눌러 형식을 고르고 “복사”로 코드를 가져가세요.');
+  exHintMsg('회의가 끝나면 ‘협의 결과서’를 먼저 뽑아 고객에게 드리세요. 다른 PC 에서 이어 하려면 ‘프로젝트 파일 저장’. 개발자에게 넘길 색 코드는 아래 ‘개발자용 코드’에 있어요.');
   updateExportGuard(); /* (2-b) 대비 미달이면 상단에 경고 */
   document.getElementById('exModal').classList.add('show');
 }

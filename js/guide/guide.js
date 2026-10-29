@@ -9,7 +9,7 @@
   const prdPage = document.getElementById('pagePrd');
   if (!prdPage) return;
   const LS = 'wemb-prd';
-  const DEFAULT = { site: '', screen: 'dash', scale: 'multi', industries: [], targets: [] };
+  const DEFAULT = { site: '', screen: 'dash', scale: 'multi', industries: [], targets: [], kpis: [], memo: '' };
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   /* ── 모니터링 유형(산업군, 다중 선택) → 모니터링 대상(라이브러리 태그) 매핑 ──
@@ -61,7 +61,22 @@
   G.industries = G.industries.filter((k) => INDUSTRIES[k]);
   delete G.industry;
   if (!Array.isArray(G.targets)) G.targets = [];
-  const save = () => { try { localStorage.setItem(LS, JSON.stringify(G)); } catch (e) {} };
+  /* 고객이 꼭 보고 싶은 숫자(이름 · 단위)와 회의 메모 — 6번째 문항(선택). 화면 맨 위 KPI 와 기능명세서에 쓴다 */
+  if (!Array.isArray(G.kpis)) G.kpis = [];
+  G.kpis = G.kpis.filter((k) => k && typeof k.label === 'string' && k.label.trim()).slice(0, 3);
+  if (typeof G.memo !== 'string') G.memo = '';
+  const kpiList = () => (G.kpis || []).filter((k) => k && k.label && k.label.trim());
+  /* 프로젝트명이 바뀌면 스튜디오 머리말 · 상단 바 · 회의 모드 고객사 이름도 바로 따라가게 한다(brand.js).
+     예전엔 페이지를 열 때 한 번만 읽어서, 새 프로젝트는 새로고침 전까지 '프로젝트'로 남았다. */
+  let savedSite = G.site, siteT = 0;
+  const save = () => {
+    try { localStorage.setItem(LS, JSON.stringify(G)); } catch (e) {}
+    if (G.site !== savedSite) {
+      savedSite = G.site;
+      clearTimeout(siteT);
+      siteT = setTimeout(() => { try { if (window.__refreshProjectName) window.__refreshProjectName(); } catch (e) {} }, 250);
+    }
+  };
 
   const SCREEN_LBL = { dash: '관제 대시보드', dt: '디지털 트윈', portal: '포탈' };
   const SCALE_LBL = { single: '단일 설비', multi: '다중 설비·구역', enterprise: '전사·다중 사이트' };
@@ -93,7 +108,11 @@
     const inds = industryLabels();
     if (inds.length) parts.push(inds.join(', '));
     const tg = targetLabels().join(' · ');
-    return (parts.join(' · ') || '—') + '<br>모니터링 대상: ' + esc(tg || '—') + '<br><span class="gs-empty">' + tail + '</span>';
+    const kp = kpiList().map((k) => k.label + (k.unit ? ' (' + k.unit + ')' : '')).join(' · ');
+    return (parts.join(' · ') || '—') + '<br>모니터링 대상: ' + esc(tg || '—')
+      + (kp ? '<br>꼭 볼 숫자: ' + esc(kp) : '')
+      + (G.memo && G.memo.trim() ? '<br>고객 메모: ' + esc(G.memo.trim().slice(0, 120)) + (G.memo.trim().length > 120 ? '…' : '') : '')
+      + '<br><span class="gs-empty">' + tail + '</span>';
   }
 
   /* ── 기능명세서 편집 저장소 ──
@@ -113,13 +132,22 @@
 
     /* 1번 — 화면 유형 (기능) */
     if (G.screen === 'dt') { add('3D 디지털 트윈 씬 뷰어', 'hi', '기능'); add('씬 위 유리 패널 오버레이 배치', 'mid', '기능'); }
-    else add(site + ' 관제 대시보드 종합 현황 화면', 'hi', '기능');
+    else add((/관제$/.test(site) ? site + ' 대시보드' : site + ' 관제 대시보드') + ' 종합 현황 화면', 'hi', '기능');
+    /* 고객이 꼭 보고 싶다고 한 숫자 — 화면 맨 위 KPI 로 상시 표시 */
+    kpiList().forEach((k) => add('핵심 지표 상시 표시: ' + k.label.trim() + (k.unit ? ' (' + k.unit.trim() + ')' : ''), 'hi', '기능'));
 
     /* 3번 — 모니터링 유형(산업군, 다중) (요구사항) */
     industryLabels().forEach((lbl) => add(lbl + ' 도메인 관제 구성', 'hi', '요구사항'));
 
     /* 4번 — 모니터링 대상(라이브러리 태그, 복수 선택) (기능) */
-    targetLabels().forEach((lbl, i) => add(lbl + ' 모니터링', i === 0 ? 'hi' : 'mid', '기능'));
+    /* 중요도 — 고객이 메모 · 요구사항을 남겼거나 꼭 볼 숫자에 이름이 들어간 대상은 '높음'.
+       그런 근거가 하나도 없으면 첫 대상만 '높음'(예전 규칙). 표 위 안내문에 같은 규칙을 적어 둔다. */
+    const kpiText = kpiList().map((k) => k.label).join(' ');
+    const noted = (lbl) => { const o = SPEC_STORE[lbl + ' 모니터링'] || {}; return !!((o.memo && o.memo.trim()) || (o.reqs && o.reqs.trim())); };
+    const strong = (lbl) => noted(lbl) || (kpiText && kpiText.includes(String(lbl).replace(/\s*\(.*?\)\s*/g, '').split(/[·\s]/)[0]));
+    const anyStrong = targetLabels().some(strong);
+    targetLabels().forEach((lbl, i) => add(lbl + ' 모니터링', strong(lbl) || (!anyStrong && i === 0) ? 'hi' : 'mid', '기능'));
+    if (G.memo && G.memo.trim()) add('고객 요청 메모 반영', 'hi', '요구사항');
 
     /* 2번 — 관제 대상 규모 (요구사항) */
     if (G.scale === 'single') add('단일 설비 집중 모니터링 뷰', 'mid', '요구사항');
@@ -145,6 +173,7 @@
     const priLab = PRI_LBL[o.priKey] || o.priKey;
     return '<tr data-id="' + esc(o.id) + '"' + (o.custom ? ' data-custom="1"' : '') + ' data-type="' + esc(o.type) + '" data-status="' + esc(o.statusLbl) + '" data-pri="' + esc(priLab) + '" data-prikey="' + esc(o.priKey) + '">'
       + '<td class="spec-feat"><span class="sf-text">' + esc(o.feat) + '</span>'
+      + (o.sub ? '<small class="sf-sub">' + esc(o.sub) + '</small>' : '')
       + (o.hasMemo ? '<span class="sf-note memo" title="상세 메모가 있어요">메모</span>' : '')
       + (o.hasReqs ? '<span class="sf-note req" title="요구사항 정리가 있어요">요구사항</span>' : '')
       + '<span class="sf-actions">'
@@ -166,6 +195,7 @@
         feat: (ov.feat != null && ov.feat !== '') ? ov.feat : r.feat,
         priKey, statusLbl: ov.status || (priKey === 'hi' ? '권장' : '예정'),
         hasMemo: !!(ov.memo && ov.memo.trim()), hasReqs: !!(ov.reqs && ov.reqs.trim()),
+        sub: specShowValues(r.feat, ov),
       });
     });
     addedRows().forEach((o) => {
@@ -176,7 +206,39 @@
       });
     });
     body.innerHTML = rows.map(specRowHTML).join('');
+    /* 중요도가 어떻게 정해졌는지 표 위에 한 줄 — '순서대로 높음'처럼 보이지 않게 */
+    const tbl = body.closest('table');
+    if (tbl && !document.getElementById('specLegend')) {
+      const p = document.createElement('p');
+      p.id = 'specLegend';
+      p.className = 'spec-legend';
+      p.textContent = '각 줄 아래 회색 글자는 화면에 보여 줄 값이에요. 고객 메모 · 요구사항을 남기거나 꼭 볼 숫자에 이름이 들어간 대상은 중요도가 \'높음\'이 되고, 배지를 눌러 바꿀 수 있어요.';
+      tbl.before(p);
+    }
     applySpecFilters();
+  }
+  /* 협의 결과서(js/theme/meeting-record.js)용 — 화면에 그린 표와 같은 줄(삭제한 줄 빼고, 직접 추가한 줄 포함) */
+  window.__specRecord = () => {
+    const out = [];
+    deriveSpec().forEach((r) => {
+      const ov = SPEC_STORE[r.feat] || {};
+      if (ov.deleted) return;
+      const pri = ov.pri || r.pri;
+      out.push({ feat: (ov.feat != null && ov.feat !== '') ? ov.feat : r.feat, type: r.type, pri, status: ov.status || (pri === 'hi' ? '권장' : '예정'),
+        sub: specShowValues(r.feat, ov), memo: (ov.memo || '').trim(), reqs: (ov.reqs || '').trim() });
+    });
+    addedRows().forEach((o) => out.push({ feat: o.feat || '', type: o.type || '기능', pri: o.pri || 'mid', status: o.status || '예정', sub: '', memo: (o.memo || '').trim(), reqs: (o.reqs || '').trim() }));
+    return out;
+  };
+  window.__prdIndustryLabels = industryLabels;
+  /* 기능명세서 한 줄이 화면에서 무엇을 보여 줄지 — 요구사항 정리(줄마다 하나)가 있으면 그것, 없으면 대상의 기본 계측 */
+  function specShowValues(feat, ov) {
+    const m = /^(.*) 모니터링$/.exec(feat);
+    if (!m) return '';
+    const reqs = ov && ov.reqs ? ov.reqs.split(/\n+/).map((s) => s.trim()).filter(Boolean) : [];
+    if (reqs.length) return '보여 줄 값 · ' + reqs.slice(0, 4).join(' · ');
+    const pool = window.__prdMetricsFor ? window.__prdMetricsFor(m[1]) : [];
+    return pool.length ? '보여 줄 값 · ' + pool.slice(0, 3).map((x) => x[0] + (x[1] ? '(' + x[1] + ')' : '')).join(' · ') : '';
   }
 
   /* ── 기능명세서 필터(상단 드롭다운) ──
@@ -1037,12 +1099,33 @@
           const card = document.createElement('button');
           card.type = 'button';
           card.className = 'wreco';
-          card.appendChild(L.wfEl(lay));
+          const wf = L.wfEl(lay);
+          /* 칸마다 실제로 들어갈 패널 이름 — 스튜디오의 PRD 칠하기와 같은 순서(칸 i = 패널 i = 사양 i+1) */
+          if (sec.screen === 'dash' && window.__prdPanelSpec) {
+            const nItems = window.__prdContentItems().length;
+            [...wf.children].forEach((c, ci) => {
+              try {
+                const sp = window.__prdPanelSpec(ci + 1);
+                if (!sp) return;
+                /* 목록을 한 바퀴 돈 칸(보통 하단 와이드 줄)은 스튜디오에서 이벤트 로그가 된다 — 이름도 같게 */
+                const nm = (ci + 1 >= nItems && /종합/.test(sp.title)) ? '실시간 이벤트' : sp.title;
+                c.innerHTML = '<span>' + esc(nm) + '</span>'; c.title = nm;
+              } catch (e) {}
+            });
+            wf.classList.add('wf-labeled');
+          }
+          card.appendChild(wf);
           if (both) { const scr = document.createElement('span'); scr.className = 'wreco-screen'; scr.textContent = SCREEN_LBL[sec.screen]; card.appendChild(scr); }
           const nm = document.createElement('div'); nm.className = 'wreco-name'; nm.textContent = lay.name;
           const dd = document.createElement('div'); dd.className = 'wreco-desc'; dd.textContent = lay.desc;
           card.appendChild(nm); card.appendChild(dd);
-          if (isReco) { const bd = document.createElement('span'); bd.className = 'wreco-badge'; bd.textContent = '추천'; card.appendChild(bd); }
+          if (isReco) {
+            const bd = document.createElement('span'); bd.className = 'wreco-badge'; bd.textContent = '추천'; card.appendChild(bd);
+            /* 왜 이걸 추천했는지 — 규모가 열 수를, 대상 수가 행 수를 정한다(recoIds) */
+            const why = document.createElement('div'); why.className = 'wreco-why';
+            why.textContent = '추천 이유 · ' + (SCALE_LBL[G.scale] || '규모') + ' → ' + grp.label + ', 대상 ' + (G.targets || []).length + '개 → 칸 ' + lay.cells.length + '개';
+            card.appendChild(why);
+          }
           card.onclick = () => pickCard(card, sec.screen, lay, ' 선택됨');
           row.appendChild(card);
           /* 첫 번째 추천을 기본 선택 */
@@ -1118,13 +1201,16 @@
     level: unlocked,
   };
   /* 유저플로우의 상위 메뉴(브랜치) 이름 — 스튜디오 상단 내비게이션에 반영 */
-  window.__WEMBFlowMenu = () => deriveTree().map((b) => b.n);
+  /* '진입 · 인증'(로그인)은 화면 흐름에는 있지만 대시보드 상단 메뉴가 아니다 — 첫 탭이 로그인으로 잡히던 문제 */
+  window.__WEMBFlowMenu = () => deriveTree().map((b) => b.n).filter((n) => !/진입|인증|로그인/.test(n));
   /* PRD 답변 기반 패널 콘텐츠 제목 목록 — 디지털 트윈/대시보드 레이아웃 패널을 이걸로 채운다.
      (종합 현황 + 모니터링 대상들 + 알람·KPI·리포트) */
   window.__prdContentItems = () => {
     const items = ['종합 현황'];
     targetLabels().forEach((t) => items.push(t));
-    items.push('알람 · 이벤트', '실시간 KPI', '리포트 · 통계');
+    /* 대상에 이미 '알람·이벤트'가 있으면 같은 판이 두 장 생긴다 → 고정 칸은 경보 대응 이력으로 */
+    const hasAlarm = targetLabels().some((t) => /알람|이벤트/.test(t));
+    items.push(hasAlarm ? '경보 대응 이력' : '알람 · 이벤트', '실시간 KPI', '리포트 · 통계');
     return items;
   };
 
@@ -1258,6 +1344,9 @@
       [/재고|물류|매장/, [['재고 수량', '개', 240, 4800, 0], ['회전율', '회', 1.2, 8.6, 1], ['결품', '건', 0, 12, 0], ['입출고', '건', 40, 620, 0]]],
       [/거래|TPS|트랜잭션|뱅킹|계정계|정보계|채널|큐잉|콜센터|시스템 현황|종합 상황/, [['거래건수', '건', 820000, 1420000, 0], ['초당 처리(TPS)', '', 180, 640, 0], ['평균 응답', 'ms', 24, 180, 0], ['동시 사용자', '명', 4200, 18400, 0], ['오류율', '%', 0, 0.8, 2]]],
       [/생산|라인|품질/, [['생산 수량', 'EA', 320, 2800, 0], ['설비종합효율', '%', 68, 96, 1], ['불량률', '%', 0.1, 3.4, 2], ['가동률', '%', 74, 98, 1]]],
+      [/경보 대응|대응 이력/, [['미처리', '건', 0, 18, 0], ['평균 대응', '분', 4, 26, 1], ['처리율', '%', 82, 99.6, 1], ['금일 발생', '건', 12, 210, 0]]],
+      [/FEMS|BEMS|에너지/, [['금일 사용량', 'kWh', 4200, 9800, 0], ['피크 대비', '%', 52, 94, 0], ['전력 원단위', 'kWh/EA', 1.2, 3.8, 2], ['절감률', '%', 2, 14, 1]]],
+      [/설비|자산/, [['설비 가동률', '%', 82, 99, 1], ['고장 설비', '대', 0, 6, 0], ['정비 예정', '건', 0, 12, 0], ['평균 고장 간격', 'h', 120, 960, 0]]],
       [/철도|교통/, [['운행 편수', '편', 40, 320, 0], ['정시율', '%', 88, 99.6, 1], ['혼잡도', '%', 22, 128, 0], ['지연', '분', 0, 14, 1]]],
       [/상\s*·?\s*하수|수위|배수/, [['수위', 'm', 0.4, 3.2, 2], ['유량', '㎥/h', 12, 68, 1], ['탁도', 'NTU', 0.2, 8.4, 1], ['펌프 가동', '대', 0, 6, 0]]],
     ];
@@ -1271,6 +1360,24 @@
       return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
     }
 
+    window.__prdMetricsFor = metricsFor;
+    /* 단위로 그럴듯한 값 폭 — 고객이 이름 · 단위만 말한 숫자에 쓴다 */
+    const UNIT_RANGE = [
+      [/^%RH$/, 35, 65, 0], [/^%$/, 62, 99, 1], [/^kWh$/i, 1200, 9800, 0], [/^MWh$/i, 8, 40, 1], [/^kW$/i, 300, 1900, 0], [/^MW$/i, 12, 96, 1],
+      [/^(℃|°C)$/, 18, 32, 1], [/^건$/, 0, 24, 0], [/^EA$/i, 400, 3200, 0], [/^개$/, 100, 2400, 0], [/^명$/, 10, 240, 0], [/^대$/, 2, 40, 0],
+      [/^V$/, 370, 390, 0], [/^A$/, 80, 340, 0], [/^Pa$/, 8, 30, 0], [/^ms$/, 20, 220, 0], [/^원$/, 1200000, 9800000, 0], [/^(톤|t)$/, 10, 120, 1], [/^h$/, 120, 960, 0],
+    ];
+    const UNIT_RE = /\s*\(?\s*(kWh\/EA|kWh|MWh|kW|MW|%RH|%|℃|°C|건|EA|개|명|대|V|A|Pa|ms|원|톤|㎥\/h|bar|MPa|Hz|h)\s*\)?\s*$/i;
+    function metricFromText(text, fallbackUnit) {
+      const s = String(text || '').trim();
+      const m = UNIT_RE.exec(s);
+      let unit = (fallbackUnit || '').trim(), label = s;
+      if (m) { unit = unit || m[1]; label = s.slice(0, m.index).trim() || s; }
+      const r = UNIT_RANGE.find((x) => x[0].test(unit)) || [null, 10, 100, 0];
+      return { label: label, unit: unit, lo: r[1], hi: r[2], dec: r[3] };
+    }
+    /* 대상 이름을 KPI 칸에 맞게 줄인다 — '공장에너지관리 (FEMS)' → 'FEMS', '설비·자산 상태' → '설비·자산' */
+    const shortName = (t) => { const p = /\(([^)]+)\)/.exec(t); return p ? p[1] : String(t).replace(/\s*(상태|현황|모니터링)$/, ''); };
     /* i 번째 패널이 무엇을 보여줄지 — 제목·분류·계측 항목·자산·이벤트를 한 묶음으로 */
     window.__prdPanelSpec = function (i) {
       const items = window.__prdContentItems();
@@ -1291,13 +1398,23 @@
           /* 종합·KPI 는 대상의 대표 계측을, 리포트는 쌓아서 읽는 계측(누적·효율·가동률 …)을 본다 */
           const roll = pool.find(function (x) { return /누적|효율|가동률|처리율|가용률|회전율|정시율|건전성/.test(x[0]); });
           const m = /리포트/.test(title) ? (roll || pool[pool.length - 1]) : pool[0];
-          return { label: /종합|리포트/.test(title) ? t : m[0], unit: m[1], lo: m[2], hi: m[3], dec: m[4], of: t };
+          return { label: /종합|리포트/.test(title) ? t : m[0], unit: m[1], lo: m[2], hi: m[3], dec: m[4], of: t,
+            kpiLabel: shortName(t) + ' · ' + m[0] + (m[1] ? ' (' + m[1] + ')' : '') };
         });
+        /* 맨 위 KPI 줄(종합 현황)은 고객이 꼭 보고 싶다고 한 숫자부터 */
+        if (/종합/.test(title)) {
+          const mine = kpiList().map((k) => { const x = metricFromText(k.label, k.unit); x.kpiLabel = x.label + (x.unit ? ' (' + x.unit + ')' : ''); x.of = x.label; return x; });
+          metrics = mine.concat(metrics);
+        }
         assets = tg.slice(0, 8).map(function (t) { return t; });
       } else {
         cat = catOf(title);
         const pool = metricsFor(title);
         metrics = pool.map(function (m) { return { label: m[0], unit: m[1], lo: m[2], hi: m[3], dec: m[4], of: title }; });
+        /* 기능명세서에 '요구사항 정리'(줄마다 하나)를 적었으면 그 줄이 이 패널의 첫 항목이 된다 */
+        const ov = SPEC_STORE[title + ' 모니터링'] || {};
+        const reqs = ov.reqs ? ov.reqs.split(/\n+/).map((s) => s.trim()).filter(Boolean).slice(0, 6) : [];
+        if (reqs.length) metrics = reqs.map((s) => Object.assign(metricFromText(s), { of: title })).concat(metrics);
         /* 경보 판의 줄은 '알람 #1' 이 아니라 실제 감시 대상이어야 읽힌다 */
         assets = (cat === 'alert' && tg.length) ? tg.slice() : assetItems(cat, title);
       }
@@ -1335,6 +1452,19 @@
         rnd: rnd,
       };
     };
+    /* 다시 연 화면 — project.js 가 엔진보다 먼저 배치를 복원해 못 칠한 대시보드가 남아 있다(__prdPaintPending).
+       여기서 칠하고, 사용자가 고친 글자(dash-edit 저장분)를 그 위에 다시 덮은 뒤 라이브 KPI 기준값을 새로 잡는다. */
+    if (window.__prdPaintPending) {
+      const pend = window.__prdPaintPending;
+      window.__prdPaintPending = null;
+      try {
+        if (window.__applyPrdToPanels && window.__applyPrdToPanels(pend)) {
+          if (window.__reloadDashContent) window.__reloadDashContent({ prd: true });
+          if (window.__reseedLiveKPI) window.__reseedLiveKPI();
+          if (window.WEMB && WEMB.panelFit) WEMB.panelFit.run();
+        }
+      } catch (e) {}
+    }
 
     const pad = (n) => String(n).padStart(2, '0');
     /* 발생시각은 '지금'에서 거꾸로 센다 — 기준일을 박아 두면 그날에 멈춘 표가 된다 */
@@ -1597,7 +1727,6 @@
     { key: 'screen', kind: 'single', title: '어떤 화면을 만드나요?', hint: '', opts: [
       ['dash', '관제 대시보드', '패널·차트 중심의 상황판'],
       ['dt', '디지털 트윈', '3D 씬 위 유리 패널'],
-      ['portal', '포탈', '현재 준비 중', true],
     ] },
     { key: 'scale', kind: 'single', title: '관제 대상 규모는 어느 정도인가요?', hint: '', opts: [
       ['single', '단일 설비', '한 대상에 집중'],
@@ -1606,6 +1735,7 @@
     ] },
     { key: 'industries', kind: 'multi', title: '어떤 산업군을 관제하나요?', hint: '모니터링 유형 (여러 개 선택 가능)', opts: Object.keys(INDUSTRIES).map((k) => [k, INDUSTRIES[k].label]) },
     { key: 'targets', kind: 'multi', title: '무엇을 모니터링하나요?', hint: '여러 개 선택', dynamic: true },
+    { key: 'extra', kind: 'extra', title: '고객이 꼭 보고 싶은 숫자가 있나요?', hint: '선택 — 적은 숫자는 화면 맨 위 KPI 로, 메모는 기능명세서로 가요. 비워 둬도 돼요.' },
   ];
   (function initPrdWiz() {
     const modal = document.getElementById('prdWiz'); if (!modal) return;
@@ -1622,6 +1752,7 @@
     const stepOpts = (st) => st.dynamic ? industryTargetOpts().map((lbl) => [lbl, lbl]) : (st.opts || []);
     function stepAnswered(i) {
       const st = WIZ_STEPS[i];
+      if (st.kind === 'extra') return true;
       if (st.kind === 'text') return !!(G.site && G.site.trim());
       if (st.kind === 'multi') return Array.isArray(G[st.key]) && G[st.key].length > 0;
       return !!G[st.key];
@@ -1640,6 +1771,32 @@
         inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); if (stepAnswered(idx)) goNext(); } });
         elField.appendChild(inp);
         setTimeout(() => { try { inp.focus(); } catch (e) {} }, 40);
+        return;
+      }
+      if (st.kind === 'extra') {
+        /* 숫자 세 줄(이름 · 단위) + 고객 메모. 고객이 말한 그대로 받아 적는 칸이다 */
+        const box = document.createElement('div');
+        box.className = 'pq-extra';
+        const rows = [0, 1, 2].map((i) => (G.kpis || [])[i] || { label: '', unit: '' });
+        const PH = ['예: 금일 전력 사용량', '예: 설비 가동률', '예: 미처리 경보'];
+        const PU = ['kWh', '%', '건'];
+        box.innerHTML = '<datalist id="pqUnits">' + ['kWh', 'kW', 'MWh', '%', '℃', '%RH', '건', 'EA', '대', '명', '원', 'V', 'A', 'ms'].map((u) => '<option value="' + u + '">').join('') + '</datalist>'
+          + rows.map((k, i) => '<div class="pq-kpi"><input class="pq-text" data-k="' + i + '" data-f="label" maxlength="30" placeholder="' + PH[i] + '" value="' + esc(k.label) + '">'
+            + '<input class="pq-text pq-unit" data-k="' + i + '" data-f="unit" maxlength="8" list="pqUnits" placeholder="단위 예: ' + PU[i] + '" value="' + esc(k.unit || '') + '"></div>').join('')
+          + '<label class="pq-memo-l" for="pqMemo">고객 메모 · 요청 사항</label>'
+          + '<textarea class="pq-text pq-memo" id="pqMemo" rows="3" maxlength="600" placeholder="고객이 한 말을 그대로 적어 두세요. 예: 상황실 75인치 2대에 띄움, 야간에는 경보만 크게">' + esc(G.memo || '') + '</textarea>';
+        const sync = () => {
+          const ks = [0, 1, 2].map((i) => ({
+            label: (box.querySelector('[data-k="' + i + '"][data-f="label"]').value || '').trim(),
+            unit: (box.querySelector('[data-k="' + i + '"][data-f="unit"]').value || '').trim(),
+          })).filter((k) => k.label);
+          G.kpis = ks;
+          G.memo = box.querySelector('#pqMemo').value;
+          save(); paintForm();
+        };
+        box.addEventListener('input', sync);
+        elField.appendChild(box);
+        setTimeout(() => { try { box.querySelector('input').focus(); } catch (e) {} }, 40);
         return;
       }
       const opts = stepOpts(st);

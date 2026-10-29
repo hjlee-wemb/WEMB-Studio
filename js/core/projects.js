@@ -83,7 +83,7 @@
      스튜디오의 모든 작업 상태는 wemb-* 로컬스토리지 키에 자동 저장된다. 그중 프로젝트 공용(목록·자산·UI)
      키를 제외한 나머지를 한 프로젝트의 상태 묶음(project.data)으로 스냅샷한다.
      프로젝트를 열 때 그 묶음을 전역 키에 되돌려 쓴 뒤 새로고침하면, 평소 새로고침처럼 그 프로젝트가 복원된다. */
-  const PROJ_GLOBAL = new Set([LS_PROJ, LS_GROUP, PENDING_GROUP, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-view', 'wemb-meeting']); /* wemb-meeting = 회의 모드(js/core/meeting.js) — 브라우저 전체 설정 */
+  const PROJ_GLOBAL = new Set([LS_PROJ, LS_GROUP, PENDING_GROUP, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-view', 'wemb-meeting', 'wemb-ui-mode']); /* wemb-meeting = 회의 모드(js/core/meeting.js) — 브라우저 전체 설정 */
   const projStateKeys = () => { try { return Object.keys(localStorage).filter((k) => k.startsWith('wemb-') && !PROJ_GLOBAL.has(k)); } catch (e) { return []; } };
   function collectProjectState() { const d = {}; projStateKeys().forEach((k) => { const v = localStorage.getItem(k); if (v != null) d[k] = v; }); return d; }
   function clearProjectState() { projStateKeys().forEach((k) => { try { localStorage.removeItem(k); } catch (e) {} }); }

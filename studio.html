@@ -11,20 +11,20 @@
     <!-- 글꼴은 로컬 사본 — 인터넷이 없는 고객사(망분리)에서도 같은 글꼴로 보인다 -->
     <link rel="stylesheet" href="src/vendor/pretendard/pretendard.css" />
     <!-- 앱 스타일 — 링크 순서가 곧 캐스케이드 순서다. 새 파일은 성격이 맞는 자리에 끼워 넣을 것. -->
-    <link rel="stylesheet" href="css/base/tokens.css?v=3" data-app-css />
+    <link rel="stylesheet" href="css/base/tokens.css?v=4" data-app-css />
     <link rel="stylesheet" href="css/shell/rail.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/shell/topbar.css?v=3" data-app-css />
-    <link rel="stylesheet" href="css/guide/pages.css?v=3" data-app-css />
+    <link rel="stylesheet" href="css/guide/pages.css?v=4" data-app-css />
     <link rel="stylesheet" href="css/studio/sidebar.css?v=1" data-app-css />
-    <link rel="stylesheet" href="css/studio/color-controls.css?v=1" data-app-css />
-    <link rel="stylesheet" href="css/studio/theme-tools.css?v=1" data-app-css />
+    <link rel="stylesheet" href="css/studio/color-controls.css?v=3" data-app-css />
+    <link rel="stylesheet" href="css/studio/theme-tools.css?v=3" data-app-css />
     <link rel="stylesheet" href="css/studio/light-chrome.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/studio/component-sheet.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/preview/canvas.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/preview/digital-twin.css?v=9" data-app-css />
     <link rel="stylesheet" href="css/preview/digital-twin-enterprise.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/preview/dashboard-grid.css?v=1" data-app-css />
-    <link rel="stylesheet" href="css/preview/dashboard.css?v=2" data-app-css />
+    <link rel="stylesheet" href="css/preview/dashboard.css?v=4" data-app-css />
     <link rel="stylesheet" href="css/preview/enterprise.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/base/focus.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/base/toast.css?v=3" data-app-css />
@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="css/preview/skhynix.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/studio/reskin.css?v=2" data-app-css />
     <link rel="stylesheet" href="css/studio/omnibox.css?v=3" data-app-css />
-    <link rel="stylesheet" href="css/base/wireframe-mini.css?v=1" data-app-css />
+    <link rel="stylesheet" href="css/base/wireframe-mini.css?v=3" data-app-css />
     <link rel="stylesheet" href="css/studio/layout-menu.css?v=2" data-app-css />
     <link rel="stylesheet" href="css/studio/atom-swap.css?v=3" data-app-css />
     <link rel="stylesheet" href="css/base/dialog.css?v=1" data-app-css />
@@ -51,11 +51,12 @@
     <link rel="stylesheet" href="css/templates/skhynix-motion.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/templates/skhynix-asset-motion.css?v=1" data-app-css />
     <!-- 작업 세션 — 앱 스크립트가 저장 상태를 읽기 전에, 주소(?screen · ?new)가 가리키는 화면으로 맞춘다 -->
-    <script src="js/core/projects.js?v=5"></script>
+    <script src="js/core/projects.js?v=6"></script>
     <script src="js/app/session.js?v=5"></script>
     <!-- 발표 모드면 화면을 연 뒤 저장을 잠근다(보여 주기만 — 발표 중 화면을 넘겨도 작업 상태가 섞이지 않게) -->
     <script src="js/app/present-boot.js?v=1"></script>
-    <script src="js/core/meeting.js?v=3"></script>
+    <script src="js/core/meeting.js?v=6"></script>
+    <script src="js/core/ui-mode.js?v=1"></script>
     <script src="js/core/project-file.js?v=1"></script>
   </head>
   <body>
@@ -405,8 +406,8 @@
                     </span>
                   </div>
                   <div class="seg" id="version">
-                    <button data-v="flat" class="on">Flat</button>
-                    <button data-v="enterprise">Enterprise</button>
+                    <button data-v="flat" class="on" title="색을 적게(약 10색) 쓰는 깔끔·기본형">Flat<small>기본형</small></button>
+                    <button data-v="enterprise" title="색을 더 촘촘히(약 50색) 나눠 쓰는 고급·정밀형">Enterprise<small>정밀형</small></button>
                   </div>
                 </div>
                 <div class="fmtrow cgate" id="gateMode">
@@ -990,7 +991,36 @@
                 <button type="button" data-d="normal" class="on">보통</button>
                 <button type="button" data-d="roomy">넓게</button>
               </div>
-              <button class="ghostbtn subreset" id="designReset" title="간격·여백·라운드·그림자·테두리·표면을 모두 기본값으로">↺ 디자인 초기화</button>
+              <!-- 고객이 실제로 고르는 것 — 글꼴 · 글자 크기 · 상태색 · 헤더 모양 (js/studio/design-controls.js) -->
+              <div class="sublbl"><span>본문 글꼴<span class="ko">화면 전체</span></span></div>
+              <div class="seg seg3" id="dfont">
+                <button type="button" data-f="pretendard" class="on">Pretendard</button>
+                <button type="button" data-f="malgun">맑은 고딕</button>
+                <button type="button" data-f="system">시스템</button>
+              </div>
+              <div class="sublbl"><span>숫자 글꼴<span class="ko">KPI · 시각</span></span></div>
+              <div class="seg" id="dnumfont">
+                <button type="button" data-f="base" class="on">본문과 같게</button>
+                <button type="button" data-f="tech">테크(Tomorrow)</button>
+              </div>
+              <div class="sublbl"><span>제목 · 숫자 크기<span class="ko">패널 제목 · KPI</span></span></div>
+              <div class="slider" title="패널 제목과 KPI 숫자 크기를 함께 조절해요">
+                <input type="range" id="tscale" min="85" max="130" value="100" />
+                <span class="rval num" id="tscaleVal">100%</span>
+              </div>
+              <div class="sublbl"><span>상태색<span class="ko">위험 · 주의</span></span></div>
+              <div class="dstatus" id="dstatus">
+                <label class="dst"><input type="color" id="dstDanger" aria-label="위험 색" /><span>위험</span></label>
+                <label class="dst"><input type="color" id="dstWarning" aria-label="주의 색" /><span>주의</span></label>
+                <small class="dst-note">정상은 강조색을 써요. 색 정하기 → 개별 색상에서도 바꿀 수 있어요.</small>
+              </div>
+              <div class="sublbl"><span>헤더 모양<span class="ko">맨 위 줄</span></span></div>
+              <div class="seg seg3" id="dhdr">
+                <button type="button" data-h="base" class="on">기본</button>
+                <button type="button" data-h="left">메뉴 왼쪽</button>
+                <button type="button" data-h="compact">간결</button>
+              </div>
+              <button class="ghostbtn subreset" id="designReset" title="간격·여백·라운드·그림자·테두리·표면·글꼴·크기·헤더를 모두 기본값으로(상태색은 그대로)">↺ 디자인 초기화</button>
 
             </div>
             </div><!-- /dsec design -->
@@ -1174,13 +1204,13 @@
             <span class="chev">▾</span>
             </summary>
             <div class="stepbody">
-            <button class="genbtn" id="exportOpen" title="토큰·이미지·공유 링크 내보내기 창을 엽니다">
+            <button class="genbtn" id="exportOpen" title="협의 결과서 · 화면 PNG · 프로젝트 파일을 남기는 창을 엽니다">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              토큰·이미지·링크 내보내기
+              결정 남기기 · 내보내기
             </button>
             </div>
           </details>
@@ -1203,7 +1233,13 @@
              '전체 옵션 초기화'로 실행한다. -->
 
         <!-- 저작권 표기 4요소: 저작권 기호(©) + 년도 + 저작권자 + 권리 유보 문구 -->
-        <div class="sbfoot">© 2026 WEMB. All rights reserved. <span style="opacity:.65">· 위젯이동 v14</span></div>
+        <div class="sbfoot">
+          <div class="sbmodes">
+            <button type="button" class="sbmode" data-ui-toggle="field" aria-pressed="false" title="고객 앞에서 디자이너 · 개발자 도구를 숨겨요">현장 모드</button>
+            <button type="button" class="sbmode" data-ui-toggle="meeting" aria-pressed="false" title="화면에서 다른 고객사 이름을 '고객사'로 가려요">회의 모드</button>
+          </div>
+          © 2026 WEMB. All rights reserved. <span class="sbver" style="opacity:.65">· 위젯이동 v14</span>
+        </div>
         </div><!-- /.sidepanel -->
       </aside>
 
@@ -1220,7 +1256,7 @@
               <line x1="12" y1="2" x2="12" y2="22" />
             </svg>
             <span id="editBannerText">패널을 끌어다 놓아 위치를 바꿔보세요. 변경 내용은 자동 저장됩니다.</span>
-            <button type="button" id="editDone" class="editdone" hidden>완료</button>
+            <button type="button" id="editDone" class="editdone" hidden title="고르던 패널 선택을 풀어요. 편집을 끝내려면 왼쪽 '편집 끝내기'">선택 해제</button>
           </div>
           <!-- (6) 미리보기 편집 발견성 힌트 칩 -->
           <div class="previewhint" id="previewHint">
@@ -1474,7 +1510,7 @@
                       <tr class="rowline">
                         <td>
                           <span class="tag t-elec">전자</span>
-                          국민은행
+                          A은행
                         </td>
                         <td class="num">1,009</td>
                         <td class="num">0</td>
@@ -1484,7 +1520,7 @@
                       <tr class="rowline">
                         <td>
                           <span class="tag t-bank">은행</span>
-                          카카오뱅크
+                          B은행
                         </td>
                         <td class="num">834</td>
                         <td class="num">0</td>
@@ -1494,7 +1530,7 @@
                       <tr class="rowline">
                         <td>
                           <span class="tag t-elec">전자</span>
-                          지역농협
+                          C조합
                         </td>
                         <td class="num">819</td>
                         <td class="num">0</td>
@@ -1504,7 +1540,7 @@
                       <tr class="rowline">
                         <td>
                           <span class="tag t-bank">은행</span>
-                          농협은행
+                          D은행
                         </td>
                         <td class="num">677</td>
                         <td class="num">0</td>
@@ -1514,7 +1550,7 @@
                       <tr>
                         <td>
                           <span class="tag t-elec">전자</span>
-                          우리은행
+                          E은행
                         </td>
                         <td class="num">623</td>
                         <td class="num" style="color: var(--fg-warning)">1</td>
@@ -1637,7 +1673,7 @@
                   <div class="sec-lab">CPU Top 5</div>
                   <div class="plist">
                     <div class="prow">
-                      <span class="nm">하나쉴드 내부망 AP#13</span>
+                      <span class="nm">보안관제 내부망 AP#13</span>
                       <div class="track"><div class="fill" style="width: 81%"></div></div>
                       <span class="pv num">81</span>
                     </div>
@@ -1647,12 +1683,12 @@
                       <span class="pv num">70</span>
                     </div>
                     <div class="prow">
-                      <span class="nm">디지털캠퍼스 자외연계 #1</span>
+                      <span class="nm">교육센터 자외연계 #1</span>
                       <div class="track"><div class="fill" style="width: 60%"></div></div>
                       <span class="pv num">60</span>
                     </div>
                     <div class="prow">
-                      <span class="nm">디지털캠퍼스 자외연계 #2</span>
+                      <span class="nm">교육센터 자외연계 #2</span>
                       <div class="track"><div class="fill" style="width: 53%"></div></div>
                       <span class="pv num">53</span>
                     </div>
@@ -1685,7 +1721,7 @@
                       <span class="pv num">76</span>
                     </div>
                     <div class="prow">
-                      <span class="nm">디지털캠퍼스 자료연계 내부망</span>
+                      <span class="nm">교육센터 자료연계 내부망</span>
                       <div class="track"><div class="fill" style="width: 70%"></div></div>
                       <span class="pv num">70</span>
                     </div>
@@ -1715,7 +1751,7 @@
                   <div class="loglist">
                     <div class="logrow">
                       <span class="badge b-crit">Host Down</span>
-                      <span>국민은행 연계 게이트웨이</span>
+                      <span>대외기관 연계 게이트웨이</span>
                       <span class="t">20:01</span>
                     </div>
                     <div class="logrow">
@@ -1735,7 +1771,7 @@
                     </div>
                     <div class="logrow">
                       <span class="badge b-crit">Critical</span>
-                      <span>디지털캠퍼스 내부망 #2</span>
+                      <span>교육센터 내부망 #2</span>
                       <span class="t">19:12</span>
                     </div>
                   </div>
@@ -2378,8 +2414,9 @@
       <div class="abmodal" id="abModal" role="dialog" aria-modal="true" aria-label="A/B 테마 비교">
         <div class="abhead">
           <h2>A/B 테마 비교</h2>
-          <span class="abnote">두 테마를 나란히 놓고 색·모서리 둥글기를 비교하세요</span>
+          <span class="abnote" id="abNote">두 테마를 나란히 놓고 색·모서리 둥글기를 비교하세요</span>
           <span class="sp"></span>
+          <button type="button" class="abkeep" id="abKeep" title="지금 화면의 테마를 이름 붙여 저장해요(A안 · B안 …). 그 뒤 색을 바꾸면 저장한 안과 지금 화면을 나란히 볼 수 있어요">지금 안 저장</button>
           <button class="abclose" id="abClose" title="닫기 (Esc)" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg></button>
         </div>
         <div class="abgrid">
@@ -2406,8 +2443,8 @@
       <div class="exmodal" id="exModal" role="dialog" aria-modal="true" aria-label="내보내기">
         <div class="excard">
           <div class="exhead">
-            <h2>내보내기 / Export</h2>
-            <span class="exnote">현재 테마를 코드·이미지·링크로 내보내요</span>
+            <h2>결정 남기기 · 내보내기</h2>
+            <span class="exnote">회의 결과와 화면을 파일로 남겨요</span>
             <span class="sp"></span>
             <button class="abclose" id="exClose" title="닫기 (Esc)" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg></button>
           </div>
@@ -2423,20 +2460,19 @@
                 <br /><button type="button" class="egfix" id="exGuardFix">자동으로 고치기</button>
               </div>
             </div>
-            <div class="extabs" id="exTabs">
-              <button data-fmt="css" class="on">CSS 변수</button>
-              <button data-fmt="json">JSON 토큰</button>
-              <button data-fmt="figma">Figma 변수</button>
-              <button data-fmt="tw">Tailwind</button>
-            </div>
-            <div class="excode">
-              <button class="excopy" id="exCopy" title="코드 전체 복사">복사</button>
-              <pre><code id="exCode"></code></pre>
-            </div>
             <div class="exsec">
-              <span class="exseclbl">파일 · 이미지 · 공유</span>
+              <span class="exseclbl">회의 결과 · 화면 · 파일</span>
             </div>
             <div class="exactions">
+              <button id="exRecord" class="exprimary" title="PRD 요약 · 꼭 볼 숫자와 메모 · 기능명세 · 화면 캡처 · 색과 로고 · 디자인 결정 · 다음 할 일을 한 장으로 — 인쇄 창에서 PDF로 저장해 고객에게 드려요">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="8" y1="13" x2="16" y2="13" />
+                  <line x1="8" y1="17" x2="13" y2="17" />
+                </svg>
+                협의 결과서(PDF)
+              </button>
               <button id="exProjFile" title="이 프로젝트를 화면 · 작업 상태째 파일(.wemb.json) 하나로 — 다른 PC · 브라우저에서 홈의 ‘파일 열기’로 이어서 작업해요">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -2497,6 +2533,20 @@
               </button>
             </div>
             <p class="exhint" id="exHint">탭을 눌러 형식을 고르고 “복사”로 코드를 가져가세요. · <b>프로젝트 파일</b>은 다른 PC 에서 이어 작업할 때, <b>화면 전체 HTML</b>은 고객에게 보기 전용으로 보낼 때(그림 · 글꼴 포함), <b>컴포넌트별 코드 복사</b>는 원하는 카드의 HTML·CSS·JS 만 가져갈 때 써요.</p>
+            <!-- 개발자용 코드 — 고객 앞에서는 접어 둔다(색 토큰 · 변수 코드) -->
+            <details class="exdev" id="exDev">
+              <summary>개발자용 코드 <span>CSS · JSON · Figma · Tailwind</span></summary>
+              <div class="extabs" id="exTabs">
+                <button data-fmt="css" class="on">CSS 변수</button>
+                <button data-fmt="json">JSON 토큰</button>
+                <button data-fmt="figma">Figma 변수</button>
+                <button data-fmt="tw">Tailwind</button>
+              </div>
+              <div class="excode">
+                <button class="excopy" id="exCopy" title="코드 전체 복사">복사</button>
+                <pre><code id="exCode"></code></pre>
+              </div>
+              </details>
           </div>
         </div>
       </div>
@@ -2697,13 +2747,13 @@
     <!-- 앱 스크립트 — 전역(classic) 스크립트라 아래 순서가 곧 의존 순서다.
          js/main.js 가 초기화를 돌리고 studio/project.js · 가이드 · 상단 크롬이 붙은 뒤, shell/routes.js 가 마지막에 주소로 화면을 연다. -->
     <script src="js/core/router.js?v=2"></script>
-    <script src="js/core/layouts.js?v=1"></script>
+    <script src="js/core/layouts.js?v=2"></script>
     <script src="js/theme/color.js?v=1"></script>
     <script src="js/app/state.js?v=1"></script>
     <script src="js/theme/contrast.js?v=1"></script>
     <script src="js/theme/enterprise.js?v=1"></script>
     <script src="js/theme/apply.js?v=1"></script>
-    <script src="js/studio/design-controls.js?v=1"></script>
+    <script src="js/studio/design-controls.js?v=2"></script>
     <script src="js/preview/screens.js?v=1"></script>
     <script src="js/templates/hana.js?v=2"></script>
     <script src="js/templates/posco.js?v=7"></script>
@@ -2719,30 +2769,32 @@
     <script src="js/theme/sources.js?v=1"></script>
     <script src="js/studio/sidebar.js?v=1"></script>
     <script src="js/preview/charts.js?v=1"></script>
-    <script src="js/preview/charts-production.js?v=1"></script>
-    <script src="js/preview/charts-dashboard.js?v=1"></script>
+    <script src="js/preview/charts-production.js?v=2"></script>
+    <script src="js/preview/charts-dashboard.js?v=2"></script>
     <script src="js/preview/realtime.js?v=3"></script>
-    <script src="js/studio/dash-edit.js?v=2"></script>
-    <script src="js/studio/screen-builder.js?v=1"></script>
+    <script src="js/studio/dash-edit.js?v=6"></script>
+    <script src="js/studio/screen-builder.js?v=4"></script>
     <script src="js/studio/dt-edit.js?v=6"></script>
-    <script src="js/preview/live-kpi.js?v=1"></script>
+    <script src="js/preview/live-kpi.js?v=3"></script>
+    <script src="js/preview/panel-fit.js?v=2"></script>
     <script src="js/theme/history.js?v=2"></script>
     <script src="js/ui/confirm.js?v=2"></script>
-    <script src="js/studio/reset.js?v=2"></script>
+    <script src="js/studio/reset.js?v=3"></script>
     <script src="js/ui/tooltip.js?v=1"></script>
     <script src="js/theme/snapshots.js?v=2"></script>
-    <script src="js/theme/ab-compare.js?v=2"></script>
-    <script src="js/theme/export.js?v=5"></script>
+    <script src="js/theme/ab-compare.js?v=3"></script>
+    <script src="js/theme/export.js?v=8"></script>
     <script src="js/theme/contrast-audit.js?v=1"></script>
     <script src="js/theme/component-sheet.js?v=2"></script>
     <script src="js/theme/standalone-export.js?v=5"></script>
-    <script src="js/studio/step-flow.js?v=2"></script>
-    <script src="js/studio/brand.js?v=3"></script>
+    <script src="js/studio/step-flow.js?v=3"></script>
+    <script src="js/studio/brand.js?v=4"></script>
     <script src="js/studio/layout-editor.js?v=6"></script>
     <script src="js/studio/wireframe-picker.js?v=1"></script>
     <script src="js/ui/toast.js?v=3"></script>
     <script src="js/ui/coach.js?v=1"></script>
     <script src="js/theme/spec-sheet.js?v=2"></script>
+    <script src="js/theme/meeting-record.js?v=2"></script>
     <script src="js/theme/autosave.js?v=1"></script>
     <script src="js/theme/export-guard.js?v=1"></script>
     <script src="js/studio/quick-actions.js?v=1"></script>
@@ -2752,12 +2804,12 @@
     <script src="js/theme/snapshot-backup.js?v=1"></script>
     <script src="js/studio/preview-hint.js?v=1"></script>
     <script src="js/main.js?v=5"></script>
-    <script src="js/studio/project.js?v=9"></script>
-    <script src="js/guide/guide.js?v=10"></script>
-    <script src="js/shell/chrome.js?v=9"></script>
+    <script src="js/studio/project.js?v=11"></script>
+    <script src="js/guide/guide.js?v=17"></script>
+    <script src="js/shell/chrome.js?v=10"></script>
     <script src="js/shell/routes.js?v=8"></script>
     <!-- 회의 모드 — 고객사 이름 가리기(js/core/meeting.js). 앱이 다 그려진 뒤 화면 · 상단 바에 건다 -->
-    <script src="js/shell/meeting-studio.js?v=1"></script>
+    <script src="js/shell/meeting-studio.js?v=2"></script>
     <!-- 원자 변경 — 지금 화면의 원자(구성도 심볼 · 라벨 · 아이콘 · 그림)를 분자 라이브러리의 다른 원자로 바꾸는 창.
          바꾼 것은 화면마다 저장되고, 화면이 다시 그려질 때마다 다시 입힌다. 원자 목록은 wemb-atomic 서버(api/atoms)에서 받는다. -->
     <script src="js/studio/atom-swap.js?v=10"></script>

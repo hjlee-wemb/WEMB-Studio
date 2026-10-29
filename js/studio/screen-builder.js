@@ -327,6 +327,8 @@
     /* 순시값 지표임을 라이브 틱에 알린다(누적 금지) */
     try { const st = document.querySelector('.stage'); if (st) st.dataset.prdKpi = '1'; } catch (e) {}
     try { if (window.__reseedLiveKPI) window.__reseedLiveKPI(); } catch (e) {}
+    /* 내용 길이가 바뀌었으니 패널 맞춤(줄 단위로 들어가는 만큼)도 다시 — js/preview/panel-fit.js */
+    try { if (window.WEMB && WEMB.panelFit) WEMB.panelFit.run(); } catch (e) {}
     return n;
   };
 
@@ -339,10 +341,22 @@
 
     /* ── 머리(제목·탭·힌트·범례) ── */
     const h3 = fit.querySelector('.ph h3');
-    if (h3) h3.textContent = spec.title;
+    /* 이벤트 로그 판이 '종합 현황'으로 불리던 문제 — 로그면 로그라고 부른다 */
+    if (h3) h3.textContent = (fit.querySelector('.loglist') && /종합/.test(spec.title)) ? '실시간 이벤트' : spec.title;
     fit.querySelectorAll('.ph .tabs b').forEach((b, k) => { b.textContent = wfPick(['금일', '주간', '월간', '누적'], k); });
-    const hint = fit.querySelector('.ph .hint');
-    if (hint) hint.innerHTML = '현재 / <b>임계</b>';
+    /* 머리 오른쪽 힌트는 판의 종류에 맞게 — 도넛은 무엇의 비중인지, 게이지는 무엇의 % 인지 말해 준다 */
+    let hint = fit.querySelector('.ph .hint');
+    /* 도넛 · 게이지 판은 원래 힌트 자리가 없다 — 무엇의 값인지 알 수 없어서 하나 만든다 */
+    if (!hint && (fit.querySelector('.dleg') || fit.querySelector('.mini-row'))) {
+      const ph = fit.querySelector('.ph');
+      const h = ph && ph.querySelector('h3');
+      if (h) { hint = document.createElement('div'); hint.className = 'hint'; h.after(hint); }
+    }
+    if (hint) {
+      if (fit.querySelector('.dleg')) hint.innerHTML = '대상별 경보 <b>비중</b> · 금주';
+      else if (fit.querySelector('.mini-row')) hint.innerHTML = '대상별 <b>가동률</b> %';
+      else hint.innerHTML = '현재 / <b>임계</b>';
+    }
     fit.querySelectorAll('.clegend span').forEach((s, k) => { s.textContent = k ? '현재' : '기준'; });
     /* 'CPU Top 5'·'Memory Top 5' 같은 머리말 — 아래 목록이 재는 계측 이름으로 바꾼다 */
     fit.querySelectorAll('.sec-lab').forEach((el, li) => { el.textContent = wfPick(M, li).label + ' 상위 5'; });
@@ -355,10 +369,10 @@
       const sub = kpi.querySelector('.sub');
       /* 여러 대상을 모은 판(종합·KPI·리포트)에서만 대상 이름이 라벨 — 한 대상만 보는 판은 계측 이름이 라벨이다 */
       const named = spec.roundup && m.of && m.of !== m.label;
-      if (lab) lab.textContent = named ? m.of : m.label;
+      if (lab) lab.textContent = m.kpiLabel || (named ? m.of : m.label);
       const x = val(m);
       if (v) { v.classList.add('wf-n'); v.textContent = wfComma(x, m.dec); }
-      if (sub) sub.innerHTML = (named ? m.label : '기준') + ' <b>| ' + wfComma(m.hi, m.dec) + (m.unit ? ' ' + m.unit : '') + '</b>';
+      if (sub) sub.innerHTML = (named && !m.kpiLabel ? m.label : '기준') + ' <b>| ' + wfComma(m.hi, m.dec) + (m.unit ? ' ' + m.unit : '') + '</b>';
       wfLive(kpi, m, x);
     });
 

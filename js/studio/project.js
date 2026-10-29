@@ -45,7 +45,13 @@
     if (!cols) return;
     const panels = ensurePanels(cols);
     /* 어느 경로로 빠져나가든 내용은 PRD 어휘로 맞춘다 — 배치만 바꾸고 끝나면 은행 데모가 남는다 */
-    const paintPrd = () => { try { if (window.__applyPrdToPanels) window.__applyPrdToPanels(cols); } catch (e) {} };
+    /* 저장된 화면을 다시 열면 이 복원이 guide.js(PRD 어휘 엔진 __prdPanelSpec)보다 먼저 돈다.
+       그때는 칠할 수 없으니 표시만 남기고, guide.js 가 엔진을 정의한 직후 대신 칠한다.
+       이걸 빼면 다시 연 화면 · 발표 · PNG 가 은행 데모로 돌아간다. */
+    const paintPrd = () => {
+      if (typeof window.__prdPanelSpec !== 'function') { window.__prdPaintPending = cols; return; }
+      try { if (window.__applyPrdToPanels) window.__applyPrdToPanels(cols); } catch (e) {}
+    };
     /* 디지털 트윈 전용 레이아웃은 대시보드 미리보기에 적용하지 않는다(3D 씬 유지) */
     if (typeof layoutId === 'string' && layoutId.startsWith('dt-')) { restoreCols(cols, panels); paintPrd(); return; }
     const lay = findLayout(layoutId);
@@ -107,6 +113,8 @@
   const SLOW_KEY = 'wemb-thumb-slowpath2';
   const SLOW_MS = 4000;
   let __slowPath = false; try { __slowPath = localStorage.getItem(SLOW_KEY) === '1'; } catch (e) {}
+  /* 썸네일이 지금 모습보다 옛것인지 — 색 · 디자인을 바꾸면 켜진다(아래 watchLook). 홈 카드가 처음 색으로 남던 문제 */
+  let __thumbStale = false;
 
   try { localStorage.removeItem('wemb-thumb-slowpath'); } catch (e) {} /* 옛 키 정리 */
   let __capturing = false;
@@ -249,7 +257,7 @@
            · 시안(인라인 SVG·통짜 이미지·이천 FMS)은 위쪽 빠른 길이 밀리초에 끝내므로 매번 갱신된다.
            · 썸네일이 없는 화면은 scheduleThumbCapture 가 **스튜디오에 있는 동안 유휴 시점에**
              한 번 찍어 두므로, 홈으로 나갈 때는 대개 여기까지 오지도 않는다. */
-        if (hasThumb || fastOnly) return;
+        if ((hasThumb && !(opts && opts.force)) || fastOnly) return;
         /* 런처가 떠 있는 동안에도 가지 않는다 — 목록이 뜬 채로 몇 초씩 얼어붙는다.
            썸네일이 없는 화면은 다음에 그 화면을 열 때 enterStudio 가 걸어 둔 유휴 캡처
            (scheduleThumbCapture)가 스튜디오 안에서 조용히 찍는다. */
@@ -288,6 +296,7 @@
         const arr = loadProjects(); const s = arr.find((x) => x.id === id);
         if (s) {
           s.thumb = dataURL; try { saveProjects(arr); } catch (e) {} if (s.projectId) touchGroup(s.projectId);
+          __thumbStale = false;
           /* 런처가 보이는 중이면 새 썸네일이 바로 반영되도록 다시 그린다 */
         }
       }
@@ -325,6 +334,8 @@
         let has = false;
         try { has = !!(loadProjects().find((x) => x.id === id) || {}).thumb; } catch (e) {}
         if (!has) captureScreenThumb();
+        /* 이미 있어도 옛 모습이면 다시 — 단 느린 기기(한 번 4초 넘게 걸린 곳)에서는 하지 않는다(편집 중 멈춤 방지) */
+        else if (__thumbStale && !__slowPath) captureScreenThumb({ force: true });
       } catch (e) {}
     }
     function arm() { clearTimeout(timer); timer = setTimeout(run, IDLE); }
@@ -333,6 +344,35 @@
     arm();
   }
   window.__wembScheduleThumb = scheduleThumbCapture;
+  /* 색(.main 의 변수) · 디자인 값(:root 변수) · 헤더 · 버전 · 밝기가 바뀌면 썸네일이 옛것이 된다.
+     부팅 중의 복원도 같은 속성을 건드리므로, 사람이 처음 누르거나 키를 친 뒤부터 지켜본다. */
+  (function watchLook() {
+    const start = (e) => {
+      if (!e.isTrusted) return;
+      window.removeEventListener('pointerdown', start, true);
+      window.removeEventListener('keydown', start, true);
+      const mark = () => { if (__thumbStale) return; __thumbStale = true; if (!__slowPath) scheduleThumbCapture(); };
+      const mo = new MutationObserver(mark);
+      const m = document.querySelector('.main');
+      if (m) mo.observe(m, { attributes: true, attributeFilter: ['style', 'data-hdr', 'data-version', 'data-mode'] });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+    };
+    window.addEventListener('pointerdown', start, true);
+    window.addEventListener('keydown', start, true);
+  })();
+  /* PNG 내보내기 · 협의 결과서가 이미 찍은 큰 그림을 줄여 썸네일로 쓴다 — 따로 다시 찍지 않아도 홈 카드가 최신이 된다 */
+  window.__wembThumbFrom = function (src) {
+    try {
+      const id = localStorage.getItem(CUR_PROJ);
+      if (!id || !src || !src.width) return;
+      const W = THUMB_W, H = Math.max(1, Math.round(W * src.height / src.width));
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      cv.getContext('2d').drawImage(src, 0, 0, W, H);
+      const url = cv.toDataURL('image/jpeg', 0.72);
+      const arr = loadProjects(); const s = arr.find((x) => x.id === id);
+      if (s) { s.thumb = url; saveProjects(arr); if (s.projectId) touchGroup(s.projectId); __thumbStale = false; }
+    } catch (e) {}
+  };
 
   /* ── 스튜디오 진입 ── */
   function enterStudio(screen, layoutId) {

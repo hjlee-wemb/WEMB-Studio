@@ -279,3 +279,17 @@ body {
   --i2-dur-trail: 300ms;
   --i2-dur-flat: 240ms; /* 변형 없이 평범하게 이동할 때 */
 }
+
+/* 현장 모드(js/core/ui-mode.js) — 고객 앞에서는 디자이너 · 개발자 도구를 숨긴다. 끄면 그대로 다 보인다 */
+html[data-field] .lc-navi[data-atomic],
+html[data-field] #stepVerify,
+html[data-field] .railbtn[data-rail='atoms'],
+html[data-field] .sbfoot .sbver,
+html[data-field] #exDev,
+html[data-field] #exSvg,
+html[data-field] #exSpec,
+html[data-field] #exShare,
+html[data-field] #exCompMode,
+html[data-field] .designer-only {
+  display: none !important;
+}

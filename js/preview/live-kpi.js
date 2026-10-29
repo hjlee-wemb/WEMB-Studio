@@ -34,10 +34,26 @@ document.querySelectorAll('.mini .d').forEach((d, i) => {
      → 다시 읽을 수 있게 함수로 빼고 노출한다. */
   let kpis = [];
   function seedKPIs() {
+    /* 돌던 카운트업(0.7초)을 멈춘다 — PRD 로 갈아끼운 직후 옛 은행 숫자가 그 위를 다시 덮어쓰지 않게 */
+    kpis.forEach((k) => { if (k.raf) cancelAnimationFrame(k.raf); });
+    const prd = stage && stage.dataset.prdKpi === '1';
     kpis = [...document.querySelectorAll('.dashpage[data-page="overview"] .kpis .kpi')].map((kpi) => {
     const valEl = kpi.querySelector('.val');
     const subB = kpi.querySelector('.sub b');
-    const val = parseInt((valEl ? valEl.textContent : '').replace(/,/g, '')) || 0;
+    const rawVal = (valEl ? valEl.textContent : '').replace(/,/g, '').trim();
+    const val = (prd ? parseFloat(rawVal) : parseInt(rawVal)) || 0;
+    /* PRD 지표 — '기준 | 1,860 kW' 는 임계(고정)다. 현재값은 화면에 적힌 숫자 근처를 오가고 소수 자리는 그대로 둔다 */
+    if (prd) {
+      let chg = kpi.querySelector('.kchg');
+      if (!chg) {
+        chg = document.createElement('div');
+        chg.className = 'kchg flat';
+        chg.innerHTML = '—';
+        if (valEl) valEl.insertAdjacentElement('afterend', chg);
+      }
+      const dec = (rawVal.split('.')[1] || '').length;
+      return { prd: true, valEl, val, cur: val, base: val, dec, chg };
+    }
     let cur = 0,
       peak = 0,
       hasPeak = false;
@@ -88,6 +104,19 @@ document.querySelectorAll('.mini .d').forEach((d, i) => {
     if (stage.classList.contains('content-editing')) return; /* 내용 수정 중엔 멈춤 */
     kpis.forEach((k) => {
       if (!k.cur) return;
+      if (k.prd) {
+        const prev = k.cur;
+        let next = prev + (k.base - prev) * 0.3 + (Math.random() - 0.5) * k.base * 0.03;
+        next = Math.max(0, +next.toFixed(k.dec));
+        k.cur = next;
+        if (k.raf) cancelAnimationFrame(k.raf);
+        if (k.valEl) k.valEl.textContent = next.toLocaleString('en-US', { minimumFractionDigits: k.dec, maximumFractionDigits: k.dec });
+        const d = prev ? ((next - prev) / prev) * 100 : 0;
+        const flat = Math.abs(d) < 0.05;
+        k.chg.className = 'kchg ' + (flat ? 'flat' : next > prev ? 'up' : 'down');
+        k.chg.innerHTML = `${flat ? '—' : next > prev ? '▲' : '▼'} ${Math.abs(d).toFixed(1)}%`;
+        return;
+      }
       const prev = k.cur;
       /* 평소엔 기준값 근처로 회귀, 가끔(7%) 피크 근처로 급등 → 임계치 경고 시연 */
       const surge = k.hasPeak && Math.random() < 0.07;

@@ -474,6 +474,7 @@ const ProdCharts = (function () {
   window.__setStudioNav = function (labels) {
     if (!Array.isArray(labels) || !labels.length) return;
     links.forEach((a, i) => {
+      a.hidden = i >= labels.length;
       if (i >= labels.length || !labels[i]) return;
       a.textContent = labels[i];
       if (i === 0) { a.dataset.page = 'overview'; LABELS.overview = labels[i]; a.removeAttribute('title'); }

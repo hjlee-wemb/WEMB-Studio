@@ -1856,3 +1856,47 @@ tbody tr {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* 패널 맞춤(js/preview/panel-fit.js) — 보는 중에는 스크롤바 대신 줄 단위로 맞추고, 숨긴 게 있으면 아래를 흐린다.
+   이벤트 로그처럼 줄을 숨기지 않는 판은 마우스를 올리면 스크롤할 수 있다. 편집 중에는 원래대로 스크롤. */
+.main:not(.editing):not(.content-editing) .cols .panel .pbody {
+  overflow: hidden;
+}
+.main:not(.editing):not(.content-editing) .cols .panel .pbody.is-clipped:hover {
+  overflow: auto;
+}
+.main:not(.editing):not(.content-editing) .cols .panel .pbody.is-clipped {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 14px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 14px), transparent);
+}
+
+/* 디자인 편집 — 글꼴 · 제목·숫자 크기 · 헤더 모양(js/studio/design-controls.js). 변수는 :root, 헤더는 .main[data-hdr] */
+.main .stage {
+  font-family: var(--dash-font, inherit);
+}
+.main .stage .kpi .val,
+.main .stage #clock {
+  font-family: var(--num-font, inherit);
+}
+.main .stage .kpi .val {
+  font-size: calc(32px * var(--title-scale, 1));
+}
+.main .stage .ph h3 {
+  font-size: calc(14px * var(--title-scale, 1));
+}
+.main[data-hdr='left'] .hdr {
+  justify-content: flex-start;
+  gap: 28px;
+}
+.main[data-hdr='left'] .hdr .hstat {
+  margin-left: auto;
+}
+.main[data-hdr='compact'] .hdr #weather {
+  display: none;
+}
+.main[data-hdr='compact'] .hdr .nav a {
+  font-size: 13px;
+}
+.main[data-hdr='compact'] .hdr .brand .wlogo {
+  max-height: 18px;
+}

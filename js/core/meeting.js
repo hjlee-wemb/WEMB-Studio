@@ -2,9 +2,11 @@
    홈 · 작업공간 · 발표 화면이 함께 쓴다. 설정은 이 브라우저 전체에 하나(localStorage 'wemb-meeting')이고,
    프로젝트별 상태 묶음에는 들어가지 않는다(js/core/projects.js 의 PROJ_GLOBAL).
 
-   { on: 회의 모드, picks: [템플릿 slug…] }
+   { on: 회의 모드, picks: [템플릿 slug…], cust: [지금 만나는 고객사 이름…] }
    - on 이면 화면의 글자 · 대체 텍스트에서 고객사 이름을 '고객사'로 바꿔 보여 준다(원래 글자는 그대로 두고 보이는 것만).
-     템플릿 갤러리는 고른 템플릿(picks)만, 제목 대신 '화면 유형 · 업무 영역'으로 보인다(js/launcher/home.js).
+     템플릿 갤러리는 고른 템플릿(picks)만 — 고른 게 없으면 실제 화면이 붙은 템플릿만 — 제목 대신 '화면 유형 · 업무 영역'으로 보인다(js/launcher/home.js).
+   - cust = 지금 열어 둔 프로젝트의 이름(PRD 프로젝트명 · 프로젝트 · 폴더 이름). 이 이름에 들어 있는 가림 단어는 가리지 않는다.
+     예전엔 '한빛정밀'이 다른 고객사 템플릿의 '한빛'에 걸려 고객 앞에서 '고객사정밀'로 보였다. 작업공간이 setCustomer 로 갱신한다.
    - 글자를 고치는 중(내용 수정 · 패널 편집)에는 가리지 않는다 — 가린 글자가 시안에 저장되지 않게.
    - 그림(사진 · 렌더 이미지) 안에 박힌 로고 · 글자는 가리지 못한다. 회의에서 보여 줄 템플릿만 고르는 것이 1차 방어다.
 
@@ -19,9 +21,10 @@
   const read = () => {
     try {
       const v = JSON.parse(localStorage.getItem(KEY) || 'null');
-      return v && typeof v === 'object' ? { on: !!v.on, picks: Array.isArray(v.picks) ? v.picks.filter((x) => typeof x === 'string') : [] } : { on: false, picks: [] };
+      const strs = (a) => (Array.isArray(a) ? a.filter((x) => typeof x === 'string') : []);
+      return v && typeof v === 'object' ? { on: !!v.on, picks: strs(v.picks), cust: strs(v.cust) } : { on: false, picks: [], cust: [] };
     } catch (e) {
-      return { on: false, picks: [] };
+      return { on: false, picks: [], cust: [] };
     }
   };
   let cur = read();
@@ -29,14 +32,23 @@
   const emit = () => subs.forEach((fn) => { try { fn(cur); } catch (e) {} });
   function set(patch) {
     cur = Object.assign({}, cur, patch);
+    if (patch && 'cust' in patch) { buildRE(); unmaskAll(); }
     try { localStorage.setItem(KEY, JSON.stringify(cur)); } catch (e) {}
     emit();
     return cur;
+  }
+  /* 지금 만나는 고객사 이름 — 같으면 저장 · 다시 가리기를 하지 않는다 */
+  function setCustomer(names) {
+    const list = [...new Set((names || []).map((s) => String(s || '').trim()).filter(Boolean))];
+    if (list.join('\n') === cur.cust.join('\n')) return cur;
+    return set({ cust: list });
   }
   /* 다른 문서(홈 ↔ 작업공간 탭, 발표 화면 ↔ 그 안의 작업공간)에서 바꾼 것을 따라간다 */
   window.addEventListener('storage', (e) => {
     if (e.key !== KEY) return;
     cur = read();
+    buildRE();
+    unmaskAll();
     emit();
   });
 
@@ -53,10 +65,19 @@
     'Hanbit', '한빛', 'KOEN', '한국남동발전', 'KISED', 'Digicentre', 'KORAIL', '코레일', 'NRTEC', 'NH-DCIM',
   ].sort((a, b) => b.length - a.length);
   const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const RE = new RegExp('(' + NAMES.map(escRe).join('|') + ')', 'g');
+  /* 지금 고객사 이름(cust)에 들어 있는 단어는 뺀다 — 다 빠지면 가릴 것이 없다(RE = null) */
+  let RE = null;
+  function buildRE() {
+    const own = cur.cust.map((s) => s.toLowerCase());
+    const list = NAMES.filter((n) => !own.some((o) => o.includes(n.toLowerCase())));
+    RE = list.length ? new RegExp('(' + list.map(escRe).join('|') + ')', 'g') : null;
+  }
+  buildRE();
+  /* 가림 단어 전체(지금 고객사 예외 없이) — 예전 버전이 가린 채 저장한 글자를 되돌릴 때 쓴다(dash-edit.js) */
+  const RE_ALL = new RegExp('(' + NAMES.map(escRe).join('|') + ')', 'g');
   const isWord = (c) => !!c && /[A-Za-z0-9_]/.test(c);
   function maskString(s) {
-    if (!s || typeof s !== 'string') return s;
+    if (!s || typeof s !== 'string' || !RE) return s;
     RE.lastIndex = 0;
     if (!RE.test(s)) return s;
     RE.lastIndex = 0;
@@ -71,6 +92,12 @@
       .replace(/고객사(\s+고객사)+/g, '고객사'); // 'POSCO KDB' → '고객사' (두 번 겹치지 않게)
   }
   const text = (s) => (cur.on ? maskString(s) : s);
+  /* name 을 예외 없이 가렸을 때의 모양 — '한빛정밀 …' → '고객사정밀 …' */
+  function maskedForm(name) {
+    const keep = RE;
+    RE = RE_ALL;
+    try { return maskString(name); } finally { RE = keep; }
+  }
 
   /* ── 화면 가리기 — 글자 노드 · 대체 텍스트 ──
      원래 값은 노드에 기억해 두고, 회의 모드를 끄거나 고치기 시작하면 되돌린다.
@@ -155,6 +182,21 @@
     apply();
     return w;
   }
+  /* 가림 단어가 바뀌면(고객사 이름 갱신) 가린 글자를 먼저 되돌린다 — 그래야 다시 맞출 때 새 기준으로 가린다 */
+  function unmaskAll() {
+    watchers.forEach((w) => { if (w.active) walk(w.root, unmaskNode, unmaskEl); });
+  }
+  /* 원래 글자로 잠깐 되돌린 채 fn 을 돌린다 — 화면 글자를 읽어 저장 · 캡처하는 코드용.
+     예전엔 글자 수정 저장(350ms 뒤)이 편집을 끝낸 직후 돌면 가린 '고객사…'가 시안에 저장됐다. */
+  function withOriginal(fn) {
+    const act = watchers.filter((w) => w.active);
+    act.forEach((w) => {
+      if (w.observing) { w.mo.disconnect(); w.observing = false; }
+      walk(w.root, unmaskNode, unmaskEl);
+      w.active = false;
+    });
+    try { return fn(); } finally { act.forEach((w) => w.apply()); }
+  }
   /* 고치기 시작 · 끝(편집 모드 클래스)이나 설정이 바뀌면 다시 맞춘다 */
   const reapply = () => watchers.forEach((w) => w.apply());
   subs.add(reapply);
@@ -166,12 +208,15 @@
   window.WEMB = window.WEMB || {};
   WEMB.meeting = {
     KEY,
-    get: () => Object.assign({}, cur, { picks: cur.picks.slice() }),
+    get: () => Object.assign({}, cur, { picks: cur.picks.slice(), cust: cur.cust.slice() }),
     set,
+    setCustomer,
     on: () => cur.on,
     text,
     mask: maskString,
+    maskedForm,
     watch,
+    withOriginal,
     refresh: reapply,
     onChange: (fn) => { subs.add(fn); return () => subs.delete(fn); },
   };

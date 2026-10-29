@@ -72,23 +72,52 @@
   textEls.forEach((el) => (DEFAULT_CONTENT[el.dataset.eid] = el.innerHTML));
   const saveContent = () => {
     const m = {};
-    textEls.forEach((el) => {
+    /* 회의 모드로 가린 글자('고객사…')가 아니라 원래 글자를 저장한다 */
+    const read = () => textEls.forEach((el) => {
       if (el.innerHTML !== DEFAULT_CONTENT[el.dataset.eid]) m[el.dataset.eid] = el.innerHTML;
     });
+    if (window.WEMB && WEMB.meeting && WEMB.meeting.withOriginal) WEMB.meeting.withOriginal(read);
+    else read();
     try {
       localStorage.setItem(CK, JSON.stringify(m));
     } catch (e) {}
   };
-  const loadContent = () => {
+  /* opts.prd — PRD 로 칠한 화면에 다시 덮을 때: KPI 숫자(.val)는 라이브 값이라 저장분으로 굳히지 않고,
+     옛 버전의 라이브 틱이 '기준' 칸에 써 넣은 현재값(예: '기준 | 989', 단위 없는 정수)도 덮지 않는다 */
+  const loadContent = (opts) => {
     try {
       const r = localStorage.getItem(CK);
       if (!r) return;
       const m = JSON.parse(r);
+      const prd = !!(opts && opts.prd);
       textEls.forEach((el) => {
-        if (m[el.dataset.eid] != null) el.innerHTML = m[el.dataset.eid];
+        const v = m[el.dataset.eid];
+        if (v == null) return;
+        if (prd && el.matches('.kpi .val')) return;
+        if (prd && el.matches('.kpi .sub') && /<b>\|\s*\d+<\/b>\s*$/.test(v)) return;
+        el.innerHTML = v;
       });
     } catch (e) {}
   };
+  /* 예전 회의 모드가 가린 채 저장한 고객사 이름('고객사정밀 …')을 원래 이름으로 되돌린다 — 지금 프로젝트 이름만 보고 고친다 */
+  (function repairMaskedSaves() {
+    try {
+      const M = window.WEMB && WEMB.meeting;
+      const r = localStorage.getItem(CK);
+      if (!M || !M.maskedForm || !r || r.indexOf('고객사') < 0) return;
+      const names = [];
+      try { const p = JSON.parse(localStorage.getItem('wemb-prd') || 'null'); if (p && p.site) names.push(String(p.site).trim()); } catch (e) {}
+      try { const id = localStorage.getItem('wemb-current-proj'); const p = JSON.parse(localStorage.getItem('wemb-projects') || '[]').find((x) => x.id === id); if (p && p.name) names.push(String(p.name).trim()); } catch (e) {}
+      let s = r, changed = false;
+      names.filter(Boolean).sort((a, b) => b.length - a.length).forEach((n) => {
+        const masked = M.maskedForm(n);
+        if (masked && masked !== n && s.indexOf(masked) >= 0) { s = s.split(masked).join(n); changed = true; }
+      });
+      if (changed) localStorage.setItem(CK, s);
+    } catch (e) {}
+  })();
+  /* 다시 연 화면은 PRD 어휘를 나중에(guide.js) 칠한다 — 그 뒤 사용자가 고친 글자를 다시 덮을 수 있게 연다 */
+  window.__reloadDashContent = loadContent;
 
   /* ---------- 3) 모드 토글 (배치/내용 상호 배타) ---------- */
   const layoutBtn = document.getElementById('editToggle');
@@ -130,7 +159,8 @@
   }
   /* 선택 상태 반영 — 선택된 패널만 편집, 나머지는 모두 해제 */
   const doneBtn = document.getElementById('editDone');
-  /* '완료' 버튼 — 위젯이 선택돼 있을 때만 노출. 누르면 선택을 해제해 다른 위젯을 고를 수 있다. */
+  /* '선택 해제' 버튼 — 위젯이 선택돼 있을 때만 노출. 누르면 선택을 해제해 다른 위젯을 고를 수 있다.
+     예전 이름 '완료'가 사이드바의 '편집 끝내기'와 같은 뜻으로 읽혀, 끝내는 버튼이 둘로 보였다. */
   function updateDoneBtn() {
     if (doneBtn) doneBtn.hidden = !(selPanel && (layoutMode || contentMode));
   }
@@ -272,6 +302,19 @@
     if (!contentMode || !e.target.closest('[data-eid]')) return;
     clearTimeout(st);
     st = setTimeout(saveContent, 350);
+  });
+  /* Enter = 고치기 끝(줄바꿈 아님) — 제목 · 표 칸 · 라벨은 한 줄짜리라 Enter 가 빈 줄을 넣어 저장됐다.
+     Esc 도 같이 끝낸다. 끝내면 바로 저장한다(350ms 기다리는 사이 편집이 끝나 다른 상태로 저장되지 않게). */
+  stage.addEventListener('keydown', (e) => {
+    if (!contentMode) return;
+    const el = e.target.closest && e.target.closest('[data-eid][contenteditable="true"]');
+    if (!el || e.isComposing) return;
+    if (e.key === 'Enter' || e.key === 'Escape') {
+      e.preventDefault();
+      el.blur();
+      clearTimeout(st);
+      saveContent();
+    }
   });
 
   /* ---------- 4) 드래그 앤 드롭 ---------- */

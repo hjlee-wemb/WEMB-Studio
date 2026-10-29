@@ -47,7 +47,7 @@ function initStepFlow() {
   const colorGate = document.getElementById('gateColor');
   const on2 = (e) => {
     if (!e.isTrusted || e.target.closest('.info')) return;
-    advance('s2', 'stepVerify');
+    advance('s2', window.WEMB && WEMB.uiMode && WEMB.uiMode.field() ? 'stepSave' : 'stepVerify');
   };
   colorGate?.addEventListener('change', on2);
   colorGate?.addEventListener('click', on2);

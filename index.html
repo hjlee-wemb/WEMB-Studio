@@ -18,12 +18,14 @@
     <!-- 글꼴은 로컬 사본 — 인터넷이 없는 고객사(망분리)에서도 같은 글꼴로 보인다 -->
     <link rel="stylesheet" href="src/vendor/pretendard/pretendard.css" />
     <!-- 홈 스타일 — 작업공간과 같은 토큰 위에 런처 · 대화상자만 싣는다(스튜디오 스타일시트는 받지 않는다) -->
-    <link rel="stylesheet" href="css/base/tokens.css?v=3" data-app-css />
+    <link rel="stylesheet" href="css/base/tokens.css?v=4" data-app-css />
+    <!-- 현장 모드 — 첫 페인트 전에 html[data-field] 를 단다(디자이너 도구가 번쩍 보였다 사라지지 않게) -->
+    <script src="js/core/ui-mode.js?v=1"></script>
     <link rel="stylesheet" href="css/base/focus.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/base/toast.css?v=3" data-app-css />
-    <link rel="stylesheet" href="css/launcher/launcher.css?v=5" data-app-css />
+    <link rel="stylesheet" href="css/launcher/launcher.css?v=6" data-app-css />
     <link rel="stylesheet" href="css/launcher/meeting.css?v=1" data-app-css />
-    <link rel="stylesheet" href="css/base/wireframe-mini.css?v=1" data-app-css />
+    <link rel="stylesheet" href="css/base/wireframe-mini.css?v=3" data-app-css />
     <link rel="stylesheet" href="css/base/dialog.css?v=1" data-app-css />
     <link rel="stylesheet" href="css/base/splash.css?v=2" data-app-css />
     <link rel="stylesheet" href="css/base/motion.css?v=1" data-app-css />
@@ -76,6 +78,11 @@
             <!-- 분자 라이브러리 — 템플릿을 분자 단위로 쪼개 재사용. 주소 #/molecules… 는 js/launcher/atomic-section.js 가 받는다 -->
             <button class="lc-navi" data-atomic type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.6" /><circle cx="5" cy="6" r="2" /><circle cx="19" cy="6" r="2" /><circle cx="12" cy="20" r="2" /><path d="M6.6 7.2 10 10.4M17.4 7.2 14 10.4M12 14.6V18" /></svg>분자 라이브러리</button>
           </nav>
+          <!-- 고객사 앞 — 현장 모드(디자이너 도구 숨김 · js/core/ui-mode.js) · 회의 모드(다른 고객사 이름 가림 · js/core/meeting.js) -->
+          <div class="lc-modes">
+            <button class="lc-mode" type="button" data-ui-toggle="field" aria-pressed="false"><b>현장 모드</b><span>디자이너 도구 숨기기</span></button>
+            <button class="lc-mode" type="button" data-ui-toggle="meeting" aria-pressed="false"><b>회의 모드</b><span>다른 고객사 이름 가리기</span></button>
+          </div>
         </aside>
         <div class="lc-main">
           <!-- 회의 모드 띠 — 켜져 있는 동안 늘 보인다(고객사 이름 가림 · 고른 템플릿만). js/launcher/home.js 가 채운다 -->
@@ -131,15 +138,15 @@
 
     <!-- 홈 스크립트 — 전역(classic) 스크립트라 아래 순서가 곧 의존 순서다 -->
     <script src="js/core/router.js?v=2"></script>
-    <script src="js/core/projects.js?v=5"></script>
-    <script src="js/core/meeting.js?v=3"></script>
+    <script src="js/core/projects.js?v=6"></script>
+    <script src="js/core/meeting.js?v=6"></script>
     <script src="js/core/project-file.js?v=1"></script>
-    <script src="js/core/layouts.js?v=1"></script>
-    <script src="js/launcher/templates.js?v=7"></script>
+    <script src="js/core/layouts.js?v=2"></script>
+    <script src="js/launcher/templates.js?v=8"></script>
     <script src="js/ui/toast.js?v=3"></script>
     <script src="js/ui/confirm.js?v=2"></script>
     <script src="js/ui/focus-trap.js?v=2"></script>
     <script src="js/launcher/atomic-section.js?v=49"></script>
-    <script src="js/launcher/home.js?v=13"></script>
+    <script src="js/launcher/home.js?v=17"></script>
   </body>
 </html>

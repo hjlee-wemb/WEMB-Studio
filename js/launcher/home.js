@@ -43,6 +43,8 @@
   let tplPicking = false;
   const meetOn = () => MEET.on();
   const tplLabel = (t) => (meetOn() ? t.screenType + ' · ' + t.area : t.title);
+  /* 주소에 쓰는 템플릿 이름 — 회의 모드면 번호(t1, t2 …), 아니면 slug */
+  const tplPathName = (t) => (meetOn() ? 't' + (TEMPLATES.indexOf(t) + 1) : t.slug);
   /* ── 주소 ↔ 런처 화면 ──
      좌측 메뉴: /projects · /recent · /favorites · /trash · /templates
      프로젝트(폴더) 안: /projects/:gid   템플릿 상세: /templates/:slug
@@ -87,7 +89,8 @@
     showLauncher(prev);
   });
   router.add('launcher:template', '/templates/:slug', (params, query, prev) => {
-    const t = TEMPLATES.find((x) => x.slug === params.slug);
+    const byNo = /^t(\d+)$/.exec(params.slug);
+    const t = byNo ? TEMPLATES[+byNo[1] - 1] : TEMPLATES.find((x) => x.slug === params.slug);
     if (!t) {
       toast('찾는 템플릿이 없어요 — 이름이 바뀌었거나 내려간 템플릿이에요. 템플릿 목록을 보여 드릴게요.', { type: 'warn' });
       return VIEW_PATH.tpl;
@@ -331,8 +334,12 @@
       const q = tplQuery.trim().toLowerCase();
       const picked = new Set(MEET.get().picks);
       const meetOnly = meetOn() && !tplPicking && picked.size > 0;
+      /* 회의 모드에서 아직 고른 게 없으면 '그림 시안'(다른 고객사 납품 화면 그림)은 숨긴다 —
+         그림 속 로고 · 글자는 가릴 수 없다. 실제 화면이 붙은 템플릿은 글자를 가릴 수 있어 남긴다. */
+      const meetLive = meetOn() && !tplPicking && picked.size === 0;
       const list = sortTemplates(TEMPLATES.filter((t) => {
         if (meetOnly && !picked.has(t.slug)) return false;
+        if (meetLive && !tplIsLive(t)) return false;
         if (tplScreen !== 'all' && t.screenType !== tplScreen) return false;
         if (tplArea !== 'all' && t.area !== tplArea) return false;
         if (tplYear !== 'all' && t.year !== tplYear) return false;
@@ -367,9 +374,9 @@
           '</div>' +
           '<div class="tplbox">' +
             '<div class="tplsec1">' +
-              '<div class="tplbadges">' +
+              (meetOn() ? '' : '<div class="tplbadges">' +
                 t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
-              '</div>' +
+              '</div>') +
               '<div class="tpltitle">' + esc(tplLabel(t)) + '</div>' +
             '</div>' +
             '<div class="tplsec2">' +
@@ -384,7 +391,7 @@
             if (cur.has(t.slug)) cur.delete(t.slug); else cur.add(t.slug);
             MEET.set({ picks: [...cur] });
           };
-        } else card.onclick = () => router.navigate('/templates/' + t.slug);
+        } else card.onclick = () => router.navigate('/templates/' + tplPathName(t));
         grid.appendChild(card);
       });
 
@@ -392,6 +399,7 @@
       if (cnt) {
         if (tplPicking) cnt.textContent = '회의용으로 ' + picked.size + '개 골랐어요';
         else if (meetOnly) cnt.textContent = '회의용 ' + list.length + '개';
+        else if (meetLive) cnt.textContent = '실제 화면 템플릿 ' + list.length + '개 · 회의 모드';
         else if (q) cnt.textContent = list.length + '개 · ‘' + tplQuery.trim() + '’ 검색';
         else if (tplScreen === 'all' && tplArea === 'all') cnt.textContent = VIEW_META.tpl.count();
         else cnt.textContent = list.length + '개 · ' + [tplScreen !== 'all' ? tplScreen : null, tplArea !== 'all' ? tplArea : null].filter(Boolean).join(' · ');
@@ -733,7 +741,7 @@
     if (!m.on) return;
     meetBar.innerHTML =
       '<span class="lc-meetdot" aria-hidden="true"></span>' +
-      '<b>회의 모드</b><span>고객사 이름을 가리고 있어요 · ' + (m.picks.length ? '템플릿은 고른 ' + m.picks.length + '개만 보여요' : '템플릿을 아직 고르지 않아 전부 보여요') + '</span>' +
+      '<b>회의 모드</b><span>다른 고객사 이름을 가리고 있어요' + (m.cust.length ? ' (‘' + escHTML(m.cust[0]) + '’은 그대로)' : '') + ' · ' + (m.picks.length ? '템플릿은 고른 ' + m.picks.length + '개만 보여요' : '그림 시안은 숨기고 실제 화면 템플릿만 보여요') + '</span>' +
       '<button type="button" class="lc-meetbtn" data-meet="pick">템플릿 고르기</button>' +
       '<button type="button" class="lc-meetbtn" data-meet="off">회의 모드 끄기</button>';
   }
@@ -1117,7 +1125,7 @@
        (프로젝트 목록·저장 스냅샷·둘러보기 여부는 유지) */
     try {
       sessionStorage.setItem('wemb-fresh-open', JSON.stringify({ screen: openProj.screen, layout: openProj.layout, name: proj.name, tpl: openProj.tpl, img: openProj.img, scene: openScene }));
-      const KEEP = new Set([LS_PROJ, LS_GROUP, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-meeting']);
+      const KEEP = new Set([LS_PROJ, LS_GROUP, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-meeting', 'wemb-ui-mode']);
       Object.keys(localStorage)
         .filter((k) => k.startsWith('wemb-') && !KEEP.has(k))
         .forEach((k) => localStorage.removeItem(k));

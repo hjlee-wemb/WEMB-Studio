@@ -34,7 +34,7 @@
   const GROUPS = [
     { key: 'g2', label: '2단', hint: '좌우 2열 — 큼직하게' },
     { key: 'g3', label: '3단', hint: '3열 — 정보를 촘촘하게' },
-    { key: 'mod', label: '모듈', hint: '크기가 다른 타일의 모자이크 — Figma 모듈 프레임 그대로' },
+    { key: 'mod', label: '모듈', hint: '크기가 다른 칸을 섞어 중요한 것을 크게' },
   ];
   /* ── 디지털 트윈 전용 레이아웃 — Figma Studio 'Digital Twin' 섹션(147:756) 그대로.
      대시보드와 달리 가운데는 3D 씬이 비치도록 비우고 패널을 가장자리·코너에 배치한다.

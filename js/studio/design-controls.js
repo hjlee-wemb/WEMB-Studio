@@ -70,7 +70,50 @@ document.getElementById('radiusReset').onclick = () => applyRadius(8, true);
     applyGap(8, true); applyPad(100, true); applyElev(0, true); applyBorder(1, true); applySurface(50, true);
     if (typeof applyRadius === 'function') applyRadius(8, true);
     document.querySelectorAll('#density button').forEach((x) => x.classList.toggle('on', x.dataset.d === 'normal'));
+    applyFont('pretendard', true); applyNumFont('base', true); applyTScale(100, true); applyHdr('base', true);
   };
+
+  /* ── 고객이 고르는 것: 글꼴 · 제목·숫자 크기 · 헤더 모양 · 상태색 ──
+     글꼴 · 크기는 다른 디자인 값처럼 :root 변수, 헤더는 .main[data-hdr]. 모두 wemb-* 키라 프로젝트 묶음에 같이 저장된다. */
+  const FK = 'wemb-dash-font', NK = 'wemb-dash-numfont', TK = 'wemb-dash-tscale', HK = 'wemb-dash-hdr';
+  const FONTS = {
+    pretendard: "'Pretendard Variable', Pretendard, 'Malgun Gothic', sans-serif",
+    malgun: "'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif",
+    system: "system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', sans-serif",
+  };
+  const segOn = (id, attr, v) => document.querySelectorAll('#' + id + ' button').forEach((x) => x.classList.toggle('on', x.dataset[attr] === v));
+  const mainEl = () => document.querySelector('.main');
+  function applyFont(k, save) { if (!FONTS[k]) k = 'pretendard'; root.setProperty('--dash-font', FONTS[k]); segOn('dfont', 'f', k); if (save) store(FK, k); }
+  function applyNumFont(k, save) { if (k !== 'tech') k = 'base'; root.setProperty('--num-font', k === 'tech' ? "'Tomorrow', var(--dash-font)" : 'var(--dash-font)'); segOn('dnumfont', 'f', k); if (save) store(NK, k); }
+  function applyTScale(pct, save) { pct = clamp(pct, 85, 130); root.setProperty('--title-scale', (pct / 100).toFixed(2)); setI('tscale', pct); setV('tscaleVal', pct + '%'); if (save) store(TK, pct); }
+  function applyHdr(k, save) { if (k !== 'left' && k !== 'compact') k = 'base'; const m = mainEl(); if (m) m.dataset.hdr = k; segOn('dhdr', 'h', k); if (save) store(HK, k); }
+  document.querySelectorAll('#dfont button').forEach((b) => (b.onclick = () => applyFont(b.dataset.f, true)));
+  document.querySelectorAll('#dnumfont button').forEach((b) => (b.onclick = () => applyNumFont(b.dataset.f, true)));
+  document.querySelectorAll('#dhdr button').forEach((b) => (b.onclick = () => applyHdr(b.dataset.h, true)));
+  bind('tscale', applyTScale);
+  const rs = (k, def) => { try { return localStorage.getItem(k) || def; } catch (e) { return def; } };
+  applyFont(rs(FK, 'pretendard'), false); applyNumFont(rs(NK, 'base'), false); applyTScale(+rs(TK, 100), false); applyHdr(rs(HK, 'base'), false);
+
+  /* 상태색 — 색 정하기의 '개별 색상'과 같은 덮어쓰기(state.overrides)를 쓴다. 색 테마 기록 · 내보내기에 그대로 들어간다 */
+  const toHex = (c) => { const m = String(c || '').trim().match(/^#([0-9a-f]{6})$/i); return m ? '#' + m[1].toLowerCase() : null; };
+  function syncStatus() {
+    const m = mainEl(); if (!m) return;
+    const cs = getComputedStyle(m);
+    const d = toHex(cs.getPropertyValue('--danger')), w = toHex(cs.getPropertyValue('--warning'));
+    if (d) setI('dstDanger', d);
+    if (w) setI('dstWarning', w);
+  }
+  const setStatus = (role, v) => {
+    if (typeof state === 'undefined' || typeof apply !== 'function') return;
+    state.overrides = state.overrides || {};
+    state.overrides[role] = String(v).toUpperCase();
+    apply();
+  };
+  const dd = $('dstDanger'), dw = $('dstWarning');
+  if (dd) dd.oninput = () => setStatus('danger', dd.value);
+  if (dw) dw.oninput = () => setStatus('warning', dw.value);
+  window.__syncStatusColors = syncStatus;
+  setTimeout(syncStatus, 0);
 
   const rd = (k, def) => { try { const v = localStorage.getItem(k); return v != null ? +v : def; } catch (e) { return def; } };
   applyGap(rd(GK, 8), false); applyPad(rd(PK, 100), false); applyElev(rd(EK, 0), false); applyBorder(rd(BK, 1), false); applySurface(rd(SK, 50), false);
@@ -83,6 +126,7 @@ document.getElementById('radiusReset').onclick = () => applyRadius(8, true);
   const lbl = btn.querySelector('.lbl');
   if (!btn || !panel) return;
   btn.onclick = () => {
+    if (window.__syncStatusColors) window.__syncStatusColors();
     const open = !panel.classList.contains('show');
     panel.classList.toggle('show', open);
     btn.classList.toggle('on', open);

@@ -24,7 +24,7 @@ async function doResetAll() {
          · wemb-theme-snapshots  이름 붙여 저장한 테마(사용자 자산)
          · wemb-onboarded        둘러보기 완료 여부(리셋마다 다시 뜨면 성가심)
          · wemb-previewhint       편집 가능 힌트 닫음 여부 */
-    const KEEP = new Set(['wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-meeting']);
+    const KEEP = new Set(['wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-meeting', 'wemb-ui-mode']);
     Object.keys(localStorage)
       .filter((k) => k.startsWith('wemb-') && !KEEP.has(k))
       .forEach((k) => localStorage.removeItem(k));

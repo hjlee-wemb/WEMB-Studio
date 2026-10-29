@@ -118,10 +118,8 @@ function initBrand() {
       setScreenName(sn.value.trim());
       store(LS.screen, sn.value);
     };
-  try {
-    const l = localStorage.getItem(LS.logo);
-    if (l) setLogo(l);
-    /* 프로젝트명 — PRD에서 저장한 값(wemb-prd.site)을 우선, 없으면 현재 프로젝트 카드 이름. 편집 불가. */
+  /* 프로젝트명 — PRD에서 저장한 값(wemb-prd.site)을 우선, 없으면 현재 프로젝트 카드 이름. 편집 불가. */
+  const readProjectName = () => {
     let pname = '';
     try { const r = JSON.parse(localStorage.getItem('wemb-prd')); if (r && r.site) pname = String(r.site).trim(); } catch (e) {}
     if (!pname) {
@@ -132,6 +130,24 @@ function initBrand() {
         if (p && p.name) pname = String(p.name).trim();
       } catch (e) {}
     }
+    return pname;
+  };
+  /* 새 프로젝트는 PRD 와 스튜디오가 같은 페이지라, 열 때 한 번 읽어서는 PRD 에서 정한 이름이 안 들어온다
+     (칸은 잠겨 있고 머리말엔 '프로젝트'). PRD 를 저장할 때마다 guide.js 가 이 함수를 부른다. */
+  const refreshProjectName = () => {
+    const pname = readProjectName();
+    if (bn && bn.value !== pname) {
+      bn.value = pname;
+      bn.dispatchEvent(new Event('input', { bubbles: true }));   /* 상단 바 프로젝트명(chrome.js)이 따라온다 */
+    }
+    setBrandName(pname);
+    try { if (window.__meetingSyncCustomer) window.__meetingSyncCustomer(); } catch (e) {}
+  };
+  window.__refreshProjectName = refreshProjectName;
+  try {
+    const l = localStorage.getItem(LS.logo);
+    if (l) setLogo(l);
+    const pname = readProjectName();
     if (bn) { bn.value = pname; bn.readOnly = true; }
     setBrandName(pname);
     /* 테마명 */
