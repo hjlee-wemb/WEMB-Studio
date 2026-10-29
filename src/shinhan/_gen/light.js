@@ -189,8 +189,9 @@ function lightExtra(PX, textured) {
     .map((t) => (typeof t === 'string' ? { cls: t[0] === '.' ? t : '.' + t, positioned: false } : t));
   const rules = [
     R + '{background:#eef2f7;color:#0e1a2b;}',
-    /* 바탕 별밭 사진은 어두운 밤하늘이다 — 색만 뒤집어 밝은 하늘로(형상 그대로) */
-    R + ' [data-name="Background"] > img{filter:invert(1) hue-rotate(180deg) saturate(0.4) brightness(1.05);opacity:0.5;}',
+    /* 바탕 별밭 사진은 어두운 밤하늘이다 — 색만 뒤집어 밝은 하늘로(형상 그대로).
+       화면 바로 아래 바탕만 — 신한카드 시안은 칩 · 요일 배지 · 이름표 판도 이름이 Background 라 함께 뒤집혀 회색이 됐다 */
+    R + ' [data-name^="Screen/"] > [data-name="Background"] > img{filter:invert(1) hue-rotate(180deg) saturate(0.4) brightness(1.05);opacity:0.5;}',
     /* 3D 건물 렌더는 흰 건물이라 라이트에서도 그대로 두되, 바닥 반사만 살짝 눌러 준다 */
     R + ' [data-name="Building Image"] img{filter:saturate(0.92) brightness(0.98);}',
     /* 도면(출입동선·전체층·단층의 와이어프레임)은 '어두운 바닥 + 흰 선' 그림이다.

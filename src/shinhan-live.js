@@ -29,6 +29,8 @@
   var STYLE_ID = 'shinhan-live-style';
   var EASE = 'cubic-bezier(.22,.8,.24,1)';
   var CSS = [
+    /* 강조 · 빛 색 — 다크는 원본 네온, 라이트는 흰 판에 맞는 차분한 파랑(아래 라이트 절에서 값만 바꾼다) */
+    '.sh-root{--sh-acc:104,212,255;--sh-acc2:104,140,255;--sh-acc3:0,186,255;}',
     /* 블록 · 위젯 이동은 CSS translate 속성 하나로 — 원본 transform(translateX(-50%) 등)을 덮지 않으려고.
        --sh-tx/ty = 반응형 · 열 재배치, --sh-dx/dy = 끄는 중 */
     '.sh-root .sh-blk,.sh-root .sh-wl{translate:calc(var(--sh-tx,0px) + var(--sh-dx,0px)) calc(var(--sh-ty,0px) + var(--sh-dy,0px));}',
@@ -47,49 +49,49 @@
     '.sh-root .sh-click{cursor:pointer;}',
     '.sh-root .sh-click *{cursor:inherit;}',
     '.dt-content-editing .sh-root .sh-click,.dt-content-editing .sh-root .sh-click *{cursor:text;}',
-    '.sh-root .sh-click:focus-visible{outline:2px solid #68d4ff;outline-offset:2px;}',
+    '.sh-root .sh-click:focus-visible{outline:2px solid rgb(var(--sh-acc));outline-offset:2px;}',
 
     /* 헤더 메뉴 */
     '.sh-root [data-name^="Menu Item/"]{transition:color .2s ease,text-shadow .2s ease,translate .2s ease;}',
-    '.sh-root [data-name^="Menu Item/"]:not(.sh-cur):hover{color:#fff!important;text-shadow:0 0 10px rgba(104,212,255,.85);translate:0 -1px;}',
+    '.sh-root [data-name^="Menu Item/"]:not(.sh-cur):hover{color:#fff!important;text-shadow:0 0 10px rgba(var(--sh-acc),.85);translate:0 -1px;}',
     '.sh-root [data-name^="Menu Item/"]:active{translate:0 1px;}',
     /* 헤더 액션 아이콘 · 브랜드 */
     '.sh-root [data-name^="Icon/Action/"]{transition:scale .2s ease,filter .2s ease,rotate .45s ' + EASE + ';}',
-    '.sh-root [data-name="Time Group"] > [data-name^="Icon/Action/"]:hover,.sh-root [data-name="Close Button"]:hover [data-name^="Icon/Action/"]{scale:1.14;filter:brightness(1.3) drop-shadow(0 0 6px rgba(104,212,255,.85));}',
-    '.sh-root [data-name="Time"]:hover [data-name="Icon/Action/Clock"]{rotate:360deg;filter:drop-shadow(0 0 6px rgba(104,212,255,.85));}',
+    '.sh-root [data-name="Time Group"] > [data-name^="Icon/Action/"]:hover,.sh-root [data-name="Close Button"]:hover [data-name^="Icon/Action/"]{scale:1.14;filter:brightness(1.3) drop-shadow(0 0 6px rgba(var(--sh-acc),.85));}',
+    '.sh-root [data-name="Time"]:hover [data-name="Icon/Action/Clock"]{rotate:360deg;filter:drop-shadow(0 0 6px rgba(var(--sh-acc),.85));}',
     '.sh-root [data-name="Brand"]{transition:filter .2s ease;}',
-    '.sh-root [data-name="Brand"].sh-click:hover{filter:brightness(1.2) drop-shadow(0 0 8px rgba(104,212,255,.5));}',
+    '.sh-root [data-name="Brand"].sh-click:hover{filter:brightness(1.2) drop-shadow(0 0 8px rgba(var(--sh-acc),.5));}',
 
     /* 버튼 — 밝아지고 빛이 번진다 */
     '.sh-root [data-name^="Button/"],.sh-root [data-name="Close Button"]{transition:filter .2s ease,box-shadow .2s ease,scale .15s ease;}',
-    '.sh-root [data-name^="Button/"]:hover,.sh-root [data-name="Close Button"]:hover{filter:brightness(1.22);box-shadow:0 0 14px rgba(104,140,255,.6);}',
+    '.sh-root [data-name^="Button/"]:hover,.sh-root [data-name="Close Button"]:hover{filter:brightness(1.22);box-shadow:0 0 14px rgba(var(--sh-acc2),.6);}',
     '.sh-root [data-name^="Button/"]:active,.sh-root [data-name="Close Button"]:active{scale:.96;filter:brightness(.95);}',
     '.sh-root [data-name="Close Button"]:hover [data-name="Icon/Action/Close"]{rotate:90deg;}',
     /* 입력칸 · 거르기 칸 */
     '.sh-root [data-name="Input"]{transition:box-shadow .2s ease,filter .2s ease;}',
     '.sh-root [data-name="Input"]:hover{box-shadow:0 0 0 1px rgba(156,151,226,.8),0 0 12px rgba(120,130,255,.35);}',
     '.sh-root [data-name="Field/Category"] [data-name="Box"],.sh-root [data-name="Field/Base Date"] [data-name="Input"]{transition:box-shadow .2s ease,filter .2s ease;}',
-    '.sh-root [data-name="Field/Category"]:hover [data-name="Box"],.sh-root [data-name="Field/Base Date"]:hover [data-name="Input"]{filter:brightness(1.3);box-shadow:0 0 10px rgba(104,140,255,.55);}',
+    '.sh-root [data-name="Field/Category"]:hover [data-name="Box"],.sh-root [data-name="Field/Base Date"]:hover [data-name="Input"]{filter:brightness(1.3);box-shadow:0 0 10px rgba(var(--sh-acc2),.55);}',
 
     /* 소제목 단추(점검대상부서 등) · 표 머리 칩 · 연도 칩 */
     '.sh-root [data-name^="Section Label/"] [data-name="Chip"],.sh-root [data-name="Chip"],.sh-root [data-name^="Chip/"]{transition:filter .2s ease;}',
-    '.sh-root [data-name^="Section Label/"]:hover [data-name="Chip"],.sh-root [data-name^="Th/"]:hover [data-name="Chip"],.sh-root [data-name^="Chip/"]:hover{filter:brightness(1.3) drop-shadow(0 0 8px rgba(104,212,255,.5));}',
+    '.sh-root [data-name^="Section Label/"]:hover [data-name="Chip"],.sh-root [data-name^="Th/"]:hover [data-name="Chip"],.sh-root [data-name^="Chip/"]:hover{filter:brightness(1.3) drop-shadow(0 0 8px rgba(var(--sh-acc),.5));}',
     '.sh-root [data-name^="Section Label/"] [data-name="Line"]{transition:filter .3s ease;}',
-    '.sh-root [data-name^="Section Label/"]:hover [data-name="Line"]{filter:brightness(1.6) drop-shadow(0 0 4px #68d4ff);}',
+    '.sh-root [data-name^="Section Label/"]:hover [data-name="Line"]{filter:brightness(1.6) drop-shadow(0 0 4px rgb(var(--sh-acc)));}',
 
     /* 표 줄(보안 현황) */
     '.sh-root [data-name^="Row/"] > [data-name="Row BG"],.sh-root [data-name^="Row/"] [data-name="Cells BG"],.sh-root [data-name^="Row/"] [data-name^="Cell BG/"]{transition:filter .2s ease,box-shadow .2s ease;}',
-    '.sh-root [data-name^="Row/"]:hover > [data-name="Row BG"]{filter:brightness(1.35);box-shadow:0 0 10px rgba(104,140,255,.45);}',
+    '.sh-root [data-name^="Row/"]:hover > [data-name="Row BG"]{filter:brightness(1.35);box-shadow:0 0 10px rgba(var(--sh-acc2),.45);}',
     '.sh-root [data-name^="Row/"]:hover [data-name="Cells BG"],.sh-root [data-name^="Row/"]:hover [data-name^="Cell BG/"]{filter:brightness(2.2);}',
     /* 지표 칩 · KPI · 일정 카드 · 배지 */
     '.sh-root [data-name="Value Box"]{transition:box-shadow .2s ease,filter .2s ease;}',
-    '.sh-root [data-name^="Metric/"]:hover [data-name="Value Box"]{filter:brightness(1.35);box-shadow:0 0 14px rgba(0,186,255,.45);}',
+    '.sh-root [data-name^="Metric/"]:hover [data-name="Value Box"]{filter:brightness(1.35);box-shadow:0 0 14px rgba(var(--sh-acc3),.45);}',
     '.sh-root [data-name^="KPI/"] > *{transition:translate .3s ' + EASE + ',filter .3s ease;}',
     '.sh-root [data-name^="KPI/"]:hover > :not([data-name="Caption"]){translate:0 -5px;filter:brightness(1.18) drop-shadow(0 8px 12px rgba(80,90,255,.35));}',
     '.sh-root [data-name^="Schedule Card/"] > *{transition:translate .3s ' + EASE + ',filter .3s ease;}',
     '.sh-root [data-name^="Schedule Card/"]:hover > *{translate:0 -4px;filter:brightness(1.22) drop-shadow(0 6px 10px rgba(120,90,255,.35));}',
     '.sh-root [data-name="Icon Badge"],.sh-root [data-name="Category Badge"] > *{transition:translate .3s ' + EASE + ',filter .3s ease;}',
-    '.sh-root [data-name="Icon Badge"]:hover,.sh-root [data-name="Category Badge"]:hover > *{translate:0 -3px;filter:brightness(1.2) drop-shadow(0 0 10px rgba(104,140,255,.6));}',
+    '.sh-root [data-name="Icon Badge"]:hover,.sh-root [data-name="Category Badge"]:hover > *{translate:0 -3px;filter:brightness(1.2) drop-shadow(0 0 10px rgba(var(--sh-acc2),.6));}',
     /* 시나리오 막대 — 하이라이트가 고른 시나리오로 미끄러진다 */
     '.sh-root [data-name="Highlight"]{transition:translate .45s ' + EASE + ';}',
     '.sh-root [data-name="Fill"]{transition:height .9s ' + EASE + ',top .9s ' + EASE + ';}',
@@ -104,24 +106,21 @@
     '.sh-root .sh-rowin{animation:shRowIn .45s ' + EASE + ' both;}',
     '.sh-root [data-name="Td/Visible"]{cursor:pointer;}',
     '.sh-root [data-name="Td/Visible"] > *{transition:scale .15s ease,filter .15s ease;}',
-    '.sh-root [data-name="Td/Visible"]:hover > *{scale:1.15;filter:brightness(1.5) drop-shadow(0 0 4px #68d4ff);}',
+    '.sh-root [data-name="Td/Visible"]:hover > *{scale:1.15;filter:brightness(1.5) drop-shadow(0 0 4px rgb(var(--sh-acc)));}',
     /* 입력 화면 — '입력' 을 누르면 그 표의 값 칸을 바로 고친다 */
     '.sh-root .sh-entry-on [data-name^="Td/"]:not([data-name="Td/Category"]){box-shadow:inset 0 0 0 1px rgba(95,173,204,.75);}',
     '.sh-root .sh-entry-on [data-name^="Td/"] p[contenteditable]{outline:none;min-width:24px;text-align:center;cursor:text;}',
-    '.sh-root .sh-entry-on [data-name^="Td/"]:focus-within{box-shadow:inset 0 0 0 2px #68d4ff;}',
+    '.sh-root .sh-entry-on [data-name^="Td/"]:focus-within{box-shadow:inset 0 0 0 2px rgb(var(--sh-acc));}',
     '.sh-root .sh-entry-on [data-name="Button/Input"]{filter:brightness(1.35);box-shadow:0 0 14px rgba(95,173,204,.8);}',
 
     /* ── 늘 움직이는 것 ── */
-    '@keyframes shSpin{to{rotate:360deg}}',
-    '@keyframes shSpinR{to{rotate:-360deg}}',
-    '.sh-root.sh-live [data-name="Ring/Outer"]{animation:shSpin 24s linear infinite;}',
-    '.sh-root.sh-live [data-name="Ring/Middle"]{animation:shSpinR 32s linear infinite;}',
-    '@keyframes shPulse{0%,100%{filter:drop-shadow(0 0 0 rgba(104,212,255,0))}50%{filter:drop-shadow(0 0 10px rgba(104,212,255,.85))}}',
-    '.sh-root.sh-live [data-name="Icon/Widget/Shield"]{animation:shPulse 2.6s ease-in-out infinite;}',
+    /* 방패 링(Visual) — Figma 가 링 · 방패를 한 장의 그림으로 내보냈다(층이 따로 없다). 그림 통째로 은은하게 숨쉰다 */
+    '@keyframes shPulse{0%,100%{filter:drop-shadow(0 0 0 rgba(var(--sh-acc),0))}50%{filter:drop-shadow(0 0 10px rgba(var(--sh-acc),.85))}}',
+    '.sh-root.sh-live [data-name="Visual"]{animation:shPulse 2.6s ease-in-out infinite;}',
     '.sh-root.sh-live [data-name="Badge/Threat Level"]{animation:shPulse 3.2s ease-in-out infinite;}',
     '@keyframes shBreath{0%,100%{opacity:1}50%{opacity:.72}}',
     '.sh-root.sh-live [data-name="Highlight"]{animation:shBreath 3.4s ease-in-out infinite;}',
-    '@keyframes shDot{0%,70%,100%{scale:1;filter:none}35%{scale:1.6;filter:drop-shadow(0 0 4px #68d4ff)}}',
+    '@keyframes shDot{0%,70%,100%{scale:1;filter:none}35%{scale:1.6;filter:drop-shadow(0 0 4px rgb(var(--sh-acc)))}}',
     '.sh-root.sh-live [data-name="Timeline"] > [data-name="Dot"]{animation:shDot 3s ease-in-out infinite;}',
     '.sh-root.sh-live [data-name="Timeline"] > [data-name="Dot"]:nth-child(3){animation-delay:.4s}',
     '.sh-root.sh-live [data-name="Timeline"] > [data-name="Dot"]:nth-child(4){animation-delay:.8s}',
@@ -129,10 +128,10 @@
     '.sh-root.sh-live [data-name="Timeline"] > [data-name="Dot"]:nth-child(6){animation-delay:1.6s}',
     '@keyframes shGlow{0%,100%{opacity:.75}50%{opacity:1}}',
     '.sh-root.sh-live [data-name="Pedestal"] > [data-name="Glow"]{animation:shGlow 2.8s ease-in-out infinite;}',
-    '@keyframes shTick{0%{text-shadow:0 0 10px rgba(104,212,255,.95)}100%{text-shadow:0 0 0 rgba(104,212,255,0)}}',
+    '@keyframes shTick{0%{text-shadow:0 0 10px rgba(var(--sh-acc),.95)}100%{text-shadow:0 0 0 rgba(var(--sh-acc),0)}}',
     '.sh-root .sh-tick{animation:shTick .9s ease-out;}',
     '.sh-root .sh-num{white-space:nowrap;}',
-    '@keyframes shFlash{0%{box-shadow:0 0 0 2px rgba(104,212,255,.95),0 0 26px rgba(104,212,255,.7)}100%{box-shadow:0 0 0 2px rgba(104,212,255,0),0 0 26px rgba(104,212,255,0)}}',
+    '@keyframes shFlash{0%{box-shadow:0 0 0 2px rgba(var(--sh-acc),.95),0 0 26px rgba(var(--sh-acc),.7)}100%{box-shadow:0 0 0 2px rgba(var(--sh-acc),0),0 0 26px rgba(var(--sh-acc),0)}}',
     '.sh-root .sh-flash{animation:shFlash 1.4s ease-out;border-radius:20px;}',
 
     /* ── 겹쳐 뜬 '이상징후 탐지 등록' 창 ── */
@@ -148,26 +147,26 @@
     '@keyframes shPopOut{from{opacity:1;transform:none}to{opacity:0;transform:scale(.98)}}',
 
     /* ── 패널편집: 옮기기 ── */
-    '.dt-editing .sh-root .sh-mv > [data-name="Background"],.sh-root.sh-edit-layout .sh-mv > [data-name="Background"]{outline:1px dashed rgba(104,212,255,0);outline-offset:3px;transition:outline-color .2s ease;}',
-    '.dt-editing .sh-root .sh-mv:has(:hover) > [data-name="Background"],.sh-root.sh-edit-layout .sh-mv:has(:hover) > [data-name="Background"]{outline-color:rgba(104,212,255,.9);}',
+    '.dt-editing .sh-root .sh-mv > [data-name="Background"],.sh-root.sh-edit-layout .sh-mv > [data-name="Background"]{outline:1px dashed rgba(var(--sh-acc),0);outline-offset:3px;transition:outline-color .2s ease;}',
+    '.dt-editing .sh-root .sh-mv:has(:hover) > [data-name="Background"],.sh-root.sh-edit-layout .sh-mv:has(:hover) > [data-name="Background"]{outline-color:rgba(var(--sh-acc),.9);}',
     '.dt-editing .sh-root .sh-mv > *,.sh-root.sh-edit-layout .sh-mv > *{cursor:grab;}',
     '.sh-root .sh-mv.sh-dragging{z-index:30;filter:drop-shadow(0 14px 22px rgba(0,0,0,.5));}',
     '.sh-root .sh-mv.sh-dragging > *{cursor:grabbing;}',
-    '.sh-root .sh-mv.sh-dragging > [data-name="Background"]{outline:1px solid #68d4ff!important;}',
-    '.sh-root .sh-ghost{position:absolute;z-index:4;border:2px dashed rgba(104,212,255,.85);border-radius:20px;background:rgba(104,212,255,.08);pointer-events:none;transition:left .25s ' + EASE + ',top .25s ' + EASE + ',height .25s ' + EASE + ';}',
-    '.dt-editing .sh-root .sh-fmv,.sh-root.sh-edit-layout .sh-fmv{cursor:grab;outline:1px dashed rgba(104,212,255,0);outline-offset:4px;transition:outline-color .2s ease;}',
-    '.dt-editing .sh-root .sh-fmv:hover,.sh-root.sh-edit-layout .sh-fmv:hover{outline-color:rgba(104,212,255,.9);}',
-    '.sh-root .sh-fmv.sh-dragging{cursor:grabbing;outline:1px solid #68d4ff!important;}',
-    '.sh-root .sh-fmv.sh-droptarget{outline:2px solid #68d4ff!important;}',
+    '.sh-root .sh-mv.sh-dragging > [data-name="Background"]{outline:1px solid rgb(var(--sh-acc))!important;}',
+    '.sh-root .sh-ghost{position:absolute;z-index:4;border:2px dashed rgba(var(--sh-acc),.85);border-radius:20px;background:rgba(var(--sh-acc),.08);pointer-events:none;transition:left .25s ' + EASE + ',top .25s ' + EASE + ',height .25s ' + EASE + ';}',
+    '.dt-editing .sh-root .sh-fmv,.sh-root.sh-edit-layout .sh-fmv{cursor:grab;outline:1px dashed rgba(var(--sh-acc),0);outline-offset:4px;transition:outline-color .2s ease;}',
+    '.dt-editing .sh-root .sh-fmv:hover,.sh-root.sh-edit-layout .sh-fmv:hover{outline-color:rgba(var(--sh-acc),.9);}',
+    '.sh-root .sh-fmv.sh-dragging{cursor:grabbing;outline:1px solid rgb(var(--sh-acc))!important;}',
+    '.sh-root .sh-fmv.sh-droptarget{outline:2px solid rgb(var(--sh-acc))!important;}',
 
     /* ── 차트 바꾸기 ── */
     '.sh-root .sh-chost{position:absolute;z-index:6;pointer-events:none;}',
     '.sh-root .sh-chost > *{pointer-events:auto;}',
     '.sh-root.sh-live .sh-chost{transition:left .55s ' + EASE + ',top .55s ' + EASE + ',width .55s ' + EASE + ',height .55s ' + EASE + ';}',
     /* 단추는 판 테두리 위에 걸친다 — 차트 제목 줄의 값과 겹치지 않게 */
-    '.sh-root .sh-chartbtn{position:absolute;top:-12px;right:22px;z-index:25;display:none;align-items:center;gap:4px;height:24px;padding:0 10px;border:1px solid #68d4ff;border-radius:12px;'
+    '.sh-root .sh-chartbtn{position:absolute;top:-12px;right:22px;z-index:25;display:none;align-items:center;gap:4px;height:24px;padding:0 10px;border:1px solid rgb(var(--sh-acc));border-radius:12px;'
       + 'background:linear-gradient(102deg,#370daf,#3e49bb 50%,#5d36e0);color:#fff;font:600 12px/22px Pretendard,system-ui,sans-serif;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.4);white-space:nowrap;}',
-    '.sh-root .sh-chartbtn:hover{filter:brightness(1.2);box-shadow:0 0 12px rgba(104,140,255,.7);}',
+    '.sh-root .sh-chartbtn:hover{filter:brightness(1.2);box-shadow:0 0 12px rgba(var(--sh-acc2),.7);}',
     '.dt-editing .sh-root .sh-chartbtn,.dt-content-editing .sh-root .sh-chartbtn,.sh-root.sh-edit-layout .sh-chartbtn{display:inline-flex;}',
     '.sh-root .sh-chartmenu{position:absolute;top:16px;right:22px;z-index:40;min-width:216px;padding:6px;border:1px solid #8fb1ff;border-radius:10px;'
       + 'background:rgba(1,13,53,.97);box-shadow:0 12px 28px rgba(0,0,0,.55);font:500 12px/1.35 Pretendard,system-ui,sans-serif;color:#cad1e2;'
@@ -175,7 +174,7 @@
     '.sh-root .sh-chartmenu.open{opacity:1;translate:0 0;pointer-events:auto!important;}',
     '.sh-root .sh-chartmenu .hd{padding:4px 8px 6px;font-size:11px;color:#8693b3;}',
     '.sh-root .sh-chartmenu button{display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;border:0;border-radius:6px;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer;}',
-    '.sh-root .sh-chartmenu button:hover{background:rgba(104,212,255,.14);color:#fff;}',
+    '.sh-root .sh-chartmenu button:hover{background:rgba(var(--sh-acc),.14);color:#fff;}',
     '.sh-root .sh-chartmenu button.cur{background:rgba(87,104,217,.4);color:#fff;}',
     '.sh-root .sh-chartmenu .ic{width:18px;height:14px;flex:none;}',
     '.sh-root .sh-chartmenu .rec{margin-left:auto;padding:1px 6px;border-radius:8px;background:#00baff;color:#001227;font-size:10px;font-weight:700;}',
@@ -199,7 +198,7 @@
     '.sh-root .sh-chart .bars{position:absolute;inset:0 0 18px;display:flex;align-items:flex-end;justify-content:space-around;gap:10px;}',
     '.sh-root .sh-chart .bars > div{position:relative;flex:1;max-width:38px;height:100%;display:flex;align-items:flex-end;}',
     '.sh-root .sh-chart .bars i{display:block;width:100%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--c),rgba(126,65,255,.35));'
-      + 'box-shadow:0 0 10px rgba(0,186,255,.3);transition:height .9s ' + EASE + ';}',
+      + 'box-shadow:0 0 10px rgba(var(--sh-acc3),.3);transition:height .9s ' + EASE + ';}',
     '.sh-root .sh-chart .bars em{position:absolute;left:50%;translate:-50% 0;bottom:calc(var(--h) + 3px);font-style:normal;font-size:11px;color:#fff;white-space:nowrap;transition:bottom .9s ' + EASE + ';}',
     '.sh-root .sh-chart .bars u{position:absolute;left:50%;translate:-50% 0;bottom:-18px;text-decoration:none;font-size:11px;color:#8693b3;white-space:nowrap;}',
     '.sh-root .sh-chart .hb{display:flex;flex-direction:column;justify-content:space-around;height:100%;gap:6px;}',
@@ -222,6 +221,52 @@
     /* ══════════ 라이트 테마 — 형상은 그대로, 판 · 글자 색만 다시 ══════════
        원본 다크의 역할별 색을 밝은 판에 맞는 짝으로 옮긴다: 본문 #1d2b4a · 보조 #4a5a78 · 값 파랑 #1b5fd1 · 강조 보라 #5a3fd6.
        짙은 판(칩 · 버튼 · 등록 단추) 위 글자는 흰색을 지킨다. */
+    /* 바탕 · 카드 패널 — 다크의 짙은 남색 카드(#1a2541 · 그림자 #081024)는 라이트에서 '흰 카드 + 옅은 선 + 부드러운 그림자'.
+       바탕은 옅은 회청 그라디언트, 원본 바탕 사진은 무늬만 아주 옅게 남긴다 */
+    /* 강조 · 빛 색(다크 = 네온 하늘) → 라이트 = 차분한 파랑. 호버 빛 · 숫자 반짝임 · 초점 테두리 · 편집 윤곽이 함께 바뀐다 */
+    '.sh-root[data-theme="light"]{background:#eef2f8!important;--sh-acc:47,111,224;--sh-acc2:40,70,160;--sh-acc3:27,110,210;}',
+    /* 호버 — 다크의 '밝아지며 둘레가 빛나는' 움직임은 흰 판에서 번진 얼룩처럼 보인다 → 라이트는 '살짝 들리며 그림자' */
+    '.sh-root[data-theme="light"] [data-name="Time Group"] > [data-name^="Icon/Action/"]:hover,.sh-root[data-theme="light"] [data-name="Close Button"]:hover [data-name^="Icon/Action/"],'
+      + '.sh-root[data-theme="light"] [data-name="Time"]:hover [data-name="Icon/Action/Clock"]{filter:drop-shadow(0 2px 4px rgba(40,70,160,.35));}',
+    '.sh-root[data-theme="light"] [data-name="Brand"].sh-click:hover{filter:drop-shadow(0 2px 6px rgba(40,70,160,.22));}',
+    '.sh-root[data-theme="light"] [data-name^="Button/"]:hover,.sh-root[data-theme="light"] [data-name="Close Button"]:hover{filter:brightness(1.06);box-shadow:0 4px 12px rgba(40,70,160,.25);}',
+    '.sh-root[data-theme="light"] [data-name="Input"]:hover{box-shadow:0 0 0 1px #8fa6e6,0 4px 10px rgba(40,70,160,.12);}',
+    '.sh-root[data-theme="light"] [data-name="Field/Category"]:hover [data-name="Box"],.sh-root[data-theme="light"] [data-name="Field/Base Date"]:hover [data-name="Input"]{filter:none;box-shadow:0 0 0 1px #7f9de0,0 4px 10px rgba(40,70,160,.15)!important;}',
+    '.sh-root[data-theme="light"] [data-name^="Section Label/"]:hover [data-name="Chip"],.sh-root[data-theme="light"] [data-name^="Th/"]:hover [data-name="Chip"],.sh-root[data-theme="light"] [data-name^="Chip/"]:hover{filter:drop-shadow(0 3px 6px rgba(40,70,160,.22));}',
+    '.sh-root[data-theme="light"] [data-name^="Metric/"]:hover [data-name="Value Box"]{filter:none;box-shadow:0 4px 12px rgba(27,110,210,.22);}',
+    '.sh-root[data-theme="light"] [data-name^="Schedule Card/"]:hover > *{filter:drop-shadow(0 6px 10px rgba(40,70,160,.18));}',
+    '.sh-root[data-theme="light"] [data-name="Icon Badge"]:hover,.sh-root[data-theme="light"] [data-name="Category Badge"]:hover > *{filter:drop-shadow(0 6px 10px rgba(40,70,160,.25));}',
+    '.sh-root[data-theme="light"] [data-name="Td/Visible"]:hover > *{filter:drop-shadow(0 0 3px rgba(47,111,224,.6));}',
+    '.sh-root[data-theme="light"] [data-name="Table/Anomaly Detection"] [data-name^="Row/"]:hover{filter:none;}',
+    '.sh-root.shd-root[data-theme="light"] [data-name="Body"] > [data-name^="Row/"]:not(.sh-on):hover > [data-name^="Td/"]{background-color:#eaf1fe!important;}',
+    /* 늘 움직이는 빛(방패 · 보안등급 배지) — 라이트는 은은하게 */
+    '@keyframes shPulseLt{0%,100%{filter:drop-shadow(0 0 0 rgba(47,111,224,0))}50%{filter:drop-shadow(0 2px 8px rgba(47,111,224,.4))}}',
+    '.sh-root[data-theme="light"].sh-live [data-name="Visual"],.sh-root[data-theme="light"].sh-live [data-name="Badge/Threat Level"]{animation-name:shPulseLt;}',
+    '.sh-root[data-theme="light"] [data-name^="Screen/"] > [data-name="Background"]{background:linear-gradient(180deg,#f4f7fc 0%,#e9eef7 100%)!important;}',
+    '.sh-root[data-theme="light"] [data-name^="Screen/"] > [data-name="Background"] > img{filter:invert(1) hue-rotate(180deg) saturate(.25) brightness(1.1)!important;opacity:.22!important;}',
+    '.sh-root[data-theme="light"] .sh-wl > [data-name="Background"]{background:#ffffff!important;border:1px solid #e0e7f3!important;'
+      + 'box-shadow:0 1px 2px rgba(22,40,90,.05),0 6px 20px rgba(22,40,90,.07)!important;}',
+    '.sh-root[data-theme="light"] .sh-chart.sh-solid{background:#ffffff;border-color:#e0e7f3;}',
+    /* 입력 · 이상징후 화면의 표 — 흰 칸 · 옅은 줄무늬 · 옅은 칸 선(머리줄 색 띠는 원본 색 그대로), 고른 줄은 옅은 파랑 */
+    '.sh-root[data-theme="light"] .shi-root [data-name="Body"] > [data-name^="Row/"] > [data-name^="Td/"],.sh-root.shi-root[data-theme="light"] [data-name="Body"] > [data-name^="Row/"] > [data-name^="Td/"],'
+      + '.sh-root.shd-root[data-theme="light"] [data-name="Body"] > [data-name^="Row/"] > [data-name^="Td/"]{background-color:#ffffff!important;background-image:none!important;border-color:#e3e9f3!important;}',
+    '.sh-root.shi-root[data-theme="light"] [data-name="Body"] > [data-name^="Row/"]:nth-child(even) > [data-name^="Td/"],'
+      + '.sh-root.shd-root[data-theme="light"] [data-name="Body"] > [data-name^="Row/"]:nth-child(even) > [data-name^="Td/"]{background-color:#f3f6fc!important;}',
+    '.sh-root.shd-root[data-theme="light"] [data-name="Body"] > [data-name^="Row/"].sh-on > [data-name^="Td/"]{background-color:#dbe7fd!important;}',
+    '.sh-root.shi-root[data-theme="light"] [data-name="Body"] [data-name^="Td/"] p,.sh-root.shd-root[data-theme="light"] [data-name="Body"] [data-name^="Td/"] p{color:#3a4a6c!important;}',
+    '.sh-root.shd-root[data-theme="light"] [data-name="Body"] > [data-name^="Row/"].sh-on [data-name^="Td/"] p{color:#123a8a!important;}',
+    '.sh-root.shd-root[data-theme="light"] [data-name="Td/Visible"] [data-name="Checkbox"]{border-color:#9aa8c6!important;background:#fff!important;}',
+    /* KPI 색 타일 — 원본은 반투명 그라디언트라 흰 카드 위에서 옅게 바랜다. 한 톤 짙게 눌러 흰 숫자가 산다 */
+    /* KPI 타일 — 원본은 반투명 그라디언트(다크 판 위에서 진해진다). 흰 카드 위에서는 같은 색상 계열의 불투명 그라디언트로,
+       흰 숫자가 4.5:1 이상 나오는 명도까지(파랑 = 전월 누적 · 현장 실태점검, 보라 = 당월 누적 · 금일 현황 · 정보보호 교육) */
+    '.sh-root[data-theme="light"] [data-name^="KPI/"] > [data-name="Background"]{background-image:linear-gradient(to top,#3a2c9a,#7546dc)!important;}',
+    '.sh-root[data-theme="light"] [data-name="KPI/Last Month"] > [data-name="Background"],.sh-root[data-theme="light"] [data-name="KPI/On-site Inspection"] > [data-name="Background"]{background-image:linear-gradient(to top,#3b67d4,#3346b6)!important;}',
+    /* 유리 테두리는 뒤를 흐려 비추는데, 라이트에서는 뒤가 흰 카드라 타일이 하얗게 뜬다 — 유리를 옅게 */
+    '.sh-root[data-theme="light"] [data-name^="KPI/"] > [data-name="Border"]{opacity:.35;}',
+    /* 빈 요일 배지(목 · 금) — 옅은 회청 배지 위 글자는 짙은 회청 */
+    '.sh-root[data-theme="light"] [data-name^="Schedule Card/"][data-name$="(Empty)"] [data-name="Day Badge"] p{color:#3f4b68!important;}',
+    '.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Measurement"] [data-name="Value"]{text-shadow:0 1px 3px rgba(20,30,90,.45);}',
+    '.sh-root[data-theme="light"] [data-name="Header Row"] > [data-name^="Th/"]{border-color:rgba(255,255,255,.25)!important;}',
     '.sh-root[data-theme="light"] .sh-gtext{background-image:linear-gradient(180deg,#1f3f86,#3a62b8)!important;}',
     '.sh-root[data-theme="light"] [data-name="Page Title"]{background-image:linear-gradient(0deg,#1d3a78,#3b5fae)!important;}',
     '.sh-root[data-theme="light"] [data-name^="Menu Item/"]:not(.sh-cur){color:#3a4a6c!important;}',
@@ -238,9 +283,8 @@
     '.sh-root[data-theme="light"] [data-name^="Row/"]:hover > [data-name="Row BG"]{filter:brightness(.97);box-shadow:0 0 0 1px #7f9de0;}',
     /* KPI 카드 */
     '.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Unit"]{color:#4a5a78!important;}',
-    '.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Caption"] > :not(p){filter:brightness(.42) saturate(1.6) hue-rotate(-8deg);}',
-    '.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Caption"] [data-name="Label"],.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Caption"] p{color:#fff!important;}',
-    '.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Value"]{color:#16233b!important;}',
+    /* KPI — 색 타일 · 유리 테두리 · 흰 숫자는 원본 그대로(생성기 LIGHT_KEEP), 이름표만 흰 이름표 + 짙은 글자 */
+    '.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Caption"] [data-name="Label"],.sh-root[data-theme="light"] [data-name^="KPI/"] [data-name="Caption"] p{color:#24324f!important;}',
     /* 지표 칩 — 원본의 하늘 · 보라 · 흰 값을 밝은 칩 위에서 읽히는 짙은 짝으로 */
     '.sh-root[data-theme="light"] [data-name="Metric/Malware"] [data-name="Value Box"] p{color:#0a5fc0!important;}',
     '.sh-root[data-theme="light"] [data-name="Metric/APT Attack"] [data-name="Value Box"] p{color:#4733c2!important;}',
@@ -249,9 +293,11 @@
     '.sh-root[data-theme="light"] [data-name^="Bar Group/"].sh-sel > [data-name="Label"],.sh-root[data-theme="light"] [data-name^="Bar Group/"].sh-sel [data-name="Value"]{color:#3a2ca8!important;}',
     /* 심의 배지 — 받침(짙은 원기둥 그림)은 두 테마 모두 짙다. 글자는 흰색을 지키고, 받침 밖으로 나온 아랫줄도
        밝은 바탕에서 읽히게 짙은 테두리 빛을 두른다 */
-    '.sh-root[data-theme="light"] [data-name="Category Badge"] p{color:#fff!important;background:none!important;-webkit-text-fill-color:#fff;text-shadow:0 0 2px #16233b,0 0 3px #16233b,0 1px 4px rgba(22,35,59,.9);}',
+    '.sh-root[data-theme="light"] [data-name="Category Badge"] p{color:#fff!important;background:none!important;-webkit-text-fill-color:#fff;text-shadow:0 0 1px #16233b,0 0 2px #16233b,0 0 3px #16233b,0 1px 5px rgba(22,35,59,.95);}',
     /* 빈 일정(목 · 금)은 원본도 흐린 '비어 있음' 표시 — 라이트에서도 흐리되 읽히게 */
-    '.sh-root[data-theme="light"] [data-name^="Schedule Card/"][data-name$="(Empty)"] [data-name="Date"]{color:#6f7d9c!important;}',
+    '.sh-root[data-theme="light"] [data-name^="Schedule Card/"][data-name$="(Empty)"] [data-name="Date"]{color:#5c6987!important;}',
+    /* 두 줄 심의 이름표(정보보호 / 내부통제 검토) — 윗줄은 짙은 받침 위, 받침 아래로 나온 아랫줄은 흰 카드 위다 */
+    '.sh-root[data-theme="light"] [data-name="Category Badge"] p.sh-offplate{color:#1d2b4a!important;-webkit-text-fill-color:#1d2b4a!important;text-shadow:none!important;}',
     /* 등록 단추 — 밝은 판에서 그라디언트 밝은 쪽이 흰 글자를 묻지 않게 한 톤 짙게 */
     '.sh-root[data-theme="light"] .sha-root [data-name="Button/Register"],.sh-root .sha-root[data-theme="light"] [data-name="Button/Register"]{background-image:linear-gradient(102.4deg,#4a1fc4 0%,#3e49bb 50.4%,#5d36e0 95.2%)!important;}',
     '.sh-root[data-theme="light"] .sha-root [data-name="Button/Register"] p,.sh-root .sha-root[data-theme="light"] [data-name="Button/Register"] p,'
@@ -265,7 +311,6 @@
     '.sh-root[data-theme="light"] [data-name^="Schedule Card/"] [data-name="Event"]{color:#2c3c5e!important;}',
     '.sh-root[data-theme="light"] [data-name^="Schedule Card/"] [data-name="Date"]{color:#1b4fb8!important;}',
     '.sh-root[data-theme="light"] [data-name="Day Badge"] p{color:#fff!important;}',
-    '.sh-root[data-theme="light"] [data-name="Day Badge"] > :not(p){filter:brightness(.6) saturate(1.5);}',
     /* 막대 차트 */
     '.sh-root[data-theme="light"] [data-name^="Bar Group/"] > [data-name="Label"]{color:#3a4a6c!important;}',
     '.sh-root[data-theme="light"] [data-name^="Bar Group/"] [data-name="Value"]{color:#4a5a78!important;}',
@@ -766,28 +811,27 @@
     var rows = all(table, '[data-name="Body"] > [data-name^="Row/"]');
     if (!rows.length) return;
     var selRow = rows.filter(function (r) { return /\(Selected\)/.test(nameOf(r)); })[0];
-    /* 원본에 그려진 두 모습(고른 줄 · 보통 줄 짝/홀)과 두 체크 모습을 그대로 옮겨 쓴다 */
-    var styleOf = function (r) {
-      return kids(r).map(function (c) {
-        var p = c.querySelector('p'), cs = getComputedStyle(c), ps = p ? getComputedStyle(p) : null;
-        return { bg: cs.backgroundColor, c: ps && ps.color, w: ps && ps.fontWeight };
-      });
+    /* 원본에 그려진 두 모습(고른 줄 · 보통 줄 짝/홀)을 **클래스째** 옮겨 쓴다 — 색을 인라인으로 굳히면
+       테마를 바꿨을 때 다크 색이 남는다. 칸 · 글자의 생성 클래스(다크 · 라이트 규칙이 함께 걸려 있다)를 바꿔 끼운다. */
+    var classesOf = function (r) {
+      return kids(r).map(function (c) { var p = c.querySelector('p'); return { c: c.className, p: p ? p.className : null }; });
     };
-    var idx = rows.indexOf(selRow);
-    var same = rows.filter(function (r, i) { return r !== selRow && i % 2 === idx % 2; })[0];
-    var SEL = selRow ? styleOf(selRow) : null;
-    var NORM = [styleOf(rows[0]), styleOf(rows[1] || rows[0])];   /* 짝 · 홀 */
+    var SEL = selRow ? classesOf(selRow) : null;
+    var NORM = [classesOf(rows[0]), classesOf(rows[1] || rows[0])];   /* 짝 · 홀 */
     var box = function (r) { return one(r, '[data-name="Td/Visible"]'); };
     var ON = selRow ? box(selRow).innerHTML : '', OFF = box(rows[0]).innerHTML;
     function paint(r, on) {
       var i = rows.indexOf(r), S = on ? SEL : NORM[i % 2];
+      r.classList.toggle('sh-on', !!on);
       if (!S) return;
       kids(r).forEach(function (c, k) {
         if (!S[k]) return;
-        c.style.backgroundColor = S[k].bg;
-        var p = c.querySelector('p'); if (p && S[k].c) { p.style.color = S[k].c; p.style.fontWeight = S[k].w; }
+        var keep = Array.prototype.filter.call(c.classList, function (x) { return /^sh-/.test(x); });
+        c.className = S[k].c; keep.forEach(function (x) { c.classList.add(x); });
+        var p = c.querySelector('p'); if (p && S[k].p) { var kp = Array.prototype.filter.call(p.classList, function (x) { return /^sh-/.test(x); }); p.className = S[k].p; kp.forEach(function (x) { p.classList.add(x); }); }
       });
     }
+    if (selRow) selRow.classList.add('sh-on');
     function check(r, on) { var b = box(r); if (b) b.innerHTML = on ? ON : OFF; r.__on = on; }
     rows.forEach(function (r) {
       r.__on = r === selRow;
@@ -1408,6 +1452,13 @@
     all(root, 'p').forEach(function (p) {
       var cs = getComputedStyle(p);
       if (cs.webkitBackgroundClip === 'text' || cs.backgroundClip === 'text') p.classList.add('sh-gtext');
+    });
+    /* 심의 이름표 중 받침(Plate 판) 아래로 나온 줄 — 라이트에서는 흰 카드 위라 짙은 글자로(윗줄은 짙은 받침 위라 흰색 그대로) */
+    all(root, '[data-name="Category Badge"]').forEach(function (b) {
+      var plate = one(b, '[data-name="Plate"] > [data-name="Background"]');
+      if (!plate) return;
+      var pb = plate.getBoundingClientRect().bottom;
+      all(b, 'p').forEach(function (p) { if (p.getBoundingClientRect().top >= pb - 3) p.classList.add('sh-offplate'); });
     });
   }
 

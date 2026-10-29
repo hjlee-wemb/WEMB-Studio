@@ -738,6 +738,15 @@ function buildScreen(S) {
   const jsxStart = src.indexOf('<', retAt);
   const rootJsx = src.slice(jsxStart, src.lastIndexOf(');'));
   const tree = parseNodes(rootJsx, { comps, assets }, Object.assign({}, assets))[0];
+  /* 라이트에서도 원본 색을 지키는 오브젝트 — 그 노드와 자손은 아래 darkRules(라이트 변환)를 건너뛴다.
+     KPI 는 타일 판(Background) · 유리 테두리(Border) · 숫자(Measurement)만 — 이름표(Caption)는 흰 이름표로 바뀐다. */
+  (function markKeep(n, keep, parentName) {
+    if (!n || n.tag === '#text') return;
+    const dn = n.attrs && typeof n.attrs['data-name'] === 'string' ? n.attrs['data-name'] : '';
+    const k = keep || LIGHT_KEEP.test(dn) || (/^KPI\//.test(parentName) && /^(Background|Border|Measurement)$/.test(dn));
+    n.__lightKeep = k;
+    (n.children || []).forEach((c) => markKeep(c, k, dn || parentName));
+  })(tree, false, '');
 
   /* 다른 화면에서 가져다 심는 조각(헤더 드롭다운) — 원본 트리를 그대로 잘라 붙인다.
      scope 에 그 화면의 에셋 파일명이 들어 있어 그림도 따라온다. */
@@ -1037,7 +1046,7 @@ function buildScreen(S) {
     const myLuma = LIGHT.surfaceLuma(decls);
     const onDark = myLuma == null ? parentOnDark : myLuma < 0.42;
     const dd = [];
-    decls.forEach(([p, v]) => {
+    if (!node.__lightKeep) decls.forEach(([p, v]) => {
       if (onDark && (p === 'color' || p === '-webkit-text-fill-color')) return;
       const nv = LIGHT.lightDecl(p, v, nid); if (nv) dd.push([p, nv]);
     });
@@ -1146,6 +1155,8 @@ function buildScreen(S) {
    정확히 +2px(=테두리 두께 2배) 큰 프레임이 여기 들어간다(_gen/README.md 의 '검증' 참고). */
 let inSopDialog = false;   /* 지금 SOP 대화상자 안을 그리는가(patch-sop-thin ①) */
 let inlineSeq = 0;   /* 인라인 SVG 마다 참조 id 를 고유하게 만들 번호 */
+/* 라이트 변환을 건너뛰는 오브젝트 이름(buildScreen 의 markKeep · mk-light-shinhan.js 와 짝) */
+const LIGHT_KEEP = /^(Day Badge|Icon Badge|Category Badge|Badge\/Threat Level|Visual|Highlight|Fill|Title Bar|Close Button|Button\/Register)$/;
 const RING_STROKE = [];
 
 /* 바깥 정렬(outside) stroke — 상자 밖으로 B 만큼 더 그려야 하는 테두리.
