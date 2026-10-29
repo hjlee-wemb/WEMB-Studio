@@ -787,6 +787,15 @@ const TPLTINT = {
      주조색은 브랜드 파랑(#2861FF, 색상각 224°). 색을 그대로 둘 것:
        · 상태·등급 색이 곧 의미인 것(상태 표지 marker · 등급 점 ellipse · 토글 손잡이 knob · 로고)
        · 바탕 사진과 3D 미니맵 렌더(사진이라 색상만 돌리면 어색하다 → 픽셀을 다시 칠한다) */
+  /* ── 신한카드 정보보호 대시보드 시안 ──
+     주조색은 지표 파랑(#4571FF, 색상각 226°). 색을 그대로 둘 것:
+       · 로고(logo-mark · 보안등급 배지의 W 로고 exclude)
+       · 바탕 사진(background*.png — 사진이라 색상만 돌리면 어색하다 → 픽셀을 다시 칠한다) */
+  SHINHAN_OPT: {
+    seed: '#4571FF', seededKey: 'wemb-shinhan-seeded', refHue: 226,
+    keep: /(logo-mark[-\d]*|exclude[-\d]*)(-lt)?\.svg(\?|$)/i,
+    raster: /background[-\d]*\.(png|jpg)(\?|$)/i,
+  },
   LSELECTRIC_OPT: {
     seed: '#2861FF', seededKey: 'wemb-lselectric-seeded', refHue: 224,
     keep: /(marker[-\w]*|ellipse[-\d]*|knob[-\d]*|logo-mark[-\d]*|battery[-\d]*|plug|fan-[\w-]+|plot[-\d]*)(-lt)?\.svg(\?|$)|(visual[-\d]*|thermal-image|chart-image[-\d]*)\.png(\?|$)/i,
@@ -913,6 +922,11 @@ const TPLTINT = {
     ['lsm', 'lsd', 'lsa', 'lsy', 'lse', 'lst', 'lsp', 'lsb', 'lsc', 'lsr'].forEach((px) => {      /* lsa~lsr = STATCOM 위에 겹친 팝업(ACB·계통·에너지·상태정보·AC전원실·충전기·냉각설비·알림) */
       this.icheonTint(t, mode, '.' + px + '-root',
         [px + '-style', px + '-light-style', 'lselectric-live-style'], 'wemb-lselectric-mode', this.LSELECTRIC_OPT);
+    });
+    /* 신한카드 정보보호 화면 4장 — 같은 방식. 네 장이 같은 밝기를 공유한다(wemb-shinhan-mode). sha = 등록 창 */
+    ['shm', 'sha', 'shi', 'shd'].forEach((px) => {
+      this.icheonTint(t, mode, '.' + px + '-root',
+        [px + '-style', px + '-light-style', 'shinhan-live-style'], 'wemb-shinhan-mode', this.SHINHAN_OPT);
     });
     ['hjc', 'hjg', 'hju'].forEach((px) => {
       this.icheonTint(t, mode, '.' + px + '-root',

@@ -609,6 +609,14 @@
           try { localStorage.setItem('wemb-lselectric-screen', wantLs); } catch (e3) {}
           if (typeof applyLsElectricDT === 'function') applyLsElectricDT(wantLs);
         }
+        else if (f.tpl === 'shinhan') {
+          localStorage.setItem('wemb-tpl-dt', 'shinhan'); localStorage.removeItem('wemb-tpl-img');
+          /* 템플릿 상세에서 고른 장면(보안 현황 · 등록 · 입력 · 이상징후 탐지)을 그대로 연다 */
+          const wantSh = (typeof SH_SCREENS !== 'undefined' && SH_SCREENS[f.scene]) ? f.scene
+            : (localStorage.getItem('wemb-shinhan-screen') || 'overview');
+          try { localStorage.setItem('wemb-shinhan-screen', wantSh); } catch (e3) {}
+          if (typeof applyShinhanDT === 'function') applyShinhanDT(wantSh);
+        }
         else if (f.tpl === 'hana') {
           localStorage.setItem('wemb-tpl-dt', 'hana'); localStorage.removeItem('wemb-tpl-img');
           /* 템플릿 상세에서 고른 장면(화면 15장 중 하나)을 그대로 연다 */

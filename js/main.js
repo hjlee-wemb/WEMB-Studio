@@ -6,7 +6,11 @@ applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
 try {
   const __tdt = localStorage.getItem('wemb-tpl-dt');
   if (state.screen === 'dt') {
-    if (__tdt === 'lselectric' && typeof applyLsElectricDT === 'function') {
+    if (__tdt === 'shinhan' && typeof applyShinhanDT === 'function') {
+      /* 네 장 중 어느 화면인지는 열려 있는 프로젝트의 tplScene 이 정답 */
+      applyShinhanDT(window.__shinhanSceneOf ? window.__shinhanSceneOf() : localStorage.getItem('wemb-shinhan-screen'));
+    }
+    else if (__tdt === 'lselectric' && typeof applyLsElectricDT === 'function') {
       /* 두 장 중 어느 화면인지는 열려 있는 프로젝트의 tplScene 이 정답 */
       applyLsElectricDT(window.__lsElectricSceneOf ? window.__lsElectricSceneOf() : localStorage.getItem('wemb-lselectric-screen'));
     }
@@ -98,6 +102,14 @@ try {
   /* LS Electric STATCOM 도 Dark 가 원본 — 고른 밝기(wemb-lselectric-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'lselectric') {
     const want = localStorage.getItem('wemb-lselectric-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* 신한카드 정보보호 대시보드도 Dark 가 원본 — 고른 밝기(wemb-shinhan-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'shinhan') {
+    const want = localStorage.getItem('wemb-shinhan-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));

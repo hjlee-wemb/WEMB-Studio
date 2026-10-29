@@ -83,6 +83,15 @@
       { src: 'src/lselectric-alarm.js?v=1', build: ['build_lsr', 'build_lsm_alarm'] },
       { src: 'src/lselectric-live.js?v=9', part: 'base' },
     ],
+    /* 신한카드 정보보호 대시보드 — Figma zXb8i3nonD9Hpu5kdZQs6t. 헤더 메뉴로 장면끼리 오가고,
+       이상징후 탐지 표에서 등록 창(sha)을 그 자리에 겹쳐 띄우므로 통째로 */
+    shinhan: [
+      { src: 'src/shinhan-overview.js?v=1', build: ['build_shm'] },
+      { src: 'src/shinhan-register.js?v=1', build: ['build_sha', 'build_shm_register'] },
+      { src: 'src/shinhan-entry.js?v=1', build: ['build_shi'] },
+      { src: 'src/shinhan-anomaly.js?v=1', build: ['build_shd'] },
+      { src: 'src/shinhan-live.js?v=5', part: 'base' },
+    ],
   };
   /* 장면마다 따로 싣는 템플릿(나머지는 통째로) · 장면을 적어 두는 전역 키 · 기본 장면 */
   const PER_SCENE = {

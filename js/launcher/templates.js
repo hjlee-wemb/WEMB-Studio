@@ -246,6 +246,22 @@
       ];
     }
   })();
+  /* 신한카드 정보보호 대시보드 — '스튜디오 열기' 시 Figma(zXb8i3nonD9Hpu5kdZQs6t) 화면 4장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/shinhan-*.js)으로 연다. 상세 미리보기도 그 화면을 그대로 캡처한 것이다. */
+  (function () {
+    const sh = TEMPLATES.find((t) => t.title === 'Dashboard: Shinhan Card Security');
+    if (sh) {
+      sh.tpl = 'shinhan';
+      sh.img = 'src/templates/shinhan-overview.jpg';
+      /* 화면 4장 — 슬라이드 순서가 곧 프로젝트 안의 화면 순서다(home.js 의 tplScene 표와 짝) */
+      sh.slides = [
+        { img: 'src/templates/shinhan-overview.jpg', label: '보안 현황' },
+        { img: 'src/templates/shinhan-register.jpg', label: '이상징후 탐지 등록' },
+        { img: 'src/templates/shinhan-entry.jpg', label: '정보보호 현황 입력' },
+        { img: 'src/templates/shinhan-anomaly.jpg', label: '이상징후 탐지' },
+      ];
+    }
+  })();
   /* 실제 화면이 붙어 있는 템플릿인지 — Figma를 HTML/CSS DOM(+SVG)으로 재구축해 두어
      '스튜디오 열기'를 누르면 그 화면이 그대로 열리는 것들이다.
      나머지는 아직 카탈로그 그림 한 장뿐이라 갤러리에서 '제작중'으로 표시한다.
@@ -259,7 +275,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };
