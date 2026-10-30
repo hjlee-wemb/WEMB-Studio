@@ -1340,6 +1340,9 @@ const OVERLAY_CSS = (S) => [
   '.' + S.px + '-mount{position:absolute;left:' + S.overlay.left + 'px;top:' + S.overlay.top + 'px;'
     + 'width:' + S.overlay.w + 'px;height:' + S.overlay.h + 'px;z-index:60;}',
   '.' + S.px + '-root{position:absolute;inset:0;background:transparent;z-index:auto;overflow:visible;}',
+  /* 창 뿌리는 Figma 에서 size-full(담는 칸을 꽉 채움)이다. 창만 따로 그리는 곳(분자 라이브러리 페이지 · 에셋)에서는
+     담는 칸이 화면 전체라 창이 1920 폭으로 늘어났다 → 창 크기를 Figma 값으로 못 박는다(스튜디오 자리 칸과 같은 값) */
+  '.' + S.px + '-root > [data-node-id="' + S.node + '"]{width:' + S.overlay.w + 'px;height:' + S.overlay.h + 'px;}',
   S.overlay.dim ? '.' + S.px + '-dim{position:absolute;inset:0;background:' + S.overlay.dim + ';z-index:59;}' : '',
 ].join('\n');
 

@@ -678,7 +678,11 @@ function initLayoutEditor() {
        한진·HANA 와 같은 장치(화면 DOM 에서 노드 id 로 잘라 쓰기) — 등록 목록만 다르다.
        이 시안은 관제 화면이라 그래프가 없다(charts 는 비어 있다) — 표·도면·상태 타일이 본체다. */
     const PK = window.__POSCO_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
-    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {});
+    /* ── 신한카드 정보보호 대시보드 4화면의 컴포넌트 에셋 ──
+       같은 장치에 하나만 더한다: 종합현황 위젯은 Figma GROUP 이라 DOM 에 상자가 없다(display:contents,
+       자식이 화면 좌표). 그런 등록물은 ox·oy(화면 안 자리)를 갖고, hjDom 이 화면 판째 당겨 그 자리만 보여 준다. */
+    const SH = window.__SHINHAN_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {}, SH.screens || {});
     const hjHtmlCache = {};
     function hjScreenHtml(px) {
       if (hjHtmlCache[px]) return hjHtmlCache[px];
@@ -690,7 +694,8 @@ function initLayoutEditor() {
         return (hjHtmlCache[px] = '');
       }
       /* 시트도 이때 한 번만 — 다크가 먼저, 라이트가 뒤(오버라이드 순서) */
-      [[px + '-style', window[S.css]], [px + '-light-style', window[S.light]]].forEach((p) => {
+      /* extra = 화면 시트 밖에서 테마를 칠하는 규칙(신한카드: 라이브 층의 라이트 규칙을 옮긴 SHINHAN_ASSET_CSS) — 시안마다 한 번 */
+      [[px + '-style', window[S.css]], [px + '-light-style', window[S.light]], [S.extra, S.extra && window[S.extra]]].forEach((p) => {
         if (!p[1] || document.getElementById(p[0])) return;
         const st = document.createElement('style');
         st.id = p[0];
@@ -739,16 +744,32 @@ function initLayoutEditor() {
       }
       return (hjSubCache[key] = '');
     }
+    /* 인라인 SVG 의 내부 참조 id(그라디언트 · clipPath · filter)를 사본마다 바꾼다.
+       같은 화면 DOM 을 썸네일 · 삽입본 · 살아 있는 화면이 함께 쓰면 id 가 겹치고, url(#…) 은 문서에서 첫 번째 것을
+       가리킨다 — 그게 숨은 사본 안에 있으면 clip-path 가 풀려 유리 아이콘의 흐림이 판 전체를 덮는다(신한카드 유리 배지). */
+    let hjUid = 0;
+    function hjUniqIds(html) {
+      const refs = new Set();
+      html.replace(/url\(#([^)\s"']+)\)|href="#([^"]+)"/g, (m, a, b) => { refs.add(a || b); return m; });
+      if (!refs.size) return html;
+      const sfx = '-u' + (++hjUid).toString(36);
+      return html.replace(/(\bid="|url\(#|href="#)([^)"\s']+)/g, (m, pre, name) => (refs.has(name) ? pre + name + sfx : m));
+    }
     /* 에셋 하나를 감싸 그린다 — 크기는 Figma 값 그대로, 자리는 .hj-asset 이 잡는다 */
     function hjDom(it, theme) {
-      const inner = hjSub(it.px, it.nid);
+      let inner = hjSub(it.px, it.nid);
       if (!inner) return '';
+      inner = hjUniqIds(inner);
+      /* GROUP 등록물 — 1920x1080 화면 판(.hj-ofs)을 (-ox,-oy) 만큼 당겨 놓는다(자식 좌표는 그대로) */
+      if (it.ox != null) inner = '<div class="hj-ofs" style="--hjox:' + it.ox + 'px;--hjoy:' + it.oy + 'px">' + inner + '</div>';
       const th = theme || (grid.dataset.theme === 'light' ? 'light' : 'dark');
-      return '<div class="' + it.px + '-root hj-asset" data-theme="' + th + '" data-hjw="' + it.w + '" data-hjh="' + it.h + '"'
+      const rc = ((DOM_SCREENS[it.px] || {}).rootClass || '') + (it.ox != null ? ' hj-grp' : '');
+      return '<div class="' + it.px + '-root hj-asset' + (rc ? ' ' + rc.trim() : '') + '" data-theme="' + th + '" data-hjw="' + it.w + '" data-hjh="' + it.h + '"'
         + ' style="width:' + it.w + 'px;height:' + it.h + 'px">' + inner + '</div>';
     }
     const hjItems = (arr, cat) => (arr || []).map((a) => ({
       cat: cat, id: a.id, name: a.name, fig: a.fig, px: a.px, nid: a.nid, w: a.w, h: a.h, dom: true,
+      ox: a.ox, oy: a.oy,
     }));
     const hjIcons = (arr, cat) => (arr || []).map((a) => ({ cat: cat, id: a.id, name: a.name, fig: a.fig, src: a.src }));
     /* 담는 상자에 맞춰 배율을 잡는다(썸네일·삽입 공통). 원본 비율 그대로 줄이기만 한다. */
@@ -825,12 +846,14 @@ function initLayoutEditor() {
         .concat(ichItems((ICH.panels || []).filter((a) => !isEventNamed(a)), 'panel'))
         .concat(hjItems(HJ.panels, 'panel'))
         .concat(hjItems(HN.panels, 'panel'))
-        .concat(hjItems(PK.panels, 'panel')),
+        .concat(hjItems(PK.panels, 'panel'))
+        .concat(hjItems(SH.panels, 'panel')),
       /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리들.
          한진 시안의 이벤트 현황(판·머리글·카운트·표·행·등급 배지)과 이천 FMS 의 이벤트 목록이 함께 산다. */
       event: hjItems(HJ.events, 'event')
         .concat(hjItems(HN.events, 'event'))
         .concat(hjItems(PK.events, 'event'))
+        .concat(hjItems(SH.events, 'event'))
         .concat(ichItems((ICH.panels || []).filter(isEventNamed), 'event')),
       symbol: (window.__WEMB_SYMBOLS || [])
         .map((s, i) => ({ cat: 'symbol', id: s.i, name: '심볼 ' + String(i + 1).padStart(2, '0'), src: s.s }))
@@ -838,7 +861,8 @@ function initLayoutEditor() {
         .concat(ichItems(ICH.symbols, 'symbol'))
         .concat(hjItems(HJ.symbols, 'symbol'))
         .concat(hjItems(HN.symbols, 'symbol'))
-        .concat(hjItems(PK.symbols, 'symbol')),
+        .concat(hjItems(PK.symbols, 'symbol'))
+        .concat(hjItems(SH.symbols, 'symbol')),
       /* 아이콘 탭에는 '…아이콘'으로 이름 붙은 등록물만 올린다 — 칩·토글·상태 점·화살표·
          로고처럼 아이콘이 아닌 부품이 섞이지 않게. 이름이 기준이라 내장 라인 아이콘
          세트(홈·차트·알림 …)도 더는 올리지 않는다 — 이름에 '아이콘'이 없다.
@@ -848,7 +872,8 @@ function initLayoutEditor() {
         .concat(ichItems(ICH.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(HJ.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(HN.icons, 'icon').filter(isIconNamed))
-        .concat(hjIcons(PK.icons, 'icon').filter(isIconNamed)),
+        .concat(hjIcons(PK.icons, 'icon').filter(isIconNamed))
+        .concat(hjIcons(SH.icons, 'icon').filter(isIconNamed)),
       /* 검색 결과 임시 버킷 — data-cat="__search" 로 클릭/드래그가 여기서 항목을 찾는다 */
       __search: [],
     };
@@ -1013,6 +1038,8 @@ function initLayoutEditor() {
       hjItems(HN.charts, 'chart').forEach((a) => items.push(a));
       /* POSCO KDB — 이 시안에는 그래프가 없어 보통 비어 있다(표·도면·상태 타일이 본체) */
       hjItems(PK.charts, 'chart').forEach((a) => items.push(a));
+      /* 신한카드 정보보호 — 전체 트레픽 용량 선 차트 · 이상징후 탐지 막대 차트 */
+      hjItems(SH.charts, 'chart').forEach((a) => items.push(a));
       return items;
     }
 

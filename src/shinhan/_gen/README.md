@@ -124,4 +124,13 @@ LS Electric(`src/lselectric/_gen/`)의 conv.js · light.js · dl.js · dedupe ·
 `js/launcher/home.js`(tplScene register · entry · anomaly) · `js/studio/project.js` · `js/core/projects.js` · `js/main.js`(새로고침 복원 · 밝기 `wemb-shinhan-mode`) ·
 `js/templates/image.js`(`SHINHAN_OPT` — 로고는 색 유지, 바탕 사진은 픽셀 재도색) · `js/studio/dt-edit.js`(DTSEL) · `js/studio/atom-swap.js`(PXS). 전부 `patch-studio.js`.
 
-아직 안 한 것: 분자 라이브러리(wemb-atomic) 추출기 화이트리스트 · 에셋 라이브러리 등록.
+## 라이브러리 등록 (2026-10-30)
+
+- **에셋 라이브러리** — 차트 2 · 심볼 48 · 아이콘 5 · 패널 16. 등록 목록 생성기와 이 시안만의 장치(GROUP 위젯 당겨 보이기 ·
+  SVG id 사본마다 바꾸기 · 라이브 층 라이트 규칙 옮기기)는 `src/shinhan-assets/_gen/README.md`.
+- **분자 라이브러리(wemb-atomic)** — 페이지 4장(보안 현황 · 등록 창 · 데이터 입력 · 이상징후 탐지), 분자 10종 새로.
+  합성 장면 `build_shm_register` 는 LS ACB 처럼 추출에서 뺀다. 빌더를 다시 만들면 `wemb-atomic/sources/WEMB-Studio/src/` 사본도 바꾸고
+  build → test → (서버 다시 켜고 측정) → export.
+- 등록 창 뿌리는 Figma 에서 size-full 이라 창만 그리는 곳에서 1920 폭으로 늘어났다 → `conv.js` OVERLAY_CSS 가 창 크기를 579x599 로 못 박는다
+  (스튜디오 자리 칸 `.sha-mount` 와 같은 값이라 스튜디오 그림은 그대로).
+- `shinhan-live.js` 의 라이트 규칙을 고치면 `node src/shinhan-assets/_gen/mk-assets.js` 도 다시 돌린다(window.SHINHAN_LIVE_CSS 를 읽는다).

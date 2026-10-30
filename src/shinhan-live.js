@@ -346,6 +346,8 @@
     '.sh-root[data-theme="light"] .sh-chartmenu button:hover{background:rgba(27,95,209,.1);color:#16233b;}',
     '.sh-root[data-theme="light"] .sh-chartmenu button.cur{background:rgba(87,104,217,.18);color:#16233b;}',
   ].join('\n');
+  /* 에셋 라이브러리 등록 목록 생성기(src/shinhan-assets/_gen/mk-assets.js)가 라이트 규칙을 옮겨 쓴다 — 고치면 생성기도 다시 돌릴 것 */
+  window.SHINHAN_LIVE_CSS = CSS;
 
   function injectStyle() {
     var st = document.getElementById(STYLE_ID);

@@ -87,10 +87,10 @@
        이상징후 탐지 표에서 등록 창(sha)을 그 자리에 겹쳐 띄우므로 통째로 */
     shinhan: [
       { src: 'src/shinhan-overview.js?v=3', build: ['build_shm'] },
-      { src: 'src/shinhan-register.js?v=3', build: ['build_sha', 'build_shm_register'] },
+      { src: 'src/shinhan-register.js?v=4', build: ['build_sha', 'build_shm_register'] },
       { src: 'src/shinhan-entry.js?v=3', build: ['build_shi'] },
       { src: 'src/shinhan-anomaly.js?v=3', build: ['build_shd'] },
-      { src: 'src/shinhan-live.js?v=7', part: 'base' },
+      { src: 'src/shinhan-live.js?v=8', part: 'base' },
     ],
   };
   /* 장면마다 따로 싣는 템플릿(나머지는 통째로) · 장면을 적어 두는 전역 키 · 기본 장면 */
