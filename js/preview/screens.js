@@ -7,15 +7,27 @@ const SCREENS = {
   dash: document.querySelector('.stage'),
   dt: document.getElementById('dtStage'),
 };
-/* SK하이닉스 시안 화면(고정 색·형상)에는 Flat/Enterprise 버전 구분이 없으므로,
-   이 화면이 활성일 때 버전 토글을 '해당없음'으로 비활성화한다(혼란 방지). */
+/* 템플릿 시안은 디자인이 고정돼 있어 Flat/Enterprise 로 나뉘지 않는다 — 어느 템플릿이든 버전을 고르지 못하게 잠그고 Flat 으로 둔다.
+   버전은 템플릿 없이 시작한 화면에서만 고른다. */
+function tplLocksVersion() {
+  try { return !!(localStorage.getItem('wemb-tpl-img') || (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt'))); } catch (e) { return false; }
+}
 function syncSkxControls() {
+  const verLock = tplLocksVersion();
+  document.getElementById('versionRow')?.classList.toggle('tpllocked', verLock);
+  if (verLock && state.version !== 'flat') {
+    state.version = 'flat';
+    try { localStorage.setItem('wemb-version', 'flat'); } catch (e) {}
+    if (typeof syncVersionUI === 'function') syncVersionUI();
+    if (typeof apply === 'function') apply();
+  }
   let skx = false;
   try { const t = localStorage.getItem('wemb-tpl-dt'); skx = (state.screen === 'dt') && (t === 'skhynix' || t === 'skhynix-hub'); } catch (e) {}
   document.querySelectorAll('#version button').forEach((b) => {
-    b.disabled = skx;
-    b.classList.toggle('locked', skx);
-    b.title = skx ? 'SK하이닉스 시안 화면에는 버전 구분이 없어요' : '';
+    b.disabled = verLock;
+    b.classList.toggle('locked', verLock);
+    if (b.dataset.tipOrig == null) b.dataset.tipOrig = b.title || '';
+    b.title = verLock ? '템플릿은 디자인이 고정돼 있어 버전을 나눌 수 없어요' : b.dataset.tipOrig;
   });
   /* '화면 테마'(dark/light)와 '색 고르기' 게이트는 원래 "버전 → 밝기 → 색" 순서로 열리는데,
      이 화면은 버전을 비활성화하므로 게이트가 영구 잠긴다 → skhynix에선 직접 열어 준다.
@@ -60,7 +72,7 @@ function applyScreen() {
   if (window.__refreshScreenBuilder) window.__refreshScreenBuilder();
   /* 레이아웃 목록도 화면 종류(대시보드/디지털 트윈)에 맞게 다시 구성한다. */
   if (window.__syncSideLayout) window.__syncSideLayout();
-  syncSkxControls(); /* SK하이닉스 화면이면 버전 토글 비활성 */
+  syncSkxControls(); /* 템플릿이면 버전 토글 비활성 */
   if (window.__syncCanvas1920) window.__syncCanvas1920(); /* 1920x1080 고정 캔버스는 요청한 화면에서만 */
   if (s === 'dt' && window.__paintDtFromPrd) window.__paintDtFromPrd(); /* PRD 답변을 트윈 패널에 반영 */
   if (s === 'dt' && window.__dtRestampLog) window.__dtRestampLog(); /* 이벤트 현황 시각을 '방금'으로 */

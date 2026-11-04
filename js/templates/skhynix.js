@@ -402,8 +402,10 @@ window.__hubSceneOfScreen = function () {
 window.__openHubScreen = function (which) {
   const hvac = which === 'hvac';
   try { localStorage.setItem('wemb-tpl-dt', 'skhynix-hub'); localStorage.setItem('wemb-hub-screen', hvac ? 'hvac' : 'main'); } catch (e) {}
-  if (hvac) { clearSkhynixHub(); applySkhynixHvac(); }
-  else { clearSkhynixHvac(); applySkhynixHub(); }
+  WEMB.screenSwitch.transition(() => {
+    if (hvac) { clearSkhynixHub(); applySkhynixHvac(); }
+    else { clearSkhynixHvac(); applySkhynixHub(); }
+  }, [hvac ? 'buildSkhynixHvac' : 'buildSkhynixHub']);
 };
 function clearSkhynixPopup() {
   document.querySelectorAll('#dtStage .skxp-root').forEach((e) => e.remove());

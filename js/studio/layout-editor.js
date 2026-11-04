@@ -682,7 +682,8 @@ function initLayoutEditor() {
        같은 장치에 하나만 더한다: 종합현황 위젯은 Figma GROUP 이라 DOM 에 상자가 없다(display:contents,
        자식이 화면 좌표). 그런 등록물은 ox·oy(화면 안 자리)를 갖고, hjDom 이 화면 판째 당겨 그 자리만 보여 준다. */
     const SH = window.__SHINHAN_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
-    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {}, SH.screens || {});
+    const PF = window.__PLANT_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {}, SH.screens || {}, PF.screens || {});
     const hjHtmlCache = {};
     function hjScreenHtml(px) {
       if (hjHtmlCache[px]) return hjHtmlCache[px];
@@ -847,13 +848,15 @@ function initLayoutEditor() {
         .concat(hjItems(HJ.panels, 'panel'))
         .concat(hjItems(HN.panels, 'panel'))
         .concat(hjItems(PK.panels, 'panel'))
-        .concat(hjItems(SH.panels, 'panel')),
+        .concat(hjItems(SH.panels, 'panel'))
+        .concat(hjItems(PF.panels, 'panel')),
       /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리들.
          한진 시안의 이벤트 현황(판·머리글·카운트·표·행·등급 배지)과 이천 FMS 의 이벤트 목록이 함께 산다. */
       event: hjItems(HJ.events, 'event')
         .concat(hjItems(HN.events, 'event'))
         .concat(hjItems(PK.events, 'event'))
         .concat(hjItems(SH.events, 'event'))
+        .concat(hjItems(PF.events, 'event'))
         .concat(ichItems((ICH.panels || []).filter(isEventNamed), 'event')),
       symbol: (window.__WEMB_SYMBOLS || [])
         .map((s, i) => ({ cat: 'symbol', id: s.i, name: '심볼 ' + String(i + 1).padStart(2, '0'), src: s.s }))
@@ -862,7 +865,8 @@ function initLayoutEditor() {
         .concat(hjItems(HJ.symbols, 'symbol'))
         .concat(hjItems(HN.symbols, 'symbol'))
         .concat(hjItems(PK.symbols, 'symbol'))
-        .concat(hjItems(SH.symbols, 'symbol')),
+        .concat(hjItems(SH.symbols, 'symbol'))
+        .concat(hjItems(PF.symbols, 'symbol')),
       /* 아이콘 탭에는 '…아이콘'으로 이름 붙은 등록물만 올린다 — 칩·토글·상태 점·화살표·
          로고처럼 아이콘이 아닌 부품이 섞이지 않게. 이름이 기준이라 내장 라인 아이콘
          세트(홈·차트·알림 …)도 더는 올리지 않는다 — 이름에 '아이콘'이 없다.
@@ -873,7 +877,8 @@ function initLayoutEditor() {
         .concat(hjIcons(HJ.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(HN.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(PK.icons, 'icon').filter(isIconNamed))
-        .concat(hjIcons(SH.icons, 'icon').filter(isIconNamed)),
+        .concat(hjIcons(SH.icons, 'icon').filter(isIconNamed))
+        .concat(hjIcons(PF.icons, 'icon').filter(isIconNamed)),
       /* 검색 결과 임시 버킷 — data-cat="__search" 로 클릭/드래그가 여기서 항목을 찾는다 */
       __search: [],
     };
@@ -1040,6 +1045,7 @@ function initLayoutEditor() {
       hjItems(PK.charts, 'chart').forEach((a) => items.push(a));
       /* 신한카드 정보보호 — 전체 트레픽 용량 선 차트 · 이상징후 탐지 막대 차트 */
       hjItems(SH.charts, 'chart').forEach((a) => items.push(a));
+      hjItems(PF.charts, 'chart').forEach((a) => items.push(a));
       return items;
     }
 

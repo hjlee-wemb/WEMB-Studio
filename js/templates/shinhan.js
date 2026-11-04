@@ -110,15 +110,18 @@ window.__shinhanSceneOf = function () {
   const v = localStorage.getItem('wemb-shinhan-screen');
   return SH_SCREENS[v] ? v : 'overview';
 };
+const SH_BUILDS = (k) => [(SH_SCREENS[k] || SH_SCREENS.overview).build, 'build_sha'];
+WEMB.screenSwitch.register('shinhan', { sceneOf: (s) => s.tplScene || 'overview', draw: applyShinhanDT, builds: SH_BUILDS });
 window.__openShinhanScreen = function (which) {
   try { localStorage.setItem('wemb-tpl-dt', 'shinhan'); } catch (e) {}
-  applyShinhanDT(SH_SCREENS[which] ? which : 'overview');
+  const key = SH_SCREENS[which] ? which : 'overview';
+  WEMB.screenSwitch.transition(() => applyShinhanDT(key), SH_BUILDS(key));
 };
 
 /* 화면끼리 잇기 — 헤더 메뉴(Main화면 · 이상징후탐지 · 정보보호점검 · 내부통제검토) · 브랜드 · 등록 창 닫기가 그 장면으로 간다
    (붙이는 쪽은 src/shinhan-live.js 의 installNav). 같은 프로젝트에 그 장면으로 만든 형제 화면이 있으면
    그 화면을 연다 — 캔버스만 바꿔치우면 열린 화면 기록(tplScene)과 어긋나 새로고침 때 되돌아간다.
-   떠나기 전에 홈에서 화면을 열 때와 같은 '여는 막'(#openSplash)을 먼저 띄운다. */
+   문서를 다시 읽지 않고 오른쪽 화면만 바꾼다(js/core/screen-switch.js). 아래 막은 그럴 수 없을 때(발표 화면)만 쓰는 예전 길이다. */
 function leaveShinhan(url, name) {
   const sp = document.getElementById('openSplash');
   if (!sp) { location.href = url; return; }
@@ -143,6 +146,7 @@ window.__gotoShinhanScene = function (scene) {
           .filter((x) => x.tpl === 'shinhan' && x.projectId === me.projectId && !x.deleted && (x.tplScene || 'overview') === key)
           .sort((a, b) => (b.ts || 0) - (a.ts || 0))[0];
         if (sib) {
+          if (WEMB.screenSwitch.toScreen(sib)) return;
           P.persistCurrentProjectData();
           leaveShinhan(location.pathname + '?screen=' + encodeURIComponent(sib.id) + '#/studio', sib.name);
           return;

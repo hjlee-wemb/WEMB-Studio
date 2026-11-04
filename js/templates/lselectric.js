@@ -139,15 +139,18 @@ window.__lsElectricSceneOf = function () {
   const v = localStorage.getItem('wemb-lselectric-screen');
   return LS_SCREENS[v] ? v : 'statcom';
 };
+const LS_BUILDS = (k) => [(LS_SCREENS[k] || LS_SCREENS.statcom).build];
+WEMB.screenSwitch.register('lselectric', { sceneOf: (s) => s.tplScene || 'statcom', draw: applyLsElectricDT, builds: LS_BUILDS });
 window.__openLsElectricScreen = function (which) {
   try { localStorage.setItem('wemb-tpl-dt', 'lselectric'); } catch (e) {}
-  applyLsElectricDT(LS_SCREENS[which] ? which : 'statcom');
+  const key = LS_SCREENS[which] ? which : 'statcom';
+  WEMB.screenSwitch.transition(() => applyLsElectricDT(key), LS_BUILDS(key));
 };
 
 /* 화면끼리 잇기 — 시안의 사이트 선택(Data Center / STATCOM 라디오)·홈 아이콘을 누르면 그 장면으로 간다
    (붙이는 쪽은 src/lselectric-live.js 의 installPicks). 같은 프로젝트에 그 장면으로 만든 형제 화면이 있으면
    그 화면을 연다 — 캔버스만 바꿔치우면 열린 화면 기록(tplScene)과 어긋나 새로고침 때 되돌아간다.
-   떠나기 전에 홈에서 화면을 열 때와 같은 '여는 막'(#openSplash)을 먼저 띄운다. */
+   문서를 다시 읽지 않고 오른쪽 화면만 바꾼다(js/core/screen-switch.js). 아래 막은 그럴 수 없을 때(발표 화면)만 쓰는 예전 길이다. */
 function leaveLsElectric(url, name) {
   const sp = document.getElementById('openSplash');
   if (!sp) { location.href = url; return; }
@@ -173,6 +176,7 @@ window.__gotoLsScene = function (scene) {
           .filter((x) => x.tpl === 'lselectric' && x.projectId === me.projectId && !x.deleted && (x.tplScene || 'statcom') === key)
           .sort((a, b) => (b.ts || 0) - (a.ts || 0))[0];
         if (sib) {
+          if (WEMB.screenSwitch.toScreen(sib)) return;
           P.persistCurrentProjectData();
           leaveLsElectric(location.pathname + '?screen=' + encodeURIComponent(sib.id) + '#/studio', sib.name);
           return;

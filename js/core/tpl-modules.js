@@ -92,12 +92,44 @@
       { src: 'src/shinhan-anomaly.js?v=3', build: ['build_shd'] },
       { src: 'src/shinhan-live.js?v=8', part: 'base' },
     ],
+    /* 우리은행 통합 대시보드 — Figma qln8qMsqzCt918dZOQOWOS. 헤더 메뉴로 장면끼리 오간다 */
+    /* STATCOM HMI 디지털 트윈 — Figma lyDJkcOlrznLKWo7mD7C2n. 화면 11장, 장면마다 따로 싣는다 */
+    statcom: [
+      { src: 'src/statcom-main.js?v=1', build: ['build_tcm'], scene: 'main' },
+      { src: 'src/statcom-statcom.js?v=1', build: ['build_tcs'], scene: 'statcom' },
+      { src: 'src/statcom-power.js?v=1', build: ['build_tcp'], scene: 'power' },
+      { src: 'src/statcom-valve.js?v=1', build: ['build_tcv'], scene: 'valve' },
+      { src: 'src/statcom-cooling.js?v=1', build: ['build_tcc'], scene: 'cooling' },
+      { src: 'src/statcom-supply.js?v=1', build: ['build_tce'], scene: 'supply' },
+      { src: 'src/statcom-safety.js?v=1', build: ['build_tcn'], scene: 'safety' },
+      { src: 'src/statcom-simulation.js?v=1', build: ['build_tcu'], scene: 'simulation' },
+      { src: 'src/statcom-alarm.js?v=1', build: ['build_tca'], scene: 'alarm' },
+      { src: 'src/statcom-cards.js?v=1', build: ['build_tcq'], scene: 'cards' },
+      { src: 'src/statcom-vr-topic.js?v=1', build: ['build_tvt'], scene: 'vr-topic' },
+      { src: 'src/statcom-vr-overview.js?v=1', build: ['build_tvo'], scene: 'vr-overview' },
+      { src: 'src/statcom-vr-step.js?v=1', build: ['build_tvs'], scene: 'vr-step' },
+      { src: 'src/statcom-vr-menu.js?v=1', build: ['build_tvm'], scene: 'vr-menu' },
+      { src: 'src/statcom-login.js?v=1', build: ['build_tcl'], scene: 'login' },
+      { src: 'src/statcom-live.js?v=2', part: 'base' },
+    ],
+    /* 공장 전력설비 디지털 트윈 — Figma hHans6kNFlTP98CO1O431o. 화면 한 장 */
+    plant: [
+      { src: 'src/plant-overview.js?v=2', build: ['build_pfo'] },
+      { src: 'src/plant-live.js?v=2', part: 'base' },
+    ],
+    woori: [
+      { src: 'src/woori-transaction.js?v=1', build: ['build_wrt'] },
+      { src: 'src/woori-performance.js?v=1', build: ['build_wrp'] },
+      { src: 'src/woori-event.js?v=1', build: ['build_wre'] },
+      { src: 'src/woori-live.js?v=1', part: 'base' },
+    ],
   };
   /* 장면마다 따로 싣는 템플릿(나머지는 통째로) · 장면을 적어 두는 전역 키 · 기본 장면 */
   const PER_SCENE = {
     hana: { key: 'wemb-hana-screen', def: 'overview-02' },
     posco: { key: 'wemb-posco-screen', def: 'main' },
     hanjin: { key: 'wemb-hanjin-screen', def: 'main' },
+    statcom: { key: 'wemb-statcom-screen', def: 'main' },
   };
 
   const byBuild = {};

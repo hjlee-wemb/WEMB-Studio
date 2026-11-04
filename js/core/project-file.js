@@ -43,7 +43,7 @@
       delete c.projectId;
       return c;
     });
-    const doc = { app: APP, kind: KIND, version: VERSION, exportedAt: new Date().toISOString(), project: { name: grp.name || '프로젝트' }, screens, open: Math.max(0, list.findIndex((s) => s.id === cur)) };
+    const doc = { app: APP, kind: KIND, version: VERSION, exportedAt: new Date().toISOString(), project: { name: grp.name || '프로젝트', logo: P.groupLogo(gid) || undefined }, screens, open: Math.max(0, list.findIndex((s) => s.id === cur)) };
     const text = JSON.stringify(doc);
     download(text, safeName(grp.name) + '.wemb.json');
     return { name: grp.name, count: screens.length, size: sizeText(text.length) };
@@ -86,6 +86,9 @@
           P.saveGroups(groups);
           return reject(new Error('브라우저 저장 공간이 모자라 열지 못했어요(파일 ' + sizeText(fr.result.length) + '). 휴지통을 비우거나 쓰지 않는 프로젝트를 파일로 저장한 뒤 지우고 다시 여세요.'));
         }
+        /* 프로젝트 로고 — 로고는 화면 묶음이 아니라 폴더에 있어 따로 되살린다. 그림 데이터만 받는다 */
+        const logo = doc.project && doc.project.logo;
+        if (typeof logo === 'string' && /^data:image\//.test(logo)) P.setGroupLogo(grp.id, logo);
         const openAt = Math.min(Math.max(0, doc.open | 0), added.length - 1);
         resolve({ gid: grp.id, name, count: added.length, openId: added[openAt].id });
       };

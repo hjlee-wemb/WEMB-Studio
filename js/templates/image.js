@@ -129,7 +129,11 @@ const TPLLOGO = {
   })(),
   /* DOM 템플릿 헤더의 로고 묶음 — 생성기가 붙인 레이어 이름, 템플릿마다 한 화면에 하나 */
   DOM: '.pk-root [data-name="Logo"], .hn-root [data-name="Logo"], .hj-root [data-name="Logo"], .skxp-root [data-name="Logo"], ' +
-    '.ls-root [data-name="Brand"], .skh-root [data-name="logo"], .skv-root [data-name="logo"]',
+    '.ls-root [data-name="Brand"], .skh-root [data-name="logo"], .skv-root [data-name="logo"], ' +
+    '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
+  /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
+  DOM_CUSTOM: '.shm-root [data-name="Brand"], .shi-root [data-name="Brand"], .shd-root [data-name="Brand"], ' +
+    '.wrt-root [data-name="Brand"], .wrp-root [data-name="Brand"], .wre-root [data-name="Brand"], .pfo-root [data-name="Brand"]',
   arCache: {},
   /* 로고의 가로세로비 — SVG 시안(<image>)의 폭을 정하는 데 쓴다.
      아직 못 읽었으면 0을 주고, 로드가 끝나면 콜백으로 다시 적용한다. */
@@ -159,6 +163,23 @@ const TPLLOGO = {
       const src = custom || this.DEF;
       if (im.getAttribute('src') !== src) im.setAttribute('src', src);
       im.alt = custom ? '브랜드 로고' : 'WEMB Studio';
+    });
+    document.querySelectorAll(this.DOM_CUSTOM).forEach((box) => {
+      let im = box.querySelector(':scope > img.tpl-studio-logo');
+      if (!custom) {
+        if (im) im.remove();
+        box.removeAttribute('data-studio-logo');
+        return;
+      }
+      if (!im) {
+        im = document.createElement('img');
+        im.className = 'tpl-studio-logo';
+        im.draggable = false;
+        im.alt = '브랜드 로고';
+        box.appendChild(im);
+        box.setAttribute('data-studio-logo', '');
+      }
+      if (im.getAttribute('src') !== custom) im.setAttribute('src', custom);
     });
   },
 
@@ -401,6 +422,7 @@ const TPLTINT = {
   NEUTRAL_OK: 0.022, /* 회색 면에 입히는 채도(OKLab) — 팔레트가 바뀐 느낌을 만드는 값 */
   NEUTRAL_C: 0.035,  /* 이 채도(OKLab) 미만은 '회색'으로 본다 */
   CHROMA_LIMIT: [0.9, 1.06], /* 유채색 채도 보정 범위 — 넓게 잡으면 화면이 쨍해진다 */
+  SUB_SPLIT: [0.55, 0.85], /* 주조색에서 이만큼(라디안, 약 32~49도) 멀면 시안의 두 번째 색 계열 — 로고 강조 2 로 칠한다. 사이는 섞는다 */
   COMPRESS: 0.45,    /* 브랜드 계열의 색상 편차를 기준색 쪽으로 얼마나 모을지(0=완전 단일색, 1=원래 간격 유지) */
   /* 의미가 정해진 색 대역 — 경보(빨강·주황·노랑)와 정상(초록)은 테마가 바뀌어도 그대로 둔다.
      단, 시안 자체의 주조색이 그 대역이면(예: 앰버 기반 시안) 보호하지 않는다. */
@@ -518,7 +540,14 @@ const TPLTINT = {
        (예전엔 주조색에서 먼 색일수록 덜 돌려서, 보라·시안이 파란색으로 남아 있었다.) */
     if (this.isSemantic(c.h, P.src)) return [r, g, b];
     const dev = this.normRad(o.h - P.srcOk);
-    return this.ok2rgb(o.L, o.C * P.chromaK, P.hOk + dev * this.COMPRESS);
+    const C = o.C * P.chromaK, h1 = P.hOk + dev * this.COMPRESS;
+    if (P.subOk == null) return this.ok2rgb(o.L, C, h1);
+    const [from, to] = this.SUB_SPLIT, w = Math.max(0, Math.min(1, (Math.abs(dev) - from) / (to - from)));
+    if (!w) return this.ok2rgb(o.L, C, h1);
+    /* 색상각을 돌리며 섞으면 사이에 엉뚱한 색이 끼므로(빨강→남색 사이의 자주) 좌표로 섞는다 */
+    const k = w * w * (3 - 2 * w), h2 = P.subOk + (dev - Math.sign(dev) * to) * this.COMPRESS;
+    const x = (1 - k) * Math.cos(h1) + k * Math.cos(h2), y = (1 - k) * Math.sin(h1) + k * Math.sin(h2);
+    return this.ok2rgb(o.L, C * Math.hypot(x, y), Math.atan2(y, x));
   },
   isSemantic(h, src) {
     for (const [a, b] of this.SEMANTIC) {
@@ -533,16 +562,26 @@ const TPLTINT = {
     /* 시안 주조색·기준색을 OKLab 색상각으로 옮겨 둔다(회전은 이 각도끼리 계산). */
     const sOk = this.rgb2ok(...this.hsl2rgb(srcHue, 70, 50));
     const tOk = this.rgb2ok(...this.hsl2rgb(t.h, t.s, t.l));
-    return {
+    const P = {
       src: srcHue, target: t.h, d: this.norm(t.h - srcHue),
       srcOk: sOk.h, hOk: tOk.h,
       /* 기준색이 진할수록 아주 조금만 더 진하게 — 예전엔 최대 +15%라 화면이 쨍했다 */
       chromaK: Math.max(lim[0], Math.min(lim[1], tOk.C / 0.13)),
     };
+    /* 로고에서 뽑은 강조 2 — 기준 색 방식에서 강조 2 를 가진 건 로고뿐이다(사진 테마는 지금처럼 한 색 계열) */
+    try {
+      if (state.source === 'seed' && state.subHex) {
+        const c = hexToRgb(state.subHex);
+        P.subOk = this.rgb2ok(c.r, c.g, c.b).h;
+      }
+    } catch (e) {}
+    return P;
   },
+  /* 다시 칠할지 보는 열쇠 — 강조 2 까지 넣어야 그 색만 바뀌어도 다시 칠한다 */
+  pkey(P) { return P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) + (P.subOk != null ? '|' + P.subOk.toFixed(2) : ''); },
   /* 64³ 색 대응표 — 픽셀마다 HSL 변환하면 느리므로 한 번 만들어 두고 찍어 낸다 */
   lutFor(P) {
-    const key = P.src.toFixed(1) + '|' + P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2);
+    const key = P.src.toFixed(1) + '|' + this.pkey(P);
     if (this.lutKey === key && this.lut) return this.lut;
     const N = this.LUT_N, T = new Uint8Array(N * N * N * 3);
     let i = 0;
@@ -596,10 +635,12 @@ const TPLTINT = {
     const base = this.orig(src, () => this.schedule());
     if (!base) return;
     const P = this.paramsFor(srcHue != null ? srcHue : this.hueOf(src, base), t);
-    const key = P ? src + '|' + P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) : '';
+    /* 시안 안의 그림(배경 · 장비)은 기준 색 한 계열로 — 강조 2 를 픽셀마다 적용하면 배경의 빛번짐이 두 색 얼룩으로 갈라진다 */
+    if (P && srcHue != null) delete P.subOk;
+    const key = P ? src + '|' + this.pkey(P) : '';
     if (imgEl.__tintKey === key) return;
     imgEl.__tintKey = key;
-    if (!P || (Math.abs(P.d) < 1 && Math.abs(P.chromaK - 1) < 0.02)) {
+    if (!P || (Math.abs(P.d) < 1 && Math.abs(P.chromaK - 1) < 0.02 && P.subOk == null)) {
       imgEl.style.filter = '';
       if (imgEl.getAttribute('src') !== src) imgEl.src = src;
       return;
@@ -676,7 +717,7 @@ const TPLTINT = {
     if (veil) veil.remove();
     const map = this.skxMap(mode);
     const P = this.paramsFor(this.skxRefHue(), t);
-    const key = P ? mode + '|' + P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) : '';
+    const key = P ? mode + '|' + this.pkey(P) : '';
     if (host.__tintKey === key) return;
     host.__tintKey = key;
     /* 1) 색 변수 */
@@ -741,8 +782,8 @@ const TPLTINT = {
     const P = this.paramsFor(this.skxRefHue(), t);
     /* 팝업 안 이미지(UPS 장비·평면도)도 같은 규칙으로 다시 칠한다.
        (스타일시트 키 검사보다 먼저 — 팝업을 나중에 열어도 반영되도록) */
-    document.querySelectorAll('.skxp-root img').forEach((im) => this.rasterTint(im, t, this.skxRefHue()));
-    const key = P ? P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) : '';
+    document.querySelectorAll('.skxp-root img:not(.tpl-studio-logo)').forEach((im) => this.rasterTint(im, t, this.skxRefHue()));
+    const key = P ? this.pkey(P) : '';
     if (st.__tintKey === key) return;
     st.__tintKey = key;
     if (!P) { st.textContent = st.__orig; return; }
@@ -791,6 +832,32 @@ const TPLTINT = {
      주조색은 지표 파랑(#4571FF, 색상각 226°). 색을 그대로 둘 것:
        · 로고(logo-mark · 보안등급 배지의 W 로고 exclude)
        · 바탕 사진(background*.png — 사진이라 색상만 돌리면 어색하다 → 픽셀을 다시 칠한다) */
+  /* ── 우리은행 통합 대시보드 시안 ──
+     주조색은 메뉴 · 구성도의 하늘 파랑(#09B6FB, 색상각 197°). 색을 그대로 둘 것:
+       · 로고(logo-mark) · 상태 등급 표지(marker-critical · major · minor · warning · normal) — 색이 곧 뜻
+       · 바탕 사진 · 3D 장비 렌더 · 구성도 무늬(사진이라 색상만 돌리면 어색하다 → 픽셀을 다시 칠한다) */
+  /* ── 공장 전력설비 시안 ──
+     주조색은 패널 테두리 · 빛의 하늘 파랑(#48B0E5, 색상각 200°). 색을 그대로 둘 것:
+       · 로고 · 등급 표지(marker · marker-1~3) — 색이 곧 뜻
+       · 3D 렌더(hero-image · map-image) — 숲 · 건물 사진이라 색을 돌리면 어색하다. 판 · 선 · 빛만 따라간다 */
+  PLANT_OPT: {
+    seed: '#48B0E5', seededKey: 'wemb-plant-seeded', refHue: 200,
+    keep: /(^|\/)(logo-mark|marker(-[123])?|hero-image|map-image)(-lt)?\.(svg|png)(\?|$)/i,
+    raster: /$^/,
+  },
+  /* ── STATCOM HMI 시안 ──
+     주조색은 시안 파랑(#00B9F0, 색상각 194°). 색을 그대로 둘 것:
+       · 로고 · 3D 장면 · 설비 사진 · 미니맵 · 공정 사진 — 그림이라 색을 돌리면 어색하다. 판 · 선 · 글자만 따라간다 */
+  STATCOM_OPT: {
+    seed: '#00B9F0', seededKey: 'wemb-statcom-seeded', refHue: 194,
+    keep: /(^|\/)(logo-image|scene-image|map-image|equipment-image|thumbnail|hero-image|marker)(-[\d-]+)?(-lt)?\.(svg|png)(\?|$)/i,
+    raster: /$^/,
+  },
+  WOORI_OPT: {
+    seed: '#09B6FB', seededKey: 'wemb-woori-seeded', refHue: 197,
+    keep: /(logo-mark[-\d]*|marker-(critical|major|minor|warning|normal)[-\d]*)(-lt)?\.svg(\?|$)/i,
+    raster: /(background|visual|cube|building)[-\w]*\.(png|jpg)(\?|$)/i,
+  },
   SHINHAN_OPT: {
     seed: '#4571FF', seededKey: 'wemb-shinhan-seeded', refHue: 226,
     keep: /(logo-mark[-\d]*|exclude[-\d]*)(-lt)?\.svg(\?|$)/i,
@@ -845,11 +912,12 @@ const TPLTINT = {
         && typeof state !== 'undefined'
         && (state.source || 'seed') === 'seed'
         && String(state.seed || '').toLowerCase() === SEED.toLowerCase()
+        && !state.subHex
         && !(state.overrides && Object.keys(state.overrides).length);
     } catch (e) {}
 
     const P = atBase ? null : this.paramsFor(REFHUE, t);
-    const key = P ? P.d.toFixed(1) + '|' + P.target.toFixed(1) + '|' + P.chromaK.toFixed(2) : 'base';
+    const key = P ? this.pkey(P) : 'base';
     /* 화면 시트(라이트)·다크 시트·인터랙션 시트를 함께 바꾼다 —
        활성 알약 그라디언트·호버색·포커스 링처럼 '움직일 때만 보이는 색'도 같은 팔레트를 따라야 한다. */
     sheets.forEach((id) => {
@@ -875,7 +943,7 @@ const TPLTINT = {
        단색 계열 벡터는 색상만 돌린다(래스터로 바꾸면 확대 시 흐려진다). */
     const deg = P ? P.d : 0;
     roots.forEach((r) => {
-      r.querySelectorAll('img').forEach((im) => {
+      r.querySelectorAll('img:not(.tpl-studio-logo)').forEach((im) => {
         const src = im.__origSrc || im.getAttribute('src') || '';
         /* 원본 색 상태 — 다시 칠한 그림이 있으면 원본 파일로 되돌린다 */
         if (!P) {
@@ -927,6 +995,17 @@ const TPLTINT = {
     ['shm', 'sha', 'shi', 'shd'].forEach((px) => {
       this.icheonTint(t, mode, '.' + px + '-root',
         [px + '-style', px + '-light-style', 'shinhan-live-style'], 'wemb-shinhan-mode', this.SHINHAN_OPT);
+    });
+    /* 공장 전력설비 — 같은 방식 */
+    this.icheonTint(t, mode, '.pfo-root', ['pfo-style', 'pfo-light-style', 'plant-live-style'], 'wemb-plant-mode', this.PLANT_OPT);
+    /* STATCOM HMI 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
+    ['tcm', 'tcs', 'tcp', 'tcv', 'tcc', 'tce', 'tcn', 'tcu', 'tca', 'tcq', 'tvt', 'tvo', 'tvs', 'tvm', 'tcl'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'statcom-live-style'], 'wemb-statcom-mode', this.STATCOM_OPT);
+    });
+    /* 우리은행 화면 3장 — 같은 방식. 세 장이 같은 밝기를 공유한다(wemb-woori-mode) */
+    ['wrt', 'wrp', 'wre'].forEach((px) => {
+      this.icheonTint(t, mode, '.' + px + '-root',
+        [px + '-style', px + '-light-style', 'woori-live-style'], 'wemb-woori-mode', this.WOORI_OPT);
     });
     ['hjc', 'hjg', 'hju'].forEach((px) => {
       this.icheonTint(t, mode, '.' + px + '-root',

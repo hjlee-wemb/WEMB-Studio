@@ -609,6 +609,24 @@
           try { localStorage.setItem('wemb-lselectric-screen', wantLs); } catch (e3) {}
           if (typeof applyLsElectricDT === 'function') applyLsElectricDT(wantLs);
         }
+        else if (f.tpl === 'statcom') {
+          localStorage.setItem('wemb-tpl-dt', 'statcom'); localStorage.removeItem('wemb-tpl-img');
+          const wantSc = (typeof SC_SCREENS !== 'undefined' && SC_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-statcom-screen') || 'main');
+          try { localStorage.setItem('wemb-statcom-screen', wantSc); } catch (e3) {}
+          if (typeof applyStatcomDT === 'function') applyStatcomDT(wantSc);
+        }
+        else if (f.tpl === 'plant') {
+          localStorage.setItem('wemb-tpl-dt', 'plant'); localStorage.removeItem('wemb-tpl-img');
+          if (typeof applyPlantDT === 'function') applyPlantDT();
+        }
+        else if (f.tpl === 'woori') {
+          localStorage.setItem('wemb-tpl-dt', 'woori'); localStorage.removeItem('wemb-tpl-img');
+          /* 템플릿 상세에서 고른 장면(거래 · 성능 · 이벤트현황)을 그대로 연다 */
+          const wantWr = (typeof WR_SCREENS !== 'undefined' && WR_SCREENS[f.scene]) ? f.scene
+            : (localStorage.getItem('wemb-woori-screen') || 'transaction');
+          try { localStorage.setItem('wemb-woori-screen', wantWr); } catch (e3) {}
+          if (typeof applyWooriDT === 'function') applyWooriDT(wantWr);
+        }
         else if (f.tpl === 'shinhan') {
           localStorage.setItem('wemb-tpl-dt', 'shinhan'); localStorage.removeItem('wemb-tpl-img');
           /* 템플릿 상세에서 고른 장면(보안 현황 · 등록 · 입력 · 이상징후 탐지)을 그대로 연다 */

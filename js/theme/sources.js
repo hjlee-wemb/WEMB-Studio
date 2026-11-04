@@ -297,6 +297,80 @@ function extractTheme(img) {
   }
   return { seed: toHex(seed), sub: sub ? toHex(sub) : null, mode: lumSum / cnt / 255 > 0.55 ? 'light' : 'dark', cols };
 }
+/* 로고의 기준 색 · 강조 2 뽑기 — 사진용 extractTheme 은 넓은 색을 고르므로 흰 바탕 · 검은 바탕 로고에서
+   #ffffff · #000000 을 대표색으로 돌려준다. 로고는 무채색(바탕 · 글자)을 먼저 빼고, 남은 색을 색상끼리 묶어 고른다.
+   유채색이 하나도 없으면(흑백 로고) null. */
+function extractLogoColors(img) {
+  const maxSide = 256; /* 작은 마크가 뭉개지지 않게 사진보다 크게 본다 */
+  const iw = img.naturalWidth || img.width || maxSide;
+  const ih = img.naturalHeight || img.height || maxSide;
+  const scale = Math.min(1, maxSide / Math.max(iw, ih));
+  const cw = Math.max(1, Math.round(iw * scale));
+  const ch = Math.max(1, Math.round(ih * scale));
+  const cv = document.createElement('canvas');
+  cv.width = cw;
+  cv.height = ch;
+  const ctx = cv.getContext('2d');
+  ctx.drawImage(img, 0, 0, cw, ch);
+  const d = ctx.getImageData(0, 0, cw, ch).data;
+  const map = {},
+    ring = {};
+  let ringN = 0;
+  for (let y = 0; y < ch; y++) {
+    for (let x = 0; x < cw; x++) {
+      const i = (y * cw + x) * 4;
+      if (d[i + 3] < 128) continue;
+      const key = ((d[i] >> 4) << 8) | ((d[i + 1] >> 4) << 4) | (d[i + 2] >> 4);
+      const o = map[key] || (map[key] = { r: 0, g: 0, b: 0, n: 0 });
+      o.r += d[i];
+      o.g += d[i + 1];
+      o.b += d[i + 2];
+      o.n++;
+      if (x === 0 || y === 0 || x === cw - 1 || y === ch - 1) {
+        ring[key] = (ring[key] || 0) + 1;
+        ringN++;
+      }
+    }
+  }
+  const all = Object.keys(map)
+    .map((k) => {
+      const o = map[k];
+      const c = { key: k, r: o.r / o.n, g: o.g / o.n, b: o.b / o.n, n: o.n };
+      Object.assign(c, rgbToHsl(c));
+      c.vivid = Math.max(c.r, c.g, c.b) - Math.min(c.r, c.g, c.b);
+      return c;
+    })
+    .filter((c) => c.vivid >= 24 && c.s >= 15);
+  const hueDist = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
+  /* 테두리 대부분을 덮는 아주 밝거나 어두운 색은 바탕이다(크림색 · 짙은 남색 판) — 글자와 섞인 비슷한 색까지 뺀다.
+     그것밖에 없으면 그 색을 쓴다 */
+  const ringTop = Object.keys(ring).sort((a, b) => ring[b] - ring[a])[0];
+  const bg = ring[ringTop] >= ringN * 0.6 ? all.find((c) => c.key === ringTop && (c.l >= 85 || c.l <= 12)) : null;
+  const noBg = bg ? all.filter((c) => !(hueDist(c.h, bg.h) <= 24 && Math.abs(c.l - bg.l) <= 20)) : all;
+  const cands = noBg.length ? noBg : all;
+  if (!cands.length) return null;
+  /* 넓은 색부터 ±24도 안의 색을 한 묶음으로 — 글자 가장자리의 옅은 색도 같은 묶음에 들어간다 */
+  const groups = [];
+  cands
+    .sort((a, b) => b.n - a.n)
+    .forEach((c) => {
+      const g = groups.find((x) => hueDist(x.h, c.h) <= 24);
+      if (!g) {
+        groups.push({ h: c.h, n: c.n, best: c });
+        return;
+      }
+      g.n += c.n;
+      if (c.n * c.s > g.best.n * g.best.s) g.best = c;
+    });
+  const total = groups.reduce((sum, g) => sum + g.n, 0);
+  groups.forEach((g) => (g.score = g.n * (0.4 + 0.6 * (g.best.s / 100))));
+  groups.sort((a, b) => b.score - a.score);
+  const main = groups[0];
+  /* 강조 2 — 기준 색과 충분히 다르고, 잡티가 아닐 만큼 넓고, 글자 가장자리의 섞인 색이 아닐 만큼 진한 색 */
+  const sub = groups.slice(1).find((g) => hueDist(g.h, main.h) > 35 && g.n >= total * 0.06 && g.best.s >= 35);
+  const toHex = (c) => '#' + [c.r, c.g, c.b].map((v) => Math.round(v).toString(16).padStart(2, '0')).join('');
+  return { seed: toHex(main.best), sub: sub ? toHex(sub.best) : null };
+}
 document.getElementById('imgfile').onchange = (e) => {
   const f = e.target.files && e.target.files[0];
   if (!f) return;

@@ -61,7 +61,7 @@ function restoreTheme(t) {
   state.overrides = Object.assign({}, t.overrides || {});
   /* Flat/Enterprise 버전도 복원 — 예전 스냅샷(version 없음)은 현재 버전 유지 */
   if (t.version === 'flat' || t.version === 'enterprise') {
-    state.version = t.version;
+    state.version = typeof tplLocksVersion === 'function' && tplLocksVersion() ? 'flat' : t.version;
     syncVersionUI();
     try {
       localStorage.setItem('wemb-version', state.version);

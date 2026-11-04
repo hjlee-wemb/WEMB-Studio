@@ -83,6 +83,7 @@
      스튜디오의 모든 작업 상태는 wemb-* 로컬스토리지 키에 자동 저장된다. 그중 프로젝트 공용(목록·자산·UI)
      키를 제외한 나머지를 한 프로젝트의 상태 묶음(project.data)으로 스냅샷한다.
      프로젝트를 열 때 그 묶음을 전역 키에 되돌려 쓴 뒤 새로고침하면, 평소 새로고침처럼 그 프로젝트가 복원된다. */
+  const LOGO_K = 'wemb-brand-logo', LOGO_F = 'wemb-brand-logo-tpl', LOGO_G = 'wembx-logo:';
   const PROJ_GLOBAL = new Set([LS_PROJ, LS_GROUP, PENDING_GROUP, CUR_PROJ, 'wemb-theme-snapshots', 'wemb-onboarded', 'wemb-previewhint', 'wemb-skx-hinted', 'wemb-view', 'wemb-meeting', 'wemb-ui-mode']); /* wemb-meeting = 회의 모드(js/core/meeting.js) — 브라우저 전체 설정 */
   const projStateKeys = () => { try { return Object.keys(localStorage).filter((k) => k.startsWith('wemb-') && !PROJ_GLOBAL.has(k)); } catch (e) { return []; } };
   function collectProjectState() { const d = {}; projStateKeys().forEach((k) => { const v = localStorage.getItem(k); if (v != null) d[k] = v; }); return d; }
@@ -97,6 +98,7 @@
     const arr = loadProjects(); const p = arr.find((x) => x.id === id);
     if (!p) return;
     p.data = collectProjectState();
+    if (p.projectId && groupLogo(p.projectId)) { delete p.data[LOGO_K]; delete p.data[LOGO_F]; } /* 프로젝트 로고는 폴더에 한 벌만 */
     p.ts = Date.now();
     saveProjects(arr);
     if (p.projectId) touchGroup(p.projectId);
@@ -136,6 +138,33 @@
     return p.id;
   }
 
+  /* 프로젝트 로고 — 화면마다 상태 묶음이 따로라, 한 화면에 올린 로고가 같은 프로젝트의 다른 화면에는 안 보였다.
+     폴더당 한 벌을 따로 둔다. 'wemb-' 접두가 아니어서 상태 묶음에 섞이지 않는다(화면 수만큼 복사되지 않는다). */
+  const groupLogo = (gid) => { try { return gid ? localStorage.getItem(LOGO_G + gid) : null; } catch (e) { return null; } };
+  function currentGroupId() {
+    try { const id = localStorage.getItem(CUR_PROJ); const p = id && loadProjects().find((x) => x.id === id); return (p && p.projectId) || null; } catch (e) { return null; }
+  }
+  function setGroupLogo(gid, src) {
+    if (!gid) return true;
+    try { if (src) localStorage.setItem(LOGO_G + gid, src); else localStorage.removeItem(LOGO_G + gid); } catch (e) { return false; }
+    /* 화면 묶음에 남은 옛 로고를 걷는다 — 되돌렸는데 옛 로고가 되살아나거나, 같은 그림이 여러 벌 남지 않게 */
+    const arr = loadProjects();
+    let changed = false;
+    arr.forEach((p) => {
+      if (p.projectId !== gid || !p.data || !(LOGO_K in p.data || LOGO_F in p.data)) return;
+      delete p.data[LOGO_K]; delete p.data[LOGO_F]; changed = true;
+    });
+    if (changed) saveProjects(arr);
+    return true;
+  }
+  /* 영구 삭제한 프로젝트의 로고는 함께 지운다 */
+  (function sweepGroupLogos() {
+    try {
+      const ids = new Set(loadGroups().map((g) => g.id));
+      Object.keys(localStorage).forEach((k) => { if (k.indexOf(LOGO_G) === 0 && !ids.has(k.slice(LOGO_G.length))) localStorage.removeItem(k); });
+    } catch (e) {}
+  })();
+
   /* 저장된 화면을 '지금 작업 중인 화면'으로 — 지금 화면 상태를 저장하고, 대상 화면의 상태 묶음과
      템플릿 장면 표시를 전역 키에 되돌려 쓴다. 작업공간이 부팅할 때 앱 스크립트보다 먼저 불린다(js/app/session.js). */
   function activateScreen(id) {
@@ -148,6 +177,8 @@
     saveProjects(arr);
     try { localStorage.setItem(CUR_PROJ, id); } catch (e) {}
     applyProjectData(t);
+    /* 프로젝트 로고 — 어느 화면을 열어도 같은 로고 */
+    try { const gl = groupLogo(t.projectId); if (gl) { localStorage.setItem(LOGO_K, gl); localStorage.setItem(LOGO_F, '1'); } } catch (e) {}
     /* 템플릿 장면(메인/팝업 · 상세) 지정 — 이 화면이 그 장면으로 그려진다 */
     try { localStorage.setItem('wemb-skx-screen', t.tplScene === 'popup' ? 'popup' : 'main'); } catch (e) {}
     try { localStorage.setItem('wemb-hub-screen', t.tplScene === 'hvac' ? 'hvac' : 'main'); } catch (e) {}
@@ -156,24 +187,26 @@
     try { if (t.tpl === 'posco') localStorage.setItem('wemb-posco-screen', t.tplScene || 'main'); } catch (e) {}
     try { if (t.tpl === 'lselectric') localStorage.setItem('wemb-lselectric-screen', t.tplScene || 'statcom'); } catch (e) {}
     try { if (t.tpl === 'shinhan') localStorage.setItem('wemb-shinhan-screen', t.tplScene || 'overview'); } catch (e) {}
+    try { if (t.tpl === 'woori') localStorage.setItem('wemb-woori-screen', t.tplScene || 'transaction'); } catch (e) {}
+    try { if (t.tpl === 'statcom') localStorage.setItem('wemb-statcom-screen', t.tplScene || 'main'); } catch (e) {}
     /* 저장된 상태가 없던(구버전) 화면은 화면 종류 · 레이아웃만이라도 반영 */
     if (!t.data) {
       try { localStorage.setItem('wemb-layout', t.layout || ''); } catch (e) {}
       try { if (t.screen === 'dash' || t.screen === 'dt') localStorage.setItem('wemb-screen', t.screen); } catch (e) {}
       try {
-        if (t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') localStorage.setItem('wemb-tpl-dt', t.tpl);
+        if (t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') localStorage.setItem('wemb-tpl-dt', t.tpl);
         else localStorage.removeItem('wemb-tpl-dt');
       } catch (e) {}
     }
     /* 템플릿 표시 동기화 — 미연결 이미지 템플릿이면 이미지 오버레이가, 아니면 이전 화면에서 남은 오버레이가 걷히도록 */
     try {
       if (t.tpl === 'image' && t.img) { localStorage.setItem('wemb-tpl-img', t.img); localStorage.removeItem('wemb-tpl-dt'); }
-      else if (t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
+      else if (t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
       else { localStorage.removeItem('wemb-tpl-img'); localStorage.removeItem('wemb-tpl-dt'); }
     } catch (e) {}
     return true;
   }
 
   window.WEMB = window.WEMB || {};
-  WEMB.projects = { CUR_PROJ, LS_GROUP, LS_PROJ, PENDING_GROUP, activateScreen, clearProjectState, groupById, loadGroups, loadProjects, newGid, newId, persistCurrentProjectData, resolvePendingGroup, saveGroups, saveGuideProject, saveProjects, screensOfGroup, touchGroup };
+  WEMB.projects = { currentGroupId, groupLogo, setGroupLogo, CUR_PROJ, LS_GROUP, LS_PROJ, PENDING_GROUP, activateScreen, clearProjectState, groupById, loadGroups, loadProjects, newGid, newId, persistCurrentProjectData, resolvePendingGroup, saveGroups, saveGuideProject, saveProjects, screensOfGroup, touchGroup };
 })();

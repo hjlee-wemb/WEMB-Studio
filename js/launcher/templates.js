@@ -110,6 +110,24 @@
       TL('shcard-smartchannel-iinfra-dbms', '인프라 · DBMS')] },
     { title: 'Dashboard: HANA Bank H.I.T', area: '종합현황', date: 'June 30, 2025', slides: [
       { img: 'src/templates/hana-overview-02.jpg', label: '종합현황02' }] },
+    { title: 'Digital Twin: Plant Power Facility', area: '발전·에너지', date: 'January 15, 2025', slides: [
+      { img: 'src/templates/plant-overview.jpg', label: '설비현황' }] },
+    { title: 'Digital Twin: STATCOM HMI', area: '발전·에너지', date: 'June 15, 2026', slides: [
+      { img: 'src/templates/statcom-main.jpg', label: '메인 화면' },
+      { img: 'src/templates/statcom-statcom.jpg', label: 'STATCOM' },
+      { img: 'src/templates/statcom-power.jpg', label: '전력설비' },
+      { img: 'src/templates/statcom-valve.jpg', label: 'VSC 밸브실' },
+      { img: 'src/templates/statcom-cooling.jpg', label: 'VSC 냉각실' },
+      { img: 'src/templates/statcom-supply.jpg', label: '전원 설비' },
+      { img: 'src/templates/statcom-safety.jpg', label: '제어 안전' },
+      { img: 'src/templates/statcom-simulation.jpg', label: '시뮬레이션' },
+      { img: 'src/templates/statcom-alarm.jpg', label: '알람 메세지' },
+      { img: 'src/templates/statcom-cards.jpg', label: '설비 요약 정보' },
+      { img: 'src/templates/statcom-vr-topic.jpg', label: 'VR 교육 주제 선택' },
+      { img: 'src/templates/statcom-vr-overview.jpg', label: 'VR 교육 개요' },
+      { img: 'src/templates/statcom-vr-step.jpg', label: 'VR 교육 단계 안내' },
+      { img: 'src/templates/statcom-vr-menu.jpg', label: 'VR 교육 메뉴' },
+      { img: 'src/templates/statcom-login.jpg', label: '로그인' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -262,6 +280,33 @@
       ];
     }
   })();
+  /* 우리은행 통합 대시보드 — '스튜디오 열기' 시 Figma(qln8qMsqzCt918dZOQOWOS) 화면 3장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/woori-*.js)으로 연다. 상세 미리보기도 그 화면을 그대로 캡처한 것이다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: Woori Bank');
+    if (w) {
+      w.tpl = 'woori';
+      w.img = 'src/templates/woori-transaction.jpg';
+      /* 화면 3장 — 슬라이드 순서가 곧 프로젝트 안의 화면 순서다(home.js 의 tplScene 표와 짝) */
+      w.slides = [
+        { img: 'src/templates/woori-transaction.jpg', label: '거래 현황' },
+        { img: 'src/templates/woori-performance.jpg', label: '성능 현황' },
+        { img: 'src/templates/woori-event.jpg', label: '이벤트 현황' },
+      ];
+    }
+  })();
+  /* 공장 전력설비 디지털 트윈 — '스튜디오 열기' 시 Figma(hHans6kNFlTP98CO1O431o) 화면을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/plant-overview.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Plant Power Facility');
+    if (w) w.tpl = 'plant';
+  })();
+  /* STATCOM HMI 디지털 트윈 — '스튜디오 열기' 시 Figma(lyDJkcOlrznLKWo7mD7C2n) 화면 11장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/statcom-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Digital Twin: STATCOM HMI');
+    if (w) w.tpl = 'statcom';
+  })();
   /* 실제 화면이 붙어 있는 템플릿인지 — Figma를 HTML/CSS DOM(+SVG)으로 재구축해 두어
      '스튜디오 열기'를 누르면 그 화면이 그대로 열리는 것들이다.
      나머지는 아직 카탈로그 그림 한 장뿐이라 갤러리에서 '제작중'으로 표시한다.
@@ -275,7 +320,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

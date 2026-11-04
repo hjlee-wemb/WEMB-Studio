@@ -38,7 +38,7 @@
      '패널편집'(내용 수정)을 켜면 화면의 글자를 전부 그 자리에서 고칠 수 있고, 수정분은 여기 CK 키에 자동 저장된다. */
   /* .hjc-root p / .hjg-root p / .hju-root p — 한진 통합관제 화면 3장의 모든 글자도 같은 방식으로 잡는다
      (Figma 텍스트 노드 = <p>. 아이콘·그래픽만 SVG 라서 화면의 글자는 전부 여기 걸린다) */
-  const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm, .skxp-txt, .skh-root p, .skv-root p, .pkm-root p, .pka-root p, .pko-root p, .pkr-root p, .pkf-root p, .pkd-root p, .pks1-root p, .lsm-root p, .lsd-root p, .shm-root p, .sha-root p, .shi-root p, .shd-root p, .hjc-root p, .hjg-root p, .hju-root p, .hno2-root p, .hnc1-root p, .hnc2-root p, .hnm-root p, .hni1-root p, .hni2-root p, .hne-root p, .hnn1-root p, .hnn2-root p, .hnn3-root p, .hnf-root p, .hns1-root p, .hns2-root p, .hnl-root p';
+  const DTSEL = '.dt-bname, .dt-nav a, .dt-navbtn span, .dt-sym span, .dt-cardhead h3, .dt-tabs b, .dt-live, .dt-chip, .dt-tnm, .skxp-txt, .skh-root p, .skv-root p, .pkm-root p, .pka-root p, .pko-root p, .pkr-root p, .pkf-root p, .pkd-root p, .pks1-root p, .lsm-root p, .lsd-root p, .tcm-root p, .tcs-root p, .tcp-root p, .tcv-root p, .tcc-root p, .tce-root p, .tcn-root p, .tcu-root p, .tca-root p, .tcq-root p, .tvt-root p, .tvt-root li, .tvo-root p, .tvo-root li, .tvs-root p, .tvs-root li, .tvm-root p, .tvm-root li, .tcl-root p, .pfo-root p, .wrt-root p, .wrp-root p, .wre-root p, .shm-root p, .sha-root p, .shi-root p, .shd-root p, .hjc-root p, .hjg-root p, .hju-root p, .hno2-root p, .hnc1-root p, .hnc2-root p, .hnm-root p, .hni1-root p, .hni2-root p, .hne-root p, .hnn1-root p, .hnn2-root p, .hnn3-root p, .hnf-root p, .hns1-root p, .hns2-root p, .hnl-root p';
   let layoutMode = false, contentMode = false;
   let textEls = [], DEF = {};
   /* 실제로 사람이 고친 글자만 기억한다.
@@ -163,6 +163,8 @@
     touched.add(host.dataset.deid);
     clearTimeout(st); st = setTimeout(saveContent, 350);
   });
+  /* 화면을 옮기기 전에 고치던 글자를 지금 화면 묶음에 넣는다(js/core/screen-switch.js) */
+  window.__dtFlushContent = () => { if (st) { clearTimeout(st); st = null; saveContent(); } };
 
   /* 편집 중 클릭이 DT 기능(뷰전환·트리·필터)을 건드리지 않게 캡처 단계에서 차단 */
   dt.addEventListener('click', (e) => {

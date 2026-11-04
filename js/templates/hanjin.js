@@ -95,7 +95,8 @@ window.__hanjinSceneOf = function () {
 };
 window.__openHanjinScreen = function (which) {
   try { localStorage.setItem('wemb-tpl-dt', 'hanjin'); } catch (e) {}
-  applyHanjinDT(HJ_SCREENS[which] ? which : 'main');
+  const key = HJ_SCREENS[which] ? which : 'main';
+  WEMB.screenSwitch.transition(() => applyHanjinDT(key), [HJ_SCREENS[key].build]);
 };
 
 /* 헤더 메뉴(대시보드 / 통합관제 / 드롭다운 항목)의 화면 이동은 hanjin-live.js 의 installMenu 가

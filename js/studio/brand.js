@@ -64,16 +64,24 @@ function initBrand() {
       rd.onload = () => {
         setLogo(rd.result);
         if (!store(LS.logo, rd.result)) say('로고는 바꿨지만 브라우저에 저장하지 못해 새로고침하면 사라져요. 더 작은 파일로 다시 올려 주세요.', 'warn', 7000);
-        /* 이미 시안 로고를 바꿔 쓰는 중이면 새 로고로 곧바로 교체 */
-        try { if (TPLLOGO.isOn()) TPLLOGO.apply(); } catch (e2) {}
+        /* 올리면 곧바로 시안 헤더에 반영하고 프로젝트의 다른 화면에도 쓴다.
+           예전엔 '로고에서 기준색'을 눌러야 시안 로고가 바뀌어, 올려도 안 바뀌는 것처럼 보였다. */
+        try {
+          TPLLOGO.setOn(true);
+          TPLLOGO.apply();
+          const P = window.WEMB && WEMB.projects;
+          if (P && !P.setGroupLogo(P.currentGroupId(), rd.result)) say('이 화면의 로고는 바꿨지만 저장 공간이 모자라 프로젝트의 다른 화면에는 적용하지 못했어요. 더 작은 파일로 다시 올려 주세요.', 'warn');
+          else say('로고를 바꿨어요. 이 프로젝트의 모든 화면에 적용돼요.', 'ok');
+        } catch (e2) {}
       };
       rd.readAsDataURL(f);
     };
   document.getElementById('brandLogoClear')?.addEventListener('click', () => {
     setLogo(null);
     store(LS.logo, null);
-    /* 시안에 얹었던 로고도 걷어내 WEMB Studio 로고로 되돌린다 */
+    /* 시안에 얹었던 로고도 걷어내 WEMB Studio 로고로 되돌린다 — 프로젝트의 다른 화면도 함께 */
     try { TPLLOGO.setOn(false); TPLLOGO.apply(); } catch (e) {}
+    try { const P = window.WEMB && WEMB.projects; if (P) P.setGroupLogo(P.currentGroupId(), null); } catch (e) {}
   });
   document.getElementById('brandLogoSeed')?.addEventListener('click', () => {
     const cur = document.querySelector('#brandLogoPrev img');
@@ -81,14 +89,23 @@ function initBrand() {
     const im = new Image();
     im.onload = () => {
       try {
-        const t = extractTheme(im);
-        /* 색을 하나도 못 찾으면(흑백 · 거의 투명한 로고) extractTheme 은 기본색만 돌려준다(cols 없음).
-           그대로 적용하면 '로고 색'이라며 엉뚱한 기본 파랑이 들어가므로 알리고 멈춘다. */
-        if (!t || !t.seed || !t.cols) {
+        const t = extractLogoColors(im);
+        /* 유채색이 없는 흑백 로고 — 기준 색을 정할 수 없으므로 지금 색을 두고 알린다 */
+        if (!t) {
           say('로고에서 대표색을 찾지 못했어요 — 흑백이거나 색이 거의 없는 로고예요. 기준 색을 직접 골라 주세요.', 'warn');
           return;
         }
         state.seed = t.seed;
+        state.subHex = t.sub; /* 로고의 두 번째 색 — 팔레트의 강조 2 · 템플릿의 두 번째 색 계열이 된다 */
+        /* 앞서 고른 색이 남아 있으면 기준 색을 바꿔도 화면이 그대로다:
+           컬러 모음 · 사진 원본 색(direct)은 기준 색을 안 보고, 강조색 직접 지정은 그 값이 이기고, 미세 조정은 색상을 비튼다 */
+        state.mapMode = 'auto';
+        if (typeof syncExtractUI === 'function') syncExtractUI('auto');
+        if (typeof resetAdjust === 'function') resetAdjust();
+        if (state.overrides) {
+          delete state.overrides['point/main'];
+          delete state.overrides['point/sub'];
+        }
         const s = document.getElementById('seed'),
           h = document.getElementById('hex');
         if (s) s.value = t.seed;
@@ -96,13 +113,11 @@ function initBrand() {
         if (typeof setSource === 'function') setSource('seed');
         apply();
         /* 템플릿 시안의 헤더 로고(기본은 WEMB Studio 로고)도 업로드한 로고로 바꾼다 */
-        let swapped = false;
         try {
           TPLLOGO.setOn(true);
           TPLLOGO.apply();
-          swapped = !!document.querySelector('[data-studio-logo], #skx-logoswap, .tpl-logoswap');
         } catch (e2) {}
-        say(swapped ? '로고 대표색을 기준 색으로 적용하고, 시안 로고도 바꿨어요.' : '로고 대표색을 기준 색으로 적용했어요.', 'ok');
+        say('로고 색을 적용했어요 — 기준 색 ' + t.seed.toUpperCase() + (t.sub ? ' · 강조 2 ' + t.sub.toUpperCase() : '') + '.', 'ok');
       } catch (err) {
         say('로고 색을 읽지 못했어요. 다른 로고 파일로 시도해 주세요.', 'err');
       }
@@ -145,6 +160,15 @@ function initBrand() {
   };
   window.__refreshProjectName = refreshProjectName;
   try {
+    /* 프로젝트 로고가 있으면 이 화면도 그 로고로(로고를 올린 뒤에 추가한 화면) */
+    try {
+      const P = window.WEMB && WEMB.projects;
+      const gl = P && P.groupLogo(P.currentGroupId());
+      if (gl && localStorage.getItem(LS.logo) !== gl) { localStorage.setItem(LS.logo, gl); TPLLOGO.setOn(true); }
+      /* 예전에 올려 둔 로고 — 그때는 올려도 시안에 안 붙었다. 다시 올리지 않아도 시안 · 프로젝트에 쓴다 */
+      const own = localStorage.getItem(LS.logo);
+      if (own && !gl) { TPLLOGO.setOn(true); if (P) P.setGroupLogo(P.currentGroupId(), own); }
+    } catch (e) {}
     const l = localStorage.getItem(LS.logo);
     if (l) setLogo(l);
     const pname = readProjectName();

@@ -61,7 +61,7 @@
     'SK hynix', 'SK Hynix', 'SK HYNIX', 'SKHynix', 'SK하이닉스', '하이닉스', 'HYNIX', 'Hynix', 'Icheon', '이천',
     '한진택배', '한진', 'HANJIN', 'Hanjin', '대전 메가허브', '메가허브',
     '하나은행', '하나카드', '하나금융', 'Hana Card', 'HANA', 'Hana',
-    'Gammania', 'Hyundai Capital', '현대캐피탈', 'Shinhan Card', 'Shinhan', '신한카드', '신한', 'SHOneView',
+    'HYOSUNG', 'Hyosung', '효성', 'Woori Bank', 'Woori', 'WOORI', '우리은행', 'Gammania', 'Hyundai Capital', '현대캐피탈', 'Shinhan Card', 'Shinhan', '신한카드', '신한', 'SHOneView',
     'Hanbit', '한빛', 'KOEN', '한국남동발전', 'KISED', 'Digicentre', 'KORAIL', '코레일', 'NRTEC', 'NH-DCIM',
   ].sort((a, b) => b.length - a.length);
   const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

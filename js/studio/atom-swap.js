@@ -34,7 +34,7 @@
      (2026-10-02 LS Electric 단독 팝업 다섯 장 lst · lsp · lsb · lsc · lsr 추가) */
   const PXS = new Set(['hno2', 'hnc1', 'hnc2', 'hnm', 'hni1', 'hni2', 'hne', 'hnn1', 'hnn2', 'hnn3', 'hnf', 'hns1', 'hns2', 'hnl',
     'hjc', 'hjg', 'hju', 'pkm', 'pka', 'pko', 'pkr', 'pkf', 'pkd', 'pks1', 'pks2', 'pks3', 'pks4', 'lsm', 'lsd', 'lsa', 'lsy', 'lse',
-    'lst', 'lsp', 'lsb', 'lsc', 'lsr', 'shm', 'sha', 'shi', 'shd', 'skh', 'skv', 'skxp']);
+    'lst', 'lsp', 'lsb', 'lsc', 'lsr', 'tcm', 'tcs', 'tcp', 'tcv', 'tcc', 'tce', 'tcn', 'tcu', 'tca', 'tcq', 'tvt', 'tvo', 'tvs', 'tvm', 'tcl', 'pfo', 'wrt', 'wrp', 'wre', 'shm', 'sha', 'shi', 'shd', 'skh', 'skv', 'skxp']);
   const ROOT_SEL = [...PXS].map((p) => '.' + p + '-root').join(',');
   const LEVEL_WORD = { atom: '원자', mol: '분자' };
   const PART_WORD = { symbol: '심볼', label: '라벨' };
@@ -65,6 +65,8 @@
   const SECTIONS = ['atoms', 'places', 'mols', 'molPlaces'];
   let store = readStore();
   let storeVer = 0;
+  /* 같은 프로젝트의 다른 화면으로 옮겨 갔다 — 문서가 그대로라 그 화면의 저장분을 다시 읽는다(js/core/screen-switch.js) */
+  window.__atomSwapReload = () => { store = readStore(); storeVer++; };
   function readStore() {
     try {
       const d = JSON.parse(localStorage.getItem(LS) || 'null');

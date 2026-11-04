@@ -93,7 +93,8 @@ window.__hanaSceneOf = function () {
 };
 window.__openHanaScreen = function (which) {
   try { localStorage.setItem('wemb-tpl-dt', 'hana'); } catch (e) {}
-  applyHanaDT(HN_SCREENS[which] ? which : 'overview-02');
+  const key = HN_SCREENS[which] ? which : 'overview-02';
+  WEMB.screenSwitch.transition(() => applyHanaDT(key), [HN_SCREENS[key].build]);
 };
 
 /* 이 시안의 '기본 색' — 처음 열 때 '색 정하기'의 시작값을 브랜드 초록으로 놓는다.

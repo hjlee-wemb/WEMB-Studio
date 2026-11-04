@@ -93,9 +93,12 @@ window.__poscoSceneOf = function () {
   const v = localStorage.getItem('wemb-posco-screen');
   return PK_SCREENS[v] ? v : 'main';
 };
+const PK_BUILDS = (k) => { const S = PK_SCREENS[k] || PK_SCREENS.main; return [S.build].concat((S.extra || []).map((x) => 'build_' + x)); };
+WEMB.screenSwitch.register('posco', { sceneOf: (s) => s.tplScene || 'main', draw: applyPoscoDT, builds: PK_BUILDS });
 window.__openPoscoScreen = function (which) {
   try { localStorage.setItem('wemb-tpl-dt', 'posco'); } catch (e) {}
-  applyPoscoDT(PK_SCREENS[which] ? which : 'main');
+  const key = PK_SCREENS[which] ? which : 'main';
+  WEMB.screenSwitch.transition(() => applyPoscoDT(key), PK_BUILDS(key));
 };
 
 /* 화면끼리 잇기 — 시안 안에서 '종합현황'·'출입동선'·브레드크럼 따위를 누르면 그 장면으로 간다
@@ -103,7 +106,8 @@ window.__openPoscoScreen = function (which) {
    이 프로젝트에 **그 장면으로 만든 형제 화면이 있으면 그 화면을 연다** — 작업공간은 화면 하나를
    여는 구조라, 캔버스만 바꿔치우면 지금 열린 화면 기록(tplScene)과 어긋나 새로고침 때 되돌아가고
    고친 글자도 엉뚱한 화면에 저장된다. 형제가 없을 때만 제자리에서 장면을 바꾼다(낱장 미리보기와 같은 동작). */
-/* 떠나기 전에 '여는 막'을 먼저 띄운다 — 홈에서 화면을 열 때와 같은 막(#openSplash)이라
+/* 형제 화면으로는 문서를 다시 읽지 않고 오른쪽 화면만 바꾼다(js/core/screen-switch.js). 아래 막은 그럴 수 없을 때(발표 화면)만 쓰는 예전 길이다.
+   떠나기 전에 '여는 막'을 먼저 띄운다 — 홈에서 화면을 열 때와 같은 막(#openSplash)이라
    새 문서가 첫 페인트부터 그대로 이어받는다(css/base/splash.css · js/shell/routes.js).
    막이 한 번 그려진 뒤 떠나고, 탭이 가려져 rAF 가 멈춰도 떠나도록 시간 폴백을 둔다. */
 function leavePosco(url, name) {
@@ -131,6 +135,7 @@ window.__gotoPoscoScene = function (scene) {
           .filter((x) => x.tpl === 'posco' && x.projectId === me.projectId && !x.deleted && (x.tplScene || 'main') === key)
           .sort((a, b) => (b.ts || 0) - (a.ts || 0))[0];
         if (sib) {
+          if (WEMB.screenSwitch.toScreen(sib)) return;
           P.persistCurrentProjectData();
           leavePosco(location.pathname + '?screen=' + encodeURIComponent(sib.id) + '#/studio', sib.name);
           return;
