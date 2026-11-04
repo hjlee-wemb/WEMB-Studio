@@ -21,6 +21,11 @@ WEMB Studio의 버전별 변경 사항을 기록합니다.
   - Metric 타일: 하늘빛 면 + 또렷한 선 + 흰 값 칸 + 굵은 숫자
   - 라이트 전용 호버 · 차트 색
 
+### 추가
+
+- `Digital Twin: STATCOM HMI` 사이드 메뉴에 `VR 교육`이 생겨 HMI 화면에서 VR 주제 선택으로 바로 들어간다.
+  - VR 주제 선택의 `뒤로` · Esc 로 들어온 화면에 돌아온다
+
 #### [Unreleased] — 2026-11-04 STATCOM HMI
 
 ### 추가
