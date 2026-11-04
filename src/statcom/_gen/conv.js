@@ -1469,3 +1469,4 @@ if (unknown.size) {
   console.log('!! UNKNOWN CLASSES:');
   for (const [k, v] of [...unknown].sort((a, b) => b[1] - a[1])) console.log('   ' + k + ' x' + v);
 } else console.log('all classes translated');
+if (process.env.LIGHT_DEBUG) for (const r of Object.keys(LIGHT.UNMAPPED)) console.log(r + ':', Object.entries(LIGHT.UNMAPPED[r]).sort((a, b) => b[1] - a[1]).map(([c, n]) => c + ' ' + n).join(' | '));

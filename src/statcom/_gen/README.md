@@ -34,14 +34,14 @@ Figma 파일 `lyDJkcOlrznLKWo7mD7C2n`(page `Dark-시안01`)의 화면 11장과 `
 1) get_design_context(forceCode, disableCodeConnect) → 큰 응답 save-dc.js · 작은 응답 extract-dc.js → dc-<key>.txt
 2) node dl.js → node strip-gama.js                    에셋(주소는 7일이면 만료)
 3) node mk-meta.js                                    글자 상자 · 이름표(인스턴스 안은 metadata 에 안 나와 use_figma 로 읽었다)
-4) node mk-light-assets.js → node mk-screen-css.js    라이트 그림 · 화면별 규칙
+4) mk-light-scenes.ps1 → node mk-light-statcom.js → node mk-screen-css.js    라이트 장면 그림 · 라이트 그림 사본 · 화면별 규칙
 5) node conv.js                                       → src/statcom-*.js + 미리보기 src/statcom/*.html
 6) node mk-live.js                                    → src/statcom-live.js
 7) Playwright cap.js → node diff-all.js → mk-thumb.ps1
 8) node patch-studio.js                               스튜디오 연결(한 번만)
 ```
 검증 서버 `node serve.js 5542`(루트 = WEMB Studio). 미리보기 `src/statcom/valve.html` — `?live=0` 라이브 없이, `?t=light|dark` 테마 고정, `?edit=1` 편집 모습.
-Playwright: `cap.js` · `live-check.js`(반응형 여백) · `light-check.js`(대비) · `studio-check.js`(스튜디오에서 실제로 누르기).
+Playwright: `cap.js` · `live-check.js`(반응형 여백) · `light-check.js`(15화면 대비) · `studio-check.js`(스튜디오에서 실제로 누르기) · `light-studio-check.js`(스튜디오에서 라이트 전환 · 이동 · 호버 · 차트 · 색 정하기).
 
 ## 밟은 함정
 
@@ -52,8 +52,19 @@ Playwright: `cap.js` · `live-check.js`(반응형 여백) · `light-check.js`(�
 ⑤ **`[data-name="Timeline"]` 이 두 군데** — 알림의 왼쪽 열도 Timeline 이다. 장면으로 거른다.
 ⑥ **lselectric 에 장면 이름 'statcom' 이 있다** — 패치 표지를 `'statcom'` 으로 쓰면 '이미 있음'으로 건너뛴다. `t.tpl === 'statcom'` 으로.
 ⑦ **TPLLOGO 가 로고 칸 폭을 풀어 폭 0** — 칸 폭을 CSS 로 박았다(digital-twin.css).
-⑧ **라이트: 채도 높은 짙은 남색(#060d1e)이 안 밝아진다 · 밝은 청록 글자가 흐리다** — light.js autoLight · darkenText.
 ⑨ **색 정하기: 상태 점(marker-*.svg)이 hue-rotate 로 뜻이 바뀐다** — STATCOM_OPT.keep 에 넣었다.
+
+## 라이트 테마(2026-11-05 다시 만듦)
+
+처음에는 다크 색을 자동으로 뒤집었더니 판이 회청색으로 뭉치고, 굵은 남색 선과 흙탕물 그림자가 남고, 어두운 3D 그림만 가운데 덩그러니 있어 어색했다. 그래서 색을 하나씩 정한 표와 라이트 전용 그림으로 바꿨다.
+
+- **색 표 `light-palette.js`** — 떠 있는 판은 흰 판 + 옅은 선 + 부드러운 그림자, 칸은 아주 옅은 회청, 글자는 3단(`#15253a` · `#4f6279` · `#5a6c82`). 강조 · 상태색은 면에서는 그대로, 글자일 때만 짙게. 표에 없는 색 보기: `LIGHT_DEBUG=1 node conv.js`.
+- **장면 그림 `mk-light-scenes.ps1`** — 렌더에 어두운 바탕이 구워져 있어 `*-lt.jpg` 사본을 쓴다. 실내 렌더 · 미니맵은 바탕 · 바닥만 밝은 쪽으로(모형 픽셀은 그대로), 메인 야외 렌더는 screen 으로 낮 하늘(뒤집으면 구름이 까매진다), 시뮬레이션 사진은 양옆 검은 띠만. VR 장면은 그대로 둔다(현장 시점이라).
+- **그림에 구워진 글자** — 층 태그(RF~B1F) · 전체 화면 안내 · 미니맵 방 이름은 칸 좌표를 적어 따로 옮긴다(Box). 렌더를 바꾸면 좌표도 다시 잡을 것.
+- **SVG 사본 `mk-light-statcom.js`** — 파일 역할별 색 표. 선택 메뉴는 남색 칩 → 옅은 하늘색 칩.
+- **Metric 타일** — 그림자만으로는 흰 판에서 칸이 안 보였다. 옅은 하늘빛 면 + 또렷한 선으로 칸을 세우고, 값 칸(Value Box · Badge)은 흰색으로 띄우고, 숫자는 굵게 한다(mk-screen-css.js). 타일 면은 이름 없는 첫 자식이다.
+- **호버** — 흰 판은 `brightness` 를 올려도 변화가 없어, 라이트에서는 살짝 눌러 보이게 한다(live-src.js).
+- 다크는 건드리지 않았다(각 모듈의 CSS · HTML 줄이 커밋본과 같음). 함정: 그림 안 글자가 흰색이면 바닥과 함께 사라진다 · 회색 광택 자국을 그대로 두면 밝은 바닥에서 검은 고리가 된다(푸른 회색도 바닥으로 친다).
 
 ## VR 4장(2026-11-04 추가)
 
