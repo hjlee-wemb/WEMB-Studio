@@ -71,7 +71,7 @@ Playwright: `cap.js` · `live-check.js`(반응형 여백) · `light-check.js`(15
 - 원본은 약 750×788 프레임이다. 1920×1080 좌표계에서 장면은 cover, 팝업은 가운데 + 원래 프레임 높이 비율만큼 확대(VH/788 = 1.37). 장면 그림 원본이 987×1034 라 전체 화면에선 조금 부드럽다.
 - 픽셀 대조는 cap-vr.js(원래 프레임 크기), 흐름 점검은 vr-check.js.
 - 글자는 Figma 에 Brand New Hyosung 인데 Pretendard 로 그린다.
-- 흐름: 주제 선택 → 개요 → 단계 안내 ⇄(M · Esc) 메뉴. HMI 사이드 메뉴에는 VR 입구가 없어 프로젝트의 화면 목록으로 들어간다.
+- 흐름: 주제 선택 → 개요 → 단계 안내 ⇄(M · Esc) 메뉴. 시안의 사이드 메뉴에는 VR 입구가 없어, 안 선택된 메뉴를 복제해 맨 아래에 `VR 교육`(`Nav Item/VR Training`, live-src.js addVrNav)을 덧붙였다. 아이콘 `icon-nav-vr-training.svg` 는 시안에 없어 새로 그렸다. 시안의 주제 선택 화면에는 돌아가는 단추가 없어, 같은 단추를 복제해 `뒤로`(`Button/Back to HMI`)를 넣었다. 뒤로 · Esc 는 VR 로 들어온 화면으로 돌아간다(기록이 없으면 메인). 점검은 vr-nav-check.js.
 - **함정:** dc 가 그라디언트 음수 정지점의 부호를 잃는다(`0 25%` → 실제 -25%, 픽셀 샘플로 확인). dc-1-4916 · dc-1-4943 을 고쳐 두었으니 다시 받으면 또 고칠 것. Instruction Card 그림자는 Figma 가 반투명 판 뒤로도 그려 ::before 흐린 판으로 대신했다. 목록 글자는 li 라 dt-edit DTSEL 에 따로 넣었다.
 - 원본 오타 '신규 선브모듈' 은 그대로 두었다.
 

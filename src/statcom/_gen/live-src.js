@@ -21,7 +21,7 @@
   var STYLE_ID = 'statcom-live-style';
   var EASE = 'cubic-bezier(.22,.8,.24,1)';
   var SCENES = { tcl: 'login', tcm: 'main', tcs: 'statcom', tcp: 'power', tcv: 'valve', tcc: 'cooling', tce: 'supply', tcn: 'safety', tcu: 'simulation', tca: 'alarm', tcq: 'cards', tvt: 'vr-topic', tvm: 'vr-menu', tvs: 'vr-step', tvo: 'vr-overview' };
-  var NAV = { 'STATCOM': 'statcom', 'Power Equipment': 'power', 'VSC Valve Room': 'valve', 'VSC Cooling Room': 'cooling', 'Power Supply': 'supply', 'Control Safety': 'safety', 'Simulation': 'simulation', 'Alarm Message': 'alarm' };
+  var NAV = { 'STATCOM': 'statcom', 'Power Equipment': 'power', 'VSC Valve Room': 'valve', 'VSC Cooling Room': 'cooling', 'Power Supply': 'supply', 'Control Safety': 'safety', 'Simulation': 'simulation', 'Alarm Message': 'alarm', 'VR Training': 'vr-topic' };
   var CARD_SCENE = { 'STATCOM': 'statcom', 'Cooling System': 'cooling', 'MMC Valve': 'valve', 'Control Panel': 'safety', 'Transformer': 'power', 'DC System': 'supply', 'AC Filter': 'power', 'Protection System': 'safety' };
 
   /* ══════════════════ 스타일 ══════════════════ */
@@ -343,13 +343,47 @@
   }
 
   /* ══════════════════ 3. 메뉴 · 머리 단추 · 로그인 ══════════════════ */
+  /* VR 로 들어온 화면 — 주제 선택의 뒤로 · Esc 가 그 화면으로 돌아간다(화면 목록으로 바로 왔으면 메인) */
+  var VR_FROM = 'wemb-statcom-vr-from';
+  function vrFrom(scene) {
+    try {
+      if (scene) sessionStorage.setItem(VR_FROM, scene);
+      return sessionStorage.getItem(VR_FROM) || 'main';
+    } catch (e) { return 'main'; }
+  }
+  /* VR 입구 — 시안의 사이드 메뉴에는 VR 이 없어, 같은 모양의 메뉴를 맨 아래에 하나 더 둔다.
+     안 선택된 메뉴를 복제해 치수 · 호버 · 테마를 그대로 받는다. 글자 수정 기록은 id 로 찾으므로 화면마다 같은 규칙으로 준다 */
+  function addVrNav(root, st) {
+    var bar = one(root, '[data-name="Side Bar"]');
+    if (!bar || one(bar, '[data-name="Nav Item/VR Training"]')) return;
+    var items = all(bar, '[data-name^="Nav Item"]');
+    var base = items.filter(function (n) { return /^Nav Item\//.test(n.getAttribute('data-name')); })[0];
+    if (!base) return;
+    var px = root.className.split('-')[0];
+    var nav = base.cloneNode(true);
+    nav.setAttribute('data-name', 'Nav Item/VR Training');
+    nav.id = px + '-Nav Item/VR Training';
+    nav.classList.remove('tc-click');
+    all(nav, '[data-node-id]').concat([nav]).forEach(function (e) { e.removeAttribute('data-node-id'); });
+    all(nav, '[id]').forEach(function (e, i) { e.id = nav.id + '-' + i; });
+    var ic = one(nav, '[data-name^="Icon/Nav/"]');
+    ic.setAttribute('data-name', 'Icon/Nav/VR Training');
+    var img = ic.querySelector('img');
+    img.setAttribute('src', img.getAttribute('src').replace(/[^\/]+$/, 'icon-nav-vr-training.svg'));
+    var ps = all(nav, 'p');
+    ps[0].textContent = 'VR';
+    ps[1].textContent = '교육';
+    items[items.length - 1].after(nav);
+    if (window.__dtRecaptureDefaults) window.__dtRecaptureDefaults(false);
+  }
   function installNav(root, st) {
+    addVrNav(root, st);
     all(root, '[data-name^="Nav Item"]').forEach(function (n) {
       var ic = one(n, '[data-name^="Icon/Nav/"]');
       var type = ic ? ic.getAttribute('data-name').replace('Icon/Nav/', '') : '';
       var scene = NAV[type];
       if (!scene || scene === st.scene) return;
-      clickable(n, function () { goto(scene); });
+      clickable(n, function () { if (scene === 'vr-topic') vrFrom(st.scene); goto(scene); });
     });
     clickable(one(root, '[data-name="Actions"] > [data-name="Button/Home"]'), function () { goto('main'); });
     clickable(one(root, '[data-name="Actions"] > [data-name="Button/Logout"]'), function () { goto('login'); });
@@ -780,7 +814,23 @@
 
   /* ══════════════════ 10-2. VR 교육 — 주제 선택 → 개요 → 단계 안내 ⇄ 메뉴 ══════════════════
      단추 호버는 원본의 '켜짐' 단추 그림(첫 단추)으로 바꾼다. M 키로 메뉴, Esc 로 돌아온다(개요 글에 적힌 조작 그대로). */
+  function addVrBack(root) {
+    var topic = one(root, '[data-name="Button/MMC Valve Submodule Replacement"]');
+    if (!topic || one(root, '[data-name="Button/Back to HMI"]')) return;
+    var px = root.className.split('-')[0];
+    var back = topic.cloneNode(true);
+    back.setAttribute('data-name', 'Button/Back to HMI');
+    back.id = px + '-Button/Back to HMI';
+    all(back, '[data-node-id]').concat([back]).forEach(function (e) { e.removeAttribute('data-node-id'); });
+    all(back, '[id]').forEach(function (e, i) { e.id = back.id + '-' + i; });
+    one(back, 'p').textContent = '뒤로';
+    /* Content 의 간격(56px)은 글과 단추 사이용이라, 단추끼리는 12px 만 띄운다 */
+    back.style.marginTop = '-44px';
+    topic.after(back);
+    if (window.__dtRecaptureDefaults) window.__dtRecaptureDefaults(false);
+  }
   function installVR(root, st) {
+    addVrBack(root);
     var FLOW = { 'Button/MMC Valve Submodule Replacement': 'vr-overview', 'Button/Start Training': 'vr-step', 'Button/Back': 'vr-topic', 'Button/Continue': 'vr-step', 'Button/Restart': 'vr-step', 'Button/Main Menu': 'vr-topic' };
     var btns = all(root, '[data-name^="Button/"]');
     var imgOf = function (b) { return one(b, '[data-name="Button BG"] img'); };
@@ -795,6 +845,7 @@
       }
       var name = b.getAttribute('data-name');
       clickable(b, function () {
+        if (name === 'Button/Back to HMI') { goto(vrFrom()); return; }
         if (FLOW[name]) { goto(FLOW[name]); return; }
         /* 위치 초기화 — 눌린 표시만 */
         b.classList.add('tc-vr-press');
@@ -820,6 +871,7 @@
       if (editing() || (e.target && e.target.isContentEditable)) return;
       if (st.scene === 'vr-step' && (e.key === 'm' || e.key === 'M' || e.key === 'ㅡ')) goto('vr-menu');
       else if (st.scene === 'vr-menu' && e.key === 'Escape') goto('vr-step');
+      else if (st.scene === 'vr-topic' && e.key === 'Escape') goto(vrFrom());
     };
     window.addEventListener('keydown', st.onKey);
   }
