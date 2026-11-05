@@ -604,7 +604,22 @@
 .hj-asset.sha-root,
 .hj-asset.shi-root,
 .hj-asset.shd-root,
-.hj-asset.pfo-root {
+.hj-asset.pfo-root,
+.hj-asset.tcm-root,
+.hj-asset.tcs-root,
+.hj-asset.tcp-root,
+.hj-asset.tcv-root,
+.hj-asset.tcc-root,
+.hj-asset.tce-root,
+.hj-asset.tcn-root,
+.hj-asset.tcu-root,
+.hj-asset.tca-root,
+.hj-asset.tcq-root,
+.hj-asset.tvt-root,
+.hj-asset.tvo-root,
+.hj-asset.tvs-root,
+.hj-asset.tvm-root,
+.hj-asset.tcl-root {
   position: relative;
   inset: auto;
   overflow: visible;
@@ -629,6 +644,12 @@
   bottom: auto !important;
   margin: 0 !important;
   transform: none !important;
+}
+/* STATCOM 등록물 — 화면에서는 부모의 flex 가 늘려 주던 칸이라, 잘라 오면 폭 · 높이가 줄어든다(스파크라인 1px, 알림 판 51px).
+   잰 크기(data-hjw/h)를 뿌리가 갖고 있으니 그대로 채운다 */
+.hj-asset.tc-asset > :not(.hj-ofs) {
+  width: 100% !important;
+  height: 100% !important;
 }
 /* GROUP 등록물(신한카드 종합현황 위젯) — 상자 없는 위젯의 자식은 화면 좌표라, 화면 판째 당겨 위젯 자리만 보인다.
    위 '> *' 규칙보다 구체적이라 이 자리 지정이 이긴다 */
