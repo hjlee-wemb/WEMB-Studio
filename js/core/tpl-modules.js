@@ -93,6 +93,21 @@
       { src: 'src/shinhan-live.js?v=8', part: 'base' },
     ],
     /* 우리은행 통합 대시보드 — Figma qln8qMsqzCt918dZOQOWOS. 헤더 메뉴로 장면끼리 오간다 */
+    /* 신사업 관리 대시보드 — Figma cES6X45zHjsaabaXL1cdrt. 화면 11장, 장면마다 따로 싣는다 */
+    newbiz: [
+      { src: 'src/newbiz-wind.js?v=14', build: ['build_nbw'], scene: 'wind' },
+      { src: 'src/newbiz-solar.js?v=14', build: ['build_nbs'], scene: 'solar' },
+      { src: 'src/newbiz-energy.js?v=14', build: ['build_nbe'], scene: 'energy' },
+      { src: 'src/newbiz-wind-input.js?v=14', build: ['build_nbk'], scene: 'wind-input' },
+      { src: 'src/newbiz-solar-input.js?v=14', build: ['build_nbl'], scene: 'solar-input' },
+      { src: 'src/newbiz-energy-input.js?v=14', build: ['build_nbg'], scene: 'energy-input' },
+      { src: 'src/newbiz-measure.js?v=14', build: ['build_nbm'], scene: 'measure' },
+      { src: 'src/newbiz-measure-wind.js?v=14', build: ['build_nbt'], scene: 'measure-wind' },
+      { src: 'src/newbiz-measure-solar.js?v=14', build: ['build_nbu'], scene: 'measure-solar' },
+      { src: 'src/newbiz-measure-popup.js?v=14', build: ['build_nbp'], scene: 'measure-popup' },
+      { src: 'src/newbiz-overseas.js?v=14', build: ['build_nbo'], scene: 'overseas' },
+      { src: 'src/newbiz-live.js?v=4', part: 'base' },
+    ],
     /* STATCOM HMI 디지털 트윈 — Figma lyDJkcOlrznLKWo7mD7C2n. 화면 11장, 장면마다 따로 싣는다 */
     statcom: [
       { src: 'src/statcom-main.js?v=5', build: ['build_tcm'], scene: 'main' },
@@ -130,6 +145,7 @@
     posco: { key: 'wemb-posco-screen', def: 'main' },
     hanjin: { key: 'wemb-hanjin-screen', def: 'main' },
     statcom: { key: 'wemb-statcom-screen', def: 'main' },
+    newbiz: { key: 'wemb-newbiz-screen', def: 'wind' },
   };
 
   const byBuild = {};

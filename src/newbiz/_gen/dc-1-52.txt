@@ -1,0 +1,1296 @@
+const imgTypeWindStatusDefault = "https://www.figma.com/api/mcp/asset/6ca9c899-7c82-40ac-99b7-745a594181ce.svg";
+const imgTypeWindStatusSelect = "https://www.figma.com/api/mcp/asset/a990be0d-d497-4ff3-a198-d6ec85c59f6d.svg";
+const imgEdit = "https://www.figma.com/api/mcp/asset/dce719d2-297e-48e0-acaf-6cb3a04c5b97.svg";
+const imgImage = "https://www.figma.com/api/mcp/asset/cfcf3cce-42c5-4b78-96f5-1408d79921f9.png";
+const imgRegionOverlay = "https://www.figma.com/api/mcp/asset/a1b5b872-6426-4600-b96f-6451ac722af1.png";
+const imgTurbineImage = "https://www.figma.com/api/mcp/asset/23a4ef4b-6c49-42be-9249-1e013e0aae64.png";
+const imgSolarPanelImage = "https://www.figma.com/api/mcp/asset/20157582-b319-4523-9849-1b0071e0a222.png";
+const imgOutline = "https://www.figma.com/api/mcp/asset/dc5b331f-60b7-4d91-b97f-5ba1e36cb287.svg";
+const imgRegions = "https://www.figma.com/api/mcp/asset/f81ca535-5ab0-4885-95b5-dd80b8a6f5d9.svg";
+const imgIconActionEdit = "https://www.figma.com/api/mcp/asset/86681f10-4df0-410e-9b6b-4a1df2ea42c3.svg";
+const imgIconActionDelete = "https://www.figma.com/api/mcp/asset/6d9bbd4e-617b-4f11-b2ff-3c3746147fb4.svg";
+const imgIconActionDelete1 = "https://www.figma.com/api/mcp/asset/150e4802-a233-41d0-82f8-55cea7c783d4.svg";
+const imgIconActionEdit1 = "https://www.figma.com/api/mcp/asset/bd90e1bf-8d1a-4a35-baff-1f1cbb2e4510.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/79b8d6fd-363a-42b9-9d60-6bae2683992e.svg";
+const imgLogoMark = "https://www.figma.com/api/mcp/asset/1a9d4ada-034b-43ed-be26-354674cad031.svg";
+const imgIconTimestampClock = "https://www.figma.com/api/mcp/asset/61b34ecf-909b-4472-b0a8-f2bb65758533.svg";
+const imgLeader = "https://www.figma.com/api/mcp/asset/21ca4669-f93f-4226-9a41-a3fab4835b41.svg";
+const imgLeader1 = "https://www.figma.com/api/mcp/asset/c2f4918a-d537-4b13-b69c-4f05e8578413.svg";
+const imgLeader2 = "https://www.figma.com/api/mcp/asset/db4f7c11-349b-404d-bac6-856bd6895ae7.svg";
+const imgTrack = "https://www.figma.com/api/mcp/asset/585f1d14-dd11-4298-abc3-c68419ed3401.svg";
+const imgMarker = "https://www.figma.com/api/mcp/asset/0a947bee-7b5c-457f-9e1e-e10803067e43.svg";
+const imgMarker1 = "https://www.figma.com/api/mcp/asset/2ac4c747-815b-4837-95b5-6025c67898c0.svg";
+const imgMarker2 = "https://www.figma.com/api/mcp/asset/2c227ae3-f77c-4647-9209-56d1637a1a0c.svg";
+const imgMarker3 = "https://www.figma.com/api/mcp/asset/31267542-db8d-4f62-a871-2a77fc129091.svg";
+const imgMarker4 = "https://www.figma.com/api/mcp/asset/39ed18ea-9373-4552-b279-a0836c919fa0.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/8afd120b-b4f9-4fd5-8ad3-1939b7110e47.svg";
+const imgIcon1 = "https://www.figma.com/api/mcp/asset/5e2405dd-7497-4e7f-98d3-33ba7b9459d8.svg";
+
+type IconProps = {
+  className?: string;
+  status?: "Default" | "Select";
+  type?: "Wind";
+};
+
+function Icon({ className, status = "Default", type = "Wind" }: IconProps) {
+  const isWindAndSelect = type === "Wind" && status === "Select";
+  return (
+    <div className={className || "relative size-[14px]"} id={isWindAndSelect ? "node-1_32" : "node-1_30"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isWindAndSelect ? imgTypeWindStatusSelect : imgTypeWindStatusDefault} />
+    </div>
+  );
+}
+
+type TabProps = {
+  className?: string;
+  stauts?: "Select";
+  text?: string;
+};
+
+function Tab({ className, stauts = "Select", text = "탭" }: TabProps) {
+  return (
+    <div className={className || "bg-[#7fd3fa] content-stretch drop-shadow-[0px_2px_3px_rgba(33,33,33,0.8)] flex gap-[4px] h-[26px] items-center justify-center px-[12px] relative rounded-tl-[6px] rounded-tr-[6px]"} data-node-id="1:37">
+      <Icon className="relative shrink-0 size-[14px]" status="Select" />
+      <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#27303a] text-[12px] text-center whitespace-nowrap" data-node-id="1:39">
+        {text}
+      </p>
+    </div>
+  );
+}
+
+type BtnTooltipProps = {
+  className?: string;
+  property1?: "Default";
+};
+
+function BtnTooltip({ className, property1 = "Default" }: BtnTooltipProps) {
+  return (
+    <div className={className || "h-[22px] relative w-[32.154px]"} data-node-id="1:3">
+      <div className="absolute bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center left-[5.08px] rounded-[6.875px] size-[22px] top-0" data-node-id="1:4" data-name="Button_Edit">
+        <div className="relative shrink-0 size-[11px]" data-node-id="1:5" data-name="Edit">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit} />
+        </div>
+      </div>
+      <div className="absolute flex h-0 items-center justify-center left-[5.08px] top-[22px] w-[22px]" data-node-id="1:7">
+        <div className="-scale-y-100 flex-none">
+          <div className="h-0 relative w-[22px]" data-name="Btn_Frame" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ScreenRenewableStatusWindTooltipInput() {
+  return (
+    <div className="bg-[#06101c] relative size-full" data-node-id="1:52" data-name="Screen/Renewable Status - Wind (Tooltip, Input)">
+      <div className="absolute contents left-[36px] top-[286px]" data-node-id="1:53" data-name="Widget/Project Map">
+        <div className="absolute contents left-[36px] top-[286px]" data-node-id="1:54" data-name="Card BG">
+          <div className="absolute h-[764px] left-[36px] mix-blend-color-dodge rounded-[16px] top-[286px] w-[796px]" data-node-id="1:55" data-name="Image">
+            <div className="absolute inset-0 opacity-70 overflow-hidden pointer-events-none rounded-[16px]">
+              <img alt="" className="absolute h-[121.72%] left-[-60.69%] max-w-none top-[-10.86%] w-[160.72%]" src={imgImage} />
+            </div>
+          </div>
+          <div className="absolute border border-[#242a39] border-solid h-[764px] left-[36px] pointer-events-none rounded-[16px] top-[286px] w-[796px]" data-node-id="1:56" data-name="Overlay">
+            <div aria-hidden className="absolute bg-[rgba(217,217,217,0.01)] inset-0 rounded-[16px]" />
+            <div className="absolute inset-[-1px] rounded-[inherit] shadow-[inset_0px_0px_34px_0px_#202e51,inset_0px_0px_14px_0px_#202e51]" />
+          </div>
+        </div>
+        <div className="absolute contents left-[102px] top-[307.7px]" data-node-id="1:57" data-name="Map Stage">
+          <div className="absolute contents inset-[28.49%_63.16%_4.37%_12.85%]" data-node-id="1:58" data-name="Korea Map">
+            <div className="absolute inset-[28.49%_63.16%_4.37%_12.85%]" data-node-id="1:59" data-name="Outline">
+              <div className="absolute inset-[-1.38%_-2.17%]">
+                <img alt="" className="block max-w-none size-full" src={imgOutline} />
+              </div>
+            </div>
+            <div className="absolute inset-[28.53%_63.19%_4.44%_12.89%]" data-node-id="1:173" data-name="Regions">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRegions} />
+            </div>
+            <div className="absolute inset-[28.53%_63.19%_4.44%_12.89%]" data-node-id="1:317" data-name="Region Overlay">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" height="723.879" src={imgRegionOverlay} width="459.666" />
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[587px] top-[810px]" data-node-id="1:461" data-name="Callout/Tongyeong (Yokjido)">
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:462" data-name="Visual">
+              <div className="absolute bottom-0 h-[53.913px] left-0 w-[39px]" data-node-id="1:463" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:464" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end leading-[normal] not-italic relative shrink-0 text-[#ffb742] w-full whitespace-nowrap" data-node-id="1:465" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:466">
+                  400
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:467">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#ffb742] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-br-[18.5px] rounded-tl-[14.5px] rounded-tr-[18.5px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] shrink-0 w-full" data-node-id="1:468" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-br-[18.5px] rounded-tl-[14.5px] rounded-tr-[18.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 183, 66, 0.2) 0%, rgba(255, 183, 66, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:469">
+                  통영(욕지도)
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,183,66,0.25),inset_0px_4px_4px_0px_rgba(255,183,66,0.25)]" />
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[488px] top-[865px]" data-node-id="1:470" data-name="Callout/Yeonsu Yeondo">
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:471" data-name="Visual">
+              <div className="absolute bottom-0 h-[53.913px] left-0 w-[39px]" data-node-id="1:472" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:473" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end leading-[normal] not-italic relative shrink-0 text-[#ffb742] w-[77px] whitespace-nowrap" data-node-id="1:474" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:475">
+                  900
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:476">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#ffb742] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-br-[18.5px] rounded-tl-[14.5px] rounded-tr-[18.5px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] shrink-0" data-node-id="1:477" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-br-[18.5px] rounded-tl-[14.5px] rounded-tr-[18.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 183, 66, 0.2) 0%, rgba(255, 183, 66, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:478">
+                  연수연도
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,183,66,0.25),inset_0px_4px_4px_0px_rgba(255,183,66,0.25)]" />
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[157px] top-[969px]" data-node-id="1:479" data-name="Callout/Tamra (Expansion)">
+            <div className="content-stretch flex flex-col gap-[8px] items-end justify-end relative shrink-0" data-node-id="1:480" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end justify-end leading-[normal] not-italic relative shrink-0 text-[#ff6a6a] w-full whitespace-nowrap" data-node-id="1:481" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:482">
+                  72
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:483">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#ff6a6a] border-solid content-stretch flex items-center px-[14px] py-[10px] relative rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] shrink-0" data-node-id="1:484" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 106, 106, 0.2) 0%, rgba(255, 106, 106, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:485">
+                  탐라(확장사업)
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,106,106,0.25),inset_0px_4px_4px_0px_rgba(255,106,106,0.25)]" />
+              </div>
+            </div>
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:486" data-name="Visual">
+              <div className="absolute bottom-0 flex h-[53.913px] items-center justify-center left-0 w-[39px]" data-node-id="1:487">
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col gap-[6px] items-center justify-end left-[335px] top-[811px]" data-node-id="1:488" data-name="Callout/Haenam (Solar)">
+            <div className="h-[37px] overflow-clip relative shrink-0 w-[65px]" data-node-id="1:489" data-name="Visual">
+              <div className="absolute bottom-[6px] h-[29px] pointer-events-none right-[4px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] w-[57px]" data-node-id="1:490" data-name="Solar Panel Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src={imgSolarPanelImage} />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_-3px_4px_0px_rgba(255,255,255,0.25)]" />
+              </div>
+            </div>
+            <div className="border border-[#575fff] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-[18.5px] shrink-0" data-node-id="1:491" data-name="Label">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[18.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(87, 95, 255, 0.2) 0%, rgba(87, 95, 255, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:492">
+                해남(태양광)
+              </p>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(87,95,255,0.25),inset_0px_4px_4px_0px_rgba(87,95,255,0.25)]" />
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col items-center justify-end left-[577px] top-[735px]" data-node-id="1:493" data-name="Callout/Sandan (Solar)">
+            <div className="h-[37px] overflow-clip relative shrink-0 w-[65px]" data-node-id="1:494" data-name="Visual">
+              <div className="absolute bottom-[6px] h-[29px] pointer-events-none right-[4px] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] w-[57px]" data-node-id="1:495" data-name="Solar Panel Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src={imgSolarPanelImage} />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_-3px_4px_0px_rgba(255,255,255,0.25)]" />
+              </div>
+            </div>
+            <div className="border border-[#575fff] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-[18.5px] shrink-0" data-node-id="1:496" data-name="Label">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[18.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(87, 95, 255, 0.2) 0%, rgba(87, 95, 255, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:497">
+                산단(태양광)
+              </p>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(87,95,255,0.25),inset_0px_4px_4px_0px_rgba(87,95,255,0.25)]" />
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[174px] top-[594px]" data-node-id="1:507" data-name="Callout/Seonamhae (Expansion)">
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:508" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end justify-end leading-[normal] not-italic relative shrink-0 text-[#ff6a6a] w-full whitespace-nowrap" data-node-id="1:509" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:510">
+                  200
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:511">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#ff6a6a] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px] shrink-0" data-node-id="1:512" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 106, 106, 0.2) 0%, rgba(255, 106, 106, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:513">
+                  서남해(확장사업)
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,106,106,0.25),inset_0px_4px_4px_0px_rgba(255,106,106,0.25)]" />
+              </div>
+            </div>
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:514" data-name="Visual">
+              <div className="absolute bottom-0 flex h-[53.913px] items-center justify-center left-0 w-[39px]" data-node-id="1:515">
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[187px] top-[697px]" data-node-id="1:516" data-name="Callout/Daegwang Imja">
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:517" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end justify-end leading-[normal] not-italic relative shrink-0 text-[#ff6a6a] w-full whitespace-nowrap" data-node-id="1:518" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:519">
+                  200
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:520">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#ff6a6a] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px] shrink-0" data-node-id="1:521" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 106, 106, 0.2) 0%, rgba(255, 106, 106, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:522">
+                  대광임자
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,106,106,0.25),inset_0px_4px_4px_0px_rgba(255,106,106,0.25)]" />
+              </div>
+            </div>
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:523" data-name="Visual">
+              <div className="absolute bottom-0 flex h-[53.913px] items-center justify-center left-0 w-[39px]" data-node-id="1:524">
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[176px] top-[401px]" data-node-id="1:525" data-name="Callout/Incheon (In-house)">
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:526" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end justify-end leading-[normal] not-italic relative shrink-0 text-[#ff6a6a] w-full whitespace-nowrap" data-node-id="1:527" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:528">
+                  320
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:529">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#ff6a6a] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px] shrink-0" data-node-id="1:530" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 106, 106, 0.2) 0%, rgba(255, 106, 106, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:531">
+                  인천(자체사업)
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,106,106,0.25),inset_0px_4px_4px_0px_rgba(255,106,106,0.25)]" />
+              </div>
+            </div>
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:532" data-name="Visual">
+              <div className="absolute bottom-0 flex h-[53.913px] items-center justify-center left-0 w-[39px]" data-node-id="1:533">
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[102px] top-[331px]" data-node-id="1:534" data-name="Callout/Incheon (Orsted)">
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:535" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end justify-end leading-[normal] not-italic relative shrink-0 text-[#ff6a6a] w-full whitespace-nowrap" data-node-id="1:536" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:537">
+                  320
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:538">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#ff6a6a] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px] shrink-0" data-node-id="1:539" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 106, 106, 0.2) 0%, rgba(255, 106, 106, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:540">
+                  인천(오스테드)
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,106,106,0.25),inset_0px_4px_4px_0px_rgba(255,106,106,0.25)]" />
+              </div>
+            </div>
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:541" data-name="Visual">
+              <div className="absolute bottom-0 flex h-[53.913px] items-center justify-center left-0 w-[39px]" data-node-id="1:542">
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[198px] top-[863px]" data-node-id="1:543" data-name="Callout/Cheonsa Ui">
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:544" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end justify-end leading-[normal] not-italic relative shrink-0 text-[#57daff] w-full whitespace-nowrap" data-node-id="1:545" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:546">
+                  390
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:547">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#57daff] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px] shrink-0" data-node-id="1:548" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-bl-[18.5px] rounded-tl-[18.5px] rounded-tr-[14.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(87, 218, 255, 0.2) 0%, rgba(87, 218, 255, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:549">
+                  천사우이
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(87,218,255,0.25),inset_0px_4px_4px_0px_rgba(87,218,255,0.25)]" />
+              </div>
+            </div>
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:550" data-name="Visual">
+              <div className="absolute bottom-0 flex h-[53.913px] items-center justify-center left-0 w-[39px]" data-node-id="1:551">
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex gap-[6px] items-end justify-end left-[337px] top-[890px]" data-node-id="1:552" data-name="Callout/Wando Geumil">
+            <div className="h-[60px] overflow-clip relative shrink-0 w-[39px]" data-node-id="1:553" data-name="Visual">
+              <div className="absolute bottom-0 h-[53.913px] left-0 w-[39px]" data-node-id="1:554" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col gap-[8px] items-center justify-end relative shrink-0" data-node-id="1:555" data-name="Tag">
+              <div className="[word-break:break-word] content-stretch flex gap-[3px] items-end leading-[normal] not-italic relative shrink-0 text-[#57daff] w-full whitespace-nowrap" data-node-id="1:556" data-name="Measurement">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:ExtraBold'] relative shrink-0 text-[24px] tracking-[-0.96px]" data-node-id="1:557">
+                  600
+                </p>
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] font-['SUIT:SemiBold'] relative shrink-0 text-[14px]" data-node-id="1:558">
+                  MW
+                </p>
+              </div>
+              <div className="border border-[#57daff] border-solid content-stretch flex items-center justify-center px-[14px] py-[10px] relative rounded-br-[18.5px] rounded-tl-[14.5px] rounded-tr-[18.5px] shrink-0" data-node-id="1:559" data-name="Label">
+                <div aria-hidden className="absolute inset-0 pointer-events-none rounded-br-[18.5px] rounded-tl-[14.5px] rounded-tr-[18.5px]" style={{ backgroundImage: "linear-gradient(90deg, rgba(87, 218, 255, 0.2) 0%, rgba(87, 218, 255, 0.2) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.8) 100%)" }} />
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-center text-white tracking-[-0.32px] whitespace-nowrap" data-node-id="1:560">
+                  완도금일
+                </p>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(87,218,255,0.25),inset_0px_4px_4px_0px_rgba(87,218,255,0.25)]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-black content-stretch flex flex-col h-[70px] items-center justify-center left-[calc(50%-2px)] pb-[32px] pt-[35px] top-0 w-[1920px]" data-node-id="1:561" data-name="Nav Bar">
+        <div className="[word-break:break-word] content-stretch flex font-['SUIT:Bold'] gap-[80px] items-center leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:562" data-name="Nav Group">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0" data-node-id="1:563">
+            About New Biz
+          </p>
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0" data-node-id="1:564">
+            재생에너지사업
+          </p>
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0" data-node-id="1:565">
+            신에너지사업
+          </p>
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0" data-node-id="1:566">
+            해외사업
+          </p>
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0" data-node-id="1:567">
+            사업운영
+          </p>
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0" data-node-id="1:568">
+            시스템관리
+          </p>
+        </div>
+      </div>
+      <div className="absolute contents left-[848px] top-[286px]" data-node-id="1:569" data-name="Widget/Project Status">
+        <div className="absolute border border-[#242a39] border-solid h-[764px] left-[848px] pointer-events-none rounded-[16px] top-[286px] w-[1037px]" data-node-id="1:570" data-name="Card BG">
+          <div aria-hidden className="absolute bg-[rgba(217,217,217,0.01)] inset-0 rounded-[16px]" />
+          <div className="absolute inset-[-1px] rounded-[inherit] shadow-[inset_0px_0px_24px_0px_#242a39,inset_0px_0px_24px_0px_#242a39]" />
+        </div>
+        <div className="absolute bg-[rgba(217,217,217,0.01)] content-stretch flex flex-col gap-[7px] items-start left-[880px] top-[318px] w-[974px]" data-node-id="1:571" data-name="Table/Project Status">
+          <div className="content-stretch flex gap-[4px] items-center leading-[0] relative shrink-0 w-full" data-node-id="1:572" data-name="Header Row">
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="1:573" data-name="Th/Stage">
+              <div className="border border-[rgba(255,255,255,0.1)] border-solid col-1 h-[35px] ml-0 mt-0 pointer-events-none relative rounded-bl-[2px] rounded-br-[2px] rounded-tl-[12px] rounded-tr-[2px] row-1 w-[128px]" data-node-id="1:574" data-name="Background">
+                <div aria-hidden className="absolute bg-[rgba(255,255,255,0.1)] inset-0 rounded-bl-[2px] rounded-br-[2px] rounded-tl-[12px] rounded-tr-[2px]" />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_4px_0px_rgba(0,0,0,0.25)]" />
+              </div>
+              <p className="[word-break:break-word] col-1 font-['SUIT:Bold'] leading-[normal] ml-[46px] mt-[5px] not-italic relative row-1 text-[#f4f4f4] text-[20px] tracking-[0.4px] whitespace-nowrap" data-node-id="1:575">
+                단계
+              </p>
+            </div>
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="1:576" data-name="Th/Project Name">
+              <div className="border border-[rgba(255,255,255,0.1)] border-solid col-1 h-[35px] ml-0 mt-0 pointer-events-none relative rounded-[2px] row-1 w-[155px]" data-node-id="1:577" data-name="Background">
+                <div aria-hidden className="absolute bg-[rgba(255,255,255,0.1)] inset-0 rounded-[2px]" />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_4px_0px_rgba(0,0,0,0.25)]" />
+              </div>
+              <p className="[word-break:break-word] col-1 font-['SUIT:Bold'] leading-[normal] ml-[51px] mt-[5px] not-italic relative row-1 text-[#f4f4f4] text-[20px] tracking-[0.4px] whitespace-nowrap" data-node-id="1:578">
+                사업명
+              </p>
+            </div>
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="1:579" data-name="Th/Capacity">
+              <div className="border border-[rgba(255,255,255,0.1)] border-solid col-1 h-[35px] ml-0 mt-0 pointer-events-none relative rounded-[2px] row-1 w-[108px]" data-node-id="1:580" data-name="Background">
+                <div aria-hidden className="absolute bg-[rgba(255,255,255,0.1)] inset-0 rounded-[2px]" />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_4px_0px_rgba(0,0,0,0.25)]" />
+              </div>
+              <div className="[word-break:break-word] col-1 content-stretch flex font-['SUIT:Bold'] gap-[4px] items-end leading-[normal] ml-[15px] mt-[5px] not-italic relative row-1 text-[#f4f4f4] whitespace-nowrap" data-node-id="1:581" data-name="Text Wrap">
+                <p className="relative shrink-0 text-[20px] tracking-[0.4px]" data-node-id="1:582">
+                  용량
+                </p>
+                <p className="relative shrink-0 text-[13px] tracking-[0.26px]" data-node-id="1:583">
+                  (MW)
+                </p>
+              </div>
+            </div>
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="1:584" data-name="Th/Status">
+              <div className="border border-[rgba(255,255,255,0.1)] border-solid col-1 h-[35px] ml-0 mt-0 pointer-events-none relative rounded-bl-[2px] rounded-br-[2px] rounded-tl-[2px] rounded-tr-[12px] row-1 w-[571px]" data-node-id="1:585" data-name="Background">
+                <div aria-hidden className="absolute bg-[rgba(255,255,255,0.1)] inset-0 rounded-bl-[2px] rounded-br-[2px] rounded-tl-[2px] rounded-tr-[12px]" />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_4px_0px_rgba(0,0,0,0.25)]" />
+              </div>
+              <p className="[word-break:break-word] col-1 font-['SUIT:Bold'] leading-[normal] ml-[265px] mt-[5px] not-italic relative row-1 text-[#7fd3fa] text-[20px] tracking-[0.4px] whitespace-nowrap" data-node-id="1:586">
+                현 황
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full" data-node-id="1:587" data-name="Body">
+            <div className="content-stretch flex flex-col gap-[4px] h-[612px] items-start overflow-x-clip overflow-y-auto relative shrink-0 w-full" data-node-id="1:588" data-name="Rows">
+              <div className="content-stretch flex h-[38px] items-start relative shrink-0 w-full" data-node-id="1:589" data-name="Row/Tamra">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center px-[10px] relative shrink-0 w-[130px]" data-node-id="1:590" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#ffdc8c] text-[18px] whitespace-nowrap" data-node-id="1:591">
+                    운영중
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center pl-[20px] pr-[10px] relative shrink-0 w-[200px]" data-node-id="1:592" data-name="Td/Project Name">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:593">
+                    탐라
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] relative shrink-0 w-[112px]" data-node-id="1:594" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:595">
+                    30
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] gap-[6px] h-full items-center min-w-px pb-[5px] pt-[8px] px-[10px] relative" data-node-id="1:596" data-name="Td/Status">
+                  <div className="bg-[#2e3947] border border-[#333a43] border-solid content-stretch flex flex-[1_0_0] h-full items-center min-w-px pl-[12px] pr-[10px] relative rounded-[2px]" data-node-id="1:597" data-name="Input">
+                    <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[16px] text-[rgba(191,202,207,0.3)] whitespace-nowrap" data-node-id="1:598">
+                      2015년 준공
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[5px] items-center relative shrink-0" data-node-id="1:599" data-name="Actions">
+                    <div className="bg-[#2e3947] content-stretch flex h-[22px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0" data-node-id="1:600" data-name="Button/Save">
+                      <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#c8e5f2] text-[14px] whitespace-nowrap" data-node-id="1:601">
+                        저장
+                      </p>
+                    </div>
+                    <div className="bg-[#2e3947] content-stretch flex h-[22px] items-center justify-center px-[12px] relative rounded-[4px] shrink-0" data-node-id="1:602" data-name="Button/Cancel">
+                      <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#c8e5f2] text-[14px] whitespace-nowrap" data-node-id="1:603">
+                        취소
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[38px] items-start overflow-clip relative shrink-0 w-full" data-node-id="1:604" data-name="Row/Seonamhae">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:605" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#ffdc8c] text-[18px] whitespace-nowrap" data-node-id="1:606">
+                    운영중
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center pl-[20px] pr-[10px] py-[10px] relative shrink-0 w-[200px]" data-node-id="1:607" data-name="Td/Project Name">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:608">
+                    서남해
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:609" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:610">
+                    60
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center min-w-px pl-[20px] pr-[10px] py-[10px] relative" data-node-id="1:611" data-name="Td/Status">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:612">
+                    2017년 준공
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[72px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:613" data-name="Row/Wando Geumil">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:614" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:615">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:616" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:617" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:618">
+                      1
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:619">
+                    완도금일
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:620" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:621">
+                    600
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:622" data-name="Td/Status">
+                  <div className="[word-break:break-word] content-stretch flex flex-col font-['SUIT:Medium'] gap-[8px] items-start leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:623" data-name="Text Wrap">
+                    <p className="relative shrink-0" data-node-id="1:624">
+                      - 환경영향평가 협의완료 (2023)
+                    </p>
+                    <p className="relative shrink-0" data-node-id="1:625">
+                      - PPA 완료 (2024.2월)
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:626" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:627" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:628" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:630" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:631" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[63px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:633" data-name="Row/Cheonsa Ui">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:634" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:635">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:636" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:637" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:638">
+                      2
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:639">
+                    천사우이
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:640" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:641">
+                    390
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:642" data-name="Td/Status">
+                  <div className="[word-break:break-word] content-stretch flex flex-col font-['SUIT:Medium'] gap-[8px] items-start leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:643" data-name="Text Wrap">
+                    <p className="relative shrink-0" data-node-id="1:644">
+                      - 환경영향평가 협의완료 (2023)
+                    </p>
+                    <p className="relative shrink-0" data-node-id="1:645">
+                      - PPA 완료 (2024.2월)
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:646" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:647" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:648" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:650" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:651" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[38px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:653" data-name="Row/Tamra Phase 2">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:654" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:655">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:656" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:657" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:658">
+                      3
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:659">
+                    탐라 2단계
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:660" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:661">
+                    72
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:662" data-name="Td/Status">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:663">
+                    - 기본 설계 中 (2021 ~)
+                  </p>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:664" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:665" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:666" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:668" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:669" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[72px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:671" data-name="Row/Incheon Yongyu Muui Jawol">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:672" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:673">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:674" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:675" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:676">
+                      4
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:677">
+                    인천용유무의자월
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:678" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:679">
+                    320
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:680" data-name="Td/Status">
+                  <div className="[word-break:break-word] content-stretch flex flex-col font-['SUIT:Medium'] gap-[8px] items-start leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:681" data-name="Text Wrap">
+                    <p className="relative shrink-0" data-node-id="1:682">
+                      - 발전사업 허가 취득 (2021)
+                    </p>
+                    <p className="relative shrink-0" data-node-id="1:683">
+                      - 기본 설계 및 환경영향평가 준비
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:684" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:685" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:686" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:688" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:689" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[72px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:691" data-name="Row/Incheon Deokjeok">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:692" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:693">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:694" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:695" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:696">
+                      5
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:697">
+                    인천덕적
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:698" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:699">
+                    320
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:700" data-name="Td/Status">
+                  <div className="[word-break:break-word] content-stretch flex flex-col font-['SUIT:Medium'] gap-[8px] items-start leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px]" data-node-id="1:701" data-name="Text Wrap">
+                    <p className="relative shrink-0 whitespace-nowrap" data-node-id="1:702">
+                      - 발전사업 허가 취득 (2023)
+                    </p>
+                    <p className="relative shrink-0 whitespace-pre" data-node-id="1:703">{`- 기본 설계 및 환경영향평가 준비 中  `}</p>
+                  </div>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:704" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:705" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:706" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:708" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:709" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[72px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:711" data-name="Row/Sinan Daegwang">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:712" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:713">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:714" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:715" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:716">
+                      6
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:717">
+                    신안대광
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:718" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:719">
+                    400
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:720" data-name="Td/Status">
+                  <div className="[word-break:break-word] content-stretch flex flex-col font-['SUIT:Medium'] gap-[8px] items-start leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px]" data-node-id="1:721" data-name="Text Wrap">
+                    <p className="relative shrink-0 whitespace-nowrap" data-node-id="1:722">
+                      - 발전사업 허가 취득 (2021)
+                    </p>
+                    <p className="relative shrink-0 whitespace-pre" data-node-id="1:723">{`- 기본 설계 및 환경영향평가 준비 中  `}</p>
+                  </div>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:724" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:725" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:726" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:728" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:729" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[72px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:731" data-name="Row/Imja">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:732" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:733">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:734" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:735" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:736">
+                      7
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:737">
+                    임자
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:738" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:739">
+                    200
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:740" data-name="Td/Status">
+                  <div className="[word-break:break-word] content-stretch flex flex-col font-['SUIT:Medium'] gap-[8px] items-start leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px]" data-node-id="1:741" data-name="Text Wrap">
+                    <p className="relative shrink-0 whitespace-nowrap" data-node-id="1:742">
+                      - 발전사업 허가 취득 (2021)
+                    </p>
+                    <p className="relative shrink-0 whitespace-pre" data-node-id="1:743">{`- 기본 설계 및 환경영향평가 준비 中  `}</p>
+                  </div>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:744" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:745" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:746" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:748" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:749" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[38px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:751" data-name="Row/Yeonsu Yeondo">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:752" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:753">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:754" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:755" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:756">
+                      8
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:757">
+                    연수연도
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:758" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:759">
+                    900
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:760" data-name="Td/Status">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:761">
+                    - 풍향자원 측정 中
+                  </p>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:762" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:763" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:764" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:766" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:767" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[38px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:769" data-name="Row/Tongyeong">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:770" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:771">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:772" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:773" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:774">
+                      9
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:775">
+                    통영
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:776" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:777">
+                    400
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:778" data-name="Td/Status">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:779">
+                    - 풍향자원 측정 中
+                  </p>
+                  <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:780" data-name="Actions">
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:781" data-name="Button/Edit">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:782" data-name="Icon/Action/Edit">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit} />
+                      </div>
+                    </div>
+                    <div className="bg-[rgba(98,123,142,0.15)] content-stretch flex items-center justify-center relative rounded-[6px] shrink-0 size-[22px]" data-node-id="1:784" data-name="Button/Delete">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="1:785" data-name="Icon/Action/Delete">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[38px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:787" data-name="Row/Sandan (Solar)">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:788" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:789">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:790" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[20px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:791" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:Bold'] leading-[10px] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="1:792">
+                      10
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:793">
+                    산단(태양광)
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:794" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:795">
+                    600
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:796" data-name="Td/Status">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:797">
+                    - 자원 측정 中
+                  </p>
+                  <BtnTooltip className="h-[22px] relative shrink-0 w-[32.154px]" />
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+              <div className="content-stretch flex h-[38px] items-center overflow-clip relative shrink-0 w-full" data-node-id="1:799" data-name="Row/Haenam (Solar)">
+                <div aria-hidden className="absolute bg-[rgba(36,42,57,0.4)] inset-0 pointer-events-none" />
+                <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:800" data-name="Td/Stage">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#1bf0c2] text-[18px] whitespace-nowrap" data-node-id="1:801">
+                    개발중
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[8px] h-full items-center pl-[20px] pr-[10px] pt-[2px] relative shrink-0 w-[200px]" data-node-id="1:802" data-name="Td/Project Name">
+                  <div className="content-stretch flex h-[22px] items-center justify-center px-[6px] relative rounded-[4px] shrink-0" data-node-id="1:803" data-name="Badge">
+                    <div aria-hidden className="absolute bg-[rgba(27,240,194,0.7)] inset-0 pointer-events-none rounded-[4px]" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-center text-white whitespace-nowrap" data-node-id="12:124">
+                      11
+                    </p>
+                    <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0.493px_0.493px_1.478px_0px_rgba(0,0,0,0.25),inset_-0.493px_-0.493px_1.478px_0px_rgba(255,255,255,0.41)]" />
+                  </div>
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:805">
+                    해남(태양광)
+                  </p>
+                </div>
+                <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:806" data-name="Td/Capacity">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="1:807">
+                    400
+                  </p>
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px pb-[8px] pl-[20px] pr-[10px] pt-[10px] relative" data-node-id="1:808" data-name="Td/Status">
+                  <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[18px] whitespace-nowrap" data-node-id="1:809">
+                    - 자원 측정 中
+                  </p>
+                  <BtnTooltip className="h-[22px] relative shrink-0 w-[32.154px]" />
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_2px_0px_0px_white]" />
+              </div>
+            </div>
+            <div className="absolute h-[43px] left-[935px] top-[51px] w-[36px]" data-node-id="1:811" data-name="Button/Delete (Hover)">
+              <div className="absolute bg-[rgba(127,211,250,0.15)] content-stretch flex items-center justify-center left-[7.08px] rounded-[6.875px] size-[22px] top-0" data-node-id="1:812" data-name="Icon Button">
+                <div className="relative shrink-0 size-[12px]" data-node-id="1:813" data-name="Icon/Action/Delete">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionDelete1} />
+                </div>
+              </div>
+            </div>
+            <div className="absolute h-[43px] left-[909px] top-[51px] w-[36px]" data-node-id="1:818" data-name="Button/Edit (Hover)">
+              <div className="absolute bg-[rgba(127,211,250,0.15)] content-stretch flex items-center justify-center left-[7.08px] rounded-[6.875px] size-[22px] top-0" data-node-id="1:819" data-name="Icon Button">
+                <div className="relative shrink-0 size-[12px]" data-node-id="1:820" data-name="Icon/Action/Edit">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconActionEdit1} />
+                </div>
+              </div>
+              <div className="absolute flex h-0 items-center justify-center left-[7.08px] top-[22px] w-[22px]" data-node-id="1:822">
+                <div className="-scale-y-100 flex-none">
+                  <div className="h-0 relative w-[22px]" data-name="Tooltip">
+                    <div className="-translate-x-1/2 absolute flex h-[18px] items-center justify-center left-[calc(50%-0.08px)] top-[-21px]" data-node-id="1:823">
+                      <div className="-scale-y-100 flex-none">
+                        <div className="bg-[#06101c] content-stretch flex h-[18px] items-center justify-center px-[8px] py-[2px] relative rounded-[4px]" data-name="Bubble">
+                          <p className="[word-break:break-word] font-['SUIT:Medium'] leading-[normal] not-italic relative shrink-0 text-[#ededed] text-[11px] whitespace-nowrap" data-node-id="1:824">
+                            편집
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="border border-[#3682f4] border-solid content-stretch flex h-[42px] items-start overflow-clip relative rounded-bl-[12px] rounded-br-[12px] shrink-0 w-full" data-node-id="1:825" data-name="Row/Total">
+              <div aria-hidden className="absolute bg-[rgba(54,130,244,0.1)] inset-0 pointer-events-none rounded-bl-[12px] rounded-br-[12px]" />
+              <div className="content-stretch flex h-full items-center justify-center p-[10px] relative shrink-0 w-[130px]" data-node-id="1:826" data-name="Td/Stage">
+                <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-white whitespace-nowrap" data-node-id="1:827">
+                  합계
+                </p>
+              </div>
+              <div className="h-full relative shrink-0 w-[200px]" data-node-id="1:828" data-name="Td/Project Name" />
+              <div className="content-stretch flex h-full items-center justify-end px-[20px] py-[10px] relative shrink-0 w-[112px]" data-node-id="1:829" data-name="Td/Capacity">
+                <p className="[word-break:break-word] font-['SUIT:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-white whitespace-nowrap" data-node-id="1:830">
+                  4,692
+                </p>
+              </div>
+              <div className="h-full relative shrink-0 w-[319px]" data-node-id="1:831" data-name="Td/Status" />
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_-4px_6px_0px_rgba(54,130,244,0.3),inset_0px_4px_6px_0px_rgba(54,130,244,0.3)]" />
+            </div>
+          </div>
+        </div>
+        <div className="absolute flex h-[13.693px] items-center justify-center left-[1344.29px] top-[342.15px] w-0" data-node-id="1:832">
+          <div className="flex-none rotate-90">
+            <div className="h-0 relative w-[13.693px]" data-name="Divider">
+              <div className="absolute inset-[-1px_0_0_0]">
+                <img alt="" className="block max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute border-[rgba(127,211,250,0)] border-b border-solid content-stretch flex h-[50px] items-center justify-center left-0 px-[40px] top-[70px] w-[1920px]" data-node-id="1:833" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 1920 50' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-5.2192e-14 -6.6111 35.739 -2.5922e-15 243.5 84.167)'><stop stop-color='rgba(127,211,250,0.7)' offset='0'/><stop stop-color='rgba(127,211,250,0)' offset='0.84594'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgb(36, 42, 57) 0%, rgb(36, 42, 57) 100%)" }} data-name="Header">
+        <div className="content-stretch flex flex-[1_0_0] items-center justify-between min-w-px relative" data-node-id="1:834" data-name="Header Bar">
+          <div className="content-stretch flex gap-[12px] items-center relative shrink-0" data-node-id="1:835" data-name="Brand">
+            <div className="h-[24px] relative shrink-0 w-[190.154px]" data-node-id="1:836" data-name="Logo Mark">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoMark} />
+            </div>
+            <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['SUIT:Bold'] justify-center leading-[0] not-italic relative shrink-0 text-[#7fd3fa] text-[24px] tracking-[0.48px] whitespace-nowrap" data-node-id="1:838">
+              <p className="leading-[normal]">재생에너지 사업현황</p>
+            </div>
+          </div>
+          <div className="border border-[rgba(127,211,250,0.5)] border-solid content-stretch flex flex-col items-center justify-center px-[12px] py-[6px] relative rounded-[8px] shrink-0" data-node-id="1:839" data-name="Toolbar">
+            <div aria-hidden className="absolute bg-[rgba(127,211,250,0.1)] inset-0 pointer-events-none rounded-[8px]" />
+            <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="1:840" data-name="Timestamp">
+              <div className="relative shrink-0 size-[16px]" data-node-id="1:841" data-name="Icon/Timestamp/Clock">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconTimestampClock} />
+              </div>
+              <div className="[word-break:break-word] content-stretch flex gap-[14px] items-center leading-[normal] not-italic relative shrink-0 text-[16px] whitespace-nowrap" data-node-id="1:843" data-name="Content">
+                <p className="font-['SUIT:SemiBold'] relative shrink-0 text-[#f3f3f3]" data-node-id="1:844">
+                  2026-00-00
+                </p>
+                <p className="font-['SUIT:ExtraBold'] relative shrink-0 text-white" data-node-id="1:845">
+                  13:00:00
+                </p>
+              </div>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_4px_24px_0px_rgba(127,211,250,0.15)]" />
+          </div>
+        </div>
+      </div>
+      <div className="absolute contents left-[36px] top-[136px]" data-node-id="1:846" data-name="Widget/Project Timeline">
+        <div className="absolute border border-[#242a39] border-solid h-[108px] left-[36px] pointer-events-none rounded-[16px] top-[162px] w-[1849px]" data-node-id="1:847" data-name="Card BG">
+          <div aria-hidden className="absolute bg-[rgba(217,217,217,0.01)] inset-0 rounded-[16px]" />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_24px_0px_#242a39]" />
+        </div>
+        <div className="absolute contents left-[294px] top-[251px]" data-node-id="1:848" data-name="Tooltips">
+          <div className="absolute flex h-[40px] items-center justify-center left-[992px] top-[251px] w-[84px]" data-node-id="1:849">
+            <div className="-scale-y-100 flex-none">
+              <div className="drop-shadow-[0px_4px_5px_rgba(0,0,0,0.4)] h-[40px] relative w-[84px]" data-name="Tooltip/Wando Geumil">
+                <div className="-translate-x-1/2 absolute flex h-[32px] items-center justify-center left-1/2 top-[-4px]" data-node-id="1:850">
+                  <div className="-scale-y-100 flex-none">
+                    <div className="border border-[#57feff] border-solid content-stretch flex h-[32px] items-center justify-center px-[16px] relative rounded-[18.5px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Chip">
+                      <div aria-hidden className="absolute bg-[rgba(87,254,255,0.2)] inset-0 pointer-events-none rounded-[18.5px]" />
+                      <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#ededed] text-[16px] whitespace-nowrap" data-node-id="1:851">
+                        완도금일
+                      </p>
+                      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(83,183,255,0.25),inset_0px_4px_4px_0px_rgba(83,183,255,0.25)]" />
+                    </div>
+                  </div>
+                </div>
+                <div className="-translate-x-1/2 absolute flex h-[9px] items-center justify-center left-1/2 top-[28.3px] w-0" data-node-id="1:852">
+                  <div className="-rotate-90 -scale-y-100 flex-none">
+                    <div className="h-0 relative w-[9px]" data-name="Leader">
+                      <div className="absolute inset-[-2.67px_0_-2.67px_-29.63%]">
+                        <img alt="" className="block max-w-none size-full" src={imgLeader} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute flex h-[40px] items-center justify-center left-[584px] top-[251px] w-[84px]" data-node-id="1:853">
+            <div className="-scale-y-100 flex-none">
+              <div className="drop-shadow-[0px_4px_5px_rgba(0,0,0,0.4)] h-[40px] relative w-[84px]" data-name="Tooltip/Daegwang Imja">
+                <div className="-translate-x-1/2 absolute flex h-[32px] items-center justify-center left-1/2 top-[-4px]" data-node-id="1:854">
+                  <div className="-scale-y-100 flex-none">
+                    <div className="border border-[#ff5857] border-solid content-stretch flex h-[32px] items-center justify-center px-[16px] relative rounded-[18.5px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Chip">
+                      <div aria-hidden className="absolute bg-[rgba(255,88,87,0.2)] inset-0 pointer-events-none rounded-[18.5px]" />
+                      <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#ededed] text-[16px] whitespace-nowrap" data-node-id="1:855">
+                        대광임자
+                      </p>
+                      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,155,83,0.25),inset_0px_4px_4px_0px_rgba(255,155,83,0.25)]" />
+                    </div>
+                  </div>
+                </div>
+                <div className="-translate-x-1/2 absolute flex h-[9px] items-center justify-center left-1/2 top-[28.3px] w-0" data-node-id="1:856">
+                  <div className="-rotate-90 -scale-y-100 flex-none">
+                    <div className="h-0 relative w-[9px]" data-name="Leader">
+                      <div className="absolute inset-[-2.67px_0_-2.67px_-29.63%]">
+                        <img alt="" className="block max-w-none size-full" src={imgLeader1} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute flex h-[40px] items-center justify-center left-[294px] top-[251px] w-[84px]" data-node-id="1:857">
+            <div className="-scale-y-100 flex-none">
+              <div className="drop-shadow-[0px_4px_5px_rgba(0,0,0,0.4)] h-[40px] relative w-[84px]" data-name="Tooltip/Yeonsu Yeondo">
+                <div className="-translate-x-1/2 absolute flex h-[32px] items-center justify-center left-1/2 top-[-4px]" data-node-id="1:858">
+                  <div className="-scale-y-100 flex-none">
+                    <div className="border border-[#ffb457] border-solid content-stretch flex h-[32px] items-center justify-center px-[16px] relative rounded-[18.5px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]" data-name="Chip">
+                      <div aria-hidden className="absolute bg-[rgba(255,180,87,0.2)] inset-0 pointer-events-none rounded-[18.5px]" />
+                      <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#ededed] text-[16px] whitespace-nowrap" data-node-id="1:859">
+                        연수연도
+                      </p>
+                      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_1px_4px_0px_rgba(255,250,83,0.25),inset_0px_4px_4px_0px_rgba(255,250,83,0.25)]" />
+                    </div>
+                  </div>
+                </div>
+                <div className="-translate-x-1/2 absolute flex h-[9px] items-center justify-center left-1/2 top-[28.3px] w-0" data-node-id="1:860">
+                  <div className="-rotate-90 -scale-y-100 flex-none">
+                    <div className="h-0 relative w-[9px]" data-name="Leader">
+                      <div className="absolute inset-[-2.67px_0_-2.67px_-29.63%]">
+                        <img alt="" className="block max-w-none size-full" src={imgLeader2} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute contents left-[67px] top-[179px]" data-node-id="1:861" data-name="Timeline">
+          <div className="-translate-x-1/2 absolute h-[19px] left-1/2 top-[234px] w-[1788px]" data-node-id="1:862" data-name="Track">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrack} />
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col gap-[4px] items-center left-[158px] w-[77px]" data-node-id="1:863" data-name="Step/Wind Measurement">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] min-w-full not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center w-[min-content]" data-node-id="1:864">
+              풍향측정
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:865" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+            </div>
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col gap-[4px] items-center left-[374px]" data-node-id="1:868" data-name="Step/Generation License">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center whitespace-nowrap" data-node-id="1:869">
+              발전사업허가
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:870" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker1} />
+            </div>
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col gap-[4px] items-center left-[674px]" data-node-id="1:873" data-name="Step/Transmission Agreement">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center whitespace-nowrap" data-node-id="1:874">
+              송전이용계약
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:875" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker1} />
+            </div>
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col gap-[4px] items-center left-[836px]" data-node-id="1:878" data-name="Step/KDI Feasibility Study">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center whitespace-nowrap" data-node-id="1:879">
+              KDI 예타
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:880" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker2} />
+            </div>
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col items-center left-[1083.5px]" data-node-id="1:883" data-name="Step/Turbine Selection">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[31px] not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center tracking-[-2.6667px] whitespace-nowrap" data-node-id="1:884">
+              풍력터빈선정
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:885" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker3} />
+            </div>
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col gap-[4px] items-center left-[1277px]" data-node-id="1:888" data-name="Step/Environmental Impact Assessment">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center whitespace-nowrap" data-node-id="1:889">
+              환경영향평가
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:890" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker3} />
+            </div>
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col gap-[4px] items-center left-[1578px]" data-node-id="1:893" data-name="Step/EPC Contract">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center whitespace-nowrap" data-node-id="1:894">
+              EPC 계약
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:895" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker4} />
+            </div>
+          </div>
+          <div className="absolute bottom-[829.65px] content-stretch flex flex-col gap-[4px] items-center left-[1778px]" data-node-id="1:898" data-name="Step/PF Groundbreaking">
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7fd3fa] text-[22px] text-center whitespace-nowrap" data-node-id="1:899">
+              PF/착공
+            </p>
+            <div className="h-[40.35px] relative shrink-0 w-[12.35px]" data-node-id="1:900" data-name="Marker">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker4} />
+            </div>
+          </div>
+          <div className="absolute bottom-[833.09px] flex h-[53.913px] items-center justify-center left-[77px] w-[39px]" data-node-id="1:903">
+            <div className="-scale-y-100 flex-none rotate-180">
+              <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-[833.09px] flex h-[53.913px] items-center justify-center left-[319px] w-[39px]" data-node-id="1:904">
+            <div className="-scale-y-100 flex-none rotate-180">
+              <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-[833.09px] flex h-[53.913px] items-center justify-center left-[611px] w-[39px]" data-node-id="1:905">
+            <div className="-scale-y-100 flex-none rotate-180">
+              <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-[833.09px] flex h-[53.913px] items-center justify-center left-[1019px] w-[39px]" data-node-id="1:906">
+            <div className="-scale-y-100 flex-none rotate-180">
+              <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-[833.09px] flex h-[53.913px] items-center justify-center left-[1513px] w-[39px]" data-node-id="1:907">
+            <div className="-scale-y-100 flex-none rotate-180">
+              <div className="h-[53.913px] relative w-[39px]" data-name="Anemometer Image">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTurbineImage} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex gap-[4px] items-center left-[52px] top-[136px]" data-node-id="1:908" data-name="Tabs">
+          <Tab className="bg-[#7fd3fa] content-stretch drop-shadow-[0px_2px_3px_rgba(33,33,33,0.8)] flex gap-[4px] h-[26px] items-center justify-center px-[12px] relative rounded-tl-[6px] rounded-tr-[6px] shrink-0" text="풍향" />
+          <div className="border-[#394b60] border-l border-r border-solid border-t content-stretch flex gap-[4px] h-[26px] items-center justify-center px-[12px] relative rounded-tl-[6px] rounded-tr-[6px] shrink-0" data-node-id="1:910" data-name="Tab/Solar">
+            <div aria-hidden className="absolute bg-[#06101c] inset-0 pointer-events-none rounded-tl-[6px] rounded-tr-[6px]" />
+            <div className="relative shrink-0 size-[14px]" data-node-id="I1:910;320:10697" data-name="Icon">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+            </div>
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[12px] text-[rgba(255,255,255,0.4)] text-center whitespace-nowrap" data-node-id="I1:910;320:10657">
+              태양광
+            </p>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_-1px_5px_0px_rgba(0,0,0,0.7)]" />
+          </div>
+          <div className="border-[#394b60] border-l border-r border-solid border-t content-stretch flex gap-[4px] h-[26px] items-center justify-center px-[12px] relative rounded-tl-[6px] rounded-tr-[6px] shrink-0" data-node-id="1:911" data-name="Tab/Energy">
+            <div aria-hidden className="absolute bg-[#06101c] inset-0 pointer-events-none rounded-tl-[6px] rounded-tr-[6px]" />
+            <div className="relative shrink-0 size-[14px]" data-node-id="I1:911;320:10697" data-name="Icon">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon1} />
+            </div>
+            <p className="[word-break:break-word] font-['SUIT:Bold'] leading-[normal] not-italic relative shrink-0 text-[12px] text-[rgba(255,255,255,0.4)] text-center whitespace-nowrap" data-node-id="I1:911;320:10657">
+              에너지
+            </p>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_-1px_5px_0px_rgba(0,0,0,0.7)]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

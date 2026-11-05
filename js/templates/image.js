@@ -130,6 +130,7 @@ const TPLLOGO = {
   /* DOM 템플릿 헤더의 로고 묶음 — 생성기가 붙인 레이어 이름, 템플릿마다 한 화면에 하나 */
   DOM: '.pk-root [data-name="Logo"], .hn-root [data-name="Logo"], .hj-root [data-name="Logo"], .skxp-root [data-name="Logo"], ' +
     '.ls-root [data-name="Brand"], .skh-root [data-name="logo"], .skv-root [data-name="logo"], ' +
+    '.nbw-root [data-name="Logo Mark"], .nbs-root [data-name="Logo Mark"], .nbe-root [data-name="Logo Mark"], .nbk-root [data-name="Logo Mark"], .nbl-root [data-name="Logo Mark"], .nbg-root [data-name="Logo Mark"], .nbm-root [data-name="Logo Mark"], .nbt-root [data-name="Logo Mark"], .nbu-root [data-name="Logo Mark"], .nbp-root [data-name="Logo Mark"], .nbo-root [data-name="Logo Mark"], ' +
     '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
   /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
   DOM_CUSTOM: '.shm-root [data-name="Brand"], .shi-root [data-name="Brand"], .shd-root [data-name="Brand"], ' +
@@ -848,6 +849,13 @@ const TPLTINT = {
   /* ── STATCOM HMI 시안 ──
      주조색은 시안 파랑(#00B9F0, 색상각 194°). 색을 그대로 둘 것:
        · 로고 · 3D 장면 · 설비 사진 · 미니맵 · 공정 사진 — 그림이라 색을 돌리면 어색하다. 판 · 선 · 글자만 따라간다 */
+  /* 신사업 관리 시안 — 주조색은 하늘색(#7FD3FA, 색상각 199°). 색을 그대로 둘 것: 로고 · 터빈 · 태양광 패널 사진 · 국기 · 단계 배지.
+     지도 그림과 판 · 선 · 글자는 따라간다 */
+  NEWBIZ_OPT: {
+    seed: '#7FD3FA', seededKey: 'wemb-newbiz-seeded', refHue: 199,
+    keep: /(^|\/)(logo-mark|turbine-image|solar-panel-image|flag|mask-?group|artwork|ellipse|shape|path)[-\w]*(-lt)?\.(svg|png)(\?|$)/i,
+    raster: /$^/,
+  },
   STATCOM_OPT: {
     seed: '#00B9F0', seededKey: 'wemb-statcom-seeded', refHue: 194,
     keep: /(^|\/)(logo-image|scene-image|map-image|equipment-image|thumbnail|hero-image|marker)(-[\d-]+)?(-lt)?\.(svg|png)(\?|$)/i,
@@ -998,6 +1006,10 @@ const TPLTINT = {
     });
     /* 공장 전력설비 — 같은 방식 */
     this.icheonTint(t, mode, '.pfo-root', ['pfo-style', 'pfo-light-style', 'plant-live-style'], 'wemb-plant-mode', this.PLANT_OPT);
+    /* 신사업 관리 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
+    ['nbw', 'nbs', 'nbe', 'nbk', 'nbl', 'nbg', 'nbm', 'nbt', 'nbu', 'nbp', 'nbo'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'newbiz-live-style'], 'wemb-newbiz-mode', this.NEWBIZ_OPT);
+    });
     /* STATCOM HMI 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
     ['tcm', 'tcs', 'tcp', 'tcv', 'tcc', 'tce', 'tcn', 'tcu', 'tca', 'tcq', 'tvt', 'tvo', 'tvs', 'tvm', 'tcl'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'statcom-live-style'], 'wemb-statcom-mode', this.STATCOM_OPT);

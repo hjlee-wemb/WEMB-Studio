@@ -6,7 +6,10 @@ applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
 try {
   const __tdt = localStorage.getItem('wemb-tpl-dt');
   if (state.screen === 'dt') {
-    if (__tdt === 'statcom' && typeof applyStatcomDT === 'function') {
+    if (__tdt === 'newbiz' && typeof applyNewbizDT === 'function') {
+      applyNewbizDT(window.__newbizSceneOf ? window.__newbizSceneOf() : localStorage.getItem('wemb-newbiz-screen'));
+    }
+    else if (__tdt === 'statcom' && typeof applyStatcomDT === 'function') {
       applyStatcomDT(window.__statcomSceneOf ? window.__statcomSceneOf() : localStorage.getItem('wemb-statcom-screen'));
     }
     else if (__tdt === 'plant' && typeof applyPlantDT === 'function') {
@@ -112,6 +115,14 @@ try {
   /* LS Electric STATCOM 도 Dark 가 원본 — 고른 밝기(wemb-lselectric-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'lselectric') {
     const want = localStorage.getItem('wemb-lselectric-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* 신사업 관리도 Dark 가 원본 — 고른 밝기(wemb-newbiz-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'newbiz') {
+    const want = localStorage.getItem('wemb-newbiz-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));

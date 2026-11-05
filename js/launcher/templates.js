@@ -128,6 +128,18 @@
       { img: 'src/templates/statcom-vr-step.jpg', label: 'VR 교육 단계 안내' },
       { img: 'src/templates/statcom-vr-menu.jpg', label: 'VR 교육 메뉴' },
       { img: 'src/templates/statcom-login.jpg', label: '로그인' }] },
+    { title: 'Dashboard: New Business Management', area: '발전·에너지', date: 'January 15, 2026', slides: [
+      { img: 'src/templates/newbiz-wind.jpg', label: '재생에너지 · 풍향' },
+      { img: 'src/templates/newbiz-solar.jpg', label: '재생에너지 · 태양광' },
+      { img: 'src/templates/newbiz-energy.jpg', label: '재생에너지 · 에너지' },
+      { img: 'src/templates/newbiz-wind-input.jpg', label: '풍향 · 툴팁 인풋' },
+      { img: 'src/templates/newbiz-solar-input.jpg', label: '태양광 · 툴팁 인풋' },
+      { img: 'src/templates/newbiz-energy-input.jpg', label: '에너지 · 툴팁 인풋' },
+      { img: 'src/templates/newbiz-measure.jpg', label: '계측현황' },
+      { img: 'src/templates/newbiz-measure-wind.jpg', label: '계측현황 · 풍력 툴팁' },
+      { img: 'src/templates/newbiz-measure-solar.jpg', label: '계측현황 · 태양광 툴팁' },
+      { img: 'src/templates/newbiz-measure-popup.jpg', label: '계측현황 · 사업 팝업' },
+      { img: 'src/templates/newbiz-overseas.jpg', label: '해외사업' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -301,6 +313,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Plant Power Facility');
     if (w) w.tpl = 'plant';
   })();
+  /* 신사업 관리 대시보드 — '스튜디오 열기' 시 Figma(cES6X45zHjsaabaXL1cdrt) 화면 11장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/newbiz-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: New Business Management');
+    if (w) w.tpl = 'newbiz';
+  })();
   /* STATCOM HMI 디지털 트윈 — '스튜디오 열기' 시 Figma(lyDJkcOlrznLKWo7mD7C2n) 화면 11장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/statcom-*.js)으로 연다. */
   (function () {
@@ -320,7 +338,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

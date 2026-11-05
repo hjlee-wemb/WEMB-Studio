@@ -493,7 +493,7 @@
   /* 상세 페이지 CTA / 스튜디오 진입 → 그 화면 종류로 새 프로젝트를 만들고 스튜디오로 진입.
      tpl이 붙은 템플릿(한진)은 디지털 트윈 페이지로 재현하므로 DT 화면으로 연다. */
   function openTemplate(t, slideIndex) {
-    const isDT = t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
+    const isDT = t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
     /* Figma로 구현된 템플릿(한진·SK하이닉스·HANA)은 실제 화면으로, 아직 미연결이면 임시 이미지로 연다.
        갤러리의 '제작중' 표시와 같은 판정을 쓴다(tplIsLive) — 표시와 동작이 어긋나면 안 된다. */
     const connected = tplIsLive(t);
@@ -1073,7 +1073,8 @@
       : pending.tpl === 'shinhan' ? 'src/templates/shinhan-overview.jpg'
       : pending.tpl === 'woori' ? 'src/templates/woori-transaction.jpg'
       : pending.tpl === 'plant' ? 'src/templates/plant-overview.jpg'
-      : pending.tpl === 'statcom' ? 'src/templates/statcom-main.jpg' : null;
+      : pending.tpl === 'statcom' ? 'src/templates/statcom-main.jpg'
+      : pending.tpl === 'newbiz' ? 'src/templates/newbiz-wind.jpg' : null;
     const proj = { id: newId(), name: pending.name, screen: pending.screen, layout: pending.layout, tpl: pending.tpl || null, img: pending.img || null, thumb: tplThumb, ts: Date.now(), fav: false, projectId: resolvePendingGroup(pending.name) };
     projs.unshift(proj);
     /* 템플릿 미리보기가 여러 장이면, 2번째 장부터 같은 프로젝트(폴더)의 화면으로 함께 만든다.
@@ -1106,6 +1107,7 @@
                   : proj.tpl === 'lselectric' ? ['datacenter', 'acb', 'system', 'energy', 'transformer', 'acroom', 'charger', 'cooling', 'alarm'][i]
                   : proj.tpl === 'shinhan' ? ['register', 'entry', 'anomaly'][i]
                   : proj.tpl === 'woori' ? ['performance', 'event'][i]
+                  : proj.tpl === 'newbiz' ? ['solar', 'energy', 'wind-input', 'solar-input', 'energy-input', 'measure', 'measure-wind', 'measure-solar', 'measure-popup', 'overseas'][i]
                   : proj.tpl === 'statcom' ? ['statcom', 'power', 'valve', 'cooling', 'supply', 'safety', 'simulation', 'alarm', 'cards', 'vr-topic', 'vr-overview', 'vr-step', 'vr-menu', 'login'][i]
                     : ('scene' + (i + 2)),
         ts: Date.now() - (i + 1),
@@ -1126,6 +1128,7 @@
       : openProj.tpl === 'lselectric' ? (openProj.tplScene || 'statcom')
       : openProj.tpl === 'shinhan' ? (openProj.tplScene || 'overview')
       : openProj.tpl === 'woori' ? (openProj.tplScene || 'transaction')
+      : openProj.tpl === 'newbiz' ? (openProj.tplScene || 'wind')
       : openProj.tpl === 'statcom' ? (openProj.tplScene || 'main')
         : openProj.tplScene === 'popup' ? 'popup' : openProj.tplScene === 'hvac' ? 'hvac' : 'main';
     try { localStorage.setItem(CUR_PROJ, openProj.id); } catch (e) {}
@@ -1147,6 +1150,7 @@
       if (openProj.tpl === 'lselectric') localStorage.setItem('wemb-lselectric-screen', openScene);
       if (openProj.tpl === 'shinhan') localStorage.setItem('wemb-shinhan-screen', openScene);
       if (openProj.tpl === 'woori') localStorage.setItem('wemb-woori-screen', openScene);
+      if (openProj.tpl === 'newbiz') localStorage.setItem('wemb-newbiz-screen', openScene);
       if (openProj.tpl === 'statcom') localStorage.setItem('wemb-statcom-screen', openScene);
     } catch (e) {}
     leaveWithSplash('openSplash', studioURL({ screen: openProj.id }, '/studio'), openProj.name);
