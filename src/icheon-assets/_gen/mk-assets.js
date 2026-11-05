@@ -87,7 +87,6 @@ const KO = {
   'Icon/Widget/Power': '전력 아이콘', 'Icon/Widget/Saturation': '포화도 아이콘', 'Icon/Widget/Temperature': '온도 아이콘',
   'Icon/Trend/Up': '상승 화살표', 'Icon/Trend/Down': '하강 화살표', 'Icon/Action/Collapse': '접기 화살표',
   'Icon/Callout/Operation': '운전상태 아이콘', 'Icon/Callout/Humidity': '습도 아이콘', 'Icon/Callout/Temperature': '온도계 아이콘',
-  logo: 'SK하이닉스 로고',
 };
 function atomicName(a) {
   if (a.name === 'Visual') return (a.label || 'Nav') + ' 심볼' + (/\(Active\)/.test(a.ctx) ? '(선택)' : '');
@@ -208,7 +207,7 @@ const seenHash = new Set(), seenName = new Set();
   .sort((a, b) => (a.screen === b.screen ? a.file.localeCompare(b.file) : a.screen === 'hub' ? -1 : 1))
   .forEach((a) => {
     const cat = atomicCat(a);
-    if (!cat || seenHash.has(a.hash)) return;
+    if (!cat || a.name === 'logo' || seenHash.has(a.hash)) return; /* 원본 고객사 로고는 에셋에 올리지 않는다 */
     seenHash.add(a.hash);
     const name = atomicName(a);
     if (seenName.has(cat + '|' + name)) return;      /* 크기만 다른 같은 그림은 하나만 */

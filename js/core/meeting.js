@@ -63,18 +63,24 @@
     '하나은행', '하나카드', '하나금융', 'Hana Card', 'HANA', 'Hana',
     'HYOSUNG', 'Hyosung', '효성', 'Woori Bank', 'Woori', 'WOORI', '우리은행', 'Gammania', 'Hyundai Capital', '현대캐피탈', 'Shinhan Card', 'Shinhan', '신한카드', '신한', 'SHOneView',
     'Hanbit', '한빛', 'KOEN', '한국남동발전', 'KISED', 'Digicentre', 'KORAIL', '코레일', 'NRTEC', 'NH-DCIM',
+    /* 템플릿 제목 · 화면 글자에 있는데 빠져 있던 이름(2026-11-05). 약어는 제목째로 넣는다('KB' 단위 오탐 방지) */
+    'Dashboard: KB', 'NH Biometrics', 'HC Approval', 'HuaNan', 'Handok', 'SHCard', 'SKHDC', 'SKH', 'LSE', 'Figma LottieFiles',
+    '국민은행', '카카오뱅크', '지역농협', '농협은행', '농협', '오스테드', '두산', '남동',
   ].sort((a, b) => b.length - a.length);
   const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  /* 보통 낱말과 겹치는 이름은 뒤에 오는 말로 좁힌다 — '남동'은 풍향 '남동풍' · 지명에도 쓰인다 */
+  const NARROW = { '남동': '남동(?= 글로벌)' };
+  const srcOf = (n) => NARROW[n] || escRe(n);
   /* 지금 고객사 이름(cust)에 들어 있는 단어는 뺀다 — 다 빠지면 가릴 것이 없다(RE = null) */
   let RE = null;
   function buildRE() {
     const own = cur.cust.map((s) => s.toLowerCase());
     const list = NAMES.filter((n) => !own.some((o) => o.includes(n.toLowerCase())));
-    RE = list.length ? new RegExp('(' + list.map(escRe).join('|') + ')', 'g') : null;
+    RE = list.length ? new RegExp('(' + list.map(srcOf).join('|') + ')', 'g') : null;
   }
   buildRE();
   /* 가림 단어 전체(지금 고객사 예외 없이) — 예전 버전이 가린 채 저장한 글자를 되돌릴 때 쓴다(dash-edit.js) */
-  const RE_ALL = new RegExp('(' + NAMES.map(escRe).join('|') + ')', 'g');
+  const RE_ALL = new RegExp('(' + NAMES.map(srcOf).join('|') + ')', 'g');
   const isWord = (c) => !!c && /[A-Za-z0-9_]/.test(c);
   function maskString(s) {
     if (!s || typeof s !== 'string' || !RE) return s;
@@ -152,18 +158,40 @@
       else fnEl(n);
     }
   }
+  const maskRecords = (list) => {
+    for (const r of list) {
+      if (r.type === 'characterData') maskNode(r.target);
+      else if (r.type === 'attributes') { if (ATTRS.includes(r.attributeName)) maskEl(r.target); }
+      else r.addedNodes.forEach((n) => walk(n, maskNode, maskEl));
+    }
+  };
   const watchers = [];
+  /* shadow DOM 안 글자(분자 미리보기 · 원자 변경 미리보기) — 바깥 watch 가 닿지 않아 회의 모드에서 은행 이름이 샜다(2026-11-05).
+     붙는 shadow root 를 모두 기억해 두고 같은 기준으로 가린다. WeakRef 라 사라진 미리보기를 붙잡지 않는다. */
+  const SHADOWS = new Set();
+  const OBSERVE = { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS };
+  let shadowOn = false;
+  const eachShadow = (fn) => SHADOWS.forEach((ref) => { const sr = ref.deref(); if (sr) fn(sr); else SHADOWS.delete(ref); });
+  const shadowMo = new MutationObserver((list) => { if (shadowOn) maskRecords(list); });
+  function applyShadows() {
+    const on = cur.on && !watchers.some((w) => w.isEditing());
+    if (on) eachShadow((sr) => { walk(sr, maskNode, maskEl); if (!shadowOn) shadowMo.observe(sr, OBSERVE); });
+    else if (shadowOn) { shadowMo.disconnect(); eachShadow((sr) => walk(sr, unmaskNode, unmaskEl)); }
+    shadowOn = on;
+  }
+  const nativeAttachShadow = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function (init) {
+    const sr = nativeAttachShadow.call(this, init);
+    SHADOWS.add(new WeakRef(sr));
+    if (shadowOn) shadowMo.observe(sr, OBSERVE);
+    return sr;
+  };
   function watch(root, isEditing) {
     if (!root) return null;
     const w = { root, isEditing: isEditing || (() => false), active: false, mo: null, observing: false };
     const want = () => cur.on && !w.isEditing();
     w.mo = new MutationObserver((list) => {
-      if (!w.active) return;
-      for (const r of list) {
-        if (r.type === 'characterData') maskNode(r.target);
-        else if (r.type === 'attributes') { if (ATTRS.includes(r.attributeName)) maskEl(r.target); }
-        else r.addedNodes.forEach((n) => walk(n, maskNode, maskEl));
-      }
+      if (w.active) maskRecords(list);
     });
     /* 회의 모드가 꺼져 있으면 지켜보지도 않는다 — 실시간 값 · 차트가 자주 바뀌는 화면에서 헛일을 하지 않게 */
     const apply = () => {
@@ -180,11 +208,13 @@
     w.apply = apply;
     watchers.push(w);
     apply();
+    applyShadows();
     return w;
   }
   /* 가림 단어가 바뀌면(고객사 이름 갱신) 가린 글자를 먼저 되돌린다 — 그래야 다시 맞출 때 새 기준으로 가린다 */
   function unmaskAll() {
     watchers.forEach((w) => { if (w.active) walk(w.root, unmaskNode, unmaskEl); });
+    if (shadowOn) eachShadow((sr) => walk(sr, unmaskNode, unmaskEl));
   }
   /* 원래 글자로 잠깐 되돌린 채 fn 을 돌린다 — 화면 글자를 읽어 저장 · 캡처하는 코드용.
      예전엔 글자 수정 저장(350ms 뒤)이 편집을 끝낸 직후 돌면 가린 '고객사…'가 시안에 저장됐다. */
@@ -195,10 +225,11 @@
       walk(w.root, unmaskNode, unmaskEl);
       w.active = false;
     });
-    try { return fn(); } finally { act.forEach((w) => w.apply()); }
+    if (shadowOn) { shadowMo.disconnect(); eachShadow((sr) => walk(sr, unmaskNode, unmaskEl)); shadowOn = false; }
+    try { return fn(); } finally { act.forEach((w) => w.apply()); applyShadows(); }
   }
   /* 고치기 시작 · 끝(편집 모드 클래스)이나 설정이 바뀌면 다시 맞춘다 */
-  const reapply = () => watchers.forEach((w) => w.apply());
+  const reapply = () => { watchers.forEach((w) => w.apply()); applyShadows(); };
   subs.add(reapply);
   const classMo = new MutationObserver(reapply);
   const observeEditing = () => document.querySelectorAll('.main, #dtStage').forEach((el) => classMo.observe(el, { attributes: true, attributeFilter: ['class'] }));

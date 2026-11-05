@@ -1,25 +1,25 @@
 /* ── HANA Bank H.I.T 템플릿 연결 ── */
 
-/* ── HANA Bank H.I.T — Figma 화면 15장을 순수 HTML/CSS DOM 으로 재구축한 것을 얹는다 ──
+/* ── Bank IT Operations — Figma 화면 15장을 순수 HTML/CSS DOM 으로 재구축한 것을 얹는다 ──
    원본: Figma H3S2M7DUCvuJgi75oBqg6W (1920x1080, page "Page 1")
    글자는 전부 편집 가능한 실제 텍스트(Pretendard CDN), 아이콘·그래픽만 Figma 가 내보낸
    개별 svg/png(src/hana/)을 그대로 쓴다. 좌표·크기·색은 Figma 값 그대로(근사 없음).
    원본이 다크 시안이라 라이트 시트를 따로 만들어 '화면 테마'로 자유롭게 바꿀 수 있다. */
 const HN_SCREENS = {
-  'overview-02': { px: 'hno2', build: 'build_hno2', css: 'HNO2_CSS', light: 'HNO2_LIGHT_CSS', title: 'HANA Bank H.I.T — 종합현황02' },
-  'cloud-01': { px: 'hnc1', build: 'build_hnc1', css: 'HNC1_CSS', light: 'HNC1_LIGHT_CSS', title: 'HANA Bank H.I.T — 클라우드현황01' },
-  'cloud-02': { px: 'hnc2', build: 'build_hnc2', css: 'HNC2_CSS', light: 'HNC2_LIGHT_CSS', title: 'HANA Bank H.I.T — 클라우드현황02' },
-  'middleware': { px: 'hnm', build: 'build_hnm', css: 'HNM_CSS', light: 'HNM_LIGHT_CSS', title: 'HANA Bank H.I.T — 미들웨어현황' },
-  'infra-main': { px: 'hni1', build: 'build_hni1', css: 'HNI1_CSS', light: 'HNI1_LIGHT_CSS', title: 'HANA Bank H.I.T — 인프라 메인' },
-  'infra-detail': { px: 'hni2', build: 'build_hni2', css: 'HNI2_CSS', light: 'HNI2_LIGHT_CSS', title: 'HANA Bank H.I.T — 인프라 상세' },
-  'event': { px: 'hne', build: 'build_hne', css: 'HNE_CSS', light: 'HNE_LIGHT_CSS', title: 'HANA Bank H.I.T — 이벤트현황' },
-  'network-01': { px: 'hnn1', build: 'build_hnn1', css: 'HNN1_CSS', light: 'HNN1_LIGHT_CSS', title: 'HANA Bank H.I.T — 네트워크현황01' },
-  'network-02': { px: 'hnn2', build: 'build_hnn2', css: 'HNN2_CSS', light: 'HNN2_LIGHT_CSS', title: 'HANA Bank H.I.T — 네트워크현황02' },
-  'network-03': { px: 'hnn3', build: 'build_hnn3', css: 'HNN3_CSS', light: 'HNN3_LIGHT_CSS', title: 'HANA Bank H.I.T — 네트워크현황03' },
-  'facility': { px: 'hnf', build: 'build_hnf', css: 'HNF_CSS', light: 'HNF_LIGHT_CSS', title: 'HANA Bank H.I.T — 상면관리' },
-  'security-01': { px: 'hns1', build: 'build_hns1', css: 'HNS1_CSS', light: 'HNS1_LIGHT_CSS', title: 'HANA Bank H.I.T — 보안시스템01' },
-  'security-02': { px: 'hns2', build: 'build_hns2', css: 'HNS2_CSS', light: 'HNS2_LIGHT_CSS', title: 'HANA Bank H.I.T — 보안시스템02' },
-  'login': { px: 'hnl', build: 'build_hnl', css: 'HNL_CSS', light: 'HNL_LIGHT_CSS', title: 'HANA Bank H.I.T — 로그인' },
+  'overview-02': { px: 'hno2', build: 'build_hno2', css: 'HNO2_CSS', light: 'HNO2_LIGHT_CSS', title: 'Bank IT Operations — 종합현황02' },
+  'cloud-01': { px: 'hnc1', build: 'build_hnc1', css: 'HNC1_CSS', light: 'HNC1_LIGHT_CSS', title: 'Bank IT Operations — 클라우드현황01' },
+  'cloud-02': { px: 'hnc2', build: 'build_hnc2', css: 'HNC2_CSS', light: 'HNC2_LIGHT_CSS', title: 'Bank IT Operations — 클라우드현황02' },
+  'middleware': { px: 'hnm', build: 'build_hnm', css: 'HNM_CSS', light: 'HNM_LIGHT_CSS', title: 'Bank IT Operations — 미들웨어현황' },
+  'infra-main': { px: 'hni1', build: 'build_hni1', css: 'HNI1_CSS', light: 'HNI1_LIGHT_CSS', title: 'Bank IT Operations — 인프라 메인' },
+  'infra-detail': { px: 'hni2', build: 'build_hni2', css: 'HNI2_CSS', light: 'HNI2_LIGHT_CSS', title: 'Bank IT Operations — 인프라 상세' },
+  'event': { px: 'hne', build: 'build_hne', css: 'HNE_CSS', light: 'HNE_LIGHT_CSS', title: 'Bank IT Operations — 이벤트현황' },
+  'network-01': { px: 'hnn1', build: 'build_hnn1', css: 'HNN1_CSS', light: 'HNN1_LIGHT_CSS', title: 'Bank IT Operations — 네트워크현황01' },
+  'network-02': { px: 'hnn2', build: 'build_hnn2', css: 'HNN2_CSS', light: 'HNN2_LIGHT_CSS', title: 'Bank IT Operations — 네트워크현황02' },
+  'network-03': { px: 'hnn3', build: 'build_hnn3', css: 'HNN3_CSS', light: 'HNN3_LIGHT_CSS', title: 'Bank IT Operations — 네트워크현황03' },
+  'facility': { px: 'hnf', build: 'build_hnf', css: 'HNF_CSS', light: 'HNF_LIGHT_CSS', title: 'Bank IT Operations — 상면관리' },
+  'security-01': { px: 'hns1', build: 'build_hns1', css: 'HNS1_CSS', light: 'HNS1_LIGHT_CSS', title: 'Bank IT Operations — 보안시스템01' },
+  'security-02': { px: 'hns2', build: 'build_hns2', css: 'HNS2_CSS', light: 'HNS2_LIGHT_CSS', title: 'Bank IT Operations — 보안시스템02' },
+  'login': { px: 'hnl', build: 'build_hnl', css: 'HNL_CSS', light: 'HNL_LIGHT_CSS', title: 'Bank IT Operations — 로그인' },
 };
 const HN_ROOTS = '.hno2-root, .hnc1-root, .hnc2-root, .hnm-root, .hni1-root, .hni2-root, .hne-root, .hnn1-root, .hnn2-root, .hnn3-root, .hnf-root, .hns1-root, .hns2-root, .hnl-root';
 const HN_SEED = '#009178';   /* 시안 자신의 브랜드 초록 — '색 정하기'의 시작값 */

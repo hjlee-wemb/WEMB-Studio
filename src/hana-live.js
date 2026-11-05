@@ -635,7 +635,9 @@
 
     var anchors = groups.map(function (els, i) {
       var o = base[i], p = probed[i];
-      var full = o.h >= BASE_H * 0.85 || o.w >= BASE_W * 0.99;   /* 전면 배경(별자리 판·건물 판) */
+      /* 전면 배경 · 본문 판 — 높이로만 가린다. 폭만 보면 80px 헤더도 여기 걸려 세로로 긴 창에서 305px 로 늘어나고,
+         안의 헤더 바(top:50%)가 아래로 밀려 KPI 와 겹친다. */
+      var full = o.h >= BASE_H * 0.85;
       var wide = !full && o.w >= 1780;                            /* 폭을 꽉 쓰는 판 */
       var selfDX = (p.x - o.x) / 100, selfDY = (p.y - o.y) / 100;
       /* 목표: 세로는 '놓인 위치에 비례해' 내려간다(맨 위 그대로 · 맨 아래는 전부) */
@@ -656,6 +658,8 @@
          헤더처럼 같은 자리에 겹쳐 그린 조각이 이중으로 보인다. */
       if (wantDY < 0.06) wantDY = 0; else if (wantDY > 0.94) wantDY = 1;
       if (wantDX < 0.06) wantDX = 0; else if (wantDX > 0.94) wantDX = 1;
+      /* 맨 윗줄(헤더 · 경로 표시)은 비례로 내려가지 않고 위에 붙는다 — 본문 판은 y=98 에 그대로 있어 경로가 내려가면 겹친다 */
+      if (o.y + o.h <= 100) wantDY = 0;
       return {
         els: els, base: o, full: full, wide: wide,
         selfDX: selfDX, selfDY: selfDY, wantDX: wantDX, wantDY: wantDY,
@@ -1806,7 +1810,7 @@
       chip.setAttribute('role', 'radio');
       chip.setAttribute('tabindex', '0');
       chip.setAttribute('aria-checked', 'false');
-      chip.title = 'GS 차량만 보기';
+      chip.title = '협력사 차량만 보기';
       if (getComputedStyle(chip).position === 'static') chip.style.position = 'relative';
       var flip = function (e) {
         if (e) { e.preventDefault(); e.stopPropagation(); }

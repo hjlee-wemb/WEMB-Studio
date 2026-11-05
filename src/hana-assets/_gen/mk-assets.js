@@ -109,7 +109,7 @@ const ITEMS = {
     /* 클라우드 */
     { px: 'hnc1', nid: '1:18630', name: 'Private 현황 판', fig: 'Stage/Private' },
     { px: 'hnc1', nid: '1:18646', name: 'Public 현황 판', fig: 'Stage/Public' },
-    { px: 'hnc1', nid: '1:18662', name: '클라우드 노드', fig: 'Node/AWS < Stage/Public' },
+    { px: 'hnc1', nid: '1:18662', name: '클라우드 노드', fig: 'Node/CloudA < Stage/Public' },
     { px: 'hnc1', nid: '1:18645', name: '서버 노드', fig: 'Node/SDC < Stage/Private' },
     { px: 'hnc1', nid: '1:18677', name: 'CPU 옵션(선택)', fig: 'Option/CPU (Selected)' },
     { px: 'hnc1', nid: '1:18670', name: 'GPU 옵션', fig: 'Option/GPU' },

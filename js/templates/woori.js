@@ -9,9 +9,9 @@
    원본이 다크 시안이라 라이트 시트를 함께 두어 '화면 테마'로 자유롭게 바꾼다.
    인터랙션·라이브·반응형·차트 바꾸기·패널 옮기기는 src/woori-live.js(window.initWoori). */
 const WR_SCREENS = {
-  'transaction': { px: 'wrt', build: 'build_wrt', css: 'WRT_CSS', light: 'WRT_LIGHT_CSS', title: '우리은행 — 거래현황' },
-  'performance': { px: 'wrp', build: 'build_wrp', css: 'WRP_CSS', light: 'WRP_LIGHT_CSS', title: '우리은행 — 성능현황' },
-  'event': { px: 'wre', build: 'build_wre', css: 'WRE_CSS', light: 'WRE_LIGHT_CSS', title: '우리은행 — 이벤트현황' },
+  'transaction': { px: 'wrt', build: 'build_wrt', css: 'WRT_CSS', light: 'WRT_LIGHT_CSS', title: '뱅킹 운영 — 거래현황' },
+  'performance': { px: 'wrp', build: 'build_wrp', css: 'WRP_CSS', light: 'WRP_LIGHT_CSS', title: '뱅킹 운영 — 성능현황' },
+  'event': { px: 'wre', build: 'build_wre', css: 'WRE_CSS', light: 'WRE_LIGHT_CSS', title: '뱅킹 운영 — 이벤트현황' },
 };
 const WR_ROOTS = '.wrt-root, .wrp-root, .wre-root';
 /* 시안 자신의 주조색 — 구성도 · 메뉴의 하늘 파랑(#09B6FB). '색 정하기'의 시작값 */

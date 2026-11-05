@@ -11,20 +11,20 @@
    원본이 다크 시안이라 라이트 시트를 함께 두어 '화면 테마'로 자유롭게 바꾼다.
    인터랙션·라이브·반응형·차트 바꾸기·패널 옮기기는 src/shinhan-live.js(window.initShinhan). */
 const SH_SCREENS = {
-  'overview': { px: 'shm', build: 'build_shm', css: ['SHM_CSS'], light: ['SHM_LIGHT_CSS'], title: '신한카드 정보보호 — 보안 현황' },
+  'overview': { px: 'shm', build: 'build_shm', css: ['SHM_CSS'], light: ['SHM_LIGHT_CSS'], title: '정보보호 — 보안 현황' },
   /* 이상징후 탐지 등록 — 보안 현황(2:2) **위에** Dim 과 등록 창(66:1026)이 떠 있는 화면(Figma 62:5).
      바탕이 보안 현황과 같아 다시 만들지 않고 창만 얹는다(build_shm_register). 시트도 두 벌을 함께 싣는다. */
   'register': {
     px: 'shm', build: 'build_shm_register',
     css: ['SHM_CSS', 'SHA_CSS'], light: ['SHM_LIGHT_CSS', 'SHA_LIGHT_CSS'],
-    title: '신한카드 정보보호 — 이상징후 탐지 등록',
+    title: '정보보호 — 이상징후 탐지 등록',
   },
-  'entry': { px: 'shi', build: 'build_shi', css: ['SHI_CSS'], light: ['SHI_LIGHT_CSS'], title: '신한카드 정보보호 — 정보보호 현황 입력' },
+  'entry': { px: 'shi', build: 'build_shi', css: ['SHI_CSS'], light: ['SHI_LIGHT_CSS'], title: '정보보호 — 정보보호 현황 입력' },
   'anomaly': {
     px: 'shd', build: 'build_shd',
     /* 표에서 줄을 두 번 누르면 그 줄로 등록 창을 겹쳐 띄운다 — 창 시트를 미리 함께 싣는다 */
     css: ['SHD_CSS', 'SHA_CSS'], light: ['SHD_LIGHT_CSS', 'SHA_LIGHT_CSS'],
-    title: '신한카드 정보보호 — 이상징후 탐지',
+    title: '정보보호 — 이상징후 탐지',
   },
 };
 /* 'SHM_CSS' → 'shm-style' · 'SHA_LIGHT_CSS' → 'sha-light-style' (색 바꾸기가 이 id 로 시트를 찾는다) */

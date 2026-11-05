@@ -103,7 +103,7 @@ window.__NEWBIZ_ASSETS = {
   {
    "id": "nb_nbw_1_3116",
    "name": "풍향계 말풍선 (빨강)",
-   "fig": "Callout/Incheon (Orsted) (1:3116)",
+   "fig": "Callout/Incheon (Partner) (1:3116)",
    "px": "nbw",
    "nid": "1:3116",
    "w": 168,

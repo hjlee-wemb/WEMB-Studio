@@ -62,7 +62,7 @@ const ITEMS = {
     /* 지도 표지 */
     { px: 'nbw', nid: '1:3044', name: '풍향계', fig: 'Visual < Callout/Tongyeong (Yokjido)' },
     { px: 'nbw', nid: '1:3071', name: '태양광 패널', fig: 'Visual < Callout/Haenam (Solar)' },
-    { px: 'nbw', nid: '1:3116', name: '풍향계 말풍선 (빨강)', fig: 'Callout/Incheon (Orsted)' },
+    { px: 'nbw', nid: '1:3116', name: '풍향계 말풍선 (빨강)', fig: 'Callout/Incheon (Partner)' },
     { px: 'nbw', nid: '1:3043', name: '풍향계 말풍선 (주황)', fig: 'Callout/Tongyeong (Yokjido)' },
     { px: 'nbw', nid: '1:3134', name: '풍향계 말풍선 (하늘)', fig: 'Callout/Wando Geumil' },
     { px: 'nbw', nid: '1:3070', name: '태양광 말풍선', fig: 'Callout/Haenam (Solar)' },

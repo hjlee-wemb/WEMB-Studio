@@ -1717,7 +1717,7 @@
       chip.setAttribute('role', 'radio');
       chip.setAttribute('tabindex', '0');
       chip.setAttribute('aria-checked', 'false');
-      chip.title = 'GS 차량만 보기';
+      chip.title = '협력사 차량만 보기';
       if (getComputedStyle(chip).position === 'static') chip.style.position = 'relative';
       var flip = function (e) {
         if (e) { e.preventDefault(); e.stopPropagation(); }

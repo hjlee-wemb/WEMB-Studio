@@ -954,7 +954,7 @@ window.__POSCO_ASSETS = {
   },
   {
    "id": "pk_pkd_1_2486",
-   "name": "자산 상세 팝업 (KDB)",
+   "name": "자산 상세 팝업 (CCTV)",
    "fig": "Popup/Asset Detail (1:2486)",
    "px": "pkd",
    "nid": "1:2486",
@@ -1019,7 +1019,7 @@ window.__POSCO_ASSETS = {
   },
   {
    "id": "pk_pkm_1_1949",
-   "name": "이벤트 표 (KDB)",
+   "name": "이벤트 표 (CCTV)",
    "fig": "Table < Event Panel/Default (1:1949)",
    "px": "pkm",
    "nid": "1:1949",

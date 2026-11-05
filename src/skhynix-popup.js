@@ -233,7 +233,7 @@
     html += '<span class="fms skxp-txt" data-node-id="84:4708">FMS</span>';
     html += '<span class="dash skxp-txt" data-node-id="84:4709">Dashboard</span>';
     html += '</div>';
-    html += '<div class="skxp-Site-Badge" data-name="Site Badge" data-node-id="84:4710"><span class="skxp-txt" data-node-id="84:4711">이천</span></div>';
+    html += '<div class="skxp-Site-Badge" data-name="Site Badge" data-node-id="84:4710"><span class="skxp-txt" data-node-id="84:4711">본사</span></div>';
     html += '</div></div>';
     html += '<div class="skxp-Clock" data-name="Clock" data-node-id="84:4712">';
     html += '<img class="ico" src="' + A + 'icon-system-clock.svg" alt="" data-name="Icon/System/Clock" data-node-id="84:4713">';

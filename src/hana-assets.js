@@ -336,7 +336,7 @@ window.__HANA_ASSETS = {
   {
    "id": "hn_hnc1_1_18662",
    "name": "클라우드 노드",
-   "fig": "Node/AWS < Stage/Public (1:18662)",
+   "fig": "Node/CloudA < Stage/Public (1:18662)",
    "px": "hnc1",
    "nid": "1:18662",
    "w": 200,

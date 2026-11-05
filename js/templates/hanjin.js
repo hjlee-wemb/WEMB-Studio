@@ -9,9 +9,9 @@
    개별 svg/png(src/hanjin/)을 그대로 쓴다. 좌표·크기·색은 Figma 값 그대로(근사 없음).
    원본이 다크 시안이라 라이트 시트를 따로 만들어 '화면 테마'로 자유롭게 바꿀 수 있다. */
 const HJ_SCREENS = {
-  main:   { px: 'hjc', build: 'build_hjc', css: 'HJC_CSS', light: 'HJC_LIGHT_CSS', title: '한진 SMART 통합관제' },
-  gate:   { px: 'hjg', build: 'build_hjg', css: 'HJG_CSS', light: 'HJG_LIGHT_CSS', title: '한진 입/출문현황' },
-  unload: { px: 'hju', build: 'build_hju', css: 'HJU_CSS', light: 'HJU_LIGHT_CSS', title: '한진 하차현황' },
+  main:   { px: 'hjc', build: 'build_hjc', css: 'HJC_CSS', light: 'HJC_LIGHT_CSS', title: 'SMART 통합관제' },
+  gate:   { px: 'hjg', build: 'build_hjg', css: 'HJG_CSS', light: 'HJG_LIGHT_CSS', title: '입/출문현황' },
+  unload: { px: 'hju', build: 'build_hju', css: 'HJU_CSS', light: 'HJU_LIGHT_CSS', title: '하차현황' },
 };
 const HJ_SEED = '#2861FF';   /* 시안 자신의 브랜드 파랑 — '색 정하기'의 시작값 */
 

@@ -280,12 +280,6 @@ window.__ICHEON_ASSETS = {
    "src": "src/skhynix-hub/icon.svg"
   },
   {
-   "id": "h_logo",
-   "name": "SK하이닉스 로고",
-   "fig": "logo < Bi < Header < Screen/FMS Hub",
-   "src": "src/skhynix-hub/logo.svg"
-  },
-  {
    "id": "v_dot_1",
    "name": "상태 점(정보)",
    "fig": "Dot < Item < Items < Legend",

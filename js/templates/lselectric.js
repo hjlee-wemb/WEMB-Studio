@@ -1,6 +1,6 @@
 /* ── LS Electric STATCOM 템플릿 연결 ── */
 
-/* ── LS Electric STATCOM — Figma 화면 2장을 순수 HTML/CSS DOM 으로 재구축한 것을 얹는다 ──
+/* ── STATCOM DCIM — Figma 화면 2장을 순수 HTML/CSS DOM 으로 재구축한 것을 얹는다 ──
    원본: Figma KkmCQi05F7eSb3tHO7ZW0Q (page "Dark-시안01")
      · Screen/STATCOM Overview 3:5       → src/lselectric-statcom.js     (.lsm-root)
      · Screen/Data Center Overview 33:748 → src/lselectric-datacenter.js (.lsd-root)
@@ -8,52 +8,52 @@
    원본이 다크 시안이라 라이트 시트를 함께 두어 '화면 테마'로 자유롭게 바꾼다.
    인터랙션·라이브·반응형·차트 바꾸기·패널 옮기기는 src/lselectric-live.js(window.initLsElectric). */
 const LS_SCREENS = {
-  'statcom': { px: 'lsm', build: 'build_lsm', css: 'LSM_CSS', light: 'LSM_LIGHT_CSS', title: 'LS Electric STATCOM — STATCOM' },
-  'datacenter': { px: 'lsd', build: 'build_lsd', css: 'LSD_CSS', light: 'LSD_LIGHT_CSS', title: 'LS Electric STATCOM — Data Center' },
+  'statcom': { px: 'lsm', build: 'build_lsm', css: 'LSM_CSS', light: 'LSM_LIGHT_CSS', title: 'STATCOM DCIM — STATCOM' },
+  'datacenter': { px: 'lsd', build: 'build_lsd', css: 'LSD_CSS', light: 'LSD_LIGHT_CSS', title: 'STATCOM DCIM — Data Center' },
   /* ACB 진단(1단) — STATCOM 화면(3:5) **위에** 진단 팝업(76:597)이 떠 있는 화면(Figma 62:1493).
      바탕이 STATCOM 과 픽셀 한 점도 다르지 않아 다시 만들지 않고 팝업만 얹는다(build_lsm_acb).
      뿌리는 STATCOM 과 같은 .lsm-root 이고 팝업은 그 안의 .lsa-root 다 — 시트도 두 벌을 함께 싣는다. */
   'acb': {
     px: 'lsm', build: 'build_lsm_acb',
     css: ['LSM_CSS', 'LSA_CSS'], light: ['LSM_LIGHT_CSS', 'LSA_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — ACB 진단(1단)',
+    title: 'STATCOM DCIM — ACB 진단(1단)',
   },
   /* 계통 진단(Figma 89:2000 · 팝업 76:875) · 에너지 진단(89:2927 · 팝업 94:5015) — ACB 와 같은 꼴(STATCOM 위에 팝업) */
   'system': {
     px: 'lsm', build: 'build_lsm_system',
     css: ['LSM_CSS', 'LSY_CSS'], light: ['LSM_LIGHT_CSS', 'LSY_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — 계통 진단',
+    title: 'STATCOM DCIM — 계통 진단',
   },
   'energy': {
     px: 'lsm', build: 'build_lsm_energy',
     css: ['LSM_CSS', 'LSE_CSS'], light: ['LSM_LIGHT_CSS', 'LSE_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — 에너지 진단',
+    title: 'STATCOM DCIM — 에너지 진단',
   },
   /* 단독 팝업 다섯 장(Figma popup-3 ~ 7) — 화면 프레임 없이 그려진 팝업이라 STATCOM 화면 한가운데에 얹는다(같은 꼴) */
   'transformer': {
     px: 'lsm', build: 'build_lsm_transformer',
     css: ['LSM_CSS', 'LST_CSS'], light: ['LSM_LIGHT_CSS', 'LST_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — 상태정보(변압기)',
+    title: 'STATCOM DCIM — 상태정보(변압기)',
   },
   'acroom': {
     px: 'lsm', build: 'build_lsm_acroom',
     css: ['LSM_CSS', 'LSP_CSS'], light: ['LSM_LIGHT_CSS', 'LSP_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — AC전원실 전압/전류',
+    title: 'STATCOM DCIM — AC전원실 전압/전류',
   },
   'charger': {
     px: 'lsm', build: 'build_lsm_charger',
     css: ['LSM_CSS', 'LSB_CSS'], light: ['LSM_LIGHT_CSS', 'LSB_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — 충전기/배터리 운영상태',
+    title: 'STATCOM DCIM — 충전기/배터리 운영상태',
   },
   'cooling': {
     px: 'lsm', build: 'build_lsm_cooling',
     css: ['LSM_CSS', 'LSC_CSS'], light: ['LSM_LIGHT_CSS', 'LSC_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — 냉각설비 상태 정보',
+    title: 'STATCOM DCIM — 냉각설비 상태 정보',
   },
   'alarm': {
     px: 'lsm', build: 'build_lsm_alarm',
     css: ['LSM_CSS', 'LSR_CSS'], light: ['LSM_LIGHT_CSS', 'LSR_LIGHT_CSS'],
-    title: 'LS Electric STATCOM — 알림',
+    title: 'STATCOM DCIM — 알림',
   },
 };
 /* 'LSM_CSS' → 'lsm-style' · 'LSA_LIGHT_CSS' → 'lsa-light-style' (색 바꾸기가 이 id 로 시트를 찾는다) */

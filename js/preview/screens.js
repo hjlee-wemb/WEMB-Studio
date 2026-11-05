@@ -48,7 +48,7 @@ function syncSkxControls() {
   document.querySelectorAll('#mode button').forEach((b) => {
     b.disabled = skxDarkOnly;
     b.classList.toggle('locked', skxDarkOnly);
-    b.title = skxDarkOnly ? '이 시안(SK하이닉스 이천 FMS)은 다크 전용이에요' : '';
+    b.title = skxDarkOnly ? '이 시안(FMS 통합 시스템)은 다크 전용이에요' : '';
   });
 }
 function applyScreen() {

@@ -124,7 +124,7 @@ function applySkhynixHub() {
     }
   } catch (e) {}
   const bn = stage.querySelector('.dt-bname');
-  if (bn) bn.textContent = 'SK하이닉스 이천 FMS';
+  if (bn) bn.textContent = 'FMS 통합 시스템';
   /* 다른 SK하이닉스 시안(메인 SVG·UPS 팝업)이 떠 있으면 치운다 */
   try { if (window.__clearSkhynixPopup) window.__clearSkhynixPopup(); } catch (e) {}
   stage.querySelectorAll('.skx-screen').forEach((e) => e.remove());
@@ -213,7 +213,7 @@ function applySkhynixHvac() {
     }
   } catch (e) {}
   const bn = stage.querySelector('.dt-bname');
-  if (bn) bn.textContent = 'SK하이닉스 이천 FMS';
+  if (bn) bn.textContent = 'FMS 통합 시스템';
   /* 다른 SK하이닉스 시안이 떠 있으면 치운다 */
   try { if (window.__clearSkhynixPopup) window.__clearSkhynixPopup(); } catch (e) {}
   try { if (window.__clearSkhynixHub) window.__clearSkhynixHub(); } catch (e) {}
@@ -615,7 +615,7 @@ function applySkhynixDT() {
     }
   } catch (e) {}
   const bn = stage.querySelector('.dt-bname');
-  if (bn) bn.textContent = 'SK하이닉스 이천 FMS';
+  if (bn) bn.textContent = 'FMS 통합 시스템';
   /* 화면 CSS 1회 주입 */
   if (!document.getElementById('skx-style') && window.SKHYNIX_CSS) {
     const st = document.createElement('style');

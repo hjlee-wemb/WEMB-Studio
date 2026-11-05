@@ -20,26 +20,26 @@
     /* SK하이닉스 이천 FMS — 메인 화면에서 팝업(UPS 전력 상세)을 그 자리에서 띄우므로 통째로 */
     skhynix: [
       { src: 'src/skhynix-screen.js?v=7', build: ['buildSkhynixScreen'] },
-      { src: 'src/skhynix-popup.js?v=5', build: ['buildSkhynixPopup'] },
+      { src: 'src/skhynix-popup.js?v=7', build: ['buildSkhynixPopup'] },
     ],
     /* Icheon main — 메인(FMS Hub) · 항온항습기 상세를 그 자리에서 오가므로 통째로 */
     'skhynix-hub': [
-      { src: 'src/skhynix-hub.js?v=1', build: ['buildSkhynixHub'] },
+      { src: 'src/skhynix-hub.js?v=3', build: ['buildSkhynixHub'] },
       { src: 'src/skhynix-hub-live.js?v=16', part: 'base' },
-      { src: 'src/skhynix-hvac.js?v=1', build: ['buildSkhynixHvac'] },
+      { src: 'src/skhynix-hvac.js?v=3', build: ['buildSkhynixHvac'] },
       { src: 'src/skhynix-hvac-live.js?v=3', part: 'base' },
     ],
     /* 한진 SMART 통합관제 — Figma A11hAZefK5FSuEE9MagOgj */
     hanjin: [
-      { src: 'src/hanjin-control.js?v=1', build: ['build_hjc'], scene: 'main' },
+      { src: 'src/hanjin-control.js?v=3', build: ['build_hjc'], scene: 'main' },
       { src: 'src/hanjin-gate.js?v=1', build: ['build_hjg'], scene: 'gate' },
-      { src: 'src/hanjin-unload.js?v=1', build: ['build_hju'], scene: 'unload' },
-      { src: 'src/hanjin-live.js?v=4', part: 'base' },
+      { src: 'src/hanjin-unload.js?v=3', build: ['build_hju'], scene: 'unload' },
+      { src: 'src/hanjin-live.js?v=6', part: 'base' },
     ],
     /* HANA Bank H.I.T — Figma H3S2M7DUCvuJgi75oBqg6W 화면 14장(합쳐 9MB — 장면마다 따로 싣는다) */
     hana: [
-      { src: 'src/hana-overview-02.js?v=2', build: ['build_hno2'], scene: 'overview-02' },
-      { src: 'src/hana-cloud-01.js?v=2', build: ['build_hnc1'], scene: 'cloud-01' },
+      { src: 'src/hana-overview-02.js?v=4', build: ['build_hno2'], scene: 'overview-02' },
+      { src: 'src/hana-cloud-01.js?v=4', build: ['build_hnc1'], scene: 'cloud-01' },
       { src: 'src/hana-cloud-02.js?v=2', build: ['build_hnc2'], scene: 'cloud-02' },
       { src: 'src/hana-middleware.js?v=2', build: ['build_hnm'], scene: 'middleware' },
       { src: 'src/hana-infra-main.js?v=2', build: ['build_hni1'], scene: 'infra-main' },
@@ -52,27 +52,27 @@
       { src: 'src/hana-security-01.js?v=2', build: ['build_hns1'], scene: 'security-01' },
       { src: 'src/hana-security-02.js?v=2', build: ['build_hns2'], scene: 'security-02' },
       { src: 'src/hana-login.js?v=2', build: ['build_hnl'], scene: 'login' },
-      { src: 'src/hana-live.js?v=2', part: 'base' },
+      { src: 'src/hana-live.js?v=5', part: 'base' },
     ],
     /* POSCO KDB CCTV 관제 — Figma dj0SONcO5BySCm7yDdZrNc. SOP 장면은 STEP 1 위에 STEP 2 · 3 · 4 를 겹친다 */
     posco: [
-      { src: 'src/posco-main.js?v=4', build: ['build_pkm'], scene: 'main' },
-      { src: 'src/posco-ack.js?v=2', build: ['build_pka'], scene: 'ack' },
-      { src: 'src/posco-overview.js?v=2', build: ['build_pko'], scene: 'overview' },
-      { src: 'src/posco-route.js?v=3', build: ['build_pkr'], scene: 'route' },
-      { src: 'src/posco-floors.js?v=2', build: ['build_pkf'], scene: 'floors' },
-      { src: 'src/posco-detail.js?v=2', build: ['build_pkd'], scene: 'detail' },
-      { src: 'src/posco-sop1.js?v=2', build: ['build_pks1'], scene: 'sop' },
-      { src: 'src/posco-sop2.js?v=2', build: ['build_pks2'], scene: 'sop' },
-      { src: 'src/posco-sop3.js?v=2', build: ['build_pks3'], scene: 'sop' },
-      { src: 'src/posco-sop4.js?v=1', build: ['build_pks4'], scene: 'sop' },
+      { src: 'src/posco-main.js?v=6', build: ['build_pkm'], scene: 'main' },
+      { src: 'src/posco-ack.js?v=4', build: ['build_pka'], scene: 'ack' },
+      { src: 'src/posco-overview.js?v=4', build: ['build_pko'], scene: 'overview' },
+      { src: 'src/posco-route.js?v=5', build: ['build_pkr'], scene: 'route' },
+      { src: 'src/posco-floors.js?v=4', build: ['build_pkf'], scene: 'floors' },
+      { src: 'src/posco-detail.js?v=4', build: ['build_pkd'], scene: 'detail' },
+      { src: 'src/posco-sop1.js?v=4', build: ['build_pks1'], scene: 'sop' },
+      { src: 'src/posco-sop2.js?v=4', build: ['build_pks2'], scene: 'sop' },
+      { src: 'src/posco-sop3.js?v=4', build: ['build_pks3'], scene: 'sop' },
+      { src: 'src/posco-sop4.js?v=3', build: ['build_pks4'], scene: 'sop' },
       { src: 'src/posco-live.js?v=52', part: 'base' },
     ],
     /* LS Electric STATCOM — Figma KkmCQi05F7eSb3tHO7ZW0Q. 헤더 '팝업' 단추가 다른 장면의 팝업을
        그 자리에서 겹쳐 띄우므로(src/lselectric-live.js installPopupLinks) 통째로 */
     lselectric: [
-      { src: 'src/lselectric-statcom.js?v=3', build: ['build_lsm'] },
-      { src: 'src/lselectric-datacenter.js?v=3', build: ['build_lsd'] },
+      { src: 'src/lselectric-statcom.js?v=5', build: ['build_lsm'] },
+      { src: 'src/lselectric-datacenter.js?v=5', build: ['build_lsd'] },
       { src: 'src/lselectric-acb.js?v=3', build: ['build_lsa', 'build_lsm_acb'] },
       { src: 'src/lselectric-system.js?v=2', build: ['build_lsy', 'build_lsm_system'] },
       { src: 'src/lselectric-energy.js?v=2', build: ['build_lse', 'build_lsm_energy'] },
@@ -95,18 +95,18 @@
     /* 우리은행 통합 대시보드 — Figma qln8qMsqzCt918dZOQOWOS. 헤더 메뉴로 장면끼리 오간다 */
     /* 신사업 관리 대시보드 — Figma cES6X45zHjsaabaXL1cdrt. 화면 11장, 장면마다 따로 싣는다 */
     newbiz: [
-      { src: 'src/newbiz-wind.js?v=14', build: ['build_nbw'], scene: 'wind' },
-      { src: 'src/newbiz-solar.js?v=14', build: ['build_nbs'], scene: 'solar' },
-      { src: 'src/newbiz-energy.js?v=14', build: ['build_nbe'], scene: 'energy' },
-      { src: 'src/newbiz-wind-input.js?v=14', build: ['build_nbk'], scene: 'wind-input' },
-      { src: 'src/newbiz-solar-input.js?v=14', build: ['build_nbl'], scene: 'solar-input' },
-      { src: 'src/newbiz-energy-input.js?v=14', build: ['build_nbg'], scene: 'energy-input' },
-      { src: 'src/newbiz-measure.js?v=14', build: ['build_nbm'], scene: 'measure' },
-      { src: 'src/newbiz-measure-wind.js?v=14', build: ['build_nbt'], scene: 'measure-wind' },
-      { src: 'src/newbiz-measure-solar.js?v=14', build: ['build_nbu'], scene: 'measure-solar' },
-      { src: 'src/newbiz-measure-popup.js?v=14', build: ['build_nbp'], scene: 'measure-popup' },
-      { src: 'src/newbiz-overseas.js?v=14', build: ['build_nbo'], scene: 'overseas' },
-      { src: 'src/newbiz-live.js?v=4', part: 'base' },
+      { src: 'src/newbiz-wind.js?v=16', build: ['build_nbw'], scene: 'wind' },
+      { src: 'src/newbiz-solar.js?v=16', build: ['build_nbs'], scene: 'solar' },
+      { src: 'src/newbiz-energy.js?v=16', build: ['build_nbe'], scene: 'energy' },
+      { src: 'src/newbiz-wind-input.js?v=16', build: ['build_nbk'], scene: 'wind-input' },
+      { src: 'src/newbiz-solar-input.js?v=16', build: ['build_nbl'], scene: 'solar-input' },
+      { src: 'src/newbiz-energy-input.js?v=16', build: ['build_nbg'], scene: 'energy-input' },
+      { src: 'src/newbiz-measure.js?v=16', build: ['build_nbm'], scene: 'measure' },
+      { src: 'src/newbiz-measure-wind.js?v=16', build: ['build_nbt'], scene: 'measure-wind' },
+      { src: 'src/newbiz-measure-solar.js?v=16', build: ['build_nbu'], scene: 'measure-solar' },
+      { src: 'src/newbiz-measure-popup.js?v=16', build: ['build_nbp'], scene: 'measure-popup' },
+      { src: 'src/newbiz-overseas.js?v=16', build: ['build_nbo'], scene: 'overseas' },
+      { src: 'src/newbiz-live.js?v=6', part: 'base' },
     ],
     /* STATCOM HMI 디지털 트윈 — Figma lyDJkcOlrznLKWo7mD7C2n. 화면 11장, 장면마다 따로 싣는다 */
     statcom: [

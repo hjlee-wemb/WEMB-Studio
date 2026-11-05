@@ -1,21 +1,21 @@
 /* ── POSCO KDB CCTV 관제 템플릿 연결 ── */
 
-/* ── POSCO KDB CCTV 관제 — Figma 화면을 순수 HTML/CSS DOM 으로 재구축한 것을 얹는다 ──
+/* ── CCTV 관제 — Figma 화면을 순수 HTML/CSS DOM 으로 재구축한 것을 얹는다 ──
    원본: Figma dj0SONcO5BySCm7yDdZrNc / 2:18441 Screen/Control Main (1920x1080, page "Page 1")
    글자는 전부 편집 가능한 실제 텍스트(Pretendard CDN), 아이콘·그래픽만 Figma 가 내보낸
    개별 svg/png(src/posco/)을 그대로 쓴다. 좌표·크기·색은 Figma 값 그대로(근사 없음).
    원본이 다크 시안이라 라이트 시트를 따로 만들어 '화면 테마'로 자유롭게 바꿀 수 있다.
    인터랙션·라이브·반응형은 src/posco-live.js(window.initPosco). */
 const PK_SCREENS = {
-  'main': { px: 'pkm', build: 'build_pkm', css: 'PKM_CSS', light: 'PKM_LIGHT_CSS', title: 'POSCO KDB CCTV 관제 — 메인' },
-  'ack': { px: 'pka', build: 'build_pka', css: 'PKA_CSS', light: 'PKA_LIGHT_CSS', title: 'POSCO KDB CCTV 관제 — 메인(Ack 알림)' },
-  'overview': { px: 'pko', build: 'build_pko', css: 'PKO_CSS', light: 'PKO_LIGHT_CSS', title: 'POSCO KDB CCTV 관제 — 종합현황' },
-  'route': { px: 'pkr', build: 'build_pkr', css: 'PKR_CSS', light: 'PKR_LIGHT_CSS', title: 'POSCO KDB CCTV 관제 — 출입동선' },
-  'floors': { px: 'pkf', build: 'build_pkf', css: 'PKF_CSS', light: 'PKF_LIGHT_CSS', title: 'POSCO KDB CCTV 관제 — 전체층' },
-  'detail': { px: 'pkd', build: 'build_pkd', css: 'PKD_CSS', light: 'PKD_LIGHT_CSS', title: 'POSCO KDB CCTV 관제 — 단층' },
+  'main': { px: 'pkm', build: 'build_pkm', css: 'PKM_CSS', light: 'PKM_LIGHT_CSS', title: 'CCTV 관제 — 메인' },
+  'ack': { px: 'pka', build: 'build_pka', css: 'PKA_CSS', light: 'PKA_LIGHT_CSS', title: 'CCTV 관제 — 메인(Ack 알림)' },
+  'overview': { px: 'pko', build: 'build_pko', css: 'PKO_CSS', light: 'PKO_LIGHT_CSS', title: 'CCTV 관제 — 종합현황' },
+  'route': { px: 'pkr', build: 'build_pkr', css: 'PKR_CSS', light: 'PKR_LIGHT_CSS', title: 'CCTV 관제 — 출입동선' },
+  'floors': { px: 'pkf', build: 'build_pkf', css: 'PKF_CSS', light: 'PKF_LIGHT_CSS', title: 'CCTV 관제 — 전체층' },
+  'detail': { px: 'pkd', build: 'build_pkd', css: 'PKD_CSS', light: 'PKD_LIGHT_CSS', title: 'CCTV 관제 — 단층' },
   /* SOP 대응 절차 — Figma 세 장(STEP 1 1:9688 · STEP 2 1:9770 · STEP 3 1:9852)을 한 장면으로.
      STEP 1 화면을 얹고, 라이브(installSop)가 STEP 2·3 의 Step List 를 같은 자리에 겹쳐 10초마다 넘긴다. */
-  'sop': { px: 'pks1', build: 'build_pks1', css: 'PKS1_CSS', light: 'PKS1_LIGHT_CSS', extra: ['pks2', 'pks3', 'pks4'], title: 'POSCO KDB CCTV 관제 — SOP 대응 절차' },
+  'sop': { px: 'pks1', build: 'build_pks1', css: 'PKS1_CSS', light: 'PKS1_LIGHT_CSS', extra: ['pks2', 'pks3', 'pks4'], title: 'CCTV 관제 — SOP 대응 절차' },
 };
 const PK_ROOTS = '.pkm-root, .pka-root, .pko-root, .pkr-root, .pkf-root, .pkd-root, .pks1-root';
 const PK_SEED = '#004BFF';   /* 시안 자신의 브랜드 파랑 — '색 정하기'의 시작값 */

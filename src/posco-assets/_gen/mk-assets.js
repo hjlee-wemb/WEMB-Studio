@@ -95,9 +95,9 @@ const ITEMS = {
     { px: 'pkf', nid: '1:2504', name: '자산정보현황 (층별)', fig: 'Widget/Asset Summary', w: 305, h: 512 },
     { px: 'pkf', nid: '1:2493', name: '사이드바', fig: 'Sidebar', w: 122, h: 695 },
     { px: 'pkd', nid: '1:2423', name: '자산리스트', fig: 'Widget/Asset List', w: 305, h: 521 },
-    /* 이름 뒤 (KDB) 는 **다른 시안 등록물과 겹쳐서** 붙였다 — 아래 '이름 겹침' 검사가 잡아 준다
+    /* 이름 뒤 (CCTV) 는 **다른 시안 등록물과 겹쳐서** 붙였다 — 아래 '이름 겹침' 검사가 잡아 준다
        (HANA 상면관리에도 '자산 상세 팝업'이, 한진 통합관제에도 '이벤트 표'가 있다) */
-    { px: 'pkd', nid: '1:2486', name: '자산 상세 팝업 (KDB)', fig: 'Popup/Asset Detail', w: 557, h: 282 },
+    { px: 'pkd', nid: '1:2486', name: '자산 상세 팝업 (CCTV)', fig: 'Popup/Asset Detail', w: 557, h: 282 },
     /* SOP — STEP 1·2·3 의 단계 목록은 같은 목록의 진행 상태만 다르다 → STEP 1 것만 올린다 */
     { px: 'pks1', nid: '1:9709', name: '대응 절차 목록', fig: 'Step List < Dialog/SOP', w: 789, h: 537 },
     { px: 'pks1', nid: '1:9723', name: 'SOP 머리글', fig: 'Content < Header < Dialog/SOP', w: 719, h: 135 },
@@ -109,7 +109,7 @@ const ITEMS = {
   /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리 */
   events: [
     { px: 'pkm', nid: '1:1926', name: '이벤트 현황', fig: 'Event Panel/Default', w: 1920, h: 267 },
-    { px: 'pkm', nid: '1:1949', name: '이벤트 표 (KDB)', fig: 'Table < Event Panel/Default', w: 1760, h: 186 },
+    { px: 'pkm', nid: '1:1949', name: '이벤트 표 (CCTV)', fig: 'Table < Event Panel/Default', w: 1760, h: 186 },
     { px: 'pko', nid: '40:11527', name: '이벤트 리스트', fig: 'Popup/Event List', w: 440, h: 227 },
   ],
 
@@ -280,7 +280,7 @@ ICONS.forEach(([file, name, fig]) => {
 
 /* ── 다른 시안 등록물과 이름이 겹치는지 ──
    라이브러리 한 탭에는 여러 시안이 함께 산다(한진·HANA·이천·SK하이닉스). 판·표처럼 덩치 있는 것이
-   같은 이름으로 두 개 놓이면 어느 시안 것인지 알 수 없다 → 이쪽 이름에 (KDB) 를 붙인다.
+   같은 이름으로 두 개 놓이면 어느 시안 것인지 알 수 없다 → 이쪽 이름에 (CCTV) 를 붙인다.
    아이콘은 원래 일반명(검색·시계·로그아웃 …)이라 겹쳐도 그대로 둔다 — 기존 시안끼리도 이미 겹친다. */
 (function crossCheck() {
   const TAB = { charts: 'chart', symbols: 'symbol', icons: 'icon', panels: 'panel', events: 'event' };
