@@ -8,7 +8,20 @@ const msgCss = MSG.map((id) => '.{{PX}}-root [data-node-id$=";' + id + '"]{line-
 /* 총 재생시간 — 원본 칸이 글자보다 좁아 두 줄로 꺾인다(08:4 / 0). 한 줄로 */
 const timeCss = ['.{{PX}}-root [data-node-id$=";1:1869"]{white-space:nowrap!important;}'];
 /* 라이트 공통 — 그림 위에 얹힌 패널은 흰 판, 글자는 짙게(대비 4.5:1). 헤더 로고 그림은 흰 글자라 어둡게 */
-const R = (t) => '.{{PX}}-root[data-theme="light"] ' + t;
+/* 선택자가 쉼표로 묶여 있으면 항목마다 앞머리를 붙인다 — 첫 항목에만 붙이면 나머지가 조건 없는 전역 규칙이 되어
+   다크 화면과 다른 템플릿까지 칠한다(2026-11-05 냉각기 카드 · Badge 가 다크에서 흰색이 된 원인). () 안의 쉼표는 나누지 않는다 */
+const R = (t) => {
+  const brace = t.indexOf('{');
+  const parts = [];
+  let depth = 0, cur = '';
+  for (const ch of t.slice(0, brace)) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === ',' && depth === 0) { parts.push(cur); cur = ''; } else cur += ch;
+  }
+  parts.push(cur);
+  return parts.map((s) => '.{{PX}}-root[data-theme="light"] ' + s.trim()).join(',') + t.slice(brace);
+};
 const LIGHT = [
   R('[data-name="Logo Image"] img:not(.tpl-studio-logo){filter:brightness(.16);}'),
   /* 떠 있는 판은 부드러운 그림자로 띄운다 */
