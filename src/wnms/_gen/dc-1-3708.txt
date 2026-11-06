@@ -1,0 +1,213 @@
+const imgTypeEvent = "https://www.figma.com/api/mcp/asset/54cd2174-a46e-489c-9588-9dc1a7f8f6e7.svg";
+const imgTypePerformance = "https://www.figma.com/api/mcp/asset/9b67df85-6f36-4a9d-b8aa-62b17a11280d.svg";
+const imgTypeUser = "https://www.figma.com/api/mcp/asset/17068b0c-1cf5-4d72-890c-cdf663588dfa.svg";
+const imgTypeDashboard = "https://www.figma.com/api/mcp/asset/1d8141ce-7782-4d57-82cf-bc4d2e8ff327.svg";
+const imgTypeConfiguration = "https://www.figma.com/api/mcp/asset/b0e89c66-724e-4fcd-ad7e-3634131a975f.svg";
+const imgTypeMenu = "https://www.figma.com/api/mcp/asset/94ba2d14-9a14-4131-a5e0-18e67a5a5b3e.svg";
+const imgCategoryCommon = "https://www.figma.com/api/mcp/asset/c5f41fee-c73b-4dc6-8d96-593815fd5e1f.svg";
+const imgCategoryConfiguration = "https://www.figma.com/api/mcp/asset/41e6677f-031a-48b1-9542-7d0a67c261fc.svg";
+const imgCategoryDashboard = "https://www.figma.com/api/mcp/asset/dafd4775-3276-43fb-aa7f-9fa6c63f131a.svg";
+const imgCategoryUser = "https://www.figma.com/api/mcp/asset/9d687837-73ea-4607-a68f-b37f9aa03b04.svg";
+const imgCategoryPerformance = "https://www.figma.com/api/mcp/asset/6e98ae45-2cfd-45ac-b03e-6c8e73ef8953.svg";
+const imgCategoryEvent = "https://www.figma.com/api/mcp/asset/585b9d8a-fe45-4f17-875e-6e1a84b43862.svg";
+const imgBackgroundImage = "https://www.figma.com/api/mcp/asset/3b0fc091-b8f4-4051-aefb-4a0fd45db6ec.png";
+const imgBackgroundLayer1 = "https://www.figma.com/api/mcp/asset/67659ce5-6e6a-4755-9828-3bb97ed2e68b.png";
+const imgBackgroundLayer2 = "https://www.figma.com/api/mcp/asset/89b314c7-b7e9-4fc9-879a-42f3696e3fd4.png";
+const imgBackgroundLayer3 = "https://www.figma.com/api/mcp/asset/af84cc7e-f280-4ef6-8940-b89c931e6a25.png";
+const imgBackgroundLayer4 = "https://www.figma.com/api/mcp/asset/c0a13106-a784-4445-b598-6a175ddb6709.png";
+const imgSceneImage = "https://www.figma.com/api/mcp/asset/17a7e88e-b6cf-472f-a5ab-197bfa76b90b.png";
+
+type IconEventProps = {
+  className?: string;
+  type?: "Event";
+};
+
+function IconEvent({ className, type = "Event" }: IconEventProps) {
+  return (
+    <div className={className || "relative size-[24px]"} data-node-id="17:3308">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypeEvent} />
+    </div>
+  );
+}
+
+type IconPerformanceProps = {
+  className?: string;
+  type?: "Performance";
+};
+
+function IconPerformance({ className, type = "Performance" }: IconPerformanceProps) {
+  return (
+    <div className={className || "relative size-[24px]"} data-node-id="17:3330">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypePerformance} />
+    </div>
+  );
+}
+
+type IconUserProps = {
+  className?: string;
+  type?: "User";
+};
+
+function IconUser({ className, type = "User" }: IconUserProps) {
+  return (
+    <div className={className || "relative size-[24px]"} data-node-id="17:3336">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypeUser} />
+    </div>
+  );
+}
+
+type IconDashboardProps = {
+  className?: string;
+  type?: "Dashboard";
+};
+
+function IconDashboard({ className, type = "Dashboard" }: IconDashboardProps) {
+  return (
+    <div className={className || "relative size-[24px]"} data-node-id="17:3273">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypeDashboard} />
+    </div>
+  );
+}
+
+type IconConfigurationProps = {
+  className?: string;
+  type?: "Configuration";
+};
+
+function IconConfiguration({ className, type = "Configuration" }: IconConfigurationProps) {
+  return (
+    <div className={className || "relative size-[24px]"} data-node-id="17:3288">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypeConfiguration} />
+    </div>
+  );
+}
+
+type IconCommonProps = {
+  className?: string;
+  type?: "Menu";
+};
+
+function IconCommon({ className, type = "Menu" }: IconCommonProps) {
+  return (
+    <div className={className || "relative size-[24px]"} data-node-id="17:3250">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypeMenu} />
+    </div>
+  );
+}
+
+type IconProps = {
+  className?: string;
+  category?: "Common" | "Configuration" | "Dashboard" | "User" | "Performance" | "Event";
+};
+
+function Icon({ className, category = "Common" }: IconProps) {
+  const isConfiguration = category === "Configuration";
+  const isDashboard = category === "Dashboard";
+  const isEvent = category === "Event";
+  const isPerformance = category === "Performance";
+  const isUser = category === "User";
+  return (
+    <div className={className || "relative size-[24px]"} id={isEvent ? "node-17_3349" : isPerformance ? "node-17_3347" : isUser ? "node-17_3345" : isDashboard ? "node-17_3343" : isConfiguration ? "node-17_3341" : "node-17_3339"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isEvent ? imgCategoryEvent : isPerformance ? imgCategoryPerformance : isUser ? imgCategoryUser : isDashboard ? imgCategoryDashboard : isConfiguration ? imgCategoryConfiguration : imgCategoryCommon} />
+    </div>
+  );
+}
+
+type GnbLandscapeProps = {
+  className?: string;
+  step?: "Collapsed";
+};
+
+function GnbLandscape({ className, step = "Collapsed" }: GnbLandscapeProps) {
+  return (
+    <div className={className || "bg-white border-[#ececec] border-r-2 border-solid content-stretch flex flex-col h-[1080px] items-center justify-between px-[12px] py-[16px] relative w-[68px]"} data-node-id="17:3493">
+      <div className="content-stretch flex flex-col gap-[20px] items-start relative shrink-0" data-node-id="17:3494" data-name="Body">
+        <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-node-id="17:3495" data-name="Toolbar">
+          <Icon className="relative shrink-0 size-[24px]" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[10px] items-start relative shrink-0 w-full" data-node-id="17:3498" data-name="Menu">
+          <div className="content-stretch flex items-center justify-center px-[12px] py-[6px] relative rounded-[10px] shrink-0 w-full" data-node-id="17:3499" data-name="Nav Item/Dashboard">
+            <Icon category="Dashboard" className="relative shrink-0 size-[24px]" />
+          </div>
+          <div className="content-stretch flex items-center justify-center px-[12px] py-[6px] relative rounded-[10px] shrink-0 w-full" data-node-id="17:3501" data-name="Nav Item/Configuration">
+            <Icon category="Configuration" className="relative shrink-0 size-[24px]" />
+          </div>
+          <div className="content-stretch flex items-center justify-center px-[12px] py-[6px] relative rounded-[10px] shrink-0 w-full" data-node-id="17:3503" data-name="Nav Item/Event">
+            <Icon category="Event" className="relative shrink-0 size-[24px]" />
+          </div>
+          <div className="content-stretch flex items-center justify-center px-[12px] py-[6px] relative rounded-[10px] shrink-0 w-full" data-node-id="17:3505" data-name="Nav Item/Performance">
+            <Icon category="Performance" className="relative shrink-0 size-[24px]" />
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col gap-[14px] items-start relative shrink-0" data-node-id="17:3507" data-name="Footer">
+        <div className="content-stretch flex items-center relative shrink-0 w-full" data-node-id="17:3508" data-name="Nav Item/User">
+          <Icon category="User" className="relative shrink-0 size-[24px]" />
+        </div>
+        <div className="content-stretch flex items-center relative shrink-0 w-full" data-node-id="17:3510" data-name="Nav Item/Logout">
+          <div className="relative shrink-0 size-[24px]" data-node-id="17:3511" data-name="Icon/User/Logout">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCategoryUser} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Screen3DCommRoomPerspectiveView() {
+  return (
+    <div className="relative size-full" data-node-id="1:3708" data-name="Screen/3D Comm Room - Perspective View">
+      <div className="absolute bg-[#4f4f4f] h-[1080px] left-0 top-0 w-[1920px]" data-node-id="1:3709" data-name="Background/Base" />
+      <div className="absolute bg-[#4f4f4f] h-[1080px] left-0 top-0 w-[1920px]" data-node-id="1:3710" data-name="Background/Fill" />
+      <div className="absolute h-[1080px] left-[68px] top-0 w-[1852px]" data-node-id="1:3711" data-name="Background/Image">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[144.29%] left-[-12.29%] max-w-none top-[-5.17%] w-[120.91%]" src={imgBackgroundImage} />
+        </div>
+      </div>
+      <div className="absolute h-[1080px] left-[68px] top-0 w-[1852px]" data-node-id="1:3712" data-name="Background/Layer 1">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[171.48%] left-0 max-w-none top-[-12.16%] w-full" src={imgBackgroundLayer1} />
+        </div>
+      </div>
+      <div className="absolute h-[1080px] left-0 top-0 w-[1920px]" data-node-id="1:3713" data-name="Background/Layer 2">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[177.78%] left-0 max-w-none top-0 w-full" src={imgBackgroundLayer2} />
+        </div>
+      </div>
+      <div className="absolute h-[1080px] right-0 top-0 w-[1920px]" data-node-id="1:3714" data-name="Background/Layer 3">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[206.57%] left-[-2.45%] max-w-none top-[-6.39%] w-[116.2%]" src={imgBackgroundLayer3} />
+        </div>
+      </div>
+      <div className="absolute h-[1080px] left-0 top-0 w-[1920px]" data-node-id="1:3715" data-name="Background/Layer 4">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img alt="" className="absolute h-[205.56%] left-0 max-w-none top-[-9.91%] w-[115.62%]" src={imgBackgroundLayer4} />
+        </div>
+      </div>
+      <GnbLandscape className="absolute bg-white border-[#ececec] border-r-2 border-solid content-stretch flex flex-col h-[1080px] items-center justify-between left-0 px-[12px] py-[16px] top-0 w-[68px]" />
+      <div className="absolute h-[606px] left-[317px] top-[335px] w-[1354px]" data-node-id="1:3717" data-name="Scene Image">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgSceneImage} />
+      </div>
+      <div className="absolute backdrop-blur-[2px] bg-gradient-to-b border border-[#2279ff] border-solid content-stretch flex from-[rgba(34,121,255,0.5)] h-[32px] items-center justify-center left-[833px] px-[11px] rounded-[8px] to-[rgba(12,77,161,0.5)] top-[371px]" data-node-id="1:3718" data-name="Rack Label/FDF">
+        <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2faff] text-[15px] text-center whitespace-nowrap" data-node-id="1:3719">
+          FDF
+        </p>
+      </div>
+      <div className="absolute backdrop-blur-[2px] bg-gradient-to-b border border-[#2279ff] border-solid content-stretch flex from-[rgba(34,121,255,0.5)] h-[32px] items-center justify-center left-[774px] px-[11px] rounded-[8px] to-[rgba(12,77,161,0.5)] top-[399px]" data-node-id="1:3720" data-name="Rack Label/Wireless Infra Rack">
+        <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2faff] text-[15px] text-center whitespace-nowrap" data-node-id="1:3721">
+          무선망 인프라랙
+        </p>
+      </div>
+      <div className="absolute backdrop-blur-[2px] bg-gradient-to-b border border-[#2279ff] border-solid content-stretch flex from-[#2279ff] h-[32px] items-center justify-center left-[759px] px-[11px] rounded-[8px] to-[#0c4da1] top-[425px]" data-node-id="1:3722" data-name="Rack Label/Wireless Backbone Rack">
+        <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#fdfdfd] text-[15px] text-center whitespace-nowrap" data-node-id="1:3723">
+          무선망 백본랙
+        </p>
+      </div>
+      <div className="absolute backdrop-blur-[2px] bg-gradient-to-b border border-[#2279ff] border-solid content-stretch flex from-[rgba(34,121,255,0.5)] h-[32px] items-center justify-center left-[740px] px-[11px] rounded-[8px] to-[rgba(12,77,161,0.5)] top-[450px]" data-node-id="1:3724" data-name="Rack Label/Wireless Security Rack">
+        <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#f2faff] text-[15px] text-center whitespace-nowrap" data-node-id="1:3725">
+          무선망 보안랙
+        </p>
+      </div>
+    </div>
+  );
+}

@@ -47,8 +47,6 @@
       TL('shoneview-p06-02-systemstatus01', '시스템현황 P06-02 · 01'), TL('shoneview-p06-02-systemstatus02', '시스템현황 P06-02 · 02'),
       TL('shoneview-p06-02-systemstatus03', '시스템현황 P06-02 · 03'), TL('shoneview-p06-02-systemstatus04', '시스템현황 P06-02 · 04'),
       TL('shoneview-login', '로그인')] },
-    { title: 'Dashboard: Hanbit', area: '에너지·환경', date: 'January 22, 2025', slides: [
-      TL('hanbit', '발전소 현황')] },
     { title: 'Dashboard: HC Approval', area: '서비스·거래', date: 'March 28, 2024', slides: [
       TL('hc-approval', '승인 현황')] },
     { title: 'Dashboard: KOEN', area: '에너지·환경', date: 'May 22, 2024', slides: [
@@ -140,6 +138,15 @@
       { img: 'src/templates/newbiz-measure-solar.jpg', label: '계측현황 · 태양광 툴팁' },
       { img: 'src/templates/newbiz-measure-popup.jpg', label: '계측현황 · 사업 팝업' },
       { img: 'src/templates/newbiz-overseas.jpg', label: '해외사업' }] },
+    { title: 'Dashboard: Wireless Network Management', area: '에너지·환경', date: 'May 20, 2026', slides: [
+      { img: 'src/templates/wnms-main.jpg', label: '무선망 통합관리 메인' },
+      { img: 'src/templates/wnms-main-open.jpg', label: '메인 · 메뉴 열림' },
+      { img: 'src/templates/wnms-main-expanded.jpg', label: '메인 · 메뉴 펼침' },
+      { img: 'src/templates/wnms-room-top.jpg', label: '3D 통신실 · 평면' },
+      { img: 'src/templates/wnms-room-view.jpg', label: '3D 통신실 · 투시' },
+      { img: 'src/templates/wnms-equipment.jpg', label: 'NMS 설비 계통도' },
+      { img: 'src/templates/wnms-detail.jpg', label: 'NMS 세부 계통도' },
+      { img: 'src/templates/wnms-login.jpg', label: '로그인' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -313,6 +320,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Plant Power Facility');
     if (w) w.tpl = 'plant';
   })();
+  /* 무선망 통합관리 대시보드 — '스튜디오 열기' 시 Figma(WdpL1qGqIo76WQavOsDvp6) 화면 8장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/wnms-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: Wireless Network Management');
+    if (w) w.tpl = 'wnms';
+  })();
   /* 신사업 관리 대시보드 — '스튜디오 열기' 시 Figma(cES6X45zHjsaabaXL1cdrt) 화면 11장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/newbiz-*.js)으로 연다. */
   (function () {
@@ -338,7 +351,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

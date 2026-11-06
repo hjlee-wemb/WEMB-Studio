@@ -6,7 +6,10 @@ applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
 try {
   const __tdt = localStorage.getItem('wemb-tpl-dt');
   if (state.screen === 'dt') {
-    if (__tdt === 'newbiz' && typeof applyNewbizDT === 'function') {
+    if (__tdt === 'wnms' && typeof applyWnmsDT === 'function') {
+      applyWnmsDT(window.__wnmsSceneOf ? window.__wnmsSceneOf() : localStorage.getItem('wemb-wnms-screen'));
+    }
+    else if (__tdt === 'newbiz' && typeof applyNewbizDT === 'function') {
       applyNewbizDT(window.__newbizSceneOf ? window.__newbizSceneOf() : localStorage.getItem('wemb-newbiz-screen'));
     }
     else if (__tdt === 'statcom' && typeof applyStatcomDT === 'function') {
@@ -115,6 +118,14 @@ try {
   /* LS Electric STATCOM 도 Dark 가 원본 — 고른 밝기(wemb-lselectric-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'lselectric') {
     const want = localStorage.getItem('wemb-lselectric-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* 무선망 통합관리는 Light 가 원본 — 고른 밝기(wemb-wnms-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'wnms') {
+    const want = localStorage.getItem('wemb-wnms-mode') === 'dark' ? 'dark' : 'light';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));

@@ -62,7 +62,7 @@
     '한진택배', '한진', 'HANJIN', 'Hanjin', '대전 메가허브', '메가허브',
     '하나은행', '하나카드', '하나금융', 'Hana Card', 'HANA', 'Hana',
     'HYOSUNG', 'Hyosung', '효성', 'Woori Bank', 'Woori', 'WOORI', '우리은행', 'Gammania', 'Hyundai Capital', '현대캐피탈', 'Shinhan Card', 'Shinhan', '신한카드', '신한', 'SHOneView',
-    'Hanbit', '한빛', 'KOEN', '한국남동발전', 'KISED', 'Digicentre', 'KORAIL', '코레일', 'NRTEC', 'NH-DCIM',
+    'Hanbit', '한빛', '신한울', '한수원', '한국수력원자력', 'KHNP', 'Shinhanul', 'KOEN', '한국남동발전', 'KISED', 'Digicentre', 'KORAIL', '코레일', 'NRTEC', 'NH-DCIM',
     /* 템플릿 제목 · 화면 글자에 있는데 빠져 있던 이름(2026-11-05). 약어는 제목째로 넣는다('KB' 단위 오탐 방지) */
     'Dashboard: KB', 'NH Biometrics', 'HC Approval', 'HuaNan', 'Handok', 'SHCard', 'SKHDC', 'SKH', 'LSE', 'Figma LottieFiles',
     '국민은행', '카카오뱅크', '지역농협', '농협은행', '농협', '오스테드', '두산', '남동',

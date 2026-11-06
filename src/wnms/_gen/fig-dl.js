@@ -1,0 +1,5 @@
+/* Figma 렌더 내려받기(대조 기준). */
+const https = require('https'), fs = require('fs'), path = require('path');
+const U = {"1-1602":"ec26aba3-ee51-4e28-ad5a-6ee58c1a41a1","1-1977":"b2e7f063-ccf5-4162-87d9-bd7b49a2dec4","1-2352":"37cd5385-f378-4856-bac5-9f53ef53f48e","1-2727":"658ae0d3-30f0-4885-8389-203cf59ec3a5","1-3690":"14ae807e-0550-485b-91ee-452ee8935a2c","1-3708":"3a080e79-45e3-4340-8074-8519e19c0548","1-3797":"e172cb99-95a0-401a-8a23-d6433a63bdc1","1-3943":"64bfbdbb-5b4a-4db8-b7cc-b8e8c91029b3"};
+const get = (u) => new Promise((res, rej) => https.get(u, (r) => { if (r.statusCode >= 300 && r.headers.location) { r.resume(); return get(r.headers.location).then(res, rej); } const c = []; r.on('data', (d) => c.push(d)); r.on('end', () => res(Buffer.concat(c))); }).on('error', rej));
+(async () => { for (const k of Object.keys(U)) { const b = await get('https://www.figma.com/api/mcp/asset/' + U[k] + '.png'); fs.writeFileSync(path.join(__dirname, 'figma-' + k + '.png'), b); console.log(k, b.length); } })();

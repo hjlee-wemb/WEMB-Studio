@@ -107,7 +107,6 @@ const TPLLOGO = {
     /* 헤더 가운데 */
     put('hanacard-main hc-approval', [893, 3, 142, 30]);
     put('hanacard-approval-text', [898, 8, 142, 30]);
-    put('hanbit', [858, 13, 190, 43]);
     put('facility-status-1', [883, 14, 157, 40]);
     put('lse-demo-main', [884, 11, 142, 31]);
     put('lse-demo-floor', [889, 13, 155, 33]);
@@ -851,6 +850,13 @@ const TPLTINT = {
        · 로고 · 3D 장면 · 설비 사진 · 미니맵 · 공정 사진 — 그림이라 색을 돌리면 어색하다. 판 · 선 · 글자만 따라간다 */
   /* 신사업 관리 시안 — 주조색은 하늘색(#7FD3FA, 색상각 199°). 색을 그대로 둘 것: 로고 · 터빈 · 태양광 패널 사진 · 국기 · 단계 배지.
      지도 그림과 판 · 선 · 글자는 따라간다 */
+  /* 무선망 통합관리 시안 — 주조색은 남색(#0C4DA1, 색상각 214°). 색을 그대로 둘 것: 3D 조감도 · 통신실 렌더 · 바탕 그림 · 상태 표시(초록 · 빨강) · 장비 그림자.
+     판 · 선 · 글자 · 메뉴 아이콘 · 차트는 따라간다 */
+  WNMS_OPT: {
+    seed: '#0C4DA1', seededKey: 'wemb-wnms-seeded', refHue: 214,
+    keep: /(^|\/)(scene-image|background|marker|icon-status|shadow|highlight|pedestal)[-\w]*\.(svg|png|jpg)(\?|$)/i,
+    raster: /$^/,
+  },
   NEWBIZ_OPT: {
     seed: '#7FD3FA', seededKey: 'wemb-newbiz-seeded', refHue: 199,
     keep: /(^|\/)(logo-mark|turbine-image|solar-panel-image|flag|mask-?group|artwork|ellipse|shape|path)[-\w]*(-lt)?\.(svg|png)(\?|$)/i,
@@ -1006,6 +1012,10 @@ const TPLTINT = {
     });
     /* 공장 전력설비 — 같은 방식 */
     this.icheonTint(t, mode, '.pfo-root', ['pfo-style', 'pfo-light-style', 'plant-live-style'], 'wemb-plant-mode', this.PLANT_OPT);
+    /* 무선망 통합관리 화면 8장 — 같은 방식. 열린 장면만 칠한다 */
+    ['wnm', 'wno', 'wnx', 'wnt', 'wnv', 'wne', 'wnd', 'wnl'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'wnms-live-style'], 'wemb-wnms-mode', this.WNMS_OPT);
+    });
     /* 신사업 관리 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
     ['nbw', 'nbs', 'nbe', 'nbk', 'nbl', 'nbg', 'nbm', 'nbt', 'nbu', 'nbp', 'nbo'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'newbiz-live-style'], 'wemb-newbiz-mode', this.NEWBIZ_OPT);

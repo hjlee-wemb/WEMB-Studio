@@ -93,6 +93,18 @@
       { src: 'src/shinhan-live.js?v=8', part: 'base' },
     ],
     /* 우리은행 통합 대시보드 — Figma qln8qMsqzCt918dZOQOWOS. 헤더 메뉴로 장면끼리 오간다 */
+    /* 무선망 통합관리 대시보드 — Figma WdpL1qGqIo76WQavOsDvp6. 화면 8장, 장면마다 따로 싣는다 */
+    wnms: [
+      { src: 'src/wnms-main.js?v=6', build: ['build_wnm'], scene: 'main' },
+      { src: 'src/wnms-main-open.js?v=6', build: ['build_wno'], scene: 'main-open' },
+      { src: 'src/wnms-main-expanded.js?v=6', build: ['build_wnx'], scene: 'main-expanded' },
+      { src: 'src/wnms-room-top.js?v=5', build: ['build_wnt'], scene: 'room-top' },
+      { src: 'src/wnms-room-view.js?v=5', build: ['build_wnv'], scene: 'room-view' },
+      { src: 'src/wnms-equipment.js?v=8', build: ['build_wne'], scene: 'equipment' },
+      { src: 'src/wnms-detail.js?v=8', build: ['build_wnd'], scene: 'detail' },
+      { src: 'src/wnms-login.js?v=8', build: ['build_wnl'], scene: 'login' },
+      { src: 'src/wnms-live.js?v=7', part: 'base' },
+    ],
     /* 신사업 관리 대시보드 — Figma cES6X45zHjsaabaXL1cdrt. 화면 11장, 장면마다 따로 싣는다 */
     newbiz: [
       { src: 'src/newbiz-wind.js?v=16', build: ['build_nbw'], scene: 'wind' },
@@ -146,6 +158,7 @@
     hanjin: { key: 'wemb-hanjin-screen', def: 'main' },
     statcom: { key: 'wemb-statcom-screen', def: 'main' },
     newbiz: { key: 'wemb-newbiz-screen', def: 'wind' },
+    wnms: { key: 'wemb-wnms-screen', def: 'main' },
   };
 
   const byBuild = {};
