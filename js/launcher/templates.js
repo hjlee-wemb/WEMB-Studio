@@ -147,6 +147,26 @@
       { img: 'src/templates/wnms-equipment.jpg', label: 'NMS 설비 계통도' },
       { img: 'src/templates/wnms-detail.jpg', label: 'NMS 세부 계통도' },
       { img: 'src/templates/wnms-login.jpg', label: '로그인' }] },
+    { title: 'Dashboard: Smart Drawing Management', area: '에너지·환경', date: 'May 20, 2026', slides: [
+      { img: 'src/templates/drawing-main.jpg', label: '메인' },
+      { img: 'src/templates/drawing-main-menu.jpg', label: '메인 · 메뉴' },
+      { img: 'src/templates/drawing-main-select.jpg', label: '메인 · 사업소 선택' },
+      { img: 'src/templates/drawing-main-popup.jpg', label: '메인 · 사업소 변경' },
+      { img: 'src/templates/drawing-search.jpg', label: '도면조회' },
+      { img: 'src/templates/drawing-search-detail.jpg', label: '도면조회 · 상세검색' },
+      { img: 'src/templates/drawing-preview.jpg', label: '도면조회 · 미리보기' },
+      { img: 'src/templates/drawing-preview-popup.jpg', label: '도면조회 · 미리보기 팝업' },
+      { img: 'src/templates/drawing-register.jpg', label: '도면 등록' },
+      { img: 'src/templates/drawing-equipment.jpg', label: '설비 마스터 팝업' },
+      { img: 'src/templates/drawing-help.jpg', label: '도움말 팝업' },
+      { img: 'src/templates/drawing-checkin.jpg', label: '도면수정(체크인)' },
+      { img: 'src/templates/drawing-cctv.jpg', label: 'CCTV 조회' },
+      { img: 'src/templates/drawing-desk.jpg', label: 'Help Desk 조회' },
+      { img: 'src/templates/drawing-desk-write.jpg', label: 'Help Desk 등록' },
+      { img: 'src/templates/drawing-desk-detail.jpg', label: 'Help Desk 상세보기' },
+      { img: 'src/templates/drawing-total-search.jpg', label: '통합검색' },
+      { img: 'src/templates/drawing-total-result.jpg', label: '통합검색 결과' },
+      { img: 'src/templates/drawing-login.jpg', label: '로그인' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -320,6 +340,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Plant Power Facility');
     if (w) w.tpl = 'plant';
   })();
+  /* 스마트 도면관리 — '스튜디오 열기' 시 Figma(hfgGjtOuOsX3wdxk33ldyv) 화면 19장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/drawing-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: Smart Drawing Management');
+    if (w) w.tpl = 'drawing';
+  })();
   /* 무선망 통합관리 대시보드 — '스튜디오 열기' 시 Figma(WdpL1qGqIo76WQavOsDvp6) 화면 8장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/wnms-*.js)으로 연다. */
   (function () {
@@ -351,7 +377,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

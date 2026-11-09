@@ -609,6 +609,12 @@
           try { localStorage.setItem('wemb-lselectric-screen', wantLs); } catch (e3) {}
           if (typeof applyLsElectricDT === 'function') applyLsElectricDT(wantLs);
         }
+        else if (f.tpl === 'drawing') {
+          localStorage.setItem('wemb-tpl-dt', 'drawing'); localStorage.removeItem('wemb-tpl-img');
+          const wantDg = (typeof DG_SCREENS !== 'undefined' && DG_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-drawing-screen') || 'main');
+          try { localStorage.setItem('wemb-drawing-screen', wantDg); } catch (e3) {}
+          if (typeof applyDrawingDT === 'function') applyDrawingDT(wantDg);
+        }
         else if (f.tpl === 'wnms') {
           localStorage.setItem('wemb-tpl-dt', 'wnms'); localStorage.removeItem('wemb-tpl-img');
           const wantWn = (typeof WN_SCREENS !== 'undefined' && WN_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-wnms-screen') || 'main');

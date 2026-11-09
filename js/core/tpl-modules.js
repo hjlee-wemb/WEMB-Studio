@@ -94,6 +94,29 @@
     ],
     /* 우리은행 통합 대시보드 — Figma qln8qMsqzCt918dZOQOWOS. 헤더 메뉴로 장면끼리 오간다 */
     /* 무선망 통합관리 대시보드 — Figma WdpL1qGqIo76WQavOsDvp6. 화면 8장, 장면마다 따로 싣는다 */
+    /* 스마트 도면관리 — Figma hfgGjtOuOsX3wdxk33ldyv. 화면 19장, 장면마다 따로 싣는다 */
+    drawing: [
+      { src: 'src/drawing-main.js?v=8', build: ['build_dwm'], scene: 'main' },
+      { src: 'src/drawing-main-menu.js?v=8', build: ['build_dwn'], scene: 'main-menu' },
+      { src: 'src/drawing-main-select.js?v=8', build: ['build_dws'], scene: 'main-select' },
+      { src: 'src/drawing-main-popup.js?v=8', build: ['build_dwp'], scene: 'main-popup' },
+      { src: 'src/drawing-search.js?v=8', build: ['build_dwa'], scene: 'search' },
+      { src: 'src/drawing-search-detail.js?v=8', build: ['build_dwb'], scene: 'search-detail' },
+      { src: 'src/drawing-preview.js?v=8', build: ['build_dwv'], scene: 'preview' },
+      { src: 'src/drawing-preview-popup.js?v=8', build: ['build_dwo'], scene: 'preview-popup' },
+      { src: 'src/drawing-register.js?v=8', build: ['build_dwr'], scene: 'register' },
+      { src: 'src/drawing-equipment.js?v=8', build: ['build_dwe'], scene: 'equipment' },
+      { src: 'src/drawing-help.js?v=8', build: ['build_dwh'], scene: 'help' },
+      { src: 'src/drawing-checkin.js?v=8', build: ['build_dwi'], scene: 'checkin' },
+      { src: 'src/drawing-cctv.js?v=8', build: ['build_dwc'], scene: 'cctv' },
+      { src: 'src/drawing-desk.js?v=8', build: ['build_dwk'], scene: 'desk' },
+      { src: 'src/drawing-desk-write.js?v=8', build: ['build_dww'], scene: 'desk-write' },
+      { src: 'src/drawing-desk-detail.js?v=8', build: ['build_dwd'], scene: 'desk-detail' },
+      { src: 'src/drawing-total-search.js?v=8', build: ['build_dwt'], scene: 'total-search' },
+      { src: 'src/drawing-total-result.js?v=8', build: ['build_dwu'], scene: 'total-result' },
+      { src: 'src/drawing-login.js?v=8', build: ['build_dwl'], scene: 'login' },
+      { src: 'src/drawing-live.js?v=8', part: 'base' },
+    ],
     wnms: [
       { src: 'src/wnms-main.js?v=6', build: ['build_wnm'], scene: 'main' },
       { src: 'src/wnms-main-open.js?v=6', build: ['build_wno'], scene: 'main-open' },
@@ -159,6 +182,7 @@
     statcom: { key: 'wemb-statcom-screen', def: 'main' },
     newbiz: { key: 'wemb-newbiz-screen', def: 'wind' },
     wnms: { key: 'wemb-wnms-screen', def: 'main' },
+    drawing: { key: 'wemb-drawing-screen', def: 'main' },
   };
 
   const byBuild = {};

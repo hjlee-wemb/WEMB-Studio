@@ -34,7 +34,7 @@
      (2026-10-02 LS Electric 단독 팝업 다섯 장 lst · lsp · lsb · lsc · lsr 추가) */
   const PXS = new Set(['hno2', 'hnc1', 'hnc2', 'hnm', 'hni1', 'hni2', 'hne', 'hnn1', 'hnn2', 'hnn3', 'hnf', 'hns1', 'hns2', 'hnl',
     'hjc', 'hjg', 'hju', 'pkm', 'pka', 'pko', 'pkr', 'pkf', 'pkd', 'pks1', 'pks2', 'pks3', 'pks4', 'lsm', 'lsd', 'lsa', 'lsy', 'lse',
-    'lst', 'lsp', 'lsb', 'lsc', 'lsr', 'wnm', 'wno', 'wnx', 'wnt', 'wnv', 'wne', 'wnd', 'wnl', 'nbw', 'nbs', 'nbe', 'nbk', 'nbl', 'nbg', 'nbm', 'nbt', 'nbu', 'nbp', 'nbo', 'tcm', 'tcs', 'tcp', 'tcv', 'tcc', 'tce', 'tcn', 'tcu', 'tca', 'tcq', 'tvt', 'tvo', 'tvs', 'tvm', 'tcl', 'pfo', 'wrt', 'wrp', 'wre', 'shm', 'sha', 'shi', 'shd', 'skh', 'skv', 'skxp']);
+    'lst', 'lsp', 'lsb', 'lsc', 'lsr', 'dwm', 'dwn', 'dws', 'dwp', 'dwa', 'dwb', 'dwv', 'dwo', 'dwr', 'dwe', 'dwh', 'dwi', 'dwc', 'dwk', 'dww', 'dwd', 'dwt', 'dwu', 'dwl', 'wnm', 'wno', 'wnx', 'wnt', 'wnv', 'wne', 'wnd', 'wnl', 'nbw', 'nbs', 'nbe', 'nbk', 'nbl', 'nbg', 'nbm', 'nbt', 'nbu', 'nbp', 'nbo', 'tcm', 'tcs', 'tcp', 'tcv', 'tcc', 'tce', 'tcn', 'tcu', 'tca', 'tcq', 'tvt', 'tvo', 'tvs', 'tvm', 'tcl', 'pfo', 'wrt', 'wrp', 'wre', 'shm', 'sha', 'shi', 'shd', 'skh', 'skv', 'skxp']);
   const ROOT_SEL = [...PXS].map((p) => '.' + p + '-root').join(',');
   const LEVEL_WORD = { atom: '원자', mol: '분자' };
   const PART_WORD = { symbol: '심볼', label: '라벨' };

@@ -630,7 +630,26 @@
 .hj-asset.nbt-root,
 .hj-asset.nbu-root,
 .hj-asset.nbp-root,
-.hj-asset.nbo-root {
+.hj-asset.nbo-root,
+.hj-asset.dwm-root,
+.hj-asset.dwn-root,
+.hj-asset.dws-root,
+.hj-asset.dwp-root,
+.hj-asset.dwa-root,
+.hj-asset.dwb-root,
+.hj-asset.dwv-root,
+.hj-asset.dwo-root,
+.hj-asset.dwr-root,
+.hj-asset.dwe-root,
+.hj-asset.dwh-root,
+.hj-asset.dwi-root,
+.hj-asset.dwc-root,
+.hj-asset.dwk-root,
+.hj-asset.dww-root,
+.hj-asset.dwd-root,
+.hj-asset.dwt-root,
+.hj-asset.dwu-root,
+.hj-asset.dwl-root {
   position: relative;
   inset: auto;
   overflow: visible;
@@ -662,6 +681,10 @@
   width: 100% !important;
   height: 100% !important;
 }
+/* 도면관리 등록물 — 가운데 정렬 판의 translate 도 자리 지정이다 */
+.hj-asset.dw-asset > :not(.hj-ofs) {
+  translate: none !important;
+}
 /* GROUP 등록물(신한카드 종합현황 위젯) — 상자 없는 위젯의 자식은 화면 좌표라, 화면 판째 당겨 위젯 자리만 보인다.
    위 '> *' 규칙보다 구체적이라 이 자리 지정이 이긴다 */
 .hj-asset > .hj-ofs {
@@ -684,6 +707,9 @@
 .libitem .thumb.domhost {
   padding: 6px;
   overflow: hidden;
+  /* 살아 있는 DOM 썸네일이 수백 개라 화면 밖 것은 그리지 않는다 — 탭을 다시 그리는 시간이 크게 준다.
+     칸 크기는 카드가 정하고, 배율(hjFit)은 data-hjw · hjh 만 읽어 안쪽을 재지 않는다 */
+  content-visibility: auto;
 }
 /* 화면·패널에 넣은 한진 에셋 — 가로에 맞춰 줄이고 높이는 줄어든 만큼만 차지한다 */
 .hj-embed {

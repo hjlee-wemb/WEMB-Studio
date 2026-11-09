@@ -1,0 +1,65 @@
+const img = "https://www.figma.com/api/mcp/asset/498a24dc-cbd9-439b-87e2-940486ddd98f.png";
+const imgBackground = "https://www.figma.com/api/mcp/asset/86bf1e06-82fa-4c27-a2eb-48a4360a314c.png";
+const imgIconCheck = "https://www.figma.com/api/mcp/asset/22ffc4d3-60bb-4bc9-acc9-a0ce7502cabd.svg";
+const imgLogoWembStudio = "https://www.figma.com/api/mcp/asset/56355dd6-5e6b-4448-b6bc-04b7e7ae4bf4.svg";
+
+type ButtonLoginProps = {
+  className?: string;
+  state?: "Default";
+};
+
+function ButtonLogin({ className, state = "Default" }: ButtonLoginProps) {
+  return (
+    <div className={className || "border border-[#2a8dff] border-solid content-stretch flex h-[70.169px] items-center justify-center px-[178px] py-[23px] relative rounded-[16px] w-[408px]"} data-node-id="1:725">
+      <div aria-hidden className="absolute bg-[#3967fd] inset-0 pointer-events-none rounded-[16px]" />
+      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#fffefe] text-[20px] whitespace-nowrap" data-node-id="1:726">
+        로그인
+      </p>
+      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_-1px_64px_0px_rgba(42,141,255,0.5),inset_0px_22.105px_66.316px_0px_rgba(42,141,255,0.7)]" />
+    </div>
+  );
+}
+
+export default function Component() {
+  return (
+    <div className="relative size-full" data-node-id="1:73" data-name="로그인">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <img alt="" className="absolute h-[267.34%] left-[-70.88%] max-w-none top-[-18.65%] w-[263.11%]" src={img} />
+      </div>
+      <div className="absolute h-[1080px] left-0 top-0 w-[1920px]" data-node-id="1:74" data-name="Background">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgBackground} />
+      </div>
+      <div className="absolute h-[414px] left-[715px] pointer-events-none rounded-[26px] shadow-[0px_0px_14px_0px_rgba(176,176,176,0.25)] top-[384px] w-[490px]" data-node-id="1:75" data-name="Login Card">
+        <div aria-hidden className="absolute backdrop-blur-[12px] bg-[rgba(255,255,255,0.5)] inset-0 rounded-[26px]" />
+        <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_4px_14px_0px_rgba(255,255,255,0.7)]" />
+      </div>
+      <div className="absolute content-stretch flex flex-col gap-[13px] h-[123.298px] items-start left-[756px] top-[454.41px] w-[408px]" data-node-id="1:76" data-name="Form">
+        <div className="bg-white border border-[#ddd] border-solid content-stretch flex items-center px-[16px] py-[18px] relative rounded-[6px] shrink-0 w-full" data-node-id="1:77" data-name="Field/ID">
+          <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#999] text-[16px] whitespace-nowrap" data-node-id="1:78">
+            아이디
+          </p>
+        </div>
+        <div className="bg-white border border-[#ddd] border-solid content-stretch flex items-center px-[16px] py-[18px] relative rounded-[6px] shrink-0 w-full" data-node-id="1:79" data-name="Field/Password">
+          <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#999] text-[16px] whitespace-nowrap" data-node-id="1:80">
+            비밀번호
+          </p>
+        </div>
+      </div>
+      <ButtonLogin className="absolute border border-[#2a8dff] border-solid content-stretch flex h-[70.169px] items-center justify-center left-[756px] px-[178px] py-[23px] rounded-[16px] top-[614px] w-[408px]" />
+      <div className="absolute content-stretch flex gap-[7px] items-center left-[756px] top-[720px]" data-node-id="1:82" data-name="Checkbox/Save ID">
+        <div className="relative shrink-0 size-[27px]" data-node-id="I1:82;1:717" data-name="Icon/Check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconCheck} />
+        </div>
+        <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[normal] not-italic relative shrink-0 text-[#666] text-[13px] whitespace-nowrap" data-node-id="I1:82;1:720">
+          아이디 저장
+        </p>
+      </div>
+      <div className="absolute h-[35.854px] left-[830px] top-[173px] w-[259.671px]" data-node-id="23:2773" data-name="Logo/WEMB Studio">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoWembStudio} />
+      </div>
+      <div className="-translate-x-1/2 -translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Pretendard:Bold'] justify-center leading-[0] left-[calc(50%+0.09px)] not-italic text-[#232729] text-[50px] text-center top-[276.31px] whitespace-nowrap" data-node-id="1:104">
+        <p className="leading-[normal]">스마트 도면관리시스템</p>
+      </div>
+    </div>
+  );
+}
