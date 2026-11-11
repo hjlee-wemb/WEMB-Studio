@@ -1,0 +1,976 @@
+const imgStateDefault = "https://www.figma.com/api/mcp/asset/14c53a70-00ed-4b77-a8f5-24fa1d8cfa6f.svg";
+const imgTitleBadge = "https://www.figma.com/api/mcp/asset/8a8b6131-d880-4df3-b2f1-08cb4aeab6a4.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/c2bb25c4-0ce5-4f70-ac15-d3fa3b85b6f1.svg";
+const imgTitleTab = "https://www.figma.com/api/mcp/asset/43ac8a98-42a6-4be7-bb5c-6a86a6a42139.svg";
+const imgHeaderBar = "https://www.figma.com/api/mcp/asset/e8d70331-4971-4544-976f-ef1b2d022c9c.svg";
+const imgCorner = "https://www.figma.com/api/mcp/asset/7b46680e-ce47-4330-8ed5-4d260ce3d7db.svg";
+const imgLeftChip = "https://www.figma.com/api/mcp/asset/9b2d7c74-0937-48ea-b70b-32398e2f0140.svg";
+const imgStatusNormalBg = "https://www.figma.com/api/mcp/asset/a9e42db0-ae63-497b-ace1-9835e899799a.svg";
+const imgStatusWarningBg = "https://www.figma.com/api/mcp/asset/abcb4b65-c00b-4dbb-8d65-6d70fc9462be.svg";
+const imgStatusMinorBg = "https://www.figma.com/api/mcp/asset/6d9ac9f1-11c8-4c94-9948-4c9f75e56788.svg";
+const imgStatusMajorBg = "https://www.figma.com/api/mcp/asset/1045d9af-c264-487b-bf31-543da0f60f4f.svg";
+const imgStatusCriticalBg = "https://www.figma.com/api/mcp/asset/04c7a686-cccb-4d3c-8dfa-e10e4c1cf2ca.svg";
+const imgBooleanFalse = "https://www.figma.com/api/mcp/asset/8d25727d-b4aa-4e41-a802-71de68de6d3b.svg";
+const imgBooleanTrue = "https://www.figma.com/api/mcp/asset/ff3a5831-11f4-4167-b3e6-67d19e233662.svg";
+const imgScreenGasMain = "https://www.figma.com/api/mcp/asset/b852d224-ec7f-440f-abbc-e91d17246e04.png";
+const imgClick = "https://www.figma.com/api/mcp/asset/bf2eb6ce-207d-4b18-8039-e346413e6c5f.png";
+const imgFloorPlan = "https://www.figma.com/api/mcp/asset/a7b140b0-83b0-4a40-99a9-65cb3271aeb8.png";
+const imgBackground1 = "https://www.figma.com/api/mcp/asset/b6bd2fa4-d43e-4da0-aa05-9bea92c6d0c4.svg";
+const imgIconEventArrowDrop = "https://www.figma.com/api/mcp/asset/019ada47-6b41-486f-9748-48ade20b0679.svg";
+const imgRadio = "https://www.figma.com/api/mcp/asset/48971ae0-ee31-4ae8-85a7-3b8ffbb859a4.svg";
+const imgIconEventArrowDrop1 = "https://www.figma.com/api/mcp/asset/13990f7e-484f-4c54-88a6-95bdff55f6e9.svg";
+const imgBackground2 = "https://www.figma.com/api/mcp/asset/b97b246d-376f-4856-bab1-a4f3f2a462d4.svg";
+const imgBtnEventStatusBg = "https://www.figma.com/api/mcp/asset/27e2e9c5-2715-478c-8514-251e4c7e989e.svg";
+const imgBtnEventStatusBg1 = "https://www.figma.com/api/mcp/asset/a0364441-a739-41bc-81df-6e97489ffdf8.svg";
+const imgBtnEventStatusBg2 = "https://www.figma.com/api/mcp/asset/3bd781b4-c6dd-4d12-941a-46656968d650.svg";
+const imgBackground3 = "https://www.figma.com/api/mcp/asset/79e3d075-9dca-4566-b557-40e5fb9100e6.svg";
+const imgMarkerSensor01Minor = "https://www.figma.com/api/mcp/asset/6443981a-d720-4043-b48c-cb0425c740f1.svg";
+const imgMarkerSensor02Normal = "https://www.figma.com/api/mcp/asset/2f9ab6c1-5514-46d9-8243-60aa1871f57c.svg";
+const imgBackground4 = "https://www.figma.com/api/mcp/asset/ece91643-60d4-49a4-8515-cff9a290fae3.svg";
+const imgIconHeaderClock = "https://www.figma.com/api/mcp/asset/ccabebd8-e5d3-46df-80b6-0c7ebd8b45c6.svg";
+
+type NavItemProps = {
+  className?: string;
+  state?: "Selected";
+};
+
+function NavItem({ className, state = "Selected" }: NavItemProps) {
+  return (
+    <div className={className || "content-stretch flex h-[50px] items-center justify-center px-[37px] py-[17px] relative w-[152px]"} data-node-id="61:3342" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 152 50' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-1.0901e-14 4.9 -12.932 -4.2249e-14 76 25)'><stop stop-color='rgba(0,187,255,0)' offset='0.29808'/><stop stop-color='rgba(0,187,255,0.5)' offset='0.8125'/><stop stop-color='rgba(0,187,255,1)' offset='1'/></radialGradient></defs></svg>\")" }}>
+      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-none not-italic relative shrink-0 text-[16px] text-center text-white w-[100px]" data-node-id="61:3033">
+        가스
+      </p>
+    </div>
+  );
+}
+
+type IconHeaderLogoutProps = {
+  className?: string;
+  state?: "Default";
+};
+
+function IconHeaderLogout({ className, state = "Default" }: IconHeaderLogoutProps) {
+  return (
+    <div className={className || "h-[18.542px] relative w-[15.786px]"} data-node-id="61:3717">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStateDefault} />
+    </div>
+  );
+}
+
+function TitleBadge({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[37.528px] relative w-[121.514px]"} data-node-id="60:2750" data-name="Title Badge">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTitleBadge} />
+    </div>
+  );
+}
+
+type WidgetSensorStatusProps = {
+  className?: string;
+  layout?: "Double";
+};
+
+function WidgetSensorStatus({ className, layout = "Double" }: WidgetSensorStatusProps) {
+  return (
+    <div className={className || "h-[301px] relative w-[415px]"} data-node-id="47:1045">
+      <div className="absolute inset-[0.33%_0_0_0]" data-node-id="47:1046" data-name="Background">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground} />
+      </div>
+      <div className="absolute inset-[0.15%_72.29%_86.38%_0]" data-node-id="47:1047" data-name="Title Tab">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTitleTab} />
+      </div>
+      <div className="absolute inset-[0.15%_0.68%_86.38%_0]" data-node-id="47:1048" data-name="Header Bar">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHeaderBar} />
+      </div>
+      <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[4.89%_84.02%_90.45%_4.18%] leading-none not-italic text-[#ddedff] text-[14px] whitespace-nowrap" data-node-id="47:1049">
+        센서현황
+      </p>
+      <div className="absolute inset-[0_0_85.23%_95.38%]" data-node-id="47:1050" data-name="Corner">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCorner} />
+      </div>
+      <div className="absolute inset-[17.55%_2.65%_71.12%_2.65%]" data-node-id="47:1107" data-name="Row/LEL">
+        <div className="absolute inset-[1.5%_84.98%_1.44%_0]" data-node-id="I47:1107;47:1093" data-name="Left Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute inset-[1.5%_34.35%_1.44%_50.63%]" data-node-id="I47:1107;47:1102" data-name="Right Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_50.63%_0_15.02%] rounded-tr-[5px]" data-node-id="I47:1107;47:1094" data-name="Left Value Box" />
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_0_0_65.65%] rounded-tr-[5px]" data-node-id="I47:1107;47:1103" data-name="Right Value Box" />
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[62.87px] top-[13.29px] w-[90px]" data-node-id="I47:1107;3082:2959" data-name="Left Track" />
+        <div className="absolute inset-[38.96%_61.11%_38.96%_16%] pointer-events-none" data-node-id="I47:1107;47:1095" data-name="Left Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 10%, rgba(0, 187, 255, 0) 10%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[261.87px] top-[13.29px] w-[90px]" data-node-id="I47:1107;3082:2960" data-name="Right Track" />
+        <div className="absolute inset-[38.96%_10.47%_38.96%_66.63%] pointer-events-none" data-node-id="I47:1107;47:1104" data-name="Right Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 15%, rgba(0, 187, 255, 0) 15%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_52.88%_32.41%_45.08%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1107;47:1096">
+          2
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_2.25%_32.41%_95.71%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1107;47:1105">
+          3
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_90.07%_32.38%_4.84%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1107;47:1097">
+          LEL
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_39.44%_32.38%_55.47%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1107;47:1106">
+          LEL
+        </p>
+      </div>
+      <div className="absolute inset-[34%_2.65%_54.67%_2.65%]" data-node-id="47:1119" data-name="Row/CO">
+        <div className="absolute inset-[1.5%_84.98%_1.44%_0]" data-node-id="I47:1119;47:1093" data-name="Left Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute inset-[1.5%_34.35%_1.44%_50.63%]" data-node-id="I47:1119;47:1102" data-name="Right Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_50.63%_0_15.02%] rounded-tr-[5px]" data-node-id="I47:1119;47:1094" data-name="Left Value Box" />
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_0_0_65.65%] rounded-tr-[5px]" data-node-id="I47:1119;47:1103" data-name="Right Value Box" />
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[62.87px] top-[13.29px] w-[90px]" data-node-id="I47:1119;3082:2959" data-name="Left Track" />
+        <div className="absolute inset-[38.96%_61.11%_38.96%_16%] pointer-events-none" data-node-id="I47:1119;47:1095" data-name="Left Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 12%, rgba(0, 187, 255, 0) 12%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[261.87px] top-[13.29px] w-[90px]" data-node-id="I47:1119;3082:2960" data-name="Right Track" />
+        <div className="absolute inset-[38.96%_10.47%_38.96%_66.63%] pointer-events-none" data-node-id="I47:1119;47:1104" data-name="Right Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 18%, rgba(0, 187, 255, 0) 18%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_52.88%_32.41%_43.81%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1119;47:1096">
+          12
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_2.25%_32.41%_94.19%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1119;47:1105">
+          18
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_90.33%_32.38%_5.09%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1119;47:1097">
+          CO
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_39.7%_32.38%_55.72%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1119;47:1106">
+          CO
+        </p>
+      </div>
+      <div className="absolute inset-[50.45%_2.65%_38.23%_2.65%]" data-node-id="47:1130" data-name="Row/H25">
+        <div className="absolute inset-[1.5%_84.98%_1.44%_0]" data-node-id="I47:1130;47:1093" data-name="Left Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute inset-[1.5%_34.35%_1.44%_50.63%]" data-node-id="I47:1130;47:1102" data-name="Right Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_50.63%_0_15.02%] rounded-tr-[5px]" data-node-id="I47:1130;47:1094" data-name="Left Value Box" />
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_0_0_65.65%] rounded-tr-[5px]" data-node-id="I47:1130;47:1103" data-name="Right Value Box" />
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[62.87px] top-[13.29px] w-[90px]" data-node-id="I47:1130;3082:2959" data-name="Left Track" />
+        <div className="absolute inset-[38.96%_61.11%_38.96%_16%] pointer-events-none" data-node-id="I47:1130;47:1095" data-name="Left Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 4%, rgba(0, 187, 255, 0) 4%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[261.87px] top-[13.29px] w-[90px]" data-node-id="I47:1130;3082:2960" data-name="Right Track" />
+        <div className="absolute inset-[38.96%_10.47%_38.96%_66.63%] pointer-events-none" data-node-id="I47:1130;47:1104" data-name="Right Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 7%, rgba(0, 187, 255, 0) 7%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_52.88%_32.41%_42.28%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1130;47:1096">
+          0.4
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_2.25%_32.41%_93.17%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1130;47:1105">
+          0.7
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_89.56%_32.38%_4.33%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1130;47:1097">
+          H2S
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_38.93%_32.38%_54.96%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1130;47:1106">
+          H2S
+        </p>
+      </div>
+      <div className="absolute inset-[66.89%_2.65%_21.78%_2.65%]" data-node-id="47:1141" data-name="Row/O2">
+        <div className="absolute inset-[1.5%_84.98%_1.44%_0]" data-node-id="I47:1141;47:1093" data-name="Left Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute inset-[1.5%_34.35%_1.44%_50.63%]" data-node-id="I47:1141;47:1102" data-name="Right Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_50.63%_0_15.02%] rounded-tr-[5px]" data-node-id="I47:1141;47:1094" data-name="Left Value Box" />
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_0_0_65.65%] rounded-tr-[5px]" data-node-id="I47:1141;47:1103" data-name="Right Value Box" />
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[62.87px] top-[13.29px] w-[90px]" data-node-id="I47:1141;3082:2959" data-name="Left Track" />
+        <div className="absolute inset-[38.96%_61.11%_38.96%_16%] pointer-events-none" data-node-id="I47:1141;47:1095" data-name="Left Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 83.6%, rgba(0, 187, 255, 0) 83.6%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[261.87px] top-[13.29px] w-[90px]" data-node-id="I47:1141;3082:2960" data-name="Right Track" />
+        <div className="absolute inset-[38.96%_10.47%_38.96%_66.63%] pointer-events-none" data-node-id="I47:1141;47:1104" data-name="Right Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 83.2%, rgba(0, 187, 255, 0) 83.2%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_52.88%_32.41%_40.5%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1141;47:1096">
+          20.9
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_2.25%_32.41%_91.13%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1141;47:1105">
+          20.8
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_90.33%_32.38%_5.35%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1141;47:1097">
+          O2
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_39.7%_32.38%_55.98%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1141;47:1106">
+          O2
+        </p>
+      </div>
+      <div className="absolute inset-[83.34%_2.65%_5.33%_2.65%]" data-node-id="47:1152" data-name="Row/CO2">
+        <div className="absolute inset-[1.5%_84.98%_1.44%_0]" data-node-id="I47:1152;47:1093" data-name="Left Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute inset-[1.5%_34.35%_1.44%_50.63%]" data-node-id="I47:1152;47:1102" data-name="Right Chip">
+          <div className="absolute inset-[-1.51%_-0.85%]">
+            <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+          </div>
+        </div>
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_50.63%_0_15.02%] rounded-tr-[5px]" data-node-id="I47:1152;47:1094" data-name="Left Value Box" />
+        <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_0_0_65.65%] rounded-tr-[5px]" data-node-id="I47:1152;47:1103" data-name="Right Value Box" />
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[62.87px] top-[13.29px] w-[90px]" data-node-id="I47:1152;3082:2959" data-name="Left Track" />
+        <div className="absolute inset-[38.96%_61.11%_38.96%_16%] pointer-events-none" data-node-id="I47:1152;47:1095" data-name="Left Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 34.667%, rgba(0, 187, 255, 0) 34.667%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <div className="absolute bg-[#0c2977] h-[7.527px] left-[261.87px] top-[13.29px] w-[90px]" data-node-id="I47:1152;3082:2960" data-name="Right Track" />
+        <div className="absolute inset-[38.96%_10.47%_38.96%_66.63%] pointer-events-none" data-node-id="I47:1152;47:1104" data-name="Right Meter">
+          <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 40.667%, rgba(0, 187, 255, 0) 40.667%, rgba(0, 187, 255, 0) 100%)" }} />
+          <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+        </div>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_52.88%_32.41%_41.27%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1152;47:1096">
+          520
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_2.25%_32.41%_92.41%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I47:1152;47:1105">
+          610
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_89.31%_32.38%_4.33%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1152;47:1097">
+          CO2
+        </p>
+        <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_38.68%_32.38%_54.96%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I47:1152;47:1106">
+          CO2
+        </p>
+      </div>
+      <div className="absolute contents inset-[6.89%_43.91%_86.45%_36.58%]" data-node-id="47:1056" data-name="Tab/GAS#1 (Active)">
+        <div className="absolute bg-[#5593ce] inset-[12.89%_43.91%_86.45%_36.58%]" data-node-id="47:1057" data-name="Indicator" />
+        <p className="[word-break:break-word] absolute font-['Pretendard:Medium'] inset-[6.89%_49.21%_89.13%_41.88%] leading-none not-italic text-[12px] text-center text-white whitespace-nowrap" data-node-id="47:1058">
+          GAS#1
+        </p>
+      </div>
+      <div className="absolute contents inset-[6.89%_43.91%_86.45%_36.58%]" data-node-id="47:1059" data-name="Tab/GAS#1 (Active)">
+        <div className="absolute bg-[#5593ce] inset-[12.89%_43.91%_86.45%_36.58%]" data-node-id="47:1060" data-name="Indicator" />
+        <p className="[word-break:break-word] absolute font-['Pretendard:Medium'] inset-[6.89%_49.21%_89.13%_41.88%] leading-none not-italic text-[12px] text-center text-white whitespace-nowrap" data-node-id="47:1061">
+          GAS#1
+        </p>
+      </div>
+      <div className="absolute contents inset-[6.89%_27.22%_89.13%_63.39%]" data-node-id="47:1062" data-name="Tab/GAS#2">
+        <p className="[word-break:break-word] absolute font-['Pretendard:Medium'] inset-[6.89%_27.22%_89.13%_63.39%] leading-none not-italic text-[12px] text-center text-white whitespace-nowrap" data-node-id="47:1063">
+          GAS#2
+        </p>
+      </div>
+      <div className="absolute contents inset-[6.89%_5.47%_89.13%_85.14%]" data-node-id="47:1064" data-name="Tab/GAS#3">
+        <p className="[word-break:break-word] absolute font-['Pretendard:Medium'] inset-[6.89%_5.47%_89.13%_85.14%] leading-none not-italic text-[12px] text-center text-white whitespace-nowrap" data-node-id="47:1065">
+          GAS#3
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type BulbProps = {
+  className?: string;
+  property1?: "bulb-critical" | "bulb-major" | "bulb-minor" | "bulb-normal" | "bulb-warning";
+};
+
+function Bulb({ className, property1 = "bulb-critical" }: BulbProps) {
+  const isBulbCritical = property1 === "bulb-critical";
+  const isBulbMajor = property1 === "bulb-major";
+  const isBulbMinor = property1 === "bulb-minor";
+  const isBulbWarning = property1 === "bulb-warning";
+  return (
+    <div className={className || "relative size-[10px]"} id={isBulbMinor ? "node-34_947" : isBulbWarning ? "node-34_942" : isBulbMajor ? "node-34_937" : isBulbCritical ? "node-34_932" : "node-34_927"}>
+      <div className={`absolute rounded-[9.88px] ${isBulbMinor ? "inset-[0.79%_0.78%_0.78%_0.78%] shadow-[0.988px_1.482px_3.952px_0px_rgba(245,195,0,0.2),-0.988px_-1.482px_3.952px_0px_rgba(245,159,80,0.5)]" : isBulbWarning ? "inset-[0.79%_0.78%_0.78%_0.78%] shadow-[0.988px_1.482px_3.952px_0px_rgba(17,168,253,0.2),-0.988px_-1.482px_3.952px_0px_#094465]" : isBulbMajor ? "inset-[0.79%_0.78%_0.78%_0.78%] shadow-[0.988px_1.482px_3.952px_0px_rgba(252,127,1,0.2),-0.988px_-1.482px_3.952px_0px_rgba(252,89,1,0.5)]" : isBulbCritical ? "inset-[0.79%_0.78%_0.78%_0.78%] shadow-[0.988px_1.482px_3.952px_0px_rgba(244,48,80,0.2),-0.988px_-1.482px_3.952px_0px_rgba(218,19,22,0.5)]" : "inset-[0.79%_0.78%_0.77%_0.78%] shadow-[0.988px_1.482px_3.952px_0px_rgba(236,236,236,0.1),-0.988px_-1.482px_3.952px_0px_rgba(145,145,145,0.05)]"}`} id={isBulbMinor ? "node-34_948" : isBulbWarning ? "node-34_943" : isBulbMajor ? "node-34_938" : isBulbCritical ? "node-34_933" : "node-34_928"} style={isBulbMinor ? { backgroundImage: "linear-gradient(-41.794772459968044deg, rgb(245, 195, 0) 14.045%, rgb(245, 159, 80) 85.291%)" } : isBulbWarning ? { backgroundImage: "linear-gradient(-41.794772459968044deg, rgb(17, 168, 253) 14.045%, rgb(0, 129, 201) 85.291%)" } : isBulbMajor ? { backgroundImage: "linear-gradient(-41.794772459968044deg, rgb(252, 127, 1) 14.045%, rgb(252, 89, 1) 85.291%)" } : isBulbCritical ? { backgroundImage: "linear-gradient(-41.79476970188031deg, rgb(244, 48, 80) 14.045%, rgb(218, 19, 22) 85.291%)" } : { backgroundImage: "linear-gradient(-41.794772459968044deg, rgb(236, 236, 236) 14.045%, rgb(126, 126, 126) 85.291%)" }} />
+      <div className="absolute blur-[0.049px] inset-0 rounded-[9.88px]" id={isBulbMinor ? "node-34_949" : isBulbWarning ? "node-34_944" : isBulbMajor ? "node-34_939" : isBulbCritical ? "node-34_934" : "node-34_929"} style={isBulbMinor ? { backgroundImage: "linear-gradient(-39.34050551265122deg, rgb(245, 195, 0) 14.752%, rgb(245, 159, 80) 84.809%)" } : isBulbWarning ? { backgroundImage: "linear-gradient(-39.34050551265122deg, rgb(17, 168, 253) 14.752%, rgb(0, 129, 201) 84.809%)" } : isBulbMajor ? { backgroundImage: "linear-gradient(-39.34050551265122deg, rgb(252, 127, 1) 14.752%, rgb(252, 89, 1) 84.809%)" } : isBulbCritical ? { backgroundImage: "linear-gradient(-39.34050551265355deg, rgb(244, 48, 80) 14.752%, rgb(218, 19, 22) 84.809%)" } : { backgroundImage: "linear-gradient(-39.34050551265122deg, rgb(236, 236, 236) 14.752%, rgb(126, 126, 126) 84.809%)" }} />
+      <div className={`absolute border-[0.099px] border-solid inset-[3.13%_3.13%_3.12%_3.12%] rounded-[9.88px] ${isBulbMinor ? "border-[#f5c300]" : isBulbWarning ? "border-[#058dd9]" : isBulbMajor ? "border-[#fc7f01]" : isBulbCritical ? "border-[#da1316]" : "border-[#919191]"}`} id={isBulbMinor ? "node-34_950" : isBulbWarning ? "node-34_945" : isBulbMajor ? "node-34_940" : isBulbCritical ? "node-34_935" : "node-34_930"} style={isBulbMinor ? { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(245, 159, 80) 14.752%, rgb(245, 195, 0) 84.809%)" } : isBulbWarning ? { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(0, 94, 163) 14.752%, rgb(17, 168, 253) 84.809%)" } : isBulbMajor ? { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(252, 89, 1) 14.752%, rgb(252, 127, 1) 84.809%)" } : isBulbCritical ? { backgroundImage: "linear-gradient(-39.34050211933365deg, rgb(218, 19, 22) 14.752%, rgb(244, 48, 80) 84.809%)" } : { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(126, 126, 126) 14.752%, rgb(236, 236, 236) 84.809%)" }} />
+      <div className="absolute blur-[0.049px] inset-[3.13%_3.13%_3.12%_3.12%] rounded-[9.88px]" id={isBulbMinor ? "node-34_951" : isBulbWarning ? "node-34_946" : isBulbMajor ? "node-34_941" : isBulbCritical ? "node-34_936" : "node-34_931"} style={isBulbMinor ? { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(245, 159, 80) 14.752%, rgb(245, 195, 0) 84.809%)" } : isBulbWarning ? { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(0, 94, 163) 14.752%, rgb(17, 168, 253) 84.809%)" } : isBulbMajor ? { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(252, 89, 1) 14.752%, rgb(252, 127, 1) 84.809%)" } : isBulbCritical ? { backgroundImage: "linear-gradient(-39.34050211933365deg, rgb(218, 19, 22) 14.752%, rgb(244, 48, 80) 84.809%)" } : { backgroundImage: "linear-gradient(-39.340502119330154deg, rgb(126, 126, 126) 14.752%, rgb(195, 195, 195) 84.809%)" }} />
+    </div>
+  );
+}
+
+function StatusNormal({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative w-[78px]"} data-node-id="34:992" data-name="status-normal">
+      <div className="absolute h-[22px] left-0 top-0 w-[78px]" data-node-id="34:993" data-name="status-normal-bg">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusNormalBg} />
+      </div>
+      <div className="content-stretch flex gap-[4px] items-center relative shrink-0 w-[52px]" data-node-id="34:996" data-name="status">
+        <Bulb className="flex items-center justify-center relative shrink-0" property1="bulb-normal" />
+        <div className="content-stretch flex items-center justify-center relative shrink-0 w-[38px]" data-node-id="34:998" data-name="txt">
+          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-[1_0_0] flex-col font-['Pretendard:Regular'] justify-center leading-[0] min-w-px not-italic relative text-[10px] text-center text-white" data-node-id="34:999">
+            <p className="leading-none">Normal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusWarning({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative w-[78px]"} data-node-id="34:982" data-name="status-warning">
+      <div className="absolute h-[22px] left-0 top-0 w-[78px]" data-node-id="34:983" data-name="status-warning-bg">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusWarningBg} />
+      </div>
+      <div className="content-stretch flex gap-[4px] items-center relative shrink-0 w-[52px]" data-node-id="34:986" data-name="status">
+        <Bulb className="flex items-center justify-center relative shrink-0" property1="bulb-warning" />
+        <div className="content-stretch flex items-center justify-center relative shrink-0 w-[38px]" data-node-id="34:988" data-name="txt">
+          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-[1_0_0] flex-col font-['Pretendard:Regular'] justify-center leading-[0] min-w-px not-italic relative text-[10px] text-center text-white" data-node-id="34:989">
+            <p className="leading-none">Warning</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusMinor({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative w-[78px]"} data-node-id="34:972" data-name="status-minor">
+      <div className="absolute h-[22px] left-0 top-0 w-[78px]" data-node-id="34:973" data-name="status-minor-bg">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusMinorBg} />
+      </div>
+      <div className="content-stretch flex gap-[4px] items-center relative shrink-0 w-[52px]" data-node-id="34:976" data-name="status">
+        <Bulb className="flex items-center justify-center relative shrink-0" property1="bulb-minor" />
+        <div className="content-stretch flex items-center justify-center relative shrink-0 w-[38px]" data-node-id="34:978" data-name="txt">
+          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-[1_0_0] flex-col font-['Pretendard:Regular'] justify-center leading-[0] min-w-px not-italic relative text-[10px] text-center text-white" data-node-id="34:979">
+            <p className="leading-none">Minor</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusMajor({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative w-[78px]"} data-node-id="34:962" data-name="status-major">
+      <div className="absolute h-[22px] left-0 top-0 w-[78px]" data-node-id="34:963" data-name="status-major-bg">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusMajorBg} />
+      </div>
+      <div className="content-stretch flex gap-[4px] items-center relative shrink-0 w-[52px]" data-node-id="34:966" data-name="status">
+        <Bulb className="flex items-center justify-center relative shrink-0" property1="bulb-major" />
+        <div className="content-stretch flex items-center justify-center relative shrink-0 w-[38px]" data-node-id="34:968" data-name="txt">
+          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-[1_0_0] flex-col font-['Pretendard:Regular'] justify-center leading-[0] min-w-px not-italic relative text-[10px] text-center text-white" data-node-id="34:969">
+            <p className="leading-none">Major</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusCritical({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative w-[78px]"} data-node-id="34:952" data-name="status-critical">
+      <div className="absolute h-[22px] left-0 top-0 w-[78px]" data-node-id="34:953" data-name="status-critical-bg">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusCriticalBg} />
+      </div>
+      <div className="content-stretch flex gap-[4px] items-center relative shrink-0 w-[52px]" data-node-id="34:956" data-name="status">
+        <Bulb className="flex items-center justify-center relative shrink-0" />
+        <div className="content-stretch flex items-center justify-center relative shrink-0 w-[38px]" data-node-id="34:958" data-name="txt">
+          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-[1_0_0] flex-col font-['Pretendard:Regular'] justify-center leading-[0] min-w-px not-italic relative text-[10px] text-center text-white" data-node-id="34:959">
+            <p className="leading-none">Critical</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type IconAudioProps = {
+  className?: string;
+  boolean?: boolean;
+};
+
+function IconAudio({ className, boolean = false }: IconAudioProps) {
+  const isBoolean = boolean;
+  return (
+    <button className={className || "block relative size-[12px]"} id={isBoolean ? "node-34_729" : "node-34_726"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBoolean ? imgBooleanTrue : imgBooleanFalse} />
+    </button>
+  );
+}
+
+export default function ScreenGasMain() {
+  return (
+    <div className="content-stretch flex flex-col items-start relative size-full" data-node-id="3059:3990" data-name="Screen/Gas Main">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgScreenGasMain} />
+      <div className="absolute content-stretch flex flex-col h-[88px] items-start left-0 overflow-clip pt-[30px] px-[55px] top-[993px] w-[1920px]" data-node-id="3070:1950" data-name="Event Log">
+        <div className="grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0 w-full" data-node-id="I3070:1950;34:1001" data-name="Panel">
+          <div className="col-1 h-[267px] ml-0 mt-0 relative row-1 w-full" data-node-id="I3070:1950;34:1002" data-name="Background">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground1} />
+          </div>
+          <div className="col-1 content-stretch flex flex-col gap-[12px] h-[224px] items-center ml-[1.44%] mt-[18.36px] relative row-1 w-[97.23%]" data-node-id="I3070:1950;34:1005" data-name="Body">
+            <div className="content-stretch flex h-[26px] items-center justify-between relative shrink-0 w-full" data-node-id="I3070:1950;34:1006" data-name="Toolbar">
+              <div className="content-stretch flex gap-[22px] items-center relative shrink-0 w-[219px]" data-node-id="I3070:1950;34:1007" data-name="Title Group">
+                <div className="content-stretch flex gap-[10px] items-center relative shrink-0" data-node-id="I3070:1950;34:1008" data-name="Title">
+                  <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="I3070:1950;34:1009" data-name="Text Wrap">
+                    <div className="border-2 border-solid border-white relative rounded-[15.904px] shadow-[0px_0px_2.8px_0px_white,0px_0px_2.8px_0px_rgba(255,255,255,0.25)] shrink-0 size-[11px]" data-node-id="I3070:1950;34:1010" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 11 11' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(0.38245 0.38245 -0.38245 0.38245 5.5 5.5)'><stop stop-color='rgba(0,0,0,0.5)' offset='0.475'/><stop stop-color='rgba(16,16,16,0.53125)' offset='0.50781'/><stop stop-color='rgba(32,32,32,0.5625)' offset='0.54062'/><stop stop-color='rgba(64,64,64,0.625)' offset='0.60625'/><stop stop-color='rgba(96,96,96,0.6875)' offset='0.67187'/><stop stop-color='rgba(128,128,128,0.75)' offset='0.7375'/><stop stop-color='rgba(159,159,159,0.8125)' offset='0.80312'/><stop stop-color='rgba(191,191,191,0.875)' offset='0.86875'/><stop stop-color='rgba(255,255,255,1)' offset='1'/></radialGradient></defs></svg>\"), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%)" }} data-name="Marker" />
+                    <p className="[word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[14px] text-white whitespace-nowrap" data-node-id="I3070:1950;34:1011">
+                      이벤트 현황
+                    </p>
+                  </div>
+                  <IconAudio boolean className="block cursor-pointer relative shrink-0 size-[12px]" />
+                </div>
+                <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="I3070:1950;34:1013" data-name="Dropdown/Auto">
+                  <div className="h-[22px] relative shrink-0 w-[66px]" data-node-id="I3070:1950;34:1014" data-name="Icon/Event/Arrow Drop">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconEventArrowDrop} />
+                    <div className="absolute content-stretch flex gap-[7px] inset-[22.73%_16.67%] items-center" data-node-id="I3070:1950;34:1014;345:7210" data-name="btn-txt">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="I3070:1950;34:1014;345:7211" data-name="radio">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRadio} />
+                      </div>
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-none not-italic relative shrink-0 text-[11px] text-white whitespace-nowrap" data-node-id="I3070:1950;34:1014;345:7213">
+                        Auto
+                      </p>
+                    </div>
+                  </div>
+                  <div className="relative shrink-0 size-[22px]" data-node-id="I3070:1950;34:1015" data-name="Icon/Event/Arrow Drop">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconEventArrowDrop1} />
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[9px] items-center justify-end relative shrink-0" data-node-id="I3070:1950;34:1016" data-name="Filter Group">
+                <div className="content-stretch flex gap-[10px] h-[24px] items-center justify-center px-[17px] py-[6px] relative shrink-0" data-node-id="I3070:1950;34:1017" data-name="Button/Ack">
+                  <div className="absolute h-[24px] left-0 top-0 w-[57px]" data-node-id="I3070:1950;34:1017;347:43003" data-name="Background">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground2} />
+                  </div>
+                  <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[13px] text-[rgba(255,255,255,0.9)] text-center whitespace-nowrap" data-node-id="I3070:1950;34:1017;347:43006">
+                    <p className="leading-none">Ack</p>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-col gap-[5px] h-[25px] items-center justify-end px-[12px] relative shrink-0 w-[100px]" data-node-id="I3070:1950;34:1018" data-name="Count/Critical">
+                  <div className="absolute h-[25px] left-0 top-0 w-[100px]" data-node-id="I3070:1950;34:1018;347:43038" data-name="btn-event-status-bg">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBtnEventStatusBg} />
+                  </div>
+                  <div className="content-stretch flex h-[12px] items-center justify-between leading-[0] relative shrink-0 w-[76px]" data-node-id="I3070:1950;34:1018;347:43027" data-name="event_txt">
+                    <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="I3070:1950;34:1018;347:43028" data-name="status">
+                      <div className="flex items-center justify-center relative shrink-0" data-node-id="I3070:1950;34:1018;347:43029">
+                        <div className="flex-none rotate-180">
+                          <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative" data-name="btn bg">
+                            <div className="col-1 ml-[0.09px] mt-[0.09px] relative rounded-[9.88px] row-1 shadow-[0.988px_1.482px_3.952px_0px_rgba(244,48,80,0.2),-0.988px_-1.482px_3.952px_0px_rgba(218,19,22,0.5)] size-[11.812px]" data-node-id="I3070:1950;34:1018;347:43030" style={{ backgroundImage: "linear-gradient(-41.79477337933122deg, rgb(244, 48, 80) 14.045%, rgb(218, 19, 22) 85.291%)" }} data-name="cr_circle1" />
+                            <div className="blur-[0.049px] col-1 ml-0 mt-0 relative rounded-[9.88px] row-1 size-[12px]" data-node-id="I3070:1950;34:1018;347:43031" style={{ backgroundImage: "linear-gradient(-39.340506852119546deg, rgb(244, 48, 80) 14.752%, rgb(218, 19, 22) 84.809%)" }} data-name="cr_circle2" />
+                            <div className="border-[#da1316] border-[0.099px] border-solid col-1 ml-[0.37px] mt-[0.38px] relative rounded-[9.88px] row-1 size-[11.25px]" data-node-id="I3070:1950;34:1018;347:43032" style={{ backgroundImage: "linear-gradient(-39.34050402435224deg, rgb(218, 19, 22) 14.752%, rgb(244, 48, 80) 84.809%)" }} data-name="cr_circle3" />
+                            <div className="blur-[0.049px] col-1 ml-[0.37px] mt-[0.38px] relative rounded-[9.88px] row-1 size-[11.25px]" data-node-id="I3070:1950;34:1018;347:43033" style={{ backgroundImage: "linear-gradient(-39.34050402435224deg, rgb(218, 19, 22) 14.752%, rgb(244, 48, 80) 84.809%)" }} data-name="cr_circle4" />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center not-italic relative shrink-0 text-[12px] text-white whitespace-nowrap" data-node-id="I3070:1950;34:1018;347:43034">
+                        <p className="leading-none">CR</p>
+                      </div>
+                    </div>
+                    <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center not-italic relative shrink-0 text-[12px] text-right text-white whitespace-nowrap" data-node-id="I3070:1950;34:1018;347:43035">
+                      <p className="leading-none">2</p>
+                    </div>
+                  </div>
+                  <div className="h-[2px] relative rounded-tl-[39.05px] rounded-tr-[39.05px] shrink-0 w-[74px]" data-node-id="I3070:1950;34:1018;347:43036" data-name="click">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-tl-[39.05px] rounded-tr-[39.05px] size-full" src={imgClick} />
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-col gap-[5px] h-[25px] items-center justify-center px-[12px] relative shrink-0 w-[100px]" data-node-id="I3070:1950;34:1020" data-name="Count/Minor">
+                  <div className="absolute h-[25px] left-0 top-0 w-[100px]" data-node-id="I3070:1950;34:1020;355:5261" data-name="btn-event-status-bg">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBtnEventStatusBg1} />
+                  </div>
+                  <div className="content-stretch flex flex-col items-center justify-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1020;355:5264" data-name="mi">
+                    <div className="content-stretch flex items-center justify-between leading-[0] relative shrink-0 w-full" data-node-id="I3070:1950;34:1020;355:5265" data-name="event_txt">
+                      <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="I3070:1950;34:1020;355:5266" data-name="status">
+                        <div className="flex items-center justify-center relative shrink-0" data-node-id="I3070:1950;34:1020;355:5267">
+                          <div className="flex-none rotate-180">
+                            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative" data-name="btn bg">
+                              <div className="col-1 ml-[0.09px] mt-[0.09px] relative rounded-[9.88px] row-1 shadow-[0.988px_1.482px_3.952px_0px_rgba(245,195,0,0.2),-0.988px_-1.482px_3.952px_0px_rgba(245,159,80,0.5)] size-[11.812px]" data-node-id="I3070:1950;34:1020;355:5268" style={{ backgroundImage: "linear-gradient(-41.79477337933122deg, rgb(245, 195, 0) 14.045%, rgb(245, 159, 80) 85.291%)" }} data-name="mi_circle1" />
+                              <div className="blur-[0.049px] col-1 ml-0 mt-0 relative rounded-[9.88px] row-1 size-[12px]" data-node-id="I3070:1950;34:1020;355:5269" style={{ backgroundImage: "linear-gradient(-39.340506852119546deg, rgb(245, 195, 0) 14.752%, rgb(245, 159, 80) 84.809%)" }} data-name="mi_circle2" />
+                              <div className="border-[#f5c300] border-[0.099px] border-solid col-1 ml-[0.37px] mt-[0.38px] relative rounded-[9.88px] row-1 size-[11.25px]" data-node-id="I3070:1950;34:1020;355:5270" style={{ backgroundImage: "linear-gradient(-39.34050402435224deg, rgb(245, 159, 80) 14.752%, rgb(245, 195, 0) 84.809%)" }} data-name="mi_circle3" />
+                              <div className="blur-[0.049px] col-1 ml-[0.37px] mt-[0.38px] relative rounded-[9.88px] row-1 size-[11.25px]" data-node-id="I3070:1950;34:1020;355:5271" style={{ backgroundImage: "linear-gradient(-39.34050402435224deg, rgb(245, 159, 80) 14.752%, rgb(245, 195, 0) 84.809%)" }} data-name="mi_circle4" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center not-italic relative shrink-0 text-[12px] text-white whitespace-nowrap" data-node-id="I3070:1950;34:1020;355:5272">
+                          <p className="leading-none">MI</p>
+                        </div>
+                      </div>
+                      <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center not-italic relative shrink-0 text-[12px] text-right text-white whitespace-nowrap" data-node-id="I3070:1950;34:1020;355:5273">
+                        <p className="leading-none">3</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-col gap-[5px] h-[25px] items-center justify-end px-[12px] relative shrink-0 w-[100px]" data-node-id="I3070:1950;34:1022" data-name="Count/Normal">
+                  <div className="absolute h-[25px] left-0 top-0 w-[100px]" data-node-id="I3070:1950;34:1022;347:43137" data-name="btn-event-status-bg">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBtnEventStatusBg2} />
+                  </div>
+                  <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I3070:1950;34:1022;359:7144" data-name="event_no">
+                    <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I3070:1950;34:1022;358:5422" data-name="group">
+                      <div className="content-stretch flex items-center justify-between leading-[0] relative shrink-0 w-full" data-node-id="I3070:1950;34:1022;358:5423" data-name="event_txt">
+                        <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="I3070:1950;34:1022;358:5424" data-name="status">
+                          <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid place-items-start relative shrink-0" data-node-id="I3070:1950;34:1022;358:6650" data-name="btn bg">
+                            <div className="col-1 flex items-center justify-center ml-[0.09px] mt-[0.09px] relative row-1 size-[11.812px]" data-node-id="I3070:1950;34:1022;358:6403">
+                              <div className="flex-none rotate-180">
+                                <div className="relative rounded-[9.88px] shadow-[0.988px_1.482px_3.952px_0px_rgba(236,236,236,0.1),-0.988px_-1.482px_3.952px_0px_rgba(145,145,145,0.05)] size-[11.812px]" style={{ backgroundImage: "linear-gradient(-41.79477337933122deg, rgb(236, 236, 236) 14.045%, rgb(126, 126, 126) 85.291%)" }} data-name="no_circle1" />
+                              </div>
+                            </div>
+                            <div className="col-1 flex items-center justify-center ml-0 mt-0 relative row-1 size-[12px]" data-node-id="I3070:1950;34:1022;358:6404">
+                              <div className="flex-none rotate-180">
+                                <div className="blur-[0.049px] relative rounded-[9.88px] size-[12px]" style={{ backgroundImage: "linear-gradient(-39.340504619672345deg, rgb(236, 236, 236) 14.752%, rgb(126, 126, 126) 84.809%)" }} data-name="no_circle2" />
+                              </div>
+                            </div>
+                            <div className="col-1 flex items-center justify-center ml-[0.38px] mt-[0.37px] relative row-1 size-[11.25px]" data-node-id="I3070:1950;34:1022;358:6405">
+                              <div className="flex-none rotate-180">
+                                <div className="border-[#919191] border-[0.099px] border-solid relative rounded-[9.88px] size-[11.25px]" style={{ backgroundImage: "linear-gradient(-39.340504024351446deg, rgb(126, 126, 126) 14.752%, rgb(236, 236, 236) 84.809%)" }} data-name="no_circle3" />
+                              </div>
+                            </div>
+                            <div className="col-1 flex items-center justify-center ml-[0.38px] mt-[0.37px] relative row-1 size-[11.25px]" data-node-id="I3070:1950;34:1022;358:6406">
+                              <div className="flex-none rotate-180">
+                                <div className="blur-[0.049px] relative rounded-[9.88px] size-[11.25px]" style={{ backgroundImage: "linear-gradient(-39.340504024351446deg, rgb(126, 126, 126) 14.752%, rgb(195, 195, 195) 84.809%)" }} data-name="no_circle4" />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center not-italic relative shrink-0 text-[12px] text-white whitespace-nowrap" data-node-id="I3070:1950;34:1022;358:5430">
+                            <p className="leading-none">NO</p>
+                          </div>
+                        </div>
+                        <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center not-italic relative shrink-0 text-[12px] text-right text-white whitespace-nowrap" data-node-id="I3070:1950;34:1022;358:5431">
+                          <p className="leading-none">3</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="h-[2px] relative rounded-tl-[39.05px] rounded-tr-[39.05px] shrink-0 w-[74px]" data-node-id="I3070:1950;34:1022;355:6395" data-name="click">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-tl-[39.05px] rounded-tr-[39.05px] size-full" src={imgClick} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col gap-[2px] h-[186px] items-start relative shrink-0 w-full" data-node-id="I3070:1950;34:1023" data-name="Table">
+              <div className="content-stretch flex flex-col h-[24px] items-start relative shrink-0 w-[1758px]" data-node-id="I3070:1950;34:1024" data-name="Header Row">
+                <div className="h-[24px] relative shrink-0 w-[1758px]" data-node-id="I3070:1950;34:1025" data-name="Background">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground3} />
+                </div>
+                <div className="absolute content-stretch flex h-[22px] items-center left-[-0.19px] top-[0.64px]" data-node-id="I3070:1950;34:1028" data-name="Cells">
+                  <div className="content-stretch flex gap-[64px] items-center relative shrink-0" data-node-id="I3070:1950;34:1029" data-name="Th/Grade">
+                    <div className="h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1030" data-name="Divider" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c9c6ce] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1031">
+                      등급
+                    </p>
+                    <div className="bg-[#c9c6ce] h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1032" data-name="Divider" />
+                  </div>
+                  <div className="content-stretch flex gap-[94px] items-center relative shrink-0" data-node-id="I3070:1950;34:1033" data-name="Th/Device Name">
+                    <div className="h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1034" data-name="Divider" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c9c6ce] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1035">
+                      장비명
+                    </p>
+                    <div className="bg-[#c9c6ce] h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1036" data-name="Divider" />
+                  </div>
+                  <div className="content-stretch flex gap-[94px] items-center relative shrink-0" data-node-id="I3070:1950;34:1037" data-name="Th/Event Type">
+                    <div className="h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1038" data-name="Divider" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c9c6ce] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1039">
+                      이벤트 타입
+                    </p>
+                    <div className="bg-[#c9c6ce] h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1040" data-name="Divider" />
+                  </div>
+                  <div className="content-stretch flex gap-[94px] items-center relative shrink-0" data-node-id="I3070:1950;34:1041" data-name="Th/Occurred At">
+                    <div className="h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1042" data-name="Divider" />
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c9c6ce] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1043">
+                      발생일시
+                    </p>
+                    <div className="bg-[#c9c6ce] h-[12px] relative shrink-0 w-px" data-node-id="I3070:1950;34:1044" data-name="Divider" />
+                  </div>
+                  <div className="content-stretch flex h-[24px] items-center justify-center px-[10px] py-[9px] relative shrink-0 w-[908px]" data-node-id="I3070:1950;34:1045" data-name="Th/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c9c6ce] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1046">
+                      이벤트 내용
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I3070:1950;34:1047" data-name="List">
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1048" data-name="Row/1">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1049" data-name="Td/Grade">
+                    <StatusCritical className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1051" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1052">
+                      GD-B2-014
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1053" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1054">
+                      가스 농도
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1055" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1056">
+                      2026-11-11 14:31:47
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1057" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1058">
+                      CO 농도 2단계 경보 (212 ppm)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1059" data-name="Row/2">
+                  <div className="content-stretch flex flex-col gap-[10px] h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1060" data-name="Td/Grade">
+                    <div className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" data-node-id="I3070:1950;45:1722" data-name="Badge/Minor">
+                      <div className="absolute h-[22px] left-0 top-0 w-[78px]" data-node-id="I3070:1950;45:1722;347:54016" data-name="status-minor-bg">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusMinorBg} />
+                      </div>
+                      <div className="content-stretch flex gap-[4px] items-center relative shrink-0 w-[52px]" data-node-id="I3070:1950;45:1722;347:54072" data-name="status">
+                        <Bulb className="flex items-center justify-center relative shrink-0" property1="bulb-minor" />
+                        <div className="content-stretch flex items-center justify-center relative shrink-0 w-[38px]" data-node-id="I3070:1950;45:1722;347:54074" data-name="txt">
+                          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-[1_0_0] flex-col font-['Pretendard:Regular'] justify-center leading-[0] min-w-px not-italic relative text-[10px] text-center text-white" data-node-id="I3070:1950;45:1722;347:54075">
+                            <p className="leading-none">Minor</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1062" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1063">
+                      GD-A1-006
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1064" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1065">
+                      가스 농도
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1066" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1067">
+                      2026-11-11 14:28:02
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1068" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1069">
+                      H2S 농도 1단계 경보 (11 ppm)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1070" data-name="Row/3">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1071" data-name="Td/Grade">
+                    <div className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" data-node-id="I3070:1950;34:1072" data-name="Badge/Minor">
+                      <div className="absolute h-[22px] left-0 top-0 w-[78px]" data-node-id="I3070:1950;34:1072;347:54016" data-name="status-minor-bg">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusMinorBg} />
+                      </div>
+                      <div className="content-stretch flex gap-[4px] items-center relative shrink-0 w-[52px]" data-node-id="I3070:1950;34:1072;347:54072" data-name="status">
+                        <Bulb className="flex items-center justify-center relative shrink-0" property1="bulb-minor" />
+                        <div className="content-stretch flex items-center justify-center relative shrink-0 w-[38px]" data-node-id="I3070:1950;34:1072;347:54074" data-name="txt">
+                          <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] flex flex-[1_0_0] flex-col font-['Pretendard:Regular'] justify-center leading-[0] min-w-px not-italic relative text-[10px] text-center text-white" data-node-id="I3070:1950;34:1072;347:54075">
+                            <p className="leading-none">Minor</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1073" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1074">
+                      GD-C3-021
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1075" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1076">
+                      센서 상태
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1077" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1078">
+                      2026-11-11 14:15:39
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1079" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1080">
+                      센서 교정 기한 임박 (D-3)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1081" data-name="Row/4">
+                  <div className="content-stretch flex flex-col gap-[10px] h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1082" data-name="Td/Grade">
+                    <StatusNormal className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1084" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1085">
+                      GD-A1-002
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1086" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1087">
+                      가스 농도
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1088" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1089">
+                      2026-11-11 14:02:11
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1090" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1091">
+                      CO 농도 정상 복귀 (18 ppm)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1092" data-name="Row/5">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1093" data-name="Td/Grade">
+                    <StatusNormal className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1095" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1096">
+                      GW-02
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1097" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1098">
+                      통신
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1099" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1100">
+                      2026-11-11 13:56:40
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1101" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1102">
+                      게이트웨이 통신 복구
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1103" data-name="Row/6">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1104" data-name="Td/Grade">
+                    <StatusCritical className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1106" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1107">
+                      GD-B2-009
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1108" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1109">
+                      가스 농도
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1110" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1111">
+                      2026-11-11 13:49:05
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1112" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1113">
+                      O2 농도 저하 경보 (18.1 %)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1114" data-name="Row/7">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1115" data-name="Td/Grade">
+                    <StatusMajor className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1117" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1118">
+                      GD-D1-017
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1119" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1120">
+                      통신
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1121" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1122">
+                      2026-11-11 13:41:27
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center pl-[63px] pr-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1123" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1124">
+                      감지기 응답 없음 (30초 초과)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1125" data-name="Row/8">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1126" data-name="Td/Grade">
+                    <StatusMinor className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1128" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1129">
+                      GD-C3-012
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1130" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1131">
+                      가스 농도
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1132" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1133">
+                      2026-11-11 13:33:54
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center pl-[63px] pr-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1134" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1135">
+                      LEL 1단계 경보 (12 %LEL)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1136" data-name="Row/9">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1137" data-name="Td/Grade">
+                    <StatusWarning className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1139" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1140">
+                      GD-A2-030
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1141" data-name="Td/Event Type">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1142">
+                      전원
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1143" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1144">
+                      2026-11-11 13:20:18
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center pl-[63px] pr-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1145" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1146">
+                      배터리 잔량 부족 (15 %)
+                    </p>
+                  </div>
+                </div>
+                <div className="border-[#33363b] border-b border-solid content-stretch flex h-[32px] items-center relative shrink-0 w-full" data-node-id="I3070:1950;34:1147" data-name="Row/10">
+                  <div className="content-stretch flex flex-col h-[32px] items-center justify-center px-[10px] py-[4px] relative shrink-0 w-[150px]" data-node-id="I3070:1950;34:1148" data-name="Td/Grade">
+                    <StatusNormal className="content-stretch flex flex-col gap-[10px] h-[22px] items-center justify-center px-[13px] py-[6px] relative shrink-0 w-[78px]" />
+                  </div>
+                  <div className="content-stretch flex items-center justify-center overflow-clip px-[10px] py-[12px] relative shrink-0 w-[223px]" data-node-id="I3070:1950;34:1150" data-name="Td/Device Name">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1151">
+                      GD-B1-004
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[245px]" data-node-id="I3070:1950;34:1152" data-name="Td/Event Type">
+                    <div className="flex h-[11.26px] items-center justify-center relative shrink-0 w-[45.464px]" data-node-id="I3070:1950;34:1153">
+                      <div className="flex-none rotate-[4.18deg]">
+                        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative text-[#c1c1c1] text-[12px] whitespace-nowrap">센서 상태</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center px-[10px] py-[12px] relative shrink-0 w-[232px]" data-node-id="I3070:1950;34:1154" data-name="Td/Occurred At">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1155">
+                      2026-11-11 13:12:46
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center pl-[63px] pr-[10px] py-[12px] relative shrink-0 w-[905px]" data-node-id="I3070:1950;34:1156" data-name="Td/Message">
+                    <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-none not-italic relative shrink-0 text-[#c1c1c1] text-[12px] whitespace-nowrap" data-node-id="I3070:1950;34:1157">
+                      정기 교정 완료
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col h-[var(--57.3485rem,917.576px)] items-start left-[30px] top-[80.37px] w-[var(--116.25rem,1860px)]" data-node-id="3059:4273" data-name="Content">
+        <div className="absolute content-stretch flex flex-col gap-[var(--0.3006rem,4.81px)] h-[var(--57.0393rem,912.63px)] items-center justify-center left-[1445px] top-0 w-[var(--25.9375rem,415px)]" data-node-id="3059:4274" data-name="Column/Left">
+          <WidgetSensorStatus className="h-[301px] relative shrink-0 w-[415px]" />
+          <div className="h-[301px] relative shrink-0 w-[415px]" data-node-id="3096:4372" data-name="Widget/Sensor Status 2">
+            <div className="absolute inset-[0.33%_0_0_0]" data-node-id="I3096:4372;47:1046" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground} />
+            </div>
+            <div className="absolute inset-[0.15%_72.29%_86.38%_0]" data-node-id="I3096:4372;47:1047" data-name="Title Tab">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTitleTab} />
+            </div>
+            <div className="absolute inset-[0.15%_0.68%_86.38%_0]" data-node-id="I3096:4372;47:1048" data-name="Header Bar">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHeaderBar} />
+            </div>
+            <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[4.89%_84.02%_90.45%_4.18%] leading-none not-italic text-[#ddedff] text-[14px] whitespace-nowrap" data-node-id="I3096:4372;47:1049">
+              센서현황
+            </p>
+            <div className="absolute inset-[0_0_85.23%_95.38%]" data-node-id="I3096:4372;47:1050" data-name="Corner">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCorner} />
+            </div>
+            <div className="absolute inset-[17.55%_2.65%_71.12%_2.65%]" data-node-id="I3096:4372;47:1107" data-name="Row/LEL">
+              <div className="absolute inset-[1.5%_84.98%_1.44%_0]" data-node-id="I3096:4372;47:1107;47:1093" data-name="Left Chip">
+                <div className="absolute inset-[-1.51%_-0.85%]">
+                  <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+                </div>
+              </div>
+              <div className="absolute inset-[1.5%_34.35%_1.44%_50.63%]" data-node-id="I3096:4372;47:1107;47:1102" data-name="Right Chip">
+                <div className="absolute inset-[-1.51%_-0.85%]">
+                  <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+                </div>
+              </div>
+              <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_50.63%_0_15.02%] rounded-tr-[5px]" data-node-id="I3096:4372;47:1107;47:1094" data-name="Left Value Box" />
+              <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_0_0_65.65%] rounded-tr-[5px]" data-node-id="I3096:4372;47:1107;47:1103" data-name="Right Value Box" />
+              <div className="absolute bg-[#0c2977] h-[7.527px] left-[62.87px] top-[13.29px] w-[90px]" data-node-id="I3096:4372;47:1107;3082:2959" data-name="Left Track" />
+              <div className="absolute inset-[38.96%_61.11%_38.96%_16%] pointer-events-none" data-node-id="I3096:4372;47:1107;47:1095" data-name="Left Meter">
+                <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 5%, rgba(0, 187, 255, 0) 5%, rgba(0, 187, 255, 0) 100%)" }} />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+              </div>
+              <div className="absolute bg-[#0c2977] h-[7.527px] left-[261.87px] top-[13.29px] w-[90px]" data-node-id="I3096:4372;47:1107;3082:2960" data-name="Right Track" />
+              <div className="absolute inset-[38.96%_10.47%_38.96%_66.63%] pointer-events-none" data-node-id="I3096:4372;47:1107;47:1104" data-name="Right Meter">
+                <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 20%, rgba(0, 187, 255, 0) 20%, rgba(0, 187, 255, 0) 100%)" }} />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+              </div>
+              <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_52.88%_32.41%_45.59%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I3096:4372;47:1107;47:1096">
+                1
+              </p>
+              <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_2.25%_32.41%_95.71%] leading-none not-italic text-[#56eefa] text-[12px] text-right whitespace-nowrap" data-node-id="I3096:4372;47:1107;47:1105">
+                4
+              </p>
+              <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_90.07%_32.38%_4.84%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I3096:4372;47:1107;47:1097">
+                LEL
+              </p>
+              <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.44%_39.44%_32.38%_55.47%] leading-none not-italic text-[#bdd8ef] text-[12px] text-center whitespace-nowrap" data-node-id="I3096:4372;47:1107;47:1106">
+                LEL
+              </p>
+            </div>
+            <div className="absolute inset-[34%_2.65%_54.67%_2.65%]" data-node-id="I3096:4372;47:1119" data-name="Row/CO">
+              <div className="absolute inset-[1.5%_84.98%_1.44%_0]" data-node-id="I3096:4372;47:1119;47:1093" data-name="Left Chip">
+                <div className="absolute inset-[-1.51%_-0.85%]">
+                  <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+                </div>
+              </div>
+              <div className="absolute inset-[1.5%_34.35%_1.44%_50.63%]" data-node-id="I3096:4372;47:1119;47:1102" data-name="Right Chip">
+                <div className="absolute inset-[-1.51%_-0.85%]">
+                  <img alt="" className="block max-w-none size-full" src={imgLeftChip} />
+                </div>
+              </div>
+              <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_50.63%_0_15.02%] rounded-tr-[5px]" data-node-id="I3096:4372;47:1119;47:1094" data-name="Left Value Box" />
+              <div className="absolute bg-[#1c2b38] border border-[#113652] border-solid inset-[0_0_0_65.65%] rounded-tr-[5px]" data-node-id="I3096:4372;47:1119;47:1103" data-name="Right Value Box" />
+              <div className="absolute bg-[#0c2977] h-[7.527px] left-[62.87px] top-[13.29px] w-[90px]" data-node-id="I3096:4372;47:1119;3082:2959" data-name="Left Track" />
+              <div className="absolute inset-[38.96%_61.11%_38.96%_16%] pointer-events-none" data-node-id="I3096:4372;47:1119;47:1095" data-name="Left Meter">
+                <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 9%, rgba(0, 187, 255, 0) 9%, rgba(0, 187, 255, 0) 100%)" }} />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+              </div>
+              <div className="absolute bg-[#0c2977] h-[7.527px] left-[261.87px] top-[13.29px] w-[90px]" data-node-id="I3096:4372;47:1119;3082:2960" data-name="Right Track" />
+              <div className="absolute inset-[38.96%_10.47%_38.96%_66.63%] pointer-events-none" data-node-id="I3096:4372;47:1119;47:1104" data-name="Right Meter">
+                <div aria-hidden className="absolute inset-0" style={{ backgroundImage: "linear-gradient(90deg, rgb(0, 187, 255) 0%, rgb(0, 187, 255) 23%, rgba(0, 187, 255, 0) 23%, rgba(0, 187, 255, 0) 100%)" }} />
+                <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_0px_7px_0px_#c1c1c1]" />
+              </div>
+              <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[32.41%_52.88%_32.41%_45.08%] leading-none not-italic text-[#56eefa] t
+[Image left out: it did not fit in the tool output limit]
+
+
+[OUTPUT TRUNCATED - exceeded 25000 token limit]
+
+The tool output was truncated. If this MCP server provides pagination or filtering tools, use them to retrieve specific portions of the data. If pagination is not available, inform the user that you are working with truncated output and results may be incomplete.

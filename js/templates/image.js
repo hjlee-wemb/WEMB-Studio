@@ -132,7 +132,8 @@ const TPLLOGO = {
     '.nbw-root [data-name="Logo Mark"], .nbs-root [data-name="Logo Mark"], .nbe-root [data-name="Logo Mark"], .nbk-root [data-name="Logo Mark"], .nbl-root [data-name="Logo Mark"], .nbg-root [data-name="Logo Mark"], .nbm-root [data-name="Logo Mark"], .nbt-root [data-name="Logo Mark"], .nbu-root [data-name="Logo Mark"], .nbp-root [data-name="Logo Mark"], .nbo-root [data-name="Logo Mark"], ' +
     '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
   /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
-  DOM_CUSTOM: '.dwm-root [data-name="Logo/WEMB Studio"], .dwn-root [data-name="Logo/WEMB Studio"], .dws-root [data-name="Logo/WEMB Studio"], .dwp-root [data-name="Logo/WEMB Studio"], .dwa-root [data-name="Logo/WEMB Studio"], .dwb-root [data-name="Logo/WEMB Studio"], .dwv-root [data-name="Logo/WEMB Studio"], .dwo-root [data-name="Logo/WEMB Studio"], .dwr-root [data-name="Logo/WEMB Studio"], .dwe-root [data-name="Logo/WEMB Studio"], .dwh-root [data-name="Logo/WEMB Studio"], .dwi-root [data-name="Logo/WEMB Studio"], .dwc-root [data-name="Logo/WEMB Studio"], .dwk-root [data-name="Logo/WEMB Studio"], .dww-root [data-name="Logo/WEMB Studio"], .dwd-root [data-name="Logo/WEMB Studio"], .dwt-root [data-name="Logo/WEMB Studio"], .dwu-root [data-name="Logo/WEMB Studio"], .dwl-root [data-name="Logo/WEMB Studio"], ' +
+  DOM_CUSTOM: '.gmm-root [data-name="Header"] > [data-name="Logo"], .gmg-root [data-name="Header"] > [data-name="Logo"], ' +
+    '.dwm-root [data-name="Logo/WEMB Studio"], .dwn-root [data-name="Logo/WEMB Studio"], .dws-root [data-name="Logo/WEMB Studio"], .dwp-root [data-name="Logo/WEMB Studio"], .dwa-root [data-name="Logo/WEMB Studio"], .dwb-root [data-name="Logo/WEMB Studio"], .dwv-root [data-name="Logo/WEMB Studio"], .dwo-root [data-name="Logo/WEMB Studio"], .dwr-root [data-name="Logo/WEMB Studio"], .dwe-root [data-name="Logo/WEMB Studio"], .dwh-root [data-name="Logo/WEMB Studio"], .dwi-root [data-name="Logo/WEMB Studio"], .dwc-root [data-name="Logo/WEMB Studio"], .dwk-root [data-name="Logo/WEMB Studio"], .dww-root [data-name="Logo/WEMB Studio"], .dwd-root [data-name="Logo/WEMB Studio"], .dwt-root [data-name="Logo/WEMB Studio"], .dwu-root [data-name="Logo/WEMB Studio"], .dwl-root [data-name="Logo/WEMB Studio"], ' +
     '.shm-root [data-name="Brand"], .shi-root [data-name="Brand"], .shd-root [data-name="Brand"], ' +
     '.wrt-root [data-name="Brand"], .wrp-root [data-name="Brand"], .wre-root [data-name="Brand"], .pfo-root [data-name="Brand"]',
   arCache: {},
@@ -855,6 +856,13 @@ const TPLTINT = {
      판 · 선 · 글자 · 메뉴 아이콘 · 차트는 따라간다 */
   /* 스마트 도면관리 시안 — 주조색은 파랑(#3967FD, 색상각 226°). 색을 그대로 둘 것: 바탕 사진 · CCTV 사진 · 유리 아이콘 그림.
      판 · 선 · 글자 · 단추 · 아이콘 · 차트는 따라간다 */
+  /* 스마트 플랜트 가스 모니터링 시안 — 주조색은 시안(#00BBFF, 색상각 196°). 색을 그대로 둘 것:
+     바탕 사진 · 공장 평면도 · 메뉴 카드 받침/유리 구 · 메뉴 아이콘 · 상태 배지/전구 · 센서 표지(색이 곧 뜻). 판 · 선 · 글자 · 미터는 따라간다 */
+  GASMON_OPT: {
+    seed: '#00BBFF', seededKey: 'wemb-gasmon-seeded', refHue: 196,
+    keep: /(^|\/)(screen-main[-\w]*\.jpg|floor-plan[-\w]*\.png|platform[-\w]*|orb[-\w]*|body[-\w]*|cloud[-\w]*|figure[-\w]*|lens[-\w]*|highlight[-\w]*|light[-\w]*|shadow[-\w]*|status-[-\w]*|btn-event-status[-\w]*|marker-sensor[-\w]*|background-1(-lt)?\.svg|background-2-2(-lt)?\.svg)(\.(svg|png|jpg))?(\?|$)/i,
+    raster: /$^/,
+  },
   DRAWING_OPT: {
     seed: '#3967FD', seededKey: 'wemb-drawing-seeded', refHue: 226,
     keep: /(^|\/)(background[-\w]*\.(png|jpg)|viewer[-\w]*|icon-image[-\w]*|logo-wemb-studio[-\w]*|service-name[-\w]*|required-mark[-\w]*)(\.(svg|png|jpg))?(\?|$)/i,
@@ -1020,6 +1028,10 @@ const TPLTINT = {
     });
     /* 공장 전력설비 — 같은 방식 */
     this.icheonTint(t, mode, '.pfo-root', ['pfo-style', 'pfo-light-style', 'plant-live-style'], 'wemb-plant-mode', this.PLANT_OPT);
+    /* 스마트 플랜트 가스 모니터링 화면 5장 — 같은 방식. 열린 장면만 칠한다(팝업 뿌리도 따로 칠한다) */
+    ['gmm', 'gmg', 'gmw', 'gma', 'gmc'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'gasmon-live-style'], 'wemb-gasmon-mode', this.GASMON_OPT);
+    });
     /* 스마트 도면관리 화면 19장 — 같은 방식. 열린 장면만 칠한다 */
     ['dwm', 'dwn', 'dws', 'dwp', 'dwa', 'dwb', 'dwv', 'dwo', 'dwr', 'dwe', 'dwh', 'dwi', 'dwc', 'dwk', 'dww', 'dwd', 'dwt', 'dwu', 'dwl'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'drawing-live-style'], 'wemb-drawing-mode', this.DRAWING_OPT);

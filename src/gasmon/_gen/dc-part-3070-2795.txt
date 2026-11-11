@@ -1,0 +1,78 @@
+const imgStateDefault = "https://www.figma.com/api/mcp/asset/f920163c-7f70-4a46-8d51-55324500aa47.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/ccf9ef84-c8ff-4df4-a153-02f9c18e6e36.svg";
+const imgIconHeaderClock = "https://www.figma.com/api/mcp/asset/4e0ef826-69b6-46cb-82d9-2bb522364068.svg";
+
+type NavItemProps = {
+  className?: string;
+  state?: "Selected";
+};
+
+function NavItem({ className, state = "Selected" }: NavItemProps) {
+  return (
+    <div className={className || "content-stretch flex h-[50px] items-center justify-center px-[37px] py-[17px] relative w-[152px]"} data-node-id="61:3342" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 152 50' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-1.0901e-14 4.9 -12.932 -4.2249e-14 76 25)'><stop stop-color='rgba(0,187,255,0)' offset='0.29808'/><stop stop-color='rgba(0,187,255,0.5)' offset='0.8125'/><stop stop-color='rgba(0,187,255,1)' offset='1'/></radialGradient></defs></svg>\")" }}>
+      <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-none not-italic relative shrink-0 text-[16px] text-center text-white w-[100px]" data-node-id="61:3033">
+        가스
+      </p>
+    </div>
+  );
+}
+
+type IconHeaderLogoutProps = {
+  className?: string;
+  state?: "Default";
+};
+
+function IconHeaderLogout({ className, state = "Default" }: IconHeaderLogoutProps) {
+  return (
+    <div className={className || "h-[18.542px] relative w-[15.786px]"} data-node-id="61:3717">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStateDefault} />
+    </div>
+  );
+}
+
+export default function Header() {
+  return (
+    <div className="relative size-full" data-node-id="3070:2795" data-name="Header">
+      <div className="absolute inset-[0_0_0.74%_0]" data-node-id="I3070:2795;37:582" data-name="Background">
+        <div className="absolute inset-[-1%_0]">
+          <img alt="" className="block max-w-none size-full" src={imgBackground} />
+        </div>
+      </div>
+      <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[33.54%_85.61%_34.7%_5.12%] leading-none not-italic text-[#ddedff] text-[16px] text-center whitespace-nowrap" data-node-id="I3070:2795;38:601">
+        스마트 플랜트 가스 모니터링
+      </p>
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex gap-[26px] items-center left-[calc(50%+797.72px)] top-[calc(50%+1.17px)]" data-node-id="I3070:2795;38:612" data-name="Toolbar">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I3070:2795;45:1800" data-name="Date">
+          <div className="col-1 ml-0 mt-0 relative row-1 size-[20px]" data-node-id="I3070:2795;38:611" data-name="Icon/Header/Clock">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconHeaderClock} />
+          </div>
+          <p className="[word-break:break-word] col-1 font-['Pretendard:SemiBold'] leading-none ml-[32.61px] mt-[2px] not-italic relative row-1 text-[#5e87bb] text-[16px] text-center whitespace-nowrap" data-node-id="I3070:2795;38:603">
+            2026-11-11
+          </p>
+        </div>
+        <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-none not-italic relative shrink-0 text-[#ddedff] text-[16px] text-center whitespace-nowrap" data-node-id="I3070:2795;38:608">
+          14:32:08
+        </p>
+        <IconHeaderLogout className="h-[18.542px] relative shrink-0 w-[15.786px]" />
+      </div>
+      <div className="absolute content-stretch flex items-center justify-center left-[685.23px] top-0" data-node-id="I3070:2795;45:1799" data-name="Nav">
+        <div className="h-[50px] relative shrink-0 w-[152px]" data-node-id="I3070:2795;61:3347" data-name="Nav Item/Main">
+          <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[34%_17.11%] leading-none not-italic text-[#ddedff] text-[16px] text-center" data-node-id="I3070:2795;61:3347;61:3346">
+            메인
+          </p>
+        </div>
+        <NavItem className="content-stretch flex h-[50px] items-center justify-center px-[37px] py-[17px] relative shrink-0 w-[152px]" />
+        <div className="h-[50px] relative shrink-0 w-[152px]" data-node-id="I3070:2795;61:3531" data-name="Nav Item/AI CCTV">
+          <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[34%_17.11%] leading-none not-italic text-[16px] text-center text-white" data-node-id="I3070:2795;61:3531;61:3346">
+            AI CCTV
+          </p>
+        </div>
+        <div className="h-[50px] relative shrink-0 w-[152px]" data-node-id="I3070:2795;61:3564" data-name="Nav Item/Admin">
+          <p className="[word-break:break-word] absolute font-['Pretendard:SemiBold'] inset-[34%_17.11%] leading-none not-italic text-[16px] text-center text-white" data-node-id="I3070:2795;61:3564;61:3346">
+            관리자페이지
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

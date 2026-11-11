@@ -167,6 +167,12 @@
       { img: 'src/templates/drawing-total-search.jpg', label: '통합검색' },
       { img: 'src/templates/drawing-total-result.jpg', label: '통합검색 결과' },
       { img: 'src/templates/drawing-login.jpg', label: '로그인' }] },
+    { title: 'Dashboard: Smart Plant Gas Monitoring', area: '제조·안전', date: 'Nov 11, 2026', slides: [
+      { img: 'src/templates/gasmon-main.jpg', label: '메인' },
+      { img: 'src/templates/gasmon-gas.jpg', label: '가스 메인' },
+      { img: 'src/templates/gasmon-worksite.jpg', label: '작업개소 상세' },
+      { img: 'src/templates/gasmon-alarm.jpg', label: '가스농도 이상' },
+      { img: 'src/templates/gasmon-confirm.jpg', label: '전송 확인' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -340,6 +346,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Plant Power Facility');
     if (w) w.tpl = 'plant';
   })();
+  /* 스마트 플랜트 가스 모니터링 — '스튜디오 열기' 시 Figma(CbbEsxxZo3vBcBprsiUhJm) 화면 2장 + 팝업 3장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/gasmon-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: Smart Plant Gas Monitoring');
+    if (w) w.tpl = 'gasmon';
+  })();
   /* 스마트 도면관리 — '스튜디오 열기' 시 Figma(hfgGjtOuOsX3wdxk33ldyv) 화면 19장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/drawing-*.js)으로 연다. */
   (function () {
@@ -377,7 +389,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

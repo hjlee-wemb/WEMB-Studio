@@ -6,7 +6,10 @@ applyScreen(); /* 저장된 화면 종류(대시보드 / Digital Twin) 복원 */
 try {
   const __tdt = localStorage.getItem('wemb-tpl-dt');
   if (state.screen === 'dt') {
-    if (__tdt === 'drawing' && typeof applyDrawingDT === 'function') {
+    if (__tdt === 'gasmon' && typeof applyGasmonDT === 'function') {
+      applyGasmonDT(window.__gasmonSceneOf ? window.__gasmonSceneOf() : localStorage.getItem('wemb-gasmon-screen'));
+    }
+    else if (__tdt === 'drawing' && typeof applyDrawingDT === 'function') {
       applyDrawingDT(window.__drawingSceneOf ? window.__drawingSceneOf() : localStorage.getItem('wemb-drawing-screen'));
     }
     else if (__tdt === 'wnms' && typeof applyWnmsDT === 'function') {
@@ -121,6 +124,14 @@ try {
   /* LS Electric STATCOM 도 Dark 가 원본 — 고른 밝기(wemb-lselectric-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'lselectric') {
     const want = localStorage.getItem('wemb-lselectric-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* 스마트 플랜트 가스 모니터링은 Dark 가 원본 — 고른 밝기(wemb-gasmon-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'gasmon') {
+    const want = localStorage.getItem('wemb-gasmon-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
