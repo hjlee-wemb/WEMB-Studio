@@ -1357,7 +1357,7 @@ const NODE_CSS = [
   '.{{PX}}-root[data-theme="light"] [data-name="Badge/Gas Level"] p{color:#fff!important;}',
 ].concat([['Critical', '#ad152d'], ['Major', '#ad4d00'], ['Minor', '#856000'], ['Warning', '#1356b3'], ['Normal', '#4b5868']].map(([g, c]) => {
   const R = '.{{PX}}-root[data-theme="light"] ';
-  return [R + '[data-name="Badge/' + g + '"] p', R + '[data-name^="status-' + g.toLowerCase() + '"] p', R + '[data-name="Count/' + g + '"] p'].join(',') + '{color:' + c + '!important;font-weight:600;}';
+  return [R + '[data-name="Badge/' + g + '"] p', R + '[data-name^="status-' + g.toLowerCase() + '"] p', R + '[data-name="Count/' + g + '"] p'].join(',') + '{color:' + c + '!important;font-weight:600;white-space:nowrap;}';   /* 굵게 하면 'Warning' 이 칸(38px)을 넘어 두 줄로 꺾였다 */
 })).concat([
   /* 팝업 단추(보내기 · 취소 · 완료 …) — 판 그라디언트가 라이트에서도 그대로 진한 파랑이라 글자도 흰색(라이트 잉크면 1.75:1) */
   '.{{PX}}-root[data-theme="light"] [data-name^="Button/"]:not([data-name="Button/Close"]):not([data-name="Button/Ack"]) p{color:#fff!important;}',

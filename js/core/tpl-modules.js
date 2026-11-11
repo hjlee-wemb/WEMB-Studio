@@ -97,11 +97,11 @@
     /* 스마트 도면관리 — Figma hfgGjtOuOsX3wdxk33ldyv. 화면 19장, 장면마다 따로 싣는다 */
     /* 스마트 플랜트 가스 모니터링 — Figma CbbEsxxZo3vBcBprsiUhJm. 화면 2장 + 팝업 3장. 팝업은 가스 메인 위에 그 자리에서 얹으므로 통째로 */
     gasmon: [
-      { src: 'src/gasmon-main.js?v=5', build: ['build_gmm'] },
-      { src: 'src/gasmon-gas.js?v=5', build: ['build_gmg'] },
-      { src: 'src/gasmon-worksite.js?v=5', build: ['build_gmw', 'build_gmw_scene'] },
-      { src: 'src/gasmon-alarm.js?v=5', build: ['build_gma', 'build_gma_scene'] },
-      { src: 'src/gasmon-confirm.js?v=5', build: ['build_gmc', 'build_gmc_scene'] },
+      { src: 'src/gasmon-main.js?v=7', build: ['build_gmm'] },
+      { src: 'src/gasmon-gas.js?v=7', build: ['build_gmg'] },
+      { src: 'src/gasmon-worksite.js?v=7', build: ['build_gmw', 'build_gmw_scene'] },
+      { src: 'src/gasmon-alarm.js?v=7', build: ['build_gma', 'build_gma_scene'] },
+      { src: 'src/gasmon-confirm.js?v=7', build: ['build_gmc', 'build_gmc_scene'] },
       { src: 'src/gasmon-live.js?v=4', part: 'base' },
     ],
     drawing: [

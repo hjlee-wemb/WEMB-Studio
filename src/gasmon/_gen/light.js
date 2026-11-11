@@ -118,7 +118,8 @@ const SKIP_NODE = {};
 const VARIANTS = require('./light-assets.json');
 function lightExtra(PX) {
   const R = '.' + PX + '-root[data-theme="light"]';
-  const rules = [R + '{background:#eef3f7;color:#15253a;}'];
+  /* 화면 판 색은 에셋 라이브러리 썸네일(.hj-asset)에 깔리지 않게 — 썸네일 바탕은 투명이어야 한다 */
+  const rules = [R + ':not(.hj-asset){background:#eef3f7;}', R + '{color:#15253a;}'];
   /* 사본을 다시 만들면 같은 이름이라 브라우저가 옛 그림을 쥐고 있다 → 파일 수정 시각을 ?v 로 붙인다 */
   const fs = require('fs'), path = require('path');
   for (const [orig, lt] of Object.entries(VARIANTS)) {

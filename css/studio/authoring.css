@@ -649,6 +649,11 @@
 .hj-asset.dwd-root,
 .hj-asset.dwt-root,
 .hj-asset.dwu-root,
+.hj-asset.gmm-root,
+.hj-asset.gmg-root,
+.hj-asset.gmw-root,
+.hj-asset.gma-root,
+.hj-asset.gmc-root,
 .hj-asset.dwl-root {
   position: relative;
   inset: auto;
@@ -684,6 +689,12 @@
 /* 도면관리 등록물 — 가운데 정렬 판의 translate 도 자리 지정이다 */
 .hj-asset.dw-asset > :not(.hj-ofs) {
   translate: none !important;
+}
+/* 가스 모니터링 등록물 — 인라인 SVG 의 overlay 섞기 층(Ack 단추 윗면 빛)은 화면에선 패널 바탕과 섞이지만,
+   사본은 배율(transform)로 따로 떨어진 층이라 섞을 바탕이 없어 흰 반쪽이 된다 → 옅은 흰빛으로 */
+.hj-asset.gm-asset use[style*="mix-blend-mode"] {
+  mix-blend-mode: normal !important;
+  opacity: 0.12;
 }
 /* GROUP 등록물(신한카드 종합현황 위젯) — 상자 없는 위젯의 자식은 화면 좌표라, 화면 판째 당겨 위젯 자리만 보인다.
    위 '> *' 규칙보다 구체적이라 이 자리 지정이 이긴다 */

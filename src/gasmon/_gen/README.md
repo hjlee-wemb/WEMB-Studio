@@ -61,6 +61,13 @@ STATCOM(`src/statcom/_gen/`) 도구를 복사해 `prep.js` 로 맞췄다(한 번
 17. **라이트 등급 · 건수 칩** — 다크 칩(검은 속 + 색 테두리 빛)을 그대로 두면 라이트에서 탁한 알약이 된다 → mk-light-gasmon.js 가 status-*-bg · btn-event-status-bg* 를 흰 속 + 옅은 등급색 + 또렷한 테두리로 사본을 만들고(검은 정지점은 offset 이 0.500291 · 0.605 등 여러 개라 offset 무관하게), conv.js NODE_CSS 가 글자를 등급색 짙은 톤(Critical #ad152d · Major #ad4d00 · Minor #856000 · Warning #1356b3 · Normal #4b5868)으로. 라이브가 새로 넣는 줄도 같은 규칙을 탄다.
 18. **라이트 바탕(screen-main-lt.jpg)** — 원본 위 띠의 경계(y≈218)가 가로줄로 보였다 → 경계 위아래 밝기 차를 열마다 재서 위쪽에서 빼고, 결 세기 상한 0.42(렌즈 빛 · 빛줄기 점이 얼룩이 되지 않게), 바탕은 위 #e8eef5 → 아래 #f3f6fa.
 14. **셸 편집** — sed/heredoc 이 역슬래시를 망가뜨린 적이 있다(`\n` → `|`). 여러 줄 · 따옴표가 많은 편집은 Edit 도구로.
+19. **라이트 화면 판 색과 에셋 라이브러리** — 뿌리 바탕 `#eef3f7` 을 `:not(.hj-asset)` 로(라이트 썸네일에 밝은 네모가 깔렸다). 에셋 등록은 `src/gasmon-assets/_gen`.
+20. **라이트 Warning 배지 두 줄** — 등급 글자를 굵게(600) 하면 'Warning' 이 38px 칸을 넘어 꺾였다 → 등급 글자 규칙에 `white-space:nowrap`.
+
+## 라이브러리 등록 (2026-11-12)
+
+- 에셋 라이브러리: `src/gasmon-assets/_gen`(README) → `src/gasmon-assets.js`. 차트 2 · 패널 12 · 이벤트 2 · 심볼 33 · 아이콘 3.
+- 분자 라이브러리: `wemb-atomic`(family `gasmon`, 페이지 5장 — 팝업 장면 `build_gmX_scene` 은 합성이라 뺐다). 화면을 다시 만들면 sources 로 다시 복사 → build → 서버 재시작 → 측정 → export.
 
 ## 원본에 없어 정한 것
 
