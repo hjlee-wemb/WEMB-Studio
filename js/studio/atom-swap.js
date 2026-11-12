@@ -127,6 +127,22 @@
       return p.replace(/^\/+/, '');
     } catch (e) { return null; }
   }
+  /* 생성기가 심은 인라인 그림(svg.ls-inl)의 data-src 는 파일 이름뿐인 것이 있다(도면관리 · 신한카드 · 무선망 · 가스 모니터링).
+     그대로 풀면 문서 루트를 가리켜 썸네일이 404 → 같은 화면 <img> 의 폴더를 붙인다. 경로가 있으면 그대로. */
+  const rootDir = new WeakMap();
+  function svgFile(svg, root) {
+    const raw = svg.getAttribute('data-src');
+    if (!raw || raw.indexOf('/') >= 0 || /^(data|blob):/i.test(raw)) return norm(raw);
+    if (!rootDir.has(root)) {
+      let dir = '';
+      for (const im of root.querySelectorAll('img[src]')) {
+        const p = norm(im.__origSrc || im.getAttribute('src'));
+        if (p && p.indexOf('/') > 0) { dir = p.slice(0, p.lastIndexOf('/') + 1); break; }
+      }
+      rootDir.set(root, dir);
+    }
+    return norm(rootDir.get(root) + raw);
+  }
   /* CSS 변수 안의 url() 은 쓰는 쪽 시트를 기준으로 풀린다 — 절대 주소로 넣는다 */
   const absUrl = (f) => new URL(f, location.href).href;
   const cssUrl = (f) => 'url("' + absUrl(f).replace(/"/g, '%22') + '")';
@@ -312,7 +328,7 @@
         if ((svg.parentElement && svg.parentElement.closest('svg')) || svg.closest('.atm-rep, .atx')) return;
         const r = svg.closest(ROOT_SEL);
         if (r) {
-          const file = norm(svg.getAttribute('data-src'));
+          const file = svgFile(svg, r);
           if (!file || !rootKey.has(r)) return;
           const ent = maps.files.get(file) || null;
           add(ent ? ent.atom : 'img:' + file, { key: placeKeyIn(r, svg, 's'), type: 'svg', el: svg, els: [svg], file, ent, root: r, cat: ctxCat(svg) });
