@@ -1,0 +1,482 @@
+const imgStateActiveTypePlan = "https://www.figma.com/api/mcp/asset/b53aa76a-89e7-48cf-a3f6-7b0cab37c64b.svg";
+const imgGate = "https://www.figma.com/api/mcp/asset/278c6c2a-8eaf-43e8-850d-8910a5c5c833.svg";
+const imgLayer = "https://www.figma.com/api/mcp/asset/5a5d27b3-aa6a-4e65-9fc0-bf3d09b689b2.svg";
+const imgBuilding = "https://www.figma.com/api/mcp/asset/c2201b2f-3b94-4779-b070-600fac3d023e.svg";
+const imgToilet = "https://www.figma.com/api/mcp/asset/68a35796-1cde-4101-aadf-a128026cc21c.svg";
+const imgBrush = "https://www.figma.com/api/mcp/asset/b8caffd5-4007-49c1-9a7f-2d45f060bee6.svg";
+const imgGrid = "https://www.figma.com/api/mcp/asset/b242cad0-0db3-408d-82b2-486680c905fb.svg";
+const imgSelect = "https://www.figma.com/api/mcp/asset/4382e083-a271-4ca9-a682-6e5dbaa085eb.svg";
+const imgDefault = "https://www.figma.com/api/mcp/asset/5ce622ce-4c14-4814-a129-08e8fd189fab.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/79e19755-48b3-494b-9d5a-7ef9a32ed411.svg";
+const imgIcon1 = "https://www.figma.com/api/mcp/asset/bc4ac7bd-b08f-409e-9722-3a5d18a08903.svg";
+const imgIcon2 = "https://www.figma.com/api/mcp/asset/f202f989-e664-4a77-ba16-affd2a396e38.svg";
+const imgIcon3 = "https://www.figma.com/api/mcp/asset/d3158287-1e3d-4a9a-8ee9-20eb74e27f48.svg";
+const imgIcon4 = "https://www.figma.com/api/mcp/asset/f1963d6a-c820-4b9a-87ab-3c054df540bf.svg";
+const imgIcon5 = "https://www.figma.com/api/mcp/asset/cbaf61fb-a5f2-4bf6-a300-85f7cf267826.svg";
+const imgIcon6 = "https://www.figma.com/api/mcp/asset/1ac55aca-31c3-45d4-a760-5223038ea39a.svg";
+const imgTypeUserStateDefault = "https://www.figma.com/api/mcp/asset/6d9dffa8-3024-406a-94d5-f4c6e76eda03.svg";
+const imgTypeSettingStateDefault = "https://www.figma.com/api/mcp/asset/1322e9fc-6be8-4bb6-a89c-10e709088b62.svg";
+const imgTypeNotificationStateSelected = "https://www.figma.com/api/mcp/asset/a871bf20-f831-42e6-95db-1bf06235a949.svg";
+const img30F012 = "https://www.figma.com/api/mcp/asset/cb57ac66-9716-4f46-a8f8-fdeda2e2f46d.png";
+const imgSelectLine = "https://www.figma.com/api/mcp/asset/db3d2c72-6fc4-4d8a-ab91-2caa1d9d7277.svg";
+const imgHome = "https://www.figma.com/api/mcp/asset/062bed7b-09bc-43bc-ab96-4869ff429b4b.svg";
+const imgGlyph = "https://www.figma.com/api/mcp/asset/06a8474d-6435-4efd-852e-d4ae4f4d8cfb.svg";
+const imgIcon7 = "https://www.figma.com/api/mcp/asset/86ee789e-e3a8-4fa7-97b7-880596bb381d.svg";
+const imgIconAction = "https://www.figma.com/api/mcp/asset/afe576dd-f685-4e3a-b3fc-d4a3dce5f45e.svg";
+const imgIconAction1 = "https://www.figma.com/api/mcp/asset/d4e997e9-f9ae-4dbf-9153-1b9818f2312a.svg";
+const imgGlyph1 = "https://www.figma.com/api/mcp/asset/b5c43462-505b-46f5-9f14-6cbe313db6fc.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/ae7f3a14-cd77-4be4-b7e0-301c57a133d5.svg";
+
+type DockButtonProps = {
+  className?: string;
+  state?: "Active" | "Default";
+  type?: "Grid" | "Plan" | "Gate" | "Layer" | "Building" | "Toilet" | "Brush";
+};
+
+function DockButton({ className, state = "Default", type = "Gate" }: DockButtonProps) {
+  const isDefaultAndBrush = state === "Default" && type === "Brush";
+  const isDefaultAndBuilding = state === "Default" && type === "Building";
+  const isDefaultAndGate = state === "Default" && type === "Gate";
+  const isDefaultAndGrid = state === "Default" && type === "Grid";
+  const isDefaultAndLayer = state === "Default" && type === "Layer";
+  const isDefaultAndToilet = state === "Default" && type === "Toilet";
+  return (
+    <div className={className || `relative size-[40px] ${state === "Default" && ["Gate", "Layer", "Building", "Toilet", "Brush", "Grid"].includes(type) ? "content-stretch flex items-center justify-center rounded-[10px]" : ""}`} id={isDefaultAndGrid ? "node-2276_28173" : isDefaultAndBrush ? "node-2276_28170" : isDefaultAndToilet ? "node-2276_28167" : isDefaultAndBuilding ? "node-2276_28164" : isDefaultAndLayer ? "node-2276_28161" : isDefaultAndGate ? "node-2276_28158" : "node-2276_28070"}>
+      {state === "Active" && type === "Plan" && <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStateActiveTypePlan} />}
+      {isDefaultAndGate && (
+        <div className="relative shrink-0 size-[20px]" data-node-id="2276:28159" data-name="Gate">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGate} />
+        </div>
+      )}
+      {isDefaultAndLayer && (
+        <div className="relative shrink-0 size-[20px]" data-node-id="2276:28162" data-name="Layer">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayer} />
+        </div>
+      )}
+      {isDefaultAndBuilding && (
+        <div className="relative shrink-0 size-[20px]" data-node-id="2276:28165" data-name="Building">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBuilding} />
+        </div>
+      )}
+      {isDefaultAndToilet && (
+        <div className="h-[16.475px] relative shrink-0 w-[20px]" data-node-id="2276:28168" data-name="Toilet">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgToilet} />
+        </div>
+      )}
+      {isDefaultAndBrush && (
+        <div className="h-[20px] relative shrink-0 w-[19.202px]" data-node-id="2276:28171" data-name="Brush">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBrush} />
+        </div>
+      )}
+      {isDefaultAndGrid && (
+        <div className="relative shrink-0 size-[20px]" data-node-id="2276:28174" data-name="Grid">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGrid} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type TabProps = {
+  className?: string;
+  state?: "Select" | "Default";
+};
+
+function Tab({ className, state = "Default" }: TabProps) {
+  const isDefault = state === "Default";
+  return (
+    <div className={className || `content-stretch flex h-[36px] items-center justify-between px-[22px] py-[7px] relative rounded-tl-[2px] rounded-tr-[2px] w-[211px] ${isDefault ? "bg-[#eeeff1]" : "bg-white border-[#e8e8e8] border-l border-r border-solid border-t"}`} id={isDefault ? "node-2003_18618" : "node-2003_18613"}>
+      <div className="content-stretch flex items-center relative shrink-0" id={isDefault ? "node-2003_18619" : "node-2003_18614"} data-name="Item">
+        <p className={`[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-["KRAFTON_Font:Regular"] leading-[11px] not-italic relative shrink-0 text-[16px] whitespace-nowrap ${isDefault ? "text-[#999]" : "text-[#272727]"}`} id={isDefault ? "node-2003_18620" : "node-2003_18615"}>
+          30F
+        </p>
+      </div>
+      {state === "Select" && (
+        <div className="relative shrink-0 size-[15px]" data-node-id="2003:18616" data-name="Select">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSelect} />
+        </div>
+      )}
+      {isDefault && (
+        <div className="relative shrink-0 size-[15px]" data-node-id="2003:18621" data-name="Default">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDefault} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type IconSpaceProps = {
+  className?: string;
+  icon?: "Brush" | "Gate" | "Toilet";
+  state?: "Active" | "Hover";
+};
+
+function IconSpace({ className, icon = "Gate", state = "Active" }: IconSpaceProps) {
+  const isBrushAndActive = icon === "Brush" && state === "Active";
+  const isGateAndHover = icon === "Gate" && state === "Hover";
+  const isToiletAndActive = icon === "Toilet" && state === "Active";
+  return (
+    <div className={className || `content-stretch flex items-center justify-center p-[6px] relative rounded-[100px] size-[40px] ${isGateAndHover ? "bg-[#5853f9]" : "bg-[#657aff]"}`} id={isBrushAndActive ? "node-184_3881" : isToiletAndActive ? "node-184_3890" : isGateAndHover ? "node-187_2319" : "node-184_3882"}>
+      <div className="relative shrink-0 size-[27px]" id={isBrushAndActive ? "node-184_3877" : isToiletAndActive ? "node-184_3850" : isGateAndHover ? "node-187_2320" : "node-184_3856"} data-name="Icon">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBrushAndActive ? imgIcon2 : isToiletAndActive ? imgIcon1 : imgIcon} />
+      </div>
+    </div>
+  );
+}
+
+type SnbTimeFilterV2Props = {
+  className?: string;
+  state?: "Filter Close";
+};
+
+function SnbTimeFilterV2({ className, state = "Filter Close" }: SnbTimeFilterV2Props) {
+  return (
+    <div className={className || "h-[1017px] relative w-[380px]"} data-node-id="145:11554">
+      <div className="absolute bg-[#161a23] content-stretch flex flex-col gap-[16px] h-[1017px] items-start left-0 px-[16px] py-[26px] top-0 w-[380px]" data-node-id="145:11555" data-name="Sidebar - Open">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="145:11556" data-name="Logo">
+          <p className="[word-break:break-word] col-1 font-['KRAFTON_Font:Regular'] leading-[normal] ml-0 mt-0 not-italic relative row-1 text-[#6d6e71] text-[23px] whitespace-nowrap" data-node-id="2977:8105">
+            wemb studio
+          </p>
+        </div>
+        <div className="bg-[#8b898c] h-px relative shrink-0 w-full" data-node-id="145:11568" data-name="Divider" />
+        <div className="content-stretch flex gap-[10px] items-center py-[8px] relative rounded-[8px] shrink-0 w-full" data-node-id="145:11571" data-name="TItle">
+          <div className="relative shrink-0 size-[21.913px]" data-node-id="145:11572" data-name="Icon">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon3} />
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-['Pretendard:SemiBold'] leading-[21.913px] min-w-px not-italic relative text-[18px] text-[rgba(253,253,253,0.8)] tracking-[-0.36px]" data-node-id="145:11574">
+            시간필터
+          </p>
+          <div className="flex items-center justify-center relative shrink-0" data-node-id="145:11575">
+            <div className="flex-none rotate-180">
+              <div className="relative size-[17.53px]" data-name="Icon">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon4} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-[#8b898c] h-px relative shrink-0 w-full" data-node-id="145:11577" data-name="Divider" />
+        <div className="content-stretch flex gap-[10px] items-center py-[8px] relative rounded-[8px] shrink-0 w-full" data-node-id="145:11580" data-name="Title">
+          <div className="relative shrink-0 size-[21.913px]" data-node-id="145:11581" data-name="Icon">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon5} />
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-['Pretendard:SemiBold'] leading-[21.913px] min-w-px not-italic relative text-[18px] text-[rgba(253,253,253,0.8)] tracking-[-0.36px]" data-node-id="145:11583">
+            공간필터
+          </p>
+          <div className="flex items-center justify-center relative shrink-0" data-node-id="145:11584">
+            <div className="flex-none rotate-180">
+              <div className="relative size-[17.53px]" data-name="Icon">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon6} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bottom-[20px] content-stretch flex flex-col items-end left-[24px] w-[333px]" data-node-id="163:27420" data-name="Action">
+        <div className="bg-[#2d2f39] border border-[#45495d] border-solid content-stretch flex items-start px-[38px] py-[8px] relative rounded-[4px] shrink-0" data-node-id="163:27421" data-name="Button">
+          <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[16px] text-[rgba(255,255,255,0.8)] whitespace-nowrap" data-node-id="163:27422">
+            조회
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type ButtonUtilProps = {
+  className?: string;
+  state?: "Default" | "Selected";
+  type?: "Notification" | "User" | "Setting";
+};
+
+function ButtonUtil({ className, state = "Default", type = "Setting" }: ButtonUtilProps) {
+  const isNotificationAndSelected = type === "Notification" && state === "Selected";
+  const isSettingAndDefault = type === "Setting" && state === "Default";
+  return (
+    <div className={className || "relative size-[38px]"} id={isNotificationAndSelected ? "node-2003_18447" : isSettingAndDefault ? "node-2003_18439" : "node-2003_18437"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isNotificationAndSelected ? imgTypeNotificationStateSelected : isSettingAndDefault ? imgTypeSettingStateDefault : imgTypeUserStateDefault} />
+    </div>
+  );
+}
+
+export default function Component() {
+  return (
+    <div className="bg-white relative size-full" data-node-id="2273:24723" data-name="분석/점유/카운팅 메인_팝업 단일">
+      <div className="absolute h-[63px] right-0 top-0 w-[1920px]" data-node-id="2273:24724" data-name="Header">
+        <div className="absolute bg-[#20202d] inset-0" data-node-id="I2273:24724;2003:18480" data-name="Background" />
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] absolute font-['KRAFTON_Font:Regular'] leading-[20px] left-[34px] not-italic text-[#f6f6f6] text-[28px] top-[22px] whitespace-nowrap" data-node-id="I2273:24724;2003:18481">
+          SMART OFFICE
+        </p>
+        <div className="absolute content-stretch flex gap-[94px] inset-[0_32.97%_0_33.02%] items-center justify-center" data-node-id="I2273:24724;2003:18482" data-name="1depth">
+          <div className="bg-[#20202d] content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2273:24724;2003:18483" data-name="Nav Item/GNB">
+            <div className="content-stretch flex h-[63px] items-center justify-center px-[60px] py-[24px] relative shrink-0 w-[155px]" data-node-id="I2273:24724;2003:18483;2003:18427" data-name="1depth">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="I2273:24724;2003:18483;2003:18428">
+                현황
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2273:24724;2003:18484" data-name="Nav Item/GNB">
+            <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2273:24724;2003:18484;2003:18433" data-name="Nav Item/GNB">
+              <div className="border-[#657aff] border-b-3 border-solid content-stretch flex h-[63px] items-center justify-center px-[60px] py-[24px] relative shrink-0 w-[155px]" data-node-id="I2273:24724;2003:18484;2003:18433;2003:18430" style={{ backgroundImage: "linear-gradient(180deg, rgba(101, 122, 255, 0) 0%, rgba(101, 122, 255, 0.2) 100%), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), linear-gradient(90deg, rgb(32, 32, 45) 0%, rgb(32, 32, 45) 100%)" }} data-name="1depth">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[18px] text-center text-white whitespace-nowrap" data-node-id="I2273:24724;2003:18484;2003:18433;2003:18431">
+                  분석
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-[#20202d] content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2273:24724;2003:18485" data-name="Nav Item/GNB">
+            <div className="content-stretch flex h-[63px] items-center justify-center px-[60px] py-[24px] relative shrink-0 w-[155px]" data-node-id="I2273:24724;2003:18485;2003:18427" data-name="1depth">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="I2273:24724;2003:18485;2003:18428">
+                관리정보
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex gap-[13px] inset-[20.63%_1.77%_19.05%_90.94%] items-center" data-node-id="I2273:24724;2003:18486" data-name="Row">
+          <ButtonUtil className="relative shrink-0 size-[38px]" state="Selected" type="Notification" />
+          <ButtonUtil className="relative shrink-0 size-[38px]" />
+          <ButtonUtil className="relative shrink-0 size-[38px]" type="User" />
+        </div>
+      </div>
+      <SnbTimeFilterV2 className="absolute bottom-0 h-[1017px] left-0 w-[380px]" />
+      <div className="absolute bg-white border border-[#e8e8e8] border-solid h-[951px] left-[400px] rounded-bl-[6px] rounded-br-[6px] rounded-tr-[6px] top-[109px] w-[1500px]" data-node-id="2273:24726" data-name="Background" />
+      <div className="absolute contents left-[603px] top-[191px]" data-node-id="2273:24727" data-name="Floor Plan">
+        <div className="absolute h-[707px] left-[603px] top-[191px] w-[816px]" data-node-id="2273:24728" data-name="30F_01 2">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={img30F012} />
+        </div>
+        <IconSpace className="absolute bg-[#657aff] content-stretch flex items-center justify-center left-[683px] p-[6px] rounded-[100px] size-[40px] top-[638px]" icon="Brush" />
+        <IconSpace className="absolute bg-[#657aff] content-stretch flex items-center justify-center left-[683.33px] p-[6px] rounded-[100px] size-[40px] top-[590.4px]" icon="Toilet" />
+        <IconSpace className="absolute bg-[#657aff] content-stretch flex items-center justify-center left-[683.33px] p-[6px] rounded-[100px] size-[40px] top-[405px]" icon="Toilet" />
+        <IconSpace className="absolute bg-[#657aff] content-stretch flex items-center justify-center left-[774px] p-[6px] rounded-[100px] size-[40px] top-[405px]" />
+        <IconSpace className="absolute bg-[#5853f9] content-stretch flex items-center justify-center left-[877px] p-[6px] rounded-[100px] size-[40px] top-[405px]" state="Hover" />
+        <IconSpace className="absolute bg-[#657aff] content-stretch flex items-center justify-center left-[965px] p-[6px] rounded-[100px] size-[40px] top-[405px]" />
+        <IconSpace className="absolute bg-[#657aff] content-stretch flex items-center justify-center left-[1113px] p-[6px] rounded-[100px] size-[40px] top-[405px]" />
+      </div>
+      <div className="absolute contents left-[400px] top-[73px]" data-node-id="2273:24736" data-name="Tab">
+        <div className="absolute content-stretch flex gap-[2px] h-[36px] items-center left-[400px] rounded-tl-[8px] rounded-tr-[8px] top-[73px]" data-node-id="2273:24737" data-name="List">
+          <Tab className="bg-white border-[#e8e8e8] border-l border-r border-solid border-t content-stretch flex h-[36px] items-center justify-between px-[22px] py-[7px] relative rounded-tl-[2px] rounded-tr-[2px] shrink-0 w-[211px]" state="Select" />
+          <div className="bg-[#eeeff1] content-stretch flex h-[36px] items-center justify-between px-[22px] py-[7px] relative rounded-tl-[2px] rounded-tr-[2px] shrink-0 w-[211px]" data-node-id="2273:24739" data-name="Tab">
+            <div className="content-stretch flex items-center relative shrink-0" data-node-id="I2273:24739;2003:18619" data-name="Item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[11px] not-italic relative shrink-0 text-[#999] text-[16px] whitespace-nowrap" data-node-id="I2273:24739;2003:18620">
+                31F
+              </p>
+            </div>
+            <div className="relative shrink-0 size-[15px]" data-node-id="I2273:24739;2003:18621" data-name="Default">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDefault} />
+            </div>
+          </div>
+          <div className="bg-[#eeeff1] content-stretch flex h-[36px] items-center justify-between px-[22px] py-[7px] relative rounded-tl-[2px] rounded-tr-[2px] shrink-0 w-[211px]" data-node-id="2273:24740" data-name="Tab">
+            <div className="content-stretch flex items-center relative shrink-0" data-node-id="I2273:24740;2003:18619" data-name="Item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[11px] not-italic relative shrink-0 text-[#999] text-[16px] whitespace-nowrap" data-node-id="I2273:24740;2003:18620">
+                32F
+              </p>
+            </div>
+            <div className="relative shrink-0 size-[15px]" data-node-id="I2273:24740;2003:18621" data-name="Default">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDefault} />
+            </div>
+          </div>
+          <div className="bg-[#eeeff1] content-stretch flex h-[36px] items-center justify-between px-[22px] py-[7px] relative rounded-tl-[2px] rounded-tr-[2px] shrink-0 w-[211px]" data-node-id="2273:24741" data-name="Tab">
+            <div className="content-stretch flex items-center relative shrink-0" data-node-id="I2273:24741;2003:18619" data-name="Item">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[11px] not-italic relative shrink-0 text-[#999] text-[16px] whitespace-nowrap" data-node-id="I2273:24741;2003:18620">
+                33F
+              </p>
+            </div>
+            <div className="relative shrink-0 size-[15px]" data-node-id="I2273:24741;2003:18621" data-name="Default">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDefault} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute h-0 left-[401px] top-[110px] w-[209px]" data-node-id="2273:24742" data-name="Select-line">
+          <div className="absolute inset-[-1px_0_0_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSelectLine} />
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col items-end right-[20px] top-[77px] w-[211px]" data-node-id="2273:24743" data-name="Breadcrumb">
+        <div className="content-stretch flex gap-[13.714px] items-center relative shrink-0" data-node-id="I2273:24743;2019:19047" data-name="Box">
+          <div className="h-[13px] relative shrink-0 w-[13.008px]" data-node-id="I2273:24743;2019:19048" data-name="Home">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHome} />
+          </div>
+          <div className="h-[8px] relative shrink-0 w-[4px]" data-node-id="I2273:24743;2019:19049" data-name="Glyph">
+            <div className="absolute inset-[-6.25%_-12.5%]">
+              <img alt="" className="block max-w-none size-full" src={imgGlyph} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#828ca0] text-[13px] text-right whitespace-nowrap" data-node-id="I2273:24743;2019:19050">
+            <p className="leading-[normal]">분석</p>
+          </div>
+          <div className="h-[8px] relative shrink-0 w-[4px]" data-node-id="I2273:24743;2019:19587" data-name="Glyph">
+            <div className="absolute inset-[-6.25%_-12.5%]">
+              <img alt="" className="block max-w-none size-full" src={imgGlyph} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#20202d] text-[13px] text-right whitespace-nowrap" data-node-id="I2273:24743;2019:19588">
+            <p className="leading-[normal]">카운팅</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col items-start left-[765px] top-[287px] w-[264px]" data-node-id="2273:24744" data-name="Popup/Room Count">
+        <div className="bg-[#292936] content-stretch flex h-[39px] items-center justify-between px-[10px] py-[13px] relative rounded-tl-[4px] rounded-tr-[4px] shrink-0 w-full" data-node-id="I2273:24744;202:13927" data-name="Title">
+          <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[13px] not-italic relative shrink-0 text-[#f1f1f1] text-[18px] whitespace-nowrap" data-node-id="I2273:24744;202:13928">
+            30F_MAIN ENTRANCE_N01
+          </p>
+          <div className="bg-[#545558] content-stretch flex items-center justify-center relative rounded-[2px] shrink-0 size-[19px]" data-node-id="I2273:24744;2011:16003" data-name="Button/Icon">
+            <div className="h-[11px] relative shrink-0 w-[6.253px]" data-node-id="I2273:24744;2011:16003;2011:15929" data-name="icon">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon7} />
+            </div>
+          </div>
+        </div>
+        <div className="bg-[rgba(255,255,255,0.9)] border border-[#292936] border-solid content-stretch flex flex-col items-center justify-center pb-[20px] pt-[18px] px-[16px] relative rounded-bl-[4px] rounded-br-[4px] shadow-[0px_8px_16px_0px_rgba(41,41,54,0.27)] shrink-0 w-full" data-node-id="I2273:24744;202:13932" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex font-['KRAFTON_Font:Regular'] gap-[14px] items-center leading-[normal] not-italic relative shrink-0 text-[#292936] whitespace-nowrap" data-node-id="I2273:24744;202:13933" data-name="Row">
+            <div className="content-stretch flex gap-[4.5px] items-end relative shrink-0" data-node-id="I2273:24744;202:13934" data-name="Text Wrap">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[18px]" data-node-id="I2273:24744;202:13935">
+                IN.
+              </p>
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[24px]" data-node-id="I2273:24744;202:13936">
+                80
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[4.5px] items-end relative shrink-0" data-node-id="I2273:24744;202:13937" data-name="Text Wrap">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[18px]" data-node-id="I2273:24744;202:13938">
+                OUT.
+              </p>
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] relative shrink-0 text-[24px]" data-node-id="I2273:24744;202:13939">
+                20
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute backdrop-blur-[5px] bg-[rgba(233,233,233,0.5)] border border-[#e8e8e8] border-solid content-stretch flex flex-col gap-[8px] items-center justify-center left-[438px] px-[10px] py-[12px] rounded-[16px] top-[861px]" data-node-id="2273:24745" data-name="Action">
+        <div className="bg-white content-stretch drop-shadow-[0px_2px_1px_rgba(0,0,0,0.15)] flex items-center justify-center relative rounded-[10px] shrink-0 size-[40px]" data-node-id="2273:24746" data-name="Button/Icon">
+          <div className="relative shrink-0 size-[22px]" data-node-id="I2273:24746;2010:18610" data-name="Icon/Action">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconAction} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center relative rounded-[8px] shrink-0 size-[40px]" data-node-id="2273:24747" data-name="Button/Icon">
+          <div className="relative shrink-0 size-[22px]" data-node-id="I2273:24747;2010:18610" data-name="Icon/Action">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconAction1} />
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col gap-[12px] items-start right-[50px] top-[139px]" data-node-id="2273:24748" data-name="Container">
+        <div className="backdrop-blur-[4px] bg-white border border-[#e8e8e8] border-solid content-stretch flex items-center pb-[16px] pt-[12px] px-[16px] relative rounded-[6px] shrink-0 w-[300px]" data-node-id="2539:41655" data-name="Box">
+          <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="2539:41656" data-name="Content">
+            <div className="content-stretch flex flex-col gap-[8px] items-start px-[6px] relative shrink-0 w-full" data-node-id="2539:41657" data-name="Widget/Floor IN/OUT Peak Time">
+              <div className="content-stretch flex gap-[10px] h-[36px] items-center relative shrink-0 w-full" data-node-id="2539:41658" data-name="Header">
+                <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[0] not-italic relative shrink-0 text-[#292936] text-[18px] whitespace-nowrap" data-node-id="2539:41659">
+                  <span className="leading-[normal]">{`선택 층 `}</span>
+                  <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">IN/OUT</span>
+                  <span className="leading-[normal]">{` 피크 시간`}</span>
+                </p>
+                <div className="relative shrink-0 size-[16px]" data-node-id="2539:41660" data-name="Glyph">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGlyph1} />
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[6px] items-start relative shrink-0 w-full" data-node-id="2539:41661" data-name="Row">
+                <div className="bg-[#657aff] content-stretch flex h-[36px] items-center justify-center px-[12px] py-[8px] relative rounded-[10px] shrink-0 w-[52px]" data-node-id="2539:41662" data-name="Floor">
+                  <p className="[word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#fdfdfd] text-[15px] whitespace-nowrap" data-node-id="2539:41663">
+                    IN
+                  </p>
+                </div>
+                <div className="bg-[rgba(101,122,255,0.1)] content-stretch flex flex-[1_0_0] h-[36px] items-center justify-center min-w-px px-[12px] py-[8px] relative rounded-[10px]" data-node-id="2539:41664" data-name="Floor">
+                  <p className="[word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#404368] text-[16px] whitespace-nowrap" data-node-id="2539:41665">
+                    08:30 ~ 09:00
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[6px] items-start relative shrink-0 w-full" data-node-id="2539:41666" data-name="Row">
+                <div className="bg-[#657aff] content-stretch flex h-[36px] items-center justify-center px-[12px] py-[8px] relative rounded-[10px] shrink-0 w-[52px]" data-node-id="2539:41667" data-name="Floor">
+                  <p className="[word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#fdfdfd] text-[15px] whitespace-nowrap" data-node-id="2539:41668">
+                    OUT
+                  </p>
+                </div>
+                <div className="bg-[rgba(101,122,255,0.1)] content-stretch flex flex-[1_0_0] h-[36px] items-center justify-center min-w-px px-[12px] py-[8px] relative rounded-[10px]" data-node-id="2539:41669" data-name="Floor">
+                  <p className="[word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#404368] text-[16px] whitespace-nowrap" data-node-id="2539:41670">
+                    16:00 ~ 17:30
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="backdrop-blur-[4px] bg-white border border-[#e8e8e8] border-solid content-stretch flex items-center pb-[16px] pt-[12px] px-[16px] relative rounded-[6px] shrink-0 w-[300px]" data-node-id="2273:24765" data-name="Box">
+          <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="2273:24766" data-name="Content">
+            <div className="content-stretch flex flex-col gap-[8px] items-start px-[6px] relative shrink-0 w-full" data-node-id="2273:24767" data-name="Info">
+              <div className="content-stretch flex gap-[10px] h-[36px] items-center relative shrink-0 w-full" data-node-id="2273:24768" data-name="Title">
+                <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[#292936] text-[18px] whitespace-nowrap" data-node-id="2273:24769">
+                  선택 층 평균 재실인원
+                </p>
+                <div className="relative shrink-0 size-[16px]" data-node-id="2273:24770" data-name="Glyph">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGlyph1} />
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[6px] items-start relative shrink-0 w-full" data-node-id="2273:24771" data-name="Row">
+                <div className="bg-[#657aff] content-stretch flex h-[36px] items-center justify-center px-[12px] py-[8px] relative rounded-[10px] shrink-0 w-[52px]" data-node-id="2273:24772" data-name="Floor">
+                  <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[#fdfdfd] text-[15px] whitespace-nowrap" data-node-id="2273:24773">
+                    평균
+                  </p>
+                </div>
+                <div className="bg-[rgba(101,122,255,0.1)] content-stretch flex flex-[1_0_0] h-[36px] items-center justify-center min-w-px px-[12px] py-[8px] relative rounded-[10px]" data-node-id="2273:24774" data-name="Floor">
+                  <div className="[word-break:break-word] content-stretch flex gap-[4px] items-center justify-center leading-[normal] not-italic relative shrink-0 text-[#404368] text-[16px] whitespace-nowrap" data-node-id="2273:24775" data-name="Count">
+                    <p className="font-['KRAFTON_Font:Regular'] relative shrink-0" data-node-id="2273:24776">
+                      123.48
+                    </p>
+                    <p className="font-['Pretendard:Medium'] relative shrink-0" data-node-id="2273:24777">
+                      명
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="backdrop-blur-[4px] bg-white border border-[#e8e8e8] border-solid content-stretch flex items-center pb-[16px] pt-[12px] px-[16px] relative rounded-[6px] shrink-0 w-[300px]" data-node-id="2273:24778" data-name="Box">
+          <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="2273:24779" data-name="Content">
+            <div className="content-stretch flex flex-col gap-[8px] items-start px-[6px] relative shrink-0 w-full" data-node-id="2273:24780" data-name="Info">
+              <div className="content-stretch flex gap-[10px] h-[36px] items-center relative shrink-0 w-full" data-node-id="2273:24781" data-name="Title">
+                <p className="[word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[#292936] text-[18px] whitespace-nowrap" data-node-id="2273:24782">
+                  선택 층 평균 재실률
+                </p>
+                <div className="relative shrink-0 size-[16px]" data-node-id="2273:24783" data-name="Glyph">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGlyph1} />
+                </div>
+              </div>
+              <div className="bg-[rgba(101,122,255,0.1)] content-stretch flex h-[36px] items-center justify-center px-[12px] py-[8px] relative rounded-[10px] shrink-0 w-full" data-node-id="2273:24784" data-name="Floor">
+                <p className="[word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#404368] text-[16px] whitespace-nowrap" data-node-id="2273:24785">
+                  80%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute backdrop-blur-[3px] bg-[rgba(233,233,233,0.5)] border border-[#e8e8e8] border-solid content-stretch flex flex-col items-center justify-center left-[960.88px] px-[12px] py-[10px] rounded-[15px] top-[980px]" data-node-id="2273:24786" data-name="Dock">
+        <div className="content-stretch flex gap-[12px] items-center relative shrink-0" data-node-id="2273:24787" data-name="Menu">
+          <DockButton className="relative shrink-0 size-[40px]" state="Active" type="Plan" />
+          <div className="flex h-[22.5px] items-center justify-center relative shrink-0 w-[1.125px]" data-node-id="2273:24789">
+            <div className="flex-none rotate-90">
+              <div className="h-[1.125px] relative w-[22.5px]" data-name="Divider">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[6px] items-center relative shrink-0" data-node-id="2273:24790" data-name="List">
+            <DockButton className="content-stretch flex items-center justify-center relative rounded-[10px] shrink-0 size-[40px]" />
+            <DockButton className="content-stretch flex items-center justify-center relative rounded-[10px] shrink-0 size-[40px]" type="Layer" />
+            <DockButton className="content-stretch flex items-center justify-center relative rounded-[10px] shrink-0 size-[40px]" type="Building" />
+            <DockButton className="content-stretch flex items-center justify-center relative rounded-[10px] shrink-0 size-[40px]" type="Toilet" />
+            <DockButton className="content-stretch flex items-center justify-center relative rounded-[10px] shrink-0 size-[40px]" type="Brush" />
+          </div>
+          <div className="flex h-[22.5px] items-center justify-center relative shrink-0 w-[1.125px]" data-node-id="2273:24796">
+            <div className="flex-none rotate-90">
+              <div className="h-[1.125px] relative w-[22.5px]" data-name="Divider">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+          </div>
+          <DockButton className="content-stretch flex items-center justify-center relative rounded-[10px] shrink-0 size-[40px]" type="Grid" />
+        </div>
+      </div>
+    </div>
+  );
+}

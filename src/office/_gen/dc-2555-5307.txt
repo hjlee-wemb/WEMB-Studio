@@ -1,0 +1,298 @@
+const imgStateDefaultTypeBoxModeLightLines01 = "https://www.figma.com/api/mcp/asset/e2de0b66-9d4b-4e76-abd3-fa00d867264d.svg";
+const imgTypeUserStateDefault = "https://www.figma.com/api/mcp/asset/bc0e3995-35d2-42a5-9fc0-8193130530ba.svg";
+const imgTypeSettingStateDefault = "https://www.figma.com/api/mcp/asset/a4ba61ad-a695-428b-aa98-e6c219796b31.svg";
+const imgTypeNotificationStateSelected = "https://www.figma.com/api/mcp/asset/55b08139-5755-4756-9f3d-3573abb4fe07.svg";
+const imgHome = "https://www.figma.com/api/mcp/asset/d83fde67-7082-4a64-8dcd-c4159fc1cfe1.svg";
+const imgGlyph = "https://www.figma.com/api/mcp/asset/5539ae8f-4bef-404d-a9f2-9c9f8402fc5b.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/354746b9-f2ac-43d1-93f7-36b5ab79173d.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/7b61032d-b8a1-470b-9cef-2ef5271d116f.svg";
+const imgCheckbox = "https://www.figma.com/api/mcp/asset/1a3f681b-0738-4fcc-8cc7-b27e437de762.svg";
+
+type CheckboxProps = {
+  className?: string;
+  lines?: "01";
+  mode?: "Light";
+  state?: "Default";
+  type?: "Box";
+};
+
+function Checkbox({ className, lines = "01", mode = "Light", state = "Default", type = "Box" }: CheckboxProps) {
+  return (
+    <div className={className || "relative size-[18px]"} data-node-id="2003:18704">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStateDefaultTypeBoxModeLightLines01} />
+    </div>
+  );
+}
+
+type ButtonUtilProps = {
+  className?: string;
+  state?: "Default" | "Selected";
+  type?: "Notification" | "User" | "Setting";
+};
+
+function ButtonUtil({ className, state = "Default", type = "Setting" }: ButtonUtilProps) {
+  const isNotificationAndSelected = type === "Notification" && state === "Selected";
+  const isSettingAndDefault = type === "Setting" && state === "Default";
+  return (
+    <div className={className || "relative size-[38px]"} id={isNotificationAndSelected ? "node-2003_18447" : isSettingAndDefault ? "node-2003_18439" : "node-2003_18437"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isNotificationAndSelected ? imgTypeNotificationStateSelected : isSettingAndDefault ? imgTypeSettingStateDefault : imgTypeUserStateDefault} />
+    </div>
+  );
+}
+
+export default function Component3() {
+  return (
+    <div className="bg-[#f7f7f7] relative size-full" data-node-id="2555:5307" data-name="3. 시간 설정">
+      <div className="absolute h-[63px] right-0 top-0 w-[1920px]" data-node-id="2555:5308" data-name="Header">
+        <div className="absolute bg-[#20202d] inset-0" data-node-id="I2555:5308;2003:18480" data-name="Background" />
+        <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] absolute font-['KRAFTON_Font:Regular'] leading-[20px] left-[34px] not-italic text-[#f6f6f6] text-[28px] top-[22px] whitespace-nowrap" data-node-id="I2555:5308;2003:18481">
+          SMART OFFICE
+        </p>
+        <div className="absolute content-stretch flex gap-[94px] inset-[0_32.97%_0_33.02%] items-center justify-center" data-node-id="I2555:5308;2003:18482" data-name="1depth">
+          <div className="bg-[#20202d] content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2555:5308;2003:18483" data-name="1depth">
+            <div className="content-stretch flex h-[63px] items-center justify-center px-[60px] py-[24px] relative shrink-0 w-[155px]" data-node-id="I2555:5308;2003:18483;2003:18427" data-name="1depth">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="I2555:5308;2003:18483;2003:18428">
+                현황
+              </p>
+            </div>
+          </div>
+          <div className="bg-[#20202d] content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2555:5308;2003:18484" data-name="Nav Item/GNB">
+            <div className="content-stretch flex h-[63px] items-center justify-center px-[60px] py-[24px] relative shrink-0 w-[155px]" data-node-id="I2555:5308;2003:18484;2003:18427" data-name="1depth">
+              <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Medium'] leading-[normal] not-italic relative shrink-0 text-[18px] text-white whitespace-nowrap" data-node-id="I2555:5308;2003:18484;2003:18428">
+                분석
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2555:5308;2003:18485" data-name="1depth">
+            <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2555:5308;2003:18485;2003:18433" data-name="Nav Item/GNB">
+              <div className="border-[#657aff] border-b-3 border-solid content-stretch flex h-[63px] items-center justify-center px-[60px] py-[24px] relative shrink-0 w-[155px]" data-node-id="I2555:5308;2003:18485;2003:18433;2003:18430" style={{ backgroundImage: "linear-gradient(180deg, rgba(101, 122, 255, 0) 0%, rgba(101, 122, 255, 0.2) 100%), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), linear-gradient(90deg, rgb(32, 32, 45) 0%, rgb(32, 32, 45) 100%)" }} data-name="1depth">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[18px] text-center text-white whitespace-nowrap" data-node-id="I2555:5308;2003:18485;2003:18433;2003:18431">
+                  관리정보
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex gap-[13px] inset-[20.63%_1.77%_19.05%_90.94%] items-center" data-node-id="I2555:5308;2003:18486" data-name="Row">
+          <ButtonUtil className="relative shrink-0 size-[38px]" state="Selected" type="Notification" />
+          <ButtonUtil className="relative shrink-0 size-[38px]" />
+          <ButtonUtil className="relative shrink-0 size-[38px]" type="User" />
+        </div>
+      </div>
+      <div className="absolute content-stretch flex h-[980px] items-start left-0 px-[20px] top-[63px] w-[1920px]" data-node-id="2555:5309" data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-center min-w-px pb-[20px] relative" data-node-id="2555:5310" data-name="Container">
+          <div className="content-stretch flex flex-col items-start py-[18px] relative shrink-0 w-full" data-node-id="2555:5311" data-name="Block">
+            <div className="content-stretch flex gap-[12px] items-center justify-end relative shrink-0 w-full" data-node-id="2555:5312" data-name="Box">
+              <div className="relative shrink-0 size-[11px]" data-node-id="2555:5313" data-name="Home">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHome} />
+              </div>
+              <div className="h-[6px] relative shrink-0 w-[3px]" data-node-id="2555:5314" data-name="Glyph">
+                <div className="absolute inset-[-8.33%_-16.67%]">
+                  <img alt="" className="block max-w-none size-full" src={imgGlyph} />
+                </div>
+              </div>
+              <div className="[word-break:break-word] flex flex-col font-['Pretendard:Regular'] justify-center leading-[0] not-italic relative shrink-0 text-[#828ca0] text-[12px] text-center whitespace-nowrap" data-node-id="2555:5315">
+                <p className="leading-[normal]">관리정보</p>
+              </div>
+              <div className="h-[6px] relative shrink-0 w-[3px]" data-node-id="2555:5316" data-name="Glyph">
+                <div className="absolute inset-[-8.33%_-16.67%]">
+                  <img alt="" className="block max-w-none size-full" src={imgGlyph} />
+                </div>
+              </div>
+              <div className="[word-break:break-word] flex flex-col font-['Pretendard:Medium'] justify-center leading-[0] not-italic relative shrink-0 text-[#20202d] text-[12px] text-center whitespace-nowrap" data-node-id="2555:5317">
+                <p className="leading-[normal]">시간 설정</p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col gap-[20px] items-start relative shrink-0 w-full" data-node-id="2555:5318" data-name="Content">
+            <div className="bg-white border border-[#e8e8e8] border-solid content-stretch flex flex-col gap-[40px] items-start px-[40px] py-[46px] relative rounded-[6px] shrink-0 w-full" data-node-id="2555:5319" data-name="Body">
+              <div className="content-stretch flex flex-col gap-[22px] items-start relative shrink-0 w-full" data-node-id="2555:5320" data-name="Header">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[#292936] text-[20px] whitespace-nowrap" data-node-id="2555:5321">
+                  업데이트 주기 정보
+                </p>
+                <div className="h-0 relative shrink-0 w-full" data-node-id="2555:5322" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="2555:5323" data-name="Text Wrap">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[0] not-italic relative shrink-0 text-[#828ca0] text-[16px] whitespace-nowrap" data-node-id="2555:5324">
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[1.6]">LIVE</span>
+                    <span className="leading-[1.6]">{` 화면의 업데이트 주기를 설정합니다. 해당 주기는 분석 기능에는 영향을 미치지 않습니다.`}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[16px] items-center relative shrink-0 w-full" data-node-id="2555:5325" data-name="Item">
+                <div className="content-stretch flex items-center relative shrink-0" data-node-id="2555:5326" data-name="Label">
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#16192c] text-[16px] w-[87px]" data-node-id="2555:5327">
+                    업데이트 주기
+                  </p>
+                </div>
+                <div className="bg-[#f9fafc] border border-[#d8d9dd] border-solid content-stretch flex items-center justify-center px-[12px] py-[9px] relative rounded-[4px] shrink-0 w-[240px]" data-node-id="2555:5328" data-name="Input">
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[0] not-italic relative shrink-0 text-[#404368] text-[16px] whitespace-nowrap" data-node-id="2555:5329">
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">1</span>
+                    <span className="leading-[normal]">분</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white border border-[#e8e8e8] border-solid content-stretch flex flex-col gap-[40px] items-start px-[40px] py-[46px] relative rounded-[6px] shrink-0 w-full" data-node-id="2555:5330" data-name="Body">
+              <div className="content-stretch flex flex-col gap-[22px] items-start relative shrink-0 w-full" data-node-id="2555:5331" data-name="Header">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[#292936] text-[20px] whitespace-nowrap" data-node-id="2555:5332">
+                  근무시간 설정
+                </p>
+                <div className="h-0 relative shrink-0 w-full" data-node-id="2555:5333" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="2555:5334" data-name="Text Wrap">
+                  <div className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[0] not-italic relative shrink-0 text-[#828ca0] text-[16px] whitespace-nowrap" data-node-id="2555:5335">
+                    <p className="leading-[1.6] mb-0">근무시간 및 점심시간을 설정합니다. 지정한 근무시간은 분석 기능의 기본 시간 필터로 적용됩니다.</p>
+                    <p className="leading-[1.6]">센서 작동 시간은 설정된 근무시간을 기준으로 자동 제어됩니다. 점심시간은 반드시 근무시간 내에 포함되어야 하며, 해당 시간에는 고스트룸 예약 취소 기능이 적용되지 않습니다.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col gap-[16px] items-start justify-center relative shrink-0 w-full" data-node-id="2555:5336" data-name="Item">
+                <div className="content-stretch flex gap-[16px] items-center relative shrink-0 w-full" data-node-id="2555:5337" data-name="Row">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="2555:5338" data-name="Label">
+                    <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#16192c] text-[16px] whitespace-nowrap" data-node-id="2555:5339">
+                      근무시간
+                    </p>
+                  </div>
+                  <div className="bg-white border border-[#d8d9dd] border-solid content-stretch flex items-center justify-between pl-[20px] pr-[18px] py-[9px] relative rounded-[4px] shrink-0 w-[280px]" data-node-id="2555:5340" data-name="Input">
+                    <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[0] not-italic relative shrink-0 text-[#292936] text-[16px] whitespace-pre" data-node-id="2555:5341">
+                      <span className="leading-[normal]">{`오전 `}</span>
+                      <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">10</span>
+                      <span className="leading-[normal]">{`시 `}</span>
+                      <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">00</span>
+                      <span className="leading-[normal]">{`분  –  오후 `}</span>
+                      <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">7</span>
+                      <span className="leading-[normal]">{`시 `}</span>
+                      <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">00</span>
+                      <span className="leading-[normal]">분</span>
+                    </p>
+                    <div className="relative shrink-0 size-[16px]" data-node-id="2555:5342" data-name="Icon">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[16px] h-[37px] items-center relative shrink-0 w-[1420px]" data-node-id="2555:5344" data-name="Row">
+                  <div className="h-[19px] relative shrink-0 w-[56px]" data-node-id="2555:5345" data-name="Label" />
+                  <div className="content-stretch flex gap-[20px] items-center relative shrink-0" data-node-id="2555:5346" data-name="List">
+                    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="2555:5347" data-name="Checkbox">
+                      <div className="relative shrink-0 size-[18px]" data-node-id="I2555:5347;2003:18723" data-name="Checkbox">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckbox} />
+                      </div>
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#222] text-[16px] whitespace-nowrap" data-node-id="I2555:5347;2003:18724">
+                        월요일
+                      </p>
+                    </div>
+                    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="2555:5348" data-name="Checkbox">
+                      <div className="relative shrink-0 size-[18px]" data-node-id="I2555:5348;2003:18723" data-name="Checkbox">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckbox} />
+                      </div>
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#222] text-[16px] whitespace-nowrap" data-node-id="I2555:5348;2003:18724">
+                        화요일
+                      </p>
+                    </div>
+                    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="2555:5349" data-name="Checkbox">
+                      <div className="relative shrink-0 size-[18px]" data-node-id="I2555:5349;2003:18723" data-name="Checkbox">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckbox} />
+                      </div>
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#222] text-[16px] whitespace-nowrap" data-node-id="I2555:5349;2003:18724">
+                        수요일
+                      </p>
+                    </div>
+                    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="2555:5350" data-name="Checkbox">
+                      <div className="relative shrink-0 size-[18px]" data-node-id="I2555:5350;2003:18723" data-name="Checkbox">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckbox} />
+                      </div>
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#222] text-[16px] whitespace-nowrap" data-node-id="I2555:5350;2003:18724">
+                        목요일
+                      </p>
+                    </div>
+                    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="2555:5351" data-name="Checkbox">
+                      <div className="relative shrink-0 size-[18px]" data-node-id="I2555:5351;2003:18723" data-name="Checkbox">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckbox} />
+                      </div>
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#222] text-[16px] whitespace-nowrap" data-node-id="I2555:5351;2003:18724">
+                        금요일
+                      </p>
+                    </div>
+                    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="2555:5352" data-name="Checkbox">
+                      <Checkbox className="relative shrink-0 size-[18px]" />
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#222] text-[16px] whitespace-nowrap" data-node-id="I2555:5352;2003:18710">
+                        토요일
+                      </p>
+                    </div>
+                    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="2555:5353" data-name="Checkbox">
+                      <Checkbox className="relative shrink-0 size-[18px]" />
+                      <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['KRAFTON_Font:Regular'] leading-[normal] not-italic relative shrink-0 text-[#222] text-[16px] whitespace-nowrap" data-node-id="I2555:5353;2003:18710">
+                        일요일
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[16px] items-center relative shrink-0 w-full" data-node-id="2555:5354" data-name="Item">
+                <div className="content-stretch flex items-center relative shrink-0" data-node-id="2555:5355" data-name="Label">
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#16192c] text-[16px] whitespace-nowrap" data-node-id="2555:5356">
+                    점심시간
+                  </p>
+                </div>
+                <div className="bg-white border border-[#d8d9dd] border-solid content-stretch flex items-center justify-between pl-[20px] pr-[18px] py-[9px] relative rounded-[4px] shrink-0 w-[280px]" data-node-id="2555:5357" data-name="Input">
+                  <p className="[word-break:break-word] font-['Pretendard:Regular'] leading-[0] not-italic relative shrink-0 text-[#292936] text-[16px] whitespace-pre" data-node-id="2555:5358">
+                    <span className="leading-[normal]">{`오전 `}</span>
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">11</span>
+                    <span className="leading-[normal]">{`시 `}</span>
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">30</span>
+                    <span className="leading-[normal]">{`분  –  오후 `}</span>
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">1</span>
+                    <span className="leading-[normal]">{`시 `}</span>
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">00</span>
+                    <span className="leading-[normal]">분</span>
+                  </p>
+                  <div className="relative shrink-0 size-[16px]" data-node-id="2555:5359" data-name="Icon">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white border border-[#e8e8e8] border-solid content-stretch flex flex-col gap-[40px] items-start px-[40px] py-[46px] relative rounded-[6px] shrink-0 w-full" data-node-id="2555:5361" data-name="Body">
+              <div className="content-stretch flex flex-col gap-[22px] items-start relative shrink-0 w-full" data-node-id="2555:5362" data-name="Header">
+                <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:Bold'] leading-[normal] not-italic relative shrink-0 text-[#292936] text-[20px] whitespace-nowrap" data-node-id="2555:5363">
+                  세렌디피티 판정 시간 정보
+                </p>
+                <div className="h-0 relative shrink-0 w-full" data-node-id="2555:5364" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="2555:5365" data-name="Text Wrap">
+                  <p className="[text-box-edge:cap_alphabetic] [text-box-trim:trim-both] [word-break:break-word] font-['Pretendard:SemiBold'] leading-[0] not-italic relative shrink-0 text-[#828ca0] text-[16px] whitespace-nowrap" data-node-id="2555:5366">
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[1.6]">LV.4 Activity Pattern</span>
+                    <span className="leading-[1.6]">의 세렌디피티 판정 시간을 설정합니다. 지정된 시간은 설정된 이후부터 세렌디피티 이벤트 판정에 반영됩니다. 기존에 감지된 데이터에는 소급 적용되지 않습니다.</span>
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[16px] items-center relative shrink-0 w-full" data-node-id="2555:5367" data-name="Item">
+                <div className="content-stretch flex items-center relative shrink-0" data-node-id="2555:5368" data-name="Label">
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[normal] not-italic relative shrink-0 text-[#16192c] text-[16px] whitespace-nowrap" data-node-id="2555:5369">
+                    세렌디피티 판정 시간
+                  </p>
+                </div>
+                <div className="bg-[#f9fafc] border border-[#d8d9dd] border-solid content-stretch flex items-center justify-center px-[12px] py-[9px] relative rounded-[4px] shrink-0 w-[240px]" data-node-id="2555:5370" data-name="Input">
+                  <p className="[word-break:break-word] font-['Pretendard:SemiBold'] leading-[0] not-italic relative shrink-0 text-[#404368] text-[16px] whitespace-nowrap" data-node-id="2555:5371">
+                    <span className="font-['KRAFTON_Font:Regular'] leading-[normal]">30</span>
+                    <span className="leading-[normal]">초</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

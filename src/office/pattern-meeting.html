@@ -1,0 +1,1435 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<title>분석 · 회의실 패턴 분석 — Figma 2273:23030 재구축</title>
+<style>
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@font-face{font-family:'Tomorrow';font-weight:400;font-style:normal;font-display:swap;src:url('./../fonts/Tomorrow-Regular.ttf') format('truetype');}
+.ofpb-root{position:absolute;inset:0;overflow:hidden;background:#05050a;z-index:5;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-size:16px;font-weight:400;font-style:normal;line-height:normal;letter-spacing:normal;color:#fff;text-align:left;text-transform:none;word-spacing:normal;-webkit-font-smoothing:antialiased;}
+.ofpb-root,.ofpb-root *,.ofpb-root *::before,.ofpb-root *::after{box-sizing:border-box;}
+.ofpb-root *{margin:0;padding:0;border:0 solid transparent;background:none;font:inherit;color:inherit;text-decoration:none;}
+.ofpb-root img{display:block;border:0;max-width:none;}
+.ofpb-root > [data-node-id]{will-change:transform;}
+.ofpb-root [hidden]{display:none!important;}
+.ofpb-root [data-sh-theme="dark"]{display:none!important;}
+.ofpb-root[data-theme="dark"] [data-sh-theme="dark"]{display:block!important;}
+.ofpb-root[data-theme="dark"] [data-sh-theme="dark"]{display:none!important;}
+.ofpb-root .n2273_23030{background-color:#fff;position:relative;width:100%;height:100%}
+.ofpb-root .n2273_23031{position:absolute;height:63px;right:0;top:0;width:1920px}
+.ofpb-root .nI2273_23031_2003_18480{position:absolute;background-color:#20202d;inset:0}
+.ofpb-root .nI2273_23031_2003_18481{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;position:absolute;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:20px;left:34px;font-style:normal;color:#f6f6f6;font-size:28px;top:22px;white-space:nowrap}
+.ofpb-root .nI2273_23031_2003_18482{position:absolute;align-content:stretch;display:flex;gap:94px;inset:0 32.97% 0 33.02%;align-items:center;justify-content:center}
+.ofpb-root .nI2273_23031_2003_18483{background-color:#20202d;align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23031_2003_18483_2003_18427{align-content:stretch;display:flex;height:63px;align-items:center;justify-content:center;padding-left:60px;padding-right:60px;padding-top:24px;padding-bottom:24px;position:relative;flex-shrink:0;width:155px}
+.ofpb-root .nI2273_23031_2003_18483_2003_18428{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:#fff;white-space:nowrap}
+.ofpb-root .nI2273_23031_2003_18484{align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23031_2003_18484_2003_18433{align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23031_2003_18484_2003_18433_2003_18430{align-content:stretch;display:flex;height:63px;align-items:center;justify-content:center;padding-left:60px;padding-right:60px;padding-top:24px;padding-bottom:24px;position:relative;flex-shrink:0;width:155px;background-image:linear-gradient(180deg, rgba(101, 122, 255, 0) 0%, rgba(101, 122, 255, 0.2) 100%), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), linear-gradient(90deg, rgb(32, 32, 45) 0%, rgb(32, 32, 45) 100%)}
+.ofpb-root .nI2273_23031_2003_18484_2003_18433_2003_18430::after{content:"";position:absolute;inset:0;border:1px solid #657aff;border-radius:inherit;border-width:0 0 3px 0;pointer-events:none;}
+.ofpb-root .nI2273_23031_2003_18484_2003_18433_2003_18431{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:620;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:18px;text-align:center;color:#fff;white-space:nowrap}
+.ofpb-root .nI2273_23031_2003_18485{background-color:#20202d;align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23031_2003_18485_2003_18427{align-content:stretch;display:flex;height:63px;align-items:center;justify-content:center;padding-left:60px;padding-right:60px;padding-top:24px;padding-bottom:24px;position:relative;flex-shrink:0;width:155px}
+.ofpb-root .nI2273_23031_2003_18485_2003_18428{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:#fff;white-space:nowrap}
+.ofpb-root .nI2273_23031_2003_18486{position:absolute;align-content:stretch;display:flex;gap:13px;inset:20.63% 1.77% 19.05% 90.94%;align-items:center}
+.ofpb-root .n2003_18447{position:relative;flex-shrink:0;width:38px;height:38px}
+.ofpb-root .x1{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2003_18439{position:relative;flex-shrink:0;width:38px;height:38px}
+.ofpb-root .x2{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2003_18437{position:relative;flex-shrink:0;width:38px;height:38px}
+.ofpb-root .x3{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23032{position:absolute;height:1017px;left:0;top:63px;width:380px}
+.ofpb-root .nI2273_23032_145_5897{position:absolute;background-color:#161a23;align-content:stretch;display:flex;gap:14px;height:1017px;align-items:flex-start;left:0;padding-left:16px;top:0;width:380px}
+.ofpb-root .nI2273_23032_155_15876{align-content:stretch;display:flex;flex:1 0 0;flex-direction:column;gap:16px;align-items:flex-start;min-width:1px;padding-top:26px;position:relative}
+.ofpb-root .nI2273_23032_188_5933{grid-template-columns:max-content;grid-template-rows:max-content;display:inline-grid;line-height:0;place-items:start;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_2977_8103{word-break:break-word;grid-column:1;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;margin-left:0;margin-top:0;font-style:normal;position:relative;grid-row:1;color:#6d6e71;font-size:23px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5910{background-color:#8b898c;height:1px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5911{align-content:stretch;display:flex;flex-direction:column;gap:6px;align-items:flex-start;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5913{align-content:stretch;display:flex;gap:10px;align-items:center;padding-top:8px;padding-bottom:8px;position:relative;border-radius:8px;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5914{position:relative;flex-shrink:0;width:21.913px;height:21.913px}
+.ofpb-root .x4{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5916{word-break:break-word;flex:1 0 0;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:520;line-height:21.913px;min-width:1px;font-style:normal;position:relative;color:#fdfdfd;font-size:18px;letter-spacing:-0.36px}
+.ofpb-root .nI2273_23032_145_5917{display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.ofpb-root .x5{flex:none;transform:rotate(180deg)}
+.ofpb-root .x6{position:relative;width:17.53px;height:17.53px}
+.ofpb-root .x7{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5919{align-content:stretch;display:flex;flex-direction:column;gap:13px;align-items:flex-start;padding-top:13px;padding-bottom:13px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5920{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5921{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:21.913px;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:rgba(255,255,255,0.8);letter-spacing:-0.36px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5923{background-color:#2d2f39;align-content:stretch;display:flex;flex-direction:column;height:42px;align-items:flex-start;padding:12px;position:relative;border-radius:4px;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5923::after{content:"";position:absolute;inset:-0px;border:1px solid rgba(255,255,255,0.1);border-radius:4px;pointer-events:none;}
+.ofpb-root .nI2273_23032_145_5924{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5925{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:400;line-height:0;font-style:normal;position:relative;flex-shrink:0;font-size:0px;color:rgba(255,255,255,0.9);white-space:nowrap}
+.ofpb-root .x8{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:18px;font-size:15px}
+.ofpb-root .x9{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x10{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x11{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:18px;font-size:15px}
+.ofpb-root .x12{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x13{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x14{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:18px;font-size:15px}
+.ofpb-root .x15{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x16{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x17{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:18px;font-size:15px}
+.ofpb-root .x18{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x19{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x20{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:18px;font-size:15px}
+.ofpb-root .x21{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x22{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .x23{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:18px;font-size:15px}
+.ofpb-root .x24{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:18px;font-size:15px}
+.ofpb-root .nI2273_23032_145_5926{position:relative;flex-shrink:0;width:16px;height:16px}
+.ofpb-root .x25{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5928{background-color:#2d2f39;height:1px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5929{align-content:stretch;display:flex;flex-direction:column;gap:13px;align-items:flex-start;padding-top:13px;padding-bottom:13px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5930{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5931{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:21.913px;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:rgba(255,255,255,0.8);letter-spacing:-0.36px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5932{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5933{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x26{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5934{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.5);white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5935{align-content:stretch;display:flex;align-items:flex-start;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5936{background-color:#fdfdfd;align-content:stretch;display:flex;align-items:center;padding:10px;position:relative;border-radius:8px;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5937{overflow:clip;position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .nI2273_23032_145_5938{word-break:break-word;position:absolute;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;left:calc(50% - 7.3px);font-style:normal;color:#464646;font-size:16px;top:calc(50% - 9.23px);letter-spacing:0.2667px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5939{background-color:#fdfdfd;align-content:stretch;display:flex;align-items:center;padding:10px;position:relative;border-radius:8px;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5940{overflow:clip;position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .nI2273_23032_145_5941{word-break:break-word;position:absolute;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;left:calc(50% - 7.3px);font-style:normal;color:#464646;font-size:16px;top:calc(50% - 9.23px);letter-spacing:0.2667px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5942{background-color:#fdfdfd;align-content:stretch;display:flex;align-items:center;padding:10px;position:relative;border-radius:8px;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5943{overflow:clip;position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .nI2273_23032_145_5944{word-break:break-word;position:absolute;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;left:calc(50% - 7.3px);font-style:normal;color:#464646;font-size:16px;top:calc(50% - 9.23px);letter-spacing:0.2667px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5945{background-color:#fdfdfd;align-content:stretch;display:flex;align-items:center;padding:10px;position:relative;border-radius:8px;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5946{overflow:clip;position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .nI2273_23032_145_5947{word-break:break-word;position:absolute;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;left:calc(50% - 7.3px);font-style:normal;color:#464646;font-size:16px;top:calc(50% - 9.23px);letter-spacing:0.2667px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5948{background-color:#2d2f39;align-content:stretch;display:flex;align-items:center;padding:10px;position:relative;border-radius:8px;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5949{overflow:clip;position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .nI2273_23032_145_5950{word-break:break-word;position:absolute;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;left:calc(50% - 7.3px);font-style:normal;color:#fdfdfd;font-size:16px;top:calc(50% - 9.23px);letter-spacing:0.2667px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5951{background-color:#2d2f39;align-content:stretch;display:flex;align-items:center;padding:10px;position:relative;border-radius:8px;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5952{overflow:clip;position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .nI2273_23032_145_5953{word-break:break-word;position:absolute;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;left:calc(50% - 7.3px);font-style:normal;color:#fdfdfd;font-size:16px;top:calc(50% - 9.23px);letter-spacing:0.2667px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5954{background-color:#2d2f39;align-content:stretch;display:flex;align-items:center;padding:10px;position:relative;border-radius:8px;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5955{overflow:clip;position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .nI2273_23032_145_5956{word-break:break-word;position:absolute;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;left:calc(50% - 7.3px);font-style:normal;color:#fdfdfd;font-size:16px;top:calc(50% - 9.23px);letter-spacing:0.2667px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5957{background-color:#2d2f39;height:1px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5958{align-content:stretch;display:flex;flex-direction:column;gap:13px;align-items:flex-start;padding-top:13px;padding-bottom:13px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5959{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5960{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:21.913px;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:rgba(255,255,255,0.8);letter-spacing:-0.36px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5961{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5962{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x27{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5963{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.5);white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5965{background-color:#2d2f39;align-content:stretch;display:flex;flex-direction:column;height:42px;align-items:flex-start;padding:12px;position:relative;border-radius:4px;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5965::after{content:"";position:absolute;inset:-0px;border:1px solid rgba(255,255,255,0.1);border-radius:4px;pointer-events:none;}
+.ofpb-root .nI2273_23032_145_5966{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5967{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:0;font-style:normal;position:relative;flex-shrink:0;font-size:15px;color:rgba(255,255,255,0.9);white-space:nowrap}
+.ofpb-root .x28{line-height:normal}
+.ofpb-root .x29{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x30{line-height:normal}
+.ofpb-root .x31{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x32{line-height:normal}
+.ofpb-root .x33{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x34{line-height:normal}
+.ofpb-root .x35{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x36{line-height:normal}
+.ofpb-root .nI2273_23032_145_5968{position:relative;flex-shrink:0;width:16px;height:16px}
+.ofpb-root .x37{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5970{background-color:#8b898c;height:1px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5971{align-content:stretch;display:flex;flex-direction:column;gap:6px;height:450.296px;align-items:flex-start;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5973{align-content:stretch;display:flex;gap:10px;align-items:center;padding-top:8px;padding-bottom:8px;position:relative;border-radius:8px;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5974{position:relative;flex-shrink:0;width:21.913px;height:21.913px}
+.ofpb-root .x38{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5976{word-break:break-word;flex:1 0 0;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:520;line-height:21.913px;min-width:1px;font-style:normal;position:relative;color:#fdfdfd;font-size:18px;letter-spacing:-0.36px}
+.ofpb-root .nI2273_23032_145_5977{display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
+.ofpb-root .x39{flex:none;transform:rotate(180deg)}
+.ofpb-root .x40{position:relative;width:17.53px;height:17.53px}
+.ofpb-root .x41{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5979{align-content:stretch;display:flex;flex-direction:column;gap:13px;align-items:flex-start;padding-top:13px;padding-bottom:13px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5980{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5981{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:21.913px;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:rgba(255,255,255,0.8);letter-spacing:-0.36px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5982{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5983{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x42{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5984{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.5);white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5986{background-color:#2d2f39;align-content:stretch;display:flex;flex-direction:column;height:42px;align-items:flex-start;padding:12px;position:relative;border-radius:4px;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5986::after{content:"";position:absolute;inset:-0px;border:1px solid rgba(255,255,255,0.1);border-radius:4px;pointer-events:none;}
+.ofpb-root .nI2273_23032_145_5987{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5988{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:18px;font-style:normal;position:relative;flex-shrink:0;font-size:15px;color:rgba(255,255,255,0.9);white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5989{position:relative;flex-shrink:0;width:16px;height:16px}
+.ofpb-root .x43{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5991{background-color:#2d2f39;height:1px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5992{align-content:stretch;display:flex;flex-direction:column;gap:13px;align-items:flex-start;padding-top:13px;padding-bottom:13px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5993{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5994{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:21.913px;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:rgba(255,255,255,0.8);letter-spacing:-0.36px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5995{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_5996{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x44{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_5997{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.5);white-space:nowrap}
+.ofpb-root .nI2273_23032_145_5999{background-color:#2d2f39;align-content:stretch;display:flex;flex-direction:column;height:42px;align-items:flex-start;padding:12px;position:relative;border-radius:4px;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_5999::after{content:"";position:absolute;inset:-0px;border:1px solid rgba(255,255,255,0.1);border-radius:4px;pointer-events:none;}
+.ofpb-root .nI2273_23032_145_6000{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_6001{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:15px;color:rgba(255,255,255,0.9);white-space:nowrap}
+.ofpb-root .nI2273_23032_145_6002{position:relative;flex-shrink:0;width:16px;height:16px}
+.ofpb-root .x45{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_6004{background-color:#2d2f39;height:1px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_6005{align-content:stretch;display:flex;flex:1 0 0;flex-direction:column;gap:13px;align-items:flex-start;min-height:1px;overflow:clip;padding-top:13px;padding-bottom:13px;position:relative;width:100%}
+.ofpb-root .nI2273_23032_145_6006{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_6007{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:21.913px;font-style:normal;position:relative;flex-shrink:0;font-size:18px;color:rgba(255,255,255,0.8);letter-spacing:-0.36px;white-space:nowrap}
+.ofpb-root .nI2273_23032_145_6008{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_6009{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x46{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_6010{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.5);white-space:nowrap}
+.ofpb-root .nI2273_23032_248_11878{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_6012{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_6013{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:10px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_145_6013_2003_18505{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_145_6013_2003_18506{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x47{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_6013_2003_18508{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18706{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x48{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_145_6013_2003_18508_2003_18717{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.ofpb-root .nI2273_23032_248_9772{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_248_9773{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:40px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0}
+.ofpb-root .nI2273_23032_248_9773_2003_18515{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_248_9773_2003_18516{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x49{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_248_9773_2003_18518{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18706b{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x50{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_248_9773_2003_18518_2003_18717{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.ofpb-root .nI2273_23032_248_9774{align-content:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:6px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_248_9775{align-content:stretch;display:flex;flex-direction:column;gap:4px;align-items:flex-start;position:relative;flex-shrink:0;width:410px}
+.ofpb-root .nI2273_23032_248_9776{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:70px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_248_9776_2003_18525{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_248_9776_2003_18526{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x51{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_248_9776_2003_18528{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18694{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x52{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_248_9776_2003_18528_2003_18731{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.9);white-space:nowrap}
+.ofpb-root .n2003_18514{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:40px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18515{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18516{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x53{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2003_18518{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18706bb{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x54{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .x55{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.ofpb-root .n2003_18514b{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:40px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18515b{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18516b{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x56{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2003_18518b{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18706bbb{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x57{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .x58{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.ofpb-root .n2003_18514bb{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:40px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18515bb{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18516bb{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x59{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2003_18518bb{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18706bbbb{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x60{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .x61{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.ofpb-root .n2003_18514bbb{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:40px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18515bbb{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18516bbb{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x62{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2003_18518bbb{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18706bbbbb{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x63{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .x64{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.ofpb-root .n2003_18514bbbb{align-content:stretch;display:flex;flex-direction:column;align-items:flex-start;padding-left:40px;padding-right:10px;padding-top:7px;padding-bottom:7px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18515bbbb{align-content:stretch;display:flex;gap:13px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2003_18516bbbb{height:22px;position:relative;flex-shrink:0;width:16px}
+.ofpb-root .x65{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2003_18518bbbb{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2003_18706bbbbbb{position:relative;flex-shrink:0;width:18px;height:18px}
+.ofpb-root .x66{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .x67{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.6);white-space:nowrap}
+.ofpb-root .nI2273_23032_154_8384{background-color:#2d2f39;height:1px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23032_155_18737{background-color:rgba(255,255,255,0.2);height:100%;position:relative;flex-shrink:0;width:17px}
+.ofpb-root .nI2273_23032_155_16633{position:absolute;left:5px;width:7px;height:7px;top:6px}
+.ofpb-root .x68{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_155_16637{position:absolute;background-color:rgba(255,255,255,0.3);align-content:stretch;display:flex;flex-direction:column;height:784px;align-items:flex-start;left:3px;top:18px;width:11px}
+.ofpb-root .nI2273_23032_155_16638{word-break:break-word;font-family:"Roboto","Pretendard",system-ui,sans-serif;font-weight:400;line-height:0;position:relative;flex-shrink:0;color:#c1c1c1;font-size:4px;width:13px;white-space:pre-wrap;font-variation-settings:"wdth" 100}
+.ofpb-root .x69{line-height:normal;margin-bottom:0}
+.ofpb-root .x70{line-height:normal;margin-bottom:0}
+.ofpb-root .x71{line-height:normal;margin-bottom:0}
+.ofpb-root .x72{line-height:normal;margin-bottom:0}
+.ofpb-root .x73{line-height:normal}
+.ofpb-root .nI2273_23032_155_16635{position:absolute;left:5px;width:7px;height:7px;top:995px}
+.ofpb-root .x74{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2273_23032_163_26355{position:absolute;bottom:20px;align-content:stretch;display:flex;flex-direction:column;align-items:flex-end;left:16px;width:333px}
+.ofpb-root .nI2273_23032_163_26356{background-color:#2d2f39;align-content:stretch;display:flex;align-items:flex-start;padding-left:38px;padding-right:38px;padding-top:8px;padding-bottom:8px;position:relative;border-radius:4px;flex-shrink:0}
+.ofpb-root .nI2273_23032_163_26356::after{content:"";position:absolute;inset:-0px;border:1px solid #45495d;border-radius:4px;pointer-events:none;}
+.ofpb-root .nI2273_23032_163_26357{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:520;line-height:normal;font-style:normal;position:relative;flex-shrink:0;font-size:16px;color:rgba(255,255,255,0.8);white-space:nowrap}
+.ofpb-root .n2273_23039{position:absolute;align-content:stretch;display:flex;height:36px;align-items:center;left:400px;top:89px;width:239px}
+.ofpb-root .n2273_23040{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:620;line-height:26px;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:22px;white-space:nowrap;width:144px}
+.ofpb-root .n2273_23041{position:absolute;background-color:#fff;align-content:stretch;display:flex;flex-direction:column;height:931px;align-items:center;left:400px;padding-bottom:120px;padding-top:30px;padding-left:30px;padding-right:30px;border-radius:6px;top:135px;width:1500px}
+.ofpb-root .n2273_23041::after{content:"";position:absolute;inset:-0px;border:1px solid #e8e8e8;border-radius:6px;pointer-events:none;}
+.ofpb-root .n2273_23042{background-color:#fff;align-content:stretch;display:flex;flex-direction:column;gap:24px;height:391.5px;align-items:flex-start;padding:20px;position:relative;border-radius:6px;flex-shrink:0;width:100%}
+.ofpb-root .n2273_23042::after{content:"";position:absolute;inset:-0px;border:1px solid #e8e8e8;border-radius:6px;pointer-events:none;}
+.ofpb-root .n2273_23043{align-content:stretch;display:flex;gap:4px;align-items:center;justify-content:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .nI2273_23043_2965_31363{align-content:stretch;display:flex;flex:1 0 0;gap:4px;align-items:center;min-width:1px;position:relative}
+.ofpb-root .nI2273_23043_2965_31364{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:520;line-height:1.5;font-style:normal;position:relative;flex-shrink:0;color:#16192c;font-size:16px;white-space:nowrap}
+.ofpb-root .nI2273_23043_2965_31365{position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .x75{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23044{align-content:stretch;display:flex;flex:1 0 0;gap:44px;align-items:flex-start;min-height:1px;position:relative;width:100%}
+.ofpb-root .n2273_23045{background-color:#fff;align-content:stretch;display:flex;flex-direction:column;height:100%;align-items:center;justify-content:center;padding-bottom:14px;padding-top:22px;padding-left:30px;padding-right:30px;position:relative;border-radius:4px;flex-shrink:0;width:337px}
+.ofpb-root .n2273_23045::after{content:"";position:absolute;inset:-0px;border:1px solid #e6edff;border-radius:4px;pointer-events:none;}
+.ofpb-root .n2273_23046{align-content:stretch;display:flex;flex:1 0 0;flex-direction:column;align-items:center;justify-content:space-between;min-height:1px;position:relative;width:277px}
+.ofpb-root .n2273_23047{flex:1 0 0;min-height:1px;position:relative;width:240px}
+.ofpb-root .n2273_23048{position:absolute;display:contents;left:0;top:0}
+.ofpb-root .n2273_23049{word-break:break-word;position:absolute;align-content:stretch;display:flex;flex-direction:column;gap:24.742px;height:86px;align-items:center;line-height:normal;left:calc(50% + 1.5px);font-style:normal;text-align:center;top:77px;white-space:nowrap;margin-left:-86px}
+.ofpb-root .n2273_23050{align-content:stretch;display:flex;align-items:flex-end;justify-content:center;position:relative;flex-shrink:0;color:#292936}
+.ofpb-root .n2273_23051{text-box-edge:cap alphabetic;text-box-trim:trim-both;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:320;position:relative;flex-shrink:0;font-size:60px;letter-spacing:-3px;width:62px;height:42px;white-space:nowrap}
+.ofpb-root .n2273_23052{text-box-edge:cap alphabetic;text-box-trim:trim-both;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:620;position:relative;flex-shrink:0;font-size:32.99px;letter-spacing:-0.6598px;width:32px;height:23px;white-space:nowrap}
+.ofpb-root .n2273_23053{font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:400;position:relative;flex-shrink:0;font-size:13px;color:rgba(41,41,54,0.3);width:172px;line-height:16px;white-space:nowrap}
+.ofpb-root .n2273_23054{position:absolute;display:contents;left:0;top:0}
+.ofpb-root .n2273_23055{position:absolute;left:3.3px;width:233.402px;height:233.402px;top:3.3px}
+.ofpb-root .x76{position:absolute;inset:0 0 25.29% 0}
+.ofpb-root .x77{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23056{position:absolute;left:0;width:240px;height:240px;top:0}
+.ofpb-root .x78{position:absolute;inset:0 2.61% 25.51% 0}
+.ofpb-root .x79{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23057{position:absolute;left:15.67px;width:208.66px;height:208.66px;top:15.67px}
+.ofpb-root .x80{position:absolute;inset:0 0 25.29% 0}
+.ofpb-root .x81{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23058{align-content:stretch;display:flex;flex-direction:column;gap:2px;align-items:flex-start;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2273_23059{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2273_23060{align-content:stretch;display:flex;gap:10px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2273_23061{display:flex;flex-direction:row;align-items:center;align-self:stretch}
+.ofpb-root .x82{display:flex;height:100%;align-items:center;justify-content:center;position:relative;flex-shrink:0;width:0;container-type:size}
+.ofpb-root .x83{flex:none;width:100cqh;transform:rotate(90deg)}
+.ofpb-root .x84{height:0;position:relative;width:100%}
+.ofpb-root .x85{position:absolute;inset:-1.5px -15%}
+.ofpb-root .x86{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23062{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:14px;text-align:center;white-space:nowrap;width:64px;height:10px}
+.ofpb-root .n2273_23063{align-content:stretch;display:flex;align-items:center;justify-content:center;padding-left:12px;padding-right:12px;padding-top:8px;padding-bottom:8px;position:relative;border-radius:38px;flex-shrink:0;background-image:linear-gradient(to bottom,rgba(255,255,255,0.11),rgba(235,235,240,0) 79.412%)}
+.ofpb-root .n2273_23063::after{content:"";position:absolute;inset:-0px;border:1px solid #fff;border-radius:38px;pointer-events:none;}
+.ofpb-root .n2273_23064{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:520;line-height:0;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:14px;text-align:right;white-space:nowrap;width:70px;height:10px}
+.ofpb-root .x87{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x88{line-height:normal}
+.ofpb-root .x89{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x90{line-height:normal}
+.ofpb-root .n2273_23064{height:10px}
+.ofpb-root .n2273_23064>span{vertical-align:top}
+.ofpb-root .n2273_23065{align-content:stretch;display:flex;align-items:center;justify-content:space-between;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2273_23066{align-content:stretch;display:flex;gap:10px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2273_23067{display:flex;flex-direction:row;align-items:center;align-self:stretch}
+.ofpb-root .x91{display:flex;height:100%;align-items:center;justify-content:center;position:relative;flex-shrink:0;width:0;container-type:size}
+.ofpb-root .x92{flex:none;width:100cqh;transform:rotate(90deg)}
+.ofpb-root .x93{height:0;position:relative;width:100%}
+.ofpb-root .x94{position:absolute;inset:-1.5px -15%}
+.ofpb-root .x95{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23068{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:420;line-height:normal;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:14px;text-align:center;white-space:nowrap;width:113px;height:10px}
+.ofpb-root .n2273_23069{align-content:stretch;display:flex;align-items:center;justify-content:center;padding-left:12px;padding-right:12px;padding-top:8px;padding-bottom:8px;position:relative;border-radius:38px;flex-shrink:0;background-image:linear-gradient(to bottom,rgba(255,255,255,0.11),rgba(235,235,240,0) 79.412%)}
+.ofpb-root .n2273_23069::after{content:"";position:absolute;inset:-0px;border:1px solid #fff;border-radius:38px;pointer-events:none;}
+.ofpb-root .n2273_23070{text-box-edge:cap alphabetic;text-box-trim:trim-both;word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:520;line-height:0;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:14px;text-align:right;white-space:nowrap;width:67px;height:10px}
+.ofpb-root .x96{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x97{line-height:normal}
+.ofpb-root .x98{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:normal}
+.ofpb-root .x99{line-height:normal}
+.ofpb-root .n2273_23070{height:10px}
+.ofpb-root .n2273_23070>span{vertical-align:top}
+.ofpb-root .n2273_23071{align-content:stretch;display:flex;flex:1 0 0;gap:10px;height:100%;align-items:center;min-width:1px;padding-top:1px;padding-bottom:1px;position:relative}
+.ofpb-root .n2273_23072{align-content:stretch;display:flex;flex:1 0 0;flex-direction:column;gap:10px;height:100%;align-items:flex-start;min-width:1px;position:relative}
+.ofpb-root .n2273_23073{align-content:stretch;display:flex;flex:1 0 0;flex-direction:column;gap:5px;align-items:center;min-height:1px;position:relative;width:100%}
+.ofpb-root .n2273_23074{align-content:stretch;display:flex;flex:1 0 0;gap:5px;align-items:flex-start;min-height:1px;position:relative;width:100%}
+.ofpb-root .n2273_23075{align-content:stretch;display:flex;gap:5px;height:100%;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2273_23076{word-break:break-word;align-content:stretch;display:flex;flex-direction:column;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:300;height:100%;align-items:flex-end;justify-content:space-between;line-height:1.5;font-style:normal;position:relative;flex-shrink:0;color:#b0b3be;font-size:12px;text-align:right}
+.ofpb-root .n2273_23077{position:relative;flex-shrink:0;white-space:nowrap;width:17px;line-height:18px}
+.ofpb-root .n2273_23078{min-width:100%;position:relative;flex-shrink:0;width:min-content;line-height:18px;white-space:nowrap}
+.ofpb-root .n2273_23079{min-width:100%;position:relative;flex-shrink:0;width:min-content;line-height:18px;white-space:nowrap}
+.ofpb-root .n2273_23080{min-width:100%;position:relative;flex-shrink:0;width:min-content;line-height:18px;white-space:nowrap}
+.ofpb-root .n2273_23081{min-width:100%;position:relative;flex-shrink:0;width:min-content;line-height:18px;white-space:nowrap}
+.ofpb-root .n2273_23082{min-width:100%;position:relative;flex-shrink:0;width:min-content;line-height:18px;white-space:nowrap}
+.ofpb-root .n2273_23083{align-content:stretch;display:flex;flex-direction:column;height:100%;align-items:flex-start;justify-content:space-between;padding-top:9px;padding-bottom:9px;position:relative;flex-shrink:0;width:4px}
+.ofpb-root .n2273_23084{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x100{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x101{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23085{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x102{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x103{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23086{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x104{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x105{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23087{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x106{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x107{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23088{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x108{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x109{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23089{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x110{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x111{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23090{align-content:stretch;display:flex;flex:1 0 0;flex-direction:column;height:100%;align-items:center;justify-content:space-between;min-width:1px;padding-top:9px;padding-bottom:9px;position:relative}
+.ofpb-root .n2273_23091{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x112{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x113{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23093{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x114{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x115{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23095{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x116{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x117{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23097{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x118{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x119{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23099{height:0;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x120{position:absolute;inset:-1px 0 0 0}
+.ofpb-root .x121{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23101{height:0.527px;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .x122{position:absolute;inset:-189.62% 0 -34.97% 0}
+.ofpb-root .x123{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23103{word-break:break-word;align-content:stretch;display:flex;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:500;align-items:flex-start;justify-content:space-between;line-height:0;font-style:normal;padding-left:40px;position:relative;flex-shrink:0;color:#b0b3be;font-size:12px;width:100%;white-space:nowrap}
+.ofpb-root .n2273_23104{position:relative;flex-shrink:0;width:38px;line-height:18px;white-space:nowrap}
+.ofpb-root .x124{line-height:1.5}
+.ofpb-root .x125{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x126{line-height:1.5}
+.ofpb-root .n2273_23104{height:18px}
+.ofpb-root .n2273_23104>span{vertical-align:top}
+.ofpb-root .n2273_23105{position:relative;flex-shrink:0;width:42px;line-height:18px;white-space:nowrap}
+.ofpb-root .x127{line-height:1.5}
+.ofpb-root .x128{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x129{line-height:1.5}
+.ofpb-root .n2273_23105{height:18px}
+.ofpb-root .n2273_23105>span{vertical-align:top}
+.ofpb-root .n2273_23106{position:relative;flex-shrink:0;width:40px;line-height:18px;white-space:nowrap}
+.ofpb-root .x130{line-height:1.5}
+.ofpb-root .x131{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x132{line-height:1.5}
+.ofpb-root .n2273_23106{height:18px}
+.ofpb-root .n2273_23106>span{vertical-align:top}
+.ofpb-root .n2273_23107{position:relative;flex-shrink:0;width:42px;line-height:18px;white-space:nowrap}
+.ofpb-root .x133{line-height:1.5}
+.ofpb-root .x134{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x135{line-height:1.5}
+.ofpb-root .n2273_23107{height:18px}
+.ofpb-root .n2273_23107>span{vertical-align:top}
+.ofpb-root .n2273_23108{position:relative;flex-shrink:0;width:36px;line-height:18px;white-space:nowrap}
+.ofpb-root .x136{line-height:1.5}
+.ofpb-root .x137{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x138{line-height:1.5}
+.ofpb-root .n2273_23108{height:18px}
+.ofpb-root .n2273_23108>span{vertical-align:top}
+.ofpb-root .n2273_23109{position:relative;flex-shrink:0;width:38px;line-height:18px;white-space:nowrap}
+.ofpb-root .x139{line-height:1.5}
+.ofpb-root .x140{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x141{line-height:1.5}
+.ofpb-root .n2273_23109{height:18px}
+.ofpb-root .n2273_23109>span{vertical-align:top}
+.ofpb-root .n2273_23110{position:relative;flex-shrink:0;width:38px;line-height:18px;white-space:nowrap}
+.ofpb-root .x142{line-height:1.5}
+.ofpb-root .x143{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x144{line-height:1.5}
+.ofpb-root .n2273_23110{height:18px}
+.ofpb-root .n2273_23110>span{vertical-align:top}
+.ofpb-root .n2273_23111{position:relative;flex-shrink:0;width:38px;line-height:18px;white-space:nowrap}
+.ofpb-root .x145{line-height:1.5}
+.ofpb-root .x146{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x147{line-height:1.5}
+.ofpb-root .n2273_23111{height:18px}
+.ofpb-root .n2273_23111>span{vertical-align:top}
+.ofpb-root .n2273_23112{position:relative;flex-shrink:0;width:38px;line-height:18px;white-space:nowrap}
+.ofpb-root .x148{line-height:1.5}
+.ofpb-root .x149{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x150{line-height:1.5}
+.ofpb-root .n2273_23112{height:18px}
+.ofpb-root .n2273_23112>span{vertical-align:top}
+.ofpb-root .n2273_23113{position:relative;flex-shrink:0;width:38px;line-height:18px;white-space:nowrap}
+.ofpb-root .x151{line-height:1.5}
+.ofpb-root .x152{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:1.5}
+.ofpb-root .x153{line-height:1.5}
+.ofpb-root .n2273_23113{height:18px}
+.ofpb-root .n2273_23113>span{vertical-align:top}
+.ofpb-root .n2273_23114{position:absolute;display:contents;left:37px;top:101px}
+.ofpb-root .n2273_23115{position:absolute;height:168px;left:37.51px;top:101px;width:981.489px}
+.ofpb-root .x154{position:absolute;inset:0 -0.1%}
+.ofpb-root .x155{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23118{position:absolute;display:flex;height:106.909px;align-items:center;justify-content:center;left:37px;top:162.09px;width:981.489px}
+.ofpb-root .x156{flex:none;transform:rotate(180deg) scaleY(-1)}
+.ofpb-root .x157{height:106.909px;position:relative;width:981.489px}
+.ofpb-root .x158{position:absolute;inset:0 -0.1%}
+.ofpb-root .x159{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23121{position:absolute;height:91.918px;left:37px;top:176.27px;width:981.04px}
+.ofpb-root .x160{position:absolute;inset:-1.09% -0.1% 0 -0.1%}
+.ofpb-root .x161{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23124{position:absolute;height:260px;left:461px;top:10px;width:29px}
+.ofpb-root .n2273_23125{position:absolute;background-color:#fff;height:107px;left:calc(50% + 60px);border-radius:8px;top:calc(50% - 0.5px);width:73px;filter:drop-shadow(0px 4px 9px rgba(0,0,0,0.1));margin-top:-53.5px;margin-left:-36.5px}
+.ofpb-root .n2273_23126{position:absolute;align-content:stretch;display:flex;flex-direction:column;gap:5px;align-items:flex-start;left:11.99px;top:11px;width:46px}
+.ofpb-root .n2273_23127{word-break:break-word;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:600;line-height:20px;min-width:100%;font-style:normal;position:relative;flex-shrink:0;color:#242529;font-size:12px;width:min-content}
+.ofpb-root .x162{line-height:20px}
+.ofpb-root .x163{font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:400;line-height:20px}
+.ofpb-root .x164{line-height:20px}
+.ofpb-root .n2273_23127{height:20px}
+.ofpb-root .n2273_23127>span{vertical-align:top}
+.ofpb-root .n2273_23128{align-content:stretch;display:flex;flex-direction:column;gap:11px;align-items:flex-start;position:relative;flex-shrink:0;width:35px}
+.ofpb-root .n2273_23129{align-content:stretch;display:flex;gap:6px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2273_23130{background-color:#9747ff;position:relative;border-radius:2px;flex-shrink:0;width:10px;height:10px}
+.ofpb-root .n2273_23131{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:300;line-height:11px;font-style:normal;position:relative;flex-shrink:0;color:#b0b3be;font-size:10px;white-space:nowrap;width:11px}
+.ofpb-root .n2273_23132{align-content:stretch;display:flex;gap:6px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2273_23133{background-color:#ffe179;position:relative;border-radius:2px;flex-shrink:0;width:10px;height:10px}
+.ofpb-root .n2273_23134{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:300;line-height:11px;font-style:normal;position:relative;flex-shrink:0;color:#b0b3be;font-size:10px;white-space:nowrap;width:11px}
+.ofpb-root .n2273_23135{align-content:stretch;display:flex;gap:6px;align-items:center;position:relative;flex-shrink:0;width:100%}
+.ofpb-root .n2273_23136{background-color:#4bc0c0;position:relative;border-radius:2px;flex-shrink:0;width:10px;height:10px}
+.ofpb-root .n2273_23137{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:300;line-height:11px;font-style:normal;position:relative;flex-shrink:0;color:#b0b3be;font-size:10px;white-space:nowrap;width:9px}
+.ofpb-root .n2273_23138{position:absolute;display:flex;align-items:center;justify-content:center;left:-11.01px;width:20px;height:20px;top:16px}
+.ofpb-root .x165{flex:none;transform:rotate(-90deg)}
+.ofpb-root .x166{position:relative;width:20px;height:20px}
+.ofpb-root .x167{position:absolute;bottom:25%;left:14%;right:14%;top:10%}
+.ofpb-root .x168{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23139{position:absolute;height:260px;left:calc(50% - 1px);top:0;width:6px;margin-left:-3px}
+.ofpb-root .x169{position:absolute;inset:0 -16.67%}
+.ofpb-root .x170{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23144{position:absolute;background-color:#fff;align-content:stretch;display:flex;flex-direction:column;gap:5px;align-items:flex-start;justify-content:center;padding:15px;right:30px;border-radius:10px;top:29px;filter:drop-shadow(0px 0px 2px rgba(75,81,95,0.2))}
+.ofpb-root .n2273_23145{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2273_23146{background-color:#9747ff;position:relative;border-radius:2px;flex-shrink:0;width:9px;height:9px}
+.ofpb-root .n2273_23147{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:300;line-height:18px;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:12px;white-space:nowrap;width:112px}
+.ofpb-root .n2273_23148{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2273_23149{background-color:#ffe179;position:relative;border-radius:2px;flex-shrink:0;width:9px;height:9px}
+.ofpb-root .n2273_23150{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:300;line-height:18px;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:12px;white-space:nowrap;width:114px}
+.ofpb-root .n2273_23151{align-content:stretch;display:flex;gap:8px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2273_23152{background-color:#4bc0c0;position:relative;border-radius:2px;flex-shrink:0;width:9px;height:9px}
+.ofpb-root .n2273_23153{word-break:break-word;font-family:"KRAFTON_Font","Pretendard Variable","Pretendard","Malgun Gothic",system-ui,sans-serif;font-weight:300;line-height:18px;font-style:normal;position:relative;flex-shrink:0;color:#292936;font-size:12px;white-space:nowrap;width:114px}
+.ofpb-root .n2273_23154{position:absolute;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);background-color:rgba(233,233,233,0.5);align-content:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;left:1007px;padding-left:12px;padding-right:12px;padding-top:10px;padding-bottom:10px;border-radius:15px;top:980px}
+.ofpb-root .n2273_23154::after{content:"";position:absolute;inset:-0px;border:1px solid #e8e8e8;border-radius:15px;pointer-events:none;}
+.ofpb-root .n2273_23155{align-content:stretch;display:flex;gap:12px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2276_28155{align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;border-radius:10px;flex-shrink:0;width:40px;height:40px}
+.ofpb-root .n2276_28156{position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .x171{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23157{display:flex;height:22.5px;align-items:center;justify-content:center;position:relative;flex-shrink:0;width:1.125px}
+.ofpb-root .x172{flex:none;transform:rotate(90deg)}
+.ofpb-root .x173{height:1.125px;position:relative;width:22.5px}
+.ofpb-root .x174{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23158{align-content:stretch;display:flex;gap:6px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .n2276_28098{position:relative;flex-shrink:0;width:40px;height:40px}
+.ofpb-root .x175{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2276_28200{align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;border-radius:10px;flex-shrink:0;width:40px;height:40px}
+.ofpb-root .n2276_28201{position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .x176{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2276_28203{align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;border-radius:10px;flex-shrink:0;width:40px;height:40px}
+.ofpb-root .n2276_28204{position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .x177{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2273_23162{display:flex;height:22.5px;align-items:center;justify-content:center;position:relative;flex-shrink:0;width:1.125px}
+.ofpb-root .x178{flex:none;transform:rotate(90deg)}
+.ofpb-root .x179{height:1.125px;position:relative;width:22.5px}
+.ofpb-root .x180{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2276_28173{align-content:stretch;display:flex;align-items:center;justify-content:center;position:relative;border-radius:10px;flex-shrink:0;width:40px;height:40px}
+.ofpb-root .n2276_28174{position:relative;flex-shrink:0;width:20px;height:20px}
+.ofpb-root .x181{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .n2277_47424{position:absolute;align-content:stretch;display:flex;flex-direction:column;align-items:flex-end;right:20px;top:77px;width:211px}
+.ofpb-root .nI2277_47424_2019_19047{align-content:stretch;display:flex;gap:13.714px;align-items:center;position:relative;flex-shrink:0}
+.ofpb-root .nI2277_47424_2019_19048{height:13px;position:relative;flex-shrink:0;width:13.008px}
+.ofpb-root .x182{position:absolute;display:block;inset:0;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2277_47424_2019_19049{height:8px;position:relative;flex-shrink:0;width:4px}
+.ofpb-root .x183{position:absolute;inset:-6.25% -12.5%}
+.ofpb-root .x184{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2277_47424_2019_19050{word-break:break-word;display:flex;flex-direction:column;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:400;justify-content:center;line-height:0;font-style:normal;position:relative;flex-shrink:0;color:#828ca0;font-size:13px;text-align:right;white-space:nowrap}
+.ofpb-root .x185{line-height:normal}
+.ofpb-root .nI2277_47424_2019_19587{height:8px;position:relative;flex-shrink:0;width:4px}
+.ofpb-root .x186{position:absolute;inset:-6.25% -12.5%}
+.ofpb-root .x187{display:block;max-width:none;width:100%;height:100%}
+.ofpb-root .nI2277_47424_2019_19588{word-break:break-word;display:flex;flex-direction:column;font-family:"Pretendard Variable","Pretendard","Malgun Gothic",-apple-system,system-ui,sans-serif;font-weight:400;justify-content:center;line-height:0;font-style:normal;position:relative;flex-shrink:0;color:#20202d;font-size:13px;text-align:right;white-space:nowrap}
+.ofpb-root .x188{line-height:normal}
+
+
+/* 분석 · 회의실 패턴 분석 — 라이트 테마(형상 동일, 색만 반전). 생성기: _gen/light.js */
+.ofpb-root[data-theme="dark"]:not(.hj-asset){background:#0e0f12;}
+.ofpb-root[data-theme="dark"]{color:#e3e9f2;}
+.ofpb-root[data-theme="dark"] img[src$="/arrow-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./arrow-1-dk.svg?v=1b11");}
+.ofpb-root[data-theme="dark"] img[src$="/arrow-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./arrow-2-dk.svg?v=1b11");}
+.ofpb-root[data-theme="dark"] img[src$="/arrow.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./arrow-dk.svg?v=sy8vxv");}
+.ofpb-root[data-theme="dark"] img[src$="/brush.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./brush-dk.svg?v=crcwox");}
+.ofpb-root[data-theme="dark"] img[src$="/building.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./building-dk.svg?v=9gi8xs");}
+.ofpb-root[data-theme="dark"] img[src$="/bullet-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./bullet-1-dk.svg?v=19b4");}
+.ofpb-root[data-theme="dark"] img[src$="/button-icon-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./button-icon-1-dk.svg?v=1j18uy5");}
+.ofpb-root[data-theme="dark"] img[src$="/button-icon-tag.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./button-icon-tag-dk.svg?v=1hn4dy4");}
+.ofpb-root[data-theme="dark"] img[src$="/button-icon.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./button-icon-dk.svg?v=qgtplg");}
+.ofpb-root[data-theme="dark"] img[src$="/calendar.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./calendar-dk.svg?v=1c655f6");}
+.ofpb-root[data-theme="dark"] img[src$="/check.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./check-dk.svg?v=mkhl8a");}
+.ofpb-root[data-theme="dark"] img[src$="/checkbox.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./checkbox-dk.svg?v=17s9ki8");}
+.ofpb-root[data-theme="dark"] img[src$="/chevron-down.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./chevron-down-dk.svg?v=1bl8e2q");}
+.ofpb-root[data-theme="dark"] img[src$="/chevron-up.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./chevron-up-dk.svg?v=qr6r46");}
+.ofpb-root[data-theme="dark"] img[src$="/circles.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./circles-dk.svg?v=1hwy5ob");}
+.ofpb-root[data-theme="dark"] img[src$="/container-1-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./container-1-2-dk.svg?v=kunvzl");}
+.ofpb-root[data-theme="dark"] img[src$="/container-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./container-2-dk.svg?v=1m9mo37");}
+.ofpb-root[data-theme="dark"] img[src$="/container-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./container-3-dk.svg?v=1fpixg");}
+.ofpb-root[data-theme="dark"] img[src$="/count-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./count-1-dk.svg?v=ah9tln");}
+.ofpb-root[data-theme="dark"] img[src$="/count-2-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./count-2-2-dk.svg?v=17n6it7");}
+.ofpb-root[data-theme="dark"] img[src$="/count-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./count-2-dk.svg?v=lqbigx");}
+.ofpb-root[data-theme="dark"] img[src$="/count.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./count-dk.svg?v=re6gy0");}
+.ofpb-root[data-theme="dark"] img[src$="/divider-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./divider-1-dk.svg?v=19ck");}
+.ofpb-root[data-theme="dark"] img[src$="/divider-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./divider-2-dk.svg?v=19m6");}
+.ofpb-root[data-theme="dark"] img[src$="/divider-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./divider-3-dk.svg?v=19bw");}
+.ofpb-root[data-theme="dark"] img[src$="/divider.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./divider-dk.svg?v=19ck");}
+.ofpb-root[data-theme="dark"] img[src$="/dot-3-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./dot-3-3-dk.svg?v=1b1s");}
+.ofpb-root[data-theme="dark"] img[src$="/fill.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./fill-dk.svg?v=14s22");}
+.ofpb-root[data-theme="dark"] img[src$="/floor-plan.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./floor-plan-dk.svg?v=u0zwtb");}
+.ofpb-root[data-theme="dark"] img[src$="/gate.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./gate-dk.svg?v=h5lyos");}
+.ofpb-root[data-theme="dark"] img[src$="/glyph-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./glyph-1-dk.svg?v=1qgr7qu");}
+.ofpb-root[data-theme="dark"] img[src$="/grid-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-1-dk.svg?v=1x3r56n");}
+.ofpb-root[data-theme="dark"] img[src$="/grid-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-2-dk.svg?v=18es5h2");}
+.ofpb-root[data-theme="dark"] img[src$="/grid-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-3-dk.svg?v=nwob9c");}
+.ofpb-root[data-theme="dark"] img[src$="/grid-line-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-line-1-dk.svg?v=19a6");}
+.ofpb-root[data-theme="dark"] img[src$="/grid-line-2-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-line-2-2-dk.svg?v=1b1s");}
+.ofpb-root[data-theme="dark"] img[src$="/grid-line-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-line-2-dk.svg?v=19a6");}
+.ofpb-root[data-theme="dark"] img[src$="/grid-line-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-line-4-dk.svg?v=1bck");}
+.ofpb-root[data-theme="dark"] img[src$="/grid.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./grid-dk.svg?v=p54i6m");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-1-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-1-3-dk.svg?v=89m43u");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-10-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-10-3-dk.svg?v=uc7gwa");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-10-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-10-4-dk.svg?v=miu5bf");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-10-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-10-5-dk.svg?v=c2r5bx");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-10-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-10-6-dk.svg?v=2a1miw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-11-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-11-2-dk.svg?v=miu5bf");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-13.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-13-dk.svg?v=waxwjc");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-14.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-14-dk.svg?v=1t6ie8p");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-15.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-15-dk.svg?v=axhhm0");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-16.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-16-dk.svg?v=1xzvy93");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-17.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-17-dk.svg?v=1xzvy93");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-18.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-18-dk.svg?v=1xzvy93");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-2-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-2-3-dk.svg?v=2a1miw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-2-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-2-4-dk.svg?v=2a1miw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-2-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-2-6-dk.svg?v=1id8zzu");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-2-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-2-7-dk.svg?v=1id8zzu");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-10.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-10-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-11.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-11-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-12.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-12-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-13.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-13-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-14.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-14-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-15.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-15-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-16.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-16-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-18.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-18-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-19.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-19-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-20.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-20-dk.svg?v=bs0yf4");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-21.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-21-dk.svg?v=bs0yf4");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-22.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-22-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-6-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-7-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-8.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-8-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-9-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-3-dk.svg?v=1fuld5s");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-4-11.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-4-11-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-4-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-4-6-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-4-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-4-7-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-4-8.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-4-8-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-4-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-4-9-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-4-dk.svg?v=kv90wh");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-5-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-5-4-dk.svg?v=1uucnvw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-5-dk.svg?v=dexlcx");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-6-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-6-3-dk.svg?v=11fk1mv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-6-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-6-5-dk.svg?v=2a1miw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-6-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-6-6-dk.svg?v=1opfaxx");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-6-dk.svg?v=bv2s2z");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-7-10.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-7-10-dk.svg?v=11fk1mv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-7-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-7-4-dk.svg?v=uc7gwa");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-7-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-7-5-dk.svg?v=1hyimzc");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-7-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-7-7-dk.svg?v=ymy61a");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-7-8.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-7-8-dk.svg?v=2a1miw");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-7-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-7-9-dk.svg?v=11fk1mv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-7-dk.svg?v=1a3e9ul");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-9-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-9-2-dk.svg?v=4tukhb");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-9-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-9-3-dk.svg?v=1i6y3b7");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-9-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-9-4-dk.svg?v=11fk1mv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-9-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-9-5-dk.svg?v=c2r5bx");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-9-dk.svg?v=11n198a");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-10.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-10-dk.svg?v=knjerv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-11.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-11-dk.svg?v=knjerv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-12.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-12-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-13.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-13-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-2-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-3-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-4-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-5-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-6-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-7-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-8.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-8-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-9-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-1-dk.svg?v=19yv893");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-10.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-10-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-11.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-11-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-12.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-12-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-13.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-13-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-14.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-14-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-15.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-15-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-16.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-16-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-17.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-17-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-18.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-18-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-19.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-19-dk.svg?v=wuu5q3");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-2-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-2-2-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-2-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-2-3-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-2-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-3-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-4-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-5-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-6-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-7-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-8.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-8-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-9-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-action.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-action-dk.svg?v=1apaepv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-chevron.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-chevron-dk.svg?v=1mpneqt");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-page-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-page-1-dk.svg?v=12zsv");}
+.ofpb-root[data-theme="dark"] img[src$="/icon-page.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./icon-page-dk.svg?v=12zu1");}
+.ofpb-root[data-theme="dark"] img[src$="/layer.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./layer-dk.svg?v=1earlgw");}
+.ofpb-root[data-theme="dark"] img[src$="/line-1-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-1-2-dk.svg?v=1i6vjx8");}
+.ofpb-root[data-theme="dark"] img[src$="/line-1-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-1-3-dk.svg?v=13dd5");}
+.ofpb-root[data-theme="dark"] img[src$="/line-1-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-1-5-dk.svg?v=13auh");}
+.ofpb-root[data-theme="dark"] img[src$="/line-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-1-dk.svg?v=13auh");}
+.ofpb-root[data-theme="dark"] img[src$="/line-10.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-10-dk.svg?v=19dv");}
+.ofpb-root[data-theme="dark"] img[src$="/line-3-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-3-3-dk.svg?v=19e6");}
+.ofpb-root[data-theme="dark"] img[src$="/line-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-3-dk.svg?v=1m1au3o");}
+.ofpb-root[data-theme="dark"] img[src$="/line-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-4-dk.svg?v=zlfeyj");}
+.ofpb-root[data-theme="dark"] img[src$="/line-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-5-dk.svg?v=nmxnmw");}
+.ofpb-root[data-theme="dark"] img[src$="/line-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-6-dk.svg?v=11bri7v");}
+.ofpb-root[data-theme="dark"] img[src$="/line-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-7-dk.svg?v=19a4");}
+.ofpb-root[data-theme="dark"] img[src$="/line-8.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-8-dk.svg?v=19a4");}
+.ofpb-root[data-theme="dark"] img[src$="/line-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-9-dk.svg?v=19a6");}
+.ofpb-root[data-theme="dark"] img[src$="/line.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./line-dk.svg?v=19dv");}
+.ofpb-root[data-theme="dark"] img[src$="/profile.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./profile-dk.svg?v=19ny");}
+.ofpb-root[data-theme="dark"] img[src$="/return.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./return-dk.svg?v=1a8o0s");}
+.ofpb-root[data-theme="dark"] img[src$="/segment-2-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./segment-2-2-dk.svg?v=1enkzmc");}
+.ofpb-root[data-theme="dark"] img[src$="/segment-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./segment-5-dk.svg?v=1fo3zcc");}
+.ofpb-root[data-theme="dark"] img[src$="/segment.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./segment-dk.svg?v=19s9");}
+.ofpb-root[data-theme="dark"] img[src$="/select-1.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./select-1-dk.svg?v=f0ipn5");}
+.ofpb-root[data-theme="dark"] img[src$="/select-2-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./select-2-2-dk.svg?v=xl3m4");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-2-dk.svg?v=1vtpm7e");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-3-dk.svg?v=1vtpm7e");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-4-dk.svg?v=1vtpm7e");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-5-dk.svg?v=1vtpm7e");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-6.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-6-dk.svg?v=1vttfmq");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-7.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-7-dk.svg?v=1vttfmq");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-8.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-8-dk.svg?v=1vttfmq");}
+.ofpb-root[data-theme="dark"] img[src$="/shape-9.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-9-dk.svg?v=1vttfmq");}
+.ofpb-root[data-theme="dark"] img[src$="/shape.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./shape-dk.svg?v=1vtpm7e");}
+.ofpb-root[data-theme="dark"] img[src$="/star.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./star-dk.svg?v=3trzo2");}
+.ofpb-root[data-theme="dark"] img[src$="/state-default-type-box-mode-dark-lines-01.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./state-default-type-box-mode-dark-lines-01-dk.svg?v=1304d");}
+.ofpb-root[data-theme="dark"] img[src$="/state-default-type-box-mode-light-lines-01.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./state-default-type-box-mode-light-lines-01-dk.svg?v=1302s");}
+.ofpb-root[data-theme="dark"] img[src$="/state-default-type-box.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./state-default-type-box-dk.svg?v=12zqc");}
+.ofpb-root[data-theme="dark"] img[src$="/state-default.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./state-default-dk.svg?v=jsvk2o");}
+.ofpb-root[data-theme="dark"] img[src$="/state-selected-type-box-mode-dark-lines-01.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./state-selected-type-box-mode-dark-lines-01-dk.svg?v=1hsyfhe");}
+.ofpb-root[data-theme="dark"] img[src$="/toilet.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./toilet-dk.svg?v=51b2e7");}
+.ofpb-root[data-theme="dark"] img[src$="/type-download-color-dark-2.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-download-color-dark-2-dk.svg?v=1ne82dh");}
+.ofpb-root[data-theme="dark"] img[src$="/type-download-color-dark-3.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-download-color-dark-3-dk.svg?v=1ne82dh");}
+.ofpb-root[data-theme="dark"] img[src$="/type-download-color-dark-4.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-download-color-dark-4-dk.svg?v=1ne82dh");}
+.ofpb-root[data-theme="dark"] img[src$="/type-download-color-dark-5.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-download-color-dark-5-dk.svg?v=1ne82dh");}
+.ofpb-root[data-theme="dark"] img[src$="/type-download-color-dark.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-download-color-dark-dk.svg?v=1ne82dh");}
+.ofpb-root[data-theme="dark"] img[src$="/type-notification-state-selected.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-notification-state-selected-dk.svg?v=17sqd6r");}
+.ofpb-root[data-theme="dark"] img[src$="/type-setting-state-default.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-setting-state-default-dk.svg?v=6fkzjj");}
+.ofpb-root[data-theme="dark"] img[src$="/type-user-state-default.svg"]:not([data-name="Header"] img):not([data-name="Sidebar - Open"] img):not([data-name^="SNB/"] img){content:url("./type-user-state-default-dk.svg?v=18l206w");}
+.ofpb-root[data-theme="dark"]:not(.hj-asset) > [data-node-id]{background-color:#0e0f12;}
+.ofpb-root[data-theme="dark"] [data-name="Input"],.ofpb-root[data-theme="dark"] [data-name="Select"],.ofpb-root[data-theme="dark"] [data-name^="Dropdown/Select"]{background-color:#111316;}
+.ofpb-root[data-theme="dark"] img[src$="/plan-image.png"],.ofpb-root[data-theme="dark"] img[src$="/plan-image-2.png"],.ofpb-root[data-theme="dark"] img[src$="/30-f-012.png"]{filter:invert(1) hue-rotate(180deg) brightness(1.15);mix-blend-mode:screen;}
+.ofpb-root[data-theme="dark"] img[src$="/heatmap-large-1.png"]{filter:brightness(.85);}
+.ofpb-root[data-theme="dark"] .n2273_23030{background-color:#17191e}
+.ofpb-root[data-theme="dark"] .nI2273_23032_145_5923::after{border-color:rgba(31,33,35,0.1);}
+.ofpb-root[data-theme="dark"] .nI2273_23032_145_5965::after{border-color:rgba(31,33,35,0.1);}
+.ofpb-root[data-theme="dark"] .nI2273_23032_145_5986::after{border-color:rgba(31,33,35,0.1);}
+.ofpb-root[data-theme="dark"] .nI2273_23032_145_5999::after{border-color:rgba(31,33,35,0.1);}
+.ofpb-root[data-theme="dark"] .nI2273_23032_163_26356::after{border-color:#777c84;}
+.ofpb-root[data-theme="dark"] .n2273_23040{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23041{background-color:#17191e}
+.ofpb-root[data-theme="dark"] .n2273_23041::after{border-color:#292b2e;}
+.ofpb-root[data-theme="dark"] .n2273_23042{background-color:#17191e}
+.ofpb-root[data-theme="dark"] .n2273_23042::after{border-color:#292b2e;}
+.ofpb-root[data-theme="dark"] .nI2273_23043_2965_31364{color:#99a0cc}
+.ofpb-root[data-theme="dark"] .n2273_23045{background-color:#17191e}
+.ofpb-root[data-theme="dark"] .n2273_23045::after{border-color:#273149;}
+.ofpb-root[data-theme="dark"] .n2273_23050{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23053{color:rgba(213,215,217,0.3)}
+.ofpb-root[data-theme="dark"] .n2273_23062{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23063{background-image:linear-gradient(to bottom,rgba(21,21,23,0.11),rgba(29,30,32,0) 79.412%)}
+.ofpb-root[data-theme="dark"] .n2273_23063::after{border-color:#1f2123;}
+.ofpb-root[data-theme="dark"] .n2273_23064{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23068{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23069{background-image:linear-gradient(to bottom,rgba(21,21,23,0.11),rgba(29,30,32,0) 79.412%)}
+.ofpb-root[data-theme="dark"] .n2273_23069::after{border-color:#1f2123;}
+.ofpb-root[data-theme="dark"] .n2273_23070{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23125{background-color:#17191e;filter:drop-shadow(0px 4px 9px rgba(0,0,0,0.22))}
+.ofpb-root[data-theme="dark"] .n2273_23127{color:#dbdcdf}
+.ofpb-root[data-theme="dark"] .n2273_23144{background-color:#17191e}
+.ofpb-root[data-theme="dark"] .n2273_23147{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23150{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23153{color:#d5d7d9}
+.ofpb-root[data-theme="dark"] .n2273_23154{background-color:rgba(31,32,34,0.5)}
+.ofpb-root[data-theme="dark"] .n2273_23154::after{border-color:#292b2e;}
+.ofpb-root[data-theme="dark"] .nI2277_47424_2019_19588{color:#a6a6bf}
+html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#05050a;}
+.ofpb-fit{position:fixed;inset:0;overflow:hidden;}
+.ofpb-stage{position:absolute;inset:0;overflow:hidden;}
+</style></head><body><div class="ofpb-fit"><div class="ofpb-stage"><div class="ofpb-root" id="lsroot">
+  <div id="ofpb-분석/업무패턴/3-2_회의실 패턴 분석" class="n2273_23030 ofpb-분석-업무패턴-3-2_회의실-패턴-분석" data-name="분석/업무패턴/3-2_회의실 패턴 분석" data-node-id="2273:23030">
+    <div id="ofpb-Header" class="n2273_23031 ofpb-Header" data-name="Header" data-node-id="2273:23031">
+      <div id="ofpb-Background" class="nI2273_23031_2003_18480 ofpb-Background" data-name="Background" data-node-id="I2273:23031;2003:18480"></div>
+      <p id="ofpb-I2273:23031;2003:18481" class="nI2273_23031_2003_18481" data-node-id="I2273:23031;2003:18481">SMART OFFICE</p>
+      <div id="ofpb-1depth" class="nI2273_23031_2003_18482 ofpb-1depth" data-name="1depth" data-node-id="I2273:23031;2003:18482">
+        <div id="ofpb-1depth_2" class="nI2273_23031_2003_18483 ofpb-1depth" data-name="1depth" data-node-id="I2273:23031;2003:18483">
+          <div id="ofpb-1depth_3" class="nI2273_23031_2003_18483_2003_18427 ofpb-1depth" data-name="1depth" data-node-id="I2273:23031;2003:18483;2003:18427">
+            <p id="ofpb-I2273:23031;2003:18483;2003:18428" class="nI2273_23031_2003_18483_2003_18428" data-node-id="I2273:23031;2003:18483;2003:18428">현황</p>
+          </div>
+        </div>
+        <div id="ofpb-1depth_4" class="nI2273_23031_2003_18484 ofpb-1depth" data-name="1depth" data-node-id="I2273:23031;2003:18484">
+          <div id="ofpb-Nav Item/GNB" class="nI2273_23031_2003_18484_2003_18433 ofpb-Nav-Item-GNB" data-name="Nav Item/GNB" data-node-id="I2273:23031;2003:18484;2003:18433">
+            <div id="ofpb-1depth_5" class="nI2273_23031_2003_18484_2003_18433_2003_18430 ofpb-1depth" data-name="1depth" data-node-id="I2273:23031;2003:18484;2003:18433;2003:18430">
+              <p id="ofpb-I2273:23031;2003:18484;2003:18433;2003:18431" class="nI2273_23031_2003_18484_2003_18433_2003_18431" data-node-id="I2273:23031;2003:18484;2003:18433;2003:18431">분석</p>
+            </div>
+          </div>
+        </div>
+        <div id="ofpb-Nav Item/GNB_2" class="nI2273_23031_2003_18485 ofpb-Nav-Item-GNB" data-name="Nav Item/GNB" data-node-id="I2273:23031;2003:18485">
+          <div id="ofpb-1depth_6" class="nI2273_23031_2003_18485_2003_18427 ofpb-1depth" data-name="1depth" data-node-id="I2273:23031;2003:18485;2003:18427">
+            <p id="ofpb-I2273:23031;2003:18485;2003:18428" class="nI2273_23031_2003_18485_2003_18428" data-node-id="I2273:23031;2003:18485;2003:18428">관리정보</p>
+          </div>
+        </div>
+      </div>
+      <div id="ofpb-Row" class="nI2273_23031_2003_18486 ofpb-Row" data-name="Row" data-node-id="I2273:23031;2003:18486">
+        <div id="ofpb-2003:18447" class="n2003_18447" data-node-id="2003:18447">
+          <img id="ofpb-Asset" class="x1" src="./type-notification-state-selected.svg" alt="">
+        </div>
+        <div id="ofpb-2003:18439" class="n2003_18439" data-node-id="2003:18439">
+          <img id="ofpb-Asset_2" class="x2" src="./type-setting-state-default.svg" alt="">
+        </div>
+        <div id="ofpb-2003:18437" class="n2003_18437" data-node-id="2003:18437">
+          <img id="ofpb-Asset_3" class="x3" src="./type-user-state-default.svg" alt="">
+        </div>
+      </div>
+    </div>
+    <div id="ofpb-SNB/Time Filter V2" class="n2273_23032 ofpb-SNB-Time-Filter-V2" data-name="SNB/Time Filter V2" data-node-id="2273:23032">
+      <div id="ofpb-Sidebar - Open" class="nI2273_23032_145_5897 ofpb-Sidebar-Open" data-name="Sidebar - Open" data-node-id="I2273:23032;145:5897">
+        <div id="ofpb-Content" class="nI2273_23032_155_15876 ofpb-Content" data-name="Content" data-node-id="I2273:23032;155:15876">
+          <div id="ofpb-Logo" class="nI2273_23032_188_5933 ofpb-Logo" data-name="Logo" data-node-id="I2273:23032;188:5933">
+            <p id="ofpb-I2273:23032;2977:8103" class="nI2273_23032_2977_8103" data-node-id="I2273:23032;2977:8103">wemb studio</p>
+          </div>
+          <div id="ofpb-Divider" class="nI2273_23032_145_5910 ofpb-Divider" data-name="Divider" data-node-id="I2273:23032;145:5910"></div>
+          <div id="ofpb-Content_2" class="nI2273_23032_145_5911 ofpb-Content" data-name="Content" data-node-id="I2273:23032;145:5911">
+            <div id="ofpb-Title" class="nI2273_23032_145_5913 ofpb-Title" data-name="Title" data-node-id="I2273:23032;145:5913">
+              <div id="ofpb-Icon" class="nI2273_23032_145_5914 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;145:5914">
+                <img id="ofpb-Asset_4" class="x4" src="./icon-3-5.svg" alt="">
+              </div>
+              <p id="ofpb-I2273:23032;145:5916" class="nI2273_23032_145_5916" data-node-id="I2273:23032;145:5916">시간필터</p>
+              <div id="ofpb-I2273:23032;145:5917" class="nI2273_23032_145_5917" data-node-id="I2273:23032;145:5917">
+                <div id="ofpb-Node" class="x5">
+                  <div id="ofpb-Icon_2" class="x6 ofpb-Icon" data-name="Icon">
+                    <img id="ofpb-Asset_5" class="x7" src="./icon-4-5.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-TreeFilter" class="nI2273_23032_145_5919 ofpb-TreeFilter" data-name="TreeFilter" data-node-id="I2273:23032;145:5919">
+              <div id="ofpb-Item" class="nI2273_23032_145_5920 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5920">
+                <p id="ofpb-I2273:23032;145:5921" class="nI2273_23032_145_5921" data-node-id="I2273:23032;145:5921">기간선택</p>
+              </div>
+              <div id="ofpb-Field" class="nI2273_23032_145_5923 ofpb-Field" data-name="Field" data-node-id="I2273:23032;145:5923">
+                <div id="ofpb-Text Wrap" class="nI2273_23032_145_5924 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="I2273:23032;145:5924">
+                  <p id="ofpb-I2273:23032;145:5925" class="nI2273_23032_145_5925" data-node-id="I2273:23032;145:5925"><span id="ofpb-Node_2" class="x8">2026</span><span id="ofpb-Node_3" class="x9">년</span><span id="ofpb-Node_4" class="x10"></span><span id="ofpb-Node_5" class="x11">10</span><span id="ofpb-Node_6" class="x12">월</span><span id="ofpb-Node_7" class="x13"></span><span id="ofpb-Node_8" class="x14">01</span><span id="ofpb-Node_9" class="x15">일</span><span id="ofpb-Node_10" class="x16"></span><span id="ofpb-Node_11" class="x17">~ 2026</span><span id="ofpb-Node_12" class="x18">년</span><span id="ofpb-Node_13" class="x19"></span><span id="ofpb-Node_14" class="x20">10</span><span id="ofpb-Node_15" class="x21">월</span><span id="ofpb-Node_16" class="x22"></span><span id="ofpb-Node_17" class="x23">31</span><span id="ofpb-Node_18" class="x24">일</span></p>
+                  <div id="ofpb-Calendar" class="nI2273_23032_145_5926 ofpb-Calendar" data-name="Calendar" data-node-id="I2273:23032;145:5926">
+                    <img id="ofpb-Asset_6" class="x25" src="./calendar.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-Divider_2" class="nI2273_23032_145_5928 ofpb-Divider" data-name="Divider" data-node-id="I2273:23032;145:5928"></div>
+            <div id="ofpb-TreeFilter_2" class="nI2273_23032_145_5929 ofpb-TreeFilter" data-name="TreeFilter" data-node-id="I2273:23032;145:5929">
+              <div id="ofpb-Item_2" class="nI2273_23032_145_5930 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5930">
+                <p id="ofpb-I2273:23032;145:5931" class="nI2273_23032_145_5931" data-node-id="I2273:23032;145:5931">요일선택</p>
+                <div id="ofpb-Item_3" class="nI2273_23032_145_5932 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5932">
+                  <div id="ofpb-Select" class="nI2273_23032_145_5933 ofpb-Select" data-name="Select" data-node-id="I2273:23032;145:5933">
+                    <img id="ofpb-Asset_7" class="x26" src="./select-1.svg" alt="">
+                  </div>
+                  <p id="ofpb-I2273:23032;145:5934" class="nI2273_23032_145_5934" data-node-id="I2273:23032;145:5934">전체</p>
+                </div>
+              </div>
+              <div id="ofpb-Content_3" class="nI2273_23032_145_5935 ofpb-Content" data-name="Content" data-node-id="I2273:23032;145:5935">
+                <div id="ofpb-Button" class="nI2273_23032_145_5936 ofpb-Button" data-name="Button" data-node-id="I2273:23032;145:5936">
+                  <div id="ofpb-Container" class="nI2273_23032_145_5937 ofpb-Container" data-name="Container" data-node-id="I2273:23032;145:5937">
+                    <p id="ofpb-I2273:23032;145:5938" class="nI2273_23032_145_5938" data-node-id="I2273:23032;145:5938">월</p>
+                  </div>
+                </div>
+                <div id="ofpb-Button_2" class="nI2273_23032_145_5939 ofpb-Button" data-name="Button" data-node-id="I2273:23032;145:5939">
+                  <div id="ofpb-Container_2" class="nI2273_23032_145_5940 ofpb-Container" data-name="Container" data-node-id="I2273:23032;145:5940">
+                    <p id="ofpb-I2273:23032;145:5941" class="nI2273_23032_145_5941" data-node-id="I2273:23032;145:5941">화</p>
+                  </div>
+                </div>
+                <div id="ofpb-Button_3" class="nI2273_23032_145_5942 ofpb-Button" data-name="Button" data-node-id="I2273:23032;145:5942">
+                  <div id="ofpb-Container_3" class="nI2273_23032_145_5943 ofpb-Container" data-name="Container" data-node-id="I2273:23032;145:5943">
+                    <p id="ofpb-I2273:23032;145:5944" class="nI2273_23032_145_5944" data-node-id="I2273:23032;145:5944">수</p>
+                  </div>
+                </div>
+                <div id="ofpb-Button_4" class="nI2273_23032_145_5945 ofpb-Button" data-name="Button" data-node-id="I2273:23032;145:5945">
+                  <div id="ofpb-Container_4" class="nI2273_23032_145_5946 ofpb-Container" data-name="Container" data-node-id="I2273:23032;145:5946">
+                    <p id="ofpb-I2273:23032;145:5947" class="nI2273_23032_145_5947" data-node-id="I2273:23032;145:5947">목</p>
+                  </div>
+                </div>
+                <div id="ofpb-Button_5" class="nI2273_23032_145_5948 ofpb-Button" data-name="Button" data-node-id="I2273:23032;145:5948">
+                  <div id="ofpb-Container_5" class="nI2273_23032_145_5949 ofpb-Container" data-name="Container" data-node-id="I2273:23032;145:5949">
+                    <p id="ofpb-I2273:23032;145:5950" class="nI2273_23032_145_5950" data-node-id="I2273:23032;145:5950">금</p>
+                  </div>
+                </div>
+                <div id="ofpb-Button_6" class="nI2273_23032_145_5951 ofpb-Button" data-name="Button" data-node-id="I2273:23032;145:5951">
+                  <div id="ofpb-Container_6" class="nI2273_23032_145_5952 ofpb-Container" data-name="Container" data-node-id="I2273:23032;145:5952">
+                    <p id="ofpb-I2273:23032;145:5953" class="nI2273_23032_145_5953" data-node-id="I2273:23032;145:5953">토</p>
+                  </div>
+                </div>
+                <div id="ofpb-Button_7" class="nI2273_23032_145_5954 ofpb-Button" data-name="Button" data-node-id="I2273:23032;145:5954">
+                  <div id="ofpb-Container_7" class="nI2273_23032_145_5955 ofpb-Container" data-name="Container" data-node-id="I2273:23032;145:5955">
+                    <p id="ofpb-I2273:23032;145:5956" class="nI2273_23032_145_5956" data-node-id="I2273:23032;145:5956">일</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-Divider_3" class="nI2273_23032_145_5957 ofpb-Divider" data-name="Divider" data-node-id="I2273:23032;145:5957"></div>
+            <div id="ofpb-TreeFilter_3" class="nI2273_23032_145_5958 ofpb-TreeFilter" data-name="TreeFilter" data-node-id="I2273:23032;145:5958">
+              <div id="ofpb-Item_4" class="nI2273_23032_145_5959 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5959">
+                <p id="ofpb-I2273:23032;145:5960" class="nI2273_23032_145_5960" data-node-id="I2273:23032;145:5960">시간선택</p>
+                <div id="ofpb-Item_5" class="nI2273_23032_145_5961 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5961">
+                  <div id="ofpb-Select_2" class="nI2273_23032_145_5962 ofpb-Select" data-name="Select" data-node-id="I2273:23032;145:5962">
+                    <img id="ofpb-Asset_8" class="x27" src="./select-2-2.svg" alt="">
+                  </div>
+                  <p id="ofpb-I2273:23032;145:5963" class="nI2273_23032_145_5963" data-node-id="I2273:23032;145:5963">종일</p>
+                </div>
+              </div>
+              <div id="ofpb-Field_2" class="nI2273_23032_145_5965 ofpb-Field" data-name="Field" data-node-id="I2273:23032;145:5965">
+                <div id="ofpb-Text Wrap_2" class="nI2273_23032_145_5966 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="I2273:23032;145:5966">
+                  <p id="ofpb-I2273:23032;145:5967" class="nI2273_23032_145_5967" data-node-id="I2273:23032;145:5967"><span id="ofpb-Node_19" class="x28">오전 </span><span id="ofpb-Node_20" class="x29">9</span><span id="ofpb-Node_21" class="x30">시 </span><span id="ofpb-Node_22" class="x31">00</span><span id="ofpb-Node_23" class="x32">분 ~ 오후 </span><span id="ofpb-Node_24" class="x33">6</span><span id="ofpb-Node_25" class="x34">시 </span><span id="ofpb-Node_26" class="x35">00</span><span id="ofpb-Node_27" class="x36">분</span></p>
+                  <div id="ofpb-Icon_3" class="nI2273_23032_145_5968 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;145:5968">
+                    <img id="ofpb-Asset_9" class="x37" src="./icon-3-13.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="ofpb-Divider_4" class="nI2273_23032_145_5970 ofpb-Divider" data-name="Divider" data-node-id="I2273:23032;145:5970"></div>
+          <div id="ofpb-Content_4" class="nI2273_23032_145_5971 ofpb-Content" data-name="Content" data-node-id="I2273:23032;145:5971">
+            <div id="ofpb-Title_2" class="nI2273_23032_145_5973 ofpb-Title" data-name="Title" data-node-id="I2273:23032;145:5973">
+              <div id="ofpb-Icon_4" class="nI2273_23032_145_5974 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;145:5974">
+                <img id="ofpb-Asset_10" class="x38" src="./icon-6-4.svg" alt="">
+              </div>
+              <p id="ofpb-I2273:23032;145:5976" class="nI2273_23032_145_5976" data-node-id="I2273:23032;145:5976">공간필터</p>
+              <div id="ofpb-I2273:23032;145:5977" class="nI2273_23032_145_5977" data-node-id="I2273:23032;145:5977">
+                <div id="ofpb-Node_28" class="x39">
+                  <div id="ofpb-Icon_5" class="x40 ofpb-Icon" data-name="Icon">
+                    <img id="ofpb-Asset_11" class="x41" src="./icon-4-5.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-TreeFilter_4" class="nI2273_23032_145_5979 ofpb-TreeFilter" data-name="TreeFilter" data-node-id="I2273:23032;145:5979">
+              <div id="ofpb-Item_6" class="nI2273_23032_145_5980 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5980">
+                <p id="ofpb-I2273:23032;145:5981" class="nI2273_23032_145_5981" data-node-id="I2273:23032;145:5981">건물</p>
+                <div id="ofpb-Item_7" class="nI2273_23032_145_5982 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5982">
+                  <div id="ofpb-Select_3" class="nI2273_23032_145_5983 ofpb-Select" data-name="Select" data-node-id="I2273:23032;145:5983">
+                    <img id="ofpb-Asset_12" class="x42" src="./select-2-2.svg" alt="">
+                  </div>
+                  <p id="ofpb-I2273:23032;145:5984" class="nI2273_23032_145_5984" data-node-id="I2273:23032;145:5984">전체</p>
+                </div>
+              </div>
+              <div id="ofpb-Field_3" class="nI2273_23032_145_5986 ofpb-Field" data-name="Field" data-node-id="I2273:23032;145:5986">
+                <div id="ofpb-Text Wrap_3" class="nI2273_23032_145_5987 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="I2273:23032;145:5987">
+                  <p id="ofpb-I2273:23032;145:5988" class="nI2273_23032_145_5988" data-node-id="I2273:23032;145:5988">TOWER A</p>
+                  <div id="ofpb-Icon_6" class="nI2273_23032_145_5989 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;145:5989">
+                    <img id="ofpb-Asset_13" class="x43" src="./icon-7-5.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-Divider_5" class="nI2273_23032_145_5991 ofpb-Divider" data-name="Divider" data-node-id="I2273:23032;145:5991"></div>
+            <div id="ofpb-TreeFilter_5" class="nI2273_23032_145_5992 ofpb-TreeFilter" data-name="TreeFilter" data-node-id="I2273:23032;145:5992">
+              <div id="ofpb-Item_8" class="nI2273_23032_145_5993 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5993">
+                <p id="ofpb-I2273:23032;145:5994" class="nI2273_23032_145_5994" data-node-id="I2273:23032;145:5994">층</p>
+                <div id="ofpb-Item_9" class="nI2273_23032_145_5995 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:5995">
+                  <div id="ofpb-Select_4" class="nI2273_23032_145_5996 ofpb-Select" data-name="Select" data-node-id="I2273:23032;145:5996">
+                    <img id="ofpb-Asset_14" class="x44" src="./select-2-2.svg" alt="">
+                  </div>
+                  <p id="ofpb-I2273:23032;145:5997" class="nI2273_23032_145_5997" data-node-id="I2273:23032;145:5997">전체</p>
+                </div>
+              </div>
+              <div id="ofpb-Field_4" class="nI2273_23032_145_5999 ofpb-Field" data-name="Field" data-node-id="I2273:23032;145:5999">
+                <div id="ofpb-Text Wrap_4" class="nI2273_23032_145_6000 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="I2273:23032;145:6000">
+                  <p id="ofpb-I2273:23032;145:6001" class="nI2273_23032_145_6001" data-node-id="I2273:23032;145:6001">30F</p>
+                  <div id="ofpb-Icon_7" class="nI2273_23032_145_6002 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;145:6002">
+                    <img id="ofpb-Asset_15" class="x45" src="./icon-7-5.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-Divider_6" class="nI2273_23032_145_6004 ofpb-Divider" data-name="Divider" data-node-id="I2273:23032;145:6004"></div>
+            <div id="ofpb-TreeFilter_6" class="nI2273_23032_145_6005 ofpb-TreeFilter" data-name="TreeFilter" data-node-id="I2273:23032;145:6005">
+              <div id="ofpb-Item_10" class="nI2273_23032_145_6006 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:6006">
+                <p id="ofpb-I2273:23032;145:6007" class="nI2273_23032_145_6007" data-node-id="I2273:23032;145:6007">공간정보</p>
+                <div id="ofpb-Item_11" class="nI2273_23032_145_6008 ofpb-Item" data-name="Item" data-node-id="I2273:23032;145:6008">
+                  <div id="ofpb-Select_5" class="nI2273_23032_145_6009 ofpb-Select" data-name="Select" data-node-id="I2273:23032;145:6009">
+                    <img id="ofpb-Asset_16" class="x46" src="./select-2-2.svg" alt="">
+                  </div>
+                  <p id="ofpb-I2273:23032;145:6010" class="nI2273_23032_145_6010" data-node-id="I2273:23032;145:6010">전체</p>
+                </div>
+              </div>
+              <div id="ofpb-Container_8" class="nI2273_23032_248_11878 ofpb-Container" data-name="Container" data-node-id="I2273:23032;248:11878">
+                <div id="ofpb-Block" class="nI2273_23032_145_6012 ofpb-Block" data-name="Block" data-node-id="I2273:23032;145:6012">
+                  <div id="ofpb-Tree Item" class="nI2273_23032_145_6013 ofpb-Tree-Item" data-name="Tree Item" data-node-id="I2273:23032;145:6013">
+                    <div id="ofpb-1depth_7" class="nI2273_23032_145_6013_2003_18505 ofpb-1depth" data-name="1depth" data-node-id="I2273:23032;145:6013;2003:18505">
+                      <div id="ofpb-Icon_8" class="nI2273_23032_145_6013_2003_18506 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;145:6013;2003:18506">
+                        <img id="ofpb-Asset_17" class="x47" src="./icon-7-2.svg" alt="">
+                      </div>
+                      <div id="ofpb-Checkbox" class="nI2273_23032_145_6013_2003_18508 ofpb-Checkbox" data-name="Checkbox" data-node-id="I2273:23032;145:6013;2003:18508">
+                        <div id="ofpb-2003:18706" class="n2003_18706" data-node-id="2003:18706">
+                          <img id="ofpb-Asset_18" class="x48" src="./state-default-type-box-mode-dark-lines-01.svg" alt="">
+                        </div>
+                        <p id="ofpb-I2273:23032;145:6013;2003:18508;2003:18717" class="nI2273_23032_145_6013_2003_18508_2003_18717" data-node-id="I2273:23032;145:6013;2003:18508;2003:18717">COLLABO SPACE</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="ofpb-Block_2" class="nI2273_23032_248_9772 ofpb-Block" data-name="Block" data-node-id="I2273:23032;248:9772">
+                  <div id="ofpb-TreeSNB" class="nI2273_23032_248_9773 ofpb-TreeSNB" data-name="TreeSNB" data-node-id="I2273:23032;248:9773">
+                    <div id="ofpb-1depth_8" class="nI2273_23032_248_9773_2003_18515 ofpb-1depth" data-name="1depth" data-node-id="I2273:23032;248:9773;2003:18515">
+                      <div id="ofpb-Icon_9" class="nI2273_23032_248_9773_2003_18516 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;248:9773;2003:18516">
+                        <img id="ofpb-Asset_19" class="x49" src="./icon-7-2.svg" alt="">
+                      </div>
+                      <div id="ofpb-Checkbox_2" class="nI2273_23032_248_9773_2003_18518 ofpb-Checkbox" data-name="Checkbox" data-node-id="I2273:23032;248:9773;2003:18518">
+                        <div id="ofpb-2003:18706_2" class="n2003_18706b" data-node-id="2003:18706">
+                          <img id="ofpb-Asset_20" class="x50" src="./state-default-type-box-mode-dark-lines-01.svg" alt="">
+                        </div>
+                        <p id="ofpb-I2273:23032;248:9773;2003:18518;2003:18717" class="nI2273_23032_248_9773_2003_18518_2003_18717" data-node-id="I2273:23032;248:9773;2003:18518;2003:18717">MEETING ROOM</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="ofpb-Tree" class="nI2273_23032_248_9774 ofpb-Tree" data-name="Tree" data-node-id="I2273:23032;248:9774">
+                    <div id="ofpb-Row_2" class="nI2273_23032_248_9775 ofpb-Row" data-name="Row" data-node-id="I2273:23032;248:9775">
+                      <div id="ofpb-TreeSNB_2" class="nI2273_23032_248_9776 ofpb-TreeSNB" data-name="TreeSNB" data-node-id="I2273:23032;248:9776">
+                        <div id="ofpb-1depth_9" class="nI2273_23032_248_9776_2003_18525 ofpb-1depth" data-name="1depth" data-node-id="I2273:23032;248:9776;2003:18525">
+                          <div id="ofpb-Icon_10" class="nI2273_23032_248_9776_2003_18526 ofpb-Icon" data-name="Icon" data-node-id="I2273:23032;248:9776;2003:18526">
+                            <img id="ofpb-Asset_21" class="x51" src="./icon-7-2.svg" alt="">
+                          </div>
+                          <div id="ofpb-Checkbox_3" class="nI2273_23032_248_9776_2003_18528 ofpb-Checkbox" data-name="Checkbox" data-node-id="I2273:23032;248:9776;2003:18528">
+                            <div id="ofpb-2003:18694" class="n2003_18694" data-node-id="2003:18694">
+                              <img id="ofpb-Asset_22" class="x52" src="./state-selected-type-box-mode-dark-lines-01.svg" alt="">
+                            </div>
+                            <p id="ofpb-I2273:23032;248:9776;2003:18528;2003:18731" class="nI2273_23032_248_9776_2003_18528_2003_18731" data-node-id="I2273:23032;248:9776;2003:18528;2003:18731">30F</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="ofpb-2003:18514" class="n2003_18514" data-node-id="2003:18514">
+                        <div id="ofpb-1depth_10" class="n2003_18515 ofpb-1depth" data-name="1depth" data-node-id="2003:18515">
+                          <div id="ofpb-Icon_11" class="n2003_18516 ofpb-Icon" data-name="Icon" data-node-id="2003:18516">
+                            <img id="ofpb-Asset_23" class="x53" src="./icon-7-2.svg" alt="">
+                          </div>
+                          <div id="ofpb-Checkbox_4" class="n2003_18518 ofpb-Checkbox" data-name="Checkbox" data-node-id="2003:18518">
+                            <div id="ofpb-2003:18706_3" class="n2003_18706bb" data-node-id="2003:18706">
+                              <img id="ofpb-Asset_24" class="x54" src="./state-default-type-box-mode-dark-lines-01.svg" alt="">
+                            </div>
+                            <p id="ofpb-Node_29" class="x55">Text</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="ofpb-2003:18514_2" class="n2003_18514b" data-node-id="2003:18514">
+                        <div id="ofpb-1depth_11" class="n2003_18515b ofpb-1depth" data-name="1depth" data-node-id="2003:18515">
+                          <div id="ofpb-Icon_12" class="n2003_18516b ofpb-Icon" data-name="Icon" data-node-id="2003:18516">
+                            <img id="ofpb-Asset_25" class="x56" src="./icon-7-2.svg" alt="">
+                          </div>
+                          <div id="ofpb-Checkbox_5" class="n2003_18518b ofpb-Checkbox" data-name="Checkbox" data-node-id="2003:18518">
+                            <div id="ofpb-2003:18706_4" class="n2003_18706bbb" data-node-id="2003:18706">
+                              <img id="ofpb-Asset_26" class="x57" src="./state-default-type-box-mode-dark-lines-01.svg" alt="">
+                            </div>
+                            <p id="ofpb-Node_30" class="x58">Text</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="ofpb-2003:18514_3" class="n2003_18514bb" data-node-id="2003:18514">
+                        <div id="ofpb-1depth_12" class="n2003_18515bb ofpb-1depth" data-name="1depth" data-node-id="2003:18515">
+                          <div id="ofpb-Icon_13" class="n2003_18516bb ofpb-Icon" data-name="Icon" data-node-id="2003:18516">
+                            <img id="ofpb-Asset_27" class="x59" src="./icon-7-2.svg" alt="">
+                          </div>
+                          <div id="ofpb-Checkbox_6" class="n2003_18518bb ofpb-Checkbox" data-name="Checkbox" data-node-id="2003:18518">
+                            <div id="ofpb-2003:18706_5" class="n2003_18706bbbb" data-node-id="2003:18706">
+                              <img id="ofpb-Asset_28" class="x60" src="./state-default-type-box-mode-dark-lines-01.svg" alt="">
+                            </div>
+                            <p id="ofpb-Node_31" class="x61">Text</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="ofpb-2003:18514_4" class="n2003_18514bbb" data-node-id="2003:18514">
+                        <div id="ofpb-1depth_13" class="n2003_18515bbb ofpb-1depth" data-name="1depth" data-node-id="2003:18515">
+                          <div id="ofpb-Icon_14" class="n2003_18516bbb ofpb-Icon" data-name="Icon" data-node-id="2003:18516">
+                            <img id="ofpb-Asset_29" class="x62" src="./icon-7-2.svg" alt="">
+                          </div>
+                          <div id="ofpb-Checkbox_7" class="n2003_18518bbb ofpb-Checkbox" data-name="Checkbox" data-node-id="2003:18518">
+                            <div id="ofpb-2003:18706_6" class="n2003_18706bbbbb" data-node-id="2003:18706">
+                              <img id="ofpb-Asset_30" class="x63" src="./state-default-type-box-mode-dark-lines-01.svg" alt="">
+                            </div>
+                            <p id="ofpb-Node_32" class="x64">Text</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div id="ofpb-2003:18514_5" class="n2003_18514bbbb" data-node-id="2003:18514">
+                        <div id="ofpb-1depth_14" class="n2003_18515bbbb ofpb-1depth" data-name="1depth" data-node-id="2003:18515">
+                          <div id="ofpb-Icon_15" class="n2003_18516bbbb ofpb-Icon" data-name="Icon" data-node-id="2003:18516">
+                            <img id="ofpb-Asset_31" class="x65" src="./icon-7-2.svg" alt="">
+                          </div>
+                          <div id="ofpb-Checkbox_8" class="n2003_18518bbbb ofpb-Checkbox" data-name="Checkbox" data-node-id="2003:18518">
+                            <div id="ofpb-2003:18706_7" class="n2003_18706bbbbbb" data-node-id="2003:18706">
+                              <img id="ofpb-Asset_32" class="x66" src="./state-default-type-box-mode-dark-lines-01.svg" alt="">
+                            </div>
+                            <p id="ofpb-Node_33" class="x67">Text</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-Divider_7" class="nI2273_23032_154_8384 ofpb-Divider" data-name="Divider" data-node-id="I2273:23032;154:8384"></div>
+          </div>
+        </div>
+        <div id="ofpb-Container_9" class="nI2273_23032_155_18737 ofpb-Container" data-name="Container" data-node-id="I2273:23032;155:18737">
+          <div id="ofpb-Arrow" class="nI2273_23032_155_16633 ofpb-Arrow" data-name="Arrow" data-node-id="I2273:23032;155:16633">
+            <img id="ofpb-Asset_33" class="x68" src="./arrow-3.svg" alt="">
+          </div>
+          <div id="ofpb-Thumb" class="nI2273_23032_155_16637 ofpb-Thumb" data-name="Thumb" data-node-id="I2273:23032;155:16637">
+            <div id="ofpb-I2273:23032;155:16638" class="nI2273_23032_155_16638" data-node-id="I2273:23032;155:16638">
+              <p id="ofpb-Node_34" class="x69">​</p>
+              <p id="ofpb-Node_35" class="x70">​</p>
+              <p id="ofpb-Node_36" class="x71">​</p>
+              <p id="ofpb-Node_37" class="x72">​</p>
+              <p id="ofpb-Node_38" class="x73">​</p>
+            </div>
+          </div>
+          <div id="ofpb-Arrow_2" class="nI2273_23032_155_16635 ofpb-Arrow" data-name="Arrow" data-node-id="I2273:23032;155:16635">
+            <img id="ofpb-Asset_34" class="x74" src="./arrow-1-2.svg" alt="">
+          </div>
+        </div>
+      </div>
+      <div id="ofpb-Action" class="nI2273_23032_163_26355 ofpb-Action" data-name="Action" data-node-id="I2273:23032;163:26355">
+        <div id="ofpb-Button_8" class="nI2273_23032_163_26356 ofpb-Button" data-name="Button" data-node-id="I2273:23032;163:26356">
+          <p id="ofpb-I2273:23032;163:26357" class="nI2273_23032_163_26357" data-node-id="I2273:23032;163:26357">조회</p>
+        </div>
+      </div>
+    </div>
+    <div id="ofpb-Title_3" class="n2273_23039 ofpb-Title" data-name="Title" data-node-id="2273:23039">
+      <p id="ofpb-Title_4" class="n2273_23040 ofpb-Title" data-name="Title" data-node-id="2273:23040">회의실 패턴 분석</p>
+    </div>
+    <div id="ofpb-Chart" class="n2273_23041 ofpb-Chart" data-name="Chart" data-node-id="2273:23041">
+      <div id="ofpb-Chart_2" class="n2273_23042 ofpb-Chart" data-name="Chart" data-node-id="2273:23042">
+        <div id="ofpb-Th Group" class="n2273_23043 ofpb-Th-Group" data-name="Th Group" data-node-id="2273:23043">
+          <div id="ofpb-Title_5" class="nI2273_23043_2965_31363 ofpb-Title" data-name="Title" data-node-id="I2273:23043;2965:31363">
+            <p id="ofpb-I2273:23043;2965:31364" class="nI2273_23043_2965_31364" data-node-id="I2273:23043;2965:31364">시간대 별 작용 횟수 합계</p>
+            <div id="ofpb-Icon_16" class="nI2273_23043_2965_31365 ofpb-Icon" data-name="Icon" data-node-id="I2273:23043;2965:31365">
+              <img id="ofpb-Asset_35" class="x75" src="./icon-6-6.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div id="ofpb-Chart_3" class="n2273_23044 ofpb-Chart" data-name="Chart" data-node-id="2273:23044">
+          <div id="ofpb-Gauge" class="n2273_23045 ofpb-Gauge" data-name="Gauge" data-node-id="2273:23045">
+            <div id="ofpb-Content_5" class="n2273_23046 ofpb-Content" data-name="Content" data-node-id="2273:23046">
+              <div id="ofpb-Top" class="n2273_23047 ofpb-Top" data-name="Top" data-node-id="2273:23047">
+                <div id="ofpb-Item_12" class="n2273_23048 ofpb-Item" data-name="Item" data-node-id="2273:23048">
+                  <div id="ofpb-Text Wrap_5" class="n2273_23049 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="2273:23049">
+                    <div id="ofpb-Text Wrap_6" class="n2273_23050 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="2273:23050">
+                      <p id="ofpb-Value" class="n2273_23051 ofpb-Value" data-name="Value" data-node-id="2273:23051">74</p>
+                      <p id="ofpb-Unit" class="n2273_23052 ofpb-Unit" data-name="Unit" data-node-id="2273:23052">%</p>
+                    </div>
+                    <p id="ofpb-Label" class="n2273_23053 ofpb-Label" data-name="Label" data-node-id="2273:23053">층 전체 회의시간 대비 활용률 (%)</p>
+                  </div>
+                  <div id="ofpb-Circles" class="n2273_23054 ofpb-Circles" data-name="Circles" data-node-id="2273:23054">
+                    <div id="ofpb-Segment" class="n2273_23055 ofpb-Segment" data-name="Segment" data-node-id="2273:23055">
+                      <div id="ofpb-Node_39" class="x76">
+                        <img id="ofpb-Asset_36" class="x77" src="./segment-5.svg" alt="">
+                      </div>
+                    </div>
+                    <div id="ofpb-Segment_2" class="n2273_23056 ofpb-Segment" data-name="Segment" data-node-id="2273:23056">
+                      <div id="ofpb-Node_40" class="x78">
+                        <img id="ofpb-Asset_37" class="x79" src="./segment-1-4.svg" alt="">
+                      </div>
+                    </div>
+                    <div id="ofpb-Segment_3" class="n2273_23057 ofpb-Segment" data-name="Segment" data-node-id="2273:23057">
+                      <div id="ofpb-Node_41" class="x80">
+                        <img id="ofpb-Asset_38" class="x81" src="./segment-2-2.svg" alt="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="ofpb-Bottom" class="n2273_23058 ofpb-Bottom" data-name="Bottom" data-node-id="2273:23058">
+                <div id="ofpb-Data" class="n2273_23059 ofpb-Data" data-name="Data" data-node-id="2273:23059">
+                  <div id="ofpb-Item_13" class="n2273_23060 ofpb-Item" data-name="Item" data-node-id="2273:23060">
+                    <div id="ofpb-2273:23061" class="n2273_23061" data-node-id="2273:23061">
+                      <div id="ofpb-Node_42" class="x82">
+                        <div id="ofpb-Node_43" class="x83">
+                          <div id="ofpb-Grid Line" class="x84 ofpb-Grid-Line" data-name="Grid Line">
+                            <div id="ofpb-Node_44" class="x85">
+                              <img id="ofpb-Asset_39" class="x86" src="./grid-line-3.svg" alt="">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p id="ofpb-Label_2" class="n2273_23062 ofpb-Label" data-name="Label" data-node-id="2273:23062">총 사용시간</p>
+                  </div>
+                  <div id="ofpb-Text Wrap_7" class="n2273_23063 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="2273:23063">
+                    <p id="ofpb-Value_2" class="n2273_23064 ofpb-Value" data-name="Value" data-node-id="2273:23064"><span id="ofpb-Node_45" class="x87">58</span><span id="ofpb-Node_46" class="x88">시간 </span><span id="ofpb-Node_47" class="x89">38</span><span id="ofpb-Node_48" class="x90">분</span></p>
+                  </div>
+                </div>
+                <div id="ofpb-Data_2" class="n2273_23065 ofpb-Data" data-name="Data" data-node-id="2273:23065">
+                  <div id="ofpb-Item_14" class="n2273_23066 ofpb-Item" data-name="Item" data-node-id="2273:23066">
+                    <div id="ofpb-2273:23067" class="n2273_23067" data-node-id="2273:23067">
+                      <div id="ofpb-Node_49" class="x91">
+                        <div id="ofpb-Node_50" class="x92">
+                          <div id="ofpb-Grid Line_2" class="x93 ofpb-Grid-Line" data-name="Grid Line">
+                            <div id="ofpb-Node_51" class="x94">
+                              <img id="ofpb-Asset_40" class="x95" src="./grid-line-3.svg" alt="">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p id="ofpb-Label_3" class="n2273_23068 ofpb-Label" data-name="Label" data-node-id="2273:23068">화이트보드 사용시간</p>
+                  </div>
+                  <div id="ofpb-Text Wrap_8" class="n2273_23069 ofpb-Text-Wrap" data-name="Text Wrap" data-node-id="2273:23069">
+                    <p id="ofpb-Value_3" class="n2273_23070 ofpb-Value" data-name="Value" data-node-id="2273:23070"><span id="ofpb-Node_52" class="x96">42</span><span id="ofpb-Node_53" class="x97">시간 </span><span id="ofpb-Node_54" class="x98">41</span><span id="ofpb-Node_55" class="x99">분</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="ofpb-Content_6" class="n2273_23071 ofpb-Content" data-name="Content" data-node-id="2273:23071">
+            <div id="ofpb-Chart_4" class="n2273_23072 ofpb-Chart" data-name="Chart" data-node-id="2273:23072">
+              <div id="ofpb-Table" class="n2273_23073 ofpb-Table" data-name="Table" data-node-id="2273:23073">
+                <div id="ofpb-Grid" class="n2273_23074 ofpb-Grid" data-name="Grid" data-node-id="2273:23074">
+                  <div id="ofpb-Y-axis" class="n2273_23075 ofpb-Y-axis" data-name="Y-axis" data-node-id="2273:23075">
+                    <div id="ofpb-Data_3" class="n2273_23076 ofpb-Data" data-name="Data" data-node-id="2273:23076">
+                      <p id="ofpb-Value_4" class="n2273_23077 ofpb-Value" data-name="Value" data-node-id="2273:23077">100</p>
+                      <p id="ofpb-Value_5" class="n2273_23078 ofpb-Value" data-name="Value" data-node-id="2273:23078">80</p>
+                      <p id="ofpb-Value_6" class="n2273_23079 ofpb-Value" data-name="Value" data-node-id="2273:23079">60</p>
+                      <p id="ofpb-Value_7" class="n2273_23080 ofpb-Value" data-name="Value" data-node-id="2273:23080">40</p>
+                      <p id="ofpb-Value_8" class="n2273_23081 ofpb-Value" data-name="Value" data-node-id="2273:23081">20</p>
+                      <p id="ofpb-Value_9" class="n2273_23082 ofpb-Value" data-name="Value" data-node-id="2273:23082">0</p>
+                    </div>
+                    <div id="ofpb-Point" class="n2273_23083 ofpb-Point" data-name="Point" data-node-id="2273:23083">
+                      <div id="ofpb-Grid Line_3" class="n2273_23084 ofpb-Grid-Line" data-name="Grid Line" data-node-id="2273:23084">
+                        <div id="ofpb-Node_56" class="x100">
+                          <img id="ofpb-Asset_41" class="x101" src="./grid-line.svg" alt="">
+                        </div>
+                      </div>
+                      <div id="ofpb-Grid Line_4" class="n2273_23085 ofpb-Grid-Line" data-name="Grid Line" data-node-id="2273:23085">
+                        <div id="ofpb-Node_57" class="x102">
+                          <img id="ofpb-Asset_42" class="x103" src="./grid-line.svg" alt="">
+                        </div>
+                      </div>
+                      <div id="ofpb-Grid Line_5" class="n2273_23086 ofpb-Grid-Line" data-name="Grid Line" data-node-id="2273:23086">
+                        <div id="ofpb-Node_58" class="x104">
+                          <img id="ofpb-Asset_43" class="x105" src="./grid-line.svg" alt="">
+                        </div>
+                      </div>
+                      <div id="ofpb-Grid Line_6" class="n2273_23087 ofpb-Grid-Line" data-name="Grid Line" data-node-id="2273:23087">
+                        <div id="ofpb-Node_59" class="x106">
+                          <img id="ofpb-Asset_44" class="x107" src="./grid-line.svg" alt="">
+                        </div>
+                      </div>
+                      <div id="ofpb-Grid Line_7" class="n2273_23088 ofpb-Grid-Line" data-name="Grid Line" data-node-id="2273:23088">
+                        <div id="ofpb-Node_60" class="x108">
+                          <img id="ofpb-Asset_45" class="x109" src="./grid-line.svg" alt="">
+                        </div>
+                      </div>
+                      <div id="ofpb-Grid Line_8" class="n2273_23089 ofpb-Grid-Line" data-name="Grid Line" data-node-id="2273:23089">
+                        <div id="ofpb-Node_61" class="x110">
+                          <img id="ofpb-Asset_46" class="x111" src="./grid-line.svg" alt="">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="ofpb-Line" class="n2273_23090 ofpb-Line" data-name="Line" data-node-id="2273:23090">
+                    <div id="ofpb-Line_2" class="n2273_23091 ofpb-Line" data-name="Line" data-node-id="2273:23091">
+                      <div id="ofpb-Node_62" class="x112">
+                        <img id="ofpb-Asset_47" class="x113" src="./line-7.svg" alt="">
+                      </div>
+                    </div>
+                    <div id="ofpb-Line_3" class="n2273_23093 ofpb-Line" data-name="Line" data-node-id="2273:23093">
+                      <div id="ofpb-Node_63" class="x114">
+                        <img id="ofpb-Asset_48" class="x115" src="./line-7.svg" alt="">
+                      </div>
+                    </div>
+                    <div id="ofpb-Line_4" class="n2273_23095 ofpb-Line" data-name="Line" data-node-id="2273:23095">
+                      <div id="ofpb-Node_64" class="x116">
+                        <img id="ofpb-Asset_49" class="x117" src="./line-7.svg" alt="">
+                      </div>
+                    </div>
+                    <div id="ofpb-Line_5" class="n2273_23097 ofpb-Line" data-name="Line" data-node-id="2273:23097">
+                      <div id="ofpb-Node_65" class="x118">
+                        <img id="ofpb-Asset_50" class="x119" src="./line-7.svg" alt="">
+                      </div>
+                    </div>
+                    <div id="ofpb-Line_6" class="n2273_23099 ofpb-Line" data-name="Line" data-node-id="2273:23099">
+                      <div id="ofpb-Node_66" class="x120">
+                        <img id="ofpb-Asset_51" class="x121" src="./line-1-3.svg" alt="">
+                      </div>
+                    </div>
+                    <div id="ofpb-Line_7" class="n2273_23101 ofpb-Line" data-name="Line" data-node-id="2273:23101">
+                      <div id="ofpb-Node_67" class="x122">
+                        <img id="ofpb-Asset_52" class="x123" src="./line-2-2.svg" alt="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="ofpb-Month" class="n2273_23103 ofpb-Month" data-name="Month" data-node-id="2273:23103">
+                  <p id="ofpb-Value_10" class="n2273_23104 ofpb-Value" data-name="Value" data-node-id="2273:23104"><span id="ofpb-Node_68" class="x124">오전</span><span id="ofpb-Node_69" class="x125">9</span><span id="ofpb-Node_70" class="x126">시</span></p>
+                  <p id="ofpb-Value_11" class="n2273_23105 ofpb-Value" data-name="Value" data-node-id="2273:23105"><span id="ofpb-Node_71" class="x127">오전</span><span id="ofpb-Node_72" class="x128">10</span><span id="ofpb-Node_73" class="x129">시</span></p>
+                  <p id="ofpb-Value_12" class="n2273_23106 ofpb-Value" data-name="Value" data-node-id="2273:23106"><span id="ofpb-Node_74" class="x130">오전</span><span id="ofpb-Node_75" class="x131">11</span><span id="ofpb-Node_76" class="x132">시</span></p>
+                  <p id="ofpb-Value_13" class="n2273_23107 ofpb-Value" data-name="Value" data-node-id="2273:23107"><span id="ofpb-Node_77" class="x133">오후</span><span id="ofpb-Node_78" class="x134">12</span><span id="ofpb-Node_79" class="x135">시</span></p>
+                  <p id="ofpb-Value_14" class="n2273_23108 ofpb-Value" data-name="Value" data-node-id="2273:23108"><span id="ofpb-Node_80" class="x136">오후</span><span id="ofpb-Node_81" class="x137">1</span><span id="ofpb-Node_82" class="x138">시</span></p>
+                  <p id="ofpb-Value_15" class="n2273_23109 ofpb-Value" data-name="Value" data-node-id="2273:23109"><span id="ofpb-Node_83" class="x139">오후</span><span id="ofpb-Node_84" class="x140">2</span><span id="ofpb-Node_85" class="x141">시</span></p>
+                  <p id="ofpb-Value_16" class="n2273_23110 ofpb-Value" data-name="Value" data-node-id="2273:23110"><span id="ofpb-Node_86" class="x142">오후</span><span id="ofpb-Node_87" class="x143">3</span><span id="ofpb-Node_88" class="x144">시</span></p>
+                  <p id="ofpb-Value_17" class="n2273_23111 ofpb-Value" data-name="Value" data-node-id="2273:23111"><span id="ofpb-Node_89" class="x145">오후</span><span id="ofpb-Node_90" class="x146">4</span><span id="ofpb-Node_91" class="x147">시</span></p>
+                  <p id="ofpb-Value_18" class="n2273_23112 ofpb-Value" data-name="Value" data-node-id="2273:23112"><span id="ofpb-Node_92" class="x148">오후</span><span id="ofpb-Node_93" class="x149">5</span><span id="ofpb-Node_94" class="x150">시</span></p>
+                  <p id="ofpb-Value_19" class="n2273_23113 ofpb-Value" data-name="Value" data-node-id="2273:23113"><span id="ofpb-Node_95" class="x151">오후</span><span id="ofpb-Node_96" class="x152">6</span><span id="ofpb-Node_97" class="x153">시</span></p>
+                </div>
+              </div>
+              <div id="ofpb-Graph" class="n2273_23114 ofpb-Graph" data-name="Graph" data-node-id="2273:23114">
+                <div id="ofpb-Purple" class="n2273_23115 ofpb-Purple" data-name="Purple" data-node-id="2273:23115">
+                  <div id="ofpb-Node_98" class="x154">
+                    <img id="ofpb-Asset_53" class="x155" src="./purple-3.svg" alt="">
+                  </div>
+                </div>
+                <div id="ofpb-Yellow" class="n2273_23118 ofpb-Yellow" data-name="Yellow" data-node-id="2273:23118">
+                  <div id="ofpb-Node_99" class="x156">
+                    <div id="ofpb-Yellow_2" class="x157 ofpb-Yellow" data-name="Yellow">
+                      <div id="ofpb-Node_100" class="x158">
+                        <img id="ofpb-Asset_54" class="x159" src="./yellow-3.svg" alt="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="ofpb-Green" class="n2273_23121 ofpb-Green" data-name="Green" data-node-id="2273:23121">
+                  <div id="ofpb-Node_101" class="x160">
+                    <img id="ofpb-Asset_55" class="x161" src="./green-3.svg" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ofpb-Hover" class="n2273_23124 ofpb-Hover" data-name="Hover" data-node-id="2273:23124">
+              <div id="ofpb-Annotate" class="n2273_23125 ofpb-Annotate" data-name="Annotate" data-node-id="2273:23125">
+                <div id="ofpb-Block_3" class="n2273_23126 ofpb-Block" data-name="Block" data-node-id="2273:23126">
+                  <p id="ofpb-Value_20" class="n2273_23127 ofpb-Value" data-name="Value" data-node-id="2273:23127"><span id="ofpb-Node_102" class="x162">오후 </span><span id="ofpb-Node_103" class="x163">1</span><span id="ofpb-Node_104" class="x164">시</span></p>
+                  <div id="ofpb-Container_10" class="n2273_23128 ofpb-Container" data-name="Container" data-node-id="2273:23128">
+                    <div id="ofpb-Legend" class="n2273_23129 ofpb-Legend" data-name="Legend" data-node-id="2273:23129">
+                      <div id="ofpb-Color" class="n2273_23130 ofpb-Color" data-name="Color" data-node-id="2273:23130"></div>
+                      <p id="ofpb-Value_21" class="n2273_23131 ofpb-Value" data-name="Value" data-node-id="2273:23131">52</p>
+                    </div>
+                    <div id="ofpb-Legend_2" class="n2273_23132 ofpb-Legend" data-name="Legend" data-node-id="2273:23132">
+                      <div id="ofpb-Color_2" class="n2273_23133 ofpb-Color" data-name="Color" data-node-id="2273:23133"></div>
+                      <p id="ofpb-Value_22" class="n2273_23134 ofpb-Value" data-name="Value" data-node-id="2273:23134">22</p>
+                    </div>
+                    <div id="ofpb-Legend_3" class="n2273_23135 ofpb-Legend" data-name="Legend" data-node-id="2273:23135">
+                      <div id="ofpb-Color_3" class="n2273_23136 ofpb-Color" data-name="Color" data-node-id="2273:23136"></div>
+                      <p id="ofpb-Value_23" class="n2273_23137 ofpb-Value" data-name="Value" data-node-id="2273:23137">13</p>
+                    </div>
+                  </div>
+                </div>
+                <div id="ofpb-Pointer" class="n2273_23138 ofpb-Pointer" data-name="Pointer" data-node-id="2273:23138">
+                  <div id="ofpb-Node_105" class="x165">
+                    <div id="ofpb-Pointer_2" class="x166 ofpb-Pointer" data-name="Pointer">
+                      <div id="ofpb-Node_106" class="x167">
+                        <img id="ofpb-Asset_56" class="x168" src="./pointer.svg" alt="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="ofpb-Point_2" class="n2273_23139 ofpb-Point" data-name="Point" data-node-id="2273:23139">
+                <div id="ofpb-Node_107" class="x169">
+                  <img id="ofpb-Asset_57" class="x170" src="./point-2.svg" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="ofpb-Legend_4" class="n2273_23144 ofpb-Legend" data-name="Legend" data-node-id="2273:23144">
+          <div id="ofpb-Legend 1" class="n2273_23145 ofpb-Legend-1" data-name="Legend 1" data-node-id="2273:23145">
+            <div id="ofpb-Bar" class="n2273_23146 ofpb-Bar" data-name="Bar" data-node-id="2273:23146"></div>
+            <p id="ofpb-Value_24" class="n2273_23147 ofpb-Value" data-name="Value" data-node-id="2273:23147">30F_WORK SPACE_N01</p>
+          </div>
+          <div id="ofpb-Legend 2" class="n2273_23148 ofpb-Legend-2" data-name="Legend 2" data-node-id="2273:23148">
+            <div id="ofpb-Bar_2" class="n2273_23149 ofpb-Bar" data-name="Bar" data-node-id="2273:23149"></div>
+            <p id="ofpb-Value_25" class="n2273_23150 ofpb-Value" data-name="Value" data-node-id="2273:23150">30F_WORK SPACE_N02</p>
+          </div>
+          <div id="ofpb-Legend 3" class="n2273_23151 ofpb-Legend-3" data-name="Legend 3" data-node-id="2273:23151">
+            <div id="ofpb-Bar_3" class="n2273_23152 ofpb-Bar" data-name="Bar" data-node-id="2273:23152"></div>
+            <p id="ofpb-Value_26" class="n2273_23153 ofpb-Value" data-name="Value" data-node-id="2273:23153">30F_WORK SPACE_N03</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="ofpb-Dock" class="n2273_23154 ofpb-Dock" data-name="Dock" data-node-id="2273:23154">
+      <div id="ofpb-Menu" class="n2273_23155 ofpb-Menu" data-name="Menu" data-node-id="2273:23155">
+        <div id="ofpb-2276:28155" class="n2276_28155" data-node-id="2276:28155">
+          <div id="ofpb-Floor Plan" class="n2276_28156 ofpb-Floor-Plan" data-name="Floor Plan" data-node-id="2276:28156">
+            <img id="ofpb-Asset_58" class="x171" src="./floor-plan.svg" alt="">
+          </div>
+        </div>
+        <div id="ofpb-Divider_8" class="n2273_23157 ofpb-Divider" data-name="Divider" data-node-id="2273:23157">
+          <div id="ofpb-Node_108" class="x172">
+            <div id="ofpb-Divider_9" class="x173 ofpb-Divider" data-name="Divider">
+              <img id="ofpb-Asset_59" class="x174" src="./divider-2.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div id="ofpb-List" class="n2273_23158 ofpb-List" data-name="List" data-node-id="2273:23158">
+          <div id="ofpb-2276:28098" class="n2276_28098" data-node-id="2276:28098">
+            <img id="ofpb-Asset_60" class="x175" src="./state-active-type-meeting.svg" alt="">
+          </div>
+          <div id="ofpb-2276:28200" class="n2276_28200" data-node-id="2276:28200">
+            <div id="ofpb-Count" class="n2276_28201 ofpb-Count" data-name="Count" data-node-id="2276:28201">
+              <img id="ofpb-Asset_61" class="x176" src="./count-1.svg" alt="">
+            </div>
+          </div>
+          <div id="ofpb-2276:28203" class="n2276_28203" data-node-id="2276:28203">
+            <div id="ofpb-Count_2" class="n2276_28204 ofpb-Count" data-name="Count" data-node-id="2276:28204">
+              <img id="ofpb-Asset_62" class="x177" src="./count-2-2.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div id="ofpb-Divider_10" class="n2273_23162 ofpb-Divider" data-name="Divider" data-node-id="2273:23162">
+          <div id="ofpb-Node_109" class="x178">
+            <div id="ofpb-Divider_11" class="x179 ofpb-Divider" data-name="Divider">
+              <img id="ofpb-Asset_63" class="x180" src="./divider-2.svg" alt="">
+            </div>
+          </div>
+        </div>
+        <div id="ofpb-2276:28173" class="n2276_28173" data-node-id="2276:28173">
+          <div id="ofpb-Grid_2" class="n2276_28174 ofpb-Grid" data-name="Grid" data-node-id="2276:28174">
+            <img id="ofpb-Asset_64" class="x181" src="./grid.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="ofpb-Breadcrumb" class="n2277_47424 ofpb-Breadcrumb" data-name="Breadcrumb" data-node-id="2277:47424">
+      <div id="ofpb-Box" class="nI2277_47424_2019_19047 ofpb-Box" data-name="Box" data-node-id="I2277:47424;2019:19047">
+        <div id="ofpb-Home" class="nI2277_47424_2019_19048 ofpb-Home" data-name="Home" data-node-id="I2277:47424;2019:19048">
+          <img id="ofpb-Asset_65" class="x182" src="./home.svg" alt="">
+        </div>
+        <div id="ofpb-Glyph" class="nI2277_47424_2019_19049 ofpb-Glyph" data-name="Glyph" data-node-id="I2277:47424;2019:19049">
+          <div id="ofpb-Node_110" class="x183">
+            <img id="ofpb-Asset_66" class="x184" src="./glyph.svg" alt="">
+          </div>
+        </div>
+        <div id="ofpb-I2277:47424;2019:19050" class="nI2277_47424_2019_19050" data-node-id="I2277:47424;2019:19050">
+          <p id="ofpb-Node_111" class="x185">업무</p>
+        </div>
+        <div id="ofpb-Glyph_2" class="nI2277_47424_2019_19587 ofpb-Glyph" data-name="Glyph" data-node-id="I2277:47424;2019:19587">
+          <div id="ofpb-Node_112" class="x186">
+            <img id="ofpb-Asset_67" class="x187" src="./glyph.svg" alt="">
+          </div>
+        </div>
+        <div id="ofpb-I2277:47424;2019:19588" class="nI2277_47424_2019_19588" data-node-id="I2277:47424;2019:19588">
+          <p id="ofpb-Node_113" class="x188">업무 패턴</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div></div>
+
+
+
+<script src="../recent-time.js?v=1"></script>
+<script src="../office-live.js?v=1t8bv2w"></script>
+<script>if(new URLSearchParams(location.search).get("live")!=="0")window.initOffice && window.initOffice(document.querySelector(".ofpb-root"));</script>
+<button id="tt" style="position:fixed;right:12px;bottom:12px;z-index:99;padding:8px 14px;border-radius:8px;border:1px solid #8888;background:#fff8;font:13px system-ui;cursor:pointer">theme</button>
+<script>(function(){var r=document.querySelector(".ofpb-root");var rs=[r].concat(Array.prototype.slice.call(document.querySelectorAll(".ofpb-root")));function set(v){rs.forEach(function(x){if(x)x.dataset.theme=v;});}var q=new URLSearchParams(location.search);if(q.get("t")){set(q.get("t"));tt.style.display="none";}tt.onclick=function(){set(r.dataset.theme==="light"?"dark":"light");};})();</script>
+</body></html>

@@ -856,6 +856,13 @@ const TPLTINT = {
      판 · 선 · 글자 · 메뉴 아이콘 · 차트는 따라간다 */
   /* 스마트 도면관리 시안 — 주조색은 파랑(#3967FD, 색상각 226°). 색을 그대로 둘 것: 바탕 사진 · CCTV 사진 · 유리 아이콘 그림.
      판 · 선 · 글자 · 단추 · 아이콘 · 차트는 따라간다 */
+  /* 스마트 오피스 시안 — 주조색은 파랑보라(#657AFF, 색상각 232°). 색을 그대로 둘 것: 도면 그림(평면도 · 히트맵).
+     판 · 선 · 글자 · 단추 · 아이콘 · 차트는 따라간다 */
+  OFFICE_OPT: {
+    seed: '#657AFF', seededKey: 'wemb-office-seeded', refHue: 232,
+    keep: /(^|\/)(plan-image[-\w]*|30-f-012[-\w]*|heatmap[-\w]*|floor-plan[-\w]*)(\.(svg|png|jpg))?(\?|$)/i,
+    raster: /$^/,
+  },
   /* 스마트 플랜트 가스 모니터링 시안 — 주조색은 시안(#00BBFF, 색상각 196°). 색을 그대로 둘 것:
      바탕 사진 · 공장 평면도 · 메뉴 카드 받침/유리 구 · 메뉴 아이콘 · 상태 배지/전구 · 센서 표지(색이 곧 뜻). 판 · 선 · 글자 · 미터는 따라간다 */
   GASMON_OPT: {
@@ -1028,6 +1035,10 @@ const TPLTINT = {
     });
     /* 공장 전력설비 — 같은 방식 */
     this.icheonTint(t, mode, '.pfo-root', ['pfo-style', 'pfo-light-style', 'plant-live-style'], 'wemb-plant-mode', this.PLANT_OPT);
+    /* 스마트 오피스 화면 54장 — 같은 방식. 열린 장면만 칠한다 */
+    ['ofha', 'ofhb', 'ofhc', 'ofhd', 'ofhe', 'ofla', 'oflb', 'oflc', 'ofld', 'ofle', 'oflf', 'oflg', 'oflh', 'ofli', 'oflj', 'oflk', 'ofoa', 'ofob', 'ofoc', 'ofod', 'ofoe', 'ofof', 'ofog', 'ofba', 'ofbb', 'ofbc', 'ofbd', 'ofbe', 'ofpa', 'ofpb', 'ofpc', 'ofpd', 'ofpe', 'ofra', 'ofrb', 'ofrc', 'ofrd', 'ofca', 'ofcb', 'ofcc', 'ofcd', 'ofce', 'ofcf', 'ofcg', 'ofch', 'ofci', 'ofma', 'ofmb', 'ofmc', 'ofmd', 'ofme', 'ofmf', 'ofmg', 'ofmh'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'office-live-style'], 'wemb-office-mode', this.OFFICE_OPT);
+    });
     /* 스마트 플랜트 가스 모니터링 화면 5장 — 같은 방식. 열린 장면만 칠한다(팝업 뿌리도 따로 칠한다) */
     ['gmm', 'gmg', 'gmw', 'gma', 'gmc'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'gasmon-live-style'], 'wemb-gasmon-mode', this.GASMON_OPT);

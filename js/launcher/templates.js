@@ -167,6 +167,61 @@
       { img: 'src/templates/drawing-total-search.jpg', label: '통합검색' },
       { img: 'src/templates/drawing-total-result.jpg', label: '통합검색 결과' },
       { img: 'src/templates/drawing-login.jpg', label: '로그인' }] },
+    { title: 'Dashboard: Smart Office', area: '부지·건물·층', date: 'Nov 10, 2026', slides: [
+      { img: 'src/templates/office-home.jpg', label: '홈' },
+      { img: 'src/templates/office-home-alert.jpg', label: '홈 · 알림' },
+      { img: 'src/templates/office-home-setting.jpg', label: '홈 · 설정' },
+      { img: 'src/templates/office-home-account.jpg', label: '홈 · 계정' },
+      { img: 'src/templates/office-home-privacy.jpg', label: '홈 · 개인정보 처리방침' },
+      { img: 'src/templates/office-live-work.jpg', label: '현황 · 업무시간' },
+      { img: 'src/templates/office-live-work-zoom.jpg', label: '현황 · 업무시간 확대' },
+      { img: 'src/templates/office-live-after.jpg', label: '현황 · 업무시간 종료' },
+      { img: 'src/templates/office-live-used.jpg', label: '현황 · 사용중' },
+      { img: 'src/templates/office-live-used-zoom.jpg', label: '현황 · 사용중 확대' },
+      { img: 'src/templates/office-live-used-popup.jpg', label: '현황 · 사용중 팝업' },
+      { img: 'src/templates/office-live-free.jpg', label: '현황 · 사용가능' },
+      { img: 'src/templates/office-live-free-popup.jpg', label: '현황 · 사용가능 팝업' },
+      { img: 'src/templates/office-live-ghost.jpg', label: '현황 · 고스트룸' },
+      { img: 'src/templates/office-live-ghost-busy.jpg', label: '현황 · 고스트룸 팝업(사용불가)' },
+      { img: 'src/templates/office-live-ghost-free.jpg', label: '현황 · 고스트룸 팝업(사용가능)' },
+      { img: 'src/templates/office-occ-map.jpg', label: '분석 · 점유' },
+      { img: 'src/templates/office-occ-popup.jpg', label: '분석 · 점유 팝업' },
+      { img: 'src/templates/office-occ-area.jpg', label: '분석 · 점유 차트(영역별)' },
+      { img: 'src/templates/office-occ-group.jpg', label: '분석 · 점유 차트(그룹별)' },
+      { img: 'src/templates/office-occ-matrix.jpg', label: '분석 · 공간 활용 매트릭스' },
+      { img: 'src/templates/office-occ-matrix-hover.jpg', label: '분석 · 공간 활용 매트릭스 호버' },
+      { img: 'src/templates/office-occ-raw.jpg', label: '분석 · 점유 RAW DATA' },
+      { img: 'src/templates/office-bridge.jpg', label: '분석 · 스페이스 브릿지' },
+      { img: 'src/templates/office-bridge-node.jpg', label: '분석 · 스페이스 브릿지 노드 호버' },
+      { img: 'src/templates/office-bridge-link.jpg', label: '분석 · 스페이스 브릿지 라인 호버' },
+      { img: 'src/templates/office-bridge-chart.jpg', label: '분석 · 스페이스 브릿지 차트' },
+      { img: 'src/templates/office-bridge-raw.jpg', label: '분석 · 공간분석 RAW DATA' },
+      { img: 'src/templates/office-pattern-main.jpg', label: '분석 · 업무 패턴' },
+      { img: 'src/templates/office-pattern-meeting.jpg', label: '분석 · 회의실 패턴 분석' },
+      { img: 'src/templates/office-pattern-desk.jpg', label: '분석 · 스탠딩 데스크 사용 시간' },
+      { img: 'src/templates/office-pattern-collab.jpg', label: '분석 · 협업 · 세렌디피티 분석' },
+      { img: 'src/templates/office-pattern-raw.jpg', label: '분석 · 업무패턴 RAW DATA' },
+      { img: 'src/templates/office-room-main.jpg', label: '분석 · 고스트룸' },
+      { img: 'src/templates/office-room-chart.jpg', label: '분석 · 고스트룸 차트' },
+      { img: 'src/templates/office-room-usage.jpg', label: '분석 · 회의실 별 실사용률' },
+      { img: 'src/templates/office-room-raw.jpg', label: '분석 · 회의실 RAW DATA' },
+      { img: 'src/templates/office-count-main.jpg', label: '분석 · 카운팅' },
+      { img: 'src/templates/office-count-single.jpg', label: '분석 · 카운팅 팝업(단일)' },
+      { img: 'src/templates/office-count-multi.jpg', label: '분석 · 카운팅 팝업(다중)' },
+      { img: 'src/templates/office-count-gate.jpg', label: '분석 · 카운팅 출입구' },
+      { img: 'src/templates/office-count-floor.jpg', label: '분석 · 카운팅 층' },
+      { img: 'src/templates/office-count-building.jpg', label: '분석 · 카운팅 건물' },
+      { img: 'src/templates/office-count-toilet.jpg', label: '분석 · 카운팅 화장실' },
+      { img: 'src/templates/office-count-brush.jpg', label: '분석 · 카운팅 양치실' },
+      { img: 'src/templates/office-count-raw.jpg', label: '분석 · 카운팅 RAW DATA' },
+      { img: 'src/templates/office-admin-home.jpg', label: '관리정보 · 홈 화면 관리' },
+      { img: 'src/templates/office-admin-home-popup.jpg', label: '관리정보 · 홈 화면 관리 팝업' },
+      { img: 'src/templates/office-admin-time.jpg', label: '관리정보 · 시간 설정' },
+      { img: 'src/templates/office-admin-space.jpg', label: '관리정보 · 공간 설정' },
+      { img: 'src/templates/office-admin-space-popup.jpg', label: '관리정보 · 공간 설정 팝업' },
+      { img: 'src/templates/office-admin-sensor.jpg', label: '관리정보 · 센서 관리' },
+      { img: 'src/templates/office-admin-sensor-popup.jpg', label: '관리정보 · 센서 관리 팝업' },
+      { img: 'src/templates/office-admin-account.jpg', label: '관리정보 · 관리자 계정 목록' }] },
     { title: 'Dashboard: Smart Plant Gas Monitoring', area: '제조·안전', date: 'Nov 11, 2026', slides: [
       { img: 'src/templates/gasmon-main.jpg', label: '메인' },
       { img: 'src/templates/gasmon-gas.jpg', label: '가스 메인' },
@@ -346,6 +401,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Plant Power Facility');
     if (w) w.tpl = 'plant';
   })();
+  /* 스마트 오피스 — '스튜디오 열기' 시 Figma(WUxDt6yorbRlc8V1py86HM) 화면 54장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/office-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: Smart Office');
+    if (w) w.tpl = 'office';
+  })();
   /* 스마트 플랜트 가스 모니터링 — '스튜디오 열기' 시 Figma(CbbEsxxZo3vBcBprsiUhJm) 화면 2장 + 팝업 3장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/gasmon-*.js)으로 연다. */
   (function () {
@@ -389,7 +450,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

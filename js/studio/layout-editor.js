@@ -686,8 +686,9 @@ function initLayoutEditor() {
     const SC = window.__STATCOM_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
     const NB = window.__NEWBIZ_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
     const DW = window.__DRAWING_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+    const OF = window.__OFFICE_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
     const GM = window.__GASMON_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
-    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {}, SH.screens || {}, PF.screens || {}, SC.screens || {}, NB.screens || {}, DW.screens || {}, GM.screens || {});
+    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {}, SH.screens || {}, PF.screens || {}, SC.screens || {}, NB.screens || {}, DW.screens || {}, OF.screens || {}, GM.screens || {});
     const hjHtmlCache = {};
     function hjScreenHtml(px) {
       if (hjHtmlCache[px]) return hjHtmlCache[px];
@@ -860,6 +861,7 @@ function initLayoutEditor() {
         .concat(hjItems(SC.panels, 'panel'))
         .concat(hjItems(NB.panels, 'panel'))
         .concat(hjItems(DW.panels, 'panel'))
+        .concat(hjItems(OF.panels, 'panel'))
         .concat(hjItems(GM.panels, 'panel')),
       /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리들.
          한진 시안의 이벤트 현황(판·머리글·카운트·표·행·등급 배지)과 이천 FMS 의 이벤트 목록이 함께 산다. */
@@ -871,6 +873,7 @@ function initLayoutEditor() {
         .concat(hjItems(SC.events, 'event'))
         .concat(hjItems(NB.events, 'event'))
         .concat(hjItems(DW.events, 'event'))
+        .concat(hjItems(OF.events, 'event'))
         .concat(hjItems(GM.events, 'event'))
         .concat(ichItems((ICH.panels || []).filter(isEventNamed), 'event')),
       symbol: (window.__WEMB_SYMBOLS || [])
@@ -885,6 +888,7 @@ function initLayoutEditor() {
         .concat(hjItems(SC.symbols, 'symbol'))
         .concat(hjItems(NB.symbols, 'symbol'))
         .concat(hjItems(DW.symbols, 'symbol'))
+        .concat(hjItems(OF.symbols, 'symbol'))
         .concat(hjItems(GM.symbols, 'symbol')),
       /* 아이콘 탭에는 '…아이콘'으로 이름 붙은 등록물만 올린다 — 칩·토글·상태 점·화살표·
          로고처럼 아이콘이 아닌 부품이 섞이지 않게. 이름이 기준이라 내장 라인 아이콘
@@ -901,6 +905,7 @@ function initLayoutEditor() {
         .concat(hjIcons(SC.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(NB.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(DW.icons, 'icon').filter(isIconNamed))
+        .concat(hjIcons(OF.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(GM.icons, 'icon').filter(isIconNamed)),
       /* 검색 결과 임시 버킷 — data-cat="__search" 로 클릭/드래그가 여기서 항목을 찾는다 */
       __search: [],
@@ -1072,6 +1077,7 @@ function initLayoutEditor() {
       hjItems(SC.charts, 'chart').forEach((a) => items.push(a));
       hjItems(NB.charts, 'chart').forEach((a) => items.push(a));
       hjItems(DW.charts, 'chart').forEach((a) => items.push(a));
+      hjItems(OF.charts, 'chart').forEach((a) => items.push(a));
       hjItems(GM.charts, 'chart').forEach((a) => items.push(a));
       return items;
     }
