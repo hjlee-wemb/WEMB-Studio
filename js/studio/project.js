@@ -615,6 +615,12 @@
           try { localStorage.setItem('wemb-office-screen', wantOf); } catch (e3) {}
           if (typeof applyOfficeDT === 'function') applyOfficeDT(wantOf);
         }
+        else if (f.tpl === 'indpark') {
+          localStorage.setItem('wemb-tpl-dt', 'indpark'); localStorage.removeItem('wemb-tpl-img');
+          const wantIp = (typeof IP_SCREENS !== 'undefined' && IP_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-indpark-screen') || 'main');
+          try { localStorage.setItem('wemb-indpark-screen', wantIp); } catch (e3) {}
+          if (typeof applyIndparkDT === 'function') applyIndparkDT(wantIp);
+        }
         else if (f.tpl === 'gasmon') {
           localStorage.setItem('wemb-tpl-dt', 'gasmon'); localStorage.removeItem('wemb-tpl-img');
           const wantGm = (typeof GM_SCREENS !== 'undefined' && GM_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-gasmon-screen') || 'main');

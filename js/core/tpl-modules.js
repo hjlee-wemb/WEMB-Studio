@@ -153,6 +153,19 @@
       { src: 'src/office-admin-account.js?v=2', build: ['build_ofmh'], scene: 'admin-account' },
       { src: 'src/office-live.js?v=3', part: 'base' },
     ],
+    /* 스마트 산단 디지털 트윈 — Figma xzZQdVDkaDM1hve8Vc88GC. 단독 화면 9장 — 열린 장면 모듈만 싣는다 */
+    indpark: [
+      { src: 'src/indpark-main.js?v=5', build: ['build_ipm'], scene: 'main' },
+      { src: 'src/indpark-menu.js?v=5', build: ['build_ipn'], scene: 'menu' },
+      { src: 'src/indpark-site.js?v=5', build: ['build_ips'], scene: 'site' },
+      { src: 'src/indpark-forklift.js?v=5', build: ['build_ipf'], scene: 'forklift' },
+      { src: 'src/indpark-vibration.js?v=6', build: ['build_ipv'], scene: 'vibration' },
+      { src: 'src/indpark-heat.js?v=6', build: ['build_iph'], scene: 'heat' },
+      { src: 'src/indpark-event.js?v=5', build: ['build_ipe'], scene: 'event' },
+      { src: 'src/indpark-history.js?v=5', build: ['build_ipy'], scene: 'history' },
+      { src: 'src/indpark-sensor.js?v=5', build: ['build_ipt'], scene: 'sensor' },
+      { src: 'src/indpark-live.js?v=6', part: 'base' },
+    ],
     /* 스마트 플랜트 가스 모니터링 — Figma CbbEsxxZo3vBcBprsiUhJm. 화면 2장 + 팝업 3장. 팝업은 가스 메인 위에 그 자리에서 얹으므로 통째로 */
     gasmon: [
       { src: 'src/gasmon-main.js?v=7', build: ['build_gmm'] },

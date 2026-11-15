@@ -132,7 +132,8 @@ const TPLLOGO = {
     '.nbw-root [data-name="Logo Mark"], .nbs-root [data-name="Logo Mark"], .nbe-root [data-name="Logo Mark"], .nbk-root [data-name="Logo Mark"], .nbl-root [data-name="Logo Mark"], .nbg-root [data-name="Logo Mark"], .nbm-root [data-name="Logo Mark"], .nbt-root [data-name="Logo Mark"], .nbu-root [data-name="Logo Mark"], .nbp-root [data-name="Logo Mark"], .nbo-root [data-name="Logo Mark"], ' +
     '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
   /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
-  DOM_CUSTOM: '.gmm-root [data-name="Header"] > [data-name="Logo"], .gmg-root [data-name="Header"] > [data-name="Logo"], ' +
+  DOM_CUSTOM: '.ipm-root [data-name="Brand"] > [data-name="Logo"], .ipn-root [data-name="Brand"] > [data-name="Logo"], .ips-root [data-name="Brand"] > [data-name="Logo"], .ipf-root [data-name="Brand"] > [data-name="Logo"], .ipv-root [data-name="Brand"] > [data-name="Logo"], .iph-root [data-name="Brand"] > [data-name="Logo"], .ipe-root [data-name="Brand"] > [data-name="Logo"], .ipy-root [data-name="Brand"] > [data-name="Logo"], .ipt-root [data-name="Brand"] > [data-name="Logo"], ' +
+    '.gmm-root [data-name="Header"] > [data-name="Logo"], .gmg-root [data-name="Header"] > [data-name="Logo"], ' +
     '.dwm-root [data-name="Logo/WEMB Studio"], .dwn-root [data-name="Logo/WEMB Studio"], .dws-root [data-name="Logo/WEMB Studio"], .dwp-root [data-name="Logo/WEMB Studio"], .dwa-root [data-name="Logo/WEMB Studio"], .dwb-root [data-name="Logo/WEMB Studio"], .dwv-root [data-name="Logo/WEMB Studio"], .dwo-root [data-name="Logo/WEMB Studio"], .dwr-root [data-name="Logo/WEMB Studio"], .dwe-root [data-name="Logo/WEMB Studio"], .dwh-root [data-name="Logo/WEMB Studio"], .dwi-root [data-name="Logo/WEMB Studio"], .dwc-root [data-name="Logo/WEMB Studio"], .dwk-root [data-name="Logo/WEMB Studio"], .dww-root [data-name="Logo/WEMB Studio"], .dwd-root [data-name="Logo/WEMB Studio"], .dwt-root [data-name="Logo/WEMB Studio"], .dwu-root [data-name="Logo/WEMB Studio"], .dwl-root [data-name="Logo/WEMB Studio"], ' +
     '.shm-root [data-name="Brand"], .shi-root [data-name="Brand"], .shd-root [data-name="Brand"], ' +
     '.wrt-root [data-name="Brand"], .wrp-root [data-name="Brand"], .wre-root [data-name="Brand"], .pfo-root [data-name="Brand"]',
@@ -865,6 +866,14 @@ const TPLTINT = {
   },
   /* 스마트 플랜트 가스 모니터링 시안 — 주조색은 시안(#00BBFF, 색상각 196°). 색을 그대로 둘 것:
      바탕 사진 · 공장 평면도 · 메뉴 카드 받침/유리 구 · 메뉴 아이콘 · 상태 배지/전구 · 센서 표지(색이 곧 뜻). 판 · 선 · 글자 · 미터는 따라간다 */
+  /* 스마트 산단 디지털 트윈 시안 — 주조색은 강조 파랑(#0088FF, 색상각 208°). 색을 그대로 둘 것:
+     위성 지도 · 3D 렌더(사업장 · 지게차 · 온도) · 화면 바탕 사진 · 등급 구슬(Badge) · 상태 전구 · 그래프 선(색이 곧 뜻).
+     판 · 선 · 글자 · 단추 · 아이콘 · 내비는 따라간다 */
+  INDPARK_OPT: {
+    seed: '#0088FF', seededKey: 'wemb-indpark-seeded', refHue: 208,
+    keep: /(^|\/)(map\.png|screen-[-\w]*\.(png|jpg)|badge-[-\w]*|indicator[-\w]*|data(-\d+)?\.svg|glyph[-\w]*|part(-\d+)?\.svg|button-close-2(-lt)?\.svg)(\.(svg|png|jpg))?(\?|$)/i,
+    raster: /$^/,
+  },
   GASMON_OPT: {
     seed: '#00BBFF', seededKey: 'wemb-gasmon-seeded', refHue: 196,
     keep: /(^|\/)(screen-main[-\w]*\.jpg|floor-plan[-\w]*\.png|platform[-\w]*|orb[-\w]*|body[-\w]*|cloud[-\w]*|figure[-\w]*|lens[-\w]*|highlight[-\w]*|light[-\w]*|shadow[-\w]*|status-[-\w]*|btn-event-status[-\w]*|marker-sensor[-\w]*|background-1(-lt)?\.svg|background-2-2(-lt)?\.svg)(\.(svg|png|jpg))?(\?|$)/i,
@@ -1038,6 +1047,10 @@ const TPLTINT = {
     /* 스마트 오피스 화면 54장 — 같은 방식. 열린 장면만 칠한다 */
     ['ofha', 'ofhb', 'ofhc', 'ofhd', 'ofhe', 'ofla', 'oflb', 'oflc', 'ofld', 'ofle', 'oflf', 'oflg', 'oflh', 'ofli', 'oflj', 'oflk', 'ofoa', 'ofob', 'ofoc', 'ofod', 'ofoe', 'ofof', 'ofog', 'ofba', 'ofbb', 'ofbc', 'ofbd', 'ofbe', 'ofpa', 'ofpb', 'ofpc', 'ofpd', 'ofpe', 'ofra', 'ofrb', 'ofrc', 'ofrd', 'ofca', 'ofcb', 'ofcc', 'ofcd', 'ofce', 'ofcf', 'ofcg', 'ofch', 'ofci', 'ofma', 'ofmb', 'ofmc', 'ofmd', 'ofme', 'ofmf', 'ofmg', 'ofmh'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'office-live-style'], 'wemb-office-mode', this.OFFICE_OPT);
+    });
+    /* 스마트 산단 디지털 트윈 화면 9장 — 같은 방식. 열린 장면만 칠한다 */
+    ['ipm', 'ipn', 'ips', 'ipf', 'ipv', 'iph', 'ipe', 'ipy', 'ipt'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'indpark-live-style'], 'wemb-indpark-mode', this.INDPARK_OPT);
     });
     /* 스마트 플랜트 가스 모니터링 화면 5장 — 같은 방식. 열린 장면만 칠한다(팝업 뿌리도 따로 칠한다) */
     ['gmm', 'gmg', 'gmw', 'gma', 'gmc'].forEach((px) => {

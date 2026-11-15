@@ -228,6 +228,16 @@
       { img: 'src/templates/gasmon-worksite.jpg', label: '작업개소 상세' },
       { img: 'src/templates/gasmon-alarm.jpg', label: '가스농도 이상' },
       { img: 'src/templates/gasmon-confirm.jpg', label: '전송 확인' }] },
+    { title: 'Digital Twin: Smart Industrial Complex', area: '안전·보안', date: 'Nov 13, 2026', slides: [
+      { img: 'src/templates/indpark-main.jpg', label: '종합 운영현황' },
+      { img: 'src/templates/indpark-menu.jpg', label: '전체 메뉴' },
+      { img: 'src/templates/indpark-site.jpg', label: '사업장 3D' },
+      { img: 'src/templates/indpark-forklift.jpg', label: '지게차 충돌감시' },
+      { img: 'src/templates/indpark-vibration.jpg', label: '진동센서 정보' },
+      { img: 'src/templates/indpark-heat.jpg', label: '온도센서 정보' },
+      { img: 'src/templates/indpark-event.jpg', label: '이벤트 현황' },
+      { img: 'src/templates/indpark-history.jpg', label: '이벤트 히스토리' },
+      { img: 'src/templates/indpark-sensor.jpg', label: '센서현황' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -407,6 +417,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Dashboard: Smart Office');
     if (w) w.tpl = 'office';
   })();
+  /* 스마트 산단 디지털 트윈 — '스튜디오 열기' 시 Figma(xzZQdVDkaDM1hve8Vc88GC) 화면 9장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/indpark-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Smart Industrial Complex');
+    if (w) w.tpl = 'indpark';
+  })();
   /* 스마트 플랜트 가스 모니터링 — '스튜디오 열기' 시 Figma(CbbEsxxZo3vBcBprsiUhJm) 화면 2장 + 팝업 3장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/gasmon-*.js)으로 연다. */
   (function () {
@@ -450,7 +466,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'indpark' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

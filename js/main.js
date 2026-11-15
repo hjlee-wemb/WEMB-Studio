@@ -9,6 +9,9 @@ try {
     if (__tdt === 'office' && typeof applyOfficeDT === 'function') {
       applyOfficeDT(window.__officeSceneOf ? window.__officeSceneOf() : localStorage.getItem('wemb-office-screen'));
     }
+    else if (__tdt === 'indpark' && typeof applyIndparkDT === 'function') {
+      applyIndparkDT(window.__indparkSceneOf ? window.__indparkSceneOf() : localStorage.getItem('wemb-indpark-screen'));
+    }
     else if (__tdt === 'gasmon' && typeof applyGasmonDT === 'function') {
       applyGasmonDT(window.__gasmonSceneOf ? window.__gasmonSceneOf() : localStorage.getItem('wemb-gasmon-screen'));
     }
@@ -135,6 +138,14 @@ try {
   /* 스마트 오피스도 Light 가 원본 — 고른 밝기(wemb-office-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'office') {
     const want = localStorage.getItem('wemb-office-mode') === 'dark' ? 'dark' : 'light';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* 스마트 산단 디지털 트윈은 Dark 가 원본 — 고른 밝기(wemb-indpark-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'indpark') {
+    const want = localStorage.getItem('wemb-indpark-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
