@@ -238,6 +238,23 @@
       { img: 'src/templates/indpark-event.jpg', label: '이벤트 현황' },
       { img: 'src/templates/indpark-history.jpg', label: '이벤트 히스토리' },
       { img: 'src/templates/indpark-sensor.jpg', label: '센서현황' }] },
+    { title: 'Digital Twin: Combined Cycle Power Plant', area: '에너지·환경', date: 'November 17, 2026', slides: [
+      { img: 'src/templates/ccpp-main.jpg?v=1', label: '설비 맵' },
+      { img: 'src/templates/ccpp-library.jpg?v=1', label: '도서관리' },
+      { img: 'src/templates/ccpp-diagram.jpg?v=1', label: '계통도' },
+      { img: 'src/templates/ccpp-detail.jpg?v=1', label: '태그 · 상세정보' },
+      { img: 'src/templates/ccpp-file-open.jpg?v=1', label: '파일 열기' }] },
+    { title: 'Digital Twin: Power Plant Disaster Prevention', area: '에너지·환경', date: 'November 16, 2026', slides: [
+      { img: 'src/templates/plantdp-main.jpg?v=4', label: '종합 방재현황' },
+      { img: 'src/templates/plantdp-weather.jpg?v=4', label: '기상 상세 분석' },
+      { img: 'src/templates/plantdp-seismic.jpg?v=4', label: '지진계측 상세 파형' },
+      { img: 'src/templates/plantdp-event.jpg?v=4', label: '이벤트 현황' },
+      { img: 'src/templates/plantdp-sop-popup.jpg?v=4', label: 'SOP 진행 팝업' },
+      { img: 'src/templates/plantdp-building.jpg?v=4', label: '건물 캐러셀' },
+      { img: 'src/templates/plantdp-floor.jpg?v=4', label: '층 캐러셀' },
+      { img: 'src/templates/plantdp-sop.jpg?v=4', label: 'SOP 진행 현황' },
+      { img: 'src/templates/plantdp-sop-standby.jpg?v=4', label: 'SOP 대기' },
+      { img: 'src/templates/plantdp-login.jpg?v=4', label: '로그인' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -441,6 +458,18 @@
     const w = TEMPLATES.find((t) => t.title === 'Dashboard: Wireless Network Management');
     if (w) w.tpl = 'wnms';
   })();
+  /* 복합화력 설비정보 디지털트윈 — '스튜디오 열기' 시 Figma(r7V2rTKcUto2Yd1qL4XSfZ) 화면 5장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/ccpp-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Combined Cycle Power Plant');
+    if (w) w.tpl = 'ccpp';
+  })();
+  /* 발전소 디지털트윈 방재 — '스튜디오 열기' 시 Figma(QVCXpLxrGKG7Id7s9SSszf) 화면 10장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/plantdp-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Power Plant Disaster Prevention');
+    if (w) w.tpl = 'plantdp';
+  })();
   /* 신사업 관리 대시보드 — '스튜디오 열기' 시 Figma(cES6X45zHjsaabaXL1cdrt) 화면 11장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/newbiz-*.js)으로 연다. */
   (function () {
@@ -466,7 +495,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'indpark' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

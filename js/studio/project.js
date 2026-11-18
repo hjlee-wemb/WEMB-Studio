@@ -639,6 +639,18 @@
           try { localStorage.setItem('wemb-wnms-screen', wantWn); } catch (e3) {}
           if (typeof applyWnmsDT === 'function') applyWnmsDT(wantWn);
         }
+        else if (f.tpl === 'ccpp') {
+          localStorage.setItem('wemb-tpl-dt', 'ccpp'); localStorage.removeItem('wemb-tpl-img');
+          const wantCc = (typeof CC_SCREENS !== 'undefined' && CC_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-ccpp-screen') || 'main');
+          try { localStorage.setItem('wemb-ccpp-screen', wantCc); } catch (e3) {}
+          if (typeof applyCcppDT === 'function') applyCcppDT(wantCc);
+        }
+        else if (f.tpl === 'plantdp') {
+          localStorage.setItem('wemb-tpl-dt', 'plantdp'); localStorage.removeItem('wemb-tpl-img');
+          const wantPd = (typeof PD_SCREENS !== 'undefined' && PD_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-plantdp-screen') || 'main');
+          try { localStorage.setItem('wemb-plantdp-screen', wantPd); } catch (e3) {}
+          if (typeof applyPlantdpDT === 'function') applyPlantdpDT(wantPd);
+        }
         else if (f.tpl === 'newbiz') {
           localStorage.setItem('wemb-tpl-dt', 'newbiz'); localStorage.removeItem('wemb-tpl-img');
           const wantNb = (typeof NB_SCREENS !== 'undefined' && NB_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-newbiz-screen') || 'wind');

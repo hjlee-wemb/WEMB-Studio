@@ -132,7 +132,7 @@ const TPLLOGO = {
     '.nbw-root [data-name="Logo Mark"], .nbs-root [data-name="Logo Mark"], .nbe-root [data-name="Logo Mark"], .nbk-root [data-name="Logo Mark"], .nbl-root [data-name="Logo Mark"], .nbg-root [data-name="Logo Mark"], .nbm-root [data-name="Logo Mark"], .nbt-root [data-name="Logo Mark"], .nbu-root [data-name="Logo Mark"], .nbp-root [data-name="Logo Mark"], .nbo-root [data-name="Logo Mark"], ' +
     '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
   /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
-  DOM_CUSTOM: '.ipm-root [data-name="Brand"] > [data-name="Logo"], .ipn-root [data-name="Brand"] > [data-name="Logo"], .ips-root [data-name="Brand"] > [data-name="Logo"], .ipf-root [data-name="Brand"] > [data-name="Logo"], .ipv-root [data-name="Brand"] > [data-name="Logo"], .iph-root [data-name="Brand"] > [data-name="Logo"], .ipe-root [data-name="Brand"] > [data-name="Logo"], .ipy-root [data-name="Brand"] > [data-name="Logo"], .ipt-root [data-name="Brand"] > [data-name="Logo"], ' +
+  DOM_CUSTOM: '.pdm-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdw-root [data-name="Header"] :has(> [data-name="logo chip"]), .pds-root [data-name="Header"] :has(> [data-name="logo chip"]), .pde-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdp-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdb-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdf-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdo-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdy-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Brand"] > [data-name="Logo"], .ipm-root [data-name="Brand"] > [data-name="Logo"], .ipn-root [data-name="Brand"] > [data-name="Logo"], .ips-root [data-name="Brand"] > [data-name="Logo"], .ipf-root [data-name="Brand"] > [data-name="Logo"], .ipv-root [data-name="Brand"] > [data-name="Logo"], .iph-root [data-name="Brand"] > [data-name="Logo"], .ipe-root [data-name="Brand"] > [data-name="Logo"], .ipy-root [data-name="Brand"] > [data-name="Logo"], .ipt-root [data-name="Brand"] > [data-name="Logo"], ' +
     '.gmm-root [data-name="Header"] > [data-name="Logo"], .gmg-root [data-name="Header"] > [data-name="Logo"], ' +
     '.dwm-root [data-name="Logo/WEMB Studio"], .dwn-root [data-name="Logo/WEMB Studio"], .dws-root [data-name="Logo/WEMB Studio"], .dwp-root [data-name="Logo/WEMB Studio"], .dwa-root [data-name="Logo/WEMB Studio"], .dwb-root [data-name="Logo/WEMB Studio"], .dwv-root [data-name="Logo/WEMB Studio"], .dwo-root [data-name="Logo/WEMB Studio"], .dwr-root [data-name="Logo/WEMB Studio"], .dwe-root [data-name="Logo/WEMB Studio"], .dwh-root [data-name="Logo/WEMB Studio"], .dwi-root [data-name="Logo/WEMB Studio"], .dwc-root [data-name="Logo/WEMB Studio"], .dwk-root [data-name="Logo/WEMB Studio"], .dww-root [data-name="Logo/WEMB Studio"], .dwd-root [data-name="Logo/WEMB Studio"], .dwt-root [data-name="Logo/WEMB Studio"], .dwu-root [data-name="Logo/WEMB Studio"], .dwl-root [data-name="Logo/WEMB Studio"], ' +
     '.shm-root [data-name="Brand"], .shi-root [data-name="Brand"], .shd-root [data-name="Brand"], ' +
@@ -889,6 +889,20 @@ const TPLTINT = {
     keep: /(^|\/)(scene-image|background|marker|icon-status|shadow|highlight|pedestal)[-\w]*\.(svg|png|jpg)(\?|$)/i,
     raster: /$^/,
   },
+  /* 발전소 디지털트윈 방재 — 주조색은 파랑(#2A74F4, 색상각 218°). 색을 그대로 둘 것: 3D 장면 · 건물 그림 · 로그인 사진 · 바탕 그림 · 화재 표지 · 등급 · 경보 색.
+     판 · 선 · 글자 · 아이콘 · 차트는 따라간다 */
+  /* 복합화력 설비정보 디지털트윈 — 주조색은 파랑(#0073FF, 색상각 213°). 색을 그대로 둘 것: 3D 설비 그림 · 계통도 그림(과 그 다크 사본) · 로고 · 상태 칩.
+     판 · 선 · 글자 · 아이콘 · 차트는 따라간다 */
+  CCPP_OPT: {
+    seed: '#0073FF', seededKey: 'wemb-ccpp-seeded', refHue: 213,
+    keep: /(^|\/)(3-dscene|diagram-image|glyph-dk|glyph\.svg|logo)[-\w]*\.(svg|png|jpg)(\?|$)/i,
+    raster: /$^/,
+  },
+  PLANTDP_OPT: {
+    seed: '#2A74F4', seededKey: 'wemb-plantdp-seeded', refHue: 218,
+    keep: /(^|\/)(stage-|screen-|background|fire-marker|vector-2|divider-1|ellipse|disability)[-\w]*\.(svg|png|jpg)(\?|$)/i,
+    raster: /$^/,
+  },
   NEWBIZ_OPT: {
     seed: '#7FD3FA', seededKey: 'wemb-newbiz-seeded', refHue: 199,
     keep: /(^|\/)(logo-mark|turbine-image|solar-panel-image|flag|mask-?group|artwork|ellipse|shape|path)[-\w]*(-lt)?\.(svg|png)(\?|$)/i,
@@ -1063,6 +1077,22 @@ const TPLTINT = {
     /* 무선망 통합관리 화면 8장 — 같은 방식. 열린 장면만 칠한다 */
     ['wnm', 'wno', 'wnx', 'wnt', 'wnv', 'wne', 'wnd', 'wnl'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'wnms-live-style'], 'wemb-wnms-mode', this.WNMS_OPT);
+    });
+    /* 복합화력 설비정보 화면 5장 — 같은 방식. 열린 장면만 칠한다 */
+    ['ccm', 'ccl', 'ccd', 'cce', 'ccf'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'ccpp-live-style'], 'wemb-ccpp-mode', this.CCPP_OPT);
+    });
+    /* 상세 팝업 탭 조각(src/ccpp-tabs.js) — 갈아 끼운 설계 · 설비 · 자재도 같은 색으로 */
+    ['ccta', 'cctb', 'cctc'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', ['ccpp-tab-design', 'ccpp-tab-equipment', 'ccpp-tab-materials'], 'wemb-ccpp-mode', this.CCPP_OPT);
+    });
+    /* 발전소 방재 화면 10장 — 같은 방식. 열린 장면만 칠한다 */
+    ['pdm', 'pdw', 'pds', 'pde', 'pdp', 'pdb', 'pdf', 'pdo', 'pdy', 'pdl'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'plantdp-live-style'], 'wemb-plantdp-mode', this.PLANTDP_OPT);
+    });
+    /* 필터 패널 변형 8벌(src/plantdp-nav.js) — 탭 · 센서 유형으로 갈아 끼운 조각도 같은 색으로 */
+    ['pdna', 'pdnb', 'pdnc', 'pdnd', 'pdne', 'pdnf', 'pdng', 'pdnh'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style'], 'wemb-plantdp-mode', this.PLANTDP_OPT);
     });
     /* 신사업 관리 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
     ['nbw', 'nbs', 'nbe', 'nbk', 'nbl', 'nbg', 'nbm', 'nbt', 'nbu', 'nbp', 'nbo'].forEach((px) => {

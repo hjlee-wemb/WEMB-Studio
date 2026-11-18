@@ -208,6 +208,32 @@
       { src: 'src/wnms-login.js?v=8', build: ['build_wnl'], scene: 'login' },
       { src: 'src/wnms-live.js?v=7', part: 'base' },
     ],
+    /* 발전소 디지털트윈 방재 — Figma QVCXpLxrGKG7Id7s9SSszf. 화면 10장, 장면마다 따로 싣는다 */
+    /* 복합화력 설비정보 디지털트윈 — Figma r7V2rTKcUto2Yd1qL4XSfZ. 화면 5장, 장면마다 따로 싣는다(탭 조각 · 라이브는 공통) */
+    ccpp: [
+      { src: 'src/ccpp-main.js?v=2', build: ['build_ccm'], scene: 'main' },
+      { src: 'src/ccpp-library.js?v=2', build: ['build_ccl'], scene: 'library' },
+      { src: 'src/ccpp-diagram.js?v=2', build: ['build_ccd'], scene: 'diagram' },
+      { src: 'src/ccpp-detail.js?v=2', build: ['build_cce'], scene: 'detail' },
+      { src: 'src/ccpp-file-open.js?v=2', build: ['build_ccf'], scene: 'file-open' },
+      { src: 'src/ccpp-tabs.js?v=3', part: 'base', build: ['build_ccta', 'build_cctb', 'build_cctc'] },
+      { src: 'src/ccpp-oper.js?v=2', build: ['build_ccto'] },
+      { src: 'src/ccpp-live.js?v=7', part: 'base' },
+    ],
+    plantdp: [
+      { src: 'src/plantdp-main.js?v=7', build: ['build_pdm'], scene: 'main' },
+      { src: 'src/plantdp-weather.js?v=7', build: ['build_pdw'], scene: 'weather' },
+      { src: 'src/plantdp-seismic.js?v=7', build: ['build_pds'], scene: 'seismic' },
+      { src: 'src/plantdp-event.js?v=7', build: ['build_pde'], scene: 'event' },
+      { src: 'src/plantdp-sop-popup.js?v=7', build: ['build_pdp'], scene: 'sop-popup' },
+      { src: 'src/plantdp-building.js?v=7', build: ['build_pdb'], scene: 'building' },
+      { src: 'src/plantdp-floor.js?v=7', build: ['build_pdf'], scene: 'floor' },
+      { src: 'src/plantdp-sop.js?v=7', build: ['build_pdo'], scene: 'sop' },
+      { src: 'src/plantdp-sop-standby.js?v=7', build: ['build_pdy'], scene: 'sop-standby' },
+      { src: 'src/plantdp-login.js?v=7', build: ['build_pdl'], scene: 'login' },
+      { src: 'src/plantdp-nav.js?v=3', part: 'base' },
+      { src: 'src/plantdp-live.js?v=17', part: 'base' },
+    ],
     /* 신사업 관리 대시보드 — Figma cES6X45zHjsaabaXL1cdrt. 화면 11장, 장면마다 따로 싣는다 */
     newbiz: [
       { src: 'src/newbiz-wind.js?v=16', build: ['build_nbw'], scene: 'wind' },
@@ -261,6 +287,8 @@
     hanjin: { key: 'wemb-hanjin-screen', def: 'main' },
     statcom: { key: 'wemb-statcom-screen', def: 'main' },
     newbiz: { key: 'wemb-newbiz-screen', def: 'wind' },
+    ccpp: { key: 'wemb-ccpp-screen', def: 'main' },
+    plantdp: { key: 'wemb-plantdp-screen', def: 'main' },
     wnms: { key: 'wemb-wnms-screen', def: 'main' },
     drawing: { key: 'wemb-drawing-screen', def: 'main' },
     office: { key: 'wemb-office-screen', def: 'home' },
