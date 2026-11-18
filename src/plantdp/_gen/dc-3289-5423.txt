@@ -1,0 +1,582 @@
+const imgWalking1 = "https://www.figma.com/api/mcp/asset/5da51b14-ca42-4c9d-af86-31d18662745c.svg";
+const imgWind1 = "https://www.figma.com/api/mcp/asset/6baae463-2cc9-4077-85aa-47a167620a08.svg";
+const imgExit1 = "https://www.figma.com/api/mcp/asset/57922769-25f2-482f-8213-4888ee46b026.svg";
+const imgLogoChip = "https://www.figma.com/api/mcp/asset/fdf4af14-6858-432f-97db-d8876bb317c1.svg";
+const img01AlignCenter = "https://www.figma.com/api/mcp/asset/6df141f1-65bd-49b5-abfb-10e506ad6969.svg";
+const imgIconTarget = "https://www.figma.com/api/mcp/asset/7b36f5c2-1ffc-42d3-97f2-399fe178ee40.svg";
+const imgIconVisionTarget = "https://www.figma.com/api/mcp/asset/cc46b3d8-ecba-48b4-b1b6-1c864c0922a3.svg";
+const imgIconManual = "https://www.figma.com/api/mcp/asset/269d7b66-6ae1-46c9-9647-285b1330fbf4.svg";
+const imgGlyph = "https://www.figma.com/api/mcp/asset/4f66f3f2-8182-44aa-be69-aaf2e300ebae.svg";
+const imgIconCheckCircle = "https://www.figma.com/api/mcp/asset/7748575e-e878-43d3-97e1-5cd6db13df4a.svg";
+const imgIconCalendarStart = "https://www.figma.com/api/mcp/asset/f3ea06aa-c4f7-4caa-808f-30baa237e6e9.svg";
+const imgIconClock = "https://www.figma.com/api/mcp/asset/7701a482-e857-48c3-9259-3cd13c2c77be.svg";
+const imgFireExtinguisher1 = "https://www.figma.com/api/mcp/asset/2401a37b-2e61-470a-88e5-732d7b10f2d7.svg";
+const imgExitAlt11 = "https://www.figma.com/api/mcp/asset/5bd2ccdc-edc4-47e7-b309-fa743aa9b6bc.svg";
+const imgLine5 = "https://www.figma.com/api/mcp/asset/b7a167e3-c98d-4c9b-8bcf-2778b9fbcf3e.svg";
+const imgCheckCircle1 = "https://www.figma.com/api/mcp/asset/ac751fc1-4f16-4e51-a8b4-e9aae649435a.svg";
+const imgIconTitle = "https://www.figma.com/api/mcp/asset/d10f1e7b-de0c-4041-8345-8a6dfb8029ce.svg";
+const imgIconFilter = "https://www.figma.com/api/mcp/asset/2cd20187-ad96-413c-a53b-40be1a61d8cb.svg";
+const imgIconChevronDown = "https://www.figma.com/api/mcp/asset/7168b479-362e-4840-be41-de3447ab1579.svg";
+const imgMagnifyingGlass1 = "https://www.figma.com/api/mcp/asset/2c5cda34-5ce6-4f12-a5f0-812a693f2d40.svg";
+const imgDividerWrap = "https://www.figma.com/api/mcp/asset/c2248a29-397f-422a-9bb4-c2448c3b27da.svg";
+const imgTimeQuarterPast1 = "https://www.figma.com/api/mcp/asset/3f9853c8-7f0a-4ebe-b121-6db9f631eb97.svg";
+const imgVector = "https://www.figma.com/api/mcp/asset/ba37c115-bd95-4aaa-8b04-0e2589c1a577.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/c853ed37-23f9-4879-a479-db7a830f9d39.svg";
+const imgAngleDownSolid1 = "https://www.figma.com/api/mcp/asset/d30eb3c0-6a01-4b3c-91be-2019816e51f1.svg";
+const imgShape = "https://www.figma.com/api/mcp/asset/05363d0e-93dc-44da-b129-8369a433ab3c.svg";
+const imgShape1 = "https://www.figma.com/api/mcp/asset/84e96b4b-0daa-43e1-a5a6-f058fd956ee1.svg";
+const imgShape2 = "https://www.figma.com/api/mcp/asset/13f86d21-463a-4f42-bbd5-8166354d4015.svg";
+
+type IconBadgeProps = {
+  className?: string;
+  iconBadge?: "intruder" | "wind";
+};
+
+function IconBadge({ className, iconBadge = "wind" }: IconBadgeProps) {
+  const isWind = iconBadge === "wind";
+  return (
+    <div className={className || `bg-[#ffefef] content-stretch flex items-center justify-center p-[4px] relative rounded-[5px] ${isWind ? "" : "gap-[10px]"}`} id={isWind ? "node-897_3554" : "node-897_3549"}>
+      {iconBadge === "intruder" && (
+        <div className="relative shrink-0 size-[14px]" data-node-id="897:3552" data-name="walking 1">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgWalking1} />
+        </div>
+      )}
+      {isWind && (
+        <div className="relative shrink-0 size-[14px]" data-node-id="897:3555" data-name="wind 1">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgWind1} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type BtnLogoutProps = {
+  className?: string;
+  btnLogout?: "normal";
+};
+
+function BtnLogout({ className, btnLogout = "normal" }: BtnLogoutProps) {
+  return (
+    <div className={className || "bg-white border border-[#ccc] border-solid content-stretch flex items-center justify-center px-[13px] py-[10px] relative rounded-[30px] size-[40px]"} data-node-id="766:7906">
+      <div className="overflow-clip relative shrink-0 size-[16px]" data-node-id="766:7907" data-name="exit 1">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgExit1} />
+      </div>
+    </div>
+  );
+}
+
+type LogoProps = {
+  className?: string;
+  property1?: "blue";
+};
+
+function Logo({ className, property1 = "blue" }: LogoProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[9.639px] items-center relative"} data-node-id="3306:4806">
+      <div className="relative shrink-0 size-[38.554px]" data-node-id="3306:4803" data-name="logo chip">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoChip} />
+      </div>
+      <p className="[word-break:break-word] font-['Pretendard_GOV:Bold'] leading-[normal] not-italic relative shrink-0 text-[#1359da] text-[24.096px] tracking-[-0.4819px] whitespace-nowrap" data-node-id="3306:4805">
+        WEMB Studio
+      </p>
+    </div>
+  );
+}
+
+export default function ScreenSopStandby() {
+  return (
+    <div className="bg-[#f4f3f3] content-stretch flex gap-[var(--0.875rem,14px)] items-end pb-[var(--1.0625rem,17px)] pt-[var(--3.3125rem,53px)] px-[var(--0.875rem,14px)] relative size-full" data-node-id="3289:5423" data-name="Screen/SOP (Standby)">
+      <div className="absolute content-stretch flex flex-col gap-[var(--3.25rem,52px)] h-[var(--28.9375rem,463px)] items-center left-[310px] top-[74px] w-[var(--65.125rem,1042px)]" data-node-id="3289:6482" data-name="Main Panel">
+        <div className="backdrop-blur-[25px] bg-white border border-[#d6dde6] border-solid content-stretch flex flex-col gap-[var(--1.25rem,20px)] h-[204px] items-start justify-between p-[var(--0.9375rem,15px)] relative rounded-[var(--0.875rem,14px)] shrink-0 w-[1042px]" data-node-id="3289:5455" data-name="Widget/SOP Summary">
+          <div className="content-stretch flex gap-[var(--35.4375rem,567px)] items-start justify-between relative shrink-0 w-[1003.03px]" data-node-id="3289:5456" data-name="Info">
+            <div className="content-stretch flex flex-col gap-[var(--1.4375rem,23px)] items-start relative shrink-0 w-[410.03px]" data-node-id="3289:5457" data-name="Title Block">
+              <div className="content-stretch flex flex-col h-[25px] items-start pl-[var(--1.99812rem,31.97px)] pr-[var(--0.89438rem,14.31px)] pt-[var(--0.1875rem,3px)] relative shrink-0 w-[170.18px]" data-node-id="3289:6487" data-name="Title Row">
+                <p className="[word-break:break-word] font-['NanumSquare_Neo:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[20px] w-[123.897px]" data-node-id="3289:5459">
+                  화재 발생 대응
+                </p>
+                <div className="absolute content-stretch flex gap-[var(--9.26125rem,148.18px)] h-[var(--1.375rem,22px)] items-center left-0 top-0 w-[var(--10.63625rem,170.18px)]" data-node-id="3289:6492" data-name="Badge Group">
+                  <div className="bg-[#ffefef] content-stretch flex gap-[10px] items-center justify-center p-[4px] relative rounded-[var(--0.3125rem,5px)] shrink-0" data-node-id="3289:5461" data-name="Icon/Fire">
+                    <div className="overflow-clip relative shrink-0 size-[14px]" data-node-id="I3289:5461;766:6842" data-name="flame 1">
+                      <div className="absolute inset-[0.19%_6.36%_0.01%_6.25%]" data-node-id="I3289:5461;766:6843" data-name="_01_align_center">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={img01AlignCenter} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-start pt-[var(--0.0625rem,1px)] relative shrink-0" data-node-id="3289:6679" data-name="Text Wrap">
+                    <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[14px] whitespace-nowrap" data-node-id="3289:5462">{` `}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--1.87062rem,29.93px)] h-[17px] items-start relative shrink-0 w-[435px]" data-node-id="3289:6493" data-name="Meta List">
+                <div className="content-stretch flex items-start pt-[var(--0.0025rem,0.04px)] relative shrink-0" data-node-id="3289:6681" data-name="Item/Location Wrap">
+                  <div className="content-stretch flex gap-[var(--0.37062rem,5.93px)] h-[16.959px] items-center relative shrink-0 w-[193.07px]" data-node-id="3289:6495" data-name="Item/Location">
+                    <div className="relative shrink-0 size-[16.959px]" data-node-id="3289:5472" data-name="Icon/Target">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconTarget} />
+                    </div>
+                    <div className="content-stretch flex items-start pb-[var(--0.0025rem,0.04px)] relative shrink-0" data-node-id="3289:6680" data-name="Label Wrap">
+                      <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] w-[170.183px]" data-node-id="3289:5469">
+                        연료시설 - 가스압축동 B1
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--0.375rem,6px)] h-[17px] items-start relative shrink-0 w-[212px]" data-node-id="3289:6494" data-name="Item/Source">
+                  <div className="relative shrink-0 size-[17px]" data-node-id="3289:5466" data-name="Icon/Vision Target">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconVisionTarget} />
+                  </div>
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[14px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] whitespace-nowrap" data-node-id="3289:5465">
+                    영상감지시스템(AI 거수자감지)
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--0.375rem,6px)] h-[48px] items-start relative shrink-0 w-[156px]" data-node-id="3289:6496" data-name="Action Buttons">
+              <div className="bg-white border border-[#d7e1f0] border-solid content-stretch flex gap-[var(--0.625rem,10px)] items-center justify-center p-[var(--0.25rem,4px)] relative rounded-[var(--2.4375rem,39px)] shrink-0 size-[48px]" data-node-id="3289:5478" data-name="Button/Manual">
+                <div className="relative shrink-0 size-[18px]" data-node-id="3289:5479" data-name="Icon/Manual">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconManual} />
+                </div>
+              </div>
+              <div className="bg-white border border-[#d7e1f0] border-solid content-stretch flex gap-[var(--0.625rem,10px)] items-center justify-center p-[var(--0.25rem,4px)] relative rounded-[var(--2.4375rem,39px)] shrink-0 size-[48px]" data-node-id="3289:5481" data-name="Button/Send SMS">
+                <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="3289:5482" data-name="Icon/Message">
+                  <div className="absolute inset-[0_0_1.29%_0]" data-node-id="3289:5483" data-name="Glyph">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGlyph} />
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--secondary-color\/\#2a74f4,#2a74f4)] content-stretch flex gap-[var(--0.625rem,10px)] items-center justify-center p-[var(--0.25rem,4px)] relative rounded-[var(--2.4375rem,39px)] shrink-0 size-[48px]" data-node-id="3289:5475" data-name="Button/End SOP">
+                <div className="relative shrink-0 size-[18px]" data-node-id="3289:5476" data-name="Icon/Check Circle">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconCheckCircle} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[var(--1.17063rem,18.73px)] h-[80px] items-start relative shrink-0 w-[1008.16px]" data-node-id="3289:6497" data-name="Stats">
+            <div className="content-stretch flex flex-col h-[80px] items-start relative shrink-0 w-[263.04px]" data-node-id="3289:6498" data-name="Card/Start">
+              <div className="content-stretch flex flex-col h-[80px] items-start relative shrink-0 w-[263.04px]" data-node-id="3289:6499" data-name="Content">
+                <div className="bg-white border border-[#d6dde6] border-solid content-stretch flex flex-col gap-[var(--0.63125rem,10.1px)] h-[80px] items-start pb-[var(--0.93125rem,14.9px)] pl-[var(--0.9375rem,15px)] pr-[var(--0.94rem,15.04px)] pt-[var(--0.75rem,12px)] relative rounded-[var(--0.875rem,14px)] shrink-0 w-[263.04px]" data-node-id="3289:5491" data-name="Row">
+                  <div className="content-stretch flex flex-col items-start pl-[var(--0.0675rem,1.08px)] relative shrink-0" data-node-id="3289:6682" data-name="Label Wrap">
+                    <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[16px] w-[31.123px]" data-node-id="3289:5502">
+                      시작
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--0.5625rem,9px)] items-start relative shrink-0" data-node-id="3289:6683" data-name="Fields">
+                    <div className="bg-[#f4f3f3] content-stretch flex gap-[var(--0.375rem,6px)] h-[25px] items-center px-[var(--0.3125rem,5px)] py-[var(--0.125rem,2px)] relative rounded-[var(--0.3125rem,5px)] shrink-0 w-[112px]" data-node-id="3289:5492" data-name="Field/Date">
+                      <div className="relative shrink-0 size-[12px]" data-node-id="3289:5493" data-name="Icon/Calendar Start">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconCalendarStart} />
+                      </div>
+                      <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[14px] whitespace-nowrap" data-node-id="3289:5495">
+                        -
+                      </p>
+                    </div>
+                    <div className="bg-[#f4f3f3] content-stretch flex gap-[var(--0.375rem,6px)] h-[25px] items-center px-[var(--0.3125rem,5px)] py-[var(--0.125rem,2px)] relative rounded-[var(--0.3125rem,5px)] shrink-0 w-[112px]" data-node-id="3289:5496" data-name="Field/Time">
+                      <div className="overflow-clip relative shrink-0 size-[12px]" data-node-id="3289:5497" data-name="Icon/Clock">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconClock} />
+                      </div>
+                      <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[14px] whitespace-nowrap" data-node-id="3289:5501">
+                        -
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col h-[80px] items-start pb-[var(--1.0625rem,17px)] pl-[var(--1.12437rem,17.99px)] pr-[var(--12.0025rem,192.04px)] pt-[var(--0.75rem,12px)] relative shrink-0 w-[261.78px]" data-node-id="3289:6500" data-name="Card/End">
+              <div className="absolute border border-[#d6dde6] border-solid h-[var(--5rem,80px)] left-0 rounded-[var(--0.875rem,14px)] top-0 w-[var(--16.36125rem,261.78px)]" data-node-id="3289:5504" style={{ backgroundImage: "linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(255, 255, 255) 100%), linear-gradient(90deg, rgb(244, 243, 243) 0%, rgb(244, 243, 243) 100%)" }} data-name="Spacer" />
+              <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--0.8125rem,13px)] h-[51px] items-start leading-[normal] not-italic relative shrink-0 w-[51.75px]" data-node-id="3289:6501" data-name="Content">
+                <p className="font-['NanumSquare_Neo:Bold'] relative shrink-0 text-[#303a46] text-[16px] w-[30.974px]" data-node-id="3289:5509">
+                  종료
+                </p>
+                <p className="font-['NanumSquare_Neo:ExtraBold'] relative shrink-0 text-[#7086a0] text-[18px] w-[51.752px]" data-node-id="3289:5507">
+                  -
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex items-start pl-[var(--0.07813rem,1.25px)] relative shrink-0" data-node-id="3289:6685" data-name="Card/Progress Wrap">
+              <div className="content-stretch flex flex-col gap-[var(--0.6875rem,11px)] h-[80px] items-start pb-[var(--1.1875rem,19px)] pl-[var(--1.21687rem,19.47px)] pr-[var(--20.9475rem,335.16px)] pt-[var(--0.75rem,12px)] relative shrink-0 w-[444.631px]" data-node-id="3289:6502" data-name="Card/Progress">
+                <div className="absolute border border-[#d6dde6] border-solid h-[var(--5rem,80px)] left-0 rounded-[var(--0.875rem,14px)] top-0 w-[var(--27.78937rem,444.631px)]" data-node-id="3289:5511" data-name="Spacer" />
+                <div className="content-stretch flex flex-col items-start pl-[var(--0.0125rem,0.2px)] relative shrink-0" data-node-id="3289:6684" data-name="Header Wrap">
+                  <div className="content-stretch flex flex-col h-[18px] items-start relative shrink-0 w-[45.96px]" data-node-id="3289:6503" data-name="Header">
+                    <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[16px] w-[45.962px]" data-node-id="3289:5514">
+                      진행률
+                    </p>
+                  </div>
+                </div>
+                <p className="[word-break:break-word] font-['NanumSquare_Neo:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[18px] whitespace-nowrap" data-node-id="3289:5515">
+                  단계 미설정
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start pl-[var(--0.0625rem,1px)] relative shrink-0" data-node-id="3289:6686" data-name="Widget/Stage Progress Wrap">
+          <div className="content-stretch flex flex-col gap-[var(--0.625rem,10px)] h-[207px] items-start relative shrink-0 w-[1013px]" data-node-id="3289:6483" data-name="Widget/Stage Progress">
+            <div className="content-stretch flex flex-col h-[22px] items-start relative shrink-0 w-[135.4px]" data-node-id="3289:6485" data-name="Header">
+              <div className="content-stretch flex gap-[var(--0.37625rem,6.02px)] h-[22px] items-center relative shrink-0 w-[135.4px]" data-node-id="3289:6486" data-name="Title Group">
+                <p className="[word-break:break-word] font-['NanumSquare_Neo:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[20px] w-[81.241px]" data-node-id="3289:5454">
+                  단계 진행
+                </p>
+                <div className="content-stretch flex items-start pt-[var(--0.0625rem,1px)] relative shrink-0" data-node-id="3289:6678" data-name="Caption Wrap">
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[14px] w-[48.143px]" data-node-id="3289:5453">
+                    (5단계)
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col gap-[var(--1.0625rem,17px)] h-[175px] items-center pb-[var(--3.875rem,62px)] pl-[var(--23.57rem,377.12px)] pr-[var(--25.13687rem,402.19px)] pt-[var(--3.9375rem,63px)] relative shrink-0 w-[1013px]" data-node-id="3289:6484" data-name="Empty State">
+              <div className="absolute bg-[rgba(255,255,255,0.3)] border border-[#d6dde6] border-solid h-[var(--10.9375rem,175px)] left-0 rounded-[var(--0.875rem,14px)] top-0 w-[var(--63.3125rem,1013px)]" data-node-id="3289:5448" data-name="Background" />
+              <div className="content-stretch flex flex-col items-start pr-[var(--0.00063rem,0.01px)] relative shrink-0" data-node-id="3289:6677" data-name="Message Wrap">
+                <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[16px] text-center w-[169.503px]" data-node-id="3289:5449">
+                  정식 SOP 절차서 미적용
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-['NanumSquare_Neo:Regular'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[14px] text-center w-[233.693px]" data-node-id="3289:5450">
+                절차서 적용 후 단계 정보가 표시됩니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute h-[var(--3.75rem,60px)] left-0 top-0 w-[var(--120rem,1920px)]" data-node-id="3289:5516" data-name="Header">
+        <div className="absolute bg-[rgba(255,255,255,0.95)] inset-0" data-node-id="I3289:5516;766:8179" data-name="Header Background" />
+        <Logo className="absolute content-stretch flex gap-[9.639px] items-center left-[14px] top-[11px] w-[217.34px]" />
+        <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] inset-[35%_12.76%_31.67%_79.11%] leading-[normal] not-italic text-[18px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] text-right whitespace-nowrap" data-node-id="I3289:5516;766:8212">
+          2026-11-16 MON
+        </p>
+        <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:ExtraBold'] inset-[23.33%_4.17%_21.67%_88.44%] leading-[normal] not-italic text-[#2d2e38] text-[30px] text-right whitespace-nowrap" data-node-id="I3289:5516;766:8213">
+          14:32:08
+        </p>
+        <BtnLogout className="absolute bg-white border border-[#ccc] border-solid content-stretch flex inset-[16.67%_1.3%_16.67%_96.61%] items-center justify-center px-[13px] py-[10px] rounded-[30px]" />
+        <div className="absolute content-stretch flex gap-[10px] items-center justify-center left-[1365px] px-[10px] py-[5px] rounded-[10px] top-[5px]" data-node-id="I3289:5516;766:8216">
+          <div className="bg-white border border-[#ccc] border-solid content-stretch flex flex-col items-center justify-center px-[10px] py-[6px] relative rounded-[40px] shrink-0 size-[40px]" data-node-id="I3289:5516;766:8217" data-name="btn-disaster">
+            <div className="relative shrink-0 size-[18px]" data-node-id="I3289:5516;766:8217;766:7893" data-name="fire-extinguisher 1">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFireExtinguisher1} />
+            </div>
+          </div>
+          <div className="bg-white border border-[#ccc] border-solid content-stretch flex flex-col items-center justify-center px-[10px] py-[6px] relative rounded-[20px] shrink-0 size-[40px]" data-node-id="I3289:5516;766:8218" data-name="btn-route">
+            <div className="relative shrink-0 size-[18px]" data-node-id="I3289:5516;766:8218;766:7900" data-name="exit-alt (1) 1">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgExitAlt11} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute flex h-[34px] items-center justify-center left-[1494px] top-[13px] w-0" data-node-id="I3289:5516;766:8219">
+          <div className="flex-none rotate-90">
+            <div className="h-0 relative w-[34px]">
+              <div className="absolute inset-[-1.5px_-4.41%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine5} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute h-[40px] left-[686px] top-[10px] w-[547px]" data-node-id="I3289:5516;766:8220" data-name="ticker">
+          <div className="-translate-y-1/2 absolute contents left-0 right-0 top-1/2" data-node-id="I3289:5516;766:8220;766:8315">
+            <div className="absolute contents inset-[12.5%_87.02%_12.5%_0]" data-node-id="I3289:5516;766:8220;766:8317" data-name="label">
+              <div className="absolute bg-[#2a74f4] inset-[12.5%_87.02%_12.5%_0] rounded-[180px]" data-node-id="I3289:5516;766:8220;766:8318" data-name="Header Background" />
+              <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] inset-[27.5%_90.31%_22.5%_3.29%] leading-[normal] not-italic text-[#f3f9fb] text-[18px] text-center whitespace-nowrap" data-node-id="I3289:5516;766:8220;766:8319">
+                정상
+              </p>
+            </div>
+            <div className="absolute contents inset-[20%_0_20%_19.56%]" data-node-id="I3289:5516;766:8220;766:8320" data-name="ticker">
+              <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] inset-[20%_0_20%_27.24%] leading-[normal] not-italic text-[#2a74f4] text-[22px] whitespace-nowrap" data-node-id="I3289:5516;766:8220;766:8321">
+                디지털트윈 방재시스템 정상 작동중입니다.
+              </p>
+              <div className="-translate-y-1/2 absolute aspect-[512/512] left-[19.56%] overflow-clip right-[76.05%] top-1/2" data-node-id="I3289:5516;766:8220;766:8324" data-name="check-circle 1">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckCircle1} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="backdrop-blur-[25px] bg-[rgba(255,255,255,0.6)] border border-[#d6dde6] border-solid content-stretch flex flex-col gap-[var(--0.625rem,10px)] h-[989px] items-center justify-between px-[var(--0.5rem,8px)] py-[var(--0.9375rem,15px)] relative rounded-[var(--0.875rem,14px)] shrink-0 w-[282px]" data-node-id="3289:5539" data-name="Side Panel/SOP List">
+        <div className="content-stretch flex flex-col gap-[var(--0.625rem,10px)] h-[556.33px] items-center relative shrink-0 w-[282px]" data-node-id="3289:6508" data-name="Body">
+          <div className="content-stretch flex flex-col gap-[var(--0.625rem,10px)] h-[121.33px] items-start relative shrink-0 w-[282px]" data-node-id="3289:6512" data-name="Header">
+            <div className="content-stretch flex flex-col items-start pl-[var(--0.46875rem,7.5px)] relative shrink-0" data-node-id="3289:6691" data-name="Title Group Wrap">
+              <div className="content-stretch flex items-start px-[var(--0.625rem,10px)] relative shrink-0 w-[166px]" data-node-id="3289:5552" data-name="Title Group">
+                <div className="content-stretch flex gap-[var(--0.25rem,4px)] items-center relative shrink-0" data-node-id="3289:5553" data-name="Title">
+                  <div className="relative shrink-0 size-[11px]" data-node-id="3289:5554" data-name="Icon/Title">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconTitle} />
+                  </div>
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[20px] whitespace-nowrap" data-node-id="3289:5559">
+                    SOP 진행 현황
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col items-start pl-[var(--11.53125rem,184.5px)] relative shrink-0" data-node-id="3289:6692" data-name="Filter Wrap">
+              <div className="content-stretch flex gap-[var(--0.375rem,6px)] h-[27px] items-center relative shrink-0 w-[90px]" data-node-id="3289:6513" data-name="Filter">
+                <div className="relative shrink-0 size-[13px]" data-node-id="3289:5545" data-name="Icon/Filter">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconFilter} />
+                </div>
+                <div className="content-stretch flex gap-[var(--1.125rem,18px)] h-[27px] items-center px-[var(--0.5rem,8px)] py-[var(--0.375rem,6px)] relative shrink-0 w-[71px]" data-node-id="3289:6514" data-name="Select">
+                  <div className="absolute bg-white border border-[#bcccd1] border-solid h-[var(--1.6875rem,27px)] left-0 rounded-[var(--0.3125rem,5px)] top-0 w-[var(--4.4375rem,71px)]" data-node-id="3289:5548" data-name="Background" />
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[14px] whitespace-nowrap" data-node-id="3289:5551">
+                    전체
+                  </p>
+                  <div className="content-stretch flex items-start pt-[var(--0.0625rem,1px)] relative shrink-0" data-node-id="3289:6690" data-name="Icon/Chevron Down Wrap">
+                    <div className="relative shrink-0 size-[10px]" data-node-id="3289:5549" data-name="Icon/Chevron Down">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconChevronDown} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col items-start pl-[var(--0.90625rem,14.5px)] pt-[var(--0.03125rem,0.5px)] relative shrink-0" data-node-id="3289:6693" data-name="Search Field Wrap">
+              <div className="bg-white border border-[#bcccd1] border-solid content-stretch flex gap-[4px] h-[35px] items-center pb-[8px] pl-[14px] pr-[112px] pt-[9px] relative rounded-[var(--1.09375rem,17.5px)] shrink-0 w-[260px]" data-node-id="3289:5543" data-name="Search Field">
+                <div className="relative shrink-0 size-[18px]" data-node-id="I3289:5543;872:8253" data-name="magnifying-glass 1">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMagnifyingGlass1} />
+                </div>
+                <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#a9bacf] text-[14px] whitespace-nowrap" data-node-id="I3289:5543;872:8255">
+                  SOP ID, 진행 현황
+                </p>
+              </div>
+            </div>
+            <div className="h-[6.83px] relative shrink-0 w-[282px]" data-node-id="3289:6694" data-name="Divider Wrap">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrap} />
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--0.625rem,10px)] h-[425px] items-start relative shrink-0 w-[262px]" data-node-id="3289:6589" data-name="List">
+            <div className="h-[135px] relative shrink-0 w-[262px]" data-node-id="3289:5561" data-name="Item/1">
+              <div className="absolute bg-white border border-[#d6dde6] border-solid inset-0 rounded-[14px]" data-node-id="I3289:5561;841:47283" data-name="row" />
+              <div className="absolute contents left-[7.25%] right-[26.72%] top-[17px]" data-node-id="I3289:5561;841:47284" data-name="Object details">
+                <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[49px] not-italic text-[16px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] top-[45px] whitespace-nowrap" data-node-id="I3289:5561;841:47286">
+                  화재 발생 대응
+                </p>
+                <IconBadge className="absolute bg-[#ffefef] content-stretch flex items-center justify-center left-[19px] p-[4px] rounded-[5px] top-[43px]" />
+                <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[19px] not-italic text-[#303a46] text-[12px] top-[17px] whitespace-nowrap" data-node-id="I3289:5561;841:47288">
+                  001
+                </p>
+                <div className="absolute contents left-[19px] top-[74px]" data-node-id="I3289:5561;841:47289" data-name="Status details">
+                  <div className="absolute bg-[rgba(255,255,255,0.1)] content-stretch flex items-center justify-center left-[19px] top-[74px]" data-node-id="I3289:5561;841:47290" data-name="Description container">
+                    <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[12px] whitespace-nowrap" data-node-id="I3289:5561;841:47291">
+                      연료시설 - 가스압축동 B1
+                    </p>
+                  </div>
+                  <div className="absolute contents left-[19px] top-[97px]" data-node-id="I3289:5561;841:47292" data-name="Timer details">
+                    <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[42px] not-italic text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] top-[99px] whitespace-nowrap" data-node-id="I3289:5561;841:47293">
+                      00:12:48
+                    </p>
+                    <div className="absolute left-[19px] size-[17px] top-[97px]" data-node-id="I3289:5561;841:47294" data-name="time-quarter-past 1">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTimeQuarterPast1} />
+                    </div>
+                  </div>
+                  <div className="absolute contents left-[123px] top-[97px]" data-node-id="I3289:5561;841:47296" data-name="Step details">
+                    <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[147px] not-italic text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] top-[99px] whitespace-nowrap" data-node-id="I3289:5561;841:47297">
+                      2/5단계
+                    </p>
+                    <div className="absolute aspect-[512/512] left-[46.95%] overflow-clip right-[46.56%] top-[97px]" data-node-id="I3289:5561;883:14071" data-name="arrow-up-small-big 1">
+                      <div className="absolute inset-[0.02%_0.17%_0_0.17%]" data-node-id="I3289:5561;883:14072" data-name="Vector">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVector} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute contents left-[195px] top-[12px]" data-node-id="I3289:5561;841:47300" data-name="Badge">
+                <div className="absolute bg-[#ffe3e3] content-stretch flex items-center justify-center left-[195px] px-[10px] py-[5px] rounded-[12px] top-[12px]" data-node-id="I3289:5561;841:47301" data-name="Badge container">
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#f43130] text-[12px] text-right whitespace-nowrap" data-node-id="I3289:5561;841:47302">
+                    진행중
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[135px] relative shrink-0 w-[262px]" data-node-id="3289:5563" data-name="Item/2">
+              <div className="absolute bg-white border border-[#d6dde6] border-solid inset-0 rounded-[14px]" data-node-id="I3289:5563;841:47283" data-name="row" />
+              <div className="absolute contents left-[7.25%] right-[20.99%] top-[17px]" data-node-id="I3289:5563;841:47284" data-name="Object details">
+                <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[0] left-[49px] not-italic text-[#f43130] text-[0px] top-[45px] whitespace-nowrap" data-node-id="I3289:5563;841:47286">
+                  <span className="leading-[normal] text-[#303a46] text-[16px]">{`강풍/ 돌풍 `}</span>
+                  <span className="leading-[normal] text-[#303a46] text-[12px]">(작업자 안전)</span>
+                </p>
+                <IconBadge className="absolute bg-[#ffefef] content-stretch flex items-center justify-center left-[19px] p-[4px] rounded-[5px] top-[43px]" />
+                <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[19px] not-italic text-[#303a46] text-[12px] top-[17px] whitespace-nowrap" data-node-id="I3289:5563;841:47288">
+                  001
+                </p>
+                <div className="absolute contents left-[19px] top-[74px]" data-node-id="I3289:5563;841:47289" data-name="Status details">
+                  <div className="absolute bg-[rgba(255,255,255,0.1)] content-stretch flex items-center justify-center left-[19px] top-[74px]" data-node-id="I3289:5563;841:47290" data-name="Description container">
+                    <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[12px] whitespace-nowrap" data-node-id="I3289:5563;841:47291">
+                      발전시설 - 2호기 옥외 구역
+                    </p>
+                  </div>
+                  <div className="absolute contents left-[19px] top-[97px]" data-node-id="I3289:5563;841:47292" data-name="Timer details">
+                    <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[42px] not-italic text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] top-[99px] whitespace-nowrap" data-node-id="I3289:5563;841:47293">
+                      00:44:57
+                    </p>
+                    <div className="absolute left-[19px] size-[17px] top-[97px]" data-node-id="I3289:5563;841:47294" data-name="time-quarter-past 1">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTimeQuarterPast1} />
+                    </div>
+                  </div>
+                  <div className="absolute contents left-[123px] top-[97px]" data-node-id="I3289:5563;841:47296" data-name="Step details">
+                    <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[147px] not-italic text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] top-[99px] whitespace-nowrap" data-node-id="I3289:5563;841:47297">
+                      단계 미설정
+                    </p>
+                    <div className="absolute aspect-[512/512] left-[46.95%] overflow-clip right-[46.56%] top-[97px]" data-node-id="I3289:5563;883:14071" data-name="arrow-up-small-big 1">
+                      <div className="absolute inset-[0.02%_0.17%_0_0.17%]" data-node-id="I3289:5563;883:14072" data-name="Vector">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVector} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute contents left-[195px] top-[12px]" data-node-id="I3289:5563;841:47300" data-name="Badge">
+                <div className="absolute bg-[#ffe3e3] content-stretch flex items-center justify-center left-[195px] px-[10px] py-[5px] rounded-[12px] top-[12px]" data-node-id="I3289:5563;841:47301" data-name="Badge container">
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#f43130] text-[12px] text-right whitespace-nowrap" data-node-id="I3289:5563;841:47302">
+                    진행중
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[135px] relative shrink-0 w-[262px]" data-node-id="3289:5562" data-name="Item/3">
+              <div className="absolute bg-[#ffc7c7] inset-0 rounded-[14px]" data-node-id="I3289:5562;841:47309" data-name="row">
+                <div className="absolute contents left-[7.25%] right-[20.99%] top-[17px]" data-node-id="I3289:5562;841:47310" data-name="Object details">
+                  <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[49px] not-italic text-[#303a46] text-[16px] top-[45px] whitespace-nowrap" data-node-id="I3289:5562;841:47312">
+                    건물 침입자 감지
+                  </p>
+                  <IconBadge className="absolute bg-[#ffefef] content-stretch flex gap-[10px] items-center justify-center left-[19px] p-[4px] rounded-[5px] top-[43px]" iconBadge="intruder" />
+                  <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[19px] not-italic text-[#303a46] text-[12px] top-[17px] whitespace-nowrap" data-node-id="I3289:5562;841:47314">
+                    003
+                  </p>
+                  <div className="absolute contents left-[19px] top-[74px]" data-node-id="I3289:5562;841:47315" data-name="Status details">
+                    <div className="absolute bg-[rgba(255,255,255,0.1)] content-stretch flex items-center justify-center left-[19px] top-[74px]" data-node-id="I3289:5562;841:47316" data-name="Description container">
+                      <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[12px] whitespace-nowrap" data-node-id="I3289:5562;841:47317">
+                        관리시설 - 북문 출입구
+                      </p>
+                    </div>
+                    <div className="absolute contents left-[19px] top-[97px]" data-node-id="I3289:5562;841:47318" data-name="Timer details">
+                      <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[42px] not-italic text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] top-[99px] whitespace-nowrap" data-node-id="I3289:5562;841:47319">
+                        00:02:18
+                      </p>
+                      <div className="absolute left-[19px] size-[17px] top-[97px]" data-node-id="I3289:5562;841:47320" data-name="time-quarter-past 1">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTimeQuarterPast1} />
+                      </div>
+                    </div>
+                    <div className="absolute contents left-[123px] top-[97px]" data-node-id="I3289:5562;841:47322" data-name="Step details">
+                      <p className="[word-break:break-word] absolute font-['NanumSquare_Neo:Bold'] leading-[normal] left-[147px] not-italic text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] top-[99px] whitespace-nowrap" data-node-id="I3289:5562;841:47323">
+                        단계 미설정
+                      </p>
+                      <div className="absolute aspect-[512/512] left-[46.95%] overflow-clip right-[46.56%] top-[97px]" data-node-id="I3289:5562;883:14078" data-name="arrow-up-small-big 1">
+                        <div className="absolute inset-[0.02%_0.17%_0_0.17%]" data-node-id="I3289:5562;883:14079" data-name="Vector">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVector} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute contents left-[195px] top-[12px]" data-node-id="I3289:5562;841:47326" data-name="Badge">
+                  <div className="absolute bg-[rgba(255,255,255,0.5)] content-stretch flex items-center justify-center left-[195px] px-[10px] py-[5px] rounded-[12px] top-[12px] w-[55px]" data-node-id="I3289:5562;841:47327" data-name="Badge container">
+                    <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[12px] text-black text-right whitespace-nowrap" data-node-id="I3289:5562;841:47328">
+                      대기
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--0.9375rem,15px)] h-[52px] items-center relative shrink-0 w-[282px]" data-node-id="3289:6593" data-name="Footer">
+          <div className="h-0 relative shrink-0 w-[282px]" data-node-id="3289:5566" data-name="Divider">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgDivider} />
+            </div>
+          </div>
+          <div className="bg-white border border-[#d6dde6] border-solid content-stretch flex gap-[5px] items-center justify-center py-[10px] relative rounded-[var(--0.625rem,10px)] shrink-0 w-[250px]" data-node-id="3289:5565" data-name="Button/Create Drill">
+            <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[15px] whitespace-nowrap" data-node-id="I3289:5565;872:171">
+              모의훈련 생성
+            </p>
+            <div className="relative shrink-0 size-[10px]" data-node-id="I3289:5565;872:172" data-name="angle-down-solid 1">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAngleDownSolid1} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex items-start pb-[var(--55.5rem,888px)] pl-[var(--52.0625rem,833px)] relative shrink-0" data-node-id="3289:6705" data-name="Tooltip Group Wrap">
+        <div className="content-stretch flex flex-col gap-[var(--3.25rem,52px)] h-[122px] items-start pl-[var(--3.375rem,54px)] pr-[var(--0.75rem,12px)] relative shrink-0 w-[209px]" data-node-id="3289:5517" data-name="Tooltip Group">
+          <div className="absolute content-stretch flex flex-col h-[var(--2.1875rem,35px)] items-start left-[-10px] pb-[var(--0.9375rem,15px)] pl-[var(--0.625rem,10px)] pr-[var(--0.5rem,8px)] pt-[var(--0.4375rem,7px)] top-0 w-[var(--7.9375rem,127px)]" data-node-id="3289:6504" data-name="Tooltip/Manual">
+            <div className="absolute flex h-[35px] items-center justify-center left-0 top-0 w-[127px]" data-node-id="3289:5519">
+              <div className="-scale-y-100 flex-none">
+                <div className="h-[35px] relative w-[127px]" data-name="Shape">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape} />
+                </div>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] text-center whitespace-nowrap" data-node-id="3289:5522">
+              대응절차 메뉴얼 확인
+            </p>
+          </div>
+          <div className="content-stretch flex flex-col items-start pl-[var(--4.375rem,70px)] relative shrink-0" data-node-id="3289:6687" data-name="Tooltip/End SOP Wrap">
+            <div className="content-stretch flex flex-col h-[35px] items-start pb-[var(--0.9375rem,15px)] pl-[var(--0.6875rem,11px)] pr-[var(--0.625rem,10px)] pt-[var(--0.4375rem,7px)] relative shrink-0 w-[73px]" data-node-id="3289:6505" data-name="Tooltip/End SOP">
+              <div className="absolute flex h-[35px] items-center justify-center left-0 top-0 w-[73px]" data-node-id="3289:5524">
+                <div className="-scale-y-100 flex-none">
+                  <div className="h-[35px] relative w-[73px]" data-name="Shape">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape1} />
+                  </div>
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] text-center whitespace-nowrap" data-node-id="3289:5527">
+                SOP 종료
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col h-[35px] items-start pb-[var(--0.375rem,6px)] pl-[var(--0.6875rem,11px)] pr-[var(--0.625rem,10px)] pt-[var(--1rem,16px)] relative shrink-0 w-[107px]" data-node-id="3289:6506" data-name="Tooltip/Send SMS">
+            <div className="absolute flex h-[35px] items-center justify-center left-0 top-0 w-[107px]" data-node-id="3289:5529">
+              <div className="-scale-y-100 flex-none rotate-180">
+                <div className="h-[35px] relative w-[107px]" data-name="Shape">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShape2} />
+                </div>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[12px] text-[color:var(--secondary-color\/\#2d2e38,#2d2e38)] text-center whitespace-nowrap" data-node-id="3289:5532">
+              담당자 문자 발송
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-col h-[989px] items-start relative shrink-0 w-[540px]" data-node-id="3289:6594" data-name="Side Panel/Execution History">
+        <div className="backdrop-blur-[25px] content-stretch flex flex-col gap-[var(--0.9375rem,15px)] h-[989px] items-start pb-[var(--0.25rem,4px)] pt-[var(--0.625rem,10px)] px-[var(--0.625rem,10px)] relative rounded-[var(--0.875rem,14px)] shrink-0 w-[540px]" data-node-id="3289:5568" data-name="Widget/Execution History">
+          <div className="content-stretch flex flex-col gap-[var(--0.875rem,14px)] items-start px-[var(--0.625rem,10px)] relative shrink-0 w-full" data-node-id="3289:5569" data-name="Header">
+            <div className="content-stretch flex gap-[var(--0.25rem,4px)] items-center relative shrink-0" data-node-id="3289:5570" data-name="Title Group">
+              <div className="relative shrink-0 size-[11px]" data-node-id="3289:5571" data-name="Icon/Title">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconTitle} />
+              </div>
+              <p className="[word-break:break-word] font-['NanumSquare_Neo:ExtraBold'] leading-[normal] not-italic relative shrink-0 text-[#303a46] text-[20px] whitespace-nowrap" data-node-id="3289:5576">
+                실행 이력
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--0.25rem,4px)] items-center relative shrink-0" data-node-id="3289:5577" data-name="Subtitle">
+              <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[14px] whitespace-nowrap" data-node-id="3289:5583">
+                화재 발생 대응 ∙ 단계별 이행 기록
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--0.625rem,10px)] h-[120px] items-start relative shrink-0 w-[520px]" data-node-id="3289:6595" data-name="Body">
+            <div className="bg-[rgba(255,255,255,0.3)] border border-[#d6dde6] border-dashed content-stretch flex gap-[var(--4.6875rem,75px)] items-center justify-center py-[var(--1.25rem,20px)] relative rounded-[var(--0.4375rem,7px)] shrink-0 w-full" data-node-id="3289:5585" data-name="Summary">
+              <div className="content-stretch flex flex-col gap-[var(--0.625rem,10px)] h-[15px] items-start justify-center relative shrink-0" data-node-id="3289:5590" data-name="Time Box">
+                <div className="content-stretch flex flex-col gap-[var(--0.375rem,6px)] items-start relative shrink-0 w-full" data-node-id="3289:5591" data-name="Content">
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[14px] text-center whitespace-nowrap" data-node-id="3289:5592">
+                    SOP 미시작
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col h-[55px] items-start relative shrink-0 w-[520px]" data-node-id="3289:6596" data-name="History">
+              <div className="bg-[rgba(255,255,255,0.3)] border border-[#d6dde6] border-dashed content-stretch flex flex-col gap-[var(--0.625rem,10px)] items-center justify-center py-[var(--1.25rem,20px)] relative rounded-[var(--0.4375rem,7px)] shrink-0 w-[520px]" data-node-id="3289:5594" data-name="Stage/1">
+                <div className="content-stretch flex flex-col gap-[var(--0.375rem,6px)] items-center justify-center relative shrink-0 w-full" data-node-id="3289:5595" data-name="Notice">
+                  <p className="[word-break:break-word] font-['NanumSquare_Neo:Bold'] leading-[normal] not-italic relative shrink-0 text-[#7086a0] text-[14px] text-center whitespace-nowrap" data-node-id="3289:5596">
+                    정식 SOP 절차서 미적용
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Secondary color/#303A46: #303A46, Secondary color/#8194AC: #7086A0, Secondary color/#F3F9FB: #F3F9FB, Event Color/Critical: #F43130, Secondary color/#2D2E38: #2D2E38.
+The generated code contains image and SVG URL constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These URLs are temporary download sources and expire after 7 days. Download each asset into the project with curl -L, then replace its URL in the generated code with a reference to the downloaded asset. Never use the temporary URLs as runtime image sources.

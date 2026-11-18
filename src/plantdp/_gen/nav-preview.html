@@ -1,0 +1,18 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>필터 패널 변형 미리보기</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>body{margin:0;background:#cfe0ee;display:flex;gap:14px;padding:14px;flex-wrap:wrap;font:12px system-ui}
+.cell{display:flex;flex-direction:column;gap:4px}.box{position:relative;width:282px;height:948px}
+body.dark{background:#111821}</style></head><body>
+<script src="../../plantdp-nav.js"></script>
+<script>
+var q = new URLSearchParams(location.search), th = q.get('t') || 'light';
+if (th === 'dark') document.body.classList.add('dark');
+Object.keys(PD_NAV).forEach(function (k) {
+  var f = PD_NAV[k];
+  [['css', f.px + '-style'], ['light', f.px + '-light-style']].forEach(function (a) { var st = document.createElement('style'); st.id = a[1]; st.textContent = f[a[0]].split('src/plantdp/').join('../'); document.head.appendChild(st); });
+  var c = document.createElement('div'); c.className = 'cell';
+  c.innerHTML = '<b>' + k + '</b><div class="box"><div class="' + f.px + '-root" data-theme="' + th + '">' + f.build('../') + '</div></div>';
+  document.body.appendChild(c);
+});
+</script></body></html>
