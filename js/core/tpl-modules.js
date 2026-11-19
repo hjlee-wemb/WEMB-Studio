@@ -32,7 +32,7 @@
     /* 한진 SMART 통합관제 — Figma A11hAZefK5FSuEE9MagOgj */
     hanjin: [
       { src: 'src/hanjin-control.js?v=3', build: ['build_hjc'], scene: 'main' },
-      { src: 'src/hanjin-gate.js?v=1', build: ['build_hjg'], scene: 'gate' },
+      { src: 'src/hanjin-gate.js?v=2', build: ['build_hjg'], scene: 'gate' },
       { src: 'src/hanjin-unload.js?v=3', build: ['build_hju'], scene: 'unload' },
       { src: 'src/hanjin-live.js?v=6', part: 'base' },
     ],
@@ -76,11 +76,11 @@
       { src: 'src/lselectric-acb.js?v=3', build: ['build_lsa', 'build_lsm_acb'] },
       { src: 'src/lselectric-system.js?v=2', build: ['build_lsy', 'build_lsm_system'] },
       { src: 'src/lselectric-energy.js?v=2', build: ['build_lse', 'build_lsm_energy'] },
-      { src: 'src/lselectric-transformer.js?v=1', build: ['build_lst', 'build_lsm_transformer'] },
-      { src: 'src/lselectric-acroom.js?v=1', build: ['build_lsp', 'build_lsm_acroom'] },
-      { src: 'src/lselectric-charger.js?v=1', build: ['build_lsb', 'build_lsm_charger'] },
-      { src: 'src/lselectric-cooling.js?v=1', build: ['build_lsc', 'build_lsm_cooling'] },
-      { src: 'src/lselectric-alarm.js?v=1', build: ['build_lsr', 'build_lsm_alarm'] },
+      { src: 'src/lselectric-transformer.js?v=2', build: ['build_lst', 'build_lsm_transformer'] },
+      { src: 'src/lselectric-acroom.js?v=2', build: ['build_lsp', 'build_lsm_acroom'] },
+      { src: 'src/lselectric-charger.js?v=2', build: ['build_lsb', 'build_lsm_charger'] },
+      { src: 'src/lselectric-cooling.js?v=2', build: ['build_lsc', 'build_lsm_cooling'] },
+      { src: 'src/lselectric-alarm.js?v=2', build: ['build_lsr', 'build_lsm_alarm'] },
       { src: 'src/lselectric-live.js?v=9', part: 'base' },
     ],
     /* 신한카드 정보보호 대시보드 — Figma zXb8i3nonD9Hpu5kdZQs6t. 헤더 메뉴로 장면끼리 오가고,
@@ -166,6 +166,21 @@
       { src: 'src/indpark-sensor.js?v=5', build: ['build_ipt'], scene: 'sensor' },
       { src: 'src/indpark-live.js?v=6', part: 'base' },
     ],
+    /* 통합 운영 원뷰 — Figma B4mYvI2xtGTL1K5crHMLqe. 단독 화면 11장 — 열린 장면 모듈만 싣는다 */
+    oneview: [
+      { src: 'src/oneview-main.js?v=2', build: ['build_ovm'], scene: 'main' },
+      { src: 'src/oneview-overview2.js?v=2', build: ['build_ovn'], scene: 'overview2' },
+      { src: 'src/oneview-transactions.js?v=2', build: ['build_ovt'], scene: 'transactions' },
+      { src: 'src/oneview-was.js?v=2', build: ['build_ovw'], scene: 'was' },
+      { src: 'src/oneview-waspopup.js?v=2', build: ['build_ovp'], scene: 'waspopup' },
+      { src: 'src/oneview-tp.js?v=2', build: ['build_ovq'], scene: 'tp' },
+      { src: 'src/oneview-system.js?v=2', build: ['build_ovs'], scene: 'system' },
+      { src: 'src/oneview-system2.js?v=2', build: ['build_ovr'], scene: 'system2' },
+      { src: 'src/oneview-detail.js?v=2', build: ['build_ovd'], scene: 'detail' },
+      { src: 'src/oneview-network.js?v=2', build: ['build_ovk'], scene: 'network' },
+      { src: 'src/oneview-event.js?v=2', build: ['build_ove'], scene: 'event' },
+      { src: 'src/oneview-live.js?v=9', part: 'base' },
+    ],
     /* 스마트 플랜트 가스 모니터링 — Figma CbbEsxxZo3vBcBprsiUhJm. 화면 2장 + 팝업 3장. 팝업은 가스 메인 위에 그 자리에서 얹으므로 통째로 */
     gasmon: [
       { src: 'src/gasmon-main.js?v=7', build: ['build_gmm'] },
@@ -210,6 +225,16 @@
     ],
     /* 발전소 디지털트윈 방재 — Figma QVCXpLxrGKG7Id7s9SSszf. 화면 10장, 장면마다 따로 싣는다 */
     /* 복합화력 설비정보 디지털트윈 — Figma r7V2rTKcUto2Yd1qL4XSfZ. 화면 5장, 장면마다 따로 싣는다(탭 조각 · 라이브는 공통) */
+    /* 스마트팩토리 에너지관리 디지털트윈 — Figma FwLj96v9IlQSHRPURiJouD. 종합 현황 + 그 위에 얹는 팝업 4장(바탕 빌더를 같이 쓴다) */
+    fems: [
+      { src: 'src/fems-main.js?v=5', build: ['build_fmm'] },
+      { src: 'src/fems-diagram.js?v=5', build: ['build_fmd', 'build_fmm_diagram'] },
+      { src: 'src/fems-event.js?v=5', build: ['build_fme', 'build_fmm_event'] },
+      { src: 'src/fems-solar.js?v=5', build: ['build_fms', 'build_fmm_solar'] },
+      { src: 'src/fems-equipment.js?v=5', build: ['build_fmq', 'build_fmm_equipment'] },
+      { src: 'src/fems-frags.js?v=5', part: 'base', build: ['build_fmx'] },
+      { src: 'src/fems-live.js?v=12', part: 'base' },
+    ],
     ccpp: [
       { src: 'src/ccpp-main.js?v=2', build: ['build_ccm'], scene: 'main' },
       { src: 'src/ccpp-library.js?v=2', build: ['build_ccl'], scene: 'library' },
@@ -274,10 +299,10 @@
       { src: 'src/plant-live.js?v=2', part: 'base' },
     ],
     woori: [
-      { src: 'src/woori-transaction.js?v=1', build: ['build_wrt'] },
-      { src: 'src/woori-performance.js?v=1', build: ['build_wrp'] },
-      { src: 'src/woori-event.js?v=1', build: ['build_wre'] },
-      { src: 'src/woori-live.js?v=1', part: 'base' },
+      { src: 'src/woori-transaction.js?v=2', build: ['build_wrt'] },
+      { src: 'src/woori-performance.js?v=2', build: ['build_wrp'] },
+      { src: 'src/woori-event.js?v=2', build: ['build_wre'] },
+      { src: 'src/woori-live.js?v=2', part: 'base' },
     ],
   };
   /* 장면마다 따로 싣는 템플릿(나머지는 통째로) · 장면을 적어 두는 전역 키 · 기본 장면 */

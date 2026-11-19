@@ -1,0 +1,1 @@
+node pw.js dump-deep.js "$@" 2>/dev/null | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const i=s.indexOf('\"');console.log(JSON.parse(s.slice(i).trim()).split('\n').map(l=>l.slice(0,150)).join('\n'))})"

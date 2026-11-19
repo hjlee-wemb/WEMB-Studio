@@ -238,6 +238,12 @@
       { img: 'src/templates/indpark-event.jpg', label: '이벤트 현황' },
       { img: 'src/templates/indpark-history.jpg', label: '이벤트 히스토리' },
       { img: 'src/templates/indpark-sensor.jpg', label: '센서현황' }] },
+    { title: 'Digital Twin: Smart Factory Energy Management', area: '에너지·환경', date: 'November 18, 2026', slides: [
+      { img: 'src/templates/fems-main.jpg?v=6', label: '종합 현황' },
+      { img: 'src/templates/fems-diagram.jpg?v=6', label: '계통도' },
+      { img: 'src/templates/fems-event.jpg?v=6', label: '이벤트 브라우저' },
+      { img: 'src/templates/fems-solar.jpg?v=6', label: '태양광 PV' },
+      { img: 'src/templates/fems-equipment.jpg?v=6', label: '장비 상세' }] },
     { title: 'Digital Twin: Combined Cycle Power Plant', area: '에너지·환경', date: 'November 17, 2026', slides: [
       { img: 'src/templates/ccpp-main.jpg?v=1', label: '설비 맵' },
       { img: 'src/templates/ccpp-library.jpg?v=1', label: '도서관리' },
@@ -255,6 +261,18 @@
       { img: 'src/templates/plantdp-sop.jpg?v=4', label: 'SOP 진행 현황' },
       { img: 'src/templates/plantdp-sop-standby.jpg?v=4', label: 'SOP 대기' },
       { img: 'src/templates/plantdp-login.jpg?v=4', label: '로그인' }] },
+    { title: 'Dashboard: Integrated Operations One-View', area: '서비스·거래', date: 'Nov 19, 2026', slides: [
+      { img: 'src/templates/oneview-main.jpg', label: '종합현황' },
+      { img: 'src/templates/oneview-overview2.jpg', label: '종합현황 2' },
+      { img: 'src/templates/oneview-transactions.jpg', label: '거래현황' },
+      { img: 'src/templates/oneview-was.jpg', label: 'WAS 현황' },
+      { img: 'src/templates/oneview-waspopup.jpg', label: 'WAS 페이지 설정' },
+      { img: 'src/templates/oneview-tp.jpg', label: 'TP 성능현황' },
+      { img: 'src/templates/oneview-system.jpg', label: '시스템 현황' },
+      { img: 'src/templates/oneview-system2.jpg', label: '시스템 현황 2' },
+      { img: 'src/templates/oneview-detail.jpg', label: '시스템 현황 상세' },
+      { img: 'src/templates/oneview-network.jpg', label: '네트워크 현황' },
+      { img: 'src/templates/oneview-event.jpg', label: '이벤트현황' }] },
   ];
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -440,6 +458,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Smart Industrial Complex');
     if (w) w.tpl = 'indpark';
   })();
+  /* 통합 운영 원뷰 — '스튜디오 열기' 시 Figma(B4mYvI2xtGTL1K5crHMLqe) 화면 11장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/oneview-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: Integrated Operations One-View');
+    if (w) w.tpl = 'oneview';
+  })();
   /* 스마트 플랜트 가스 모니터링 — '스튜디오 열기' 시 Figma(CbbEsxxZo3vBcBprsiUhJm) 화면 2장 + 팝업 3장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/gasmon-*.js)으로 연다. */
   (function () {
@@ -457,6 +481,12 @@
   (function () {
     const w = TEMPLATES.find((t) => t.title === 'Dashboard: Wireless Network Management');
     if (w) w.tpl = 'wnms';
+  })();
+  /* 스마트팩토리 에너지관리 디지털트윈 — '스튜디오 열기' 시 Figma(FwLj96v9IlQSHRPURiJouD) 화면 5장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/fems-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Smart Factory Energy Management');
+    if (w) w.tpl = 'fems';
   })();
   /* 복합화력 설비정보 디지털트윈 — '스튜디오 열기' 시 Figma(r7V2rTKcUto2Yd1qL4XSfZ) 화면 5장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/ccpp-*.js)으로 연다. */
@@ -495,7 +525,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   window.WEMB = window.WEMB || {};
   WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };

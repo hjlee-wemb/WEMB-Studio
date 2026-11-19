@@ -621,6 +621,12 @@
           try { localStorage.setItem('wemb-indpark-screen', wantIp); } catch (e3) {}
           if (typeof applyIndparkDT === 'function') applyIndparkDT(wantIp);
         }
+        else if (f.tpl === 'oneview') {
+          localStorage.setItem('wemb-tpl-dt', 'oneview'); localStorage.removeItem('wemb-tpl-img');
+          const wantIp = (typeof OV_SCREENS !== 'undefined' && OV_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-oneview-screen') || 'main');
+          try { localStorage.setItem('wemb-oneview-screen', wantIp); } catch (e3) {}
+          if (typeof applyOneviewDT === 'function') applyOneviewDT(wantIp);
+        }
         else if (f.tpl === 'gasmon') {
           localStorage.setItem('wemb-tpl-dt', 'gasmon'); localStorage.removeItem('wemb-tpl-img');
           const wantGm = (typeof GM_SCREENS !== 'undefined' && GM_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-gasmon-screen') || 'main');
@@ -638,6 +644,12 @@
           const wantWn = (typeof WN_SCREENS !== 'undefined' && WN_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-wnms-screen') || 'main');
           try { localStorage.setItem('wemb-wnms-screen', wantWn); } catch (e3) {}
           if (typeof applyWnmsDT === 'function') applyWnmsDT(wantWn);
+        }
+        else if (f.tpl === 'fems') {
+          localStorage.setItem('wemb-tpl-dt', 'fems'); localStorage.removeItem('wemb-tpl-img');
+          const wantFm = (typeof FM_SCREENS !== 'undefined' && FM_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-fems-screen') || 'main');
+          try { localStorage.setItem('wemb-fems-screen', wantFm); } catch (e3) {}
+          if (typeof applyFemsDT === 'function') applyFemsDT(wantFm);
         }
         else if (f.tpl === 'ccpp') {
           localStorage.setItem('wemb-tpl-dt', 'ccpp'); localStorage.removeItem('wemb-tpl-img');

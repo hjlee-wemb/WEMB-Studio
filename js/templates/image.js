@@ -132,7 +132,8 @@ const TPLLOGO = {
     '.nbw-root [data-name="Logo Mark"], .nbs-root [data-name="Logo Mark"], .nbe-root [data-name="Logo Mark"], .nbk-root [data-name="Logo Mark"], .nbl-root [data-name="Logo Mark"], .nbg-root [data-name="Logo Mark"], .nbm-root [data-name="Logo Mark"], .nbt-root [data-name="Logo Mark"], .nbu-root [data-name="Logo Mark"], .nbp-root [data-name="Logo Mark"], .nbo-root [data-name="Logo Mark"], ' +
     '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
   /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
-  DOM_CUSTOM: '.pdm-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdw-root [data-name="Header"] :has(> [data-name="logo chip"]), .pds-root [data-name="Header"] :has(> [data-name="logo chip"]), .pde-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdp-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdb-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdf-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdo-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdy-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Brand"] > [data-name="Logo"], .ipm-root [data-name="Brand"] > [data-name="Logo"], .ipn-root [data-name="Brand"] > [data-name="Logo"], .ips-root [data-name="Brand"] > [data-name="Logo"], .ipf-root [data-name="Brand"] > [data-name="Logo"], .ipv-root [data-name="Brand"] > [data-name="Logo"], .iph-root [data-name="Brand"] > [data-name="Logo"], .ipe-root [data-name="Brand"] > [data-name="Logo"], .ipy-root [data-name="Brand"] > [data-name="Logo"], .ipt-root [data-name="Brand"] > [data-name="Logo"], ' +
+  DOM_CUSTOM: '.ovm-root [data-name="Brand"] > [data-name="Logo"], .ovn-root [data-name="Brand"] > [data-name="Logo"], .ovt-root [data-name="Brand"] > [data-name="Logo"], .ovw-root [data-name="Brand"] > [data-name="Logo"], .ovp-root [data-name="Brand"] > [data-name="Logo"], .ovq-root [data-name="Brand"] > [data-name="Logo"], .ovs-root [data-name="Brand"] > [data-name="Logo"], .ovr-root [data-name="Brand"] > [data-name="Logo"], .ovd-root [data-name="Brand"] > [data-name="Logo"], .ovk-root [data-name="Brand"] > [data-name="Logo"], .ove-root [data-name="Brand"] > [data-name="Logo"], ' +
+    '.pdm-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdw-root [data-name="Header"] :has(> [data-name="logo chip"]), .pds-root [data-name="Header"] :has(> [data-name="logo chip"]), .pde-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdp-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdb-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdf-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdo-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdy-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Brand"] > [data-name="Logo"], .ipm-root [data-name="Brand"] > [data-name="Logo"], .ipn-root [data-name="Brand"] > [data-name="Logo"], .ips-root [data-name="Brand"] > [data-name="Logo"], .ipf-root [data-name="Brand"] > [data-name="Logo"], .ipv-root [data-name="Brand"] > [data-name="Logo"], .iph-root [data-name="Brand"] > [data-name="Logo"], .ipe-root [data-name="Brand"] > [data-name="Logo"], .ipy-root [data-name="Brand"] > [data-name="Logo"], .ipt-root [data-name="Brand"] > [data-name="Logo"], ' +
     '.gmm-root [data-name="Header"] > [data-name="Logo"], .gmg-root [data-name="Header"] > [data-name="Logo"], ' +
     '.dwm-root [data-name="Logo/WEMB Studio"], .dwn-root [data-name="Logo/WEMB Studio"], .dws-root [data-name="Logo/WEMB Studio"], .dwp-root [data-name="Logo/WEMB Studio"], .dwa-root [data-name="Logo/WEMB Studio"], .dwb-root [data-name="Logo/WEMB Studio"], .dwv-root [data-name="Logo/WEMB Studio"], .dwo-root [data-name="Logo/WEMB Studio"], .dwr-root [data-name="Logo/WEMB Studio"], .dwe-root [data-name="Logo/WEMB Studio"], .dwh-root [data-name="Logo/WEMB Studio"], .dwi-root [data-name="Logo/WEMB Studio"], .dwc-root [data-name="Logo/WEMB Studio"], .dwk-root [data-name="Logo/WEMB Studio"], .dww-root [data-name="Logo/WEMB Studio"], .dwd-root [data-name="Logo/WEMB Studio"], .dwt-root [data-name="Logo/WEMB Studio"], .dwu-root [data-name="Logo/WEMB Studio"], .dwl-root [data-name="Logo/WEMB Studio"], ' +
     '.shm-root [data-name="Brand"], .shi-root [data-name="Brand"], .shd-root [data-name="Brand"], ' +
@@ -874,6 +875,14 @@ const TPLTINT = {
     keep: /(^|\/)(map\.png|screen-[-\w]*\.(png|jpg)|badge-[-\w]*|indicator[-\w]*|data(-\d+)?\.svg|glyph[-\w]*|part(-\d+)?\.svg|button-close-2(-lt)?\.svg)(\.(svg|png|jpg))?(\?|$)/i,
     raster: /$^/,
   },
+  /* 통합 운영 원뷰 시안 — 주조색은 강조 파랑(#2F80FF, 색상각 216°). 색을 그대로 둘 것:
+     3D 노드 그림(구슬 · 큐브 · 장비) · 화면 바탕 · 장식 그림 · 그래프 선 · 범례 점 · 상태 점(색이 곧 뜻).
+     판 · 선 · 글자 · 단추 · 아이콘 · 내비는 따라간다 */
+  ONEVIEW_OPT: {
+    seed: '#2F80FF', seededKey: 'wemb-oneview-seeded', refHue: 216,
+    keep: /(^|\/)(line-[-\w]*|key-[-\w]*|dot-[-\w]*|image(-\d+)*|shape(-\d+)*|center|background(-\d+)?|indicator[-\w]*)(-lt)?\.(svg|png|jpg)(\?|$)/i,
+    raster: /$^/,
+  },
   GASMON_OPT: {
     seed: '#00BBFF', seededKey: 'wemb-gasmon-seeded', refHue: 196,
     keep: /(^|\/)(screen-main[-\w]*\.jpg|floor-plan[-\w]*\.png|platform[-\w]*|orb[-\w]*|body[-\w]*|cloud[-\w]*|figure[-\w]*|lens[-\w]*|highlight[-\w]*|light[-\w]*|shadow[-\w]*|status-[-\w]*|btn-event-status[-\w]*|marker-sensor[-\w]*|background-1(-lt)?\.svg|background-2-2(-lt)?\.svg)(\.(svg|png|jpg))?(\?|$)/i,
@@ -893,6 +902,13 @@ const TPLTINT = {
      판 · 선 · 글자 · 아이콘 · 차트는 따라간다 */
   /* 복합화력 설비정보 디지털트윈 — 주조색은 파랑(#0073FF, 색상각 213°). 색을 그대로 둘 것: 3D 설비 그림 · 계통도 그림(과 그 다크 사본) · 로고 · 상태 칩.
      판 · 선 · 글자 · 아이콘 · 차트는 따라간다 */
+  /* 스마트팩토리 에너지관리 디지털트윈 — 주조색은 하늘 파랑(#009DFF, 색상각 203°). 색을 그대로 둘 것: 3D 설비 그림 · 장비 사진 · 미니맵 · 바탕 사진 · 로고(과 그 다크 사본).
+     판 · 선 · 글자 · 아이콘 · 차트는 따라간다 */
+  FEMS_OPT: {
+    seed: '#009DFF', seededKey: 'wemb-fems-seeded', refHue: 203,
+    keep: /(^|\/)(3-dscene|equipment-image|map|base|logo)[-\w]*\.(svg|png|jpg)(\?|$)/i,
+    raster: /$^/,
+  },
   CCPP_OPT: {
     seed: '#0073FF', seededKey: 'wemb-ccpp-seeded', refHue: 213,
     keep: /(^|\/)(3-dscene|diagram-image|glyph-dk|glyph\.svg|logo)[-\w]*\.(svg|png|jpg)(\?|$)/i,
@@ -1066,6 +1082,10 @@ const TPLTINT = {
     ['ipm', 'ipn', 'ips', 'ipf', 'ipv', 'iph', 'ipe', 'ipy', 'ipt'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'indpark-live-style'], 'wemb-indpark-mode', this.INDPARK_OPT);
     });
+    /* 통합 운영 원뷰 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
+    ['ovm', 'ovn', 'ovt', 'ovw', 'ovp', 'ovq', 'ovs', 'ovr', 'ovd', 'ovk', 'ove'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'oneview-live-style'], 'wemb-oneview-mode', this.ONEVIEW_OPT);
+    });
     /* 스마트 플랜트 가스 모니터링 화면 5장 — 같은 방식. 열린 장면만 칠한다(팝업 뿌리도 따로 칠한다) */
     ['gmm', 'gmg', 'gmw', 'gma', 'gmc'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'gasmon-live-style'], 'wemb-gasmon-mode', this.GASMON_OPT);
@@ -1078,6 +1098,12 @@ const TPLTINT = {
     ['wnm', 'wno', 'wnx', 'wnt', 'wnv', 'wne', 'wnd', 'wnl'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'wnms-live-style'], 'wemb-wnms-mode', this.WNMS_OPT);
     });
+    /* 스마트팩토리 에너지관리 화면 5장(팝업은 종합 현황 뿌리 안) — 같은 방식. 열린 장면만 칠한다 */
+    ['fmm', 'fmd', 'fme', 'fms', 'fmq'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'fems-live-style'], 'wemb-fems-mode', this.FEMS_OPT);
+    });
+    /* 펼친 이벤트 로그 조각(src/fems-frags.js) — 같은 색으로 */
+    if (document.querySelector('.fmx-root')) this.icheonTint(t, mode, '.fmx-root', ['fmx-frag-style', 'fmx-frag-light-style'], 'wemb-fems-mode', this.FEMS_OPT);
     /* 복합화력 설비정보 화면 5장 — 같은 방식. 열린 장면만 칠한다 */
     ['ccm', 'ccl', 'ccd', 'cce', 'ccf'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'ccpp-live-style'], 'wemb-ccpp-mode', this.CCPP_OPT);
