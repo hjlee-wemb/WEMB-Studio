@@ -1154,7 +1154,9 @@ function buildScreen(S) {
       if (trimmed && !has('height') && mh <= 48) decls.push(['height', +mh.toFixed(3) + 'px']);
       if (!trimmed && !has('height') && mh <= 48) {
         const i = decls.findIndex((x) => x[0] === 'line-height');
-        if (i >= 0) decls[i][1] = +mh.toFixed(3) + 'px'; else decls.push(['line-height', +mh.toFixed(3) + 'px']);
+        /* 원뷰 — <br> 로 여러 줄인 글자는 상자 높이를 줄 수로 나눈다(28px 한 줄 높이로 박아 두 줄이 56px 로 넘쳤다) */
+        const brs = (node.children || []).filter((c) => c.tag === 'br').length, lh = mh / (brs + 1);
+        if (i >= 0) decls[i][1] = +lh.toFixed(3) + 'px'; else decls.push(['line-height', +lh.toFixed(3) + 'px']);
       }
       /* 원본에서 한 줄이던 글자는 여기서도 한 줄이라야 한다(위 주석 참고).
          상자 높이가 글꼴 한 줄 높이면 원본에서 안 접힌 것이다 — 두 줄짜리는 2.3배쯤 되므로 안 걸린다. */
@@ -1249,7 +1251,9 @@ function buildScreen(S) {
     if (dd.length) darkRules.push(ROOT + '[data-theme="light"] .' + uc + '{' + dd.map(([p, v]) => p + ':' + v).join(';') + '}');
     if (ring) {
       const mm = ring.match(/border:([^;]+);border-radius/);
-      if (mm) { const nb = LIGHT.lightRing(mm[1]); if (nb) darkRules.push(ROOT + '[data-theme="light"] .' + uc + '::after{border-color:' + nb.replace(/^\S+\s+\S+\s+/, '') + ';}'); }
+      /* 두께 3px 넘는 장식 테두리(판 괄호 선)는 라이트에서 옅은 하늘빛 — 진파랑 5~10px 선이 흰 바탕에서 무거웠다 */
+      const bw = Math.max(0, ...((/border-width:([^;]+)/.exec(ring) || [, '0'])[1].match(/[\d.]+/g) || ['0']).map(Number));
+      if (mm) { const nb = LIGHT.lightRing(mm[1], bw >= 3); if (nb) darkRules.push(ROOT + '[data-theme="light"] .' + uc + '::after{border-color:' + nb.replace(/^\S+\s+\S+\s+/, '') + ';}'); }
     }
 
     const cls = [uc];
@@ -1314,6 +1318,8 @@ function buildScreen(S) {
       out.push(pad + '</' + node.tag + '>');
       return;
     }
+    /* 빈 태그(br · img …)는 닫지 않는다 — '</br>' 는 브라우저가 <br> 하나로 더 읽어 줄이 하나 늘었다 */
+    if (!node.children.length && /^(br|img|hr|input)$/.test(node.tag)) { out.push(pad + '<' + node.tag + ' ' + attrs.join(' ') + '>'); return; }
     if (!node.children.length) { out.push(pad + '<' + node.tag + ' ' + attrs.join(' ') + '></' + node.tag + '>'); return; }
     /* SOP: span 끼리는 줄바꿈 없이 — patch-sop-thin.js ② */
     if (node.tag === 'p' && node.children.length > 1 && node.children.every((c) => c.tag === 'span' || (c.tag === '#text' && !c.text.trim()))) {

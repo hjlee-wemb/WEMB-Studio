@@ -92,17 +92,24 @@ async (page) => {
   out.ev.devClosed = await page.evaluate(() => getComputedStyle(document.querySelector('[data-name="Popup/Device Select"] > [data-name="Background"]')).visibility);
   const ER = '[data-name="Body"] > [data-name^="Row/"]';
   const idx = await page.evaluate((s) => [...document.querySelectorAll(s)].findIndex((r) => !r.closest('[data-name^="Popup/"]') && r.children.length >= 10 && r.getBoundingClientRect().top > 720), ER);
+  /* 팝업이 떠 있으면 뒤는 dim(모달) — 상세정보부터 닫고 줄을 누른다 */
+  const vis = () => page.evaluate(() => getComputedStyle(document.querySelector('[data-name="Popup/Server Detail"] > [data-name="Background"]')).visibility);
+  const dimOn = () => page.evaluate(() => document.querySelector('.ov-dim').classList.contains('on'));
+  out.ev.dimWithDetail = await dimOn();
+  await click('[data-name="Popup/Server Detail"] [data-name="Button/Close"]');
+  await page.waitForTimeout(450);
+  out.ev.detClosed = await vis();
+  out.ev.dimAfterClose = await dimOn();
   await click(ER, idx);
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(500);
+  out.ev.detReopen = await vis();
+  out.ev.dimReopen = await dimOn();
   out.ev.detailTitle = await page.evaluate(() => document.querySelector('[data-name="Popup/Server Detail"] [data-name="Title"]').textContent);
   out.ev.detailDev = await page.evaluate(() => [...document.querySelectorAll('[data-name="Popup/Server Detail"] p')].slice(0, 6).map((p) => p.textContent).join('|'));
   await page.screenshot({ path: GEN + 'it-event-detail.png' });
-  await click('[data-name="Popup/Server Detail"] [data-name="Button/Close"]');
-  await page.waitForTimeout(400);
-  out.ev.detClosed = await page.evaluate(() => getComputedStyle(document.querySelector('[data-name="Popup/Server Detail"] > [data-name="Background"]')).visibility);
-  await click(ER, idx + 1);
-  await page.waitForTimeout(500);
-  out.ev.detReopen = await page.evaluate(() => getComputedStyle(document.querySelector('[data-name="Popup/Server Detail"] > [data-name="Background"]')).visibility);
+  await page.mouse.click(960, 960);
+  await page.waitForTimeout(450);
+  out.ev.closedByDim = await vis();
   out.errs = errs.slice(0, 8);
   return out;
 }

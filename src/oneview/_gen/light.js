@@ -50,12 +50,17 @@ function autoLight(c, role) {
     return out(fromHsl({ h: 218, s: 0.07, l: nl, a: h.a }));   /* POSCO — 남색 시안 */
   }
   if (role === 'text') return h.l > 0.3 ? out(fromHsl({ h: h.h, s: Math.min(0.95, h.s), l: 0.3, a: h.a })) : null;
+  /* 아주 옅은 선(연분홍 · 연하늘 흰 테두리) → 중성 회청 선 — 같은 색상각으로 어둡게 하면 갈색 · 탁한 분홍이 됐다 */
+  if (role === 'border' && h.l > 0.82 && h.s < 0.5) return out({ r: 200, g: 213, b: 230, a: h.a });
   if (role === 'border') return h.l > 0.5 ? out(fromHsl({ h: h.h, s: h.s * 0.8, l: 0.62, a: h.a })) : null;
   /* POSCO — 아주 어두운 유채색 면·선(짙은 남색 판)은 색상각을 지킨 채 밝은 쪽으로 옮긴다.
      채도가 아주 높은 것(브랜드 파랑 #004BFF, 상태색)은 그대로 둔다 — 색이 곧 의미라서. */
   /* 원뷰 — 남색 · 보라 판(색상각 190~290°)과 중간 회청 판은 채도와 상관없이 밝은 면으로(제목 띠 · 값 알약이 짙게 남아 글자가 묻혔다) */
+  /* 11-20 — 연보라 · 회청으로 뭉치지 않게 색상각을 차가운 중성(214°)으로 모으고 채도를 낮춘다.
+     아주 짙은 면(l < .16) = 흰 판, 그보다 옅은 판 · 칸 = #f3f6fa ~ #e9eef6, 반투명 줄무늬는 같은 비율로 */
   if (role === 'bg' && ((h.h >= 190 && h.h <= 290 && h.l < 0.42) || (h.s < 0.45 && h.l < 0.62))) {
-    return out(fromHsl({ h: h.h, s: Math.min(0.3, h.s * 0.45), l: 0.965 - h.l * 0.14, a: h.a }));
+    const nl = h.l < 0.16 ? 1 : Math.max(0.915, 0.985 - (h.l - 0.16) * 0.22);
+    return out(fromHsl({ h: 214, s: nl >= 1 ? 0 : 0.32, l: nl, a: h.a < 1 ? Math.min(1, h.a + 0.35) : 1 }));
   }
   if ((role === 'bg' || role === 'border') && h.l < 0.32 && (h.s < 0.86 || h.l < 0.14)) {
     return out(fromHsl({ h: h.h, s: Math.min(0.3, h.s * 0.45), l: role === 'bg' ? 0.965 - h.l * 0.14 : 0.9 - h.l * 0.5, a: h.a }));
@@ -84,6 +89,20 @@ function darkenText(c) {
   return out({ r: cur.r, g: cur.g, b: cur.b, a: o.a < 0.75 ? Math.max(o.a, 0.9) : o.a });
 }
 
+/* 라이트 그림자 · 빛 — 흰 판 위에서는 그림자가 아주 옅어야 자연스럽다.
+   · 흰 · 아주 밝은 빛(반사)은 그대로
+   · 무채 · 짙은 그림자 → 옅은 남색(30,60,100), 알파 ×0.22 (최소 .03 · 최대 .12)
+   · 색 있는 빛(하늘 · 파랑 · 보라 글로우) → 같은 색상각의 중간 밝기, 알파 ×0.3 (최대 .22) */
+function shadowLight(c) {
+  const o = parse(c); if (!o) return undefined;
+  if (o.a < 0.05) return undefined;
+  const h = toHsl(o);
+  if (h.l > 0.9) return undefined;
+  if (h.s < 0.25 || h.l < 0.3) return out({ r: 30, g: 60, b: 100, a: Math.min(0.12, Math.max(0.03, o.a * 0.22)) });
+  const x = fromHsl({ h: h.h, s: Math.min(0.8, h.s), l: 0.55, a: Math.min(0.22, Math.max(0.04, o.a * 0.3)) });
+  return out(x);
+}
+
 /* 값 하나를 라이트로 옮긴다. 바뀐 게 없으면 null(오버라이드를 만들지 않는다). */
 function mapValue(value, role) {
   let changed = false;
@@ -91,12 +110,26 @@ function mapValue(value, role) {
     const t = TABLE[role];
     const key = c.trim().replace(/\s+/g, '');
     let n = t[key] || t[key.toLowerCase()];
+    /* 그림자 · 빛은 표를 거치지 않고 shadowLight 로 — 다크 세기(알파 .3~.8)가 흰 판에서 진한 얼룩이 됐다(11-20 사용자 지적) */
+    if (role === 'shadow') { n = shadowLight(key); if (n === undefined) n = key; }   /* 흰 반사광은 그대로(예전 자동 규칙이 회색 .7 그림자로 바꿨다) */
     if (n === undefined) { n = autoLight(key, role); if (process.env.LIGHT_DEBUG) { const u = UNMAPPED[role] = UNMAPPED[role] || {}; u[key] = (u[key] || 0) + 1; } }
     if (role === 'text') n = darkenText(n || key);
     if (n && n !== key) { changed = true; return n; }
     return c;
   });
-  return changed ? v : null;
+  let v2 = v;
+  if (role === 'bg') {
+    /* 탭 · 카드 머리의 사선 줄무늬(멈춤점 두 개가 같은 % 인 칼날 그라디언트) — 어두운 판에서는 은은한 반사였지만
+       흰 판에서는 회색 얼룩이라 라이트에서는 지운다. 남보라로 흐르던 탭 바탕은 같은 파랑의 옅은 단색 흐름으로 */
+    v2 = v2.replace(/linear-gradient\([^()]*(?:\([^()]*\)[^()]*)*\)/g, (g) => {
+      const pcts = g.match(/\s(\d+(?:\.\d+)?)%/g) || [];
+      if (pcts.length === 2 && pcts[0].trim() === pcts[1].trim() && !/0%$/.test(pcts[0].trim())) return 'linear-gradient(transparent,transparent)';
+      return g;
+    });
+    v2 = v2.replace(/rgba\(46, ?134, ?252, ?0\.1\) 0%, ?rgba\([^)]*\) 100%/g, 'rgba(46,134,252,0.11) 0%, rgba(46,134,252,0.05) 100%');
+    if (v2 !== value) changed = true;
+  }
+  return changed ? v2 : null;
 }
 
 /* 그라디언트·이미지가 섞인 선언(background-image 등)도 색만 갈아 끼운다 */
@@ -110,7 +143,11 @@ function lightDecl(prop, value, nid) {
 }
 
 /* ::after 링의 border 축약값(`1px solid #565e71`) */
-function lightRing(shorthand) {
+function lightRing(shorthand, thick) {
+  if (thick) {
+    const v = shorthand.replace(COLOR_RE, (c) => { const o = parse(c); if (!o) return c; const h = toHsl(o); return h.s > 0.4 ? out(fromHsl({ h: h.h, s: 0.7, l: 0.82, a: o.a })) : c; });
+    if (v !== shorthand) return v;
+  }
   return mapValue(shorthand, 'border');
 }
 
@@ -128,14 +165,21 @@ function lightExtra(PX) {
     R + ' [data-name="Logo Group"] [data-name="Title"]{background-image:linear-gradient(to right,#1d4fc4,#3a7ee6)!important;}',
     R + ' [data-name="Clock"] [data-name="Time"]{background-image:linear-gradient(to top,#173f9e,#2e72dc 86.843%)!important;}',
     /* 3D 바닥 · 장식 그림(짙은 타원 PNG) — 흰 바탕에서 검은 웅덩이처럼 보여 위 라벨이 묻혔다 → 밝고 옅게 */
-    R + ' :is([data-name="Symbol"],[data-name="Floor"],[data-name="Floor Layer"],[data-name="Effect"]) img{filter:brightness(1.75) saturate(.55);opacity:.7;}',
+    /* 11-20 다시 — 밝기를 올린 원판이 분홍 · 보라 비눗방울로, 바닥 띠가 회색 웅덩이로 보였다.
+       원판(구) = 원래 색 그대로 아주 옅게, 바닥 띠 = 거의 안 보이게, 빛줄기 = 반쯤 */
+    R + ' [data-name="Symbol"] > [data-name="Shape"] img{opacity:.32;filter:saturate(.7);}',
+    /* KPI 배지(Badge) — 원래 육각 그림 그대로(색만 바꾼 사본, mk-light-oneview.js BADGE), 글자색만 그 강조색의 진한 색 */
+    ...[['background-4', '#04536b'], ['background-5', '#6b3361'], ['background-6', '#6e4a07'], ['background-7', '#195429']].map(([f, tx]) => R + ' [data-name="Badge"]:has(img[src$="/' + f + '.svg"]) p{color:' + tx + '!important;}'),
+    R + ' :is([data-name="Floor Layer"],[data-name="Floor"] > [data-name="Part"]) > *{opacity:.18;}',
+    R + ' [data-name="Floor"] img{opacity:.25;}',
+    R + ' [data-name="Effect"] > * > *,' + R + ' [data-name="Effect"] img{opacity:.45;}',
     /* 파란 단추(Stop · Own · Ack · 선택)는 라이트에서도 원본 파란 판 + 흰 글자 */
     R + ' :is([data-name="Button/Stop"],[data-name="Button/Own"],[data-name="Button/Ack"],[data-name="Button/Select"]) img{content:normal!important;}',
     R + ' :is([data-name="Button/Stop"],[data-name="Button/Own"],[data-name="Button/Ack"],[data-name="Button/Select"]) p{color:#fff!important;}',
-    R + ' [data-name="Button/Stop"]{background:#1e86f0!important;}', R + ' [data-name="Button/Own"]{background:#2d6bd6!important;}',
+    R + ' [data-name="Button/Stop"]{background:#1668d4!important;}', R + ' [data-name="Button/Own"]{background:#2d6bd6!important;}',
     R + ' [data-name="Button/Ack"]{background:#24489f!important;}', R + ' [data-name="Button/Select"]{background:#1f6fd8!important;}',
     /* 3D 노드 라벨 — 짙은 바닥 위라 라이트에서 남색 글자가 묻힌다 → 흰 테두리 빛 */
-    R + ' :is([data-name^="Node/"],[data-name="Icons"],[data-name="Node Group"]) p{text-shadow:0 0 3px #fff,0 0 6px #fff,0 0 10px rgba(255,255,255,.9);}'];
+  ];
   /* 사본을 다시 만들면 같은 이름이라 브라우저가 옛 그림을 쥐고 있다 → 파일 수정 시각을 ?v 로 붙인다 */
   const fs = require('fs'), path = require('path');
   for (const [orig, lt] of Object.entries(VARIANTS)) {

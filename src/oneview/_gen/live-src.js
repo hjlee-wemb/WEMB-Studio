@@ -108,6 +108,48 @@
     '.ov-root :has(> .ov-chartmenu.open){z-index:50!important;}',
     /* 실제 조작 — 글자 단추 · 셀렉트 · 입력 · 체크 · 줄 선택 */
     '.ov-root .ov-line{pointer-events:none;}',
+    '.ov-root .ov-card{position:absolute;display:none;pointer-events:none;border-radius:12px;}',
+    '/* 쌓임 — 이벤트현황 40 < 막 60 < 팝업 62 < 셀렉트 목록 70 */',
+    '.ov-root .ov-logtop{z-index:40!important;}',
+    '.ov-root .ov-dim{position:absolute;left:-4000px;top:-4000px;width:12000px;height:12000px;z-index:60;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .3s ease;}',
+    '.ov-root .ov-dim.on{opacity:1;pointer-events:auto;cursor:pointer;}',
+    '.dt-editing .ov-root .ov-dim.on{pointer-events:none;}',
+    '.ov-root .ov-popbox{z-index:62!important;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] > [data-name="Background"]{background-color:#fff!important;}',
+    '.ov-root[data-theme="light"] [data-name="Event Log"] > [data-name="Table"]{background-color:#fff!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-cri > div:not([data-name]):first-child{background-color:#fde4e4!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-cri > div:not([data-name]):last-child{box-shadow:inset 0 0 16px 0 rgba(244,49,48,.35)!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-maj > div:not([data-name]):first-child{background-color:#ffeedd!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-maj > div:not([data-name]):last-child{box-shadow:inset 0 0 16px 0 rgba(255,138,0,.35)!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-min > div:not([data-name]):first-child{background-color:#fbf4d6!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-min > div:not([data-name]):last-child{box-shadow:inset 0 0 16px 0 rgba(232,200,25,.35)!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-war > div:not([data-name]):first-child{background-color:#dcf3f9!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-war > div:not([data-name]):last-child{box-shadow:inset 0 0 16px 0 rgba(0,183,238,.35)!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-nor > div:not([data-name]):first-child{background-color:#def3e7!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-nor > div:not([data-name]):last-child{box-shadow:inset 0 0 16px 0 rgba(52,210,141,.35)!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-own > div:not([data-name]):first-child{background-color:#ebe9fa!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-g-own > div:not([data-name]):last-child{box-shadow:inset 0 0 16px 0 rgba(138,92,255,.35)!important;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn1,.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn1 > div:not([data-name]):first-child{background-color:#2468dc!important;background-image:none!important;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn1 p{color:#fff!important;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn2,.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn2 > div:not([data-name]):first-child{background-color:#fff!important;background-image:none!important;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn2 p{color:#2c3e54!important;}',
+    '.ov-root[data-theme="light"] [data-name="Event Log"] [data-name="Body"] > [data-name^="Row/"]::after{border-color:#e6ebf2!important;}',
+    '.ov-root[data-theme="light"] [data-name="Event Log"] [data-name="Header Row"]::after{border-color:#cfd9e6!important;}',
+    '.ov-root[data-theme="light"] [data-name="Event Log"] > [data-name="Toolbar"] [data-name="Title Bar"] [data-name="Title"]{color:#10284d!important;font-weight:700!important;}',
+    '.ov-root[data-theme="light"] [data-name="Event Log"] [data-name="Header Row"] p{color:#34465f!important;font-weight:600!important;}',
+    '.ov-root[data-theme="light"] [data-name="Event Log"] [data-name="Body"] > [data-name^="Row/"]:hover{background:#eaf2ff!important;filter:none;}',
+    '.ov-root[data-theme="light"] [data-name="Event Log"] [data-name="Body"] > [data-name^="Row/"] p{color:#22344f!important;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-grade.ov-g-cri.ov-g-cri p{color:#c62828!important;font-weight:600;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-grade.ov-g-maj.ov-g-maj p{color:#b45309!important;font-weight:600;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-grade.ov-g-min.ov-g-min p{color:#8a6d00!important;font-weight:600;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-grade.ov-g-war.ov-g-war p{color:#0b7189!important;font-weight:600;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-grade.ov-g-nor.ov-g-nor p{color:#1b7a46!important;font-weight:600;}',
+    '.ov-root[data-theme="light"] .ov-grade.ov-grade.ov-g-own.ov-g-own p{color:#5040a8!important;font-weight:600;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] > [data-name="Background"]::after{border:1px solid #c6d3e4!important;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] [data-name="Title Bar"] [data-name="Title"]{color:#fff!important;font-weight:600!important;z-index:1;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] [data-name="Button/Close"]{z-index:2;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn1 p{color:#fff!important;font-weight:600;}',
+    '.ov-root[data-theme="light"] [data-name^="Popup/"] .ov-btn2 p{color:#2c3e54!important;}',
     '.ov-root .ov-btn{cursor:pointer;transition:filter .18s ease,translate .18s ' + EASE + ',box-shadow .22s ease;}',
     '.ov-root .ov-btn:hover{filter:brightness(1.3) drop-shadow(0 0 6px rgba(0,170,255,.6));translate:0 -1px;}',
     '.ov-root .ov-btn:active{filter:brightness(.88);translate:0 1px;transition-duration:.06s;}',
@@ -163,8 +205,8 @@
     '.ov-root[data-theme="light"] .ov-ddmenu button.cur{background:#d2e4fb;color:#0b3d82;}',
     '.ov-root[data-theme="light"] .ov-input{color:#1d2c42;caret-color:#0a6ed1;}',
     '.ov-root[data-theme="light"] .ov-input::placeholder{color:rgba(40,60,90,.42);}',
-    '.ov-root[data-theme="light"] .ov-chkoff{background:#f0f0f5;}',
-    '.ov-root[data-theme="light"] .ov-chkoff.k10{background:#ebedf5;}',
+    '.ov-root[data-theme="light"] .ov-chkoff{background:#eef2f7;}',
+    '.ov-root[data-theme="light"] .ov-chkoff.k10{background:#eef2f7;}',
     '.ov-root[data-theme="light"] .ov-row:hover{filter:brightness(.95);}',
     '.ov-root[data-theme="light"] .ov-sel,.ov-root[data-theme="light"] [data-name^="Row/"].ov-sel{box-shadow:inset 0 0 0 999px rgba(30,120,230,.13),inset 3px 0 0 #1e78e6;}',
     '.ov-root[data-theme="light"] .ov-tip{background:#fff;color:#2c3e54;border-color:#9dbbe6;box-shadow:0 8px 20px rgba(30,60,120,.16);}',
@@ -452,7 +494,11 @@
       if (!g) return;
       var p = one(g, 'p');
       var lab = p && p.parentNode;
-      if (lab) lab.classList.toggle('ov-cri', /Cri/.test(p.textContent));
+      if (!lab) return;
+      var gk = (p.textContent.trim().slice(0, 3) || '').toLowerCase();
+      lab.classList.toggle('ov-cri', gk === 'cri');
+      ['cri', 'maj', 'min', 'war', 'nor', 'own'].forEach(function (k) { lab.classList.toggle('ov-g-' + k, gk === k); });
+      lab.classList.add('ov-grade');
     });
   }
   function installEventLog(root, st) {
@@ -832,6 +878,7 @@
     if (st.scene === 'waspopup') { setTimeout(function () { goto('was'); }, 260); return; }
     setTimeout(function () { els.forEach(function (e) { e.style.visibility = 'hidden'; e.style.pointerEvents = 'none'; }); }, 290);
     pop.__closed = true;
+    if (st.updateDim) st.updateDim();
   }
   function openPopup(root, st, pop) {
     if (!pop) return;
@@ -840,6 +887,7 @@
     els.forEach(function (e) { e.style.transition = 'none'; e.style.visibility = ''; e.style.pointerEvents = ''; e.style.opacity = '0'; e.style.scale = '.985'; });
     void document.body.offsetWidth;
     els.forEach(function (e) { e.style.transition = 'opacity .3s ease,scale .35s ' + EASE; e.style.opacity = ''; e.style.scale = ''; });
+    if (st.updateDim) st.updateDim();
   }
   function flash(p) { if (!p) return; p.classList.remove('ov-tick'); void p.offsetWidth; p.classList.add('ov-tick'); }
   function setText(p, s) { if (p && write(p, s)) flash(p); }
@@ -1114,7 +1162,7 @@
         if (w > 240 || h > 40) break;
       }
       if (!box || all(box, 'p').length > 1) return;
-      box.classList.add('ov-btn');
+      box.classList.add('ov-btn', /^(닫기|취소|전체체크 해지|삭제)$/.test(t) ? 'ov-btn2' : 'ov-btn1');
       if (box.classList.contains('ov-click')) return;
       var pop = box.closest('[data-name^="Popup/"]'), log = box.closest('[data-name="Event Log"]');
       clickable(box, function () {
@@ -1325,6 +1373,59 @@
     root.addEventListener('pointerleave', hide);
   }
 
+  /* ══════════════════ 6-5. 라이트 카드 — 판 그림이 없는 위젯 뒤에 흰 카드(라이트에서만 보인다) ══════════════════
+     다크 원본은 짙은 바탕 위에 제목 · 본문만 놓아도 구역이 읽히지만, 밝은 바탕에서는 위젯이 떠 보였다(11-20 '라이트가 어색하다').
+     위젯 자신이 판(Background · Panel 자식)을 가진 화면(종합현황 2 · 네트워크)은 그 판을 쓰고 여기서는 건너뛴다. */
+  var CARD_SKIP = /^Widget\/(Infrastructure|Linked Systems|Customer Contact)$/;
+  function installCards(root, st) {
+    var ws = all(root, '[data-name^="Widget/"],[data-name="Server Info"]').filter(function (w) {
+      if (CARD_SKIP.test(nm(w))) return false;
+      if (w.parentElement && w.parentElement.closest('[data-name^="Widget/"]')) return false;
+      if (w.closest('[data-name^="Popup/"]')) return false;
+      return !kids(w).some(function (c) { return /^(Background|Panel|Panel Background)$/.test(nm(c)); });
+    });
+    ws.forEach(function (w) {
+      var r = unionRect(boxes(w), st);
+      if (!r || r.w < 80 || r.h < 60) return;
+      var P = 10, card = document.createElement('div');
+      card.className = 'ov-card ov-place';
+      card.style.left = (r.x - P) + 'px'; card.style.top = (r.y - P) + 'px';
+      card.style.width = (r.w + P * 2) + 'px'; card.style.height = (r.h + P * 2) + 'px';
+      /* 판 바로 앞(같은 묶음의 첫 상자 앞)에 꽂아 위젯 글자 · 표가 위에 그려지게 */
+      var first = boxes(w)[0];
+      (first && first.parentElement ? first.parentElement : st.frame).insertBefore(card, first || null);
+      /* 카드의 실제 기준 상자(offsetParent) 기준 좌표로 — contents 위젯 안에 넣으면 기준은 프레임이다
+         (contents 요소 자체의 화면 좌표로 빼면 스튜디오처럼 프레임이 화면 왼쪽에서 떨어진 곳에서 카드가 밀렸다) */
+      var cb = card.offsetParent;
+      if (cb && cb !== st.frame && st.frame.contains(cb)) {
+        var pr = rectIn(cb, st);
+        card.style.left = (r.x - P - pr.x) + 'px'; card.style.top = (r.y - P - pr.y) + 'px';
+      }
+      w.__extra = (w.__extra || []).concat([card]);
+      var fu = (st.units || []).filter(function (u) { return u.kind === 'move' && (u.el === w || u.el.contains(w)); })[0];
+      if (fu && fu.els.indexOf(card) < 0) { fu.els.push(card); card.__fx = (st.exW || 0) * fu.ax; card.__fy = (st.exH || 0) * fu.ay; place(card); }
+    });
+  }
+
+  /* ══════════════════ 6-6. 쌓임 순서 · 팝업 dim ══════════════════
+     이벤트현황은 늘 다른 판 위(펼쳤을 때 판에 깔리지 않게), 팝업이 떠 있으면 그 뒤로 검정 70% 막 → 팝업 → 셀렉트 목록 · 툴팁 순 */
+  function installLayers(root, st) {
+    all(root, '[data-name="Event Log"]').forEach(function (log) { boxes(log).forEach(function (e) { e.classList.add('ov-logtop'); }); });
+    var pops = all(root, '[data-name^="Popup/"]');
+    if (!pops.length) return;
+    pops.forEach(function (p) { boxes(p).forEach(function (e) { e.classList.add('ov-popbox'); }); });
+    var dim = document.createElement('div');
+    dim.className = 'ov-dim';
+    st.frame.appendChild(dim);
+    st.updateDim = function () { dim.classList.toggle('on', pops.some(function (p) { return !p.__closed; })); };
+    dim.addEventListener('click', function (e) {
+      if (editing()) return;
+      e.stopPropagation();
+      pops.forEach(function (p) { if (!p.__closed) closePopup(root, st, p); });
+    });
+    st.updateDim();
+  }
+
   /* ══════════════════ 6-4. 마우스 길 트기 — 단추 · 범례 · 줄을 덮은 그림 판은 마우스를 통과시킨다 ══════════════════ */
   function installUnblock(root, st) {
     function pass() {
@@ -1341,7 +1442,7 @@
           if (!h || t.contains(h) || h.contains(t) || !root.contains(h)) return;
           var blk = h.closest('svg') || h;
           if (blk.closest('[data-name^="Popup/"]') !== t.closest('[data-name^="Popup/"]')) return;   /* 팝업이 덮은 것은 그대로 */
-          if (blk.closest('.ov-click,.ov-btn,.ov-dd,.ov-field,.ov-chk,.ov-input,.ov-chost,.ov-chartbtn,.ov-chartmenu,.ov-ddmenu,.ov-fold') || one(blk, 'p') || blk.tagName === 'P') return;
+          if (blk.closest('.ov-dim,.ov-popbox,.ov-click,.ov-btn,.ov-dd,.ov-field,.ov-chk,.ov-input,.ov-chost,.ov-chartbtn,.ov-chartmenu,.ov-ddmenu,.ov-fold') || one(blk, 'p') || blk.tagName === 'P') return;
           blk.style.pointerEvents = 'none';
         }
       });
@@ -1529,10 +1630,10 @@
       if (cur >= 0) apply(cur);
       /* 묶음(contents) 판은 옮길 때 같이 따라가도록 */
       if (!mover) {
-        w.__extra = [host, btn, menu];
+        w.__extra = (w.__extra || []).concat([host, btn, menu]);
         /* 화면 맞추기 단위에도 넣는다 — 판이 16:9 가 아니면 위젯이 옮겨지는데 단추 · 차트가 제자리에 남았다 */
         var fu = (st.units || []).filter(function (u) { return u.kind === 'move' && (u.el === w || u.el.contains(w)); })[0];
-        if (fu) w.__extra.forEach(function (b) { fu.els.push(b); b.classList.add('ov-place'); b.__fx = (st.exW || 0) * fu.ax; b.__fy = (st.exH || 0) * fu.ay; place(b); });
+        if (fu) [host, btn, menu].forEach(function (b) { fu.els.push(b); b.classList.add('ov-place'); b.__fx = (st.exW || 0) * fu.ax; b.__fy = (st.exH || 0) * fu.ay; place(b); });
       }
     });
     syncChartHue(root, probe);
@@ -1625,7 +1726,7 @@
     return { px: m ? m[1] : 'ovm', scene: m && SCENE_OF[m[1]] ? SCENE_OF[m[1]] : 'main' };
   }
   function start(root, st) {
-    var steps = [['fit', installFit], ['clock', installClock], ['recent', installRecent], ['nav', installNav], ['elog', installEventLog], ['controls', installControls], ['fold', installFold],
+    var steps = [['fit', installFit], ['clock', installClock], ['recent', installRecent], ['nav', installNav], ['elog', installEventLog], ['controls', installControls], ['layers', installLayers], ['fold', installFold],
       ['scroll', installScroll], ['charts', installLiveCharts], ['tip', installTooltip], ['jitter', installJitter], ['swap', installChartSwap], ['move', installPanelMove], ['unblock', installUnblock]];
     steps.forEach(function (s) { try { s[1](root, st); } catch (e) { console.warn('[ov] ' + s[0], e); } });
     root.classList.add('ov-enter');
