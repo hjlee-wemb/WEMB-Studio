@@ -168,17 +168,17 @@
     ],
     /* 통합 운영 원뷰 — Figma B4mYvI2xtGTL1K5crHMLqe. 단독 화면 11장 — 열린 장면 모듈만 싣는다 */
     oneview: [
-      { src: 'src/oneview-main.js?v=2', build: ['build_ovm'], scene: 'main' },
-      { src: 'src/oneview-overview2.js?v=2', build: ['build_ovn'], scene: 'overview2' },
-      { src: 'src/oneview-transactions.js?v=2', build: ['build_ovt'], scene: 'transactions' },
-      { src: 'src/oneview-was.js?v=2', build: ['build_ovw'], scene: 'was' },
-      { src: 'src/oneview-waspopup.js?v=2', build: ['build_ovp'], scene: 'waspopup' },
-      { src: 'src/oneview-tp.js?v=2', build: ['build_ovq'], scene: 'tp' },
-      { src: 'src/oneview-system.js?v=2', build: ['build_ovs'], scene: 'system' },
-      { src: 'src/oneview-system2.js?v=2', build: ['build_ovr'], scene: 'system2' },
-      { src: 'src/oneview-detail.js?v=2', build: ['build_ovd'], scene: 'detail' },
-      { src: 'src/oneview-network.js?v=2', build: ['build_ovk'], scene: 'network' },
-      { src: 'src/oneview-event.js?v=2', build: ['build_ove'], scene: 'event' },
+      { src: 'src/oneview-main.js?v=3', build: ['build_ovm'], scene: 'main' },
+      { src: 'src/oneview-overview2.js?v=3', build: ['build_ovn'], scene: 'overview2' },
+      { src: 'src/oneview-transactions.js?v=3', build: ['build_ovt'], scene: 'transactions' },
+      { src: 'src/oneview-was.js?v=3', build: ['build_ovw'], scene: 'was' },
+      { src: 'src/oneview-waspopup.js?v=3', build: ['build_ovp'], scene: 'waspopup' },
+      { src: 'src/oneview-tp.js?v=3', build: ['build_ovq'], scene: 'tp' },
+      { src: 'src/oneview-system.js?v=3', build: ['build_ovs'], scene: 'system' },
+      { src: 'src/oneview-system2.js?v=3', build: ['build_ovr'], scene: 'system2' },
+      { src: 'src/oneview-detail.js?v=3', build: ['build_ovd'], scene: 'detail' },
+      { src: 'src/oneview-network.js?v=3', build: ['build_ovk'], scene: 'network' },
+      { src: 'src/oneview-event.js?v=3', build: ['build_ove'], scene: 'event' },
       { src: 'src/oneview-live.js?v=9', part: 'base' },
     ],
     /* 스마트 플랜트 가스 모니터링 — Figma CbbEsxxZo3vBcBprsiUhJm. 화면 2장 + 팝업 3장. 팝업은 가스 메인 위에 그 자리에서 얹으므로 통째로 */
@@ -227,12 +227,12 @@
     /* 복합화력 설비정보 디지털트윈 — Figma r7V2rTKcUto2Yd1qL4XSfZ. 화면 5장, 장면마다 따로 싣는다(탭 조각 · 라이브는 공통) */
     /* 스마트팩토리 에너지관리 디지털트윈 — Figma FwLj96v9IlQSHRPURiJouD. 종합 현황 + 그 위에 얹는 팝업 4장(바탕 빌더를 같이 쓴다) */
     fems: [
-      { src: 'src/fems-main.js?v=5', build: ['build_fmm'] },
-      { src: 'src/fems-diagram.js?v=5', build: ['build_fmd', 'build_fmm_diagram'] },
-      { src: 'src/fems-event.js?v=5', build: ['build_fme', 'build_fmm_event'] },
-      { src: 'src/fems-solar.js?v=5', build: ['build_fms', 'build_fmm_solar'] },
-      { src: 'src/fems-equipment.js?v=5', build: ['build_fmq', 'build_fmm_equipment'] },
-      { src: 'src/fems-frags.js?v=5', part: 'base', build: ['build_fmx'] },
+      { src: 'src/fems-main.js?v=6', build: ['build_fmm'] },
+      { src: 'src/fems-diagram.js?v=6', build: ['build_fmd', 'build_fmm_diagram'] },
+      { src: 'src/fems-event.js?v=6', build: ['build_fme', 'build_fmm_event'] },
+      { src: 'src/fems-solar.js?v=6', build: ['build_fms', 'build_fmm_solar'] },
+      { src: 'src/fems-equipment.js?v=6', build: ['build_fmq', 'build_fmm_equipment'] },
+      { src: 'src/fems-frags.js?v=6', part: 'base', build: ['build_fmx'] },
       { src: 'src/fems-live.js?v=12', part: 'base' },
     ],
     ccpp: [

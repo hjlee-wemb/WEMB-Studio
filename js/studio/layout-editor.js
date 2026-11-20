@@ -691,7 +691,9 @@ function initLayoutEditor() {
     const IP = window.__INDPARK_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
     const PD = window.__PLANTDP_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
     const CP = window.__CCPP_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
-    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {}, SH.screens || {}, PF.screens || {}, SC.screens || {}, NB.screens || {}, DW.screens || {}, OF.screens || {}, GM.screens || {}, IP.screens || {}, PD.screens || {}, CP.screens || {});
+    const OV = window.__ONEVIEW_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+    const FM = window.__FEMS_ASSETS || { screens: {}, charts: [], symbols: [], icons: [], panels: [], events: [] };
+    const DOM_SCREENS = Object.assign({}, HJ.screens || {}, HN.screens || {}, PK.screens || {}, SH.screens || {}, PF.screens || {}, SC.screens || {}, NB.screens || {}, DW.screens || {}, OF.screens || {}, GM.screens || {}, IP.screens || {}, PD.screens || {}, CP.screens || {}, OV.screens || {}, FM.screens || {});
     const hjHtmlCache = {};
     function hjScreenHtml(px) {
       if (hjHtmlCache[px]) return hjHtmlCache[px];
@@ -868,7 +870,9 @@ function initLayoutEditor() {
         .concat(hjItems(GM.panels, 'panel'))
         .concat(hjItems(IP.panels, 'panel'))
         .concat(hjItems(PD.panels, 'panel'))
-        .concat(hjItems(CP.panels, 'panel')),
+        .concat(hjItems(CP.panels, 'panel'))
+        .concat(hjItems(OV.panels, 'panel'))
+        .concat(hjItems(FM.panels, 'panel')),
       /* 이벤트 패널 탭 — 이벤트 현황 판과 그 안에서 따로 꺼내 쓸 수 있는 덩어리들.
          한진 시안의 이벤트 현황(판·머리글·카운트·표·행·등급 배지)과 이천 FMS 의 이벤트 목록이 함께 산다. */
       event: hjItems(HJ.events, 'event')
@@ -884,6 +888,8 @@ function initLayoutEditor() {
         .concat(hjItems(IP.events, 'event'))
         .concat(hjItems(PD.events, 'event'))
         .concat(hjItems(CP.events, 'event'))
+        .concat(hjItems(OV.events, 'event'))
+        .concat(hjItems(FM.events, 'event'))
         .concat(ichItems((ICH.panels || []).filter(isEventNamed), 'event')),
       symbol: (window.__WEMB_SYMBOLS || [])
         .map((s, i) => ({ cat: 'symbol', id: s.i, name: '심볼 ' + String(i + 1).padStart(2, '0'), src: s.s }))
@@ -901,7 +907,9 @@ function initLayoutEditor() {
         .concat(hjItems(GM.symbols, 'symbol'))
         .concat(hjItems(IP.symbols, 'symbol'))
         .concat(hjItems(PD.symbols, 'symbol'))
-        .concat(hjItems(CP.symbols, 'symbol')),
+        .concat(hjItems(CP.symbols, 'symbol'))
+        .concat(hjItems(OV.symbols, 'symbol'))
+        .concat(hjItems(FM.symbols, 'symbol')),
       /* 아이콘 탭에는 '…아이콘'으로 이름 붙은 등록물만 올린다 — 칩·토글·상태 점·화살표·
          로고처럼 아이콘이 아닌 부품이 섞이지 않게. 이름이 기준이라 내장 라인 아이콘
          세트(홈·차트·알림 …)도 더는 올리지 않는다 — 이름에 '아이콘'이 없다.
@@ -921,7 +929,9 @@ function initLayoutEditor() {
         .concat(hjIcons(GM.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(IP.icons, 'icon').filter(isIconNamed))
         .concat(hjIcons(PD.icons, 'icon').filter(isIconNamed))
-        .concat(hjIcons(CP.icons, 'icon').filter(isIconNamed)),
+        .concat(hjIcons(CP.icons, 'icon').filter(isIconNamed))
+        .concat(hjIcons(OV.icons, 'icon').filter(isIconNamed))
+        .concat(hjIcons(FM.icons, 'icon').filter(isIconNamed)),
       /* 검색 결과 임시 버킷 — data-cat="__search" 로 클릭/드래그가 여기서 항목을 찾는다 */
       __search: [],
     };
@@ -1097,6 +1107,8 @@ function initLayoutEditor() {
       hjItems(IP.charts, 'chart').forEach((a) => items.push(a));
       hjItems(PD.charts, 'chart').forEach((a) => items.push(a));
       hjItems(CP.charts, 'chart').forEach((a) => items.push(a));
+      hjItems(OV.charts, 'chart').forEach((a) => items.push(a));
+      hjItems(FM.charts, 'chart').forEach((a) => items.push(a));
       return items;
     }
 

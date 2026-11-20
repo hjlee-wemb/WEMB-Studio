@@ -152,7 +152,7 @@ function lightExtra(PX) {
   for (const [orig, dk] of Object.entries(VARIANTS)) rules.push(R + ' img[src$="/' + orig + '"]{content:url("{{B}}' + dk + '?v=' + ver(dk) + '");}');
   rules.push(
     /* 화면 바탕(하늘 #cae7ff) → 밤 바탕, 위쪽이 조금 밝은 남회색 */
-    R + ':not(.sh-pop) > [data-node-id]{background:linear-gradient(180deg,#111720 0%,#0b0e13 100%)!important;}',
+    R + ':not(.sh-pop):not(.hj-asset) > [data-node-id]{background:linear-gradient(180deg,#111720 0%,#0b0e13 100%)!important;}',
     /* 3D 설비 그림(하늘이 구워진 JPG) → 하늘을 투명하게 뺀 다크 사본(mk-dark-scene.ps1, k=0.86 — 설비만 조금 누른다). 밤 바탕은 화면이 깐다 */
     R + ' img[src$="/3-dscene.png"]{content:url("{{B}}3-dscene-dk.png?v=' + ver('3-dscene-dk.png') + '");}',
     /* 바탕 사진(하늘 보케) · 옆 판 유리(PNG) → 다크 사본(scratchpad dk.ps1: 바탕은 채도만 살린 밤 보케, 유리는 그래파이트) */
