@@ -1,0 +1,49 @@
+const img1 = "https://www.figma.com/api/mcp/asset/5731213f-4dcf-4f0e-8a48-1376459b02ea.png";
+
+type ButtonEquipmentMenuProps = {
+  className?: string;
+  type?: "Detail" | "Manual" | "Chart" | "Close";
+};
+
+function ButtonEquipmentMenu({ className, type = "Detail" }: ButtonEquipmentMenuProps) {
+  const isChart = type === "Chart";
+  const isClose = type === "Close";
+  const isManual = type === "Manual";
+  return (
+    <div className={className || "h-[32px] relative w-[60px]"} id={isClose ? "node-729_4150" : isChart ? "node-729_4145" : isManual ? "node-729_4140" : "node-729_4135"}>
+      <div className="absolute contents inset-0" id={isClose ? "node-729_4151" : isChart ? "node-729_4146" : isManual ? "node-729_4141" : "node-729_4136"} data-name="Icon">
+        <div className="absolute bg-[#2e2d3e] border border-[#3b3b5f] border-solid inset-0 rounded-[4px] shadow-[0px_2px_2px_0px_rgba(0,0,0,0.15)]" id={isClose ? "node-729_4152" : isChart ? "node-729_4147" : isManual ? "node-729_4142" : "node-729_4137"} data-name="Background" />
+      </div>
+      <p className={`[word-break:break-word] absolute font-["Pretendard:Regular"] leading-[normal] not-italic text-[#bfc1d0] text-[10px] text-center whitespace-nowrap ${["Chart", "Close"].includes(type) ? "inset-[31.25%_35%]" : isManual ? "inset-[31.25%_28.33%]" : "inset-[31.25%_21.67%_31.25%_20%]"}`} id={isClose ? "node-729_4153" : isChart ? "node-729_4148" : isManual ? "node-729_4143" : "node-729_4138"}>
+        {isClose ? "닫기" : isChart ? "차트" : isManual ? "매뉴얼" : "상세보기"}
+      </p>
+    </div>
+  );
+}
+
+function PopupEquipmentCard({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[376px] relative w-[388px]"} data-node-id="729:4229" data-name="Popup/Equipment Card">
+      <div className="absolute bg-[rgba(32,30,40,0.8)] border border-[#3b3b5f] border-solid inset-0" data-node-id="729:4230" data-name="Box" />
+      <ButtonEquipmentMenu className="absolute inset-[2.66%_2.58%_88.83%_81.96%]" />
+      <ButtonEquipmentMenu className="absolute inset-[11.97%_2.58%_79.52%_81.96%]" type="Manual" />
+      <ButtonEquipmentMenu className="absolute inset-[21.28%_2.58%_70.21%_81.96%]" type="Chart" />
+      <ButtonEquipmentMenu className="absolute inset-[30.59%_2.58%_60.9%_81.96%]" type="Close" />
+      <div className="absolute aspect-[296/350] left-[2.32%] right-[21.39%] top-[18px]" data-node-id="729:4235" data-name="장비 1">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={img1} />
+      </div>
+      <div className="absolute contents inset-[2.66%_48.2%_92.55%_29.12%]" data-node-id="729:4236" data-name="Content">
+        <div className="absolute bg-[#2e2d3e] inset-[2.66%_48.2%_92.55%_29.12%] rounded-[3px]" data-node-id="729:4237" data-name="Background" />
+        <p className="[word-break:break-word] absolute font-['Pretendard:Regular'] inset-[3.19%_48.71%_93.62%_29.64%] leading-[normal] not-italic text-[#ddd] text-[12px] text-center" data-node-id="729:4238">
+          STS_7SB_5
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function PopupEquipmentCard1() {
+  return (
+    <PopupEquipmentCard className="relative size-full" />
+  );
+}

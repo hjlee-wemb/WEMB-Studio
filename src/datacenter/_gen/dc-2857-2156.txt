@@ -1,0 +1,479 @@
+const imgPath = "https://www.figma.com/api/mcp/asset/b234f596-2f86-4054-ae5e-45b8c018fae6.svg";
+const imgShape = "https://www.figma.com/api/mcp/asset/9920d7fc-3636-4ec4-9cb4-6622d40665eb.svg";
+const imgPath1 = "https://www.figma.com/api/mcp/asset/ff69a353-281b-47d5-9787-d70f9db6f36c.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/f9af0020-aa32-447d-80be-8d5e2b149dd5.svg";
+const imgShape1 = "https://www.figma.com/api/mcp/asset/0aa10178-a348-4818-9b96-9421f0a016fe.svg";
+const imgIcon1 = "https://www.figma.com/api/mcp/asset/f186cfd9-5866-44e7-9eff-e7eb0aa98032.svg";
+const imgIcon2 = "https://www.figma.com/api/mcp/asset/76f9264c-4a8a-4fcd-8912-abfe9ce8bd6c.svg";
+const imgDividerButtons = "https://www.figma.com/api/mcp/asset/4d882240-14e3-4cc3-8852-69b9a12fae6b.svg";
+const imgTrack = "https://www.figma.com/api/mcp/asset/da43027e-962e-418a-b9a4-6e00428defbe.svg";
+const imgProgress = "https://www.figma.com/api/mcp/asset/a38941ed-d709-456f-a81b-b2674fce6cb0.svg";
+const imgPoints = "https://www.figma.com/api/mcp/asset/45269fb6-ae4a-4144-9f64-3ce6d250ee32.svg";
+const imgMarkerCurrent = "https://www.figma.com/api/mcp/asset/563ff47c-7268-4efa-bb15-4ab722d407cf.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/ffe60e85-4cfd-4ec9-baca-76066c25568b.svg";
+const imgPath2 = "https://www.figma.com/api/mcp/asset/3d646d5a-21e6-4cec-bb99-6e720ce3026b.svg";
+const imgDividerSection = "https://www.figma.com/api/mcp/asset/65a65637-3da9-4ff9-95d9-9e3296f863c3.svg";
+const imgDividerTitle = "https://www.figma.com/api/mcp/asset/4a7c8485-a321-4507-a28f-5bc18a956fe5.svg";
+const imgDiagramImage1 = "https://www.figma.com/api/mcp/asset/5b6a5270-6df4-4128-9b5a-708434df0cde.png";
+const imgSceneImage1 = "https://www.figma.com/api/mcp/asset/598e9a1c-dca3-43ed-8168-2163a976d152.png";
+const imgDiagramImage = "https://www.figma.com/api/mcp/asset/230a68ba-2b43-4211-ac91-94f819dfd2c0.svg";
+const imgSceneImage = "https://www.figma.com/api/mcp/asset/2eccf0e7-6077-4396-94bc-7efe2bad3243.svg";
+const imgBackgroundGlow = "https://www.figma.com/api/mcp/asset/cb61cd02-2368-4fcd-bd4e-eb70d02c19de.svg";
+const imgLogoChip = "https://www.figma.com/api/mcp/asset/83e8dc94-7339-4671-ac6d-71c8e1da2957.svg";
+const imgDivision = "https://www.figma.com/api/mcp/asset/87f151b2-3515-4205-9f18-c78cbb711bab.svg";
+const imgIconLogout = "https://www.figma.com/api/mcp/asset/2373cf58-7602-4d3e-a43a-74ab029e8a0b.svg";
+const imgArrow = "https://www.figma.com/api/mcp/asset/3f71c8d9-467a-4441-83ac-35919e8b9e0d.svg";
+
+type ButtonLargeProps = {
+  className?: string;
+  type?: "Dark";
+};
+
+function ButtonLarge({ className, type = "Dark" }: ButtonLargeProps) {
+  return (
+    <div className={className || "h-[35px] relative w-[120px]"} data-node-id="690:1475">
+      <div className="absolute flex inset-0 items-center justify-center" data-node-id="690:1476" style={{ containerType: "size" }}>
+        <div className="flex-none h-[100cqh] rotate-180 w-[100cqw]">
+          <div className="relative size-full" data-name="Path">
+            <div className="absolute inset-[-2.86%_-0.83%]">
+              <img alt="" className="block max-w-none size-full" src={imgPath} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[22.86%_1.67%_28.57%_1.67%] leading-[normal] not-italic text-[16px] text-center text-white" data-node-id="690:1477">
+        화면 초기화
+      </p>
+    </div>
+  );
+}
+
+type IconButtonPanelProps = {
+  className?: string;
+  icon?: "Drawing Info" | "Scenario" | "Equipment Info";
+  state?: "Default";
+  theme?: "Dark";
+};
+
+function IconButtonPanel({ className, icon = "Drawing Info", state = "Default", theme = "Dark" }: IconButtonPanelProps) {
+  const isDrawingInfoAndDarkAndDefault = icon === "Drawing Info" && theme === "Dark" && state === "Default";
+  const isEquipmentInfoAndDarkAndDefault = icon === "Equipment Info" && theme === "Dark" && state === "Default";
+  return (
+    <div className={className || "relative size-[42px]"} id={isDrawingInfoAndDarkAndDefault ? "node-676_4479" : isEquipmentInfoAndDarkAndDefault ? "node-676_4572" : "node-676_4559"}>
+      <div className="absolute border border-[#ccb7b7] border-solid inset-0 rounded-bl-[4px] rounded-tl-[4px] rounded-tr-[4px]" id={isDrawingInfoAndDarkAndDefault ? "node-676_4480" : isEquipmentInfoAndDarkAndDefault ? "node-676_4573" : "node-676_4560"} style={{ backgroundImage: "linear-gradient(-39.7680455014214deg, rgb(0, 0, 0) 50.648%, rgb(31, 34, 38) 50.648%)" }} data-name="Background" />
+      <div className="absolute contents inset-0" id={isDrawingInfoAndDarkAndDefault ? "node-676_4481" : isEquipmentInfoAndDarkAndDefault ? "node-676_4574" : "node-676_4561"} data-name="Masked Content">
+        <div className="absolute flex inset-[-47.22%_-43.4%_64.52%_61.11%] items-center justify-center" id={isDrawingInfoAndDarkAndDefault ? "node-676_4483" : isEquipmentInfoAndDarkAndDefault ? "node-676_4576" : "node-676_4563"} style={{ containerType: "size" }}>
+          <div className="-rotate-45 flex-none h-[hypot(49.872cqw,50.1267cqh)] skew-x-[-0.29deg] w-[hypot(50.128cqw,-49.8733cqh)]">
+            <div className="bg-[rgba(255,255,255,0.5)] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-25.667px_19.833px] mask-size-[42px_42px] relative size-full" style={isEquipmentInfoAndDarkAndDefault ? { maskImage: `url("${imgShape1}")` } : { maskImage: `url("${imgShape}")` }} data-name="Shape" />
+          </div>
+        </div>
+      </div>
+      <div className="absolute inset-[80.56%_0_0_80.56%]" id={isDrawingInfoAndDarkAndDefault ? "node-676_4484" : isEquipmentInfoAndDarkAndDefault ? "node-676_4577" : "node-676_4564"} data-name="Path">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath1} />
+      </div>
+      <div className={`absolute ${isDrawingInfoAndDarkAndDefault ? "inset-[27.48%_22.42%_28.07%_27.58%]" : isEquipmentInfoAndDarkAndDefault ? "inset-[16.67%_22.22%_22.22%_19.44%]" : "bottom-[22.22%] left-[22.22%] right-1/4 top-[22.22%]"}`} id={isDrawingInfoAndDarkAndDefault ? "node-676_4485" : isEquipmentInfoAndDarkAndDefault ? "node-676_4578" : "node-676_4565"} data-name="Icon">
+        {theme === "Dark" && state === "Default" && ["Scenario", "Equipment Info"].includes(icon) && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isEquipmentInfoAndDarkAndDefault ? imgIcon1 : imgIcon} />}
+        {isDrawingInfoAndDarkAndDefault && (
+          <div className="absolute inset-[-2.68%_-3.36%_-2.68%_-2.38%]">
+            <img alt="" className="block max-w-none size-full" src={imgIcon2} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type SidePanelProps = {
+  className?: string;
+  type?: "Scenario";
+};
+
+function SidePanel({ className, type = "Scenario" }: SidePanelProps) {
+  return (
+    <div className={className || "h-[944px] relative w-[247px]"} data-node-id="2921:1381">
+      <div className="absolute bg-[rgba(0,0,0,0.7)] border border-[#373662] border-solid inset-[0_0_0_2.83%]" data-node-id="2921:1215" data-name="Background" />
+      <div className="absolute contents inset-[8.79%_1.01%_82.73%_0.2%]" data-node-id="2921:1216" data-name="Button Group">
+        <div className="absolute inset-[17.27%_1.01%_82.73%_0.2%]" data-node-id="2921:1217" data-name="Divider/Buttons">
+          <div className="absolute inset-[-0.5px_0]">
+            <img alt="" className="block max-w-none size-full" src={imgDividerButtons} />
+          </div>
+        </div>
+        <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[13.99%_38.06%_84.11%_37.25%] leading-[normal] not-italic text-[#a4a5ba] text-[16px] whitespace-nowrap" data-node-id="2921:1218">
+          시나리오
+        </p>
+        <IconButtonPanel className="absolute inset-[8.79%_41.7%_86.76%_41.3%]" icon="Scenario" />
+        <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[13.98%_5.26%_84.11%_70.04%] leading-[normal] not-italic text-[#a4a5ba] text-[16px] whitespace-nowrap" data-node-id="2921:1220">
+          설비정보
+        </p>
+        <IconButtonPanel className="absolute inset-[8.79%_74.49%_86.76%_8.5%]" />
+        <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[13.98%_70.85%_84.11%_4.45%] leading-[normal] not-italic text-[#a4a5ba] text-[16px] whitespace-nowrap" data-node-id="2921:1222">
+          도면정보
+        </p>
+        <IconButtonPanel className="absolute inset-[8.79%_8.91%_86.76%_74.09%]" icon="Equipment Info" />
+      </div>
+      <div className="absolute bg-[rgba(0,0,0,0.7)] inset-[0_0_93.22%_2.83%]" data-node-id="2921:1224" data-name="Title Background" />
+      <div className="absolute bg-[rgba(0,0,0,0.7)] border-[#373662] border-solid border-t inset-[30.51%_0_64.41%_2.83%]" data-node-id="2921:1225" data-name="Section Title Background" />
+      <div className="absolute border-[#373662] border-b border-solid border-t inset-[61.02%_0_6.78%_2.83%] pointer-events-none" data-node-id="2921:1226" data-name="Steps Background">
+        <div aria-hidden className="absolute bg-[rgba(49,52,63,0.8)] inset-0" />
+        <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_15px_15px_0px_#16141e]" />
+      </div>
+      <div className="absolute contents inset-[61.02%_1.21%_6.36%_0.4%]" data-node-id="2921:1227" data-name="Scenario Steps">
+        <div className="absolute contents inset-[63.27%_16.92%_-15.75%_8.16%]" data-node-id="2921:1229" data-name="Flowchart">
+          <div className="absolute flex inset-[80.93%_87.45%_5.93%_10.93%] items-center justify-center" data-node-id="2921:1230" style={{ containerType: "size" }}>
+            <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+              <div className="bg-[#c1bebe] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-26px_-188px] mask-size-[243px_308px] relative rounded-[3px] shadow-[2px_0px_4px_0px_rgba(191,167,167,0.25)] size-full" style={{ maskImage: `url("${imgTrack}")` }} data-name="Track" />
+            </div>
+          </div>
+          <div className="absolute flex inset-[63.29%_87.23%_18.49%_10.76%] items-center justify-center" data-node-id="2921:1231" style={{ containerType: "size" }}>
+            <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+              <div className="mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-25.579px_-21.44px] mask-size-[243px_308px] relative size-full" style={{ maskImage: `url("${imgTrack}")` }} data-name="Progress">
+                <div className="absolute inset-[-80.55%_-3.49%_-80.55%_-1.16%]">
+                  <img alt="" className="block max-w-none size-full" src={imgProgress} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[63.27%_65.09%_35.46%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-21.252px] mask-size-[243px_308px] not-italic text-[#ccc] text-[15px]" data-node-id="2921:1232" style={{ maskImage: `url("${imgTrack}")` }}>
+            시작
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[68.99%_30.28%_29.74%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-75.252px] mask-size-[243px_308px] not-italic text-[#ccc] text-[15px]" data-node-id="2921:1233" style={{ maskImage: `url("${imgTrack}")` }}>
+            상용전원 정상
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[74.6%_26.23%_24.13%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-128.252px] mask-size-[243px_308px] not-italic text-[#ccc] text-[15px]" data-node-id="2921:1234" style={{ maskImage: `url("${imgTrack}")` }}>
+            UPS공급(자동)
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[80.54%_25.42%_16.5%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-184.252px] mask-size-[243px_308px] not-italic text-[15px] text-white" data-node-id="2921:1235" style={{ maskImage: `url("${imgTrack}")` }}>
+            발전기 ON(자동) 후 수동전환
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[87.74%_16.92%_9.72%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-252.252px] mask-size-[243px_308px] not-italic text-[#ccc] text-[15px]" data-node-id="2921:1236" style={{ maskImage: `url("${imgTrack}")` }}>
+            CTTS 자동전환(발전) 후 수동전환
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[94.72%_43.15%_2.73%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-318.14px] mask-size-[243px_308px] not-italic text-[#ccc] text-[11px]" data-node-id="2921:1237" style={{ maskImage: `url("${imgTrack}")` }}>
+            HV-A, MTR-A, SHV-A4 OFF
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[101.73%_40.95%_-4.28%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-384.311px] mask-size-[243px_308px] not-italic text-[#ccc] text-[11px]" data-node-id="2921:1238" style={{ maskImage: `url("${imgTrack}")` }}>
+            SHV-B4, MTR-B, HV-B ON
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[108.74%_30.39%_-10.01%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-450.481px] mask-size-[243px_308px] not-italic text-[#ccc] text-[11px]" data-node-id="2921:1239" style={{ maskImage: `url("${imgTrack}")` }}>
+            CTTS 수동전환(상용)
+          </p>
+          <p className="[word-break:break-word] absolute font-['NanumSquare:Bold'] inset-[114.47%_39.01%_-15.75%_18.71%] leading-[normal] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-45.218px_-504.593px] mask-size-[243px_308px] not-italic text-[#ccc] text-[11px]" data-node-id="2921:1240" style={{ maskImage: `url("${imgTrack}")` }}>
+            발전기 OFF(수동)
+          </p>
+          <div className="absolute flex inset-[63.9%_88.16%_-14.62%_11.07%] items-center justify-center" data-node-id="2921:1241" style={{ containerType: "size" }}>
+            <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+              <div className="mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-26.344px_-27.179px] mask-size-[243px_308px] relative size-full" style={{ maskImage: `url("${imgTrack}")` }} data-name="Points">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPoints} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-[80.38%_85.25%_17.91%_8.16%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-19.16px_-182.793px] mask-size-[243px_308px]" data-node-id="2921:1360" style={{ maskImage: `url("${imgTrack}")` }} data-name="Marker/Current">
+            <div className="absolute inset-[-18.6%_-24.58%_-31%_-24.58%]">
+              <img alt="" className="block max-w-none size-full" src={imgMarkerCurrent} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="[word-break:break-word] absolute font-['NanumGothic:Bold'] inset-[1.48%_13.77%_94.28%_12.96%] leading-[0] not-italic text-[#d8e1ec] text-[20px] text-center whitespace-nowrap" data-node-id="2921:1363">
+        <p className="leading-[normal] mb-0 whitespace-pre">{`해람 스마트 `}</p>
+        <p className="leading-[normal] whitespace-pre">클라우드 데이터 센터</p>
+      </div>
+      <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[32.57%_35.22%_64.99%_34.01%] leading-[normal] not-italic text-[#d8e1ec] text-[20px] text-center whitespace-nowrap" data-node-id="2921:1364">
+        시나리오
+      </p>
+      <div className="absolute content-stretch flex inset-[38.88%_6.07%_58.79%_4.86%] items-center pl-[5px]" data-node-id="2921:1365" data-name="Item/Utility Normal">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2921:1365;461:1880" data-name="Text">
+          <div className="col-1 h-[3.559px] ml-0 mt-[9px] relative row-1 w-[3.561px]" data-node-id="I2921:1365;461:1881" data-name="Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <div className="[word-break:break-word] col-1 flex flex-col font-['NanumGothic:Bold'] h-[22px] justify-center ml-[19px] mt-0 not-italic overflow-hidden relative row-1 text-[#8b8b8c] text-[20px] text-ellipsis w-[150px] whitespace-nowrap" data-node-id="I2921:1365;461:1882">
+            <p className="leading-[normal] overflow-hidden text-ellipsis">상용전원 정상</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex inset-[42.8%_6.07%_54.87%_4.86%] items-center pl-[5px]" data-node-id="2921:1366" data-name="Item/Utility Outage">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2921:1366;461:1880" data-name="Text">
+          <div className="col-1 h-[3.559px] ml-0 mt-[9px] relative row-1 w-[3.561px]" data-node-id="I2921:1366;461:1881" data-name="Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <div className="[word-break:break-word] col-1 flex flex-col font-['NanumGothic:Bold'] h-[22px] justify-center ml-[19px] mt-0 not-italic overflow-hidden relative row-1 text-[#8b8b8c] text-[20px] text-ellipsis w-[150px] whitespace-nowrap" data-node-id="I2921:1366;461:1882">
+            <p className="leading-[normal] overflow-hidden text-ellipsis">상용전원 정전</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex inset-[46.72%_6.07%_50.95%_4.86%] items-center pl-[5px]" data-node-id="2921:1367" data-name="Item/Utility Restoration">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2921:1367;461:1880" data-name="Text">
+          <div className="col-1 h-[3.559px] ml-0 mt-[9px] relative row-1 w-[3.561px]" data-node-id="I2921:1367;461:1881" data-name="Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <div className="[word-break:break-word] col-1 flex flex-col font-['NanumGothic:Bold'] h-[22px] justify-center ml-[19px] mt-0 not-italic overflow-hidden relative row-1 text-[#8b8b8c] text-[20px] text-ellipsis w-[150px] whitespace-nowrap" data-node-id="I2921:1367;461:1882">
+            <p className="leading-[normal] overflow-hidden text-ellipsis">상용전원 복전</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex inset-[50.64%_6.07%_47.03%_4.86%] items-center pl-[5px]" data-node-id="2921:1368" data-name="Item/ALTS-A to ALTS-B Transfer">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2921:1368;461:1880" data-name="Text">
+          <div className="col-1 h-[3.559px] ml-0 mt-[9px] relative row-1 w-[3.561px]" data-node-id="I2921:1368;461:1881" data-name="Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <div className="[word-break:break-word] col-1 flex flex-col font-['NanumGothic:Bold'] h-[22px] justify-center ml-[19px] mt-0 not-italic overflow-hidden relative row-1 text-[#8b8b8c] text-[20px] text-ellipsis w-[150px] whitespace-nowrap" data-node-id="I2921:1368;461:1882">
+            <p className="leading-[normal] overflow-hidden text-ellipsis">ALTS-A-전환-ALTS-B</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex inset-[54.56%_6.07%_43.11%_4.86%] items-center pl-[5px]" data-node-id="2921:1369" data-name="Item/MTR1 Fault">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2921:1369;461:1880" data-name="Text">
+          <div className="col-1 h-[3.559px] ml-0 mt-[9px] relative row-1 w-[3.561px]" data-node-id="I2921:1369;461:1881" data-name="Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <div className="[word-break:break-word] col-1 flex flex-col font-['NanumGothic:Bold'] h-[22px] justify-center ml-[19px] mt-0 not-italic overflow-hidden relative row-1 text-[#8b8b8c] text-[20px] text-ellipsis w-[150px] whitespace-nowrap" data-node-id="I2921:1369;461:1882">
+            <p className="leading-[normal] overflow-hidden text-ellipsis">MTR1고장</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bg-[#35363c] content-stretch flex inset-[58.47%_6.07%_39.19%_4.86%] items-center pl-[5px]" data-node-id="2921:1370" data-name="Item/MTR1 Recovery">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2921:1370;464:1156" data-name="Text">
+          <div className="col-1 h-[3.559px] ml-0 mt-[9px] relative row-1 w-[3.561px]" data-node-id="I2921:1370;464:1157" data-name="Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <div className="[word-break:break-word] col-1 flex flex-col font-['NanumGothic:Bold'] h-[22px] justify-center ml-[19px] mt-0 not-italic overflow-hidden relative row-1 text-[20px] text-ellipsis text-white w-[150px] whitespace-nowrap" data-node-id="I2921:1370;464:1158">
+            <p className="leading-[normal] overflow-hidden text-ellipsis">MTR1정상화</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex inset-[94.28%_6.07%_3.39%_4.86%] items-center pl-[5px]" data-node-id="2921:1371" data-name="Item/Substation Statutory Inspection">
+        <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2921:1371;461:1880" data-name="Text">
+          <div className="col-1 h-[3.559px] ml-0 mt-[9px] relative row-1 w-[3.561px]" data-node-id="I2921:1371;461:1881" data-name="Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <div className="[word-break:break-word] col-1 flex flex-col font-['NanumGothic:Bold'] h-[22px] justify-center ml-[19px] mt-0 not-italic overflow-hidden relative row-1 text-[#8b8b8c] text-[20px] text-ellipsis w-[150px] whitespace-nowrap" data-node-id="I2921:1371;461:1882">
+            <p className="leading-[normal] overflow-hidden text-ellipsis">수변전실 법정검사</p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute contents inset-[19.07%_2.43%_72.14%_6.48%]" data-node-id="2921:1372" data-name="Controls">
+        <ButtonLarge className="absolute inset-[19.07%_44.94%_77.22%_6.48%]" />
+        <div className="absolute inset-[24.15%_44.94%_72.14%_6.48%]" data-node-id="2921:1374" data-name="Button/Reset Scenario">
+          <div className="absolute flex inset-0 items-center justify-center" data-node-id="I2921:1374;690:1476" style={{ containerType: "size" }}>
+            <div className="flex-none h-[100cqh] rotate-180 w-[100cqw]">
+              <div className="relative size-full" data-name="Path">
+                <div className="absolute inset-[-2.86%_-0.83%]">
+                  <img alt="" className="block max-w-none size-full" src={imgPath} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[22.86%_1.67%_28.57%_1.67%] leading-[normal] not-italic text-[16px] text-center text-white" data-node-id="I2921:1374;690:1477">
+            시나리오 초기화
+          </p>
+        </div>
+        <div className="absolute inset-[19.81%_2.43%_78.61%_58.3%]" data-node-id="2921:1375" data-name="Checkbox/Label">
+          <div className="absolute bg-[#1f6ffc] inset-[6.75%_87.12%_6.75%_0] rounded-[1px]" data-node-id="I2921:1375;69:4806" data-name="Shape" />
+          <div className="absolute inset-[28.98%_89.44%_28.98%_2.31%]" data-node-id="I2921:1375;69:4808" data-name="Path">
+            <div className="absolute inset-[-15.86%_-12.5%_-15.86%_-12.49%]">
+              <img alt="" className="block max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+          <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Regular'] inset-[0_52.56%_-20%_15.48%] leading-[normal] not-italic text-[#b1b1b2] text-[16px] whitespace-nowrap" data-node-id="I2921:1375;69:4807">
+            라벨
+          </p>
+        </div>
+        <div className="absolute inset-[22.79%_2.43%_75.62%_58.3%]" data-node-id="2921:1376" data-name="Checkbox/Flow">
+          <div className="absolute bg-[#1f6ffc] inset-[6.75%_87.12%_6.75%_0] rounded-[1px]" data-node-id="I2921:1376;69:4806" data-name="Shape" />
+          <div className="absolute inset-[28.98%_89.44%_28.98%_2.31%]" data-node-id="I2921:1376;69:4808" data-name="Path">
+            <div className="absolute inset-[-15.86%_-12.5%_-15.86%_-12.49%]">
+              <img alt="" className="block max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+          <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Regular'] inset-[0_52.56%_-20%_15.48%] leading-[normal] not-italic text-[#b1b1b2] text-[16px] whitespace-nowrap" data-node-id="I2921:1376;69:4807">
+            흐름
+          </p>
+        </div>
+        <div className="absolute inset-[25.78%_2.43%_72.63%_58.3%]" data-node-id="2921:1377" data-name="Checkbox/Duct & Pipe">
+          <div className="absolute bg-[#1f6ffc] inset-[6.75%_87.12%_6.75%_0] rounded-[1px]" data-node-id="I2921:1377;69:4806" data-name="Shape" />
+          <div className="absolute inset-[28.98%_89.44%_28.98%_2.31%]" data-node-id="I2921:1377;69:4808" data-name="Path">
+            <div className="absolute inset-[-15.86%_-12.5%_-15.86%_-12.49%]">
+              <img alt="" className="block max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+          <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Regular'] inset-[0_15.45%_-20%_15.48%] leading-[normal] not-italic text-[#b1b1b2] text-[16px] whitespace-nowrap" data-node-id="I2921:1377;69:4807">
+            덕트/배관
+          </p>
+        </div>
+      </div>
+      <div className="absolute inset-[36.33%_1.01%_63.67%_0.2%]" data-node-id="2921:1378" data-name="Divider/Section">
+        <div className="absolute inset-[-0.5px_0]">
+          <img alt="" className="block max-w-none size-full" src={imgDividerSection} />
+        </div>
+      </div>
+      <div className="absolute inset-[7.63%_1.62%_92.37%_0]" data-node-id="2921:1379" data-name="Divider/Title">
+        <div className="absolute inset-[-1px_0_0_0]">
+          <img alt="" className="block max-w-none size-full" src={imgDividerTitle} />
+        </div>
+      </div>
+      <div className="absolute bg-[#afafaf] inset-[61.86%_3.24%_21.61%_95.14%] rounded-[4px]" data-node-id="2921:1380" data-name="Scroll Thumb" />
+    </div>
+  );
+}
+
+function StagePowerDiagram({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[944px] relative w-[1648px]"} data-node-id="2921:1103" data-name="Stage/Power Diagram">
+      <div className="absolute contents inset-[0_50.49%_0_0]" data-node-id="2921:1085" data-name="View/Plan Diagram">
+        <div className="absolute bg-[rgba(0,0,0,0.7)] border-2 border-[#373662] border-solid inset-[0_50.49%_0_0] opacity-80" data-node-id="2921:1086" data-name="Background" />
+        <div className="absolute contents inset-[0_50.49%_0_0.97%]" data-node-id="2921:1087" data-name="Viewport">
+          <div className="absolute aspect-[1728/1008] left-[-33.98%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[576px_-80px] mask-size-[800px_944px] opacity-80 right-[29.13%] top-[80px]" data-node-id="2921:1089" style={{ maskImage: `url("${imgDiagramImage}")` }} data-name="Diagram Image">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgDiagramImage1} />
+          </div>
+        </div>
+      </div>
+      <div className="absolute contents inset-[0_0_0_50.49%]" data-node-id="2921:1090" data-name="View/3D Scene">
+        <div className="absolute bg-[rgba(0,0,0,0.7)] border-2 border-[#373662] border-solid inset-[0_0_0_50.49%] opacity-80" data-node-id="2921:1091" data-name="Background" />
+        <div className="absolute contents inset-[0_0.97%_0_50.49%]" data-node-id="2921:1092" data-name="Viewport">
+          <div className="absolute aspect-[1568/640] left-[25.24%] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[416px_-192px] mask-size-[800px_944px] opacity-80 right-[-20.39%] top-[192px]" data-node-id="2921:1094" style={{ maskImage: `url("${imgSceneImage}")` }} data-name="Scene Image">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgSceneImage1} />
+          </div>
+        </div>
+      </div>
+      <div className="absolute contents inset-[93.22%_52.43%_1.69%_34.95%]" data-node-id="2921:1096" data-name="Button/Plan Power Diagram">
+        <div className="absolute bg-[rgba(0,0,0,0.8)] border-2 border-[#007387] border-solid inset-[93.22%_52.43%_1.69%_34.95%] rounded-[60px] shadow-[0px_4px_4px_0px_rgba(163,119,119,0.2)]" data-node-id="2921:1097" data-name="Background" />
+        <p className="[word-break:break-word] absolute font-['NanumGothic:Bold'] inset-[95.23%_53.74%_3.05%_36.47%] leading-none not-italic text-[#67dcf1] text-[20px] text-center" data-node-id="2921:1098">
+          평면전력계통도
+        </p>
+      </div>
+      <div className="absolute contents inset-[93.22%_1.94%_1.69%_85.44%]" data-node-id="2921:1099" data-name="Button/Building Power Diagram">
+        <div className="absolute bg-[rgba(0,0,0,0.8)] border-2 border-[#007387] border-solid inset-[93.22%_1.94%_1.69%_85.44%] rounded-[60px] shadow-[0px_4px_4px_0px_rgba(163,119,119,0.2)]" data-node-id="2921:1100" data-name="Background" />
+        <p className="[word-break:break-word] absolute font-['NanumGothic:Bold'] inset-[95.23%_3.44%_3.05%_86.77%] leading-none not-italic text-[#67dcf1] text-[20px] text-center" data-node-id="2921:1101">
+          건물전력계통도
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function BackgroundGlow({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[2272.643px] relative w-[3119.309px]"} data-node-id="2921:436" data-name="Background/Glow">
+      <div className="absolute inset-[-5.41%_-3.42%_-4.95%_-6.09%]">
+        <img alt="" className="block max-w-none size-full" src={imgBackgroundGlow} />
+      </div>
+    </div>
+  );
+}
+
+export default function ScreenPowerSystemDiagram() {
+  return (
+    <div className="relative size-full" data-node-id="2857:2156" style={{ backgroundImage: "linear-gradient(180.00000000000006deg, rgba(0, 255, 246, 0.7) 11.538%, rgba(0, 221, 255, 0.7) 50.962%, rgba(0, 72, 255, 0.7) 100%), linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%)" }} data-name="Screen/Power System Diagram">
+      <div className="absolute contents left-[-539px] top-[-610px]" data-node-id="2857:2157" data-name="Layout">
+        <BackgroundGlow className="absolute h-[2272.643px] left-[-539px] top-[-610px] w-[3119.309px]" />
+        <StagePowerDiagram className="absolute h-[944px] left-[256px] top-[64px] w-[1648px]" />
+        <SidePanel className="absolute h-[944px] left-[9px] top-[64px] w-[247px]" />
+        <div className="absolute h-[190px] left-0 top-0 w-[1920px]" data-node-id="2857:2441" data-name="Header">
+          <div className="absolute backdrop-blur-[2px] bg-gradient-to-r content-stretch flex from-[rgba(255,255,255,0)] gap-[243px] h-[57px] items-center left-0 pl-[60px] pr-[18px] py-[7px] to-[rgba(255,255,255,0)] top-0 via-[53.365%] via-[rgba(255,255,255,0.3)] w-[1920px]" data-node-id="I2857:2441;873:2655" data-name="Top">
+            <div className="h-[42px] relative shrink-0 w-[145px]" data-node-id="I2857:2441;688:5512" data-name="Logo Slot" />
+            <div className="absolute content-stretch flex gap-[9.639px] items-center left-[60px] top-[9.22px]" data-node-id="I2857:2441;2920:737" data-name="Logo">
+              <div className="relative shrink-0 size-[38.554px]" data-node-id="I2857:2441;2920:737;2915:654" data-name="Logo Chip">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoChip} />
+              </div>
+              <p className="[word-break:break-word] font-['Pretendard_GOV:Bold'] leading-[normal] not-italic relative shrink-0 text-[#1359da] text-[24.096px] tracking-[-0.4819px] whitespace-nowrap" data-node-id="I2857:2441;2920:737;2915:656">
+                WEMB Studio
+              </p>
+            </div>
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2441;873:2924" data-name="Content">
+              <div className="col-1 content-stretch flex gap-[23px] items-center justify-center ml-0 mt-[9.5px] relative row-1 w-[1011.246px]" data-node-id="I2857:2441;872:1861" data-name="Nav">
+                <div className="content-stretch flex items-center justify-center relative shrink-0 w-[132px]" data-node-id="I2857:2441;872:1986" data-name="Menu">
+                  <p className="[word-break:break-word] font-['Nanum_Gothic:Bold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-[rgba(255,255,255,0.5)] text-center whitespace-nowrap" data-node-id="I2857:2441;688:5477">
+                    통합모니터링
+                  </p>
+                </div>
+                <div className="h-[12.82px] relative shrink-0 w-0" data-node-id="I2857:2441;688:5484" data-name="Division">
+                  <div className="absolute inset-[-7.8%_-1px]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivision} />
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center relative shrink-0 w-[132px]" data-node-id="I2857:2441;872:1999" data-name="Menu">
+                  <p className="[word-break:break-word] font-['Nanum_Gothic:Bold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-center text-white whitespace-nowrap" data-node-id="I2857:2441;688:5476">
+                    전력
+                  </p>
+                </div>
+                <div className="h-[12.82px] relative shrink-0 w-0" data-node-id="I2857:2441;688:5485" data-name="Division">
+                  <div className="absolute inset-[-7.8%_-1px]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivision} />
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center relative shrink-0 w-[132px]" data-node-id="I2857:2441;872:1973" data-name="Menu">
+                  <p className="[word-break:break-word] font-['Nanum_Gothic:Bold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-[rgba(255,255,255,0.5)] text-center whitespace-nowrap" data-node-id="I2857:2441;688:5478">
+                    공조
+                  </p>
+                </div>
+                <div className="h-[12.82px] relative shrink-0 w-0" data-node-id="I2857:2441;688:5486" data-name="Division">
+                  <div className="absolute inset-[-7.8%_-1px]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivision} />
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2857:2441;872:1960" data-name="Menu">
+                  <p className="[word-break:break-word] font-['Nanum_Gothic:Bold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-[rgba(255,255,255,0.5)] text-center whitespace-nowrap" data-node-id="I2857:2441;688:5479">
+                    건물통합계통도
+                  </p>
+                </div>
+                <div className="h-[12.82px] relative shrink-0 w-0" data-node-id="I2857:2441;688:5487" data-name="Division">
+                  <div className="absolute inset-[-7.8%_-1px]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivision} />
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="I2857:2441;872:1947" data-name="Menu">
+                  <p className="[word-break:break-word] font-['Nanum_Gothic:Bold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2441;688:5480">
+                    작업자안전관리
+                  </p>
+                </div>
+                <div className="h-[12.82px] relative shrink-0 w-0" data-node-id="I2857:2441;688:5488" data-name="Division">
+                  <div className="absolute inset-[-7.8%_-1px]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivision} />
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-center relative shrink-0 w-[132px]" data-node-id="I2857:2441;872:1934" data-name="Menu">
+                  <p className="[word-break:break-word] font-['Nanum_Gothic:Bold'] leading-[normal] not-italic relative shrink-0 text-[20px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2441;688:5481">
+                    운영관리
+                  </p>
+                </div>
+              </div>
+              <div className="col-1 content-stretch flex gap-[16px] items-start ml-[1151.25px] mt-0 relative row-1" data-node-id="I2857:2441;872:377" data-name="Date Time Logout">
+                <div className="[word-break:break-word] font-['NanumGothic:Bold'] leading-[0] not-italic relative shrink-0 text-[#eae8f0] text-[18px] text-right whitespace-nowrap" data-node-id="I2857:2441;688:5482">
+                  <p className="leading-[normal] mb-0">2026/11/24</p>
+                  <p className="leading-[normal]">TUE</p>
+                </div>
+                <p className="[word-break:break-word] bg-clip-text bg-gradient-to-b font-['NanumGothic:Bold'] from-[#b0d8df] from-[60.249%] leading-[normal] not-italic relative shrink-0 text-[32px] text-[transparent] to-[#2ee0ff] whitespace-nowrap" data-node-id="I2857:2441;688:5483">
+                  14:27:35
+                </p>
+                <div className="relative shrink-0 size-[34.754px]" data-node-id="I2857:2441;688:5496" data-name="Icon Logout">
+                  <div className="absolute inset-[0_-11.51%_-23.02%_-11.51%]">
+                    <img alt="" className="block max-w-none size-full" src={imgIconLogout} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex flex-col gap-[3px] items-center left-[613px] top-[56.69px] w-[148px]" data-node-id="I2857:2441;873:2824" data-name="Hover">
+              <div className="h-[7.623px] relative shrink-0 w-[116.678px]" data-node-id="I2857:2441;688:5490" data-name="Arrow">
+                <div className="absolute inset-[-19.68%_0_-29.03%_0]">
+                  <img alt="" className="block max-w-none size-full" src={imgArrow} />
+                </div>
+              </div>
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2441;688:5963" data-name="Drop Down Default">
+                <div className="backdrop-blur-[2px] bg-[rgba(0,0,0,0.5)] border border-[#809297] border-solid col-1 h-[103px] ml-0 mt-0 relative rounded-[5px] row-1 shadow-[0px_2px_10px_0px_rgba(151,119,120,0.2)] w-[148px]" data-node-id="I2857:2441;688:5964" data-name="Background" />
+                <div className="bg-[rgba(113,125,129,0.8)] col-1 h-[50px] ml-px mt-[1.07px] relative rounded-tl-[4px] rounded-tr-[4px] row-1 w-[146px]" data-node-id="I2857:2441;688:5965" data-name="Shape" />
+                <div className="bg-[#809297] col-1 h-[0.824px] ml-[12.19px] mt-[51.09px] relative row-1 w-[123.616px]" data-node-id="I2857:2441;688:5966" data-name="Divider" />
+                <p className="[word-break:break-word] col-1 font-['Nanum_Gothic:Bold'] leading-[normal] ml-[20.5px] mt-[17.07px] not-italic relative row-1 text-[16px] text-center text-white whitespace-nowrap" data-node-id="I2857:2441;688:5967">
+                  통합전력계통도
+                </p>
+                <p className="[word-break:break-word] col-1 font-['Nanum_Gothic:Bold'] leading-[normal] ml-[20.5px] mt-[66.33px] not-italic relative row-1 text-[#767c7f] text-[16px] text-center whitespace-nowrap" data-node-id="I2857:2441;688:5968">
+                  평면전력계통도
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="absolute inset-[29.12%_0_69.82%_0]" data-node-id="I2857:2441;688:5475" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0.96154%, rgba(88, 182, 186, 0.5) 12.5%, rgba(113, 196, 225, 0.5) 52.072%, rgba(255, 255, 255, 0.5) 62.749%, rgba(113, 214, 225, 0.5) 76.193%, rgba(62, 123, 146, 0.5) 88.096%, rgba(255, 255, 255, 0.5) 100%)" }} data-name="Division" />
+        </div>
+      </div>
+    </div>
+  );
+}

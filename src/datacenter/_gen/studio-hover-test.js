@@ -1,0 +1,73 @@
+/* 스튜디오 오버 검증 — 헤더 '전력' 오버 → 서브메뉴 → '평면전력계통도' 클릭(설비 카드 장면), 옆 판 툴팁, 패널편집 중 헤더 글자 편집. node pw.js studio-hover-test.js */
+async (page) => {
+  const GEN = 'C:/Users/wemb/Desktop/진행중/디자인팀/1_WEMB STUDIO/WEMB Studio/src/datacenter/_gen/';
+  const errs = [];
+  page.on('pageerror', (e) => errs.push('pageerror: ' + e.message));
+  page.on('console', (m) => { if (m.type() === 'error' || /\[dc\]/.test(m.text())) errs.push(m.type() + ': ' + m.text().slice(0, 200)); });
+  await page.setViewportSize({ width: 1568, height: 1032 });
+  await page.goto('http://localhost:5600/index.html#/templates');
+  await page.evaluate(() => { try { Object.keys(localStorage).filter((k) => /datacenter/.test(k)).forEach((k) => localStorage.removeItem(k)); } catch (e) {} });
+  await page.waitForTimeout(1200);
+  await page.locator('text=Data Center Integrated Monitoring').first().click();
+  await page.waitForTimeout(700);
+  await page.locator('.tpld-start').click();
+  await page.waitForSelector('#dtStage .dmm-root.dc-live', { timeout: 20000 });
+  await page.waitForTimeout(2000);
+  const out = {};
+  const at = (sel, t) => page.evaluate(([s, t]) => { const e = [...document.querySelectorAll(s)].find((x) => (!t || x.textContent.trim() === t) && x.getClientRects().length); if (!e) return null; const r = e.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }, [sel, t]);
+  out.rest = await page.evaluate(() => ({ dd: document.querySelector('#dtStage .dc-dd').classList.contains('dc-ddopen'), act: [...document.querySelectorAll('#dtStage .dc-navlab.dc-act')].map((p) => p.textContent.trim()) }));
+  let p = await at('#dtStage .dc-navlab', '전력');
+  await page.mouse.move(p.x, p.y, { steps: 4 });
+  await page.waitForTimeout(500);
+  out.hoverPower = await page.evaluate(() => document.querySelector('#dtStage .dc-dd').classList.contains('dc-ddopen'));
+  await page.screenshot({ path: GEN + 'sh-dd.png', clip: { x: 352, y: 40, width: 900, height: 200 } });
+  p = await at('#dtStage .dc-dd p', '평면전력계통도');
+  await page.mouse.move(p.x, p.y - 40, { steps: 3 });
+  await page.mouse.move(p.x, p.y, { steps: 5 });
+  await page.waitForTimeout(300);
+  const t0 = Date.now();
+  await page.mouse.click(p.x, p.y);
+  await page.waitForSelector('#dtStage .dmc-mount', { timeout: 8000 }).catch(() => {});
+  out.toCardMs = Date.now() - t0;
+  await page.waitForTimeout(1500);
+  out.card = await page.evaluate(() => ({ dmc: !!document.querySelector('#dtStage .dmc-mount'), act: [...document.querySelectorAll('#dtStage .dc-navlab.dc-act')].map((p) => p.textContent.trim()) }));
+  /* 카드 장면 헤더 메뉴(팝업이 떠 있어도 눌린다) → 작업자안전관리 */
+  p = await at('#dtStage .dc-navlab', '작업자안전관리');
+  await page.mouse.click(p.x, p.y);
+  await page.waitForSelector('#dtStage .dmw-root.dc-live', { timeout: 8000 }).catch(() => {});
+  await page.waitForTimeout(1500);
+  out.worker = await page.evaluate(() => !!document.querySelector('#dtStage .dmw-root'));
+  p = await at('#dtStage .dc-navlab', '전력');
+  await page.mouse.move(p.x, p.y, { steps: 4 });
+  await page.waitForTimeout(500);
+  out.workerDD = await page.evaluate(() => { const d = document.querySelector('#dtStage .dc-dd'); return d && d.classList.contains('dc-ddopen'); });
+  await page.screenshot({ path: GEN + 'sh-worker-dd.png', clip: { x: 352, y: 40, width: 900, height: 200 } });
+  /* 메인으로, 옆 판 '시나리오' 툴팁 */
+  p = await at('#dtStage .dc-navlab', '통합모니터링');
+  await page.mouse.click(p.x, p.y);
+  await page.waitForSelector('#dtStage .dmm-root.dc-live', { timeout: 8000 }).catch(() => {});
+  await page.waitForTimeout(1500);
+  p = await at('#dtStage [data-name="Button/Scenario"] [data-name="Background"]');
+  await page.mouse.move(p.x, p.y, { steps: 4 });
+  await page.waitForTimeout(800);
+  out.tip = await page.evaluate(() => (document.querySelector('#dtStage .dc-tip.on') || {}).textContent || null);
+  await page.screenshot({ path: GEN + 'sh-tip.png', clip: { x: 352, y: 40, width: 600, height: 300 } });
+  /* 패널편집 — 헤더 날짜 · 메뉴 글자를 눌러 편집할 수 있는지 */
+  await page.locator('#editAll').click();
+  await page.waitForTimeout(1000);
+  p = await at('#dtStage .dc-navlab', '공조');
+  await page.mouse.click(p.x, p.y);
+  await page.keyboard.press('End');
+  await page.keyboard.type('X');
+  await page.waitForTimeout(300);
+  out.editMenu = await page.evaluate(() => [...document.querySelectorAll('#dtStage .dc-navlab')].map((x) => x.textContent.trim()).find((t) => /공조/.test(t)));
+  p = await at('#dtStage [data-name="Button/Scenario"] p');
+  await page.mouse.click(p.x, p.y);
+  await page.keyboard.press('End');
+  await page.keyboard.type('Y');
+  await page.waitForTimeout(300);
+  out.editSide = await page.evaluate(() => document.querySelector('#dtStage [data-name="Button/Scenario"] p').textContent.trim());
+  out.tipInEdit = await page.evaluate(() => !!document.querySelector('#dtStage .dc-tip.on'));
+  out.errs = errs;
+  return out;
+}

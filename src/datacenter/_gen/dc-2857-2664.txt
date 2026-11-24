@@ -1,0 +1,1038 @@
+const imgPath = "https://www.figma.com/api/mcp/asset/71c3f417-4d16-44c2-aacf-32d02040a614.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/5c3b9822-d745-4cd8-bd8c-deb3684f8127.svg";
+const imgLogoChip = "https://www.figma.com/api/mcp/asset/def507ee-55a2-4645-ba7a-894cdefe8241.svg";
+const imgBackgroundGlow = "https://www.figma.com/api/mcp/asset/9d1ce8f3-2f9e-45c1-8054-e980a29cd27f.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/e5cd2d7b-5159-4886-b11f-993750ee4d89.svg";
+const imgArrow = "https://www.figma.com/api/mcp/asset/36d428d6-85dc-424c-8e03-922baad143a7.svg";
+const imgIconLogout = "https://www.figma.com/api/mcp/asset/ed4a5f6f-eba3-4392-b685-dac7337b0cd1.svg";
+const imgPath1 = "https://www.figma.com/api/mcp/asset/ab8818c7-7a03-4cd2-826e-44e4b781ea88.svg";
+const imgIconPaper = "https://www.figma.com/api/mcp/asset/233deb9d-3622-4acc-a6b6-8885bf6b39d0.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/399c40d5-7db9-4863-ab86-153d1558d663.svg";
+const imgPath2 = "https://www.figma.com/api/mcp/asset/a9600afa-a8cd-4789-b2d6-c238cc199871.svg";
+const imgPath3 = "https://www.figma.com/api/mcp/asset/afe3aede-82a9-45c4-94cf-8e90c0dd3903.svg";
+const imgIconMenu = "https://www.figma.com/api/mcp/asset/bb926ae7-2c20-4dda-94fe-c3a7644d5b26.svg";
+const imgSeparator = "https://www.figma.com/api/mcp/asset/0d533d9a-610f-4037-b2b8-6ef779f30671.svg";
+const imgIconHome = "https://www.figma.com/api/mcp/asset/ee7aa0aa-4c49-44c1-83a4-481b195bef65.svg";
+const imgIconClose = "https://www.figma.com/api/mcp/asset/6b56157f-5439-4576-802e-48ad5699d7a0.svg";
+const imgSelectCategoryLv1 = "https://www.figma.com/api/mcp/asset/fa3d3f19-b698-4b9d-9858-b8ba0fe1830a.svg";
+const imgChevron = "https://www.figma.com/api/mcp/asset/cd20ce47-1249-4361-b657-063d0fb61196.svg";
+const imgPath4 = "https://www.figma.com/api/mcp/asset/11cfe471-356c-4837-93a8-9aa27fee1dcf.svg";
+
+type ButtonSmallProps = {
+  className?: string;
+  state?: "Default" | "Hover";
+  type?: "Excel" | "Register" | "Delete" | "Search";
+};
+
+function ButtonSmall({ className, state = "Default", type = "Excel" }: ButtonSmallProps) {
+  const isDeleteAndDefault = type === "Delete" && state === "Default";
+  const isRegisterAndHover = type === "Register" && state === "Hover";
+  const isSearchAndDefault = type === "Search" && state === "Default";
+  return (
+    <div className={className || "h-[29px] relative w-[70px]"} id={isSearchAndDefault ? "node-2920_1464" : isDeleteAndDefault ? "node-2920_1448" : isRegisterAndHover ? "node-2920_1441" : "node-2920_1420"}>
+      <div className={`absolute inset-0 rounded-[3px] ${isRegisterAndHover ? "bg-[#ababab]" : "bg-[#d9d9d9]"}`} id={isSearchAndDefault ? "node-2920_1461" : isDeleteAndDefault ? "node-2920_1446" : isRegisterAndHover ? "node-2920_1439" : "node-2920_1418"} data-name="Background" />
+      <p className={`[word-break:break-word] absolute leading-[normal] not-italic text-[12px] whitespace-nowrap ${isSearchAndDefault ? 'font-["NanumGothic:Bold"] inset-[34.49%_27.12%_24.13%_40.02%] text-[#777]' : isRegisterAndHover ? 'font-["NanumGothic:ExtraBold"] inset-[29.31%_33.57%] text-black' : 'font-["NanumGothic:ExtraBold"] inset-[29.31%_33.57%] text-[#777]'}`} id={isSearchAndDefault ? "node-2920_1462" : isDeleteAndDefault ? "node-2920_1447" : isRegisterAndHover ? "node-2920_1440" : "node-2920_1419"}>
+        {isSearchAndDefault ? "조회" : isDeleteAndDefault ? "삭제" : isRegisterAndHover ? "등록" : "엑셀"}
+      </p>
+      {isSearchAndDefault && (
+        <div className="absolute inset-[30.48%_66.18%_24.15%_15.02%]" data-node-id="2920:1463" data-name="Path">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type SideMenuItemProps = {
+  className?: string;
+  state?: "Default";
+};
+
+function SideMenuItem({ className, state = "Default" }: SideMenuItemProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start pl-[29px] py-[10px] relative w-[249px]"} data-node-id="777:1765">
+      <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="777:1762" data-name="Content">
+        <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="777:1763">
+          자산관리
+        </p>
+        <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="777:1764" data-name="Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LogoWembStudio({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex gap-[9.639px] items-center relative"} data-node-id="2920:692" data-name="Logo/WEMB Studio">
+      <div className="relative shrink-0 size-[38.554px]" data-node-id="2915:654" data-name="Logo Chip">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogoChip} />
+      </div>
+      <p className="[word-break:break-word] font-['Pretendard_GOV:Bold'] leading-[normal] not-italic relative shrink-0 text-[#1359da] text-[24.096px] tracking-[-0.4819px] whitespace-nowrap" data-node-id="2915:656">
+        WEMB Studio
+      </p>
+    </div>
+  );
+}
+
+function BackgroundGlow({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[2272.643px] relative w-[3119.309px]"} data-node-id="2921:436" data-name="Background/Glow">
+      <div className="absolute inset-[-5.41%_-3.42%_-4.95%_-6.09%]">
+        <img alt="" className="block max-w-none size-full" src={imgBackgroundGlow} />
+      </div>
+    </div>
+  );
+}
+
+export default function ScreenAssetManagement() {
+  return (
+    <div className="relative size-full" data-node-id="2857:2664" style={{ backgroundImage: "linear-gradient(180.00000000000006deg, rgba(0, 255, 246, 0.7) 11.538%, rgba(0, 221, 255, 0.7) 50.962%, rgba(0, 72, 255, 0.7) 100%), linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%)" }} data-name="Screen/Asset Management">
+      <div className="absolute contents left-[-539px] top-[-610px]" data-node-id="2857:2665" data-name="Layout">
+        <BackgroundGlow className="absolute h-[2272.643px] left-[-539px] top-[-610px] w-[3119.309px]" />
+        <div className="absolute h-[190px] left-0 top-0 w-[1920px]" data-node-id="2857:2673" data-name="Header">
+          <div className="absolute contents left-0 top-0" data-node-id="I2857:2673;691:4810" data-name="Content">
+            <div className="absolute contents inset-[0_0_69.82%_0]" data-node-id="I2857:2673;691:4811" data-name="Graphic">
+              <div className="absolute backdrop-blur-[2px] bg-gradient-to-r from-[rgba(255,255,255,0)] inset-[0_0_70%_0] to-[rgba(255,255,255,0)] via-[53.365%] via-[rgba(255,255,255,0.3)]" data-node-id="I2857:2673;691:4812" data-name="Background" />
+              <div className="absolute inset-[29.12%_0_69.82%_0]" data-node-id="I2857:2673;691:4813" style={{ backgroundImage: "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0.96154%, rgba(88, 182, 186, 0.5) 12.5%, rgba(113, 196, 225, 0.5) 52.072%, rgba(255, 255, 255, 0.5) 62.749%, rgba(113, 214, 225, 0.5) 76.193%, rgba(62, 123, 146, 0.5) 88.096%, rgba(255, 255, 255, 0.5) 100%)" }} data-name="Divider" />
+            </div>
+            <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[8.95%_63.02%_78.95%_35%] leading-[normal] not-italic text-[20px] text-[rgba(255,255,255,0.5)] text-center whitespace-nowrap" data-node-id="I2857:2673;691:4814">
+              전력
+            </p>
+            <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[8.95%_70.36%_78.95%_23.75%] leading-[normal] not-italic text-[20px] text-[rgba(255,255,255,0.5)] text-center whitespace-nowrap" data-node-id="I2857:2673;691:4815">
+              통합모니터링
+            </p>
+            <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[8.95%_53.7%_78.95%_44.32%] leading-[normal] not-italic text-[20px] text-[rgba(255,255,255,0.5)] text-center whitespace-nowrap" data-node-id="I2857:2673;691:4816">
+              공조
+            </p>
+            <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[8.95%_41.93%_78.95%_51.2%] leading-[normal] not-italic text-[20px] text-[rgba(255,255,255,0.5)] text-center whitespace-nowrap" data-node-id="I2857:2673;691:4817">
+              건물통합계통도
+            </p>
+            <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[8.95%_32.6%_78.95%_60.52%] leading-[normal] not-italic text-[20px] text-white whitespace-nowrap" data-node-id="I2857:2673;691:4818">
+              작업자안전관리
+            </p>
+            <p className="[word-break:break-word] absolute font-['Nanum_Gothic:Bold'] inset-[8.95%_24.74%_78.95%_71.3%] leading-[normal] not-italic text-[20px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2673;691:4819">
+              운영관리
+            </p>
+            <div className="[word-break:break-word] absolute font-['NanumGothic:Bold'] inset-[4.21%_11.53%_76.84%_83.21%] leading-[0] not-italic text-[#eae8f0] text-[18px] text-right whitespace-nowrap" data-node-id="I2857:2673;691:4820">
+              <p className="leading-[normal] mb-0">2026/11/24</p>
+              <p className="leading-[normal]">TUE</p>
+            </div>
+            <p className="[word-break:break-word] absolute bg-clip-text bg-gradient-to-b font-['NanumGothic:Bold'] from-[#b0d8df] from-[60.249%] inset-[3.79%_3.51%_79.36%_89.41%] leading-[normal] not-italic text-[32px] text-[transparent] to-[#2ee0ff] whitespace-nowrap" data-node-id="I2857:2673;691:4821">
+              14:27:35
+            </p>
+            <div className="absolute inset-[12.05%_68.7%_81.21%_31.3%]" data-node-id="I2857:2673;691:4822" data-name="Divider">
+              <div className="absolute inset-[-7.8%_-1px]">
+                <img alt="" className="block max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+            <div className="absolute inset-[12.05%_59.38%_81.21%_40.63%]" data-node-id="I2857:2673;691:4823" data-name="Divider">
+              <div className="absolute inset-[-7.8%_-1px]">
+                <img alt="" className="block max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+            <div className="absolute inset-[12.05%_50.05%_81.21%_49.95%]" data-node-id="I2857:2673;691:4824" data-name="Divider">
+              <div className="absolute inset-[-7.8%_-1px]">
+                <img alt="" className="block max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+            <div className="absolute inset-[12.05%_40.73%_81.21%_59.27%]" data-node-id="I2857:2673;691:4825" data-name="Divider">
+              <div className="absolute inset-[-7.8%_-1px]">
+                <img alt="" className="block max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+            <div className="absolute inset-[12.05%_31.41%_81.21%_68.59%]" data-node-id="I2857:2673;691:4826" data-name="Divider">
+              <div className="absolute inset-[-7.8%_-1px]">
+                <img alt="" className="block max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+            <div className="absolute h-[7.623px] left-[1170px] top-[57px] w-[116.678px]" data-node-id="I2857:2673;691:4828" data-name="Arrow">
+              <div className="absolute inset-[-19.68%_0_-29.03%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgArrow} />
+              </div>
+            </div>
+            <div className="absolute left-[1867px] size-[34.754px] top-[10px]" data-node-id="I2857:2673;691:4834" data-name="Icon Logout">
+              <div className="absolute inset-[0_-11.51%_-23.02%_-11.51%]">
+                <img alt="" className="block max-w-none size-full" src={imgIconLogout} />
+              </div>
+            </div>
+            <div className="absolute aspect-[145/42] left-[3.02%] right-[89.43%] top-[7.83px]" data-node-id="I2857:2673;691:4850" data-name="Logo Slot" />
+            <LogoWembStudio className="absolute content-stretch flex gap-[9.639px] items-center left-[58px] top-[9.56px]" />
+          </div>
+        </div>
+      </div>
+      <div className="absolute bg-[#333] h-[992px] left-[32px] top-[80px] w-[1872px]" data-node-id="2857:2675" data-name="Content Background" />
+      <div className="absolute bg-[rgba(0,0,0,0.7)] h-[992px] left-[32px] top-[80px] w-[256px]" data-node-id="2857:2676" data-name="Side Menu Background" />
+      <div className="absolute h-[986.599px] left-[26px] top-[73px] w-[251px]" data-node-id="2857:2677" data-name="Side Menu">
+        <div className="absolute bg-[rgba(0,0,0,0.7)] inset-[0_0.4%]" data-node-id="I2857:2677;777:1113" data-name="Background" />
+        <div className="absolute bg-[rgba(0,0,0,0.5)] inset-[0_0.4%_32.09%_0.4%]" data-node-id="I2857:2677;777:1114" data-name="Shape" />
+        <div className="absolute inset-[5.27%_0.8%_89.86%_0]" data-node-id="I2857:2677;777:1115" data-name="Side Menu/Group">
+          <div className="absolute contents inset-0" data-node-id="I2857:2677;777:1115;2920:1358" data-name="Content">
+            <div className="absolute bg-[rgba(255,255,255,0.1)] inset-0" data-node-id="I2857:2677;777:1115;2920:1359" data-name="Background" />
+            <p className="[word-break:break-word] absolute font-['NanumGothic:Bold'] inset-[34.62%_53.46%_27.88%_19.23%] leading-[normal] not-italic text-[18px] text-white whitespace-nowrap" data-node-id="I2857:2677;777:1115;2920:1360">
+              업무관리
+            </p>
+            <div className="absolute inset-[44.05%_8.05%_45.53%_87.93%]" data-node-id="I2857:2677;777:1115;2920:1361" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath1} />
+            </div>
+            <div className="absolute inset-[27.15%_84.79%_27.15%_8.45%]" data-node-id="I2857:2677;777:1115;2920:1362" data-name="Icon Paper">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconPaper} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute inset-[41.15%_0.8%_53.98%_0]" data-node-id="I2857:2677;777:1116" data-name="Side Menu/Group">
+          <div className="absolute contents inset-0" data-node-id="I2857:2677;777:1116;2920:1358" data-name="Content">
+            <div className="absolute bg-[rgba(255,255,255,0.1)] inset-0" data-node-id="I2857:2677;777:1116;2920:1359" data-name="Background" />
+            <p className="[word-break:break-word] absolute font-['NanumGothic:Bold'] inset-[34.62%_46.63%_27.88%_19.23%] leading-[normal] not-italic text-[18px] text-white whitespace-nowrap" data-node-id="I2857:2677;777:1116;2920:1360">
+              시스템관리
+            </p>
+            <div className="absolute inset-[44.05%_8.05%_45.53%_87.93%]" data-node-id="I2857:2677;777:1116;2920:1361" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath1} />
+            </div>
+            <div className="absolute inset-[27.15%_84.79%_27.15%_8.45%]" data-node-id="I2857:2677;777:1116;2920:1362" data-name="Icon Paper">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconPaper} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute contents inset-[11.25%_0_63.21%_0.4%]" data-node-id="I2857:2677;777:1117" data-name="List">
+          <SideMenuItem className="absolute content-stretch flex flex-col inset-[11.25%_0.4%_85.1%_0.4%] items-start pl-[29px] py-[10px]" />
+          <div className="absolute bg-[rgba(255,255,255,0.3)] content-stretch flex inset-[14.9%_0.4%_81.45%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1776" data-name="Side Menu/Item">
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1776;777:1768" data-name="Content">
+              <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-white whitespace-nowrap" data-node-id="I2857:2677;777:1776;777:1769">
+                시나리오관리
+              </p>
+              <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1776;777:1770" data-name="Dot">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col inset-[18.55%_0.4%_77.8%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1780" data-name="Side Menu/Item">
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1780;777:1762" data-name="Content">
+              <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1780;777:1763">
+                시나리오SUB관리
+              </p>
+              <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1780;777:1764" data-name="Dot">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col inset-[22.2%_0_74.15%_0.8%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1784" data-name="Side Menu/Item">
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1784;777:1762" data-name="Content">
+              <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1784;777:1763">
+                대응매뉴얼파일관리
+              </p>
+              <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1784;777:1764" data-name="Dot">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col inset-[25.85%_0.4%_70.5%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1788" data-name="Side Menu/Item">
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1788;777:1762" data-name="Content">
+              <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1788;777:1763">
+                전력계통도면관리
+              </p>
+              <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1788;777:1764" data-name="Dot">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col inset-[29.5%_0.4%_66.86%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1792" data-name="Side Menu/Item">
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1792;777:1762" data-name="Content">
+              <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1792;777:1763">
+                작업자현황조회
+              </p>
+              <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1792;777:1764" data-name="Dot">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+              </div>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex flex-col inset-[33.14%_0.4%_63.21%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1796" data-name="Side Menu/Item">
+            <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1796;777:1762" data-name="Content">
+              <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1796;777:1763">
+                작업이력
+              </p>
+              <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1796;777:1764" data-name="Dot">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute contents inset-[47.44%_0.4%_34.32%_0.4%]" data-node-id="I2857:2677;777:1126" data-name="Content">
+          <div className="absolute contents inset-[47.44%_0.4%_34.32%_0.4%]" data-node-id="I2857:2677;777:1832" data-name="List">
+            <div className="absolute content-stretch flex flex-col inset-[47.44%_0.4%_48.92%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1807" data-name="Side Menu/Item">
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1807;777:1762" data-name="Content">
+                <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1807;777:1763">
+                  권한그룹관리
+                </p>
+                <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1807;777:1764" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex flex-col inset-[51.08%_0.4%_45.27%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1815" data-name="Side Menu/Item">
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1815;777:1762" data-name="Content">
+                <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1815;777:1763">
+                  코드관리
+                </p>
+                <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1815;777:1764" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex flex-col inset-[54.73%_0.4%_41.62%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1819" data-name="Side Menu/Item">
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1819;777:1762" data-name="Content">
+                <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1819;777:1763">
+                  사용자관리
+                </p>
+                <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1819;777:1764" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex flex-col inset-[58.38%_0.4%_37.97%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1823" data-name="Side Menu/Item">
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1823;777:1762" data-name="Content">
+                <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1823;777:1763">
+                  사용자이력
+                </p>
+                <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1823;777:1764" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex flex-col inset-[62.03%_0.4%_34.32%_0.4%] items-start pl-[29px] py-[10px]" data-node-id="I2857:2677;777:1827" data-name="Side Menu/Item">
+              <div className="grid-cols-[max-content] grid-rows-[max-content] inline-grid leading-[0] place-items-start relative shrink-0" data-node-id="I2857:2677;777:1827;777:1762" data-name="Content">
+                <p className="[word-break:break-word] col-1 font-['NanumGothic:Bold'] leading-[normal] ml-[28.78px] mt-0 not-italic relative row-1 text-[16px] text-[rgba(255,255,255,0.4)] whitespace-nowrap" data-node-id="I2857:2677;777:1827;777:1763">
+                  메뉴관리
+                </p>
+                <div className="col-1 ml-0 mt-[1.48px] relative row-1 size-[9.05px]" data-node-id="I2857:2677;777:1827;777:1764" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bg-[rgba(0,0,0,0.7)] h-[48px] left-[272px] top-[80px] w-[1616px]" data-node-id="2857:2678" data-name="Tab Bar" />
+      <div className="absolute bg-[rgba(255,255,255,0.05)] h-[64px] left-[288px] rounded-[9px] top-[192px] w-[1584px]" data-node-id="2857:2679" data-name="Filter Bar Background" />
+      <div className="absolute bg-[rgba(255,255,255,0.05)] h-[784px] left-[288px] rounded-[9px] top-[256px] w-[1584px]" data-node-id="2857:2680" data-name="Table Panel Background" />
+      <div className="absolute bg-[rgba(255,255,255,0.2)] h-[32px] left-[288px] rounded-[25.102px] top-[80px] w-[96px]" data-node-id="2857:2684" data-name="Tab Background" />
+      <p className="[word-break:break-word] absolute font-['NanumGothic:Bold'] leading-[normal] left-[301.56px] not-italic text-[15px] text-white top-[90.75px] whitespace-nowrap" data-node-id="2857:2685">
+        자산관리
+      </p>
+      <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] leading-[normal] left-[332.28px] not-italic text-[14px] text-white top-[209.14px] whitespace-nowrap" data-node-id="2857:2686">
+        분류LV1
+      </p>
+      <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] leading-[normal] left-[310.86px] not-italic text-[12px] text-white top-[281.12px] whitespace-nowrap" data-node-id="2857:2687">
+        전력자산관리
+      </p>
+      <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] leading-[normal] left-[1591.03px] not-italic text-[#de366e] text-[12px] top-[281.12px] whitespace-nowrap" data-node-id="2857:2688">
+        [ 483 ]
+      </p>
+      <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] leading-[normal] left-[572px] not-italic text-[14px] text-white top-[209.14px] whitespace-nowrap" data-node-id="2857:2689">
+        분류LV2
+      </p>
+      <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] leading-[normal] left-[834.09px] not-italic text-[14px] text-white top-[209.14px] whitespace-nowrap" data-node-id="2857:2690">
+        전력설비이름
+      </p>
+      <ButtonSmall className="absolute h-[29px] left-[1790px] top-[200px] w-[70px]" type="Search" />
+      <ButtonSmall className="absolute h-[29px] left-[1640px] top-[272px] w-[70px]" />
+      <ButtonSmall className="absolute h-[29px] left-[1714px] top-[272px] w-[70px]" state="Hover" type="Register" />
+      <ButtonSmall className="absolute h-[29px] left-[1788px] top-[272px] w-[70px]" type="Delete" />
+      <div className="absolute contents left-[311px] top-[330px]" data-node-id="2857:2715" data-name="Table">
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[330px] w-[1532px]" data-node-id="2857:2716" data-name="Row/1">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.55%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2716;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2559">
+              1
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_85.93%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2560">{` PAD SWITCH-01`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.79%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2562">
+              수전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_61.06%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2563">
+              수전 패드스위치(1F)
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2564">
+              01F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2566">
+              2024-03-12
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.55%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2716;706:2567">
+              PMU-3000
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2716;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[364px] w-[1532px]" data-node-id="2857:2717" data-name="Row/2">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.27%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2717;706:2594" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2595">
+              2
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_88.93%_26.95%_7.8%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2596">{` VCB-M1`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2597">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.07%_26.95%_25.21%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2598">
+              수변전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_62.5%_26.95%_32.08%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2599">
+              메인 진공차단기
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2600">
+              B1F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2601">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2602">
+              2024-03-12
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.27%_26.95%_89.47%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2717;706:2603">
+              VCB-24K
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2717;706:2604" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath3} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[#1979c7] border-[rgba(129,171,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[398px] w-[1532px]" data-node-id="2857:2718" data-name="Row/3">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.61%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2718;706:2570" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2571">
+              3
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_90.24%_26.95%_7.8%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2572">{` TR-1`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2573">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.07%_26.95%_25.21%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2574">
+              수변전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_60.61%_26.95%_32.08%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2575">
+              몰드변압기 2500kVA
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2576">
+              B1F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2577">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2578">
+              2024-03-15
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.61%_26.95%_89.47%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.5)] whitespace-nowrap" data-node-id="I2857:2718;706:2579">
+              MTR-2500
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2718;706:2580" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[#1979c7] border-[rgba(129,171,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[432px] w-[1532px]" data-node-id="2857:2719" data-name="Row/4">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.61%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2719;706:2582" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2583">
+              4
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_90.24%_26.95%_7.8%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2584">{` TR-2`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2585">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.07%_26.95%_25.21%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2586">
+              수변전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_60.61%_26.95%_32.08%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2587">
+              몰드변압기 2500kVA
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2588">
+              B1F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2589">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2590">
+              2024-03-15
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.61%_26.95%_89.47%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2719;706:2591">
+              MTR-2500
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2719;706:2592" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath3} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.2)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[466px] w-[1532px]" data-node-id="2857:2720" data-name="Row/5">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.87%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2720;706:2606" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2607">
+              5
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.78%_26.95%_7.8%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2608">{` ATS-1`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2609">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_70.35%_26.95%_25.21%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2610">
+              비상전원설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_62.76%_26.95%_32.08%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2611">
+              자동절체스위치
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2612">
+              B1F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2613">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2614">
+              2024-03-20
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.87%_26.95%_89.47%] leading-[normal] not-italic text-[12px] text-[rgba(255,255,255,0.7)] whitespace-nowrap" data-node-id="I2857:2720;706:2615">
+              ATS-1600
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2720;706:2616" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[500px] w-[1532px]" data-node-id="2857:2721" data-name="Row/6">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.55%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2721;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2559">
+              6
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.52%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2560">{` GEN-1`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_70.35%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2562">
+              비상전원설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_60.87%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2563">
+              비상발전기 2250kW
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2564">
+              B1F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2566">
+              2024-03-22
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.55%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2721;706:2567">
+              GN-2250D
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2721;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[534px] w-[1532px]" data-node-id="2857:2722" data-name="Row/7">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.94%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2722;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2559">
+              7
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.19%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2560">{` UPS-1A`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.85%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2562">
+              UPS설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_63.28%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2563">
+              UPS 500kVA
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2564">
+              02F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2566">
+              2024-04-02
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.94%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2722;706:2567">
+              UPS-500T
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2722;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[568px] w-[1532px]" data-node-id="2857:2723" data-name="Row/8">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.94%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2723;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2559">
+              8
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.26%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2560">{` UPS-1B`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.85%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2562">
+              UPS설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_63.28%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2563">
+              UPS 500kVA
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2564">
+              02F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2566">
+              2024-04-02
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.94%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2723;706:2567">
+              UPS-500T
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2723;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[602px] w-[1532px]" data-node-id="2857:2724" data-name="Row/9">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.94%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2724;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_97.12%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2559">
+              9
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.19%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2560">{` UPS-2A`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.85%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2562">
+              UPS설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_63.28%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2563">
+              UPS 500kVA
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2564">
+              04F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2566">
+              2024-04-03
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.94%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2724;706:2567">
+              UPS-500T
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2724;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[636px] w-[1532px]" data-node-id="2857:2725" data-name="Row/10">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_6.94%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2725;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2559">
+              10
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.26%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2560">{` UPS-2B`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.85%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2562">
+              UPS설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_63.28%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2563">
+              UPS 500kVA
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2564">
+              04F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2566">
+              2024-04-03
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_6.94%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2725;706:2567">
+              UPS-500T
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2725;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[670px] w-[1532px]" data-node-id="2857:2726" data-name="Row/11">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.01%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2726;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2559">
+              11
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_88.48%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2560">{` LV-2A-01`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_70.35%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2562">
+              저압배전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_64%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2563">
+              저압 배전반
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2564">
+              02F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2566">
+              2024-04-10
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.01%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2726;706:2567">
+              LVS-4000
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2726;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[704px] w-[1532px]" data-node-id="2857:2727" data-name="Row/12">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.01%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2727;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2559">
+              12
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_88.48%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2560">{` LV-4A-03`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_70.35%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2562">
+              저압배전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_64%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2563">
+              저압 배전반
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2564">
+              04F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2566">
+              2024-04-11
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.01%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2727;706:2567">
+              LVS-4000
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2727;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[738px] w-[1532px]" data-node-id="2857:2728" data-name="Row/13">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.2%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2728;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2559">
+              13
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_87.95%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2560">{` PDU-3F-05`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.79%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2562">
+              분전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_64.72%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2563">
+              랙 분전반
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2564">
+              03F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2566">
+              2024-05-06
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.2%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2728;706:2567">
+              PDU-250
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2728;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[772px] w-[1532px]" data-node-id="2857:2729" data-name="Row/14">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.2%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2729;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2559">
+              14
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_87.95%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2560">{` PDU-5F-12`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.79%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2562">
+              분전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_64.72%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2563">
+              랙 분전반
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2564">
+              05F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2566">
+              2024-05-08
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.2%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2729;706:2567">
+              PDU-250
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2729;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[806px] w-[1532px]" data-node-id="2857:2730" data-name="Row/15">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.01%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2730;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2559">
+              15
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_87.76%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2560">{` MCC-2F-04`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.79%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2562">
+              동력설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_64%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2563">
+              동력 제어반
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2564">
+              02F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2566">
+              2024-04-18
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.01%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2730;706:2567">
+              MCC-800
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2730;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[840px] w-[1532px]" data-node-id="2857:2731" data-name="Row/16">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.53%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2731;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2559">
+              16
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_88.67%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2560">{` STS-2-01`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.85%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2562">
+              UPS설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_62.5%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2563">
+              정적 절체스위치
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2564">
+              02F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2566">
+              2024-04-05
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.53%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2731;706:2567">
+              STS-600
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2731;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[874px] w-[1532px]" data-node-id="2857:2732" data-name="Row/17">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.33%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2732;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2559">
+              17
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_88.21%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2560">{` APFR-HV2`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.07%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2562">
+              수변전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_61.98%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2563">
+              자동역률조정장치
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2564">
+              B1F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2566">
+              2024-03-18
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.33%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2732;706:2567">
+              APFR-12
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2732;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[908px] w-[1532px]" data-node-id="2857:2733" data-name="Row/18">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.33%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2733;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2559">
+              18
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.13%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2560">{` BAT-1A`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.85%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2562">
+              UPS설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_64.92%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2563">
+              축전지반
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2564">
+              02F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2566">
+              2024-04-02
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.33%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2733;706:2567">
+              BAT-480
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2733;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[942px] w-[1532px]" data-node-id="2857:2734" data-name="Row/19">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.33%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2734;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2559">
+              19
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.72%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2560">{` SPD-1`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.79%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2562">
+              수전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_63.48%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2563">
+              서지보호장치
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2564">
+              01F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2566">
+              2024-03-12
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.33%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2734;706:2567">
+              SPD-40K
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2734;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.05)] border-b border-solid h-[34px] left-[311px] top-[976px] w-[1532px]" data-node-id="2857:2735" data-name="Row/20">
+          <div className="absolute contents inset-[calc(26.95%+0.27px)_7.46%_calc(26.95%-0.73px)_0.39%]" data-node-id="I2857:2735;706:2558" data-name="Content">
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_96.66%_26.95%_2.36%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2559">
+              20
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_89.39%_26.95%_7.8%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2560">{` ALTS-B`}</p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_78.33%_26.95%_18.67%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2561">
+              전기설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_71.07%_26.95%_25.21%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2562">
+              수변전설비
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_61.26%_26.95%_32.08%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2563">
+              자동부하전환개폐기
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_53.19%_26.95%_45.44%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2564">
+              B1F
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_44.08%_26.95%_52.14%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2565">
+              해람 IT센터
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_35.23%_26.95%_60.4%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2566">
+              2024-03-15
+            </p>
+            <p className="[word-break:break-word] absolute font-['NanumGothic:ExtraBold'] inset-[37.76%_7.46%_26.95%_89.47%] leading-[normal] not-italic text-[#999] text-[12px] whitespace-nowrap" data-node-id="I2857:2735;706:2567">
+              ALTS-25
+            </p>
+            <div className="absolute inset-[26.95%_98.59%_26.95%_0.39%]" data-node-id="I2857:2735;706:2568" data-name="Path">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath2} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute inset-[8.19%_86.51%_90.09%_12.03%]" data-node-id="2857:2736" data-name="Icon/Menu">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconMenu} />
+      </div>
+      <div className="absolute contents left-[295.43px] top-[149px]" data-node-id="2857:2737" data-name="Breadcrumb">
+        <p className="[word-break:break-word] absolute font-['NanumGothic:Bold'] leading-[normal] left-[373.76px] not-italic text-[18px] text-[rgba(255,255,255,0.5)] top-[149px] whitespace-nowrap" data-node-id="2857:2738">
+          자산관리
+        </p>
+        <p className="[word-break:break-word] absolute font-['NanumGothic:Bold'] leading-[normal] left-[319.15px] not-italic text-[18px] text-[rgba(255,255,255,0.5)] top-[149px] whitespace-nowrap" data-node-id="2857:2739">
+          관리
+        </p>
+        <div className="absolute h-[8px] left-[359.1px] top-[155.08px] w-[7.075px]" data-node-id="2857:2740" data-name="Separator">
+          <div className="absolute inset-[-10.83%_-28.72%_-10.94%_-7.07%]">
+            <img alt="" className="block max-w-none size-full" src={imgSeparator} />
+          </div>
+        </div>
+        <div className="absolute inset-[13.9%_83.78%_84.84%_15.39%]" data-node-id="2857:2741" data-name="Icon/Home">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconHome} />
+        </div>
+      </div>
+      <div className="absolute inset-[8.73%_80.59%_90.53%_18.99%]" data-node-id="2857:2742" data-name="Icon/Close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconClose} />
+      </div>
+      <div className="absolute h-[32px] left-[416px] top-[192px] w-[128px]" data-node-id="2857:2743" data-name="Select/Category LV1">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSelectCategoryLv1} />
+      </div>
+      <p className="[word-break:break-word] absolute font-['NanumGothic:Regular'] leading-[normal] left-[425.85px] not-italic text-[12px] text-black top-[209.14px] whitespace-nowrap" data-node-id="2857:2746">
+        전력
+      </p>
+      <div className="absolute contents left-[1296px] top-[208px]" data-node-id="2857:2748" data-name="Select/Filter">
+        <div className="absolute bg-[rgba(0,0,0,0.8)] border border-[rgba(255,255,255,0.2)] border-solid h-[32px] left-[1296px] rounded-[4px] top-[208px] w-[128px]" data-node-id="2857:2749" data-name="Background" />
+        <div className="absolute inset-[19.62%_26.48%_79.69%_72.89%]" data-node-id="2857:2750" data-name="Chevron">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevron} />
+        </div>
+        <p className="[word-break:break-word] absolute font-['NanumGothic:Regular'] leading-[normal] left-[1304px] not-italic text-[12px] text-white top-[209px] whitespace-nowrap" data-node-id="2857:2751">
+          - 전체 -
+        </p>
+      </div>
+      <div className="absolute contents left-[1472px] top-[208px]" data-node-id="2857:2752" data-name="Input/Keyword">
+        <div className="absolute bg-[rgba(0,0,0,0.8)] border border-[rgba(255,255,255,0.2)] border-solid h-[32px] left-[1472px] rounded-[4px] top-[208px] w-[208px]" data-node-id="2857:2753" data-name="Background" />
+      </div>
+      <div className="absolute h-[29.809px] left-[655px] top-[200px] w-[129.552px]" data-node-id="2857:2755" data-name="Select/Category LV2">
+        <div className="absolute bg-[rgba(0,0,0,0.8)] border border-[rgba(255,255,255,0.3)] border-solid inset-0 rounded-[4px]" data-node-id="I2857:2755;2920:1641" data-name="Background" />
+        <div className="absolute inset-[39.87%_6.19%_35.24%_84.55%]" data-node-id="I2857:2755;2920:1642" data-name="Path">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPath4} />
+        </div>
+        <p className="[word-break:break-word] absolute font-['NanumGothic:Regular'] inset-[30.19%_59.09%_29.55%_10.81%] leading-[normal] not-italic text-[12px] text-white whitespace-nowrap" data-node-id="I2857:2755;2920:1643">
+          - 전체 -
+        </p>
+      </div>
+      <div className="absolute h-[29.809px] left-[927px] top-[200px] w-[201.721px]" data-node-id="2857:2756" data-name="Input/Power Equipment Name">
+        <div className="absolute bg-[rgba(0,0,0,0.8)] border border-[rgba(255,255,255,0.3)] border-solid inset-0 rounded-[4px]" data-node-id="I2857:2756;2920:1629" data-name="Background" />
+      </div>
+    </div>
+  );
+}

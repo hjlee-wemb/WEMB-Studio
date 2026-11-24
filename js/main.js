@@ -15,6 +15,9 @@ try {
     else if (__tdt === 'oneview' && typeof applyOneviewDT === 'function') {
       applyOneviewDT(window.__oneviewSceneOf ? window.__oneviewSceneOf() : localStorage.getItem('wemb-oneview-screen'));
     }
+    else if (__tdt === 'datacenter' && typeof applyDatacenterDT === 'function') {
+      applyDatacenterDT(window.__datacenterSceneOf ? window.__datacenterSceneOf() : localStorage.getItem('wemb-datacenter-screen'));
+    }
     else if (__tdt === 'gasmon' && typeof applyGasmonDT === 'function') {
       applyGasmonDT(window.__gasmonSceneOf ? window.__gasmonSceneOf() : localStorage.getItem('wemb-gasmon-screen'));
     }
@@ -166,6 +169,14 @@ try {
   /* 통합 운영 원뷰은 Dark 가 원본 — 고른 밝기(wemb-oneview-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'oneview') {
     const want = localStorage.getItem('wemb-oneview-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* 데이터센터 통합 모니터링은 Dark 가 원본 — 고른 밝기(wemb-datacenter-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'datacenter') {
+    const want = localStorage.getItem('wemb-datacenter-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
