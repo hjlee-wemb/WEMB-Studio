@@ -2,7 +2,7 @@
 
 (function () {
   const { CUR_PROJ, LS_GROUP, LS_PROJ, groupById, loadGroups, loadProjects, newGid, newId, persistCurrentProjectData, resolvePendingGroup, saveGroups, saveProjects, screensOfGroup, touchGroup } = WEMB.projects;
-  const { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive } = WEMB.templates;
+  const { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive, tplStats } = WEMB.templates;
   const { LAYOUTS, findLayout, wfEl } = WEMB.layouts;
 
   const home = document.getElementById('flowHome');
@@ -42,9 +42,26 @@
   const MEET = WEMB.meeting;
   let tplPicking = false;
   const meetOn = () => MEET.on();
-  const tplLabel = (t) => (meetOn() ? t.screenType + ' · ' + t.area : t.title);
+  /* 템플릿 admin — 템플릿 갤러리의 'admin' 체크. 켜면 제목이 한글 + 실제 고객사로 보이고, 개수 요약(전체 · 열기 가능)이 나온다.
+     회의용 고르기 · 회의 모드 거르기 없이 전부 보인다. 이 브라우저에 기억(localStorage 'wemb-tpl-admin').
+     회의 모드가 켜지면 꺼진다 — 고객 앞에서 실제 고객사 이름이 보이면 안 된다. */
+  const ADM_KEY = 'wemb-tpl-admin';
+  let tplAdmin = (() => { try { return localStorage.getItem(ADM_KEY) === '1'; } catch (e) { return false; } })() && !meetOn();
+  const setTplAdmin = (on) => {
+    tplAdmin = !!on;
+    try { localStorage.setItem(ADM_KEY, tplAdmin ? '1' : '0'); } catch (e) {}
+  };
+  const tplLabel = (t) => (tplAdmin ? t.koTitle : meetOn() ? t.screenType + ' · ' + t.area : t.title);
   /* 주소에 쓰는 템플릿 이름 — 회의 모드면 번호(t1, t2 …), 아니면 slug */
-  const tplPathName = (t) => (meetOn() ? 't' + (TEMPLATES.indexOf(t) + 1) : t.slug);
+  const tplPathName = (t) => (!tplAdmin && meetOn() ? 't' + (TEMPLATES.indexOf(t) + 1) : t.slug);
+  /* admin 상태 거르기 — 'all' · 'live'(열기 가능) */
+  let tplAdmState = 'all';
+  /* admin 카드 · 상세의 고객사 줄 — 실제 고객사(표에 없으면 생략) + 갤러리 영문 제목 */
+  const admCorpHTML = (t, esc) =>
+    '<div class="tpladm-corp">' +
+      (t.corp ? '<span class="who">' + esc(t.corp) + '</span>' : '') +
+      '<span class="en">' + esc(t.title) + '</span>' +
+    '</div>';
   /* ── 주소 ↔ 런처 화면 ──
      좌측 메뉴: /projects · /recent · /favorites · /trash · /templates
      프로젝트(폴더) 안: /projects/:gid   템플릿 상세: /templates/:slug
@@ -88,6 +105,10 @@
     renderProjects();
     showLauncher(prev);
   });
+  /* 예전 주소(#/templates-admin…) — admin 을 켜고 템플릿 갤러리 · 상세로 넘긴다 */
+  const toAdmin = (to) => { if (!meetOn()) setTplAdmin(true); return to; };
+  router.add('launcher:tpladmin', '/templates-admin', () => toAdmin(VIEW_PATH.tpl));
+  router.add('launcher:tpladmin-detail', '/templates-admin/:slug', (params) => toAdmin('/templates/' + encodeURIComponent(params.slug)));
   router.add('launcher:template', '/templates/:slug', (params, query, prev) => {
     const byNo = /^t(\d+)$/.exec(params.slug);
     const t = byNo ? TEMPLATES[+byNo[1] - 1] : TEMPLATES.find((x) => x.slug === params.slug);
@@ -108,7 +129,7 @@
   let tplSort = 'recent';
   function sortTemplates(arr) {
     const a = arr.slice();
-    if (tplSort === 'name') a.sort((x, y) => x.title.localeCompare(y.title, 'en'));
+    if (tplSort === 'name') a.sort((x, y) => (tplAdmin ? x.koTitle.localeCompare(y.koTitle, 'ko') : x.title.localeCompare(y.title, 'en')));
     else if (tplSort === 'pop') a.sort((x, y) => (y.pop || 0) - (x.pop || 0));
     else a.sort((x, y) => (y.ts || 0) - (x.ts || 0));
     return a;
@@ -119,7 +140,7 @@
     recent: { title: '최근 편집', count: (n) => n + '개 · 최근 편집순' },
     fav: { title: '즐겨찾기', count: (n) => '즐겨찾기 ' + n + '개' },
     trash: { title: '휴지통', count: (n) => '휴지통 ' + n + '개' },
-    tpl: { title: '템플릿', count: () => '템플릿 ' + TEMPLATES.length + '개' },
+    tpl: { title: '템플릿', count: () => { const s = tplStats(); return '템플릿 ' + s.total + '개 · 열기 가능 ' + s.live + '개'; } },
   };
   const searchTerm = () => (document.getElementById('lcSearch')?.value || '').trim().toLowerCase();
 
@@ -286,27 +307,40 @@
       op.onclick = (e) => { e.stopPropagation(); tplSort = op.dataset.sort; renderProjects(); };
     });
     right.appendChild(sortWrap);
-    /* 회의 모드 — 고르기(회의에 보여 줄 템플릿) · 켜기/끄기. 정렬과 같은 부품을 쓴다 */
-    const meetIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 20 20 4"/></svg>';
-    const pickIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="8 12 11 15 16 9"/></svg>';
-    const picks = MEET.get().picks;
-    const pickBtn = document.createElement('button');
-    pickBtn.type = 'button';
-    pickBtn.className = 'tplsort-btn tplmeet-pick' + (tplPicking ? ' filtered' : '');
-    pickBtn.title = '회의에서 보여 줄 템플릿을 고릅니다 — 회의 모드에서는 고른 것만 보여요';
-    pickBtn.innerHTML = pickIcon + '<span>' + (tplPicking ? '고르기 끝' : '회의용 고르기') + (picks.length ? ' <b class="num">' + picks.length + '</b>' : '') + '</span>';
-    pickBtn.onclick = () => { tplPicking = !tplPicking; renderProjects(); };
-    right.appendChild(pickBtn);
-    const meetBtn = document.createElement('button');
-    meetBtn.type = 'button';
-    meetBtn.className = 'tplsort-btn tplmeet-toggle' + (meetOn() ? ' filtered on' : '');
-    meetBtn.setAttribute('aria-pressed', meetOn() ? 'true' : 'false');
-    meetBtn.title = '회의 모드 — 고객사 이름을 가리고, 템플릿은 고른 것만 보여요';
-    meetBtn.innerHTML = meetIcon + '<span>회의 모드 ' + (meetOn() ? '켬' : '끔') + '</span>';
-    meetBtn.onclick = () => { tplPicking = false; MEET.set({ on: !meetOn() }); };
-    right.appendChild(meetBtn);
+    /* admin 체크 — 한글 제목 · 실제 고객사 · 개수 요약. 정렬과 같은 부품 */
+    const admIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/>' +
+      (tplAdmin ? '<polyline points="8 12 11 15 16 9"/>' : '') + '</svg>';
+    const admBtn = document.createElement('button');
+    admBtn.type = 'button';
+    admBtn.className = 'tplsort-btn tpladm-toggle' + (tplAdmin ? ' filtered on' : '');
+    admBtn.setAttribute('role', 'checkbox');
+    admBtn.setAttribute('aria-checked', tplAdmin ? 'true' : 'false');
+    admBtn.title = '내부용 — 제목을 한글 · 실제 고객사로 보이고, 전체 · 열기 가능 개수를 셉니다';
+    admBtn.innerHTML = admIcon + '<span>admin</span>';
+    admBtn.onclick = () => {
+      if (!tplAdmin && meetOn()) {
+        if (typeof toast === 'function') toast('회의 모드에서는 admin 을 켤 수 없어요 — 실제 고객사 이름이 보여요. 회의 모드를 먼저 끄세요.', { type: 'warn' });
+        return;
+      }
+      setTplAdmin(!tplAdmin);
+      tplPicking = false;
+      tplAdmState = 'all';
+      renderProjects();
+    };
+    right.insertBefore(admBtn, right.firstChild);
+    /* 회의용 고르기 · 회의 모드 단추는 갤러리에서 뺐다(2026-11-24 사용자 지시) — 회의 모드는 왼쪽 아래 '회의 모드' 띠에서 켜고 끈다 */
     sortBar.appendChild(right);
     gal.appendChild(sortBar);
+    /* 템플릿 admin — 개수 요약(전체 · 열기 가능). 숫자를 누르면 그 묶음만 본다 */
+    let stats = null;
+    if (tplAdmin) {
+      stats = document.createElement('div');
+      stats.className = 'tpladm-stats';
+      stats.setAttribute('role', 'group');
+      stats.setAttribute('aria-label', '개수로 거르기');
+      /* 카테고리 줄 오른쪽 끝 — 줄을 하나 더 쓰지 않고, 같은 '거르기' 성격끼리 한 줄에 둔다 */
+      cats.appendChild(stats);
+    }
     if (tplPicking) {
       const tip = document.createElement('div');
       tip.className = 'tplmeet-tip';
@@ -333,19 +367,39 @@
       grid.innerHTML = '';
       const q = tplQuery.trim().toLowerCase();
       const picked = new Set(MEET.get().picks);
-      const meetOnly = meetOn() && !tplPicking && picked.size > 0;
+      const meetOnly = !tplAdmin && meetOn() && !tplPicking && picked.size > 0;
       /* 회의 모드에서 아직 고른 게 없으면 '그림 시안'(다른 고객사 납품 화면 그림)은 숨긴다 —
          그림 속 로고 · 글자는 가릴 수 없다. 실제 화면이 붙은 템플릿은 글자를 가릴 수 있어 남긴다. */
-      const meetLive = meetOn() && !tplPicking && picked.size === 0;
-      const list = sortTemplates(TEMPLATES.filter((t) => {
+      const meetLive = !tplAdmin && meetOn() && !tplPicking && picked.size === 0;
+      /* 카테고리 · 연도 · 검색까지 걸러진 목록(admin 의 '열기 가능만' 같은 상태 거르기는 아직 안 건 것) */
+      const scoped = TEMPLATES.filter((t) => {
         if (meetOnly && !picked.has(t.slug)) return false;
         if (meetLive && !tplIsLive(t)) return false;
         if (tplScreen !== 'all' && t.screenType !== tplScreen) return false;
         if (tplArea !== 'all' && t.area !== tplArea) return false;
         if (tplYear !== 'all' && t.year !== tplYear) return false;
         if (!q) return true;
-        return tplLabel(t).toLowerCase().includes(q) || t.badges.some((bd) => bd[0].toLowerCase().includes(q));
-      }));
+        const hay = [tplLabel(t), tplAdmin ? t.title : '', tplAdmin ? t.corp || '' : ''].join(' ').toLowerCase();
+        return hay.includes(q) || t.badges.some((bd) => bd[0].toLowerCase().includes(q));
+      });
+      const ADM_STATES = { live: tplIsLive };
+      const list = sortTemplates(tplAdmin && ADM_STATES[tplAdmState] ? scoped.filter(ADM_STATES[tplAdmState]) : scoped);
+      if (stats) {
+        const all = tplStats();
+        const cur = tplStats(scoped);
+        const narrowed = cur.total !== all.total;
+        /* 걸러 보는 중이면 '지금 범위 / 전체' 로 같이 보인다 */
+        const num = (n, whole) => '<b>' + n + (narrowed ? '<i>/' + whole + '</i>' : '') + '</b>';
+        /* 정렬 줄 단추(.tplsort-btn)와 같은 크기 · 모양의 작은 칩 — 점(카테고리 · 배지와 같은 색 언어) + 라벨 + 숫자 */
+        const item = (key, label, n, whole, cls) =>
+          '<button type="button" class="tpladm-stat' + (cls ? ' ' + cls : '') + (tplAdmState === key ? ' on' : '') + '" data-st="' + key + '" aria-pressed="' + (tplAdmState === key) + '">' +
+            '<span class="lbl">' + label + '</span>' + num(n, whole) + '</button>';        stats.innerHTML =
+          item('all', '전체 프로젝트', cur.total, all.total) +
+          item('live', '열기 가능', cur.live, all.live, 'live');
+        stats.querySelectorAll('.tpladm-stat').forEach((b) => {
+          b.onclick = () => { tplAdmState = tplAdmState === b.dataset.st ? 'all' : b.dataset.st; renderGrid(); };
+        });
+      }
       if (!list.length) {
         const e = document.createElement('div');
         e.className = 'tplempty';
@@ -374,10 +428,11 @@
           '</div>' +
           '<div class="tplbox">' +
             '<div class="tplsec1">' +
-              (meetOn() ? '' : '<div class="tplbadges">' +
+              (meetOn() && !tplAdmin ? '' : '<div class="tplbadges">' +
                 t.badges.map((bd) => '<span class="tplbadge ' + bd[1] + '">' + esc(bd[0]) + '</span>').join('') +
               '</div>') +
               '<div class="tpltitle">' + esc(tplLabel(t)) + '</div>' +
+              (tplAdmin ? admCorpHTML(t, esc) : '') +
             '</div>' +
             '<div class="tplsec2">' +
               '<span class="tpldate">' + esc(tplDate(t.date)) + '</span>' +
@@ -397,7 +452,9 @@
 
       const cnt = document.getElementById('lcCount');
       if (cnt) {
-        if (tplPicking) cnt.textContent = '회의용으로 ' + picked.size + '개 골랐어요';
+        const st = tplStats(list);
+        if (tplAdmin) cnt.textContent = (list.length === TEMPLATES.length ? '전체 ' : '') + '프로젝트 ' + st.total + '개 · 열기 가능 ' + st.live + '개';
+        else if (tplPicking) cnt.textContent = '회의용으로 ' + picked.size + '개 골랐어요';
         else if (meetOnly) cnt.textContent = '회의용 ' + list.length + '개';
         else if (meetLive) cnt.textContent = '실제 화면 템플릿 ' + list.length + '개 · 회의 모드';
         else if (q) cnt.textContent = list.length + '개 · ‘' + tplQuery.trim() + '’ 검색';
@@ -451,6 +508,7 @@
           '<div class="tpld-title">' + esc(tplLabel(t)) + '</div>' +
           '<div class="tpld-date">' + esc(tplDate(t.date)) + '</div>' +
         '</div>' +
+        (tplAdmin ? admCorpHTML(t, esc) : '') +
       '</div>' +
       heroHTML +
       '<div class="tpld-cta">' +
@@ -493,7 +551,7 @@
   /* 상세 페이지 CTA / 스튜디오 진입 → 그 화면 종류로 새 프로젝트를 만들고 스튜디오로 진입.
      tpl이 붙은 템플릿(한진)은 디지털 트윈 페이지로 재현하므로 DT 화면으로 연다. */
   function openTemplate(t, slideIndex) {
-    const isDT = t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
+    const isDT = t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
     /* Figma로 구현된 템플릿(한진·SK하이닉스·HANA)은 실제 화면으로, 아직 미연결이면 임시 이미지로 연다.
        갤러리의 '제작중' 표시와 같은 판정을 쓴다(tplIsLive) — 표시와 동작이 어긋나면 안 된다. */
     const connected = tplIsLive(t);
@@ -749,9 +807,13 @@
     const b = e.target.closest('[data-meet]');
     if (!b) return;
     if (b.dataset.meet === 'off') { tplPicking = false; MEET.set({ on: false }); }
-    else { tplPicking = true; if (view === 'tpl' && !tplSelected) renderProjects(); else goView('tpl'); }
+    else { tplPicking = true; setTplAdmin(false); if (view === 'tpl' && !tplSelected) renderProjects(); else goView('tpl'); }
   });
-  MEET.onChange(() => { renderMeetBar(); renderProjects(); });
+  MEET.onChange(() => {
+    if (meetOn() && tplAdmin) setTplAdmin(false); /* 회의 모드가 켜지면 admin(실제 고객사 이름)도 끈다 */
+    renderMeetBar();
+    renderProjects();
+  });
   renderMeetBar();
   MEET.watch(home);
 
@@ -971,7 +1033,7 @@
     view = v;
     curGroup = null; /* 뷰를 바꾸면 폴더 밖(프로젝트 목록)으로 */
     trashSel.clear(); /* 뷰를 바꾸면 휴지통 선택 초기화 */
-    document.querySelectorAll('.lc-navi').forEach((b) => b.classList.toggle('on', b.dataset.view === v));
+    markNav();
     renderProjects();
   }
   /* 경로 표시의 '프로젝트 목록' 클릭 → 폴더 밖으로 (뒤로가기와 동일) */
@@ -1081,6 +1143,7 @@
       : pending.tpl === 'wnms' ? 'src/templates/wnms-main.jpg'
       : pending.tpl === 'indpark' ? 'src/templates/indpark-main.jpg'
       : pending.tpl === 'oneview' ? 'src/templates/oneview-main.jpg'
+      : pending.tpl === 'datacenter' ? 'src/templates/datacenter-main.jpg'
       : pending.tpl === 'gasmon' ? 'src/templates/gasmon-main.jpg'
       : pending.tpl === 'drawing' ? 'src/templates/drawing-main.jpg'
       : pending.tpl === 'office' ? 'src/templates/office-home.jpg' : null;
@@ -1119,6 +1182,7 @@
                   : proj.tpl === 'office' ? ['home-alert', 'home-setting', 'home-account', 'home-privacy', 'live-work', 'live-work-zoom', 'live-after', 'live-used', 'live-used-zoom', 'live-used-popup', 'live-free', 'live-free-popup', 'live-ghost', 'live-ghost-busy', 'live-ghost-free', 'occ-map', 'occ-popup', 'occ-area', 'occ-group', 'occ-matrix', 'occ-matrix-hover', 'occ-raw', 'bridge', 'bridge-node', 'bridge-link', 'bridge-chart', 'bridge-raw', 'pattern-main', 'pattern-meeting', 'pattern-desk', 'pattern-collab', 'pattern-raw', 'room-main', 'room-chart', 'room-usage', 'room-raw', 'count-main', 'count-single', 'count-multi', 'count-gate', 'count-floor', 'count-building', 'count-toilet', 'count-brush', 'count-raw', 'admin-home', 'admin-home-popup', 'admin-time', 'admin-space', 'admin-space-popup', 'admin-sensor', 'admin-sensor-popup', 'admin-account'][i]
                   : proj.tpl === 'indpark' ? ['menu', 'site', 'forklift', 'vibration', 'heat', 'event', 'history', 'sensor'][i]
                   : proj.tpl === 'oneview' ? ['overview2', 'transactions', 'was', 'waspopup', 'tp', 'system', 'system2', 'detail', 'network', 'event'][i]
+                  : proj.tpl === 'datacenter' ? ['power', 'worker', 'asset', 'equipment', 'card', 'search', 'scenario'][i]
                   : proj.tpl === 'gasmon' ? ['gas', 'worksite', 'alarm', 'confirm'][i]
                   : proj.tpl === 'drawing' ? ['main-menu', 'main-select', 'main-popup', 'search', 'search-detail', 'preview', 'preview-popup', 'register', 'equipment', 'help', 'checkin', 'cctv', 'desk', 'desk-write', 'desk-detail', 'total-search', 'total-result', 'login'][i]
                   : proj.tpl === 'wnms' ? ['main-open', 'main-expanded', 'room-top', 'room-view', 'equipment', 'detail', 'login'][i]
@@ -1149,6 +1213,7 @@
       : openProj.tpl === 'office' ? (openProj.tplScene || 'home')
       : openProj.tpl === 'indpark' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'oneview' ? (openProj.tplScene || 'main')
+      : openProj.tpl === 'datacenter' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'gasmon' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'drawing' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'wnms' ? (openProj.tplScene || 'main')
@@ -1180,6 +1245,7 @@
       if (openProj.tpl === 'office') localStorage.setItem('wemb-office-screen', openScene);
       if (openProj.tpl === 'indpark') localStorage.setItem('wemb-indpark-screen', openScene);
       if (openProj.tpl === 'oneview') localStorage.setItem('wemb-oneview-screen', openScene);
+      if (openProj.tpl === 'datacenter') localStorage.setItem('wemb-datacenter-screen', openScene);
       if (openProj.tpl === 'gasmon') localStorage.setItem('wemb-gasmon-screen', openScene);
       if (openProj.tpl === 'drawing') localStorage.setItem('wemb-drawing-screen', openScene);
       if (openProj.tpl === 'wnms') localStorage.setItem('wemb-wnms-screen', openScene);

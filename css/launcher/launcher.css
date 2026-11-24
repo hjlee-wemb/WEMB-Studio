@@ -1352,3 +1352,91 @@
   border-color: var(--point-main);
   background: color-mix(in srgb, var(--point-main) 12%, transparent);
 }
+
+/* ── 템플릿 admin(갤러리의 'admin' 체크) — 개수 요약 · 고객사 줄 ──
+   요약 칸은 정렬 줄과 같은 표면 · 선을 쓰고, 누르면 그 묶음만 거른다(다시 누르면 풀림). */
+.tpladm-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: -7px 0 -7px auto; /* 카테고리 줄 오른쪽 끝. 칩 높이만큼 줄이 늘지 않게 위아래를 당긴다 */
+}
+/* 정렬 줄 단추(.tplsort-btn)와 같은 높이 · 모서리 · 글자 크기 */
+.tpladm-stat {
+  --tone: var(--point-main);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 31px; /* .tplsort-btn 실측 높이 */
+  padding: 0 7px 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-accent);
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-weak);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.tpladm-stat.live { --tone: #34d399; }
+/* 카테고리 · 배지와 같은 6px 점 */
+.tpladm-stat::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tone);
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+.tpladm-stat:hover {
+  color: var(--text-strong);
+  border-color: color-mix(in srgb, var(--tone) 45%, var(--line));
+}
+.tpladm-stat.on {
+  color: var(--text-strong);
+  border-color: color-mix(in srgb, var(--tone) 60%, var(--line));
+  background: color-mix(in srgb, var(--tone) 10%, var(--bg-accent));
+}
+.tpladm-stat.on::before,
+.tpladm-stat:hover::before { opacity: 1; }
+/* 숫자 — 작은 알약(연도 메뉴의 개수 · 배지와 같은 결) */
+.tpladm-stat b {
+  min-width: 22px;
+  padding: 2px 7px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--tone) 16%, transparent);
+  color: var(--text-strong);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.tpladm-stat.live b { color: #7ff0b5; }
+.tpladm-stat i {
+  margin-left: 2px;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--text-weak);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tpladm-stat, .tpladm-stat::before { transition: none; }
+}
+.tpladm-corp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: 13px;
+  color: var(--text-weak);
+}
+.tpladm-corp .who {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+.tpladm-corp .en { font-size: 12px; }
+/* admin 체크까지 들어가 오른쪽 단추가 늘었다 — 좁은 창에서 단추 글자가 꺾이지 않게, 줄이는 건 검색창이 맡는다 */
+.tplbarright { flex: none; }
+.tplbarright .tplsort-btn { white-space: nowrap; }

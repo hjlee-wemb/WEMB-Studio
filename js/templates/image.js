@@ -54,7 +54,7 @@ const TPLLOGO = {
   DEF_LT: 'src/studio-logo-lt.svg', /* 밝은 바탕용 — 같은 로고의 짙은 판 */
   /* 그림 템플릿의 로고 자리 — 그림 이름(-hi · 확장자 뺀 것) → [x, y, w, h(, 'mark')], 1920×1080 기준.
      원래 로고(심볼 + 글자)를 꼭 맞게 감싼 상자다. 'mark' 는 심볼만 있는 자리라 로고의 심볼만 보인다.
-     그림 템플릿 88장을 하나씩 재서 넣었다(2026-10-12). 빠진 것은 shoneview-login 하나 — 로고가 헤더가 아니라 로그인 칸에 있다. */
+     그림 템플릿 88장을 하나씩 재서 넣었다(2026-10-12). SHOneView 그림 12장은 통합 운영 원뷰(Integrated Operations One-View)와 중복이라 2026-11-24 카탈로그에서 뺐다. 같은 날 Army Prototype 2장도 뺐다. */
   BOX: (() => {
     const B = {};
     const put = (names, box) => names.split(' ').forEach((n) => (B[n] = box));
@@ -67,9 +67,6 @@ const TPLLOGO = {
     put('hyundaicapital-p01-service-map hyundaicapital-p03-monitoring hyundaicapital-p07-it-kpi hyundaicapital-p08-it-status', [29, 15, 122, 28]);
     put('shinhan-card-security', [23, 16, 149, 32]);
     put('psim-dashboard-ic', [24, 9, 157, 36]);
-    put('shoneview-main01 shoneview-main02 shoneview-main03 shoneview-network shoneview-p03-was shoneview-p05-db ' +
-      'shoneview-p06-01-systemstatus01 shoneview-p06-01-systemstatus02 shoneview-p06-02-systemstatus01 ' +
-      'shoneview-p06-02-systemstatus02 shoneview-p06-02-systemstatus03 shoneview-p06-02-systemstatus04', [36, 16, 138, 31]);
     put('koen-dashboard01', [37, 17, 137, 31]);
     put('dcms-energystatus dcms-electricty', [46, 24, 137, 31]);
     put('figma-lottiefiles', [36, 7, 138, 38]);
@@ -91,7 +88,6 @@ const TPLLOGO = {
     put('hanjin-2d-ld', [54, 25, 139, 31]);
     put('wooribank-transaction wooribank-performance', [29, 18, 143, 32]);
     put('wooribank-event', [26, 14, 214, 33]);
-    put('army-prototype01 army-prototype02', [90, 14, 144, 32]);
     put('nh-biometrics', [216, 12, 143, 32]);
     put('huananbank-banking', [19, 7, 99, 27]);
     put('handok-gridsol-cube', [39, 19, 157, 36]);
@@ -132,7 +128,8 @@ const TPLLOGO = {
     '.nbw-root [data-name="Logo Mark"], .nbs-root [data-name="Logo Mark"], .nbe-root [data-name="Logo Mark"], .nbk-root [data-name="Logo Mark"], .nbl-root [data-name="Logo Mark"], .nbg-root [data-name="Logo Mark"], .nbm-root [data-name="Logo Mark"], .nbt-root [data-name="Logo Mark"], .nbu-root [data-name="Logo Mark"], .nbp-root [data-name="Logo Mark"], .nbo-root [data-name="Logo Mark"], ' +
     '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
   /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
-  DOM_CUSTOM: '.ovm-root [data-name="Brand"] > [data-name="Logo"], .ovn-root [data-name="Brand"] > [data-name="Logo"], .ovt-root [data-name="Brand"] > [data-name="Logo"], .ovw-root [data-name="Brand"] > [data-name="Logo"], .ovp-root [data-name="Brand"] > [data-name="Logo"], .ovq-root [data-name="Brand"] > [data-name="Logo"], .ovs-root [data-name="Brand"] > [data-name="Logo"], .ovr-root [data-name="Brand"] > [data-name="Logo"], .ovd-root [data-name="Brand"] > [data-name="Logo"], .ovk-root [data-name="Brand"] > [data-name="Logo"], .ove-root [data-name="Brand"] > [data-name="Logo"], ' +
+  DOM_CUSTOM: '.dmm-root [data-name="Header"] [data-name="Logo"], .dmm-root [data-name="Header"] [data-name="Logo/WEMB Studio"], .dmp-root [data-name="Header"] [data-name="Logo"], .dmp-root [data-name="Header"] [data-name="Logo/WEMB Studio"], .dmw-root [data-name="Header"] [data-name="Logo"], .dmw-root [data-name="Header"] [data-name="Logo/WEMB Studio"], .dma-root [data-name="Header"] [data-name="Logo"], .dma-root [data-name="Header"] [data-name="Logo/WEMB Studio"], ' +
+    '.ovm-root [data-name="Brand"] > [data-name="Logo"], .ovn-root [data-name="Brand"] > [data-name="Logo"], .ovt-root [data-name="Brand"] > [data-name="Logo"], .ovw-root [data-name="Brand"] > [data-name="Logo"], .ovp-root [data-name="Brand"] > [data-name="Logo"], .ovq-root [data-name="Brand"] > [data-name="Logo"], .ovs-root [data-name="Brand"] > [data-name="Logo"], .ovr-root [data-name="Brand"] > [data-name="Logo"], .ovd-root [data-name="Brand"] > [data-name="Logo"], .ovk-root [data-name="Brand"] > [data-name="Logo"], .ove-root [data-name="Brand"] > [data-name="Logo"], ' +
     '.pdm-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdw-root [data-name="Header"] :has(> [data-name="logo chip"]), .pds-root [data-name="Header"] :has(> [data-name="logo chip"]), .pde-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdp-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdb-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdf-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdo-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdy-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Brand"] > [data-name="Logo"], .ipm-root [data-name="Brand"] > [data-name="Logo"], .ipn-root [data-name="Brand"] > [data-name="Logo"], .ips-root [data-name="Brand"] > [data-name="Logo"], .ipf-root [data-name="Brand"] > [data-name="Logo"], .ipv-root [data-name="Brand"] > [data-name="Logo"], .iph-root [data-name="Brand"] > [data-name="Logo"], .ipe-root [data-name="Brand"] > [data-name="Logo"], .ipy-root [data-name="Brand"] > [data-name="Logo"], .ipt-root [data-name="Brand"] > [data-name="Logo"], ' +
     '.gmm-root [data-name="Header"] > [data-name="Logo"], .gmg-root [data-name="Header"] > [data-name="Logo"], ' +
     '.dwm-root [data-name="Logo/WEMB Studio"], .dwn-root [data-name="Logo/WEMB Studio"], .dws-root [data-name="Logo/WEMB Studio"], .dwp-root [data-name="Logo/WEMB Studio"], .dwa-root [data-name="Logo/WEMB Studio"], .dwb-root [data-name="Logo/WEMB Studio"], .dwv-root [data-name="Logo/WEMB Studio"], .dwo-root [data-name="Logo/WEMB Studio"], .dwr-root [data-name="Logo/WEMB Studio"], .dwe-root [data-name="Logo/WEMB Studio"], .dwh-root [data-name="Logo/WEMB Studio"], .dwi-root [data-name="Logo/WEMB Studio"], .dwc-root [data-name="Logo/WEMB Studio"], .dwk-root [data-name="Logo/WEMB Studio"], .dww-root [data-name="Logo/WEMB Studio"], .dwd-root [data-name="Logo/WEMB Studio"], .dwt-root [data-name="Logo/WEMB Studio"], .dwu-root [data-name="Logo/WEMB Studio"], .dwl-root [data-name="Logo/WEMB Studio"], ' +
@@ -883,6 +880,15 @@ const TPLTINT = {
     keep: /(^|\/)(line-[-\w]*|key-[-\w]*|dot-[-\w]*|image(-\d+)*|shape(-\d+)*|center|background(-\d+)?|indicator[-\w]*)(-lt)?\.(svg|png|jpg)(\?|$)/i,
     raster: /$^/,
   },
+  /* 데이터센터 통합 모니터링 시안 — 주조색은 시안 파랑(#2575D5, 색상각 213°). 색을 그대로 둘 것:
+     3D 렌더(scene-image) · 평면 계통도(diagram-image) · 설비 사진 · 3D 모형 · 카드 장비 그림(1.png) · 층 판 · 작업자 표시 ·
+     등급 점(circle: CR 빨강 · WA 하늘 · NO 초록) · 빨간 경보 표지(arrow · arrow-1 · icon-7 · track) · 체크 표시 — 색이 곧 뜻이거나 사진이다.
+     판 · 선 · 글자 · 단추 · 아이콘 · 내비 · 바탕 빛 번짐은 따라간다 */
+  DATACENTER_OPT: {
+    seed: '#2575D5', seededKey: 'wemb-datacenter-seeded', refHue: 213,
+    keep: /(^|\/)(scene-image[-\w]*|diagram-image[-\w]*|equipment-(photo|model)|1|floor-plate[-\w]*|worker-icon[-\w]*|dot-p-[-\w]*|circle(-\d+)?|arrow(-1)?|icon-7|track|pedestal[-\w]*|checkbox[-\w]*|path-2-2|marker-current)(-lt)?\.(svg|png|jpg)(\?|$)/i,
+    raster: /$^/,
+  },
   GASMON_OPT: {
     seed: '#00BBFF', seededKey: 'wemb-gasmon-seeded', refHue: 196,
     keep: /(^|\/)(screen-main[-\w]*\.jpg|floor-plan[-\w]*\.png|platform[-\w]*|orb[-\w]*|body[-\w]*|cloud[-\w]*|figure[-\w]*|lens[-\w]*|highlight[-\w]*|light[-\w]*|shadow[-\w]*|status-[-\w]*|btn-event-status[-\w]*|marker-sensor[-\w]*|background-1(-lt)?\.svg|background-2-2(-lt)?\.svg)(\.(svg|png|jpg))?(\?|$)/i,
@@ -1085,6 +1091,10 @@ const TPLTINT = {
     /* 통합 운영 원뷰 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
     ['ovm', 'ovn', 'ovt', 'ovw', 'ovp', 'ovq', 'ovs', 'ovr', 'ovd', 'ovk', 'ove'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'oneview-live-style'], 'wemb-oneview-mode', this.ONEVIEW_OPT);
+    });
+    /* 데이터센터 통합 모니터링 화면 8장면 — 같은 방식. 열린 장면만 칠한다 */
+    ['dmm', 'dmp', 'dmw', 'dma', 'dme', 'dmc', 'dms', 'dmx', 'dmi'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'datacenter-live-style'], 'wemb-datacenter-mode', this.DATACENTER_OPT);
     });
     /* 스마트 플랜트 가스 모니터링 화면 5장 — 같은 방식. 열린 장면만 칠한다(팝업 뿌리도 따로 칠한다) */
     ['gmm', 'gmg', 'gmw', 'gma', 'gmc'].forEach((px) => {

@@ -40,13 +40,6 @@
       TL('shinhan-card-security', '보안 현황')] },
     { title: 'Dashboard: PSIM', area: '안전·보안', date: 'August 30, 2024', slides: [
       TL('psim-dashboard-ic', 'PSIM 현황')] },
-    { title: 'Dashboard: SHOneView', area: '종합현황', date: 'August 1, 2026', slides: [
-      TL('shoneview-main01', '메인 01'), TL('shoneview-main02', '메인 02'), TL('shoneview-main03', '메인 03'),
-      TL('shoneview-network', '네트워크'), TL('shoneview-p03-was', 'WAS'), TL('shoneview-p05-db', 'DB'),
-      TL('shoneview-p06-01-systemstatus01', '시스템현황 P06-01 · 01'), TL('shoneview-p06-01-systemstatus02', '시스템현황 P06-01 · 02'),
-      TL('shoneview-p06-02-systemstatus01', '시스템현황 P06-02 · 01'), TL('shoneview-p06-02-systemstatus02', '시스템현황 P06-02 · 02'),
-      TL('shoneview-p06-02-systemstatus03', '시스템현황 P06-02 · 03'), TL('shoneview-p06-02-systemstatus04', '시스템현황 P06-02 · 04'),
-      TL('shoneview-login', '로그인')] },
     { title: 'Dashboard: HC Approval', area: '서비스·거래', date: 'March 28, 2024', slides: [
       TL('hc-approval', '승인 현황')] },
     { title: 'Dashboard: KOEN', area: '에너지·환경', date: 'May 22, 2024', slides: [
@@ -85,8 +78,6 @@
       TL('hanjin-main', '메인')] },
     { title: 'Dashboard: Woori Bank', area: '서비스·거래', date: 'December 1, 2026', slides: [
       TL('wooribank-transaction', '거래 현황'), TL('wooribank-performance', '성능 현황'), TL('wooribank-event', '이벤트 현황')] },
-    { title: 'Dashboard: Army Prototype', area: '안전·보안', date: 'October 17, 2024', slides: [
-      TL('army-prototype01', '프로토타입 01'), TL('army-prototype02', '프로토타입 02')] },
     { title: 'Dashboard: NH Biometrics', area: '서비스·거래', date: 'May 6, 2026', slides: [
       TL('nh-biometrics', '생체인증 현황')] },
     { title: 'Dashboard: HuaNan Bank', area: '서비스·거래', date: 'July 30, 2026', slides: [
@@ -273,14 +264,82 @@
       { img: 'src/templates/oneview-detail.jpg', label: '시스템 현황 상세' },
       { img: 'src/templates/oneview-network.jpg', label: '네트워크 현황' },
       { img: 'src/templates/oneview-event.jpg', label: '이벤트현황' }] },
+    { title: 'Digital Twin: Data Center Integrated Monitoring', area: 'IT·데이터센터', date: 'Nov 24, 2026', slides: [
+      { img: 'src/templates/datacenter-main.jpg', label: '통합모니터링' },
+      { img: 'src/templates/datacenter-power.jpg', label: '통합전력계통도' },
+      { img: 'src/templates/datacenter-worker.jpg', label: '작업자안전관리' },
+      { img: 'src/templates/datacenter-asset.jpg', label: '자산관리' },
+      { img: 'src/templates/datacenter-equipment.jpg', label: '설비정보' },
+      { img: 'src/templates/datacenter-card.jpg', label: '설비 카드' },
+      { img: 'src/templates/datacenter-search.jpg', label: '설비정보팝업' },
+      { img: 'src/templates/datacenter-scenario.jpg', label: '시나리오설명' }] },
   ];
+  /* ── 템플릿 admin 용 — 한글 제목 · 실제 고객사 ──
+     갤러리 제목(영문)은 고객 앞에 보여도 되게 지은 이름이고, 이 표는 내부(템플릿 갤러리의 'admin' 체크)에서만 쓴다.
+     [한글 제목, 실제 고객사]. 고객사가 null 이면 근거(원본 Figma · 카탈로그 파일명 · 화면 글자)를 못 찾은 것 — admin 에선 고객사 줄을 비운다.
+     추측해서 채우지 말고 확인되면 넣는다. 원본: 각 템플릿 생성기 README · Figma 파일 이름 · UI Library 1.0 썸네일 이름. */
+  const TPL_ADMIN = {
+    'Digital Twin: POSCO KDB CCTV 관제': ['포스코 KDB CCTV 관제', '포스코'],
+    'Digital Twin: LS Electric STATCOM': ['LS일렉트릭 STATCOM', 'LS일렉트릭'],
+    'Digital Twin: SKHynix Icheon 1level': ['SK하이닉스 이천 1레벨', 'SK하이닉스'],
+    'Digital Twin: Gammania': ['감마니아 건물 관제', '감마니아'],
+    'Dashboard: Icheon main': ['SK하이닉스 이천 FMS 메인', 'SK하이닉스'],
+    'Dashboard: NH-DCIM': ['NH농협 DCIM', 'NH농협'],
+    'Dashboard: KB': ['KB 종합현황', 'KB'],
+    'Dashboard: Hyundai Capital': ['현대캐피탈 IT 모니터링', '현대캐피탈'],
+    'Dashboard: Hana Card': ['하나카드 승인 현황', '하나카드'],
+    'Dashboard: Shinhan Card Security': ['신한카드 정보보호 대시보드', '신한카드'],
+    'Dashboard: PSIM': ['PSIM 통합보안 현황', null],
+    'Dashboard: HC Approval': ['HC 승인 현황', null],
+    'Dashboard: KOEN': ['한국남동발전 발전 현황', '한국남동발전'],
+    'Dashboard: DCMS': ['DCMS 에너지 · 전력 현황', null],
+    'Dashboard: Figma LottieFiles': ['Figma LottieFiles 모션 컴포넌트', null],
+    'Dashboard: KISED': ['창업진흥원 현황', '창업진흥원'],
+    'Digital Twin: Digicentre DCIM': ['디지센터 DCIM', '디지센터'],
+    'Dashboard: Global Status': ['글로벌 현황', null],
+    'Dashboard: SW Security': ['SW 통합보안 현황', null],
+    'Dashboard: Korea Status': ['국내 현황', null],
+    'Dashboard: KORAIL Concept': ['코레일 노선 현황 컨셉', '한국철도공사(코레일)'],
+    'Dashboard: Sewerage System Concept': ['하수처리 시스템 컨셉', null],
+    'Dashboard: NRTEC Concept': ['NRTEC 2D · 3D 맵 컨셉', null],
+    'Digital Twin: Facility Status': ['설비 현황 디지털트윈', null],
+    'Dashboard: Port Status': ['항만 운영 현황', null],
+    'Digital Twin: Solar Concept (FEMS)': ['태양광 발전단지 컨셉(FEMS)', null],
+    'Digital Twin: LSE Demo': ['LS일렉트릭 데모', 'LS일렉트릭'],
+    'Digital Twin: Hanjin main': ['한진 통합관제', '한진'],
+    'Dashboard: Woori Bank': ['우리은행 통합 대시보드', '우리은행'],
+    'Dashboard: NH Biometrics': ['NH농협 생체인증 현황', 'NH농협'],
+    'Dashboard: HuaNan Bank': ['화난은행 통합 모니터링', '화난은행(대만)'],
+    'Digital Twin: Handok GridSol Cube': ['한독 그리드솔 큐브', '한독'],
+    'Dashboard: Incheon Monitoring': ['인천 모니터링', null],
+    'Digital Twin: BioTech D-BT': ['바이오텍 D-BT', null],
+    'Dashboard: SKH Security': ['SK하이닉스 보안 현황', 'SK하이닉스'],
+    'Dashboard: SHCard Smart Channel': ['신한카드 스마트채널', '신한카드'],
+    'Dashboard: HANA Bank H.I.T': ['하나은행 H.I.T', '하나은행'],
+    'Digital Twin: Plant Power Facility': ['공장 전력설비 디지털트윈', null],
+    'Digital Twin: STATCOM HMI': ['효성중공업 TPC 펑린 STATCOM HMI', '효성중공업'],
+    'Dashboard: New Business Management': ['한국남동발전 신사업 관리', '한국남동발전'],
+    'Dashboard: Wireless Network Management': ['신한울 무선망 통합관리', '한국수력원자력(신한울)'],
+    'Dashboard: Smart Drawing Management': ['한국남동발전 스마트 도면관리', '한국남동발전'],
+    'Dashboard: Smart Office': ['크래프톤 스마트 오피스(LiDAR 재실)', '크래프톤'],
+    'Dashboard: Smart Plant Gas Monitoring': ['현대제철 가스 모니터링', '현대제철'],
+    'Digital Twin: Smart Industrial Complex': ['한전KDN 여수 산단 디지털트윈', '한전KDN'],
+    'Digital Twin: Smart Factory Energy Management': ['LS조흥 공장 에너지관리(FEMS)', 'LS조흥'],
+    'Digital Twin: Combined Cycle Power Plant': ['한국남동발전 고성 천연가스 발전소 설비정보', '한국남동발전'],
+    'Digital Twin: Power Plant Disaster Prevention': ['한국서부발전 구미 천연가스 발전소 방재', '한국서부발전'],
+    'Dashboard: Integrated Operations One-View': ['신한은행 One View 통합 운영', '신한은행'],
+    'Digital Twin: Data Center Integrated Monitoring': ['LG CNS 부산 데이터센터 통합모니터링', 'LG CNS'],
+  };
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
     const dt = d.title.startsWith('Digital Twin');
     const screenType = dt ? '3D 디지털트윈' : '2D 대시보드';
+    const adm = TPL_ADMIN[d.title] || [d.title, null];
     return {
       img: d.slides[0].img,
       title: d.title,
+      koTitle: adm[0], /* 템플릿 admin 에서만 보이는 한글 제목 */
+      corp: adm[1], /* 실제 고객사 — null 이면 admin 에서 생략 */
       /* 주소용 이름 — 'Digital Twin: SKHynix Icheon 1level' → digital-twin-skhynix-icheon-1level */
       slug: d.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
       date: d.date,
@@ -464,6 +523,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Dashboard: Integrated Operations One-View');
     if (w) w.tpl = 'oneview';
   })();
+  /* 데이터센터 통합 모니터링 — '스튜디오 열기' 시 Figma(HzfsAmSQbpqIhAYebEkOWr) 화면 8장면을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/datacenter-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Digital Twin: Data Center Integrated Monitoring');
+    if (w) w.tpl = 'datacenter';
+  })();
   /* 스마트 플랜트 가스 모니터링 — '스튜디오 열기' 시 Figma(CbbEsxxZo3vBcBprsiUhJm) 화면 2장 + 팝업 3장을
      순수 HTML/CSS DOM 으로 재구축한 것(src/gasmon-*.js)으로 연다. */
   (function () {
@@ -525,8 +590,17 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+
+  /* 개수 — 전체 템플릿(프로젝트) 수와 그중 '열기 가능'(실제 화면이 붙은 것) 수. list 를 주면 그 목록만 센다 */
+  const tplStats = (list) => {
+    const a = list || TEMPLATES;
+    const live = a.filter(tplIsLive).length;
+    return { total: a.length, live, image: a.length - live };
+  };
+  /* 표에 없는 새 템플릿 — admin 에서 영문 제목 그대로 보이니, 만든 사람이 알아차리게 콘솔에 남긴다 */
+  TPL_DEFS.forEach((d) => { if (!TPL_ADMIN[d.title]) console.warn('[templates] admin 한글 제목 · 고객사 표에 없음:', d.title); });
 
   window.WEMB = window.WEMB || {};
-  WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive };
+  WEMB.templates = { TEMPLATES, TPL_AREAS, TPL_SCREENS, tplDate, tplIsLive, tplStats };
 })();
