@@ -627,6 +627,12 @@
           try { localStorage.setItem('wemb-oneview-screen', wantIp); } catch (e3) {}
           if (typeof applyOneviewDT === 'function') applyOneviewDT(wantIp);
         }
+        else if (f.tpl === 'bems') {
+          localStorage.setItem('wemb-tpl-dt', 'bems'); localStorage.removeItem('wemb-tpl-img');
+          const wantBe = (f.scene === 'main' || f.scene === 'floor') ? f.scene : (localStorage.getItem('wemb-bems-screen') || 'main');
+          try { localStorage.setItem('wemb-bems-screen', wantBe); } catch (e3) {}
+          if (typeof applyBemsDT === 'function') applyBemsDT(wantBe);
+        }
         else if (f.tpl === 'datacenter') {
           localStorage.setItem('wemb-tpl-dt', 'datacenter'); localStorage.removeItem('wemb-tpl-img');
           const wantIp = (typeof IP_SCREENS !== 'undefined' && IP_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-datacenter-screen') || 'main');

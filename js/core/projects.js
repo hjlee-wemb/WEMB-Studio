@@ -191,6 +191,7 @@
     try { if (t.tpl === 'office') localStorage.setItem('wemb-office-screen', t.tplScene || 'home'); } catch (e) {}
     try { if (t.tpl === 'indpark') localStorage.setItem('wemb-indpark-screen', t.tplScene || 'main'); } catch (e) {}
     try { if (t.tpl === 'oneview') localStorage.setItem('wemb-oneview-screen', t.tplScene || 'main'); } catch (e) {}
+    try { if (t.tpl === 'bems') localStorage.setItem('wemb-bems-screen', t.tplScene || 'main'); } catch (e) {}
     try { if (t.tpl === 'datacenter') localStorage.setItem('wemb-datacenter-screen', t.tplScene || 'main'); } catch (e) {}
     try { if (t.tpl === 'gasmon') localStorage.setItem('wemb-gasmon-screen', t.tplScene || 'main'); } catch (e) {}
     try { if (t.tpl === 'drawing') localStorage.setItem('wemb-drawing-screen', t.tplScene || 'main'); } catch (e) {}
@@ -205,14 +206,14 @@
       try { localStorage.setItem('wemb-layout', t.layout || ''); } catch (e) {}
       try { if (t.screen === 'dash' || t.screen === 'dt') localStorage.setItem('wemb-screen', t.screen); } catch (e) {}
       try {
-        if (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') localStorage.setItem('wemb-tpl-dt', t.tpl);
+        if (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'bems' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') localStorage.setItem('wemb-tpl-dt', t.tpl);
         else localStorage.removeItem('wemb-tpl-dt');
       } catch (e) {}
     }
     /* 템플릿 표시 동기화 — 미연결 이미지 템플릿이면 이미지 오버레이가, 아니면 이전 화면에서 남은 오버레이가 걷히도록 */
     try {
       if (t.tpl === 'image' && t.img) { localStorage.setItem('wemb-tpl-img', t.img); localStorage.removeItem('wemb-tpl-dt'); }
-      else if (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
+      else if (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'bems' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub') { localStorage.setItem('wemb-tpl-dt', t.tpl); localStorage.removeItem('wemb-tpl-img'); }
       else { localStorage.removeItem('wemb-tpl-img'); localStorage.removeItem('wemb-tpl-dt'); }
     } catch (e) {}
     return true;

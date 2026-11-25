@@ -181,6 +181,12 @@
       { src: 'src/oneview-event.js?v=9', build: ['build_ove'], scene: 'event' },
       { src: 'src/oneview-live.js?v=13', part: 'base' },
     ],
+    /* 스마트 빌딩 에너지 관리 — Figma CKnzs0z7gCSTPybhRZme1P. 화면 2장(메인 · 층별 현황) */
+    bems: [
+      { src: 'src/bems-main.js?v=3', build: ['build_bem'] },
+      { src: 'src/bems-floor.js?v=3', build: ['build_bef'] },
+      { src: 'src/bems-live.js?v=4', part: 'base' },
+    ],
     /* 데이터센터 통합 모니터링 — Figma HzfsAmSQbpqIhAYebEkOWr. 화면 4장 + 전력 계통도 위 팝업 5장. 팝업이 바탕 빌더를 부르므로 통째로 */
     datacenter: [
       { src: 'src/datacenter-main.js?v=4', build: ['build_dmm'] },

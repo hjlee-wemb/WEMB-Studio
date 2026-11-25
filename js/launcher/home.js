@@ -551,7 +551,7 @@
   /* 상세 페이지 CTA / 스튜디오 진입 → 그 화면 종류로 새 프로젝트를 만들고 스튜디오로 진입.
      tpl이 붙은 템플릿(한진)은 디지털 트윈 페이지로 재현하므로 DT 화면으로 연다. */
   function openTemplate(t, slideIndex) {
-    const isDT = t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
+    const isDT = t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'bems' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix-hub' || t.screen === 'dt';
     /* Figma로 구현된 템플릿(한진·SK하이닉스·HANA)은 실제 화면으로, 아직 미연결이면 임시 이미지로 연다.
        갤러리의 '제작중' 표시와 같은 판정을 쓴다(tplIsLive) — 표시와 동작이 어긋나면 안 된다. */
     const connected = tplIsLive(t);
@@ -1143,6 +1143,7 @@
       : pending.tpl === 'wnms' ? 'src/templates/wnms-main.jpg'
       : pending.tpl === 'indpark' ? 'src/templates/indpark-main.jpg'
       : pending.tpl === 'oneview' ? 'src/templates/oneview-main.jpg'
+      : pending.tpl === 'bems' ? 'src/templates/bems-main.jpg'
       : pending.tpl === 'datacenter' ? 'src/templates/datacenter-main.jpg'
       : pending.tpl === 'gasmon' ? 'src/templates/gasmon-main.jpg'
       : pending.tpl === 'drawing' ? 'src/templates/drawing-main.jpg'
@@ -1182,6 +1183,7 @@
                   : proj.tpl === 'office' ? ['home-alert', 'home-setting', 'home-account', 'home-privacy', 'live-work', 'live-work-zoom', 'live-after', 'live-used', 'live-used-zoom', 'live-used-popup', 'live-free', 'live-free-popup', 'live-ghost', 'live-ghost-busy', 'live-ghost-free', 'occ-map', 'occ-popup', 'occ-area', 'occ-group', 'occ-matrix', 'occ-matrix-hover', 'occ-raw', 'bridge', 'bridge-node', 'bridge-link', 'bridge-chart', 'bridge-raw', 'pattern-main', 'pattern-meeting', 'pattern-desk', 'pattern-collab', 'pattern-raw', 'room-main', 'room-chart', 'room-usage', 'room-raw', 'count-main', 'count-single', 'count-multi', 'count-gate', 'count-floor', 'count-building', 'count-toilet', 'count-brush', 'count-raw', 'admin-home', 'admin-home-popup', 'admin-time', 'admin-space', 'admin-space-popup', 'admin-sensor', 'admin-sensor-popup', 'admin-account'][i]
                   : proj.tpl === 'indpark' ? ['menu', 'site', 'forklift', 'vibration', 'heat', 'event', 'history', 'sensor'][i]
                   : proj.tpl === 'oneview' ? ['overview2', 'transactions', 'was', 'waspopup', 'tp', 'system', 'system2', 'detail', 'network', 'event'][i]
+                  : proj.tpl === 'bems' ? ['floor'][i]
                   : proj.tpl === 'datacenter' ? ['power', 'worker', 'asset', 'equipment', 'card', 'search', 'scenario'][i]
                   : proj.tpl === 'gasmon' ? ['gas', 'worksite', 'alarm', 'confirm'][i]
                   : proj.tpl === 'drawing' ? ['main-menu', 'main-select', 'main-popup', 'search', 'search-detail', 'preview', 'preview-popup', 'register', 'equipment', 'help', 'checkin', 'cctv', 'desk', 'desk-write', 'desk-detail', 'total-search', 'total-result', 'login'][i]
@@ -1213,6 +1215,7 @@
       : openProj.tpl === 'office' ? (openProj.tplScene || 'home')
       : openProj.tpl === 'indpark' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'oneview' ? (openProj.tplScene || 'main')
+      : openProj.tpl === 'bems' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'datacenter' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'gasmon' ? (openProj.tplScene || 'main')
       : openProj.tpl === 'drawing' ? (openProj.tplScene || 'main')
@@ -1245,6 +1248,7 @@
       if (openProj.tpl === 'office') localStorage.setItem('wemb-office-screen', openScene);
       if (openProj.tpl === 'indpark') localStorage.setItem('wemb-indpark-screen', openScene);
       if (openProj.tpl === 'oneview') localStorage.setItem('wemb-oneview-screen', openScene);
+      if (openProj.tpl === 'bems') localStorage.setItem('wemb-bems-screen', openScene);
       if (openProj.tpl === 'datacenter') localStorage.setItem('wemb-datacenter-screen', openScene);
       if (openProj.tpl === 'gasmon') localStorage.setItem('wemb-gasmon-screen', openScene);
       if (openProj.tpl === 'drawing') localStorage.setItem('wemb-drawing-screen', openScene);
