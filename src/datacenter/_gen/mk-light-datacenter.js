@@ -56,6 +56,12 @@ function rulesFor(f) {
   if (/^(divider-2|divider-5|divider-6|header-divider|column-divider)\.svg$/.test(f)) return glyph(LINE);
   /* 왼쪽 판 구분선(점선 · 실선) — 짙은 보라 → 판 테두리와 같은 옅은 회청(light-palette BORDER '#373662') */
   if (/^divider(-buttons|-section|-title|-9)?.svg$/.test(f)) return [[/stroke="#373662"/g, 'stroke="#b9c7d8"']];
+  /* 팝업 제목 앞 ○ · 단추 아이콘(맵이동 · 검색 돋보기) — 흰 글리프가 밝은 제목 띠 · 단추에서 사라졌다 */
+  if (/^(bullet|bullet-2|dot-3|icon-9|path-1-4).svg$/.test(f)) return [[/#868686/g, '#7a8aa0']].concat(glyph(ICON));
+  /* 설비 검색 표 머리 칸 구분(흰 막대) */
+  if (f === 'divider-3-2.svg') return glyph(LINE);
+  /* 설비 검색 표 머리 띠(거의 검정 #0A0A11) — 파란 머리 글자가 검은 띠에 묻혔다 → 옅은 회청 띠 */
+  if (f === 'path-12.svg') return [[/fill="#0A0A11"/g, 'fill="#e3eaf4"']];
   /* 헤더 메뉴 사이 짧은 막대(옅은 하늘) */
   if (f === 'division.svg' || f === 'divider-3.svg') return [[/#91CBE9/g, '#8fa8c4']];
   return null;

@@ -5,13 +5,13 @@ async (page) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
   const GEN = 'C:/Users/wemb/Desktop/진행중/디자인팀/1_WEMB STUDIO/WEMB Studio/src/datacenter/_gen/';
   const res = {};
-  for (const pg of ['main', 'overview2', 'transactions', 'was', 'waspopup', 'tp', 'system', 'system2', 'detail', 'network', 'event']) {
+  for (const pg of (globalThis.__ARGS && globalThis.__ARGS.length ? globalThis.__ARGS : ['main', 'power', 'worker', 'asset', 'equipment', 'cardset', 'search', 'scenario'])) {
     await page.goto('http://localhost:5600/src/datacenter/' + pg + '.html?live=0&t=light&r=' + Date.now());
     await page.waitForLoadState('networkidle').catch(() => {});
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(400);
+    await page.evaluate(() => { window.__POPONLY = true; }); await page.waitForTimeout(400);
     await page.screenshot({ path: GEN + 'lfull-' + pg + '.png' });
-    const boxes = await page.evaluate(() => [...document.querySelectorAll('p')].filter((p) => p.textContent.trim() && p.offsetWidth).map((p) => {
+    const boxes = await page.evaluate(() => [...document.querySelectorAll(window.__POPONLY ? '.sh-pop p, [data-name^="Popup/"] p' : 'p')].filter((p) => p.textContent.trim() && p.offsetWidth).map((p) => {
       const r = p.getBoundingClientRect(), cs = getComputedStyle(p);
       if (cs.visibility === 'hidden' || +cs.opacity === 0) return null;
       /* 그라디언트 글자(시계)는 글자색이 투명이라 잴 수 없다 — 따로 본다 */

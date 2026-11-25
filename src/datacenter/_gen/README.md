@@ -57,6 +57,8 @@
 - 라이트: 팝업 뿌리(.sh-pop)에 공통 바탕색이 깔려 전력 화면을 덮었다 → 투명. Normal 배지의 짙은 초록 정지색은 팔레트에서 그대로. 헤더 시계 규칙은 `Header:has(Icon Logout)` 로 좁힌다(이벤트 칩 숫자에 번짐).
 - 왼쪽 판 선: 다크에선 판 · 제목 · 구분선이 모두 짙은 보라(#373662)라 Figma 의 1px · 7px 어긋남이 안 보였다. 라이트는 #b9c7d8 한 색(팔레트 BORDER + divider 사본)으로 바꾸고,
   메인 Title Bar 테두리를 판 테두리에 겹치고(left/right -1px), 전력 Divider/Title · Buttons · Section 을 판 폭(부모 기준 left 6.99 · 240.02)에 맞춘다. 검사 `side-lines.js 장면 x0 x1 y0 y1` · `side-cap.js`.
+- 라이트 팝업: 흰 판이 밝은 화면에 묻혔다(그림자 4%) → mk-light-rules.js PER 표로 판 테두리 + 떠 있는 그림자, 제목 띠 옅은 회청 그라디언트, 값 칸 #f1f5fa.
+  설비 검색 표 머리 띠는 CSS 가 아니라 검은 그림(path-12.svg)이라 사본으로, 제목 앞 ○ · 맵이동 · 돋보기 흰 글리프도 사본. 대비는 `cap-contrast.js 장면…`(팝업 글자만) → `contrast.js`.
 - 평면 계통도 PNG 는 라이트에서 invert + hue-rotate 로 밝기만 뒤집는다. 3D 렌더 · 사진은 그대로.
 - Bash heredoc · sed 로 정규식 역슬래시를 넣으면 먹힌다 → 정규식 줄은 Edit 도구로.
 

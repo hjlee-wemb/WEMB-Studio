@@ -37,8 +37,45 @@ const POWER = [
 /* 겹친 팝업 뿌리 — 라이트 공통 규칙이 뿌리에 화면 바탕색을 깔아 아래 전력 계통도를 덮었다 → 팝업 뿌리는 투명 */
 const POP = ['.{{PX}}-root.sh-pop[data-theme="light"]{background:transparent!important;}'];
 
+/* 팝업 판 — 다크는 짙은 판이 파란 화면 위에 떠서 또렷했는데, 라이트는 흰 판 · 옅은 회색이 밝은 화면에 묻혔다(그림자 4%).
+   모양은 그대로 두고 ① 판에 또렷한 테두리 + 떠 있는 그림자 ② 제목 띠의 탁한 회색 그라디언트를 같은 방향의 옅은 회청 그라디언트로
+   ③ 값 칸 회색(#d9dade)을 맑은 칸으로 ④ 설비 검색 표 머리 글자(2.43:1)를 짙은 파랑으로 */
+const SHADOW = 'box-shadow:0 18px 44px rgba(20,45,80,.26),0 2px 8px rgba(20,45,80,.12)!important;';
+const HEAD = 'background-image:linear-gradient(to right,#e4ebf4 48.714%,#bccbdd)!important;box-shadow:inset 0 -1px 0 #b3c3d6;';
+const id = (s) => '[data-node-id="' + s + '"]';
+const PER = {
+  '2857-3044': [   /* 설비정보 */
+    R + ' ' + id('2857:3046') + '{' + SHADOW + '}',
+    R + ' ' + id('2857:3046') + '::after{border-color:#a9b9cd!important;}',
+    R + ' ' + id('2857:3049') + '{' + HEAD + '}',
+    R + ' ' + id('2857:3063') + '{background-color:#f1f5fa!important;}',
+  ],
+  '2857-3670': [   /* 설비정보팝업(검색) */
+    R + ' ' + id('I2857:3670;726:1267') + '{' + SHADOW + '}',
+    R + ' ' + id('I2857:3670;726:1267') + '::after{border-color:#a9b9cd!important;}',
+    R + ' ' + id('I2857:3670;726:1364') + '{' + HEAD + '}',
+    R + ' ' + id('I2857:3670;726:1340') + '{background-color:#f1f5fa!important;}',
+    R + ' :is(' + id('I2857:3670;726:1268') + ',' + id('I2857:3670;726:1381;726:1081') + '){background-color:#e6edf6!important;}',
+    R + ' [data-name="Table Header"] p{color:#1d4fa8!important;}',
+  ],
+  '2857-3379': [   /* 간이 설비정보(카드 장면) — 판 하나가 없고 제목 띠 + 몸통이라 화면 프레임에 그림자 */
+    R + ' > [data-node-id]{' + SHADOW + 'outline:1px solid #a9b9cd;}',
+    R + ' ' + id('I2857:3379;729:4606') + '{' + HEAD + '}',
+    R + ' ' + id('I2857:3379;729:4618') + '{background-color:#e4eaf2!important;}',
+    R + ' ' + id('I2857:3379;729:4619') + '{background-color:#f1f5fa!important;}',
+  ],
+  '2857-3378': [   /* 설비 카드 */
+    R + ' > [data-node-id]{' + SHADOW + '}',
+    R + ' ' + id('729:4230') + '{background-color:rgba(244,247,251,.96)!important;}',
+    R + ' ' + id('729:4230') + '::after{border-color:#a9b9cd!important;}',
+  ],
+  '2857-3672': [   /* 시나리오 설명(전체 화면) */
+    R + ' ' + id('2857:3674') + '{' + HEAD + '}',
+  ],
+};
+
 const KEYS = { '2857-2053': HEADER.concat(MAIN), '2857-2156': HEADER.concat(POWER), '2857-2443': HEADER, '2857-2664': HEADER };
-['2857-3044', '2857-3378', '2857-3379', '2857-3670', '2857-3672'].forEach((k) => { KEYS[k] = POP; });
+['2857-3044', '2857-3378', '2857-3379', '2857-3670', '2857-3672'].forEach((k) => { KEYS[k] = POP.concat(PER[k] || []); });
 for (const [k, v] of Object.entries(KEYS)) J[k + ':light'] = v;
 fs.writeFileSync(F, JSON.stringify(J, null, 1));
 console.log('screen-css.json 라이트 손규칙', Object.entries(KEYS).map(([k, v]) => k + ':' + v.length).join(' '));
