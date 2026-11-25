@@ -752,6 +752,15 @@
 .hj-asset.fme-root,
 .hj-asset.fms-root,
 .hj-asset.fmq-root,
+.hj-asset.dmm-root,
+.hj-asset.dmp-root,
+.hj-asset.dmw-root,
+.hj-asset.dma-root,
+.hj-asset.dme-root,
+.hj-asset.dmc-root,
+.hj-asset.dmi-root,
+.hj-asset.dms-root,
+.hj-asset.dmx-root,
 .hj-asset.dwl-root {
   position: relative;
   inset: auto;
@@ -800,8 +809,9 @@
   position: absolute !important;
   left: calc(var(--hjox, 0px) * -1) !important;
   top: calc(var(--hjoy, 0px) * -1) !important;
-  width: 1920px;
-  height: 1080px;
+  /* 기본은 화면 판 크기, 부모가 작은 판인 묶음은 등록 목록의 ow · oh(자식 % 위치의 기준) */
+  width: var(--hjow, 1920px);
+  height: var(--hjoh, 1080px);
   pointer-events: none;
 }
 .hj-asset > .hj-ofs > * {
