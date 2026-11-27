@@ -276,6 +276,16 @@
     { title: 'Digital Twin: Smart Building Energy Management', area: '부지·건물·층', date: 'Nov 25, 2026', slides: [
       { img: 'src/templates/bems-main.jpg', label: '메인' },
       { img: 'src/templates/bems-floor.jpg', label: '층별 현황' }] },
+    { title: 'Dashboard: Securities Integrated Monitoring', area: '통합관제·IT 운영', date: 'Nov 26, 2026', slides: [
+      { img: 'src/templates/secmon-main.jpg', label: '통합관제현황' },
+      { img: 'src/templates/secmon-channel.jpg', label: '채널현황' },
+      { img: 'src/templates/secmon-micro.jpg', label: '마이크로 서비스현황' },
+      { img: 'src/templates/secmon-mq.jpg', label: '메시지큐현황' },
+      { img: 'src/templates/secmon-infra.jpg', label: '인프라현황' },
+      { img: 'src/templates/secmon-event.jpg', label: '이벤트현황' },
+      { img: 'src/templates/secmon-eventpanel.jpg', label: '이벤트 현황(펼침)' },
+      { img: 'src/templates/secmon-alert.jpg', label: '이벤트 알림' },
+      { img: 'src/templates/secmon-sound.jpg', label: '사운드 설정 가이드' }] },
   ];
   /* ── 템플릿 admin 용 — 한글 제목 · 실제 고객사 ──
      갤러리 제목(영문)은 고객 앞에 보여도 되게 지은 이름이고, 이 표는 내부(템플릿 갤러리의 'admin' 체크)에서만 쓴다.
@@ -333,6 +343,7 @@
     'Dashboard: Integrated Operations One-View': ['신한은행 One View 통합 운영', '신한은행'],
     'Digital Twin: Data Center Integrated Monitoring': ['LG CNS 부산 데이터센터 통합모니터링', 'LG CNS'],
     'Digital Twin: Smart Building Energy Management': ['대만 Bio-Tech 빌딩 에너지 관제', '대만 Bio-Tech'],
+    'Dashboard: Securities Integrated Monitoring': ['증권 통합관제', '신한투자증권'],
   };
   const TEMPLATES = TPL_DEFS.map((d, i) => {
     const n = i + 1;
@@ -527,6 +538,12 @@
     const w = TEMPLATES.find((t) => t.title === 'Dashboard: Integrated Operations One-View');
     if (w) w.tpl = 'oneview';
   })();
+  /* 증권 통합관제 — '스튜디오 열기' 시 Figma(CWWIdHGJ2LlEolp3hCe6Gk) 화면 6장 + 팝업 3장을
+     순수 HTML/CSS DOM 으로 재구축한 것(src/secmon-*.js)으로 연다. */
+  (function () {
+    const w = TEMPLATES.find((t) => t.title === 'Dashboard: Securities Integrated Monitoring');
+    if (w) w.tpl = 'secmon';
+  })();
   /* 스마트 빌딩 에너지 관리 — '스튜디오 열기' 시 Figma(CKnzs0z7gCSTPybhRZme1P) 화면 2장면을
      순수 HTML/CSS DOM 으로 재구축한 것(src/bems-*.js)으로 연다. */
   (function () {
@@ -600,7 +617,7 @@
     /* 오늘보다 뒤인 날짜(예: 2026-12-01)가 '등록일'로 보이면 틀린 정보처럼 읽힌다 — 날짜는 그대로 두고 '예정'을 붙인다 */
     return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일' + (d.getTime() > Date.now() ? ' 예정' : '');
   }
-  const tplIsLive = (t) => !!t && (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'bems' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
+  const tplIsLive = (t) => !!t && (t.tpl === 'fems' || t.tpl === 'ccpp' || t.tpl === 'plantdp' || t.tpl === 'indpark' || t.tpl === 'oneview' || t.tpl === 'secmon' || t.tpl === 'bems' || t.tpl === 'datacenter' || t.tpl === 'office' || t.tpl === 'gasmon' || t.tpl === 'drawing' || t.tpl === 'wnms' || t.tpl === 'newbiz' || t.tpl === 'statcom' || t.tpl === 'plant' || t.tpl === 'woori' || t.tpl === 'shinhan' || t.tpl === 'lselectric' || t.tpl === 'posco' || t.tpl === 'hanjin' || t.tpl === 'hana' || t.tpl === 'skhynix' || t.tpl === 'skhynix-hub');
 
   /* 개수 — 전체 템플릿(프로젝트) 수와 그중 '열기 가능'(실제 화면이 붙은 것) 수. list 를 주면 그 목록만 센다 */
   const tplStats = (list) => {

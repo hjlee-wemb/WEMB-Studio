@@ -128,7 +128,8 @@ const TPLLOGO = {
     '.nbw-root [data-name="Logo Mark"], .nbs-root [data-name="Logo Mark"], .nbe-root [data-name="Logo Mark"], .nbk-root [data-name="Logo Mark"], .nbl-root [data-name="Logo Mark"], .nbg-root [data-name="Logo Mark"], .nbm-root [data-name="Logo Mark"], .nbt-root [data-name="Logo Mark"], .nbu-root [data-name="Logo Mark"], .nbp-root [data-name="Logo Mark"], .nbo-root [data-name="Logo Mark"], ' +
     '.tcm-root [data-name="Logo Image"], .tcs-root [data-name="Logo Image"], .tcp-root [data-name="Logo Image"], .tcv-root [data-name="Logo Image"], .tcc-root [data-name="Logo Image"], .tce-root [data-name="Logo Image"], .tcn-root [data-name="Logo Image"], .tcu-root [data-name="Logo Image"], .tca-root [data-name="Logo Image"], .tcq-root [data-name="Logo Image"], .tcl-root [data-name="Logo Image"]',
   /* 헤더에 이미 WEMB Studio 로고가 그려진 템플릿(Figma 원본 그대로) — 업로드한 로고가 있을 때만 바꾼다 */
-  DOM_CUSTOM: '.bem-root [data-name="Header"] > [data-name="Logo"], .bef-root [data-name="Header"] > [data-name="Logo"], ' +
+  DOM_CUSTOM: '.smm-root [data-name="Header"] > [data-name="Logo/WEMB Studio"], .smc-root [data-name="Header"] > [data-name="Logo/WEMB Studio"], .sms-root [data-name="Header"] > [data-name="Logo/WEMB Studio"], .smq-root [data-name="Header"] > [data-name="Logo/WEMB Studio"], .smi-root [data-name="Header"] > [data-name="Logo/WEMB Studio"], .sme-root [data-name="Header"] > [data-name="Logo/WEMB Studio"], ' +
+    '.bem-root [data-name="Header"] > [data-name="Logo"], .bef-root [data-name="Header"] > [data-name="Logo"], ' +
     '.dmm-root [data-name="Header"] [data-name="Logo"], .dmm-root [data-name="Header"] [data-name="Logo/WEMB Studio"], .dmp-root [data-name="Header"] [data-name="Logo"], .dmp-root [data-name="Header"] [data-name="Logo/WEMB Studio"], .dmw-root [data-name="Header"] [data-name="Logo"], .dmw-root [data-name="Header"] [data-name="Logo/WEMB Studio"], .dma-root [data-name="Header"] [data-name="Logo"], .dma-root [data-name="Header"] [data-name="Logo/WEMB Studio"], ' +
     '.ovm-root [data-name="Brand"] > [data-name="Logo"], .ovn-root [data-name="Brand"] > [data-name="Logo"], .ovt-root [data-name="Brand"] > [data-name="Logo"], .ovw-root [data-name="Brand"] > [data-name="Logo"], .ovp-root [data-name="Brand"] > [data-name="Logo"], .ovq-root [data-name="Brand"] > [data-name="Logo"], .ovs-root [data-name="Brand"] > [data-name="Logo"], .ovr-root [data-name="Brand"] > [data-name="Logo"], .ovd-root [data-name="Brand"] > [data-name="Logo"], .ovk-root [data-name="Brand"] > [data-name="Logo"], .ove-root [data-name="Brand"] > [data-name="Logo"], ' +
     '.pdm-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdw-root [data-name="Header"] :has(> [data-name="logo chip"]), .pds-root [data-name="Header"] :has(> [data-name="logo chip"]), .pde-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdp-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdb-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdf-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdo-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdy-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Header"] :has(> [data-name="logo chip"]), .pdl-root [data-name="Brand"] > [data-name="Logo"], .ipm-root [data-name="Brand"] > [data-name="Logo"], .ipn-root [data-name="Brand"] > [data-name="Logo"], .ips-root [data-name="Brand"] > [data-name="Logo"], .ipf-root [data-name="Brand"] > [data-name="Logo"], .ipv-root [data-name="Brand"] > [data-name="Logo"], .iph-root [data-name="Brand"] > [data-name="Logo"], .ipe-root [data-name="Brand"] > [data-name="Logo"], .ipy-root [data-name="Brand"] > [data-name="Logo"], .ipt-root [data-name="Brand"] > [data-name="Logo"], ' +
@@ -888,6 +889,14 @@ const TPLTINT = {
   /* 스마트 빌딩 에너지 관리 시안 — 주조색은 단추 테두리 · 막대 파랑(#568DFF, 색상각 221°). 색을 그대로 둘 것:
      3D 건물 · 층 렌더 · 화면 바탕 사진 · 건물 아이콘(사진 + 면) · 차트 선/면(범례 색이 곧 뜻).
      판 · 선 · 글자 · 단추 · 아이콘 · 내비는 따라간다 */
+  /* 증권 통합관제 시안 — 주조색은 패널 테두리 파랑(#57A2FE, 색상각 213°). 색을 그대로 둘 것:
+     화면 바탕 사진 · 3D 서버 · 큐브 렌더(image · facet · body) · 등급 점(circle) · 차트 선/면(data · arc · donut — 범례 색이 곧 뜻).
+     판 · 선 · 글자 · 단추 · 아이콘 · 내비는 따라간다 */
+  SECMON_OPT: {
+    seed: '#57A2FE', seededKey: 'wemb-secmon-seeded', refHue: 213,
+    keep: /(^|\/)(image(-[\w]+)*|background(-[\w]+)?|facet-[-\w]*|body(-[\w]+)*|masked-visual(-[\w]+)*|circle(-[\w]+)*|data(-[\w]+)*|arc(-[\w]+)*|donut(-[\w]+)*|bar(-[\w]+)*|shape(-[\w]+)*)(-lt)?\.(svg|png|jpg)(\?|$)/i,
+    raster: /$^/,
+  },
   BEMS_OPT: {
     seed: '#568DFF', seededKey: 'wemb-bems-seeded', refHue: 221,
     keep: /(^|\/)(view-[-\w]*|background(-[\w]+)?|image(-[\w]+)*|facet-[-\w]*|shadow(-[\w]+)*|reflection(-[\w]+)*|data|line-[-\w]*|slider[-\w]*|bullet(-\d+)?|icon-trend-[-\w]*)(-lt)?\.(svg|png|jpg)(\?|$)/i,
@@ -1100,6 +1109,10 @@ const TPLTINT = {
     /* 통합 운영 원뷰 화면 11장 — 같은 방식. 열린 장면만 칠한다 */
     ['ovm', 'ovn', 'ovt', 'ovw', 'ovp', 'ovq', 'ovs', 'ovr', 'ovd', 'ovk', 'ove'].forEach((px) => {
       if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'oneview-live-style'], 'wemb-oneview-mode', this.ONEVIEW_OPT);
+    });
+    /* 증권 통합관제 화면 6장 + 팝업 3장 — 같은 방식. 열린 장면만 칠한다(팝업 뿌리는 장면 안에 얹혀 있다) */
+    ['smm', 'smc', 'sms', 'smq', 'smi', 'sme', 'smx', 'sma', 'smg'].forEach((px) => {
+      if (document.querySelector('.' + px + '-root')) this.icheonTint(t, mode, '.' + px + '-root', [px + '-style', px + '-light-style', 'secmon-live-style'], 'wemb-secmon-mode', this.SECMON_OPT);
     });
     /* 스마트 빌딩 에너지 관리 화면 2장면 — 같은 방식. 열린 장면만 칠한다 */
     ['bem', 'bef'].forEach((px) => {

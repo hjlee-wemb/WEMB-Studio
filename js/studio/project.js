@@ -627,6 +627,12 @@
           try { localStorage.setItem('wemb-oneview-screen', wantIp); } catch (e3) {}
           if (typeof applyOneviewDT === 'function') applyOneviewDT(wantIp);
         }
+        else if (f.tpl === 'secmon') {
+          localStorage.setItem('wemb-tpl-dt', 'secmon'); localStorage.removeItem('wemb-tpl-img');
+          const wantSm = (typeof SM_SCREENS !== 'undefined' && SM_SCREENS[f.scene]) ? f.scene : (localStorage.getItem('wemb-secmon-screen') || 'main');
+          try { localStorage.setItem('wemb-secmon-screen', wantSm); } catch (e3) {}
+          if (typeof applySecmonDT === 'function') applySecmonDT(wantSm);
+        }
         else if (f.tpl === 'bems') {
           localStorage.setItem('wemb-tpl-dt', 'bems'); localStorage.removeItem('wemb-tpl-img');
           const wantBe = (f.scene === 'main' || f.scene === 'floor') ? f.scene : (localStorage.getItem('wemb-bems-screen') || 'main');

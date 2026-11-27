@@ -15,6 +15,9 @@ try {
     else if (__tdt === 'oneview' && typeof applyOneviewDT === 'function') {
       applyOneviewDT(window.__oneviewSceneOf ? window.__oneviewSceneOf() : localStorage.getItem('wemb-oneview-screen'));
     }
+    else if (__tdt === 'secmon' && typeof applySecmonDT === 'function') {
+      applySecmonDT(window.__secmonSceneOf ? window.__secmonSceneOf() : localStorage.getItem('wemb-secmon-screen'));
+    }
     else if (__tdt === 'bems' && typeof applyBemsDT === 'function') {
       applyBemsDT(window.__bemsSceneOf ? window.__bemsSceneOf() : localStorage.getItem('wemb-bems-screen'));
     }
@@ -172,6 +175,14 @@ try {
   /* 통합 운영 원뷰은 Dark 가 원본 — 고른 밝기(wemb-oneview-mode)는 그대로 되살아난다 */
   if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'oneview') {
     const want = localStorage.getItem('wemb-oneview-mode') === 'light' ? 'light' : 'dark';
+    if (state.mode !== want) {
+      state.mode = want;
+      document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));
+    }
+  }
+  /* 증권 통합관제는 Dark 가 원본 — 고른 밝기(wemb-secmon-mode)는 그대로 되살아난다 */
+  if (state.screen === 'dt' && localStorage.getItem('wemb-tpl-dt') === 'secmon') {
+    const want = localStorage.getItem('wemb-secmon-mode') === 'light' ? 'light' : 'dark';
     if (state.mode !== want) {
       state.mode = want;
       document.querySelectorAll('#mode button').forEach((x) => x.classList.toggle('on', x.dataset.m === want));

@@ -181,6 +181,19 @@
       { src: 'src/oneview-event.js?v=9', build: ['build_ove'], scene: 'event' },
       { src: 'src/oneview-live.js?v=13', part: 'base' },
     ],
+    /* 증권 통합관제 — Figma CWWIdHGJ2LlEolp3hCe6Gk. 화면 6장 + 팝업 3장(팝업 모듈은 어느 장면에서나 같이 싣는다 — js/templates/secmon.js 의 SM_BUILDS) */
+    secmon: [
+      { src: 'src/secmon-main.js?v=9', build: ['build_smm'] },
+      { src: 'src/secmon-channel.js?v=9', build: ['build_smc'] },
+      { src: 'src/secmon-micro.js?v=9', build: ['build_sms'] },
+      { src: 'src/secmon-mq.js?v=9', build: ['build_smq'] },
+      { src: 'src/secmon-infra.js?v=9', build: ['build_smi'] },
+      { src: 'src/secmon-event.js?v=9', build: ['build_sme'] },
+      { src: 'src/secmon-eventpanel.js?v=9', build: ['build_smx', 'build_smm_eventpanel'] },
+      { src: 'src/secmon-alert.js?v=9', build: ['build_sma', 'build_smm_alert'] },
+      { src: 'src/secmon-sound.js?v=9', build: ['build_smg', 'build_smm_sound'] },
+      { src: 'src/secmon-live.js?v=7', part: 'base' },
+    ],
     /* 스마트 빌딩 에너지 관리 — Figma CKnzs0z7gCSTPybhRZme1P. 화면 2장(메인 · 층별 현황) */
     bems: [
       { src: 'src/bems-main.js?v=3', build: ['build_bem'] },
